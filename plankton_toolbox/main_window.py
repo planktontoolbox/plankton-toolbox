@@ -28,8 +28,10 @@
 Main window for the Plankton toolbox.
 """
 
+import time
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
+import plankton_toolbox.utils as utils
 import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.activities.activity_manager as activity_manager
 import plankton_toolbox.tools.log_tool as log_tool
@@ -53,8 +55,10 @@ class MainWindow(QtGui.QMainWindow):
         # Logging. Always log to plankton_toolbox_log.txt. Also use  
         # the Log tool when it is available.
         self.__logfile = open('plankton_toolbox_log.txt', 'w')
-        self.__logfile.write('Plankton-toolbox.\n\n')
-        self.__logtool = None # 
+        self.__logfile.write('Plankton-toolbox. ' +
+                             time.strftime("%Y-%m-%d %H:%M:%S") +'\n\n')
+        self.__logtool = None #
+        utils.Logger().setLogTarget(self) # Logger should log here. 
         # Setup main window.
         self.__createActions()
         self.__createMenu()
@@ -132,7 +136,8 @@ class MainWindow(QtGui.QMainWindow):
         # Add one button for each activity. Create stacked widgets.
         for activity in self.__activitymanager.getActivityList():
             button = QtGui.QPushButton(activity.objectName())
-            activitiesvbox.addWidget(button)
+            activitiesvbox.addWidget(button) # Adds to stack.
+            # The activity is called to select stack item by object, not index.
             self.connect(button, QtCore.SIGNAL("clicked()"), activity.showInMainWindow)
             # Create one layer in the stacked activity widget.
             self.__activitystack.addWidget(activity)
@@ -150,8 +155,6 @@ class MainWindow(QtGui.QMainWindow):
         """ """
         self.__activitybox.setTitle(activity.objectName())
         self.__activitystack.setCurrentWidget(activity)
-    
-    
     
     def __createCentralWidget(self):
         """ 
@@ -174,21 +177,6 @@ class MainWindow(QtGui.QMainWindow):
         dummy = QtGui.QWidget(self)
         self.__activitystack.addWidget(dummy)
        
-#        test1 = QtGui.QListWidget(self)        
-#        test1.addItem("")
-#        test1.addItem("   Please select activity.   ")
-#        test1.addItem("")
-#        self.__activitystack.addWidget(test1)
-#        
-#        test2 = QtGui.QListWidget(self)        
-#        test2.addItem("")
-#        test2.addItem("   Please select activity. 22222   ")
-#        test2.addItem("")
-#        self.__activitystack.addWidget(test2)
-#
-#        self.__activitystack.setCurrentIndex(1)
-#        self.__activitystack.setCurrentWidget(dummy)
-               
     def __createActions(self):
         """ Common application related actions. """
         self.__quitaction = QtGui.QAction(self.tr("&Quit"), self)
@@ -209,7 +197,8 @@ class MainWindow(QtGui.QMainWindow):
         if not self.__logtool:
             for tool in self.__toolmanager.getToolList():
                 if type(tool) == log_tool.LogTool:
-                    self.__logtool = tool        
+                    self.__logtool = tool
+                            
         if self.__logtool: self.__logtool.writeToLog(message)
 
     def __about(self):

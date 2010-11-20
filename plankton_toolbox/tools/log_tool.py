@@ -66,6 +66,7 @@ class LogTool(tool_base.ToolBase):
     def writeToLog(self, message):
         """ """
         self.__logarea.addItem(message)
+        self.__logarea.scrollToBottom()
         # Remove oldest lines if max exceeded.
         try:
             max = int(self.__limitedit.text()) 

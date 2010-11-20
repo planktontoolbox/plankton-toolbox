@@ -41,8 +41,9 @@ class ToolManager():
 
     def initTools(self):
         """ Tool activator. """
-        self.__toollist.append(template_tool.TemplateTool("Template tool", self._parent))
+        # The log tool should be loaded before other tools.
         self.__toollist.append(log_tool.LogTool("Log tool", self._parent))
+        self.__toollist.append(template_tool.TemplateTool("Template tool", self._parent))
         
     def showTool(self, index):
         """ Makes a tool visible. """
