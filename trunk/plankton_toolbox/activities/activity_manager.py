@@ -27,6 +27,9 @@
 """
 """
 
+import plankton_toolbox.activities.pwreports_activity as pwreports_activity
+import plankton_toolbox.activities.preparedatasets_activity as preparedatasets_activity
+import plankton_toolbox.activities.prepareresources_activity as prepareresources_activity
 import plankton_toolbox.activities.template_activity as template_activity
 
 class ActivityManager():
@@ -40,6 +43,9 @@ class ActivityManager():
 
     def initActivities(self):
         """ Activity activator. """
+        self.__activitylist.append(pwreports_activity.PwReportsActivity("PW reports", self._parent))
+        self.__activitylist.append(preparedatasets_activity.PrepareDatasetsActivity("Prepare datasets", self._parent))
+        self.__activitylist.append(prepareresources_activity.PrepareResourcesActivity("Prepare resources", self._parent))
         self.__activitylist.append(template_activity.TemplateActivity("Activity template", self._parent))
         
     def getActivityList(self):

@@ -29,49 +29,44 @@
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-import plankton_toolbox.utils as utils
 import plankton_toolbox.activities.activity_base as activity_base
 
-class TemplateActivity(activity_base.ActivityBase):
+class PrepareResourcesActivity(activity_base.ActivityBase):
     """
-    This is a template for new activities.
     """
     
     def __init__(self, name, parentwidget):
         """ """
-        super(TemplateActivity, self).__init__(name, parentwidget)
+        super(PrepareResourcesActivity, self).__init__(name, parentwidget)
 
     def _createContent(self):
         """ """
         # Active widgets and connections.
-        self.__nameedit = QtGui.QLineEdit("<Name>")
-        self.__emailedit = QtGui.QLineEdit("<Email>")
-        self.__customerlist = QtGui.QListWidget()
-        self.__testbutton = QtGui.QPushButton("Write email to log")
-        self.connect(self.__testbutton, QtCore.SIGNAL("clicked()"), self.__test)                
+#        self.__nameedit = QtGui.QLineEdit("<Name>")
+#        self.__emailedit = QtGui.QLineEdit("<Email>")
+#        self.__customerlist = QtGui.QListWidget()
+#        self.__testbutton = QtGui.QPushButton("Write name to log")
+#        self.connect(self.__testbutton, QtCore.SIGNAL("clicked()"), self.__test)                
         # Layout widgets.
-        form1 = QtGui.QFormLayout()
-        form1.addRow("&Name:", self.__nameedit);
-        form1.addRow("&Email:", self.__emailedit);
-        form1.addRow("&Projects:", self.__customerlist);
-        hbox1 = QtGui.QHBoxLayout()
-        hbox1.addStretch()
-        hbox1.addWidget(self.__testbutton)
+#        form1 = QtGui.QFormLayout()
+#        form1.addRow("&Name:", self.__nameedit);
+#        form1.addRow("&Email:", self.__emailedit);
+#        form1.addRow("&Projects:", self.__customerlist);
+#        hbox1 = QtGui.QHBoxLayout()
+#        hbox1.addStretch()
+#        hbox1.addWidget(self.__testbutton)
         # Top level layout.
         toplayout = QtGui.QVBoxLayout()
-        toplayout.addLayout(form1)
-        toplayout.addLayout(hbox1)
+#        toplayout.addLayout(form1)
+#        toplayout.addLayout(hbox1)
         toplayout.addStretch()
         self.setLayout(toplayout)
         # Test data.
-        self.__customerlist.addItems(QtCore.QStringList()
-            << "First project."
-            << "Second project.")
+#        self.__customerlist.addItems(QtCore.QStringList()
+#            << "First project."
+#            << "Second project.")
         # 
-        self._writeToLog("The template activity was successfully created.")
 
-    def __test(self):
-        """ """
-#        self._writeToLog("Name: " + self.__emailedit.text())
-        utils.Logger().info("Name: " + self.__emailedit.text())
-        
+#    def __test(self):
+#        """ """
+#        self._writeToLog("Name: " + self.__nameedit.text())

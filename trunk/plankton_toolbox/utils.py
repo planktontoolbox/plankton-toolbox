@@ -28,13 +28,15 @@
 This module contains utilities for the Plankton toolbox project.
 """
 
+import time
+
 def singleton(cls):
     """
-    This is an implementation of the Singleton pattern by using decorators.
+    This is an implementation of the Singleton pattern by using decorator.
     Usage example:
         @singleton
-            class MyClass:
-               ...               
+        class MyClass:
+           ...               
     """
     instances = {}
     def getinstance():
@@ -42,3 +44,64 @@ def singleton(cls):
             instances[cls] = cls()
         return instances[cls]
     return getinstance
+
+@singleton
+class Logger(object):
+    """
+    Utility class for logging.
+    Info are used for direct logging, and errors and warnings are accumulated. 
+    """
+    def __init__(self):
+        self.__logtarget = None
+        self.__errors = {} # Contains accumulated errors and counter.
+        self.__warnings = {} # Contains accumulated warnings and counter.
+        
+    def setLogTarget(self, target):
+        """ Target must be an object containing a method named writeToLog. """
+        self.__logtarget = target
+
+    def clear(self):
+        """ """
+        self._errors.clear()
+        self._warnings.clear()
+        
+    def error(self, message):
+        """ Accumulates errors. Increment counter if it alredy exists. """
+        if message in self.__errors:
+            self.__errors['ERROR: ' + message] += 1
+        else:
+            self.__errors['ERROR: ' + message] = 1
+        
+    def warning(self, message):
+        """ Accumulates warnings. Increment counter if it alredy exists. """
+        if message in self.__error:
+            self.__warnings['WARNING: ' + message] += 1
+        else:
+            self.__warnings['WARNING: ' + message] = 1
+        
+    def info(self, message):
+        """ Used for direct logging. """
+        if self.__logtarget:
+            self.__logtarget.writeToLog(time.strftime("%Y-%m-%d %H:%M:%S") + ': ' + message)
+        else:
+            print(time.strftime("%Y-%m-%d %H:%M:%S") + ': ' + message)
+        
+    def getError(self):
+        """ """
+        return self.__errors
+        
+    def getWarning(self):
+        """ """
+        return self.__warnings
+        
+    def LogAllError(self):
+        """ Log all the content in the accumulated error list. """
+        for message in self.__errors:
+            self.info(message + ' (' + unicode(self.__errors[message]) + ' times)')
+        
+    def LogAllWarnings(self):
+        """ Log all the content in the accumulated warning list. """
+        for message in self.__warnings:
+            self.info(message + ' (' + unicode(self.__warnings[message]) + ' times)')
+        
+        
