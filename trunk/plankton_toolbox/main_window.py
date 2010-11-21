@@ -36,7 +36,7 @@ import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.activities.activity_manager as activity_manager
 import plankton_toolbox.tools.log_tool as log_tool
 
-__version__ = '0.1.0' # Plankton-toolbox version.
+__version__ = '0.0.1' # Plankton-toolbox version.
 
 class MainWindow(QtGui.QMainWindow):
     """ 
