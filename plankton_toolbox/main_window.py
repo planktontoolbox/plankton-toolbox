@@ -173,9 +173,6 @@ class MainWindow(QtGui.QMainWindow):
         grid2 = QtGui.QGridLayout()
         self.__activitybox.setLayout(grid2)
         grid2.addWidget(self.__activitystack)
-        # Dummy activity.
-        dummy = QtGui.QWidget(self)
-        self.__activitystack.addWidget(dummy)
        
     def __createActions(self):
         """ Common application related actions. """
