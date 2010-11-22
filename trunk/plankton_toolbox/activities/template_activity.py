@@ -43,6 +43,7 @@ class TemplateActivity(activity_base.ActivityBase):
 
     def _createContent(self):
         """ """
+        # === GroupBox: templatebox === 
         # Active widgets and connections.
         self.__nameedit = QtGui.QLineEdit("<Name>")
         self.__emailedit = QtGui.QLineEdit("<Email>")
@@ -50,19 +51,27 @@ class TemplateActivity(activity_base.ActivityBase):
         self.__testbutton = QtGui.QPushButton("Write email to log")
         self.connect(self.__testbutton, QtCore.SIGNAL("clicked()"), self.__test)                
         # Layout widgets.
+        templatebox = QtGui.QGroupBox("Member info", self)
+        #
         form1 = QtGui.QFormLayout()
         form1.addRow("&Name:", self.__nameedit);
         form1.addRow("&Email:", self.__emailedit);
         form1.addRow("&Projects:", self.__customerlist);
+        #
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch()
         hbox1.addWidget(self.__testbutton)
-        # Top level layout.
-        toplayout = QtGui.QVBoxLayout()
-        toplayout.addLayout(form1)
-        toplayout.addLayout(hbox1)
-        toplayout.addStretch()
-        self.setLayout(toplayout)
+        #
+        templatelayout = QtGui.QVBoxLayout()
+        templatelayout.addLayout(form1)
+        templatelayout.addLayout(hbox1)
+        templatelayout.addStretch()
+        templatebox.setLayout(templatelayout)
+        # === Main level layout. ===
+        mainlayout = QtGui.QVBoxLayout()
+        mainlayout.addWidget(templatebox)
+        mainlayout.addStretch()
+        self.setLayout(mainlayout)
         # Test data.
         self.__customerlist.addItems(QtCore.QStringList()
             << "First project."
