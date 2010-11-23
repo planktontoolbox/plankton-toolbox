@@ -29,6 +29,8 @@
 
 import plankton_toolbox.tools.log_tool as log_tool
 import plankton_toolbox.tools.latlong_tool as latlong_tool
+import plankton_toolbox.tools.taxonfacts_tool as taxonfacts_tool
+import plankton_toolbox.tools.taxonimages_tool as taxonimages_tool
 import plankton_toolbox.tools.template_tool as template_tool
 
 class ToolManager():
@@ -44,8 +46,10 @@ class ToolManager():
         """ Tool activator. """
         # The log tool should be loaded before other tools.
         self.__toollist.append(log_tool.LogTool("Log tool", self._parent))
+        self.__toollist.append(taxonfacts_tool.TaxonFactsTool("Taxon facts tool", self._parent))
+        self.__toollist.append(taxonimages_tool.TaxonImagesTool("Taxon images tool", self._parent))
         self.__toollist.append(latlong_tool.LatLongTool("Latlong tool", self._parent))
-        self.__toollist.append(template_tool.TemplateTool("Tool template", self._parent))
+        self.__toollist.append(template_tool.TemplateTool("(Tool template)", self._parent))
         
     def showTool(self, index):
         """ Makes a tool visible. """

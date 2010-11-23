@@ -27,10 +27,15 @@
 """
 """
 
+import os
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.utils as utils
 import plankton_toolbox.activities.activity_base as activity_base
+import plankton_toolbox.core.monitoring.pw_monitoring_files as pw_monitoring_files
+import plankton_toolbox.core.monitoring.pw_exports as pw_exports
+import plankton_toolbox.core.biology.taxa as taxa
+import plankton_toolbox.core.biology.taxa_sources as taxa_sources
 
 class PwReportsActivity(activity_base.ActivityBase):
     """
@@ -39,13 +44,14 @@ class PwReportsActivity(activity_base.ActivityBase):
     def __init__(self, name, parentwidget):
         """ """
         super(PwReportsActivity, self).__init__(name, parentwidget)
+        self._samplefiles = {}
 
     def _createContent(self):
         """ """
         # === GroupBox: databox === 
         databox = QtGui.QGroupBox("Select data files", self)
         # Active widgets and connections.
-        self.__fromdirectory_edit = QtGui.QLineEdit("testdata/pwdata")
+        self.__fromdirectory_edit = QtGui.QLineEdit("testdata/pwdata/")
         self.__fromdirectory_button = QtGui.QPushButton("Browse...")
         self.__files_table = QtGui.QTableWidget()
         self.connect(self.__fromdirectory_button, QtCore.SIGNAL("clicked()"), self.__fromDirectoryBrowse)                
@@ -53,7 +59,7 @@ class PwReportsActivity(activity_base.ActivityBase):
         form1 = QtGui.QGridLayout()
         label1 = QtGui.QLabel("From directory:")
         form1.addWidget(label1, 0, 0, 1, 1)
-        form1.addWidget(self.__fromdirectory_edit, 0, 2, 1, 8)
+        form1.addWidget(self.__fromdirectory_edit, 0, 1, 1, 9)
         form1.addWidget(self.__fromdirectory_button, 0, 10, 1, 1)
         label2 = QtGui.QLabel("Files (CSV):")
         form1.addWidget(label2, 1, 0, 1, 1)
@@ -65,9 +71,9 @@ class PwReportsActivity(activity_base.ActivityBase):
         # === GroupBox: resourcebox === 
         resourcebox = QtGui.QGroupBox("Select resources", self)
         # Active widgets and connections.
-        self.__pegfile_edit = QtGui.QLineEdit("../../data/resources/peg.json")
+        self.__pegfile_edit = QtGui.QLineEdit("data/resources/peg.json")
         self.__pegfile_button = QtGui.QPushButton("Browse...")
-        self.__translatefile_edit = QtGui.QLineEdit("../../data/resources/translate_pw_to_peg.json")
+        self.__translatefile_edit = QtGui.QLineEdit("data/resources/translate_pw_to_peg.json")
         self.__translatefile_button = QtGui.QPushButton("Browse...")
         self.connect(self.__pegfile_button, QtCore.SIGNAL("clicked()"), self.__pegFileBrowse)                
         self.connect(self.__translatefile_button, QtCore.SIGNAL("clicked()"), self.__translateFileBrowse)                
@@ -75,11 +81,11 @@ class PwReportsActivity(activity_base.ActivityBase):
         form1 = QtGui.QGridLayout()
         label1 = QtGui.QLabel("PEG:")
         form1.addWidget(label1, 0, 0, 1, 1)
-        form1.addWidget(self.__pegfile_edit, 0, 1, 1, 8)
+        form1.addWidget(self.__pegfile_edit, 0, 1, 1, 9)
         form1.addWidget(self.__pegfile_button, 0, 10, 1, 1)
         label2 = QtGui.QLabel("Translate PW to PEG:")
         form1.addWidget(label2, 1, 0, 1, 1)
-        form1.addWidget(self.__translatefile_edit, 1, 1, 1, 8)
+        form1.addWidget(self.__translatefile_edit, 1, 1, 1, 9)
         form1.addWidget(self.__translatefile_button, 1, 10, 1, 1)
         resourcelayout = QtGui.QVBoxLayout()
         resourcelayout.addLayout(form1)
@@ -89,21 +95,21 @@ class PwReportsActivity(activity_base.ActivityBase):
         reportbox = QtGui.QGroupBox("Select report", self)
         # Active widgets and connections.
         self.__report_list = QtGui.QComboBox()
-        self.__report_list.addItems(["<select report>",
-                                     "PW Report 1",
-                                     "PW Report 2",
-                                     "PW Report 3"])
+        self.__report_list.addItems(["<select>",
+                                     "MJ Report 1",
+                                     "MJ Report 2",
+                                     "ATS Report 1"])
         self.__tofile_edit = QtGui.QLineEdit("report.txt")
         self.__createreport_button = QtGui.QPushButton("Create report")
         self.connect(self.__createreport_button, QtCore.SIGNAL("clicked()"), self.__createPwReport)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
-        label1 = QtGui.QLabel("Select report:")
+        label1 = QtGui.QLabel("Report type:")
         form1.addWidget(label1, 0, 0, 1, 1)
-        form1.addWidget(self.__report_list, 0, 2, 1, 1)
+        form1.addWidget(self.__report_list, 0, 1, 1, 1)
         label2 = QtGui.QLabel("To file:")
         form1.addWidget(label2, 1, 0, 1, 1)
-        form1.addWidget(self.__tofile_edit, 1, 2, 1, 8)
+        form1.addWidget(self.__tofile_edit, 1, 1, 1, 9)
         reportlayout = QtGui.QVBoxLayout()
         reportlayout.addLayout(form1)
         reportbox.setLayout(reportlayout)
@@ -133,17 +139,84 @@ class PwReportsActivity(activity_base.ActivityBase):
                 
     def __fromDirectoryBrowse(self):
         """ """
-        utils.Logger().info("AAA")
+        dirdialog = QtGui.QFileDialog(self)
+        dirdialog.setFileMode(QtGui.QFileDialog.Directory)
+        dirdialog.setOptions(QtGui.QFileDialog.ShowDirsOnly)
+        dirdialog.setDirectory(unicode(self.__fromdirectory_edit.text()))
+        dirpath = dirdialog.getExistingDirectory()
+        if dirpath:
+            self.__fromdirectory_edit.setText(dirpath)
+            self._samplefiles.clear()
+            self.__files_table.setColumnCount(1)
+            self.__files_table.horizontalHeader().setStretchLastSection(True)
+            for row, filename in enumerate(os.listdir(self.__fromdirectory_edit.text())):
+                if os.path.splitext(filename)[1] in ['.csv', '.CSV']:
+                    self.__files_table.setRowCount(row + 1)
+                    item = QtGui.QTableWidgetItem(filename)
+                    item.setCheckState(QtCore.Qt.Checked)
+                    self.__files_table.setItem(row, 0, item)            
                 
     def __pegFileBrowse(self):
         """ """
-        utils.Logger().info("BBB")
-                
+        dirdialog = QtGui.QFileDialog(self)
+        dirdialog.setDirectory(unicode(self.__pegfile_edit.text()))
+        filepath = dirdialog.getOpenFileName()
+        if filepath:
+            self.__pegfile_edit.setText(filepath)
+
     def __translateFileBrowse(self):
         """ """
-        utils.Logger().info("CCC")
+        dirdialog = QtGui.QFileDialog(self)
+        dirdialog.setDirectory(unicode(self.__translatefile_edit.text()))
+        filepath = dirdialog.getOpenFileName()
+        if filepath:
+            self.__translatefile_edit.setText(filepath)
                 
     def __createPwReport(self):
         """ """
         utils.Logger().info("DDD")
+        try:
+            self._writeToLog("Importing CSV files...")
+            self._writeToStatusBar("Importing CSV files...")
+            self._samplefiles.clear()
+            self._samplefiles['Danafjord 2010-04-06_10-20 m.CSV'] = None
+            self._samplefiles['Koljöfjord 2010--04-06-10_20m.CSV'] = None
+            self._samplefiles['Kosterfjorden (NR16) 2010-04-06_10-20m.CSV'] = None
+            self._samplefiles['Stretudden 2010-04-07_10-20m.CSV'] = None
+            self._samplefiles['Åstol 2010-04-07_10-20m.CSV'] = None
+            for samplefile in self._samplefiles:
+                self._writeToLog('Reading ' + samplefile + '...')        
+                sampledata = pw_monitoring_files.PwCsv()
+                sampledata.importFile('testdata/pwdata/' + samplefile)
+                self._samplefiles[samplefile] = sampledata
+                self._writeToLog('')
+        except UserWarning, e:
+            QtGui.QMessageBox.warning(self, "Warning", unicode(e))
+        except (IOError, OSError), e:
+            QtGui.QMessageBox.warning(self, "Error", unicode(e))
+        finally:    
+            self._writeToLog("done.")
+            self._writeToStatusBar("")
+
+        """ """
+        try:
+            self._writeToLog("Exporting to test.csv...")
+            self._writeToStatusBar("")
+            # Load PEG.json
+            peg = taxa.Peg()
+            importer = taxa_sources.JsonFile(taxaObject = peg)
+            importer.importTaxa(file = 'data/resources/peg.json')
+            # Create exporter object.
+            exportfile = pw_exports.ExportPw()
+            exportfile.setPeg(peg)
+            exportfile.exportFile(self._samplefiles, 'test_export.txt')
+        except Warning, e:
+            QtGui.QMessageBox.warning(self, "Warning", unicode(e))
+        except StandardError, e:
+            QtGui.QMessageBox.warning(self, "Error", unicode(e))
+        finally:    
+            self._writeToLog("done.")
+            self._writeToStatusBar("")
+        
+
 

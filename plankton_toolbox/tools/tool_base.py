@@ -42,7 +42,7 @@ class ToolBase(QtGui.QDockWidget):
         self._parent = parentwidget
         
         self._writeToStatusBar("Loading " + name + "...")
-        self._writeToLog("Loading " + name + "...")
+#        self._writeToLog("Loading " + name + "...")
         
         self.setObjectName(name)
         self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea | 
@@ -57,7 +57,7 @@ class ToolBase(QtGui.QDockWidget):
         self._parent.toolsmenu.addAction(self.toggleViewAction())
 
         self._writeToStatusBar("")
-        self._writeToLog(name + " loaded.")
+#        self._writeToLog(name + " loaded.")
 
     @abstractmethod
     def _createContent(self):
