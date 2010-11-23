@@ -42,14 +42,14 @@ class ActivityBase(QtGui.QWidget):
         self._parent = parentwidget
         
         self._writeToStatusBar("Loading " + name + "...")
-        self._writeToLog("Loading " + name + "...")
+#        self._writeToLog("Loading " + name + "...")
         
         self.setObjectName(name)
 
         self._createContent() # Adds specific content. Abstract.
         
         self._writeToStatusBar("")
-        self._writeToLog(name + " loaded.")
+#        self._writeToLog(name + " loaded.")
 
     @abstractmethod
     def _createContent(self):

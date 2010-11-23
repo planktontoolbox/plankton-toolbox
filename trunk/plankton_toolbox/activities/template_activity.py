@@ -85,7 +85,7 @@ class TemplateActivity(activity_base.ActivityBase):
             << "First project."
             << "Second project.")
         # 
-        self._writeToLog("The template activity was successfully created.")
+#        self._writeToLog("The template activity was successfully created.")
 
     def __test(self):
         """ """

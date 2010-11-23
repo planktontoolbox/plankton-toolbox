@@ -55,7 +55,7 @@ class ExportPw(Exports):
         
         # Load translation file between SmhiPhytoplanktonList and PEG list.  
         taxon_size_translation_dict = {}
-        translateFile = open('../data/smhi_pw_to_peg.txt', 'r')
+        translateFile = open('data/resources/smhi_pw_to_peg.txt', 'r')
         separator = '\t' # Tab as separator.
         for row in translateFile:
             row_list = row.split(separator)

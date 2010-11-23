@@ -29,44 +29,47 @@
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-import plankton_toolbox.activities.activity_base as activity_base
+import plankton_toolbox.tools.tool_base as tool_base
 
-class PrepareDatasetsActivity(activity_base.ActivityBase):
+class TaxonImagesTool(tool_base.ToolBase):
     """
     """
     
     def __init__(self, name, parentwidget):
         """ """
-        super(PrepareDatasetsActivity, self).__init__(name, parentwidget)
+        super(TaxonImagesTool, self).__init__(name, parentwidget)
 
     def _createContent(self):
         """ """
-        # Active widgets and connections.
-#        self.__nameedit = QtGui.QLineEdit("<Name>")
-#        self.__emailedit = QtGui.QLineEdit("<Email>")
-#        self.__customerlist = QtGui.QListWidget()
-#        self.__testbutton = QtGui.QPushButton("Write name to log")
-#        self.connect(self.__testbutton, QtCore.SIGNAL("clicked()"), self.__test)                
-        # Layout widgets.
-#        form1 = QtGui.QFormLayout()
-#        form1.addRow("&Name:", self.__nameedit);
-#        form1.addRow("&Email:", self.__emailedit);
-#        form1.addRow("&Projects:", self.__customerlist);
-#        hbox1 = QtGui.QHBoxLayout()
-#        hbox1.addStretch(5)
-#        hbox1.addWidget(self.__testbutton)
-        # Top level layout.
-        toplayout = QtGui.QVBoxLayout()
-#        toplayout.addLayout(form1)
-#        toplayout.addLayout(hbox1)
-        toplayout.addStretch(5)
-        self.setLayout(toplayout)
-        # Test data.
-#        self.__customerlist.addItems(QtCore.QStringList()
-#            << "First project."
-#            << "Second project.")
-        # 
+        mainwidget = QtGui.QWidget(self._parent)
+        self.setWidget(mainwidget)
 
-#    def __test(self):
-#        """ """
-#        self._writeToLog("Name: " + self.__nameedit.text())
+        # TODO: Test image...
+
+        label = QtGui.QLabel('<b>Incertae sedis</b>');
+        label.setAlignment(QtCore.Qt.AlignHCenter)
+        imagelabel = QtGui.QLabel();
+        imagelabel.setAlignment(QtCore.Qt.AlignHCenter)
+        image = QtGui.QImage('data/cache/images/Incertae sedis.jpg')
+        imagelabel.setPixmap(QtGui.QPixmap.fromImage(image))
+        
+         # === Main level layout. ===
+        content = QtGui.QWidget()
+        contentLayout = QtGui.QVBoxLayout()
+        content.setLayout(contentLayout)
+        contentLayout.addWidget(label)
+        contentLayout.addWidget(imagelabel)
+        contentLayout.addStretch(5)
+        # Add scroll.
+        mainscroll = QtGui.QScrollArea()
+        mainscroll.setFrameShape(QtGui.QFrame.NoFrame)
+        mainscroll.setBackgroundRole(QtGui.QPalette.Dark)
+        mainscroll.setWidget(content)
+        mainscroll.setWidgetResizable(True)
+        mainlayout = QtGui.QVBoxLayout()
+        mainlayout.addWidget(mainscroll)
+        mainwidget.setLayout(mainlayout)
+
+    def __test(self):
+        """ """
+        self._writeToLog("Name: " + self.__nameedit.text())
