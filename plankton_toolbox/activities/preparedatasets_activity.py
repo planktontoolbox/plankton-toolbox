@@ -53,13 +53,13 @@ class PrepareDatasetsActivity(activity_base.ActivityBase):
 #        form1.addRow("&Email:", self.__emailedit);
 #        form1.addRow("&Projects:", self.__customerlist);
 #        hbox1 = QtGui.QHBoxLayout()
-#        hbox1.addStretch()
+#        hbox1.addStretch(5)
 #        hbox1.addWidget(self.__testbutton)
         # Top level layout.
         toplayout = QtGui.QVBoxLayout()
 #        toplayout.addLayout(form1)
 #        toplayout.addLayout(hbox1)
-        toplayout.addStretch()
+        toplayout.addStretch(5)
         self.setLayout(toplayout)
         # Test data.
 #        self.__customerlist.addItems(QtCore.QStringList()

@@ -120,18 +120,19 @@ class MainWindow(QtGui.QMainWindow):
         # Widget to create space and layout for two groupboxes.
         widget1 = QtGui.QWidget()
         dock.setWidget(widget1)
-        grid1 = QtGui.QGridLayout()
+        grid1 = QtGui.QVBoxLayout()
         widget1.setLayout(grid1)
         # For activites.        
         activitiesgroup = QtGui.QGroupBox("Activities")
-        grid1.addWidget(activitiesgroup, 0, 0)
+        grid1.addWidget(activitiesgroup)
         activitiesvbox = QtGui.QVBoxLayout()
         activitiesgroup.setLayout(activitiesvbox)
         # For tools.
         toolsgroup = QtGui.QGroupBox("Tools")
-        grid1.addWidget(toolsgroup, 1, 0)        
+        grid1.addWidget(toolsgroup)        
         toolsvbox = QtGui.QVBoxLayout()
         toolsgroup.setLayout(toolsvbox)
+        grid1.addStretch(5)
 
         # Add one button for each activity. Create stacked widgets.
         for activity in self.__activitymanager.getActivityList():
@@ -141,7 +142,7 @@ class MainWindow(QtGui.QMainWindow):
             self.connect(button, QtCore.SIGNAL("clicked()"), activity.showInMainWindow)
             # Create one layer in the stacked activity widget.
             self.__activitystack.addWidget(activity)
-        activitiesvbox.addStretch(1)
+        activitiesvbox.addStretch(5)
 
         # Add one button for each tool.
         for tool in self.__toolmanager.getToolList():
@@ -149,30 +150,34 @@ class MainWindow(QtGui.QMainWindow):
             toolsvbox.addWidget(button)
             self.connect(button, QtCore.SIGNAL("clicked()"), tool.show) # Show if hidden.
             self.connect(button, QtCore.SIGNAL("clicked()"), tool.raise_) # Bring to front.
-        toolsvbox.addStretch(1)
+        toolsvbox.addStretch(5)
            
     def showActivity(self, activity):
         """ """
-        self.__activitybox.setTitle(activity.objectName())
+        self.__activityheader.setText('<b>' + activity.objectName() + '</b>')
+#        self.__activitybox.setTitle(activity.objectName())
         self.__activitystack.setCurrentWidget(activity)
     
     def __createCentralWidget(self):
         """ 
         The central widget contains the selected activity. It is implemented as
-        stacked widget, QStackedWidget, where the pages are selected from
+        stacked layout, QStackedLayout, where the pages are selected from
         the activities group box. 
         """
-        self.__activitybox = QtGui.QGroupBox("Activity not selected...", self)
-        self.__activitystack = QtGui.QStackedWidget()
+        self.__activityheader = QtGui.QLabel("<b>Activity not selected...</b>", self)
+        self.__activityheader.setAlignment(QtCore.Qt.AlignHCenter)
+        self.__activitystack = QtGui.QStackedLayout()
+        
         # Layout widgets.
         widget1 = QtGui.QWidget(self) 
-        grid1 = QtGui.QGridLayout()
+        grid1 = QtGui.QVBoxLayout()
         widget1.setLayout(grid1)
         self.setCentralWidget(widget1)
-        grid1.addWidget(self.__activitybox)
-        grid2 = QtGui.QGridLayout()
-        self.__activitybox.setLayout(grid2)
-        grid2.addWidget(self.__activitystack)
+        grid1.addWidget(self.__activityheader)
+        grid1.addLayout(self.__activitystack)
+        # Dummy stack content.
+        dummy = QtGui.QWidget(self)
+        self.__activitystack.addWidget(dummy)
        
     def __createActions(self):
         """ Common application related actions. """

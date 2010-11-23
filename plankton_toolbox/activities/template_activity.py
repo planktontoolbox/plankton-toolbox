@@ -44,6 +44,7 @@ class TemplateActivity(activity_base.ActivityBase):
     def _createContent(self):
         """ """
         # === GroupBox: templatebox === 
+        templatebox = QtGui.QGroupBox("Member info", self)
         # Active widgets and connections.
         self.__nameedit = QtGui.QLineEdit("<Name>")
         self.__emailedit = QtGui.QLineEdit("<Email>")
@@ -51,26 +52,33 @@ class TemplateActivity(activity_base.ActivityBase):
         self.__testbutton = QtGui.QPushButton("Write email to log")
         self.connect(self.__testbutton, QtCore.SIGNAL("clicked()"), self.__test)                
         # Layout widgets.
-        templatebox = QtGui.QGroupBox("Member info", self)
-        #
         form1 = QtGui.QFormLayout()
         form1.addRow("&Name:", self.__nameedit);
         form1.addRow("&Email:", self.__emailedit);
         form1.addRow("&Projects:", self.__customerlist);
         #
         hbox1 = QtGui.QHBoxLayout()
-        hbox1.addStretch()
+        hbox1.addStretch(5)
         hbox1.addWidget(self.__testbutton)
         #
         templatelayout = QtGui.QVBoxLayout()
         templatelayout.addLayout(form1)
         templatelayout.addLayout(hbox1)
-        templatelayout.addStretch()
+        templatelayout.addStretch(5)
         templatebox.setLayout(templatelayout)
-        # === Main level layout. ===
+         # === Main level layout. ===
+        content = QtGui.QWidget()
+        contentLayout = QtGui.QVBoxLayout()
+        content.setLayout(contentLayout)
+        contentLayout.addWidget(templatebox)
+        contentLayout.addStretch(5)
+        # Add scroll.
+        mainscroll = QtGui.QScrollArea()
+        mainscroll.setFrameShape(QtGui.QFrame.NoFrame)
+        mainscroll.setWidget(content)
+        mainscroll.setWidgetResizable(True)
         mainlayout = QtGui.QVBoxLayout()
-        mainlayout.addWidget(templatebox)
-        mainlayout.addStretch()
+        mainlayout.addWidget(mainscroll)
         self.setLayout(mainlayout)
         # Test data.
         self.__customerlist.addItems(QtCore.QStringList()

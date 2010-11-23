@@ -53,7 +53,7 @@ class LogTool(tool_base.ToolBase):
         # Layout widgets.
         limitlabel = QtGui.QLabel("Row limit: ", mainwidget)
         hbox1 = QtGui.QHBoxLayout()
-        hbox1.addStretch()
+        hbox1.addStretch(5)
         hbox1.addWidget(limitlabel)
         hbox1.addWidget(self.__limitedit)
         hbox1.addWidget(self.__clearbutton)
