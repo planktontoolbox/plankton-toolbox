@@ -62,8 +62,8 @@ class Logger(object):
 
     def clear(self):
         """ """
-        self._errors.clear()
-        self._warnings.clear()
+        self.__errors.clear()
+        self.__warnings.clear()
         
     def error(self, message):
         """ Accumulates errors. Increment counter if it alredy exists. """
@@ -74,7 +74,7 @@ class Logger(object):
         
     def warning(self, message):
         """ Accumulates warnings. Increment counter if it alredy exists. """
-        if message in self.__error:
+        if message in self.__warnings:
             self.__warnings['WARNING: ' + message] += 1
         else:
             self.__warnings['WARNING: ' + message] = 1
@@ -94,12 +94,12 @@ class Logger(object):
         """ """
         return self.__warnings
         
-    def LogAllError(self):
+    def logAllErrors(self):
         """ Log all the content in the accumulated error list. """
         for message in self.__errors:
             self.info(message + ' (' + unicode(self.__errors[message]) + ' times)')
         
-    def LogAllWarnings(self):
+    def logAllWarnings(self):
         """ Log all the content in the accumulated warning list. """
         for message in self.__warnings:
             self.info(message + ' (' + unicode(self.__warnings[message]) + ' times)')

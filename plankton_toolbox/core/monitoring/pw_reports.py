@@ -28,19 +28,21 @@
 
 """
 
-class Exports(object):
+import plankton_toolbox.utils as utils
+
+class PwReports(object):
     """ 
     """
     def __init__(self):
         """ """
         self._metadata = {} # Metadata for the dataset.
         
-class ExportPw(Exports):
+class PwReportMJ1(PwReports):
     """ 
     """
     def __init__(self):
         """ """
-        super(ExportPw, self).__init__()
+        super(PwReportMJ1, self).__init__()
         
     def setPeg(self, peg):
         """ """
@@ -121,8 +123,9 @@ class ExportPw(Exports):
                     pegsizeclass = None
                     if pegobject:
                         for sizeclass in pegobject['Size classes']:
-                            if sizeclass['Size class'] == int(peg_size):
-                                pegsizeclass = sizeclass
+                            if peg_size != '':
+                                if sizeclass['Size class'] == int(peg_size):
+                                    pegsizeclass = sizeclass
                     
                     
                     
@@ -141,9 +144,12 @@ class ExportPw(Exports):
                     if pegsizeclass: out_columns[13] = pegsizeclass.get('', '') # 100-um pieces/L
                     biovolume = 0.0
                     if pegsizeclass:
-                        biovolume = pegsizeclass.get('Calculated volume, um3', '')         
-                    if pegsizeclass: out_columns[14] = str(biovolume * float(coeff) * float(units) / 1000000.0).replace('.', ',') # Biovolume mm3/L        
-    
+                        biovolume = pegsizeclass.get('Calculated volume, um3', '')
+                    try:         
+                        if pegsizeclass: out_columns[14] = str(biovolume * float(coeff) * float(units) / 1000000.0).replace('.', ',') # Biovolume mm3/L        
+                    except Exception, e:
+                        utils.Logger().error('Biovolume mm3/L: ' + unicode(e))
+                        
     #                pegobject = self.peg.getTaxonByName(pw_data[sample])
     #                pegobject
     

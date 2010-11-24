@@ -34,6 +34,7 @@ http://code.google.com/p/pythonxy/wiki/StandardPlugins
 import datetime
 from abc import abstractmethod
 import simplejson as json
+import plankton_toolbox.utils as utils
 
 class DataSources(object):
     """
@@ -76,6 +77,7 @@ class JsonFile(DataSources):
 
     def exportTaxa(self, file = None, encoding = 'utf-8'):
         """ """
+        utils.Logger().info("Writes taxa to: " + file)
         if file == None:
             raise UserWarning('File name is missing.')
         outdata = open(file, 'w')

@@ -75,6 +75,7 @@ class TemplateActivity(activity_base.ActivityBase):
         # Add scroll.
         mainscroll = QtGui.QScrollArea()
         mainscroll.setFrameShape(QtGui.QFrame.NoFrame)
+#        mainscroll.setViewportMargins(20, 20, 20, 20) # TEST. 
         mainscroll.setWidget(content)
         mainscroll.setWidgetResizable(True)
         mainlayout = QtGui.QVBoxLayout()

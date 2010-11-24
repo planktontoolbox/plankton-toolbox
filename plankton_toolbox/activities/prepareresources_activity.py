@@ -29,7 +29,11 @@
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
+import plankton_toolbox.utils as utils
 import plankton_toolbox.activities.activity_base as activity_base
+import plankton_toolbox.core.biology.taxa as taxa
+import plankton_toolbox.core.biology.taxa_sources as taxa_sources
+import plankton_toolbox.core.biology.taxa_prepare as taxa_prepare
 
 class PrepareResourcesActivity(activity_base.ActivityBase):
     """
@@ -45,12 +49,12 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
         dyntaxabox = QtGui.QGroupBox("Dynamic taxa", self)
         # Active widgets and connections.
         self.__dyntaxasource_list = QtGui.QComboBox()
-        self.__dyntaxasource_list.addItems(["<select source type>",
+        self.__dyntaxasource_list.addItems(["<select>",
                                             "Dyntaxa, SOAP",
                                             "Dyntaxa, REST",
                                             "Dyntaxa, DB-tables as text files"])
-        self.__dyntaxafromdirectory_edit = QtGui.QLineEdit("../../data/dyntaxa")
-        self.__dyntaxatofile_edit = QtGui.QLineEdit("../data/resources/dyntaxa_2009.json")        
+        self.__dyntaxafromdirectory_edit = QtGui.QLineEdit("planktondata/resources/originalfiles/")
+        self.__dyntaxatofile_edit = QtGui.QLineEdit("planktondata/resources/smhi_dv_dyntaxa_2009.json")        
         self.__dyntaxametadata_table = QtGui.QTableWidget()
         self.__dyntaxametadata_button = QtGui.QPushButton("Copy metadata from...")
         self.__dyntaxaprepare_button = QtGui.QPushButton("Create resource")
@@ -58,7 +62,7 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
         self.connect(self.__dyntaxaprepare_button, QtCore.SIGNAL("clicked()"), self.__prepareDyntaxa)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
-        label1 = QtGui.QLabel("Source:")
+        label1 = QtGui.QLabel("Source type:")
         form1.addWidget(label1, 0, 0, 1, 1)
         form1.addWidget(self.__dyntaxasource_list, 0, 1, 1, 1);
         label2 = QtGui.QLabel("From directory:")
@@ -82,8 +86,8 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
         # === GroupBox: pegbox === 
         pegbox = QtGui.QGroupBox("PEG, Plankton Expert Group", self)
         # Active widgets and connections.
-        self.__pegfromfile_edit = QtGui.QLineEdit("../../data/peg.txt")
-        self.__pegtofile_edit = QtGui.QLineEdit("../data/resources/peg_2010.json")
+        self.__pegfromfile_edit = QtGui.QLineEdit("planktondata/resources/originalfiles/smhi_extended_peg_version_2010-10-26.txt")
+        self.__pegtofile_edit = QtGui.QLineEdit("planktondata/resources/smhi_extended_peg_version_2010-10-26.json")
         self.__pegmetadata_table = QtGui.QTableWidget()
         self.__pegmetadata_button = QtGui.QPushButton("Copy metadata from...")
         self.__pegprepare_button = QtGui.QPushButton("Create resource")
@@ -119,6 +123,7 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
         # Add scroll.
         mainscroll = QtGui.QScrollArea()
         mainscroll.setFrameShape(QtGui.QFrame.NoFrame)
+#        mainscroll.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding)) # TEST
         mainscroll.setWidget(content)
         mainscroll.setWidgetResizable(True)
         mainlayout = QtGui.QVBoxLayout()
@@ -127,61 +132,68 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
 
     def __copyDyntaxaMetadata(self):
         """ """
-#        self._writeToLog("Name: " + self.__nameedit.text())
+        QtGui.QMessageBox.information(self, 'Metadata', 'Not implemented.')
 
     def __prepareDyntaxa(self):
         """ """
-        dt = taxa.Dyntaxa()
-        importer = taxa_prepare.DyntaxaDbTablesAsTextFiles(taxaObject = dt)
-        importer.importTaxa('../data/')
-        print('Number of Dyntaxa taxon:' + str(len(dt.getTaxonList())))
-        exporter = taxa_sources.JsonFile(taxaObject = dt)
-        exporter.exportTaxa(file = '../data/dyntaxa.json', encoding = 'iso-8859-1')
-        
-    def __prepare_smhi_extented_peg(self):
-        """ """
-#        smhi_phytowin_to_peg = taxon.SmhiPhytowin()
-#        importer = taxa_sources.SmhiPhytowinToPegAsTextFiles(taxaObject = smhi_phytowin_to_peg)
-##        importer.importTaxa('mellifica/data/')
-#        importer.importTaxa('../data/smhi_phytowin_to_peg.txt')
-#        
-#        pp = pprint.PrettyPrinter()
-#
-#        print('Number of:' + str(len(smhi_phytowin_to_peg.getTaxonList())))
-#        print('Number of:' + str(len(smhi_phytowin_to_peg.getIdToTaxonMap())))
-#
-##        pp.pprint(smhi_phytowin_to_peg)
-#        pp.pprint(smhi_phytowin_to_peg.getIdToTaxonMap())
-#        
-#        exporter = taxa_sources.JsonFile(taxaObject = smhi_phytowin_to_peg)
-#        exporter.exportTaxa(file = 'SmhiPhytowinToPeg.json', encoding = 'iso-8859-1')
-#
-#        print(json.dumps(smhi_phytowin_to_peg.getIdToTaxonMap(),  encoding = 'iso-8859-1', sort_keys=True, indent=1))
-#        self._writeToLog("Name: " + self.__nameedit.text())
+        utils.Logger().info("Prepare dyntaxa. Started.")
+        utils.Logger().clear()
+        self._writeToStatusBar("Prepare dyntaxa.")
+        try:
+            if self.__dyntaxasource_list.currentIndex() == 3:
+                dt = taxa.Dyntaxa()
+                importer = taxa_prepare.PrepareDyntaxaDbTablesAsTextFiles(taxaObject = dt)
+                importer.importTaxa(self.__dyntaxafromdirectory_edit.text())
+                utils.Logger().info('Number of dyntaxa taxa: ' + str(len(dt.getTaxonList())))
+                exporter = taxa_sources.JsonFile(taxaObject = dt)
+                exporter.exportTaxa(file = self.__dyntaxatofile_edit.text(), encoding = 'iso-8859-1')
+            else:
+                raise UserWarning('The selected data source type is not implemented.')
+        except UserWarning, e:
+            utils.Logger().error("UserWarning: " + unicode(e))
+            QtGui.QMessageBox.warning(self, "Warning", unicode(e))
+        except (IOError, OSError), e:
+            utils.Logger().error("Error: " + unicode(e))
+            QtGui.QMessageBox.warning(self, "Error", unicode(e))
+        except Exception, e:
+            utils.Logger().error("Failed on exception: " + unicode(e))
+            QtGui.QMessageBox.warning(self, "Exception", unicode(e))
+            raise
+        finally:
+            utils.Logger().logAllWarnings()    
+            utils.Logger().logAllErrors()    
+            utils.Logger().info("Prepare dyntaxa. Ended.")
+            self._writeToStatusBar("")
 
     def __copyPegMetadata(self):
         """ """
-#        self._writeToLog("Name: " + self.__nameedit.text())
+        QtGui.QMessageBox.information(self, 'Metadata', 'Not implemented.')
 
     def __preparePeg(self):
         """ """
-        """ """
-        peg = taxa.Peg()
-        importer = taxa_prepare.PegTextFile(taxaObject = peg)
-        importer.importTaxa(file = '../data/species_peg_bvol.txt')
-        print('Number of PEG taxon: ' + str(len(peg.getTaxonList())))                
-        exporter = taxa_sources.JsonFile(taxaObject = peg)
-        exporter.exportTaxa(file = '../data/peg.json', encoding = 'iso-8859-1')
-        # Test: reload json file:
-###        peg2 = taxon.Peg()
-###        importer = taxa_sources.JsonFile(taxaObject = peg2)
-###        importer.importTaxa(file = '../data/peg.json')
-###        print('Number of PEG taxon: ' + str(len(peg2.getTaxonList())))
-        # Test: pretty printer:
-###        pp = pprint.PrettyPrinter()
-###        pp.pprint(peg2.getTaxonList())
-        # Test: json.dumps:
-###        print(json.dumps(peg2.getTaxonList(), encoding = 'iso-8859-1', sort_keys=True, indent=1))
-#        self._writeToLog("Name: " + self.__nameedit.text())
-
+        utils.Logger().info("Prepare PEG. Started.")
+        utils.Logger().clear()
+        self._writeToStatusBar("Prepare PEG.")
+        try:
+            peg = taxa.Peg()
+            importer = taxa_prepare.PreparePegTextFile(taxaObject = peg)
+            importer.importTaxa(file = self.__pegfromfile_edit.text())
+            utils.Logger().info('Number of PEG taxa: ' + str(len(peg.getTaxonList())))                
+            exporter = taxa_sources.JsonFile(taxaObject = peg)
+            exporter.exportTaxa(file = self.__pegtofile_edit.text(), encoding = 'iso-8859-1')
+        except UserWarning, e:
+            utils.Logger().error("UserWarning: " + unicode(e))
+            QtGui.QMessageBox.warning(self, "Warning", unicode(e))
+        except (IOError, OSError), e:
+            utils.Logger().error("Error: " + unicode(e))
+            QtGui.QMessageBox.warning(self, "Error", unicode(e))
+        except Exception, e:
+            utils.Logger().error("Failed on exception: " + unicode(e))
+            QtGui.QMessageBox.warning(self, "Exception", unicode(e))
+            raise
+        finally:
+            utils.Logger().logAllWarnings()    
+            utils.Logger().logAllErrors()    
+            utils.Logger().info("Prepare PEG. Ended.")
+            self._writeToStatusBar("")
 
