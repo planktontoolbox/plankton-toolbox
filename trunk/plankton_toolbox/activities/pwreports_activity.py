@@ -32,10 +32,11 @@ import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.utils as utils
 import plankton_toolbox.activities.activity_base as activity_base
-import plankton_toolbox.core.monitoring.pw_monitoring_files as pw_monitoring_files
-import plankton_toolbox.core.monitoring.pw_exports as pw_exports
 import plankton_toolbox.core.biology.taxa as taxa
 import plankton_toolbox.core.biology.taxa_sources as taxa_sources
+import plankton_toolbox.core.biology.taxa_sources as taxa_sources
+import plankton_toolbox.core.monitoring.pw_monitoring_files as pw_monitoring_files
+import plankton_toolbox.core.monitoring.pw_reports as pw_reports
 
 class PwReportsActivity(activity_base.ActivityBase):
     """
@@ -51,7 +52,7 @@ class PwReportsActivity(activity_base.ActivityBase):
         # === GroupBox: databox === 
         databox = QtGui.QGroupBox("Select data files", self)
         # Active widgets and connections.
-        self.__fromdirectory_edit = QtGui.QLineEdit("testdata/pwdata/")
+        self.__fromdirectory_edit = QtGui.QLineEdit("planktondata/pwdata")
         self.__fromdirectory_button = QtGui.QPushButton("Browse...")
         self.__files_table = QtGui.QTableWidget()
         self.connect(self.__fromdirectory_button, QtCore.SIGNAL("clicked()"), self.__fromDirectoryBrowse)                
@@ -71,9 +72,9 @@ class PwReportsActivity(activity_base.ActivityBase):
         # === GroupBox: resourcebox === 
         resourcebox = QtGui.QGroupBox("Select resources", self)
         # Active widgets and connections.
-        self.__pegfile_edit = QtGui.QLineEdit("data/resources/peg.json")
+        self.__pegfile_edit = QtGui.QLineEdit("planktondata/resources/smhi_extended_peg_version_2010-10-26.json")
         self.__pegfile_button = QtGui.QPushButton("Browse...")
-        self.__translatefile_edit = QtGui.QLineEdit("data/resources/translate_pw_to_peg.json")
+        self.__translatefile_edit = QtGui.QLineEdit("planktondata/resources/smhi_pw_to_extended_peg.txt")
         self.__translatefile_button = QtGui.QPushButton("Browse...")
         self.connect(self.__pegfile_button, QtCore.SIGNAL("clicked()"), self.__pegFileBrowse)                
         self.connect(self.__translatefile_button, QtCore.SIGNAL("clicked()"), self.__translateFileBrowse)                
@@ -139,21 +140,24 @@ class PwReportsActivity(activity_base.ActivityBase):
                 
     def __fromDirectoryBrowse(self):
         """ """
+        # Show directory dialog box.
         dirdialog = QtGui.QFileDialog(self)
         dirdialog.setFileMode(QtGui.QFileDialog.Directory)
         dirdialog.setOptions(QtGui.QFileDialog.ShowDirsOnly)
         dirdialog.setDirectory(unicode(self.__fromdirectory_edit.text()))
         dirpath = dirdialog.getExistingDirectory()
+        # Check if user pressed ok or cancel.
         if dirpath:
             self.__fromdirectory_edit.setText(dirpath)
             self._samplefiles.clear()
             self.__files_table.setColumnCount(1)
             self.__files_table.horizontalHeader().setStretchLastSection(True)
+            # Add files in selected directory to QTableWidget.
             for row, filename in enumerate(os.listdir(self.__fromdirectory_edit.text())):
                 if os.path.splitext(filename)[1] in ['.csv', '.CSV']:
                     self.__files_table.setRowCount(row + 1)
                     item = QtGui.QTableWidgetItem(filename)
-                    item.setCheckState(QtCore.Qt.Checked)
+                    item.setCheckState(QtCore.Qt.Unchecked)
                     self.__files_table.setItem(row, 0, item)            
                 
     def __pegFileBrowse(self):
@@ -174,49 +178,60 @@ class PwReportsActivity(activity_base.ActivityBase):
                 
     def __createPwReport(self):
         """ """
-        utils.Logger().info("DDD")
+        if self.__report_list.currentIndex() == 0:
+            QtGui.QMessageBox.information(self, "Info", 'Report type must be selected.')
+            return        
+        utils.Logger().info("PW reports. Started.")
+        utils.Logger().clear()
+        self._writeToStatusBar("Generating PW report.")
         try:
-            self._writeToLog("Importing CSV files...")
-            self._writeToStatusBar("Importing CSV files...")
-            self._samplefiles.clear()
-            self._samplefiles['Danafjord 2010-04-06_10-20 m.CSV'] = None
-            self._samplefiles['Koljöfjord 2010--04-06-10_20m.CSV'] = None
-            self._samplefiles['Kosterfjorden (NR16) 2010-04-06_10-20m.CSV'] = None
-            self._samplefiles['Stretudden 2010-04-07_10-20m.CSV'] = None
-            self._samplefiles['Åstol 2010-04-07_10-20m.CSV'] = None
+            # Add selected files to filelist.
+            self._samplefiles.clear()                
+            for index in range(self.__files_table.rowCount() - 1):
+#            for item in self.__files_table.items():
+                item = self.__files_table.item(index, 0)
+                if item.checkState(): # Check if selected by user.
+                    key = unicode(item.data(QtCore.Qt.DisplayRole).toString())
+                    self._samplefiles[key] = None # With no data.
+            # Read files and add data as values in the filelist.        
+            sampledata = pw_monitoring_files.PwCsv()
             for samplefile in self._samplefiles:
-                self._writeToLog('Reading ' + samplefile + '...')        
-                sampledata = pw_monitoring_files.PwCsv()
-                sampledata.importFile('testdata/pwdata/' + samplefile)
-                self._samplefiles[samplefile] = sampledata
-                self._writeToLog('')
+                utils.Logger().info('Reading ' + samplefile + '...')        
+                sampledata.importFile(self.__fromdirectory_edit.text() + '/' + samplefile)
+                self._samplefiles[samplefile] = sampledata  # With data.
+            # Check which report to generate.        
+            if self.__report_list.currentIndex() == 1:
+                
+                
+                
+                # === Report MJ1 ===
+                utils.Logger().info("Used PEG list: " + self.__pegfile_edit.text())
+                peg = taxa.Peg()
+                importer = taxa_sources.JsonFile(taxaObject = peg)
+                importer.importTaxa(file = self.__pegfile_edit.text())
+                # Create exporter object.
+                report = pw_reports.PwReportMJ1()
+                report.setPeg(peg)
+                report.exportFile(self._samplefiles, self.__tofile_edit.text())
+                
+                
+                
+            else:
+                raise UserWarning('The selected report type is not implemented.')
         except UserWarning, e:
+            utils.Logger().error("UserWarning: " + unicode(e))
             QtGui.QMessageBox.warning(self, "Warning", unicode(e))
         except (IOError, OSError), e:
+            utils.Logger().error("Error: " + unicode(e))
             QtGui.QMessageBox.warning(self, "Error", unicode(e))
-        finally:    
-            self._writeToLog("done.")
+        except Exception, e:
+            utils.Logger().error("Failed on exception: " + unicode(e))
+            QtGui.QMessageBox.warning(self, "Exception", unicode(e))
+            raise
+        finally:
+            utils.Logger().logAllWarnings()    
+            utils.Logger().logAllErrors()    
+            utils.Logger().info("PW reports. Ended.")
             self._writeToStatusBar("")
-
-        """ """
-        try:
-            self._writeToLog("Exporting to test.csv...")
-            self._writeToStatusBar("")
-            # Load PEG.json
-            peg = taxa.Peg()
-            importer = taxa_sources.JsonFile(taxaObject = peg)
-            importer.importTaxa(file = 'data/resources/peg.json')
-            # Create exporter object.
-            exportfile = pw_exports.ExportPw()
-            exportfile.setPeg(peg)
-            exportfile.exportFile(self._samplefiles, 'test_export.txt')
-        except Warning, e:
-            QtGui.QMessageBox.warning(self, "Warning", unicode(e))
-        except StandardError, e:
-            QtGui.QMessageBox.warning(self, "Error", unicode(e))
-        finally:    
-            self._writeToLog("done.")
-            self._writeToStatusBar("")
-        
 
 

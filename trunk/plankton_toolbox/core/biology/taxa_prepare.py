@@ -36,6 +36,7 @@ http://code.google.com/p/pythonxy/wiki/StandardPlugins
 from abc import abstractmethod
 import datetime
 import simplejson as json
+import plankton_toolbox.utils as utils
 
 class PrepareDataSources(object):
     """
@@ -55,7 +56,7 @@ class PrepareDataSources(object):
 #        raise UserWarning('Abstract method not implemented.')
 
 
-class PrepareDyntaxaDbTablesAsTextFiles(DataSources):
+class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
     """
     Imports from text files.  
     """
@@ -78,6 +79,7 @@ class PrepareDyntaxaDbTablesAsTextFiles(DataSources):
         self.__createNameTypeDict() # Maps from name type id to name type.
         
         # === TAXON file ===
+        utils.Logger().info("Reading: " + dir + 'species_dyntaxa_taxon.txt')
         taxonFile = open(dir + 'species_dyntaxa_taxon.txt', 'r')
         separator = '\t' # Tab as separator.
         for line in taxonFile:
@@ -121,10 +123,11 @@ class PrepareDyntaxaDbTablesAsTextFiles(DataSources):
                 if not(taxonid in self.__idToTaxon):
                     self.__idToTaxon[taxonid] = taxonDict # Updates Taxa object.
                 else:
-                    print ("Duplicate taxon id: " + str(taxonid) )
+                    utils.Logger().warning("Duplicate taxon id: " + str(taxonid) )
         taxonFile.close()
         
         # === HIER file ===
+        utils.Logger().info("Reading: " + dir + 'species_dyntaxa_hier.txt')
         hierFile = open(dir + 'species_dyntaxa_hier.txt', 'r')
         separator = '\t' # Tab as separator.
         for line in hierFile:
@@ -164,10 +167,11 @@ class PrepareDyntaxaDbTablesAsTextFiles(DataSources):
                         elif relationid == '2':
                             taxon['Parent id'] = agarid
                      else:
-                        print('Can not find Taxon id(hier): ' + underid)
+                        utils.Logger().error('Can not find Taxon id(hier): ' + underid)
         hierFile.close()
         
         # === NAMES file ===
+        utils.Logger().info("Reading: " + dir + 'species_dyntaxa_names.txt')
         namesFile = open(dir + 'species_dyntaxa_names.txt', 'r')
         separator = '\t' # Tab as separator.
         for line in namesFile:
@@ -220,7 +224,7 @@ class PrepareDyntaxaDbTablesAsTextFiles(DataSources):
                             taxon['Valid name'] = namn
                             taxon['Valid author'] = auktor
                     else:
-                        print('Can not find Taxon id(name): ' + str(underid))                
+                        utils.Logger().error('Can not find Taxon id(name): ' + str(underid))                
         namesFile.close()
         
     def __cleanUpString(self,value):
@@ -285,7 +289,7 @@ class PrepareDyntaxaDbTablesAsTextFiles(DataSources):
             "15": "Anamorf name"}
 
 
-class PreparePegTextFile(DataSources):
+class PreparePegTextFile(PrepareDataSources):
     """ 
     """
     def __init__(self, taxaObject = None):
@@ -297,6 +301,7 @@ class PreparePegTextFile(DataSources):
         self.__header = []
         self.__taxa = self._taxaObject.getTaxonList()
         
+        utils.Logger().info("Reading: " + file)
         pegFile = open(file, 'r')
         separator = '\t' # Tab as separator.
         for line in pegFile:
@@ -326,7 +331,7 @@ class PreparePegTextFile(DataSources):
                                     # Use string format if not valid numeric. 
                                     sizeClassDict[self.__header[column]] = value.strip()
                                     
-#                                    print ('ERROR float:' + value + '     ' + value.strip().replace(',', '.').replace(' ', ''))
+#                                    utils.Logger().error('ERROR float:' + value + '     ' + value.strip().replace(',', '.').replace(' ', ''))
                                     
                             else:
                                 sizeClassDict[self.__header[column]] = value.strip()
@@ -401,248 +406,4 @@ class PreparePegTextFile(DataSources):
         if (self.__header[column] == 'Filament: length of cell, um'): return True
         if (self.__header[column] == 'Calculated Carbon pg/counting unit'): return True
         return False     
-
-class PrepareSmhiPwSpecies(DataSources):
-    """ 
-    """
-    def __init__(self, taxaObject = None):
-        """ """
-        super(PreparePegTextFile, self).__init__(taxaObject)
-
-    def importTaxa(self, file = None):
-        """ """
-        self.__header = []
-        self.__taxa = self._taxaObject.getTaxonList()
-        
-        pegFile = open(file, 'r')
-        separator = '\t' # Tab as separator.
-        for line in pegFile:
-            if len(self.__header) == 0:
-                # Store header columns. They will be used as keys i the taxon dictionary.
-                importFileHeader = line.split(separator)
-                for columnName in importFileHeader: 
-                    self.__header.append(self.__translateHeader(columnName.strip()))
-            else:
-                taxonDict = {}
-                sizeClassDict = {}
-                column = 0
-                for value in line.split(separator):
-                    if len(value.strip()) > 0:
-                        # Separate columns containing taxon and 
-                        # size-class related info.                
-                        if self.__isTaxonRelated(column):
-                            taxonDict[self.__header[column]] = value.strip()
-                        else:
-                            if self.__isColumnNumeric(column):
-                                try:
-                                    sizeClassDict[self.__header[column]] = float(value.strip().replace(',', '.').replace(' ', ''))
-                                except:
-                                    # Use string format if not valid numeric. 
-                                    sizeClassDict[self.__header[column]] = value.strip()
-                                    
-#                                    print ('ERROR float:' + value + '     ' + value.strip().replace(',', '.').replace(' ', ''))
-                                    
-                            else:
-                                sizeClassDict[self.__header[column]] = value.strip()
-                    column += 1
-                # Check if the taxon-related data already exists.
-                taxonExists = False
-                for taxon in self.__taxa:
-                    if taxon['Species'] == taxonDict['Species']:
-                        taxonExists = True
-                        taxon['Size classes'].append(sizeClassDict)
-                        continue
-                # First time. Create the list and add dictionary for 
-                # size classes. 
-                if taxonExists == False:
-                    self.__taxa.append(taxonDict)
-                    taxonDict['Size classes'] = []
-                    taxonDict['Size classes'].append(sizeClassDict)
-                
-        pegFile.close()
-        
-    def __translateHeader(self, importFileHeader):
-        """ Convert import file column names to key names used in dictionary. """        
-#        if (importFileHeader == 'Division'): return 'Division'
-#        if (importFileHeader == 'Class'): return 'Class'
-#        if (importFileHeader == 'Order'): return 'Order'
-#        if (importFileHeader == 'Species'): return 'Species'
-        if (importFileHeader == 'SFLAG (sp., spp., cf., complex, group)'): return 'SFLAG' # Modified
-        if (importFileHeader == 'STAGE (cyst, naked)'): return 'Stage' # Modified
-#        if (importFileHeader == 'Author'): return 'Author'
-#        if (importFileHeader == 'Trophy'): return 'Trophy'
-#        if (importFileHeader == 'Geometric shape'): return 'Geometric shape'
-        if (importFileHeader == 'FORMULA'): return 'Formula' # Modified
-        if (importFileHeader == 'Size class No'): return 'Size class' # Modified
-#        if (importFileHeader == 'Unit'): return 'Unit'
-        if (importFileHeader == 'size range,'): return 'Size range' # Modified
-        if (importFileHeader == 'Length (l1), \xb5m'): return 'Length(l1), um' # Modified
-        if (importFileHeader == 'Length (l2), \xb5m'): return 'Length(l2), um' # Modified
-        if (importFileHeader == 'Width (w), \xb5m'): return 'Width(w), um' # Modified
-        if (importFileHeader == 'Height (h), \xb5m'): return 'Height(h), um' # Modified
-        if (importFileHeader == 'Diameter (d1), \xb5m'): return 'Diameter(d1), um' # Modified
-        if (importFileHeader == 'Diameter (d2), \xb5m'): return 'Diameter(d2), um' # Modified
-        if (importFileHeader == 'No. of cells/ counting unit'): return 'No. of cells/counting unit' # Modified
-        if (importFileHeader == 'Calculated  volume, \xb5m3'): return 'Calculated volume, um3' # Modified
-        if (importFileHeader == 'Comment'): return 'Comment'
-        if (importFileHeader == 'Filament: length of cell (\xb5m)'): return 'Filament: length of cell, um' # Modified
-        if (importFileHeader == 'Calculated Carbon pg/counting unit        (Menden-Deuer & Lessard 2000)'): return 'Calculated Carbon pg/counting unit' # Modified
-        if (importFileHeader == 'Comment on Carbon calculation'): return 'Comment on Carbon calculation'
-        if (importFileHeader == 'CORRECTION / ADDITION                            2009'): return 'CORRECTION/ADDITION 2009' # Modified
-        return importFileHeader     
-        
-    def __isTaxonRelated(self, column):
-        """ """        
-        if (self.__header[column] == 'Division'): return True
-        if (self.__header[column] == 'Class'): return True
-        if (self.__header[column] == 'Order'): return True
-        if (self.__header[column] == 'Species'): return True
-        if (self.__header[column] == 'SFLAG'): return True
-        if (self.__header[column] == 'Author'): return True
-        return False # Related to size class.     
-        
-    def __isColumnNumeric(self, column):
-        """ """        
-        if (self.__header[column] == 'Length(l1), um'): return True
-        if (self.__header[column] == 'Length(l2), um'): return True
-        if (self.__header[column] == 'Width(w), um'): return True
-        if (self.__header[column] == 'Height(h), um'): return True
-        if (self.__header[column] == 'Diameter(d1), um'): return True
-        if (self.__header[column] == 'Diameter(d2), um'): return True
-        if (self.__header[column] == 'No. of cells/counting unit'): return True
-        if (self.__header[column] == 'Calculated volume, um3'): return True
-        if (self.__header[column] == 'Filament: length of cell, um'): return True
-        if (self.__header[column] == 'Calculated Carbon pg/counting unit'): return True
-        return False     
-
-class PrepareSmhiPhytoplanktonList(DataSources):
-    """
-    The PEG (Plankton Expert Group)-list does not cover all planktons found on
-    the Swedish west coast and a special list has to be maintained for the
-    datasets managed by SMHI. The sources for the SMHI Phytoplankton list is
-    the planktonlist used in PW at SMHI, the PEG-list and two translation
-    lists. One translation list from the PW list to PEG, and one from 
-    PEG to Dyntaxa.
-    The result of this plaktonlist preparation is a Json file containing one 
-    Json object for each taxon. Example:
-    {
-    ...
-    } 
-    """
-    def __init__(self, taxaObject = None):
-        """ """
-        super(PrepareSmhiPhytoplanktonList, self).__init__(taxaObject)
-
-    def importTaxa(self, file = None, encoding = 'utf-8'):
-        """ """
-        self.__header = []
-        self.__taxa = self._taxaObject.getTaxonList()
-        
-#        // 0 NOP    
-#        // 1 DIVISION
-#        // 2 CLASS
-#        // 3 ORDER
-#        // 4 GENUS
-#        // 5 SPECIESNAME
-#        // 6 SUBTYPE
-#        // 7 SUBNAME
-#        // 8 THROPHY
-#        // 9 SIZECLASS
-#        // 10 RUBINCODE
-#        // 11 DESCRIPTION
-#        // 12 LENGTH
-#        // 13 WIDTH
-#        // 14 VOLUME
-#        // 15 NOTUSED
-#        // 16 VOLUME2
-#        // 17 AUTHOR
-#        // 18 UPLOADED_BY
-
-        pwFile = open(file, 'r')
-        separator = '\t' # Tab as separator.
-        for line in pwFile:
-            if len(self.__header) == 0:
-                # Store header columns. They will be used as keys i the dictionary.
-                importFileHeader = line.split(separator)
-                for columnName in importFileHeader: 
-                    self.__header.append(self.__translateHeader(columnName.strip().strip('"').strip()))
-            else:
-                taxonDict = {}
-                sizeClassDict = {}
-                column = 0
-                for value in line.split(separator):
-                    value = value.strip().strip('"').strip()
-                    if column >= len(self.__header):
-                        print 'ERROR: index out of range' + value.strip()
-                        continue
-                    # Separate columns containing taxon and 
-                    # size-class related info.                
-                    if self.__isTaxonRelated(column):
-                        taxonDict[self.__header[column]] = value.strip()
-                    else:
-                        if self.__isColumnNumeric(column):
-                            try:
-                                float_value = float(value.strip().replace(',', '.').replace(' ', ''))
-                                sizeClassDict[self.__header[column]] = float_value
-                                if self.__header[column] == 'SIZECLASS':  # Covert SIZECLASS to integer.
-                                    sizeClassDict[self.__header[column]] = int(float_value)
-                            except:
-                                # Use string format if not valid numeric. 
-                                sizeClassDict[self.__header[column]] = value.strip()
-                        else:
-                            sizeClassDict[self.__header[column]] = value.strip()
-                    column += 1
-                                
-                # Create Species name.
-                taxonName = taxonDict['GENUS'] + ' ' + \
-                            taxonDict['SPECIESNAME'] + ' ' + \
-                            taxonDict['SUBTYPE'] + ' ' + \
-                            taxonDict['SUBNAME']
-                taxonDict['Species'] = taxonName.strip()
-                # Check if the taxon-related data already exists.
-                taxonExists = False
-                for taxon in self.__taxa:
-                    if  taxon['Species'] == taxonDict['Species']:
-                        taxonExists = True
-                        taxon['Size classes'].append(sizeClassDict)
-                        continue
-                # First time. Create the list and add dictionary for 
-                # size classes. 
-                if taxonExists == False:
-                    self.__taxa.append(taxonDict)
-                    taxonDict['Size classes'] = []
-                    taxonDict['Size classes'].append(sizeClassDict)
-
-                
-        pwFile.close()
-        
-    def __translateHeader(self, importFileHeader):
-        """ Convert import file column names to key names used in dictionary. """        
-#        if (importFileHeader == 'PW-Taxon att behålla trots ej i PEG'): return 'PW-Taxon not in PEG'
-#        if (importFileHeader == 'PW-sizeClass att beh'): return 'PW-SizeClass not in PEG'
-        return importFileHeader   
-
-    def __isTaxonRelated(self, column):
-        """ """        
-        if (self.__header[column] == 'NOP'): return True
-        if (self.__header[column] == 'DIVISION'): return True
-        if (self.__header[column] == 'CLASS'): return True
-        if (self.__header[column] == 'ORDER'): return True
-        if (self.__header[column] == 'GENUS'): return True
-        if (self.__header[column] == 'SPECIESNAME'): return True
-        if (self.__header[column] == 'SUBTYPE'): return True
-        if (self.__header[column] == 'SUBNAME'): return True
-        if (self.__header[column] == 'THROPHY'): return True
-        if (self.__header[column] == 'RUBINCODE'): return True
-        if (self.__header[column] == 'AUTHOR'): return True
-        return False # Related to size class.     
-        
-    def __isColumnNumeric(self, column):
-        """ """        
-        if (self.__header[column] == 'SIZECLASS'): return True
-        if (self.__header[column] == 'LENGTH'): return True
-        if (self.__header[column] == 'WIDTH'): return True
-        if (self.__header[column] == 'VOLUME'): return True
-        if (self.__header[column] == 'VOLUME2'): return True
-        return False
 
