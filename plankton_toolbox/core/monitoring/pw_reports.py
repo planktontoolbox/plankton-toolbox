@@ -44,10 +44,16 @@ class PwReportMJ1(PwReports):
     def __init__(self):
         """ """
         super(PwReportMJ1, self).__init__()
+#        self.__peg = None
+#        self.__translationFileName = None
         
     def setPeg(self, peg):
         """ """
-        self.peg = peg
+        self.__peg = peg
+
+    def setTaxonSizeClassTranslationFile(self, fileName):
+        """ """
+        self.__translationFileName = fileName
 
     def exportFile(self, pw_sample_dict = None, fileName = None, encoding = 'utf-8'):
         """ """
@@ -58,7 +64,8 @@ class PwReportMJ1(PwReports):
         
         # Load translation file between SmhiPhytoplanktonList and PEG list.  
         taxon_size_translation_dict = {}
-        translateFile = open('data/resources/smhi_pw_to_peg.txt', 'r')
+#        translateFile = codecs.open(self.__translationFileName, mode = 'r', encoding = 'utf-8')
+        translateFile = open('planktondata/resources/smhi_pw_to_peg.txt', 'r')
         separator = '\t' # Tab as separator.
         for row in translateFile:
             row_list = row.split(separator)
@@ -120,7 +127,7 @@ class PwReportMJ1(PwReports):
                     
                     peg_species, peg_size = taxon_size_translation_dict.get(pw_species_size, ':').split(':')
                     
-                    pegobject = self.peg.getTaxonByName(peg_species)
+                    pegobject = self.__peg.getTaxonByName(peg_species)
                     pegsizeclass = None
                     if pegobject:
                         for sizeclass in pegobject['Size classes']:

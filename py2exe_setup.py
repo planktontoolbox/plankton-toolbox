@@ -1,3 +1,13 @@
+#!/usr/bin/env python
+""" 
+Project: Plankton toolbox. http://plankton-toolbox.org
+
+Creates single file package for MS Windows: plankton_toolbox.exe
+
+Command to execute this setup file: 
+python py2exe_setup.py py2exe
+
+"""
 from distutils.core import setup
 import py2exe
 setup(
