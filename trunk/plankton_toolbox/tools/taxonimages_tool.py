@@ -50,7 +50,7 @@ class TaxonImagesTool(tool_base.ToolBase):
         label.setAlignment(QtCore.Qt.AlignHCenter)
         imagelabel = QtGui.QLabel();
         imagelabel.setAlignment(QtCore.Qt.AlignHCenter)
-        image = QtGui.QImage('data/cache/images/Incertae_sedis.jpg')
+        image = QtGui.QImage('planktondata/cache/images/Incertae_sedis.jpg')
         imagelabel.setPixmap(QtGui.QPixmap.fromImage(image))
         
          # === Main level layout. ===

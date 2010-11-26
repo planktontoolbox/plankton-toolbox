@@ -201,21 +201,44 @@ class PwReportsActivity(activity_base.ActivityBase):
                 self._samplefiles[samplefile] = sampledata  # With data.
             # Check which report to generate.        
             if self.__report_list.currentIndex() == 1:
-                
-                
-                
-                # === Report MJ1 ===
-                utils.Logger().info("Used PEG list: " + self.__pegfile_edit.text())
+                # === Report: MJ1 ===
+                utils.Logger().info("Selected report: MJ1")
                 peg = taxa.Peg()
                 importer = taxa_sources.JsonFile(taxaObject = peg)
                 importer.importTaxa(file = self.__pegfile_edit.text())
                 # Create exporter object.
                 report = pw_reports.PwReportMJ1()
+                utils.Logger().info("Used PEG list: " + self.__pegfile_edit.text())
+                utils.Logger().info("Used translation file: " + self.__translatefile_edit.text())
                 report.setPeg(peg)
+                report.setTaxonSizeClassTranslationFile(self.__translatefile_edit.text())
                 report.exportFile(self._samplefiles, self.__tofile_edit.text())
-                
-                
-                
+            elif self.__report_list.currentIndex() == 2:
+                # === Report: MJ1 ===
+                utils.Logger().info("Selected report: MJ2")
+                peg = taxa.Peg()
+                importer = taxa_sources.JsonFile(taxaObject = peg)
+                importer.importTaxa(file = self.__pegfile_edit.text())
+                # Create exporter object.
+                report = pw_reports.PwReportMJ1()
+                utils.Logger().info("Used PEG list: " + self.__pegfile_edit.text())
+                utils.Logger().info("Used translation file: " + self.__translatefile_edit.text())
+                report.setPeg(peg)
+                report.setTaxonSizeClassTranslationFile(self.__translatefile_edit.text())
+                report.exportFile(self._samplefiles, self.__tofile_edit.text())
+            elif self.__report_list.currentIndex() == 3:
+                # === Report: MJ1 ===
+                utils.Logger().info("Selected report: ATS1")
+                peg = taxa.Peg()
+                importer = taxa_sources.JsonFile(taxaObject = peg)
+                importer.importTaxa(file = self.__pegfile_edit.text())
+                # Create exporter object.
+                report = pw_reports.PwReportMJ1()
+                utils.Logger().info("Used PEG list: " + self.__pegfile_edit.text())
+                utils.Logger().info("Used translation file: " + self.__translatefile_edit.text())
+                report.setPeg(peg)
+                report.setTaxonSizeClassTranslationFile(self.__translatefile_edit.text())
+                report.exportFile(self._samplefiles, self.__tofile_edit.text())
             else:
                 raise UserWarning('The selected report type is not implemented.')
         except UserWarning, e:
