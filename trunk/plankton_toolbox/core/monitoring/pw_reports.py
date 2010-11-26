@@ -28,6 +28,7 @@
 
 """
 
+import codecs
 import plankton_toolbox.utils as utils
 
 class PwReports(object):
@@ -68,7 +69,7 @@ class PwReportMJ1(PwReports):
         
         out = None
         try:
-            out = open(fileName, 'w')
+            out = codecs.open(fileName, mode = 'w', encoding = 'iso-8859-1')
             separator = '\t' # Use tab as item separator.
 
             out.write( 'Station' + separator + # Index 0.
@@ -145,15 +146,16 @@ class PwReportMJ1(PwReports):
                     biovolume = 0.0
                     if pegsizeclass:
                         biovolume = pegsizeclass.get('Calculated volume, um3', '')
-                    try:         
-                        if pegsizeclass: out_columns[14] = str(biovolume * float(coeff) * float(units) / 1000000.0).replace('.', ',') # Biovolume mm3/L        
-                    except Exception, e:
-                        utils.Logger().error('Biovolume mm3/L: ' + unicode(e))
+                        try:         
+                            if pegsizeclass: out_columns[14] = str(biovolume * float(coeff) * float(units) / 1000000.0).replace('.', ',') # Biovolume mm3/L        
+                        except Exception, e:
+                            out_columns[14] = '<error>'
+                            utils.Logger().error('Biovolume mm3/L: ' + unicode(e))
                         
     #                pegobject = self.peg.getTaxonByName(pw_data[sample])
     #                pegobject
     
-                    out.write('\t'.join(map(str, out_columns)) + '\n')
+                    out.write('\t'.join(map(unicode, out_columns)) + '\n')
             
                 
         except (IOError, OSError):

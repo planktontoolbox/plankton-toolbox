@@ -28,6 +28,8 @@
 
 """
 
+import codecs
+
 class MonitoringFiles(object):
     """ 
     """
@@ -51,7 +53,7 @@ class PwCsv(MonitoringFiles):
             raise UserWarning('File name is missing.')
         file = None
         try:
-            file = open(fileName, 'r')
+            file = codecs.open(fileName, mode = 'r', encoding = 'iso-8859-1')
             separator = ',' # Use ',' as item separator.
             
             # Read data header. Same header used for data and aggregated data.
