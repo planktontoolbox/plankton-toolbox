@@ -194,9 +194,9 @@ class PwReportsActivity(activity_base.ActivityBase):
                     key = unicode(item.data(QtCore.Qt.DisplayRole).toString())
                     self._samplefiles[key] = None # With no data.
             # Read files and add data as values in the filelist.        
-            sampledata = pw_monitoring_files.PwCsv()
             for samplefile in self._samplefiles:
                 utils.Logger().info('Reading ' + samplefile + '...')        
+                sampledata = pw_monitoring_files.PwCsv()
                 sampledata.importFile(self.__fromdirectory_edit.text() + '/' + samplefile)
                 self._samplefiles[samplefile] = sampledata  # With data.
             # Check which report to generate.        
