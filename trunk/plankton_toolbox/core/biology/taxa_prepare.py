@@ -28,14 +28,12 @@
 This module is used for preparation of resource files. Resource files are 
 stored in the json format, but they can be prepared from various sources.
 
-Simplejson. For Python(x,y) users, add from:
-http://code.google.com/p/pythonxy/wiki/StandardPlugins
 """
 
 #import date
 from abc import abstractmethod
 import datetime
-import simplejson as json
+import json as json
 import plankton_toolbox.utils as utils
 
 class PrepareDataSources(object):
