@@ -26,14 +26,12 @@
 
 """
 
-Simplejson. For Python(x,y) users, add from:
-http://code.google.com/p/pythonxy/wiki/StandardPlugins
 """
 
 #import date
 import datetime
 from abc import abstractmethod
-import simplejson as json
+import json as json
 import plankton_toolbox.utils as utils
 
 class DataSources(object):
