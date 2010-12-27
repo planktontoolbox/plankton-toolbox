@@ -127,6 +127,13 @@ class MainWindow(QtGui.QMainWindow):
         grid1.addWidget(activitiesgroup)
         activitiesvbox = QtGui.QVBoxLayout()
         activitiesgroup.setLayout(activitiesvbox)
+        
+###        
+#        activitiestree = QtGui.QTreeWidget()
+#        activitiesvbox.addWidget(activitiestree)
+#        activitiestree.setHeaderHidden(True)
+###
+        
         # For tools.
         toolsgroup = QtGui.QGroupBox("Tools")
         grid1.addWidget(toolsgroup)        
@@ -138,8 +145,20 @@ class MainWindow(QtGui.QMainWindow):
         for activity in self.__activitymanager.getActivityList():
             button = QtGui.QPushButton(activity.objectName())
             activitiesvbox.addWidget(button) # Adds to stack.
+                     
+###
+#            treeitem = QtGui.QTreeWidgetItem(activitiestree, [activity.objectName()])            
+#            treeitem = QtGui.QTreeWidgetItem(treeitem, [activity.objectName()])
+###
+
+            
             # The activity is called to select stack item by object, not index.
             self.connect(button, QtCore.SIGNAL("clicked()"), activity.showInMainWindow)
+
+###            
+#            self.connect(activitiestree, QtCore.SIGNAL("itemClicked(QTreeWidgetItem *, int)"), activity.showInMainWindow)
+###            
+            
             # Create one layer in the stacked activity widget.
             self.__activitystack.addWidget(activity)
         activitiesvbox.addStretch(5)

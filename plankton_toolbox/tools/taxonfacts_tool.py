@@ -130,7 +130,7 @@ class TaxonFactsTool(tool_base.ToolBase):
 </tbody>        
         """)
 
-         # === Main level layout. ===
+        # === Main level layout. ===
         content = QtGui.QWidget()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)

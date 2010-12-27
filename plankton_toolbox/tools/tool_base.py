@@ -78,5 +78,3 @@ class ToolBase(QtGui.QDockWidget):
         in log file and/or in log tool window. 
         """
         self._parent.writeToLog(message)
-
- 

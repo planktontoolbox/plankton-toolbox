@@ -49,7 +49,7 @@ def singleton(cls):
 class Logger(object):
     """
     Utility class for logging.
-    Info are used for direct logging, and errors and warnings are accumulated. 
+    Info are used for direct logging. Errors and warnings are accumulated. 
     """
     def __init__(self):
         self.__logtarget = None
@@ -66,7 +66,7 @@ class Logger(object):
         self.__warnings.clear()
         
     def error(self, message):
-        """ Accumulates errors. Increment counter if it alredy exists. """
+        """ Accumulates errors. Increment counter if it already exists. """
         message = 'ERROR: ' + message
         if message in self.__errors:
             self.__errors[message] += 1
@@ -74,7 +74,7 @@ class Logger(object):
             self.__errors[message] = 1
         
     def warning(self, message):
-        """ Accumulates warnings. Increment counter if it alredy exists. """
+        """ Accumulates warnings. Increment counter if it already exists. """
         message = 'WARNING: ' + message
         if message in self.__warnings:
             self.__warnings[message] += 1

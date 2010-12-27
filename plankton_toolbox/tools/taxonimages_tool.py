@@ -53,7 +53,7 @@ class TaxonImagesTool(tool_base.ToolBase):
         image = QtGui.QImage('planktondata/cache/images/Incertae_sedis.jpg')
         imagelabel.setPixmap(QtGui.QPixmap.fromImage(image))
         
-         # === Main level layout. ===
+        # === Main level layout. ===
         content = QtGui.QWidget()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)

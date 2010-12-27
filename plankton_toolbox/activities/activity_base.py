@@ -74,5 +74,3 @@ class ActivityBase(QtGui.QWidget):
         in log file and/or in the Log tool window. 
         """
         self._parent.writeToLog(message)
-
- 

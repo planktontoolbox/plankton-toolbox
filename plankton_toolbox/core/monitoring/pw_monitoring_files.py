@@ -29,6 +29,7 @@
 """
 
 import codecs
+import json
 
 class MonitoringFiles(object):
     """ 

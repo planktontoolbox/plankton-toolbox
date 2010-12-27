@@ -33,7 +33,7 @@ stored in the json format, but they can be prepared from various sources.
 #import date
 from abc import abstractmethod
 import datetime
-import json as json
+#import json as json
 import plankton_toolbox.utils as utils
 
 class PrepareDataSources(object):
@@ -85,7 +85,7 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
                 # Store header columns.
                 self.__taxonHeader = line.split(separator)
             else:
-                 # Split row and trim each item.
+                # Split row and trim each item.
                 columns = map(self.__cleanUpString, line.split(separator))
                 if len(columns) < 2:
                     continue # Don't handle short rows.
@@ -133,7 +133,7 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
                 # Store header columns.
                 self.__hierHeader = line.split(separator)
             else:
-                 # Split row and trim each item.
+                # Split row and trim each item.
                 columns = map(self.__cleanUpString, line.split(separator))
                 if len(columns) < 2:
                     continue # Don't handle short rows.
@@ -158,13 +158,13 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
                 nowDate = datetime.date.today() # Note: includes day and time.           
                 now = datetime.datetime(nowDate.year, nowDate.month, nowDate.day)                
                 if (dateFrom <= now) and (now <= dateTo):
-                     if underid in self.__idToTaxon:
+                    if underid in self.__idToTaxon:
                         taxon = self.__idToTaxon[underid]
                         if relationid == '0':
                             taxon['Parent id'] = ''
                         elif relationid == '2':
                             taxon['Parent id'] = agarid
-                     else:
+                    else:
                         utils.Logger().error('Can not find Taxon id(hier): ' + underid)
         hierFile.close()
         
@@ -177,7 +177,7 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
                 # Store header columns.
                 self.__namesHeader = line.split(separator)
             else:
-                 # Split row and trim each item.
+                # Split row and trim each item.
                 columns = map(self.__cleanUpString, line.split(separator))
                 if len(columns) < 2:
                     continue # Don't handle short rows.

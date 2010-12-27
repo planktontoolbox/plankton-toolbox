@@ -128,7 +128,7 @@ class MarineSpecies(Taxa):
     """
     def __init__(self):
         """ """
-        super(AlgaeBase, self).__init__()
+        super(MarineSpecies, self).__init__()
 
 
 class Ioc(Taxa):
