@@ -25,7 +25,7 @@
 # THE SOFTWARE.
 
 """
-Plankton toolbox... TODO
+Plankton toolbox...
 """
 
 import sys

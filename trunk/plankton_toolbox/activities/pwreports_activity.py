@@ -34,7 +34,6 @@ import plankton_toolbox.utils as utils
 import plankton_toolbox.activities.activity_base as activity_base
 import plankton_toolbox.core.biology.taxa as taxa
 import plankton_toolbox.core.biology.taxa_sources as taxa_sources
-import plankton_toolbox.core.biology.taxa_sources as taxa_sources
 import plankton_toolbox.core.monitoring.pw_monitoring_files as pw_monitoring_files
 import plankton_toolbox.core.monitoring.pw_reports as pw_reports
 

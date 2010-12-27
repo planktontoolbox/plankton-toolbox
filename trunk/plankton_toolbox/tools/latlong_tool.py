@@ -26,6 +26,8 @@
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
+import webbrowser
+import plankton_toolbox.utils as utils
 import plankton_toolbox.tools.tool_base as tool_base
 from plankton_toolbox.core.map_projections.swedish_geoposition_converter import SwedishGeoPositionConverter
 import plankton_toolbox.core.map_projections.latlong_dd_dm_dms as latlong
@@ -129,6 +131,15 @@ class LatLongTool(tool_base.ToolBase):
         self.connect(self.__sweref99E, QtCore.SIGNAL("textEdited(QString)"), self.__sweref99_calculate)
 #        self.connect(self.__sweref99N, QtCore.SIGNAL("editingFinished()"), self.__update_sweref99)
 #        self.connect(self.__sweref99E, QtCore.SIGNAL("editingFinished()"), self.__update_sweref99)
+
+        # Open in web browser: Google maps.
+        self.__opengooglemaps = QtGui.QPushButton("Open maps.google.com")
+        self.connect(self.__opengooglemaps, QtCore.SIGNAL("clicked()"), self.__open_googlemaps)                
+        # Open in web browser: latlong.mellifica.se.
+        self.__openlatlongmellifica = QtGui.QPushButton("Open latlong.mellifica.se")
+        self.connect(self.__openlatlongmellifica, QtCore.SIGNAL("clicked()"), self.__open_latlongmellifica)                
+        
+        
                 
         # Layout.
         # Tabs, single and multiple.
@@ -142,7 +153,6 @@ class LatLongTool(tool_base.ToolBase):
         # Single position tab.
         singleLayout = QtGui.QGridLayout()
         singleWidget.setLayout(singleLayout)
-        singleLayout.setRowStretch(4, 5)
         # Single, lat/long.        
         latLongGroup = QtGui.QGroupBox("SWEREF 99 (~WGS 84)", tabWidget)
         singleLayout.addWidget(latLongGroup, 0, 0)
@@ -213,6 +223,12 @@ class LatLongTool(tool_base.ToolBase):
         sweref99Layout.addWidget(sweref99ELabel, 1, 2)
         sweref99Layout.addWidget(self.__sweref99E, 1, 3)
         #
+        hbox = QtGui.QHBoxLayout()
+        singleLayout.addLayout(hbox, 3, 0)
+        hbox.addWidget(self.__opengooglemaps)
+        hbox.addWidget(self.__openlatlongmellifica)
+        #
+        singleLayout.setRowStretch(4, 5)
         
         # === TABLE POSITIONS ===
         
@@ -459,6 +475,26 @@ class LatLongTool(tool_base.ToolBase):
         print("Y: %.12f" % y)
                 
         print("Test convert_long_to_dms(57.123): " + latlong.convert_long_to_dms(57.123))
+
+    def __open_googlemaps(self):
+        """ Launch web browser and use maps.google.com to display position. """
+        if (len(self.__latDd.text()) == 0) or (len(self.__longDd.text()) == 0):
+            utils.Logger().info("Failed to open maps.google.com. No values for lat/long.")
+            return
+        webbrowser.open("http://maps.google.com/maps/?ll=" + self.__latDd.text() + "," + self.__longDd.text())
+        
+    def __open_latlongmellifica(self):
+        """ Launch web browser and use latlong.mellifica.se to display position. """
+        if (len(self.__latDd.text()) == 0) or (len(self.__longDd.text()) == 0):
+            utils.Logger().info("Failed to open latlong.mellifica.se. No values for lat/long.")
+            return
+        webbrowser.open("http://latlong.mellifica.se/?latlong=" + self.__latDd.text() + "," + self.__longDd.text())
+        
+        
+
+
+
+
 
 #    def __paste(self):
 #        """ """

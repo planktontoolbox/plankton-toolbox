@@ -66,7 +66,7 @@ class TemplateActivity(activity_base.ActivityBase):
         templatelayout.addLayout(hbox1)
         templatelayout.addStretch(5)
         templatebox.setLayout(templatelayout)
-         # === Main level layout. ===
+        # === Main level layout. ===
         content = QtGui.QWidget()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
