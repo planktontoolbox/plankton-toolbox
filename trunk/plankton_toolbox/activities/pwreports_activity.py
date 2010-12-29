@@ -55,7 +55,7 @@ class PwReportsActivity(activity_base.ActivityBase):
         
         
 #        self.__fromdirectory_edit = QtGui.QLineEdit("")
-        self.__fromdirectory_edit = QtGui.QLineEdit("C:/Users/arnold/Desktop/data/planktondata/phytowin_files")
+        self.__fromdirectory_edit = QtGui.QLineEdit("../../../../data/planktondata/phytowin_files")
 
         
         
@@ -199,18 +199,12 @@ class PwReportsActivity(activity_base.ActivityBase):
                 if item.checkState(): # Check if selected by user.
                     # When reading from a table the display rule must be used.
                     key = unicode(item.data(QtCore.Qt.DisplayRole).toString())
-#                    key = unicode(item.data(QtCore.Qt.DisplayRole).toString(), 'UTF-8')
-#                    key = unicode(item.data(QtCore.Qt.DisplayRole).toString()).encode('utf-8') # TODO: utf-8 TEST.....
                     self._samplefiles[key] = None # With no data.
             # Read files and add data as values in the sample file list.        
-            for samplefile in self._samplefiles:
-                
-### TODO. Can't log filenames containing swedish characters. They are converted to unicode, but...                
+            for samplefile in self._samplefiles:                
                 utils.Logger().info('Reading ' + samplefile + '...')        
-#                utils.Logger().info('Reading ' + samplefile.encode('utf-8') + '...')        
-
                 sampledata = pw_monitoring_files.PwCsv()
-                sampledata.importFile(unicode(self.__fromdirectory_edit.text()) + '/' + samplefile)
+                sampledata.importFile(unicode(self.__fromdirectory_edit.text()) + '/' + samplefile, encoding = 'iso-8859-1')
                 self._samplefiles[samplefile] = sampledata  # With data.
             # Check which report to generate.        
             if self.__report_list.currentIndex() == 1:
@@ -251,7 +245,7 @@ class PwReportsActivity(activity_base.ActivityBase):
                 utils.Logger().info("Used translation file: " + unicode(self.__translatefile_edit.text()))
                 report.setPeg(peg)
                 report.setTaxonSizeClassTranslationFile(unicode(self.__translatefile_edit.text()))
-                report.exportFile(self._samplefiles, unicode(self.__tofile_edit.text()))
+                report.exportFile(self._samplefiles, unicode(self.__tofile_edit.text()), encoding = 'iso-8859-1')
             else:
                 raise UserWarning('The selected report type is not implemented.')
         except UserWarning, e:

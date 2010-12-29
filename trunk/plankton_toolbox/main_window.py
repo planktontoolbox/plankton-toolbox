@@ -30,7 +30,6 @@ Main window for the Plankton toolbox.
 
 import time
 import codecs
-
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.utils as utils
@@ -58,7 +57,7 @@ class MainWindow(QtGui.QMainWindow):
         # the Log tool when it is available.
         
         
-#        self.__logfile = open('plankton_toolbox_log.txt', 'w')        
+###        self.__logfile = open('plankton_toolbox_log.txt', 'w')        
         self.__logfile = codecs.open('plankton_toolbox_log.txt', mode = 'w', encoding = 'iso-8859-1')
 
         
