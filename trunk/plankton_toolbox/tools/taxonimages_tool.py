@@ -72,4 +72,4 @@ class TaxonImagesTool(tool_base.ToolBase):
 
     def __test(self):
         """ """
-        self._writeToLog("Name: " + self.__nameedit.text())
+        self._writeToLog("Name: " + unicode(self.__nameedit.text()))

@@ -65,7 +65,8 @@ class PwReportMJ1(PwReports):
         # Load translation file between SmhiPhytoplanktonList and PEG list.  
         taxon_size_translation_dict = {}
 #        translateFile = codecs.open(self.__translationFileName, mode = 'r', encoding = 'utf-8')
-        translateFile = open('planktondata/resources/smhi_pw_to_peg.txt', 'r')
+#        translateFile = open('planktondata/resources/smhi_pw_to_peg.txt', 'r')
+        translateFile = open(self.__translationFileName, 'r')
         separator = '\t' # Tab as separator.
         for row in translateFile:
             row_list = row.split(separator)
@@ -95,7 +96,7 @@ class PwReportMJ1(PwReports):
                         'Cells/L' + separator + # Index 12.
                         '100-um pieces/L' + separator + # Index 13.
                         'Biovolume mm3/L' + separator + # Index 14.
-                        '\n'
+                        '\r\n'
                         );
                         
             for pw_sample in pw_sample_dict.values():
@@ -162,7 +163,7 @@ class PwReportMJ1(PwReports):
     #                pegobject = self.peg.getTaxonByName(pw_data[sample])
     #                pegobject
     
-                    out.write('\t'.join(map(unicode, out_columns)) + '\n')
+                    out.write('\t'.join(map(unicode, out_columns)) + '\r\n')
             
                 
         except (IOError, OSError):

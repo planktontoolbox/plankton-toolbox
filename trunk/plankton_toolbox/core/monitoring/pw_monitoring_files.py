@@ -30,6 +30,10 @@
 
 import codecs
 import json
+import urllib
+import string
+import plankton_toolbox.utils as utils
+
 
 class MonitoringFiles(object):
     """ 
@@ -37,6 +41,67 @@ class MonitoringFiles(object):
     def __init__(self):
         """ """
         self._metadata = {} # Metadata for the dataset.
+
+        
+class SharkwebDownload(MonitoringFiles):
+    """ 
+    """
+    def __init__(self):
+        """ """
+        super(SharkwebDownload, self).__init__()
+        self._dataset = {} # Dataset containing the json result set.
+
+    def clear(self):
+        """ """
+        self._dataset = {}
+
+    def readData(self, parameters = None, encoding = 'utf-8'):
+        """ """
+        self.clear()
+        if parameters == None:
+            raise UserWarning('Parameters are missing.')
+        # URL and parameters. Use unicode and utf-8 to handle swedish characters.
+        url = u'http://test.mellifica.org/sharkweb/shark_php.php'
+        parameters = dict([k, v.encode('utf-8')] for k, v in parameters.items())
+        params = urllib.urlencode(parameters)
+        #
+        utils.Logger().info('DEBUG: URL: ' + url)
+        utils.Logger().info('DEBUG: Parameters: ' + params)
+        #   
+        f = urllib.urlopen(url, params)
+        self._dataset['data'] = []
+        for row, line in enumerate(f.readlines()):
+            # Use this if data is delivered in rows with tab separated fields.
+            if row == 0:
+                self._dataset['headers'] = map(string.strip, line.split('\t'))
+            else:
+                self._dataset['data'].append(map(string.strip, line.split('\t')))
+#            # Use this if data is delivered in the Json format.
+#            self._dataset = json.loads(line, encoding = encoding)
+        utils.Logger().info('Received rows: ' + str(len(self._dataset['data'])))
+            
+    def getHeader(self, column):
+        if self._dataset.has_key('headers'): 
+            return self._dataset['headers'][column]
+        return ''
+
+    def getData(self, row, column):
+        if self._dataset.has_key('data'): 
+            return self._dataset['data'][row][column]
+        return ''
+
+    def getColumnCount(self):
+        if self._dataset.has_key('headers'): 
+            return len(self._dataset['headers'])
+        return 0
+
+    def getRowCount(self):
+        if self._dataset.has_key('data'): 
+            return len(self._dataset['data'])
+        return 0
+
+    
+
         
 class PwCsv(MonitoringFiles):
     """ 

@@ -69,4 +69,4 @@ class AnalyseDataActivity(activity_base.ActivityBase):
 
 #    def __test(self):
 #        """ """
-#        self._writeToLog("Name: " + self.__nameedit.text())
+#        self._writeToLog("Name: " + unicode(self.__nameedit.text()))

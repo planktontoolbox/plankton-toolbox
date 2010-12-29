@@ -69,7 +69,7 @@ class LogTool(tool_base.ToolBase):
         self.__logarea.scrollToBottom()
         # Remove oldest lines if max exceeded.
         try:
-            max = int(self.__limitedit.text()) 
+            max = int(unicode(self.__limitedit.text())) 
             if max > 1:
                 while self.__logarea.count() > max:
                     self.__logarea.takeItem(0)
