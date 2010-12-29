@@ -1,0 +1,3611 @@
+PW-Taxon	PW-SizeClass	PEG-Taxon	PEG-SizeClass	PW-Taxon att behålla trots ej i PEG	PW-sizeClass att beh
+Acanthoica quattrospina	1	Acanthoica quattrospina	1		
+Acanthoica quattrospina	32	Acanthoica quattrospina			
+Acanthoica quattrospina	33	Acanthoica quattrospina			
+Achroonema lentum	1	Achroonema lentum	1		
+Achroonema lentum	32	Achroonema lentum			
+Achroonema proteiforme	1	Achroonema proteiforme	1		
+Achroonema proteiforme	32	Achroonema proteiforme			
+Actinastrum hantzschii	1	Actinastrum hantzschii	1		
+Actinastrum hantzschii	2	Actinastrum hantzschii	2		
+Actinastrum hantzschii	3	Actinastrum hantzschii	3		
+Actinastrum hantzschii	32	Actinastrum hantzschii			
+Actiniscus pentasterias	1	Actiniscus pentasterias	1		
+Actiniscus pentasterias	32	Actiniscus pentasterias			
+Actinocyclus normanii forma normanii	1	Actinocyclus normanii f. normanii	1		
+Actinocyclus normanii forma normanii	2	Actinocyclus normanii f. normanii	2		
+Actinocyclus normanii forma normanii	3	Actinocyclus normanii f. normanii	3		
+Actinocyclus normanii forma normanii	4	Actinocyclus normanii f. normanii	4		
+Actinocyclus normanii forma normanii	5	Actinocyclus normanii f. normanii	5		
+Actinocyclus normanii forma normanii	6	Actinocyclus normanii f. normanii	6		
+Actinocyclus normanii forma normanii	32	Actinocyclus normanii f. normanii			
+Actinocyclus normanii forma subsalsus	1	Actinocyclus normanii f. subsalsus	1		
+Actinocyclus normanii forma subsalsus	2	Actinocyclus normanii f. subsalsus	2		
+Actinocyclus normanii forma subsalsus	3	Actinocyclus normanii f. subsalsus	3		
+Actinocyclus normanii forma subsalsus	4	Actinocyclus normanii f. subsalsus	4		
+Actinocyclus normanii forma subsalsus	5	Actinocyclus normanii f. subsalsus	5		
+Actinocyclus normanii forma subsalsus	6	Actinocyclus normanii f. subsalsus	6		
+Actinocyclus normanii forma subsalsus	32	Actinocyclus normanii f. subsalsus			
+Actinocyclus octonarius var. crassus	1	Actinocyclus octonarius var. crassus	1		
+Actinocyclus octonarius var. crassus	2	Actinocyclus octonarius var. crassus	2		
+Actinocyclus octonarius var. crassus	3	Actinocyclus octonarius var. crassus	3		
+Actinocyclus octonarius var. crassus	4	Actinocyclus octonarius var. crassus	4		
+Actinocyclus octonarius var. crassus	5	Actinocyclus octonarius var. crassus	5		
+Actinocyclus octonarius var. crassus	6	Actinocyclus octonarius var. crassus	6		
+Actinocyclus octonarius var. crassus	7	Actinocyclus octonarius var. crassus	7		
+Actinocyclus octonarius var. crassus	32	Actinocyclus octonarius var. crassus			
+Akashiwo sanguinea	1	Akashiwo sanguinea	1		
+Akashiwo sanguinea	2	Akashiwo sanguinea	2		
+Akashiwo sanguinea	3	Akashiwo sanguinea	3		
+Akashiwo sanguinea	4	Akashiwo sanguinea	4		
+Akashiwo sanguinea	32	Akashiwo sanguinea			
+Alexandrium minutum	1	Alexandrium minutum	1		
+Alexandrium minutum	2	Alexandrium minutum	2		
+Alexandrium minutum	32	Alexandrium minutum			
+Alexandrium ostenfeldii	1	Alexandrium ostenfeldii	2		
+Alexandrium ostenfeldii	32	Alexandrium ostenfeldii			
+Alexandrium pseudogonyaulax	0	Alexandrium pseudogonyaulax			
+Alexandrium pseudogonyaulax	1	Alexandrium pseudogonyaulax	1		
+Alexandrium pseudogonyaulax	32	Alexandrium pseudogonyaulax			
+Alexandrium spp	1	Alexandrium	1		
+Alexandrium spp	2	Alexandrium	2		
+Alexandrium spp	3	Alexandrium	3		
+Alexandrium spp	32	Alexandrium			
+Alexandrium tamarense	1	Alexandrium tamarense	1		
+Alexandrium tamarense	2	Alexandrium tamarense	2		
+Alexandrium tamarense	3	Alexandrium tamarense	3		
+Alexandrium tamarense	32	Alexandrium tamarense			
+Alexandrium/Fragilidium spp	32		no size		
+Amoeba spp_naked	32				
+Amphidinium acutissimum	1	Amphidinium acutissimum			
+Amphidinium acutissimum	32	Amphidinium acutissimum			
+Amphidinium crassum	1	Amphidinium crassum	1		
+Amphidinium crassum	2	Amphidinium crassum	2		
+Amphidinium crassum	32	Amphidinium crassum			
+Amphidinium incoloratum	1	Amphidinium incoloratum			
+Amphidinium incoloratum	32	Amphidinium incoloratum			
+Amphidinium operculatum	1	Amphidinium operculatum			
+Amphidinium operculatum	32	Amphidinium operculatum			
+Amphidinium pellucidum	1	Amphidinium pellucidum	1		
+Amphidinium pellucidum	32	Amphidinium pellucidum			
+Amphidinium sp.A	0	Amphidinium			
+Amphidinium sphenoides	1	Amphidinium sphenoides	1		
+Amphidinium sphenoides	2	Amphidinium sphenoides	2		
+Amphidinium sphenoides	3	Amphidinium sphenoides	3		
+Amphidinium sphenoides	32	Amphidinium sphenoides			
+Amphidinium spp	1	Amphidinium	1		
+Amphidinium spp	2	Amphidinium	2		
+Amphidinium spp	3	Amphidinium	3		
+Amphidinium spp	4	Amphidinium	4		
+Amphidinium spp	5	Amphidinium	5		
+Amphidinium spp	6	Amphidinium	6		
+Amphidinium spp	7	Amphidinium	7		
+Amphidinium spp	8	Amphidinium	8		
+Amphidinium spp	32	Amphidinium			
+Amphiprora paludosa var. paludosa	1	Amphiprora paludosa var. paludosa	1		
+Amphiprora paludosa var. paludosa	2	Amphiprora paludosa var. paludosa	2		
+Amphiprora paludosa var. paludosa	32	Amphiprora paludosa var. paludosa			
+Amphora commutata	1	Amphora commutata	1		
+Amphora commutata	32	Amphora commutata			
+Amphora ovalis	1	Amphora ovalis	1		
+Amphora ovalis	32	Amphora ovalis			
+Amylax triacantha	1	Amylax triacantha	1		
+Amylax triacantha	2	Amylax triacantha	2		
+Amylax triacantha	3	Amylax triacantha	3		
+Amylax triacantha	4	Amylax triacantha	4		
+Amylax triacantha	32	Amylax triacantha			
+Anabaena affinis	1	Anabaena affinis	1		
+Anabaena affinis	32	Anabaena affinis			
+Anabaena circinalis	1	Anabaena circinalis	1		
+Anabaena circinalis	32	Anabaena circinalis			
+Anabaena crassa	1	Anabaena crassa	1		
+Anabaena crassa	32	Anabaena crassa			
+Anabaena inaequalis	1	Anabaena inaequalis	1		
+Anabaena inaequalis	2	Anabaena inaequalis	2		
+Anabaena inaequalis	32	Anabaena inaequalis			
+Anabaena macrospora	1	Anabaena macrospora	1		
+Anabaena macrospora	32	Anabaena macrospora			
+Anabaena oscillarioides	1	Anabaena oscillarioides	1		
+Anabaena oscillarioides	32	Anabaena oscillarioides			
+Anabaena planctonica	1	Anabaena planctonica	1		
+Anabaena planctonica	2	Anabaena planctonica	2		
+Anabaena planctonica	32	Anabaena planctonica			
+Anabaena smithii	1	Anabaena smithii	1		
+Anabaena smithii	32	Anabaena smithii			
+Anabaena spiroides	1	Anabaena spiroides	1		
+Anabaena spiroides	32	Anabaena spiroides			
+Anabaena spp	1	Anabaena	1		
+Anabaena spp	2	Anabaena	2		
+Anabaena spp	3	Anabaena	3		
+Anabaena spp	4	Anabaena	4		
+Anabaena spp	5	Anabaena	5		
+Anabaena spp	6	Anabaena	6		
+Anabaena spp	32	Anabaena			
+Anabaena torulosa	1	Anabaena torulosa	1		
+Anabaena torulosa	32	Anabaena torulosa			
+Anabaenopsis elenkinii	1	Anabaenopsis elenkinii	1		
+Anabaenopsis elenkinii	32	Anabaenopsis elenkinii			
+Andra_alger_slv_10 spp	32				
+Andra_alger_slv_20 spp	32				
+Andra_alger_slv_40 spp	32				
+Ankistrodesmus fusiformis	1	Ankistrodesmus fusiformis	1		
+Ankistrodesmus fusiformis	32	Ankistrodesmus fusiformis			
+Ankyra ocellata	1	Ankyra			
+Ankyra ocellata	32	Ankyra			
+Apedinella radians	0	Apedinella radians			
+Apedinella radians	1	Apedinella radians	1		
+Apedinella radians	2	Apedinella radians	2		
+Apedinella radians	3	Apedinella radians	3		
+Apedinella radians	4	Apedinella radians	4		
+Apedinella radians	32	Apedinella radians			
+Apedinella spinifera	32	Apedinella spinifera			
+Aphanizomenon hungaricum	1	Aphanizomenon hungaricum	1		
+Aphanizomenon hungaricum	32	Aphanizomenon hungaricum			
+Aphanizomenon issatschenkoi	1	Aphanizomenon issatschenkoi	1		
+Aphanizomenon issatschenkoi	2	Aphanizomenon issatschenkoi	2		
+Aphanizomenon issatschenkoi	32	Aphanizomenon issatschenkoi			
+Aphanizomenon klebahnii	1	Aphanizomenon klebahnii	1		
+Aphanizomenon klebahnii	32	Aphanizomenon klebahnii			
+Aphanizomenon skujae	1	Aphanizomenon skujae	1		
+Aphanizomenon skujae	32	Aphanizomenon skujae			
+Aphanizomenon sp	1	Aphanizomenon	1		
+Aphanizomenon spp	32	Aphanizomenon			
+Aphanizomenon yezoense	1	Aphanizomenon yezoense	1		
+Aphanizomenon yezoense	32	Aphanizomenon yezoense			
+Aphanocapsa conferta	1	Aphanocapsa conferta	1		
+Aphanocapsa conferta	2	Aphanocapsa conferta	2		
+Aphanocapsa conferta	3	Aphanocapsa conferta	3		
+Aphanocapsa conferta	4	Aphanocapsa conferta	4		
+Aphanocapsa conferta	5	Aphanocapsa conferta	5		
+Aphanocapsa conferta	32	Aphanocapsa conferta			32
+Aphanocapsa elachista	1	Aphanocapsa elachista	1		
+Aphanocapsa elachista	2	Aphanocapsa elachista	2		
+Aphanocapsa elachista	3	Aphanocapsa elachista	3		
+Aphanocapsa elachista	4	Aphanocapsa elachista	4		
+Aphanocapsa elachista	5	Aphanocapsa elachista	5		
+Aphanocapsa elachista	32	Aphanocapsa elachista			
+Aphanocapsa holsatica	1	Aphanocapsa holsatica	1		
+Aphanocapsa holsatica	2	Aphanocapsa holsatica	2		
+Aphanocapsa holsatica	3	Aphanocapsa holsatica	3		
+Aphanocapsa holsatica	4	Aphanocapsa holsatica	4		
+Aphanocapsa holsatica	5	Aphanocapsa holsatica	5		
+Aphanocapsa holsatica	32	Aphanocapsa holsatica			
+Aphanocapsa planctonica	1	Aphanocapsa planctonica	1		
+Aphanocapsa planctonica	2	Aphanocapsa planctonica	2		
+Aphanocapsa planctonica	3	Aphanocapsa planctonica	3		
+Aphanocapsa planctonica	4	Aphanocapsa planctonica	4		
+Aphanocapsa planctonica	5	Aphanocapsa planctonica	5		
+Aphanocapsa planctonica	32	Aphanocapsa planctonica			
+Aphanocapsa reinboldii	1	Aphanocapsa reinboldii	1		
+Aphanocapsa reinboldii	2	Aphanocapsa reinboldii	2		
+Aphanocapsa reinboldii	3	Aphanocapsa reinboldii	3		
+Aphanocapsa reinboldii	4	Aphanocapsa reinboldii	4		
+Aphanocapsa reinboldii	5	Aphanocapsa reinboldii	5		
+Aphanocapsa reinboldii	32	Aphanocapsa reinboldii			
+Aphanocapsa rivularis	1	Aphanocapsa rivularis	1		
+Aphanocapsa rivularis	2	Aphanocapsa rivularis	2		
+Aphanocapsa rivularis	3	Aphanocapsa rivularis	3		
+Aphanocapsa rivularis	4	Aphanocapsa rivularis	4		
+Aphanocapsa rivularis	5	Aphanocapsa rivularis	5		
+Aphanocapsa rivularis	32	Aphanocapsa rivularis			
+Aphanothece castagnei	1	Aphanothece castagnei	1		
+Aphanothece castagnei	2	Aphanothece castagnei	2		
+Aphanothece castagnei	3	Aphanothece castagnei	3		
+Aphanothece castagnei	4	Aphanothece castagnei	4		
+Aphanothece castagnei	5	Aphanothece castagnei	5		
+Aphanothece castagnei	32	Aphanothece castagnei			
+Aphanothece clathrata	1	Aphanothece clathrata	1		
+Aphanothece clathrata	2	Aphanothece clathrata	2		
+Aphanothece clathrata	3	Aphanothece clathrata	3		
+Aphanothece clathrata	4	Aphanothece clathrata	4		
+Aphanothece clathrata	5	Aphanothece clathrata	5		
+Aphanothece clathrata	32	Aphanothece clathrata			
+Aphanothece minutissima	1	Aphanothece minutissima	1		
+Aphanothece minutissima	2	Aphanothece minutissima	2		
+Aphanothece minutissima	3	Aphanothece minutissima	3		
+Aphanothece minutissima	4	Aphanothece minutissima	4		
+Aphanothece minutissima	5	Aphanothece minutissima	5		
+Aphanothece minutissima	32	Aphanothece minutissima			
+Aphanothece smithii	1	Aphanothece smithii	1		
+Aphanothece smithii	2	Aphanothece smithii	2		
+Aphanothece smithii	3	Aphanothece smithii	3		
+Aphanothece smithii	4	Aphanothece smithii	4		
+Aphanothece smithii	5	Aphanothece smithii	5		
+Aphanothece smithii	32	Aphanothece smithii			
+Aphanothece stagnina	1	Aphanothece stagnina	1		
+Aphanothece stagnina	2	Aphanothece stagnina	2		
+Aphanothece stagnina	3	Aphanothece stagnina	3		
+Aphanothece stagnina	4	Aphanothece stagnina	4		
+Aphanothece stagnina	5	Aphanothece stagnina	5		
+Aphanothece stagnina	32	Aphanothece stagnina			
+Arthrospira jenneri	1	Arthrospira jenneri			
+Arthrospira jenneri	32	Arthrospira jenneri			
+Arthrospira spp	1	Arthrospira			
+Arthrospira spp	32	Arthrospira			
+Asterionella formosa	1	Asterionella formosa	1		
+Asterionella formosa	2	Asterionella formosa	2		
+Asterionella formosa	3	Asterionella formosa	3		
+Asterionella formosa	4	Asterionella formosa			
+Asterionella formosa	5	Asterionella formosa			
+Asterionella formosa	6	Asterionella formosa			
+Asterionella formosa	32	Asterionella formosa			
+Asterionellopsis glacialis	0	Asterionellopsis glacialis			
+Asterionellopsis glacialis	1	Asterionellopsis glacialis	1		
+Asterionellopsis glacialis	2	Asterionellopsis glacialis	2		
+Asterionellopsis glacialis	3	Asterionellopsis glacialis	3		
+Asterionellopsis glacialis	32	Asterionellopsis glacialis			
+Attheya decora	1	Attheya decora	1		
+Attheya decora	2	Attheya decora	2		
+Attheya decora	3	Attheya decora	3		
+Attheya decora	4	Attheya decora	4		
+Attheya decora	5	Attheya decora	5		
+Attheya decora	32	Attheya decora			
+Attheya longicornis	0	Attheya longicornis			
+Attheya longicornis	1	Attheya longicornis	1		
+Attheya longicornis	32	Attheya longicornis			
+Attheya septentrionalis	1	Attheya septentrionalis	1		
+Attheya septentrionalis	32	Attheya septentrionalis			
+Attheya sp	32	Attheya			
+Attheya spp	32	Attheya			
+Aulacoseira granulata var. angustissima	1	Aulacoseira granulata var. angustissima	1		
+Aulacoseira granulata var. angustissima	2	Aulacoseira granulata var. angustissima	2		
+Aulacoseira granulata var. angustissima	3	Aulacoseira granulata var. angustissima	3		
+Aulacoseira granulata var. angustissima	4	Aulacoseira granulata var. angustissima	4		
+Aulacoseira granulata var. angustissima	5	Aulacoseira granulata var. angustissima			
+Aulacoseira granulata var. granulata	1	Aulacoseira granulata var. granulata	1		
+Aulacoseira granulata var. granulata	2	Aulacoseira granulata var. granulata	2		
+Aulacoseira islandica subsp. helvetica	1	Aulacoseira islandica ssp. helvetica	1		
+Aulacoseira islandica subsp. helvetica	2	Aulacoseira islandica ssp. helvetica	2		
+Aulacoseira islandica subsp. helvetica	32	Aulacoseira islandica ssp. helvetica			
+Aulacoseira islandica subsp. islandica	1	Aulacoseira islandica ssp. islandica	1		
+Aulacoseira islandica subsp. islandica	2	Aulacoseira islandica ssp. islandica	2		
+Aulacoseira islandica subsp. islandica	3	Aulacoseira islandica ssp. islandica	3		
+Aulacoseira islandica subsp. islandica	4	Aulacoseira islandica ssp. islandica	4		
+Aulacoseira islandica subsp. islandica	5	Aulacoseira islandica ssp. islandica	5		
+Aulacoseira islandica subsp. islandica	32	Aulacoseira islandica ssp. islandica			
+Aulacoseira italica	1	Aulacoseira italica	1		
+Aulacoseira italica	2	Aulacoseira italica	2		
+Aulacoseira italica	32	Aulacoseira italica			
+Aulacoseira sp	32	Aulacoseira			
+Aulacoseira spp	1	Aulacoseira			
+Aulacoseira spp	2	Aulacoseira			
+Aulacoseira spp	3	Aulacoseira			
+Aulacoseira spp	4	Aulacoseira			
+Aulacoseira spp	32	Aulacoseira			
+Azadinium spinosum	1			Azadinium spinosum	1
+Azadinium spinosum	32			Azadinium spinosum	32
+Bacillaria paxillifera	32	Bacillaria paxillifera			
+Bacteriastrum hyalinum	1	Bacteriastrum hyalinum	1		
+Bacteriastrum hyalinum	32	Bacteriastrum hyalinum			
+Bacteriastrum hyalinum_restingspore	1	Bacteriastrum			
+Balanion comatum	0	Balanion comatum			
+Balanion comatum	32	Balanion comatum			
+Balanion spp	1	Balanion			
+Balanion spp	32	Balanion			
+Biflagellate spB	0	Flagellates spp	3		
+Blue bead spp	1				
+Botryococcus braunii	1	Botryococcus braunii			
+Botryococcus braunii	2	Botryococcus braunii			
+Botryococcus braunii	32	Botryococcus braunii			
+Calliacantha longicaudata	1	Calliacantha longicaudata	1		
+Calliacantha longicaudata	2	Calliacantha longicaudata	2		
+Calliacantha longicaudata	3	Calliacantha longicaudata			
+Calliacantha longicaudata	32	Calliacantha longicaudata			
+Calliacantha natans	1	Calliacantha natans	1		
+Calliacantha natans	2	Calliacantha natans	2		
+Calliacantha natans	32	Calliacantha natans			
+Caloneis amphisbaena forma subsalina	1	Caloneis amphisbaena			
+Caloneis amphisbaena forma subsalina	2	Caloneis amphisbaena			
+Caloneis amphisbaena forma subsalina	32	Caloneis amphisbaena			
+Calycomonas vangoorii	1	Ollicola vangorii	1		
+Calycomonas vangoorii	32	Ollicola vangorii			32
+Calycomonas wulfii	1	Ollicola vangorii	1		
+Calycomonas wulfii	32	Ollicola vangorii			32
+Centrales spp	1	Coscinodiscophyceae	1		
+Centrales spp	2	Coscinodiscophyceae	2		
+Centrales spp	3	Coscinodiscophyceae	3		
+Centrales spp	4	Coscinodiscophyceae	4		
+Centrales spp	5	Coscinodiscophyceae	5		
+Centrales spp	6	Coscinodiscophyceae	6		
+Centrales spp	7	Coscinodiscophyceae	7		
+Centrales spp	8	Coscinodiscophyceae	8		
+Centrales spp	9	Coscinodiscophyceae	9		
+Centrales spp	10	Coscinodiscophyceae	10		
+Centrales spp	11	Coscinodiscophyceae	11		
+Centrales spp	12	Coscinodiscophyceae	12		
+Centrales spp	13	Coscinodiscophyceae			
+Centrales spp	14	Coscinodiscophyceae			
+Centrales spp	15	Coscinodiscophyceae			
+Centrales spp	19	Coscinodiscophyceae			
+Centrales spp	32	Coscinodiscophyceae			
+Centric diatoms	1	Centrales spp	1		
+Centric diatoms	3	Centrales spp	3		
+Centric diatoms	4	Centrales spp	4		
+Centric diatoms	5	Centrales spp	5		
+Centric diatoms	6	Centrales spp	6		
+Centric diatoms	7	Centrales spp	7		
+Centric diatoms	8	Centrales spp	8		
+Centric diatoms	9	Centrales spp	9		
+Centric diatoms	10	Centrales spp	10		
+Centric diatoms	11	Centrales spp	11		
+Centric diatoms	12	Centrales spp	12		
+Cerataulina pelagica	1	Cerataulina pelagica	1		
+Cerataulina pelagica	2	Cerataulina pelagica	2		
+Cerataulina pelagica	3	Cerataulina pelagica	3		
+Cerataulina pelagica	4	Cerataulina pelagica	4		
+Cerataulina pelagica	5	Cerataulina pelagica	5		
+Cerataulina pelagica	6	Cerataulina pelagica	6		
+Cerataulina pelagica	7	Cerataulina pelagica	7		
+Cerataulina pelagica	8	Cerataulina pelagica	8		
+Cerataulina pelagica	9	Cerataulina pelagica	9		
+Cerataulina pelagica	10	Cerataulina pelagica	10		
+Cerataulina pelagica	11	Cerataulina pelagica	11		
+Cerataulina pelagica	12	Cerataulina pelagica	12		
+Cerataulina pelagica	13	Cerataulina pelagica	13		
+Cerataulina pelagica	14	Cerataulina pelagica	14		
+Cerataulina pelagica	15	Cerataulina pelagica	15		
+Cerataulina pelagica	16	Cerataulina pelagica	16		
+Cerataulina pelagica	17	Cerataulina pelagica	17		
+Cerataulina pelagica	18	Cerataulina pelagica			
+Cerataulina pelagica	32	Cerataulina pelagica			
+Ceratium arietinum	0	Ceratium			
+Ceratium arietinum	2	Ceratium			
+Ceratium bucephalum	32	Ceratium bucephalum			
+Ceratium furca	1	Ceratium furca	1		
+Ceratium furca	2	Ceratium furca	2		
+Ceratium furca	3	Ceratium furca	3		
+Ceratium furca	4	Ceratium furca			
+Ceratium furca	6	Ceratium furca			
+Ceratium furca	7	Ceratium furca			
+Ceratium furca	8	Ceratium furca			
+Ceratium furca	9	Ceratium furca			
+Ceratium furca	10	Ceratium furca			
+Ceratium furca	11	Ceratium furca			
+Ceratium furca	12	Ceratium furca			
+Ceratium furca	32	Ceratium furca			
+Ceratium fusus	1	Ceratium fusus	1		
+Ceratium fusus	2	Ceratium fusus	2		
+Ceratium fusus	3	Ceratium fusus			
+Ceratium fusus	4	Ceratium fusus			
+Ceratium fusus	5	Ceratium fusus			
+Ceratium fusus	6	Ceratium fusus			
+Ceratium fusus	7	Ceratium fusus			
+Ceratium fusus	8	Ceratium fusus			
+Ceratium fusus	9	Ceratium fusus			
+Ceratium fusus	32	Ceratium fusus			
+Ceratium hirundinella	1	Ceratium hirundinella	1		
+Ceratium hirundinella	2	Ceratium hirundinella	2		
+Ceratium horridum	0	Ceratium horridum			
+Ceratium horridum	1	Ceratium horridum	1		
+Ceratium horridum	2	Ceratium horridum	2		
+Ceratium horridum	3	Ceratium horridum	3		
+Ceratium horridum	32	Ceratium horridum			
+Ceratium lineatum	1	Ceratium lineatum	1		
+Ceratium lineatum	2	Ceratium lineatum	2		
+Ceratium lineatum	3	Ceratium lineatum	3		
+Ceratium lineatum	4	Ceratium lineatum	4		
+Ceratium lineatum	5	Ceratium lineatum	5		
+Ceratium lineatum	6	Ceratium lineatum			
+Ceratium lineatum	7	Ceratium lineatum			
+Ceratium lineatum	8	Ceratium lineatum			
+Ceratium lineatum	32	Ceratium lineatum			
+Ceratium longipes	1	Ceratium longipes	1		
+Ceratium longipes	2	Ceratium longipes	1		
+Ceratium longipes	3	Ceratium longipes			
+Ceratium longipes	4	Ceratium longipes			
+Ceratium longipes	5	Ceratium longipes			
+Ceratium longipes	32	Ceratium longipes			
+Ceratium macroceros	0	Ceratium macroceros			
+Ceratium macroceros	1	Ceratium macroceros	1		
+Ceratium macroceros	2	Ceratium macroceros	2		
+Ceratium macroceros	3	Ceratium macroceros			
+Ceratium macroceros	32	Ceratium macroceros			
+Ceratium spp	1	Ceratium			
+Ceratium spp	2	Ceratium			
+Ceratium spp	32	Ceratium			
+Ceratium spp_swarmers	32	Ceratium			
+Ceratium swarmers	0	Ceratium			
+Ceratium tripos	1	Ceratium tripos	1		
+Ceratium tripos	2	Ceratium tripos	2		
+Ceratium tripos	3	Ceratium tripos	3		
+Ceratium tripos	4	Ceratium tripos	4		
+Ceratium tripos	5	Ceratium tripos	5		
+Ceratium tripos	6	Ceratium tripos	6		
+Ceratium tripos	7	Ceratium tripos			
+Ceratium tripos	8	Ceratium tripos			
+Ceratium tripos	9	Ceratium tripos			
+Ceratium tripos	10	Ceratium tripos			
+Ceratium tripos	32	Ceratium tripos			
+Ceratium tripos	33	Ceratium tripos			
+Chaetoceros affinis	1	Chaetoceros affinis	1		
+Chaetoceros affinis	2	Chaetoceros affinis	2		
+Chaetoceros affinis	3	Chaetoceros affinis	3		
+Chaetoceros affinis	4	Chaetoceros affinis	2		
+Chaetoceros affinis	5	Chaetoceros affinis	5		
+Chaetoceros affinis	6	Chaetoceros affinis	4		
+Chaetoceros affinis	7	Chaetoceros affinis			
+Chaetoceros affinis	8	Chaetoceros affinis			
+Chaetoceros affinis	9	Chaetoceros affinis			
+Chaetoceros affinis	32	Chaetoceros affinis			
+Chaetoceros anastomosans var. externa	0	Chaetoceros anastomosans var. externa			
+Chaetoceros anastomosans var. externa	1	Chaetoceros anastomosans var. externa	1		
+Chaetoceros anastomosans var. externa	2	Chaetoceros anastomosans var. externa			
+Chaetoceros anastomosans var. externa	3	Chaetoceros anastomosans var. externa			
+Chaetoceros anastomosans var. externa	32	Chaetoceros anastomosans var. externa			
+Chaetoceros borealia-group	1	Chaetoceros	1		
+Chaetoceros borealia-group	2	Chaetoceros	2		
+Chaetoceros borealia-group	3	Chaetoceros	3		
+Chaetoceros borealia-group	4	Chaetoceros	4		
+Chaetoceros brevis	0	Chaetoceros brevis			
+Chaetoceros brevis	1	Chaetoceros brevis	1		
+Chaetoceros brevis	2	Chaetoceros brevis	2		
+Chaetoceros brevis	3	Chaetoceros brevis	3		
+Chaetoceros brevis	4	Chaetoceros brevis	4		
+Chaetoceros brevis	5	Chaetoceros brevis	5		
+Chaetoceros brevis	6	Chaetoceros brevis	6		
+Chaetoceros brevis	32	Chaetoceros brevis			
+Chaetoceros brevis forma restingspores	0	Chaetoceros brevis			
+Chaetoceros brevis_restingspore	0	Chaetoceros			
+Chaetoceros brevis_restingspore	32	Chaetoceros			
+Chaetoceros bspecies	1	Chaetoceros	11		
+Chaetoceros bspecies	2	Chaetoceros	11		
+Chaetoceros ceratosporus ceratosporus var.	1	Chaetoceros ceratosporus			
+Chaetoceros ceratosporus ceratosporus var.	2	Chaetoceros ceratosporus			
+Chaetoceros ceratosporus ceratosporus var.	3	Chaetoceros ceratosporus			
+Chaetoceros ceratosporus ceratosporus var.	4	Chaetoceros ceratosporus			
+Chaetoceros ceratosporus ceratosporus var.	32	Chaetoceros ceratosporus			
+Chaetoceros circinalis	0	Chaetoceros circinalis			
+Chaetoceros circinalis	1	Chaetoceros circinalis	1		
+Chaetoceros circinalis	2	Chaetoceros circinalis			
+Chaetoceros circinalis	32	Chaetoceros circinalis			
+Chaetoceros circinalis_restingspore	0	Chaetoceros			
+Chaetoceros circinalis_restingspore	32	Chaetoceros			
+Chaetoceros concavicornis	1	Chaetoceros concavicornis	1		
+Chaetoceros concavicornis	2	Chaetoceros concavicornis	2		
+Chaetoceros concavicornis	3	Chaetoceros concavicornis	3		
+Chaetoceros concavicornis	4	Chaetoceros concavicornis	4		
+Chaetoceros concavicornis	5	Chaetoceros concavicornis	5		
+Chaetoceros concavicornis	6	Chaetoceros concavicornis	6		
+Chaetoceros concavicornis	7	Chaetoceros concavicornis	7		
+Chaetoceros concavicornis	8	Chaetoceros concavicornis	8		
+Chaetoceros concavicornis	32	Chaetoceros concavicornis			
+Chaetoceros constrictus	1	Chaetoceros constrictus	1		
+Chaetoceros constrictus	2	Chaetoceros constrictus	2		
+Chaetoceros constrictus	3	Chaetoceros constrictus	3		
+Chaetoceros constrictus	4	Chaetoceros constrictus	4		
+Chaetoceros constrictus	32	Chaetoceros constrictus			
+Chaetoceros contortus	0	Chaetoceros contortus			
+Chaetoceros contortus	1	Chaetoceros contortus	1		
+Chaetoceros contortus	2	Chaetoceros contortus	2		
+Chaetoceros contortus	3	Chaetoceros contortus	3		
+Chaetoceros contortus	4	Chaetoceros contortus			
+Chaetoceros contortus	5	Chaetoceros contortus			
+Chaetoceros contortus	6	Chaetoceros contortus			
+Chaetoceros contortus	32	Chaetoceros contortus			
+Chaetoceros contortus_restingspore	0	Chaetoceros			
+Chaetoceros contortus_restingspore	32	Chaetoceros			
+Chaetoceros coronatus	1	Chaetoceros coronatus	2		
+Chaetoceros coronatus	2	Chaetoceros coronatus	1		
+Chaetoceros coronatus	3	Chaetoceros coronatus			
+Chaetoceros coronatus	32	Chaetoceros coronatus			
+Chaetoceros coronatus_restingspore	0	Chaetoceros			
+Chaetoceros coronatus_restingspore	1	Chaetoceros	1		
+Chaetoceros coronatus_restingspore	32	Chaetoceros			
+Chaetoceros costatus	1	Chaetoceros costatus			
+Chaetoceros costatus	32	Chaetoceros costatus			
+Chaetoceros crinitus	1	Chaetoceros crinitus	1		
+Chaetoceros crinitus	2	Chaetoceros crinitus	2		
+Chaetoceros crinitus	32	Chaetoceros crinitus			
+Chaetoceros curvisetus	1	Chaetoceros curvisetus	1		
+Chaetoceros curvisetus	2	Chaetoceros curvisetus	2		
+Chaetoceros curvisetus	3	Chaetoceros curvisetus	3		
+Chaetoceros curvisetus	4	Chaetoceros curvisetus			
+Chaetoceros curvisetus	5	Chaetoceros curvisetus			
+Chaetoceros curvisetus	6	Chaetoceros curvisetus			
+Chaetoceros curvisetus	7	Chaetoceros curvisetus			
+Chaetoceros curvisetus	8	Chaetoceros curvisetus			
+Chaetoceros curvisetus	9	Chaetoceros curvisetus			
+Chaetoceros curvisetus	10	Chaetoceros curvisetus			
+Chaetoceros curvisetus	32	Chaetoceros curvisetus			
+Chaetoceros curvisetus_restingspore	1	Chaetoceros	1		
+Chaetoceros curvisetus_restingspore	32	Chaetoceros			
+Chaetoceros danicus	1	Chaetoceros danicus	1		
+Chaetoceros danicus	2	Chaetoceros danicus	2		
+Chaetoceros danicus	3	Chaetoceros danicus	3		
+Chaetoceros danicus	4	Chaetoceros danicus	4		
+Chaetoceros danicus	5	Chaetoceros danicus	5		
+Chaetoceros danicus	6	Chaetoceros danicus	6		
+Chaetoceros danicus	7	Chaetoceros danicus	7		
+Chaetoceros danicus	8	Chaetoceros danicus	8		
+Chaetoceros danicus	9	Chaetoceros danicus	9		
+Chaetoceros danicus	32	Chaetoceros danicus			
+Chaetoceros dcu	0	Chaetoceros			
+Chaetoceros debilis	0	Chaetoceros debilis			
+Chaetoceros debilis	1	Chaetoceros debilis	1		
+Chaetoceros debilis	2	Chaetoceros debilis	2		
+Chaetoceros debilis	3	Chaetoceros debilis	3		
+Chaetoceros debilis	4	Chaetoceros debilis	4		
+Chaetoceros debilis	5	Chaetoceros debilis	5		
+Chaetoceros debilis	6	Chaetoceros debilis			
+Chaetoceros debilis	7	Chaetoceros debilis			
+Chaetoceros debilis	8	Chaetoceros debilis			
+Chaetoceros debilis	32	Chaetoceros debilis			
+Chaetoceros debilis_restingspore	1	Chaetoceros	1		
+Chaetoceros debilis_restingspore	2	Chaetoceros	2		
+Chaetoceros debilis_restingspore	32	Chaetoceros			
+Chaetoceros decipiens	1	Chaetoceros decipiens	1		
+Chaetoceros decipiens	2	Chaetoceros decipiens	2		
+Chaetoceros decipiens	3	Chaetoceros decipiens	3		
+Chaetoceros decipiens	4	Chaetoceros decipiens	4		
+Chaetoceros decipiens	5	Chaetoceros decipiens	5		
+Chaetoceros decipiens	6	Chaetoceros decipiens			
+Chaetoceros decipiens	7	Chaetoceros decipiens			
+Chaetoceros decipiens	8	Chaetoceros decipiens			
+Chaetoceros decipiens	9	Chaetoceros decipiens			
+Chaetoceros decipiens	32	Chaetoceros decipiens			
+Chaetoceros densus	0	Chaetoceros densus			
+Chaetoceros densus	1	Chaetoceros densus	1		
+Chaetoceros densus	2	Chaetoceros densus			
+Chaetoceros densus	32	Chaetoceros densus			
+Chaetoceros diadema	1	Chaetoceros diadema	1		
+Chaetoceros diadema	2	Chaetoceros diadema	2		
+Chaetoceros diadema	3	Chaetoceros diadema	3		
+Chaetoceros diadema	4	Chaetoceros diadema	4		
+Chaetoceros diadema	5	Chaetoceros diadema	5		
+Chaetoceros diadema	6	Chaetoceros diadema			
+Chaetoceros diadema	7	Chaetoceros diadema			
+Chaetoceros diadema	8	Chaetoceros diadema			
+Chaetoceros diadema	32	Chaetoceros diadema			
+Chaetoceros diadema_restingspore	9	Chaetoceros	9		
+Chaetoceros diadema_restingspore	10	Chaetoceros	10		
+Chaetoceros diadema_restingspore	32	Chaetoceros			
+Chaetoceros didymus	2	Chaetoceros didymus			
+Chaetoceros didymus	32	Chaetoceros didymus			
+Chaetoceros didymus sensu lato	2	Chaetoceros didymus			
+Chaetoceros didymus var. anglicus	32	Chaetoceros didymus			
+Chaetoceros didymus var. didymus	1	Chaetoceros didymus var. didymus	1		
+Chaetoceros didymus var. didymus	2	Chaetoceros didymus var. didymus	2		
+Chaetoceros didymus var. didymus	32	Chaetoceros didymus var. didymus			
+Chaetoceros didymus var. protuberans	0	Chaetoceros didymus var. protuberans			
+Chaetoceros didymus var. protuberans	1	Chaetoceros didymus var. protuberans	1		
+Chaetoceros didymus var. protuberans	2	Chaetoceros didymus var. protuberans			
+Chaetoceros didymus var. protuberans	32	Chaetoceros didymus var. protuberans			
+Chaetoceros didymus_restingspore	1	Chaetoceros didymus	1		
+Chaetoceros didymus_restingspore	32	Chaetoceros			
+Chaetoceros didymus_sensulato	1	Chaetoceros didymus	1		
+Chaetoceros didymus_sensulato	2	Chaetoceros didymus	1		
+Chaetoceros didymus_sensulato	3	Chaetoceros didymus	1		
+Chaetoceros eibenii	1	Chaetoceros eibenii	1		
+Chaetoceros eibenii	2	Chaetoceros eibenii			
+Chaetoceros eibenii	32	Chaetoceros eibenii			
+Chaetoceros impressus	1	Chaetoceros impressus	1		
+Chaetoceros impressus	2	Chaetoceros impressus	2		
+Chaetoceros impressus	3	Chaetoceros impressus	3		
+Chaetoceros impressus	4	Chaetoceros impressus	4		
+Chaetoceros impressus	5	Chaetoceros impressus	5		
+Chaetoceros impressus	32	Chaetoceros impressus			
+Chaetoceros ingolfianus	1	Chaetoceros ingolfianus			
+Chaetoceros ingolfianus	32	Chaetoceros ingolfianus			
+Chaetoceros laciniosus	0	Chaetoceros laciniosus			
+Chaetoceros laciniosus	1	Chaetoceros laciniosus	1		
+Chaetoceros laciniosus	2	Chaetoceros laciniosus	2		
+Chaetoceros laciniosus	3	Chaetoceros laciniosus	3		
+Chaetoceros laciniosus	4	Chaetoceros laciniosus	4		
+Chaetoceros laciniosus	32	Chaetoceros laciniosus			
+Chaetoceros laciniosus_restingspore	1	Chaetoceros	1		
+Chaetoceros laciniosus_restingspore	4	Chaetoceros	4		
+Chaetoceros laciniosus_restingspore	5	Chaetoceros	5		
+Chaetoceros laciniosus_restingspore	32	Chaetoceros			
+Chaetoceros lauderi	1	Chaetoceros lauderi	1		
+Chaetoceros lauderi	2	Chaetoceros lauderi	2		
+Chaetoceros lauderi	3	Chaetoceros lauderi	3		
+Chaetoceros lauderi	32	Chaetoceros lauderi			
+Chaetoceros lorenzianus	1	Chaetoceros lorenzianus	1		
+Chaetoceros lorenzianus	2	Chaetoceros lorenzianus	2		
+Chaetoceros lorenzianus	3	Chaetoceros lorenzianus	3		
+Chaetoceros lorenzianus	4	Chaetoceros lorenzianus			
+Chaetoceros lorenzianus	32	Chaetoceros lorenzianus			
+Chaetoceros minimus	0	Chaetoceros minimus			
+Chaetoceros minimus	1	Chaetoceros minimus	1		
+Chaetoceros minimus	2	Chaetoceros minimus	2		
+Chaetoceros minimus	32	Chaetoceros minimus			
+Chaetoceros pseudobrevis	0	Chaetoceros pseudobrevis			
+Chaetoceros pseudobrevis	1	Chaetoceros pseudobrevis	1		
+Chaetoceros pseudobrevis	2	Chaetoceros pseudobrevis			
+Chaetoceros pseudobrevis	3	Chaetoceros pseudobrevis			
+Chaetoceros pseudobrevis	32	Chaetoceros pseudobrevis			
+Chaetoceros pseudocrinitus	1	Chaetoceros pseudocrinitus	1		
+Chaetoceros pseudocrinitus	2	Chaetoceros pseudocrinitus			
+Chaetoceros pseudocrinitus	32	Chaetoceros pseudocrinitus			
+Chaetoceros radiatus	32	Chaetoceros			
+Chaetoceros radicans	1	Chaetoceros radicans			
+Chaetoceros radicans	32	Chaetoceros radicans			
+Chaetoceros relacini	3	Chaetoceros	3		
+Chaetoceros restdebilis	0	Chaetoceros			
+Chaetoceros restdiadema	4	Chaetoceros	4		
+Chaetoceros restingspores	5	Chaetoceros	5		
+Chaetoceros scoialis forma socialis	1	Chaetoceros	1		
+Chaetoceros scoialis forma socialis	2	Chaetoceros	2		
+Chaetoceros scoialis forma socialis	3	Chaetoceros	3		
+Chaetoceros scoialis forma socialis	4	Chaetoceros	4		
+Chaetoceros seiracanthus	1	Chaetoceros seiracanthus	1		
+Chaetoceros seiracanthus	2	Chaetoceros seiracanthus			
+Chaetoceros seiracanthus	3	Chaetoceros seiracanthus			
+Chaetoceros seiracanthus	32	Chaetoceros seiracanthus			
+Chaetoceros seiracanthus_restingspore	0	Chaetoceros			
+Chaetoceros seiracanthus_restingspore	1	Chaetoceros	1		
+Chaetoceros seiracanthus_restingspore	32	Chaetoceros			
+Chaetoceros similis	1	Chaetoceros similis	1		
+Chaetoceros similis	2	Chaetoceros similis	2		
+Chaetoceros similis	3	Chaetoceros similis	3		
+Chaetoceros similis	4	Chaetoceros similis	2		
+Chaetoceros similis	5	Chaetoceros similis	5		
+Chaetoceros similis	6	Chaetoceros similis	6		
+Chaetoceros similis	7	Chaetoceros similis	7		
+Chaetoceros similis	32	Chaetoceros similis			
+Chaetoceros similis_restingspore	1	Chaetoceros	1		
+Chaetoceros similis_restingspore	32	Chaetoceros			
+Chaetoceros simplex	0	Chaetoceros simplex			
+Chaetoceros simplex	1	Chaetoceros simplex	1		
+Chaetoceros simplex	2	Chaetoceros simplex	2		
+Chaetoceros simplex	3	Chaetoceros simplex	3		
+Chaetoceros simplex	4	Chaetoceros simplex	4		
+Chaetoceros simplex	5	Chaetoceros simplex	5		
+Chaetoceros simplex	6	Chaetoceros simplex	6		
+Chaetoceros simplex	7	Chaetoceros simplex	7		
+Chaetoceros simplex	8	Chaetoceros simplex	8		
+Chaetoceros simplex	32	Chaetoceros simplex			
+Chaetoceros socialis	0	Chaetoceros socialis			
+Chaetoceros socialis	1	Chaetoceros socialis			
+Chaetoceros socialis	32	Chaetoceros socialis			
+Chaetoceros socialis forma radians	0	Chaetoceros socialis f. radians			
+Chaetoceros socialis forma radians	1	Chaetoceros socialis f. radians	1		
+Chaetoceros socialis forma radians	2	Chaetoceros socialis f. radians	2		
+Chaetoceros socialis forma radians	3	Chaetoceros socialis f. radians			
+Chaetoceros socialis forma radians	32	Chaetoceros socialis f. radians			
+Chaetoceros socialis forma socialis	0	Chaetoceros socialis f. socialis			
+Chaetoceros socialis forma socialis	1	Chaetoceros socialis f. socialis	1		
+Chaetoceros socialis forma socialis	2	Chaetoceros socialis f. socialis	2		
+Chaetoceros socialis forma socialis	3	Chaetoceros socialis f. socialis	3		
+Chaetoceros socialis forma socialis	4	Chaetoceros socialis f. socialis	4		
+Chaetoceros socialis forma socialis	32	Chaetoceros socialis f. socialis			
+Chaetoceros socialis_chains	0	Chaetoceros socialis			
+Chaetoceros socialis_chains	1	Chaetoceros socialis	4		
+Chaetoceros socialis_chains	32	Chaetoceros socialis			
+Chaetoceros socialis_chains forma radians	32	Chaetoceros socialis f. radians			
+Chaetoceros socialis_chains forma socialis	32	Chaetoceros socialis f. socialis			
+Chaetoceros socialis_colony	32	Chaetoceros socialis f. socialis			
+Chaetoceros socialis_colony forma radians	32	Chaetoceros socialis f. radians			
+Chaetoceros socialis_colony forma socialis	32	Chaetoceros socialis f. socialis			
+Chaetoceros socialis_restingspore	0	Chaetoceros socialis			
+Chaetoceros socialis_restingspore	32	Chaetoceros socialis			
+Chaetoceros solitary	0	Chaetoceros			
+Chaetoceros sp	6	Chaetoceros	6		
+Chaetoceros sp	7	Chaetoceros	7		
+Chaetoceros sp	8	Chaetoceros	8		
+Chaetoceros sp._restingspore	9	Chaetoceros	9		
+Chaetoceros sp_restingspore	0	Chaetoceros			
+Chaetoceros spA	0	Chaetoceros			
+Chaetoceros spp	1	Chaetoceros	1		
+Chaetoceros spp	2	Chaetoceros	2		
+Chaetoceros spp	3	Chaetoceros	3		
+Chaetoceros spp	4	Chaetoceros	4		
+Chaetoceros spp	5	Chaetoceros	5		
+Chaetoceros spp	6	Chaetoceros	6		
+Chaetoceros spp	7	Chaetoceros	7		
+Chaetoceros spp	8	Chaetoceros	8		
+Chaetoceros spp	9	Chaetoceros	9		
+Chaetoceros spp	10	Chaetoceros	10		
+Chaetoceros spp	11	Chaetoceros	11		
+Chaetoceros spp	32	Chaetoceros			
+Chaetoceros spp_solitary	1	Chaetoceros	1		
+Chaetoceros spp_solitary	2	Chaetoceros	2		
+Chaetoceros spp_solitary	3	Chaetoceros	3		
+Chaetoceros spp_solitary	32	Chaetoceros			
+Chaetoceros subtilis	1	Chaetoceros subtilis			
+Chaetoceros subtilis	2	Chaetoceros subtilis			
+Chaetoceros subtilis	32	Chaetoceros subtilis			
+Chaetoceros subtilis var. subtilis	1	Chaetoceros subtilis var. subtilis	1		
+Chaetoceros subtilis var. subtilis	2	Chaetoceros subtilis var. subtilis	2		
+Chaetoceros subtilis var. subtilis	3	Chaetoceros subtilis var. subtilis	3		
+Chaetoceros subtilis var. subtilis	4	Chaetoceros subtilis var. subtilis	4		
+Chaetoceros subtilis var. subtilis	5	Chaetoceros subtilis var. subtilis	5		
+Chaetoceros subtilis var. subtilis	6	Chaetoceros subtilis var. subtilis	6		
+Chaetoceros subtilis var. subtilis	7	Chaetoceros subtilis var. subtilis	7		
+Chaetoceros subtilis var. subtilis	8	Chaetoceros subtilis var. subtilis	8		
+Chaetoceros subtilis var. subtilis	9	Chaetoceros subtilis var. subtilis	9		
+Chaetoceros subtilis var. subtilis	10	Chaetoceros subtilis var. subtilis	10		
+Chaetoceros subtilis var. subtilis	11	Chaetoceros subtilis var. subtilis	11		
+Chaetoceros subtilis var. subtilis	12	Chaetoceros subtilis var. subtilis	12		
+Chaetoceros subtilis var. subtilis	32	Chaetoceros subtilis var. subtilis			
+Chaetoceros tenuissimus	1	Chaetoceros tenuissimus	1		
+Chaetoceros tenuissimus	2	Chaetoceros tenuissimus	2		
+Chaetoceros tenuissimus	3	Chaetoceros tenuissimus	3		
+Chaetoceros tenuissimus	4	Chaetoceros tenuissimus	4		
+Chaetoceros tenuissimus	32	Chaetoceros tenuissimus			
+Chaetoceros teres	1	Chaetoceros teres	1		
+Chaetoceros teres	2	Chaetoceros teres	2		
+Chaetoceros teres	32	Chaetoceros teres			
+Chaetoceros throndsenii	0	Chaetoceros throndsenii			
+Chaetoceros throndsenii	1	Chaetoceros throndsenii			
+Chaetoceros throndsenii	32	Chaetoceros throndsenii			
+Chaetoceros throndsenii var. throndsenii	1	Chaetoceros throndsenii var. throndsenii	1		
+Chaetoceros throndsenii var. throndsenii	2	Chaetoceros throndsenii var. throndsenii	2		
+Chaetoceros throndsenii var. throndsenii	3	Chaetoceros throndsenii var. throndsenii	3		
+Chaetoceros throndsenii var. throndsenii	4	Chaetoceros throndsenii var. throndsenii	4		
+Chaetoceros throndsenii var. throndsenii	5	Chaetoceros throndsenii var. throndsenii	5		
+Chaetoceros throndsenii var. throndsenii	32	Chaetoceros throndsenii var. throndsenii			
+Chaetoceros throndsenii var. trisetosus	1	Chaetoceros throndsenii			
+Chaetoceros throndsenii var. trisetosus	32	Chaetoceros throndsenii			
+Chaetoceros wighamii	1	Chaetoceros wighamii	1		
+Chaetoceros wighamii	2	Chaetoceros wighamii	2		
+Chaetoceros wighamii	3	Chaetoceros wighamii	3		
+Chaetoceros wighamii	4	Chaetoceros wighamii	4		
+Chaetoceros wighamii	5	Chaetoceros wighamii	5		
+Chaetoceros wighamii	6	Chaetoceros wighamii	6		
+Chaetoceros wighamii	7	Chaetoceros wighamii	7		
+Chaetoceros wighamii	8	Chaetoceros wighamii	8		
+Chaetoceros wighamii	9	Chaetoceros wighamii	9		
+Chaetoceros wighamii	10	Chaetoceros wighamii	10		
+Chaetoceros wighamii	11	Chaetoceros wighamii	11		
+Chaetoceros wighamii	12	Chaetoceros wighamii	12		
+Chaetoceros wighamii	13	Chaetoceros wighamii	13		
+Chaetoceros wighamii	14	Chaetoceros wighamii	14		
+Chaetoceros wighamii	15	Chaetoceros wighamii	15		
+Chaetoceros wighamii	16	Chaetoceros wighamii	16		
+Chaetoceros wighamii	17	Chaetoceros wighamii	17		
+Chaetoceros wighamii	18	Chaetoceros wighamii	18		
+Chaetoceros wighamii	19	Chaetoceros wighamii	19		
+Chaetoceros wighamii	32	Chaetoceros wighamii			
+Chattonella cf.verruculosa	1	Chattonella			
+Chattonella cf.verruculosa	2	Chattonella			
+Chattonella cf.verruculosa	3	Chattonella			
+Chattonella cf.verruculosa	4	Chattonella			
+Chattonella cf.verruculosa	32	Chattonella			
+Chattonella spp	1	Chattonella			
+Chattonella spp	32	Chattonella			
+Chattonella verruculosa	1	Chattonella verruculosa	1		
+Chlamydocapsa ampla	1	Chlamydocapsa ampla	1		
+Chlamydocapsa ampla	2	Chlamydocapsa ampla	2		
+Chlamydocapsa ampla	32	Chlamydocapsa ampla			
+Chlorodendrales spp	1	Chlorodendrales			
+Chlorodendrales spp	32	Chlorodendrales			
+Chlorogonium maximum	1	Chlorogonium maximum	1		
+Chlorogonium maximum	2	Chlorogonium maximum	2		
+Chlorogonium maximum	3	Chlorogonium maximum	3		
+Chlorogonium maximum	32	Chlorogonium maximum			
+Chlorogonium minimum	1	Chlorogonium minimum	1		
+Chlorogonium minimum	2	Chlorogonium minimum	2		
+Chlorogonium minimum	32	Chlorogonium minimum			
+Choano col	0	Craspedophyceae spp			1
+Choano sol	0	Craspedophyceae spp			1
+Choanoflagellidea spp	1	Choanoflagellidea	1		
+Choanoflagellidea spp	32	Choanoflagellidea			
+Choanoflagellidea spp_colony	32	Choanoflagellidea			
+Choanoflagellidea spp_solitary	2	Choanoflagellidea	2		
+Choanoflagellidea spp_solitary	32	Choanoflagellidea			
+Choricystis chodatii	1	Choricystis chodatii	1		
+Choricystis chodatii	2	Choricystis chodatii	2		
+Choricystis chodatii	3	Choricystis chodatii	3		
+Choricystis chodatii	32	Choricystis chodatii			
+Choricystis coccoides	1	Choricystis coccoides	1		
+Choricystis coccoides	2	Choricystis coccoides	2		
+Choricystis coccoides	3	Choricystis coccoides	3		
+Choricystis coccoides	32	Choricystis coccoides			
+Chroococcus aphanocapsoides	1	Chroococcus aphanocapsoides	1		
+Chroococcus aphanocapsoides	2	Chroococcus aphanocapsoides	2		
+Chroococcus aphanocapsoides	32	Chroococcus aphanocapsoides			
+Chroococcus cohaerens	1	Chroococcus cohaerens			
+Chroococcus cumulatus	1	Chroococcus cumulatus	1		
+Chroococcus cumulatus	32	Chroococcus cumulatus			
+Chroococcus dispersus	1	Chroococcus dispersus	1		
+Chroococcus dispersus	2	Chroococcus dispersus	2		
+Chroococcus distans	1	Chroococcus distans	1		
+Chroococcus distans	32	Chroococcus distans			
+Chroococcus microscopicus	1	Chroococcus microscopicus	1		
+Chroococcus microscopicus	2	Chroococcus microscopicus	2		
+Chroococcus microscopicus	3	Chroococcus microscopicus	3		
+Chroococcus microscopicus	4	Chroococcus microscopicus	4		
+Chroococcus microscopicus	5	Chroococcus microscopicus	5		
+Chroococcus microscopicus	32	Chroococcus microscopicus			
+Chroococcus minimus	1	Chroococcus minimus	1		
+Chroococcus minimus	32	Chroococcus minimus			
+Chroococcus minor	1	Chroococcus minor	1		
+Chroococcus minor	32	Chroococcus minor			
+Chroococcus minutus	1	Chroococcus minutus	1		
+Chroococcus minutus	32	Chroococcus minutus			
+Chroococcus turgidus	1	Chroococcus turgidus	1		
+Chroococcus turgidus	2	Chroococcus turgidus	2		
+Chroococcus turgidus	3	Chroococcus turgidus	3		
+Chroococcus turgidus	32	Chroococcus turgidus			
+Chroomonas baltica	1	Chroomonas baltica	1		
+Chroomonas baltica	32	Chroomonas baltica			
+Chrysochromulina hirta	32	Chrysochromulina hirta			
+Chrysochromulina polylepis	1	Chrysochromulina polylepis	1		
+Chrysochromulina polylepis	2	Chrysochromulina polylepis	2		
+Chrysochromulina polylepis	3	Chrysochromulina polylepis	3		
+Chrysochromulina polylepis	32	Chrysochromulina polylepis			
+Chrysochromulina pringsheimii	32	Chrysochromulina pringsheimii			
+Chrysochromulina spp	1	Chrysochromulina	1		
+Chrysochromulina spp	2	Chrysochromulina	2		
+Chrysochromulina spp	3	Chrysochromulina	3		
+Chrysochromulina spp	4	Chrysochromulina	4		
+Chrysochromulina spp	5	Chrysochromulina	5		
+Chrysochromulina spp	32	Chrysochromulina			
+Chrysophyceae spp	32	Chrysophyceae			
+Ciliate Asp	0			Ciliophora	4
+Ciliate sp_A	32			Ciliophora	32
+Ciliates spp	0			Ciliophora	1
+Ciliates spp	1			Ciliophora	7
+Ciliates spp	2			Ciliophora	7
+Ciliates spp	3			Ciliophora	4
+Ciliates spp	4			Ciliophora	7
+Ciliates spp	5			Ciliophora	3
+Ciliates spp	6			Ciliophora	2
+Ciliates spp	7			Ciliophora	7
+Ciliates spp	8			Ciliophora	10
+Ciliates spp	9			Ciliophora	11
+Ciliates spp	10			Ciliophora	5
+Ciliates spp	11			Ciliophora	1
+Ciliates spp	12			Ciliophora	12
+Ciliates spp	13			Ciliophora	6
+Ciliates spp	14			Ciliophora	1
+Ciliates spp	15			Ciliophora	2
+Ciliates spp	16			Ciliophora	8
+Ciliophora spp	7	Ciliophora			
+Ciliophora spp	8	Ciliophora			
+Ciliophora spp	9	Ciliophora			
+Ciliophora spp	10	Ciliophora			
+Ciliophora spp	11	Ciliophora			
+Ciliophora spp	12	Ciliophora			
+Ciliophora spp	13	Ciliophora			
+Ciliophora spp	14	Ciliophora			
+Ciliophora spp	15	Ciliophora			
+Ciliophora spp	16	Ciliophora			
+Ciliophora spp	17	Ciliophora			
+Ciliophora spp	1	Ciliophora			
+Ciliophora spp	2	Ciliophora			
+Ciliophora spp	3	Ciliophora			
+Ciliophora spp	4	Ciliophora			
+Ciliophora spp	5	Ciliophora			
+Ciliophora spp	6	Ciliophora			
+Ciliophora spp	7	Ciliophora			
+Ciliophora spp	8	Ciliophora			
+Ciliophora spp	9	Ciliophora			
+Ciliophora spp	10	Ciliophora			
+Ciliophora spp	32	Ciliophora			
+Cladopyxis claytonii	1	Cladopyxis claytonii	1		
+Cladopyxis claytonii	2	Cladopyxis claytonii	2		
+Cladopyxis claytonii	32	Cladopyxis claytonii			
+Closteriopsis longissima	1	Closteriopsis longissima	1		
+Closteriopsis longissima	32	Closteriopsis longissima			
+Closterium acerosum	1	Closterium acerosum	1		
+Closterium acerosum	2	Closterium acerosum	2		
+Closterium acerosum	32	Closterium acerosum			
+Closterium aciculare	1	Closterium aciculare	1		
+Closterium aciculare	2	Closterium aciculare	2		
+Closterium aciculare	3	Closterium aciculare	3		
+Closterium aciculare	32	Closterium aciculare			
+Closterium acutum	1	Closterium acutum			
+Closterium acutum	2	Closterium acutum			
+Closterium acutum	3	Closterium acutum			
+Closterium acutum	32	Closterium acutum			
+Closterium acutum var. variabile	1	Closterium acutum var. variabile	1		
+Closterium acutum var. variabile	2	Closterium acutum var. variabile	2		
+Closterium acutum var. variabile	32	Closterium acutum var. variabile			
+Closterium gracile	1	Closterium gracile	1		
+Closterium gracile	32	Closterium gracile			
+Closterium lineatum	1	Closterium lineatum	1		
+Closterium lineatum	32	Closterium lineatum			
+Closterium moniliferum	1	Closterium moniliferum	1		
+Closterium moniliferum	32	Closterium moniliferum			
+Closterium parvulum	1	Closterium parvulum	1		
+Closterium parvulum	32	Closterium parvulum			
+Closterium spp	1	Closterium	1		
+Closterium spp	2	Closterium	2		
+Closterium spp	32	Closterium			
+Closterium strigosum	1	Closterium strigosum	1		
+Closterium strigosum	2	Closterium strigosum	2		
+Closterium strigosum	32	Closterium strigosum			
+Coccoid sp.A	1			Chlorodendrales	1
+Coccoid sp.A	2			Chlorodendrales	1
+Coccolithophorid spp	32				
+Cocconeis pediculus	1	Cocconeis pediculus	1		
+Cocconeis pediculus	32	Cocconeis pediculus			
+Cocconeis placentula var. placentula	1	Cocconeis placentula var. placentula	1		
+Cocconeis placentula var. placentula	2	Cocconeis placentula var. placentula	2		
+Cocconeis placentula var. placentula	3	Cocconeis placentula var. placentula	3		
+Cocconeis placentula var. placentula	4	Cocconeis placentula var. placentula	4		
+Cocconeis placentula var. placentula	5	Cocconeis placentula var. placentula	5		
+Cocconeis placentula var. placentula	32	Cocconeis placentula var. placentula			
+Cocconeis spp	32	Cocconeis			
+Cochlodinium helicoides	1	Cochlodinium helicoides	1		
+Cochlodinium helicoides	32	Cochlodinium helicoides			
+Cochlodinium helix	32	Cochlodinium helix			
+Cochlodinium pupa	1	Cochlodinium pupa	1		
+Cochlodinium pupa	32	Cochlodinium pupa			
+Cochlodinium spA	1	Cochlodinium	1		
+Cochlodinium spA	2	Cochlodinium	2		
+Cochlodinium spp	1	Cochlodinium	1		
+Cochlodinium spp	2	Cochlodinium	2		
+Cochlodinium spp	32	Cochlodinium			
+Coelastrum microporum	1	Coelastrum microporum	1		
+Coelastrum microporum	32	Coelastrum microporum			
+Coelastrum reticulatum	1	Coelastrum reticulatum	1		
+Coelastrum reticulatum	32	Coelastrum reticulatum			
+Coelastrum sphaericum	1	Coelastrum sphaericum	1		
+Coelastrum sphaericum	32	Coelastrum sphaericum			
+Coelomoron pusillum	1	Coelomoron pusillum	1		
+Coelomoron pusillum	2	Coelomoron pusillum	2		
+Coelomoron pusillum	3	Coelomoron pusillum	3		
+Coelomoron pusillum	32	Coelomoron pusillum			
+Coelomoron spp	1	Coelomoron	1		
+Coelomoron spp	2	Coelomoron	2		
+Coelomoron spp	3	Coelomoron	3		
+Coelomoron spp	32	Coelomoron			
+Coelosphaerium dubium	1	Coelosphaerium dubium	1		
+Coelosphaerium dubium	2	Coelosphaerium dubium	2		
+Coelosphaerium dubium	3	Coelosphaerium dubium	3		
+Coelosphaerium dubium	4	Coelosphaerium dubium	4		
+Coelosphaerium dubium	5	Coelosphaerium dubium	5		
+Coelosphaerium dubium	32	Coelosphaerium dubium			
+Coelosphaerium kuetzingianum	1	Coelosphaerium kuetzingianum	1		
+Coelosphaerium kuetzingianum	2	Coelosphaerium kuetzingianum	2		
+Coelosphaerium kuetzingianum	3	Coelosphaerium kuetzingianum	3		
+Coelosphaerium kuetzingianum	4	Coelosphaerium kuetzingianum	4		
+Coelosphaerium kuetzingianum	5	Coelosphaerium kuetzingianum	5		
+Coelosphaerium kuetzingianum	32	Coelosphaerium kuetzingianum			
+Coelosphaerium subarcticum	1	Coelosphaerium subarcticum	1		
+Coelosphaerium subarcticum	2	Coelosphaerium subarcticum	2		
+Coelosphaerium subarcticum	3	Coelosphaerium subarcticum	3		
+Coelosphaerium subarcticum	4	Coelosphaerium subarcticum	4		
+Coelosphaerium subarcticum	5	Coelosphaerium subarcticum	5		
+Coelosphaerium subarcticum	32	Coelosphaerium subarcticum			
+Colacium vesiculosum	1	Colacium vesiculosum	1		
+Colacium vesiculosum	32	Colacium vesiculosum			
+Commation sp	0			Commation spp	1
+Commation spp	1			Commation spp	1
+Commation spp	32			Commation spp	32
+Corethron hystrix	1	Corethron			
+Corethron hystrix	32	Corethron			
+Corethron spp	32	Corethron			
+Corethron spp.	32	Corethron			
+Corymbellus aureus	0	Corymbellus aureus			
+Corymbellus aureus	32	Corymbellus aureus			
+Coscinodiscus asteromphalus	1	Coscinodiscus asteromphalus			
+Coscinodiscus asteromphalus	32	Coscinodiscus asteromphalus			
+Coscinodiscus centralis	0	Coscinodiscus centralis			
+Coscinodiscus centralis	1	Coscinodiscus centralis			
+Coscinodiscus centralis	2	Coscinodiscus centralis			
+Coscinodiscus centralis	32	Coscinodiscus centralis			
+Coscinodiscus commutatus	1	Coscinodiscus commutatus	1		
+Coscinodiscus commutatus	2	Coscinodiscus commutatus	2		
+Coscinodiscus commutatus	3	Coscinodiscus commutatus	3		
+Coscinodiscus commutatus	4	Coscinodiscus commutatus	4		
+Coscinodiscus commutatus	5	Coscinodiscus commutatus	5		
+Coscinodiscus commutatus	32	Coscinodiscus commutatus			
+Coscinodiscus concinnus	0	Coscinodiscus concinnus			
+Coscinodiscus concinnus	1	Coscinodiscus concinnus	1		
+Coscinodiscus concinnus	2	Coscinodiscus concinnus	2		
+Coscinodiscus concinnus	3	Coscinodiscus concinnus	3		
+Coscinodiscus concinnus	4	Coscinodiscus concinnus	4		
+Coscinodiscus concinnus	5	Coscinodiscus concinnus	5		
+Coscinodiscus concinnus	32	Coscinodiscus concinnus			
+Coscinodiscus granii	1	Coscinodiscus granii	1		
+Coscinodiscus granii	2	Coscinodiscus granii	2		
+Coscinodiscus granii	3	Coscinodiscus granii	3		
+Coscinodiscus granii	4	Coscinodiscus granii	4		
+Coscinodiscus granii	5	Coscinodiscus granii	5		
+Coscinodiscus granii	6	Coscinodiscus granii	6		
+Coscinodiscus granii	7	Coscinodiscus granii	7		
+Coscinodiscus granii	8	Coscinodiscus granii	8		
+Coscinodiscus granii	9	Coscinodiscus granii	9		
+Coscinodiscus granii	32	Coscinodiscus granii			
+Coscinodiscus jonesianus	1	Coscinodiscus jonesianus			
+Coscinodiscus jonesianus	32	Coscinodiscus jonesianus			
+Coscinodiscus oculus-iridis	1	Coscinodiscus oculus-iridis			
+Coscinodiscus radiatus	1	Coscinodiscus radiatus	1		
+Coscinodiscus radiatus	2	Coscinodiscus radiatus	2		
+Coscinodiscus radiatus	3	Coscinodiscus radiatus	3		
+Coscinodiscus radiatus	4	Coscinodiscus radiatus	4		
+Coscinodiscus radiatus	5	Coscinodiscus radiatus	5		
+Coscinodiscus radiatus	6	Coscinodiscus radiatus	6		
+Coscinodiscus radiatus	7	Coscinodiscus radiatus	7		
+Coscinodiscus radiatus	8	Coscinodiscus radiatus	8		
+Coscinodiscus radiatus	9	Coscinodiscus radiatus	9		
+Coscinodiscus radiatus	10	Coscinodiscus radiatus			
+Coscinodiscus radiatus	11	Coscinodiscus radiatus			
+Coscinodiscus radiatus	12	Coscinodiscus radiatus			
+Coscinodiscus radiatus	13	Coscinodiscus radiatus			
+Coscinodiscus radiatus	14	Coscinodiscus radiatus			
+Coscinodiscus radiatus	32	Coscinodiscus radiatus			
+Coscinodiscus spp	1	Coscinodiscus	1		
+Coscinodiscus spp	2	Coscinodiscus	2		
+Coscinodiscus spp	3	Coscinodiscus	3		
+Coscinodiscus spp	4	Coscinodiscus	4		
+Coscinodiscus spp	5	Coscinodiscus	5		
+Coscinodiscus spp	6	Coscinodiscus	6		
+Coscinodiscus spp	7	Coscinodiscus	7		
+Coscinodiscus spp	8	Coscinodiscus	8		
+Coscinodiscus spp	9	Coscinodiscus	9		
+Coscinodiscus spp	10	Coscinodiscus	10		
+Coscinodiscus spp	11	Coscinodiscus	11		
+Coscinodiscus spp	32	Coscinodiscus			
+Coscinodiscus wailesii	0	Coscinodiscus wailesii			
+Coscinodiscus wailesii	1	Coscinodiscus wailesii	1		
+Coscinodiscus wailesii	2	Coscinodiscus wailesii	2		
+Coscinodiscus wailesii	3	Coscinodiscus wailesii	3		
+Coscinodiscus wailesii	4	Coscinodiscus wailesii	4		
+Coscinodiscus wailesii	5	Coscinodiscus wailesii	5		
+Coscinodiscus wailesii	32	Coscinodiscus wailesii			
+Cosmarium spp	1	Cosmarium	1		
+Cosmarium spp	2	Cosmarium	2		
+Cosmarium spp	3	Cosmarium	3		
+Cosmarium spp	32	Cosmarium			
+Coxliella helix	32	Coxliella helix			
+Craspedophyceae spp	1	Choanoflagellidea	1		
+Craspedophyceae spp	2	Choanoflagellidea	2		
+Craspedophyceae spp	32	Choanoflagellidea			
+Crucigenia quadrata	1	Crucigenia quadrata	1		
+Crucigenia quadrata	2	Crucigenia quadrata	2		
+Crucigenia quadrata	3	Crucigenia quadrata	3		
+Crucigenia quadrata	4	Crucigenia quadrata	4		
+Crucigenia quadrata	5	Crucigenia quadrata	5		
+Crucigenia quadrata	32	Crucigenia quadrata			
+Crucigenia tetrapedia	1	Crucigenia tetrapedia	1		
+Crucigenia tetrapedia	32	Crucigenia tetrapedia			
+Crucigeniella apiculata	1	Crucigeniella apiculata	1		
+Crucigeniella apiculata	32	Crucigeniella apiculata			
+Crucigeniella rectangularis	1	Crucigeniella rectangularis	1		
+Crucigeniella rectangularis	32	Crucigeniella rectangularis			
+Cryothecomonas scybalophora	0	Cryothecomonas scybalophora			
+Cryothecomonas scybalophora	1	Cryothecomonas scybalophora	1		
+Cryothecomonas scybalophora	32	Cryothecomonas scybalophora			
+Cryothecomonas sp	0	Cryothecomonas			
+Cryothecomonas sp	32	Cryothecomonas			
+Cryothecomonas spp	0	Cryothecomonas			
+Cryothecomonas spp	1	Cryothecomonas			
+Cryothecomonas spp	2	Cryothecomonas			
+Cryothecomonas spp	3	Cryothecomonas			
+Cryothecomonas spp	32	Cryothecomonas			
+Crypt sp	0	Cryptomonadales spp	5		
+Cryptaulax marina	1	Cryptaulax marina	1		
+Cryptaulax marina	32	Cryptaulax marina			
+Cryptaulax spp	1	Cryptaulax	1		
+Cryptaulax spp	2	Cryptaulax	2		
+Cryptaulax spp	3	Cryptaulax	3		
+Cryptaulax spp	4	Cryptaulax	4		
+Cryptaulax spp	32	Cryptaulax			
+Cryptomonadales spp	1	Cryptomonadales spp	1		
+Cryptomonadales spp	2	Cryptomonadales spp	2		
+Cryptomonadales spp	3	Cryptomonadales spp	3		
+Cryptomonadales spp	4	Cryptomonadales spp	4		
+Cryptomonadales spp	5	Cryptomonadales spp	5		
+Cryptomonadales spp	32	Cryptomonadales spp			32
+Cryptomonas ovata	1	Cryptomonas ovata	1		
+Cryptomonas ovata	2	Cryptomonas ovata	2		
+Cryptomonas ovata	3	Cryptomonas ovata	3		
+Cryptomonas ovata	4	Cryptomonas ovata	4		
+Cryptomonas ovata	5	Cryptomonas ovata	5		
+Cryptomonas ovata	32	Cryptomonas ovata			
+Cryptomonas pelagica	1	Cryptomonas pelagica			
+Cryptomonas pelagica	32	Cryptomonas pelagica			
+Cryptomonas platyuris	1	Cryptomonas platyuris	1		
+Cryptomonas platyuris	32	Cryptomonas platyuris			
+Cryptomonas spp	1	Cryptomonas	3		
+Cryptomonas spp	32	Cryptomonas			
+Cyanobacteria filaments	1				
+Cyanobacteria filaments	2				
+Cyanobacteria filaments	3				
+Cyanobacteria spp_colony	32			Cyanobacteria spp_colony	32
+Cyanobacteria spp_filaments	1				
+Cyanobacteria spp_filaments	3			Cyanobacteria spp_filaments	3
+Cyanobacteria spp_filaments	32			Cyanobacteria spp_filaments	32
+Cyanobacteria_filaments spp	1			Cyanobacteria spp_filaments	3
+Cyanodictyon reticulatum	1	Cyanodictyon reticulatum	1		
+Cyanodictyon reticulatum	2	Cyanodictyon reticulatum	2		
+Cyanodictyon reticulatum	3	Cyanodictyon reticulatum	3		
+Cyanodictyon reticulatum	4	Cyanodictyon reticulatum	4		
+Cyanodictyon reticulatum	5	Cyanodictyon reticulatum	5		
+Cyanodictyon reticulatum	32	Cyanodictyon reticulatum			
+Cyanodictyon sp	1	Cyanodictyon	6		
+Cyanodictyon sp	2	Cyanodictyon	2		
+Cyanodictyon sp	3	Cyanodictyon	3		
+Cyanodictyon sp	4	Cyanodictyon	4		
+Cyanodictyon sp	5	Cyanodictyon	5		
+Cyanodictyon sp	32	Cyanodictyon			
+Cyanodictyon tubiforme	1	Cyanodictyon tubiforme	1		
+Cyanodictyon tubiforme	2	Cyanodictyon tubiforme	2		
+Cyanodictyon tubiforme	3	Cyanodictyon tubiforme	3		
+Cyanodictyon tubiforme	4	Cyanodictyon tubiforme	4		
+Cyanodictyon tubiforme	5	Cyanodictyon tubiforme	5		
+Cyanodictyon tubiforme	32	Cyanodictyon tubiforme			
+Cyanonephron spp	1	Cyanonephron	1		
+Cyanonephron spp	2	Cyanonephron	2		
+Cyanonephron spp	3	Cyanonephron	3		
+Cyanonephron spp	4	Cyanonephron	4		
+Cyanonephron spp	5	Cyanonephron	5		
+Cyanonephron spp	32	Cyanonephron			
+Cyanonephron styloides	1	Cyanonephron styloides	1		
+Cyanonephron styloides	2	Cyanonephron styloides	2		
+Cyanonephron styloides	3	Cyanonephron styloides	3		
+Cyanonephron styloides	4	Cyanonephron styloides	4		
+Cyanonephron styloides	5	Cyanonephron styloides	5		
+Cyanonephron styloides	32	Cyanonephron styloides			
+Cybom/Pachysph/Ptero spp	1			Chlorodendrales	1
+Cybom/Pachysph/Ptero spp	2			Chlorodendrales	2
+Cybom/Pachysph/Ptero spp	32			Chlorodendrales	32
+Cyclostephanos dubius	1	Cyclostephanos dubius	1		
+Cyclostephanos dubius	2	Cyclostephanos dubius	2		
+Cyclostephanos dubius	32	Cyclostephanos dubius			
+Cyclotella atomus	1	Cyclotella atomus	1		
+Cyclotella atomus	2	Cyclotella atomus	2		
+Cyclotella atomus	3	Cyclotella atomus	3		
+Cyclotella atomus	4	Cyclotella atomus	4		
+Cyclotella atomus	5	Cyclotella atomus	5		
+Cyclotella atomus	32	Cyclotella atomus			
+Cyclotella choctawhatcheana	32	Cyclotella			
+Cyclotella glomerata	1	Cyclotella glomerata	1		
+Cyclotella glomerata	2	Cyclotella glomerata	2		
+Cyclotella radiosa	1	Cyclotella radiosa	1		
+Cyclotella radiosa	2	Cyclotella radiosa	2		
+Cyclotella radiosa	3	Cyclotella radiosa	3		
+Cyclotella radiosa	4	Cyclotella radiosa	4		
+Cyclotella radiosa	32	Cyclotella radiosa			
+Cyclotella stelligera	1	Cyclotella stelligera	1		
+Cyclotella stelligera	2	Cyclotella stelligera	2		
+Cyclotella stelligera	3	Cyclotella stelligera	3		
+Cyclotella stelligera	32	Cyclotella stelligera			
+Cylindrotheca closterium	1	Cylindrotheca closterium	1		
+Cylindrotheca closterium	2	Cylindrotheca closterium	2		
+Cylindrotheca closterium	3	Cylindrotheca closterium	3		
+Cylindrotheca closterium	4	Cylindrotheca closterium	4		
+Cylindrotheca closterium	5	Cylindrotheca closterium	4		
+Cylindrotheca closterium	6	Cylindrotheca closterium			
+Cylindrotheca closterium	7	Cylindrotheca closterium			
+Cylindrotheca closterium	8	Cylindrotheca closterium			
+Cylindrotheca closterium	9	Cylindrotheca closterium			
+Cylindrotheca closterium	10	Cylindrotheca closterium			
+Cylindrotheca closterium	11	Cylindrotheca closterium			
+Cylindrotheca closterium	32	Cylindrotheca closterium			
+Cymatopleura elliptica	1	Cymatopleura elliptica	1		
+Cymatopleura elliptica	2	Cymatopleura elliptica	2		
+Cymatopleura elliptica	3	Cymatopleura elliptica	3		
+Cymatopleura elliptica	32	Cymatopleura elliptica			
+Cymatopleura solea	1	Cymatopleura solea	1		
+Cymatopleura solea	2	Cymatopleura solea	2		
+Cymatopleura solea	32	Cymatopleura solea			
+Cymbella cistula	1	Cymbella cistula	1		
+Cymbella cistula	32	Cymbella cistula			
+Cymbella lanceolata	1	Cymbella lanceolata	1		
+Cymbella lanceolata	32	Cymbella lanceolata			
+Cymbella obtusiuscula	1	Cymbella obtusiuscula	1		
+Cymbella obtusiuscula	32	Cymbella obtusiuscula			
+Cymbomonas tetramitiformis	1	Cymbomonas tetramitiformis	2		
+Cymbomonas tetramitiformis	2	Cymbomonas tetramitiformis	2		
+Cymbomonas tetramitiformis	32	Cymbomonas tetramitiformis			
+Cyst dinoflagellate	0	Dinophyceae spp	2		
+Cyst dinoflagellate	1	Dinophyceae spp	8		
+Cyst Parvilucifera	0				
+Cyst spp	1				
+Cyst spp	2				
+Cyst spp	3				
+Cyst spp	4				
+Cyst spp	32				
+Cyst unidentified	6				
+Dactflagellat sp	0	Flagellates spp	6		
+Dactyliosolen blavyanus	32	Dactyliosolen blavyanus			
+Dactyliosolen fragilissimus	1	Dactyliosolen fragilissimus	1		
+Dactyliosolen fragilissimus	2	Dactyliosolen fragilissimus	2		
+Dactyliosolen fragilissimus	3	Dactyliosolen fragilissimus	2		
+Dactyliosolen fragilissimus	4	Dactyliosolen fragilissimus	4		
+Dactyliosolen fragilissimus	5	Dactyliosolen fragilissimus	5		
+Dactyliosolen fragilissimus	6	Dactyliosolen fragilissimus	6		
+Dactyliosolen fragilissimus	7	Dactyliosolen fragilissimus	7		
+Dactyliosolen fragilissimus	8	Dactyliosolen fragilissimus	12		
+Dactyliosolen fragilissimus	9	Dactyliosolen fragilissimus	11		
+Dactyliosolen fragilissimus	10	Dactyliosolen fragilissimus	10		
+Dactyliosolen fragilissimus	11	Dactyliosolen fragilissimus	2		
+Dactyliosolen fragilissimus	12	Dactyliosolen fragilissimus	4		
+Dactyliosolen fragilissimus	32	Dactyliosolen fragilissimus			
+Dactyliosolen phuketensis	0	Dactyliosolen phuketensis			
+Dactyliosolen phuketensis	1	Dactyliosolen phuketensis	3		
+Dactyliosolen phuketensis	2	Dactyliosolen phuketensis	2		
+Dactyliosolen phuketensis	3	Dactyliosolen phuketensis	1		
+Dactyliosolen phuketensis	32	Dactyliosolen phuketensis			
+Dactylosphaerium jurisii	1	Dactylosphaerium jurisii	1		
+Dactylosphaerium jurisii	32	Dactylosphaerium jurisii			
+Desmodesmus abundans	1	Desmodesmus abundans	1		
+Desmodesmus abundans	2	Desmodesmus abundans	2		
+Desmodesmus abundans	3	Desmodesmus abundans	3		
+Desmodesmus armatus var. armatus	1	Desmodesmus armatus var. armatus	1		
+Desmodesmus armatus var. armatus	2	Desmodesmus armatus var. armatus	2		
+Desmodesmus armatus var. armatus	3	Desmodesmus armatus var. armatus	3		
+Desmodesmus armatus var. armatus	4	Desmodesmus armatus var. armatus	4		
+Desmodesmus armatus var. armatus	32	Desmodesmus armatus var. armatus			
+Desmodesmus bicellularis	1	Desmodesmus bicellularis	1		
+Desmodesmus bicellularis	32	Desmodesmus bicellularis			
+Desmodesmus brasiliensis	1	Desmodesmus brasiliensis	1		
+Desmodesmus brasiliensis	32	Desmodesmus brasiliensis			
+Desmodesmus communis	1	Desmodesmus communis	1		
+Desmodesmus communis	2	Desmodesmus communis	2		
+Desmodesmus communis	3	Desmodesmus communis	3		
+Desmodesmus communis	4	Desmodesmus communis	4		
+Desmodesmus communis	32	Desmodesmus communis			
+Desmodesmus costato-granulatus	1	Desmodesmus costato-granulatus	1		
+Desmodesmus costato-granulatus	32	Desmodesmus costato-granulatus			
+Desmodesmus denticulatus	1	Desmodesmus denticulatus			
+Desmodesmus denticulatus	2	Desmodesmus denticulatus			
+Desmodesmus denticulatus	3	Desmodesmus denticulatus			
+Desmodesmus denticulatus	4	Desmodesmus denticulatus			
+Desmodesmus denticulatus	5	Desmodesmus denticulatus			
+Desmodesmus denticulatus	32	Desmodesmus denticulatus			
+Desmodesmus denticulatus var. linearis	1	Desmodesmus denticulatus var. linearis	1		
+Desmodesmus denticulatus var. linearis	32	Desmodesmus denticulatus var. linearis			
+Desmodesmus dispar	1	Desmodesmus dispar	1		
+Desmodesmus dispar	32	Desmodesmus dispar			
+Desmodesmus hystrix	1	Desmodesmus hystrix	1		
+Desmodesmus hystrix	32	Desmodesmus hystrix			
+Desmodesmus intermedius	1	Desmodesmus intermedius	1		
+Desmodesmus intermedius	32	Desmodesmus intermedius			
+Desmodesmus lefevrii	1	Desmodesmus			
+Desmodesmus opoliensis var. opoliensis	1	Desmodesmus opoliensis var. opoliensis	1		
+Desmodesmus opoliensis var. opoliensis	2	Desmodesmus opoliensis var. opoliensis	2		
+Desmodesmus opoliensis var. opoliensis	32	Desmodesmus opoliensis var. opoliensis			
+Desmodesmus protuberans	1	Desmodesmus protuberans	1		
+Desmodesmus protuberans	32	Desmodesmus protuberans			
+Desmodesmus serratus	1	Desmodesmus serratus	1		
+Desmodesmus serratus	32	Desmodesmus serratus			
+Desmodesmus spinosus	1	Desmodesmus spinosus	1		
+Desmodesmus spinosus	32	Desmodesmus spinosus			
+Detonula confervacea	1	Detonula confervacea	1		
+Detonula confervacea	2	Detonula confervacea	2		
+Detonula confervacea	3	Detonula confervacea	3		
+Detonula confervacea	32	Detonula confervacea			
+Detonula pumila	1	Detonula pumila	1		
+Detonula pumila	32	Detonula pumila			
+Diatoma constricta	1	Diatoma constricta	1		
+Diatoma constricta	32	Diatoma constricta			
+Diatoma tenuis	1	Diatoma tenuis	1		
+Diatoma tenuis	2	Diatoma tenuis	2		
+Diatoma tenuis	3	Diatoma tenuis	3		
+Diatoma tenuis	4	Diatoma tenuis	4		
+Diatoma tenuis	5	Diatoma tenuis	5		
+Diatoma tenuis	6	Diatoma tenuis	6		
+Diatoma tenuis	32	Diatoma tenuis			
+Diatomophyceae spp	1	Bacillariophyta			
+Diatomophyceae spp	2	Bacillariophyta			
+Diatomophyceae spp	3	Bacillariophyta			
+Diatomophyceae spp	32	Bacillariophyta			
+Dicroerisma psilonereiella	0	Dicroerisma psilonereiella			
+Dicroerisma psilonereiella	1	Dicroerisma psilonereiella	1		
+Dicroerisma psilonereiella	32	Dicroerisma psilonereiella			
+Dictyocha fibula	0	Dictyocha fibula			
+Dictyocha fibula	1	Dictyocha fibula	1		
+Dictyocha fibula	2	Dictyocha fibula			
+Dictyocha fibula	32	Dictyocha fibula			
+Dictyocha naked	0	Dictyocha			
+Dictyocha speculum	0	Dictyocha speculum			
+Dictyocha speculum	1	Dictyocha speculum	1		
+Dictyocha speculum	2	Dictyocha speculum	3		
+Dictyocha speculum	3	Dictyocha speculum	2		
+Dictyocha speculum	4	Dictyocha speculum	2		
+Dictyocha speculum	32	Dictyocha speculum			
+Dictyocha speculum_naked	1	Dictyocha			
+Dictyocha speculum_naked	32	Dictyocha			
+Dictyosphaerium ehrenbergianum	1	Dictyosphaerium ehrenbergianum	1		
+Dictyosphaerium ehrenbergianum	2	Dictyosphaerium ehrenbergianum	2		
+Dictyosphaerium ehrenbergianum	3	Dictyosphaerium ehrenbergianum			
+Dictyosphaerium ehrenbergianum	32	Dictyosphaerium ehrenbergianum			
+Dictyosphaerium elegans	1	Dictyosphaerium elegans	1		
+Dictyosphaerium elegans	32	Dictyosphaerium elegans			
+Dictyosphaerium pulchellum	1	Dictyosphaerium pulchellum	1		
+Dictyosphaerium pulchellum	2	Dictyosphaerium pulchellum	2		
+Dictyosphaerium pulchellum	3	Dictyosphaerium pulchellum	3		
+Dictyosphaerium pulchellum	4	Dictyosphaerium pulchellum	4		
+Dictyosphaerium pulchellum	5	Dictyosphaerium pulchellum	5		
+Dictyosphaerium pulchellum	32	Dictyosphaerium pulchellum			
+Dictyosphaerium subsolitarium	1	Dictyosphaerium subsolitarium	1		
+Dictyosphaerium subsolitarium	32	Dictyosphaerium subsolitarium			
+Didinium spp	32			Ciliophora	32
+Dinobryon balticum	1	Dinobryon balticum	1		
+Dinobryon balticum	2	Dinobryon balticum	2		
+Dinobryon balticum	3	Dinobryon balticum	3		
+Dinobryon balticum	32	Dinobryon balticum			
+Dinobryon balticum_colony	32	Dinobryon			
+Dinobryon balticum_solitary	5	Dinobryon			
+Dinobryon balticum_solitary	32	Dinobryon			
+Dinobryon cylindricum	1	Dinobryon cylindricum	1		
+Dinobryon cylindricum	32	Dinobryon cylindricum			
+Dinobryon divergens	1	Dinobryon divergens	1		
+Dinobryon divergens	2	Dinobryon divergens	2		
+Dinobryon divergens	32	Dinobryon divergens			
+Dinobryon faculiferum	1	Dinobryon faculiferum	1		
+Dinobryon faculiferum	2	Dinobryon faculiferum	2		
+Dinobryon faculiferum	3	Dinobryon faculiferum	3		
+Dinobryon faculiferum	32	Dinobryon faculiferum			
+Dinobryon spp	1	Dinobryon	1		
+Dinobryon spp	2	Dinobryon	2		
+Dinobryon spp	32	Dinobryon			
+Dinoflagellate spp_naked	1	Gymnodiniales spp	1		
+Dinoflagellate spp_naked	2	Gymnodiniales spp	2		
+Dinoflagellate spp_naked	3	Gymnodiniales spp	3		
+Dinoflagellate spp_naked	4	Gymnodiniales spp	4		
+Dinoflagellate spp_naked	5	Gymnodiniales spp	5		
+Dinoflagellate spp_naked	6	Gymnodiniales spp	6		
+Dinoflagellate spp_naked	7	Gymnodiniales spp	7		
+Dinoflagellate spp_naked	8	Gymnodiniales spp	8		
+Dinoflagellate spp_naked	9	Gymnodiniales spp	9		
+Dinoflagellate spp_naked	10	Gymnodiniales spp	10		
+Dinoflagellate spp_naked	11	Gymnodiniales spp	11		
+Dinoflagellate spp_naked	12	Gymnodiniales spp	12		
+Dinoflagellate spp_naked	13	Gymnodiniales spp	13		
+Dinoflagellate spp_naked	14	Gymnodiniales spp	14		
+Dinoflagellate spp_naked	15	Gymnodiniales spp	15		
+Dinoflagellate spp_naked	16	Gymnodiniales spp	16		
+Dinoflagellate spp_naked	17	Gymnodiniales spp	17		
+Dinoflagellate spp_naked	18	Gymnodiniales spp	18		
+Dinoflagellate spp_naked	19	Gymnodiniales spp	19		
+Dinoflagellate spp_naked	20	Gymnodiniales spp	20		
+Dinoflagellate spp_naked	21	Gymnodiniales spp	21		
+Dinoflagellate spp_naked	22	Gymnodiniales spp	22		
+Dinoflagellate spp_naked	23	Gymnodiniales spp	23		
+Dinoflagellate spp_naked	24	Gymnodiniales spp	24		
+Dinoflagellate spp_naked	32	Gymnodiniales spp			32
+Dinoflagellate spp_thecal	1	Peridiniales spp	1		
+Dinoflagellate spp_thecal	2	Peridiniales spp	2		
+Dinoflagellate spp_thecal	3	Peridiniales spp	3		
+Dinoflagellate spp_thecal	4	Peridiniales spp	4		
+Dinoflagellate spp_thecal	5	Peridiniales spp	5		
+Dinoflagellate spp_thecal	6	Peridiniales spp	6		
+Dinoflagellate spp_thecal	7	Peridiniales spp	7		
+Dinoflagellate spp_thecal	8	Peridiniales spp	8		
+Dinoflagellate spp_thecal	9	Peridiniales spp	9		
+Dinoflagellate spp_thecal	10	Peridiniales spp	10		
+Dinoflagellate spp_thecal	11	Peridiniales spp	11		
+Dinoflagellate spp_thecal	12	Peridiniales spp	12		
+Dinoflagellate spp_thecal	13	Peridiniales spp	13		
+Dinoflagellate spp_thecal	14	Peridiniales spp	14		
+Dinoflagellate spp_thecal	15	Peridiniales spp	15		
+Dinoflagellate spp_thecal	16	Peridiniales spp	16		
+Dinoflagellate spp_thecal	17	Peridiniales spp	17		
+Dinoflagellate spp_thecal	18	Peridiniales spp	18		
+Dinoflagellate spp_thecal	19	Peridiniales spp	19		
+Dinoflagellate spp_thecal	20	Peridiniales spp	20		
+Dinoflagellate spp_thecal	21	Peridiniales spp	21		
+Dinoflagellate spp_thecal	22	Peridiniales spp	22		
+Dinoflagellate spp_thecal	23	Peridiniales spp	23		
+Dinoflagellate spp_thecal	24	Peridiniales spp	24		
+Dinoflagellate spp_thecal	32	Peridiniales spp			32
+Dinoflagellate spp1.thecal	3	Peridiniales spp	2		
+Dinoflagellate spp1.thecal	5	Peridiniales spp	5		
+Dinoflagellate spp1.thecal	6	Peridiniales spp	6		
+Dinophyceae spp	1	Dinophyceae	1		
+Dinophyceae spp	2	Dinophyceae	2		
+Dinophyceae spp	3	Dinophyceae	3		
+Dinophyceae spp	4	Dinophyceae	4		
+Dinophyceae spp	5	Dinophyceae	5		
+Dinophyceae spp	6	Dinophyceae	6		
+Dinophyceae spp	7	Dinophyceae	7		
+Dinophyceae spp	8	Dinophyceae	8		
+Dinophyceae spp	10	Dinophyceae			
+Dinophyceae spp	11	Dinophyceae			
+Dinophyceae spp	12	Dinophyceae			
+Dinophyceae spp	13	Dinophyceae			
+Dinophyceae spp	32	Dinophyceae			
+Dinophysis acuminata	1	Dinophysis acuminata	1		
+Dinophysis acuminata	2	Dinophysis acuminata	2		
+Dinophysis acuminata	3	Dinophysis acuminata	3		
+Dinophysis acuminata	4	Dinophysis acuminata	4		
+Dinophysis acuminata	5	Dinophysis acuminata	5		
+Dinophysis acuminata	6	Dinophysis acuminata	6		
+Dinophysis acuminata	7	Dinophysis acuminata			
+Dinophysis acuminata	8	Dinophysis acuminata			
+Dinophysis acuminata	9	Dinophysis acuminata			
+Dinophysis acuminata	10	Dinophysis acuminata			
+Dinophysis acuminata	11	Dinophysis acuminata			
+Dinophysis acuminata	32	Dinophysis acuminata			
+Dinophysis acuta	1	Dinophysis acuta	1		
+Dinophysis acuta	2	Dinophysis acuta	2		
+Dinophysis acuta	3	Dinophysis acuta	3		
+Dinophysis acuta	4	Dinophysis acuta	4		
+Dinophysis acuta	5	Dinophysis acuta	5		
+Dinophysis acuta	6	Dinophysis acuta			
+Dinophysis acuta	7	Dinophysis acuta			
+Dinophysis acuta	8	Dinophysis acuta			
+Dinophysis acuta	9	Dinophysis acuta			
+Dinophysis acuta	10	Dinophysis acuta			
+Dinophysis acuta	32	Dinophysis acuta			
+Dinophysis dens	0	Dinophysis dens			
+Dinophysis dens	1	Dinophysis dens	1		
+Dinophysis dens	5	Dinophysis dens			
+Dinophysis dens	32	Dinophysis dens			
+Dinophysis norvegica	1	Dinophysis norvegica	1		
+Dinophysis norvegica	2	Dinophysis norvegica	2		
+Dinophysis norvegica	3	Dinophysis norvegica	3		
+Dinophysis norvegica	4	Dinophysis norvegica	4		
+Dinophysis norvegica	5	Dinophysis norvegica			
+Dinophysis norvegica	6	Dinophysis norvegica			
+Dinophysis norvegica	7	Dinophysis norvegica			
+Dinophysis norvegica	32	Dinophysis norvegica			
+Dinophysis odiosa	1	Dinophysis odiosa	1		
+Dinophysis odiosa	4	Dinophysis odiosa			
+Dinophysis odiosa	32	Dinophysis odiosa			
+Dinophysis rotundata	1	Dinophysis rotundata	1		
+Dinophysis rotundata	2	Dinophysis rotundata	2		
+Dinophysis rotundata	3	Dinophysis rotundata	3		
+Dinophysis rotundata	4	Dinophysis rotundata	4		
+Dinophysis rotundata	32	Dinophysis rotundata			
+Dinophysis spp	1	Dinophysis	1		
+Dinophysis spp	2	Dinophysis	2		
+Dinophysis spp	3	Dinophysis	3		
+Dinophysis spp	4	Dinophysis	4		
+Dinophysis spp	5	Dinophysis	5		
+Dinophysis spp	6	Dinophysis	6		
+Dinophysis spp	7	Dinophysis	7		
+Dinophysis spp	8	Dinophysis			
+Dinophysis spp	9	Dinophysis			
+Dinophysis spp	32	Dinophysis			
+Dinophysis tripos	1	Dinophysis tripos	1		
+Dinophysis tripos	32	Dinophysis tripos			
+Diploneis didyma	1	Diploneis didyma	1		
+Diploneis didyma	32	Diploneis didyma			
+Diploneis elliptica	1	Diploneis elliptica	1		
+Diploneis elliptica	32	Diploneis elliptica			
+Diploneis interrupta	1	Diploneis interrupta	1		
+Diploneis interrupta	32	Diploneis interrupta			
+Diploneis spp	32	Diploneis			
+Diplopelta bomba	1	Diplopelta			
+Diplopelta bomba	2	Diplopelta			
+Diplopelta bomba	32	Diplopelta			
+Diplopsalis groupA	1	Diplopsalis complex spp	2		
+Diplopsalis groupB	2	Diplopsalis complex spp	5		
+Diplopsalis groupC	3	Diplopsalis complex spp	3		
+Diplopsalis groupD	4	Diplopsalis complex spp	1		
+Diplopsalis groupE	5	Diplopsalis complex spp	5		
+Diplopsalis-complex spp	32	Diplopsalis complex spp			32
+Diplopsalis-group spp	1	Diplopsalis complex spp	1		
+Diplopsalis-group spp	2	Diplopsalis complex spp	2		
+Diplopsalis-group spp	3	Diplopsalis complex spp	3		
+Diplopsalis-group spp	4	Diplopsalis complex spp	4		
+Diplopsalis-group spp	5	Diplopsalis complex spp	5		
+Diplopsalis-group spp	6	Diplopsalis complex spp	2		
+Diplopsalis-group spp	7	Diplopsalis complex spp	3		
+Diplopsalis-group spp	8	Diplopsalis complex spp	3		
+Diplopsalis-group spp	9	Diplopsalis complex spp	5		
+Diplopsalis-group spp	10	Diplopsalis complex spp	5		
+Diplopsalis-group spp	32	Diplopsalis complex spp			32
+Diplopsalopsis bomba	3	Diplopsalopsis bomba			
+Diplopsalopsis bomba	32	Diplopsalopsis bomba			
+Dissodinium pseudolunula_cyst	32	Dissodinium			
+Dissodinium pseudolunula_swarmer	32	Dissodinium			
+Ditylum brightwellii	0	Ditylum brightwellii			
+Ditylum brightwellii	1	Ditylum brightwellii	1		
+Ditylum brightwellii	2	Ditylum brightwellii	2		
+Ditylum brightwellii	3	Ditylum brightwellii	3		
+Ditylum brightwellii	4	Ditylum brightwellii	4		
+Ditylum brightwellii	5	Ditylum brightwellii	6		
+Ditylum brightwellii	6	Ditylum brightwellii	6		
+Ditylum brightwellii	7	Ditylum brightwellii			
+Ditylum brightwellii	8	Ditylum brightwellii			
+Ditylum brightwellii	9	Ditylum brightwellii			
+Ditylum brightwellii	10	Ditylum brightwellii			
+Ditylum brightwellii	11	Ditylum brightwellii			
+Ditylum brightwellii	32	Ditylum brightwellii			
+Ditylum brightwellii_restingspore	0	Ditylum			
+Ditylum brightwellii_restingspore	32	Ditylum			
+Durinskia baltica	1	Durinskia baltica	1		
+Durinskia baltica	2	Durinskia baltica	2		
+Durinskia baltica	3	Durinskia baltica	3		
+Durinskia baltica	32	Durinskia baltica			
+Ebria tripartita	0	Ebria tripartita			
+Ebria tripartita	1	Ebria tripartita	1		
+Ebria tripartita	2	Ebria tripartita	2		
+Ebria tripartita	3	Ebria tripartita	3		
+Ebria tripartita	4	Ebria tripartita	4		
+Ebria tripartita	5	Ebria tripartita	5		
+Ebria tripartita	32	Ebria tripartita			
+Elakotothrix gelatinosa	1	Elakatothrix gelatinosa	1		
+Elakotothrix gelatinosa	2	Elakatothrix gelatinosa	2		
+Elakotothrix gelatinosa	3	Elakatothrix gelatinosa	3		
+Elakotothrix gelatinosa	4	Elakatothrix gelatinosa	4		
+Elakotothrix gelatinosa	5	Elakatothrix gelatinosa	5		
+Elakotothrix gelatinosa	32	Elakatothrix gelatinosa			32
+Elakotothrix genevensis	1	Elakatothrix genevensis	1		
+Elakotothrix genevensis	2	Elakatothrix genevensis	2		
+Elakotothrix genevensis	3	Elakatothrix genevensis	3		
+Elakotothrix genevensis	4	Elakatothrix genevensis	4		
+Elakotothrix genevensis	32	Elakatothrix genevensis			32
+Emiliania huxleyi	0	Emiliania huxleyi			
+Emiliania huxleyi	1	Emiliania huxleyi	1		
+Emiliania huxleyi	2	Emiliania huxleyi	2		
+Emiliania huxleyi	32	Emiliania huxleyi			
+Entomoneis sp	32	Entomoneis			
+Eucampia groenlandica	1	Eucampia groenlandica	1		
+Eucampia groenlandica	32	Eucampia groenlandica			
+Eucampia zodiacus	0	Eucampia zodiacus			
+Eucampia zodiacus	1	Eucampia zodiacus	4		
+Eucampia zodiacus	2	Eucampia zodiacus	2		
+Eucampia zodiacus	3	Eucampia zodiacus	3		
+Eucampia zodiacus	4	Eucampia zodiacus	4		
+Eucampia zodiacus	32	Eucampia zodiacus			
+Eucapsis alpina	1	Eucapsis alpina	1		
+Eucapsis alpina	32	Eucapsis alpina			
+Eucapsis minuta	1	Eucapsis minuta	1		
+Eucapsis minuta	32	Eucapsis minuta			
+Eucapsis spp	1	Eucapsis	1		
+Eucapsis spp	32	Eucapsis			
+Eudorina elegans	1	Eudorina elegans	1		
+Eudorina elegans	2	Eudorina elegans	2		
+Eudorina elegans	32	Eudorina elegans			
+Eudorina unicocca	1	Eudorina unicocca	1		
+Eudorina unicocca	2	Eudorina unicocca	2		
+Eudorina unicocca	3	Eudorina unicocca	3		
+Eudorina unicocca	4	Eudorina unicocca	4		
+Eudorina unicocca	5	Eudorina unicocca	5		
+Eudorina unicocca	32	Eudorina unicocca			
+Euglena acus	1	Euglena acus	1		
+Euglena acus	32	Euglena acus			
+Euglena oxyuris	1	Euglena oxyuris	1		
+Euglena oxyuris	32	Euglena oxyuris			
+Euglena sp	32	Euglena			
+Euglena spp	1	Euglena	1		
+Euglena spp	2	Euglena	2		
+Euglena spp	3	Euglena	3		
+Euglena spp	4	Euglena	4		
+Euglena spp	5	Euglena	5		
+Euglena spp	32	Euglena			
+Euglenales spp	1	Euglenales	1		
+Euglenales spp	2	Euglenales	2		
+Euglenales spp	3	Euglenales	3		
+Euglenales spp	4	Euglenales	4		
+Euglenales spp	32	Euglenales			
+Eunotia spp	1	Eunotia	1		
+Eutintinnus spp	1	Eutintinnus			
+Eutintinnus spp	32	Eutintinnus			
+Eutreptia lanowii	1	Eutreptia lanowii	1		
+Eutreptia lanowii	32	Eutreptia lanowii			
+Eutreptia viridis	1	Eutreptia viridis	1		
+Eutreptia viridis	32	Eutreptia viridis			
+Eutreptiella braarudii	0	Eutreptiella braarudii			
+Eutreptiella braarudii	1	Eutreptiella braarudii			
+Eutreptiella braarudii	32	Eutreptiella braarudii			
+Eutreptiella gymnastica	0	Eutreptiella gymnastica			
+Eutreptiella gymnastica	1	Eutreptiella gymnastica	1		
+Eutreptiella gymnastica	32	Eutreptiella gymnastica			
+Eutreptiella spp	1	Eutreptiella	1		
+Eutreptiella spp	2	Eutreptiella	1		
+Eutreptiella spp	3	Eutreptiella	7		
+Eutreptiella spp	4	Eutreptiella	7		
+Eutreptiella spp	5	Eutreptiella	12		
+Eutreptiella spp	6	Eutreptiella	3		
+Eutreptiella spp	7	Eutreptiella	4		
+Eutreptiella spp	8	Eutreptiella	5		
+Eutreptiella spp	9	Eutreptiella	6		
+Eutreptiella spp	10	Eutreptiella	5		
+Eutreptiella spp	11	Eutreptiella	5		
+Eutreptiella spp	12	Eutreptiella	8		
+Eutreptiella spp	13	Eutreptiella	9		
+Eutreptiella spp	14	Eutreptiella	11		
+Eutreptiella spp	15	Eutreptiella	15		
+Eutreptiella spp	16	Eutreptiella	16		
+Eutreptiella spp	17	Eutreptiella	17		
+Eutreptiella spp	18	Eutreptiella	18		
+Eutreptiella spp	32	Eutreptiella			
+Favella ehrenbergii	32	Favella ehrenbergii			
+Flagellate sp_Y	0	Flagellates spp	6		
+Flagellate sp_Y	32	Flagellates spp			32
+Flagellate spp	2	Flagellates spp	6		
+Flagellate spY	0	Flagellates spp	6		
+Flagellates spp	0	Flagellates spp	2		
+Flagellates spp	1	Flagellates spp	1		
+Flagellates spp	2	Flagellates spp	2		
+Flagellates spp	3	Flagellates spp	3		
+Flagellates spp	4	Flagellates spp	4		
+Flagellates spp	5	Flagellates spp	5		
+Flagellates spp	6	Flagellates spp	6		
+Flagellates spp	7	Flagellates spp	7		
+Flagellates spp	8	Flagellates spp	8		
+Flagellates spp	9	Flagellates spp	9		
+Flagellates spp	10	Flagellates spp	10		
+Flagellates spp	11	Flagellates spp	11		
+Flagellates spp	12	Flagellates spp	12		
+Flagellates spp	13	Flagellates spp	13		
+Flagellates spp	14	Flagellates spp	14		
+Flagellates spp	32	Flagellates spp			32
+Fragilaria capucina var. capucina	1	Fragilaria capucina var. capucina	1		
+Fragilaria capucina var. capucina	2	Fragilaria capucina var. capucina	2		
+Fragilaria capucina var. capucina	32	Fragilaria capucina var. capucina			
+Fragilaria istvanffyi	1	Fragilaria istvanffyi	1		
+Fragilaria istvanffyi	32	Fragilaria istvanffyi			
+Fragilaria spp	32	Fragilaria			
+Fragilariforma virescens	1	Fragilariforma virescens	1		
+Fragilariforma virescens	2	Fragilariforma virescens	3		
+Fragilariforma virescens	32	Fragilariforma virescens			
+Fragilariopsis oceanica	1	Fragilariopsis oceanica			
+Fragilariopsis oceanica	32	Fragilariopsis oceanica			
+Fragilidium spp	1	Fragilidium			
+Fragilidium spp	32	Fragilidium			
+Fragilidium spp_cyst	32	Fragilidium			
+Fragilidium subglobosum	1	Fragilidium subglobosum	1		
+Fragilidium subglobosum	2	Fragilidium subglobosum	2		
+Fragilidium subglobosum	32	Fragilidium subglobosum			
+Fragilidium subglobosum cyst	2	Fragilidium subglobosum	1		
+Fragilidium subglobosum cyst	3	Fragilidium subglobosum			
+Fragilidium subglobosum_cyst	1	Fragilidium			
+Fragilidium subglobosum_cyst	2	Fragilidium			
+Fragilidium subglobosum_cyst	4	Fragilidium			
+Franceia ovalis	1	Franceia ovalis	1		
+Franceia ovalis	32	Franceia ovalis			
+Glenodinium danicum	1	Glenodinium danicum	1		
+Glenodinium danicum	32	Glenodinium danicum			
+Glenodinium paululum	1	Glenodinium paululum	1		
+Glenodinium paululum	32	Glenodinium paululum			
+Gloeotrichia echinulata	1	Gloeotrichia echinulata	1		
+Gloeotrichia echinulata	32	Gloeotrichia echinulata			
+Gloeotrichia spp	1	Gloeotrichia	1		
+Gloeotrichia spp	2	Gloeotrichia	2		
+Gloeotrichia spp	3	Gloeotrichia	3		
+Gloeotrichia spp	32	Gloeotrichia			
+Golenkinia radiata	1	Golenkinia radiata	1		
+Golenkinia radiata	32	Golenkinia radiata			
+Gomphonema olivaceum	1	Gomphonema olivaceum			
+Gomphonema olivaceum	32	Gomphonema olivaceum			
+Gomphosphaeria aponina	1	Gomphosphaeria aponina	1		
+Gomphosphaeria aponina	2	Gomphosphaeria aponina	2		
+Gomphosphaeria aponina	3	Gomphosphaeria aponina	3		
+Gomphosphaeria aponina	32	Gomphosphaeria aponina			
+Gomphosphaeria salina	1	Gomphosphaeria salina	1		
+Gomphosphaeria salina	2	Gomphosphaeria salina	2		
+Gomphosphaeria salina	3	Gomphosphaeria salina	3		
+Gomphosphaeria salina	32	Gomphosphaeria salina			
+Goniochloris mutica	1	Goniochloris mutica	1		
+Goniochloris mutica	32	Goniochloris mutica			
+Goniomonas amphinema	1	Goniomonas amphinema			
+Goniomonas amphinema	32	Goniomonas amphinema			
+Goniomonas pacifica	1	Goniomonas pacifica			
+Goniomonas pacifica	32	Goniomonas pacifica			
+Goniomonas truncata	1	Goniomonas truncata			
+Goniomonas truncata	32	Goniomonas truncata			
+Gonium pectorale	1	Gonium pectorale	1		
+Gonium pectorale	2	Gonium pectorale	2		
+Gonium pectorale	3	Gonium pectorale	3		
+Gonium pectorale	4	Gonium pectorale	4		
+Gonium pectorale	5	Gonium pectorale	5		
+Gonium pectorale	6	Gonium pectorale	6		
+Gonium pectorale	32	Gonium pectorale			
+Gonium sociale	1	Gonium sociale	1		
+Gonium sociale	2	Gonium sociale	2		
+Gonium sociale	32	Gonium sociale			
+Gonyaulax digitale	1	Gonyaulax digitale	1		
+Gonyaulax digitale	2	Gonyaulax digitale	2		
+Gonyaulax digitale	3	Gonyaulax digitale	3		
+Gonyaulax digitale	32	Gonyaulax digitale			
+Gonyaulax polygramma	1	Gonyaulax polygramma	1		
+Gonyaulax polygramma	32	Gonyaulax polygramma			
+Gonyaulax spinifera	32	Gonyaulax spinifera			
+Gonyaulax spp	1	Gonyaulax	1		
+Gonyaulax spp	2	Gonyaulax	2		
+Gonyaulax spp	3	Gonyaulax	3		
+Gonyaulax spp	4	Gonyaulax	4		
+Gonyaulax spp	5	Gonyaulax	5		
+Gonyaulax spp	6	Gonyaulax			
+Gonyaulax spp	32	Gonyaulax			
+Gonyaulax verior	1	Gonyaulax verior	1		
+Gonyaulax verior	2	Gonyaulax verior	2		
+Gonyaulax verior	3	Gonyaulax verior	3		
+Gonyaulax verior	4	Gonyaulax verior	4		
+Gonyaulax verior	5	Gonyaulax verior	5		
+Gonyaulax verior	32	Gonyaulax verior			
+Gonyaulax verior_cyst	32	Gonyaulax			
+Grammatophora marina	1	Grammatophora marina	1		
+Grammatophora marina	2	Grammatophora marina	2		
+Grammatophora marina	32	Grammatophora marina			
+Grammatophora oceanica	1	Grammatophora oceanica			
+Grammatophora oceanica	32	Grammatophora oceanica			
+Grammatophora spp	32	Grammatophora			
+Granulocystopsis pseudocoronata	1	Granulocystopsis pseudocoronata	1		
+Granulocystopsis pseudocoronata	32	Granulocystopsis pseudocoronata			
+Guinardia delicatula	1	Guinardia delicatula	1		
+Guinardia delicatula	2	Guinardia delicatula	2		
+Guinardia delicatula	3	Guinardia delicatula	3		
+Guinardia delicatula	4	Guinardia delicatula			
+Guinardia delicatula	5	Guinardia delicatula			
+Guinardia delicatula	6	Guinardia delicatula			
+Guinardia delicatula	7	Guinardia delicatula			
+Guinardia delicatula	32	Guinardia delicatula			
+Guinardia flaccida	1	Guinardia flaccida	1		
+Guinardia flaccida	2	Guinardia flaccida	2		
+Guinardia flaccida	3	Guinardia flaccida	3		
+Guinardia flaccida	4	Guinardia flaccida	4		
+Guinardia flaccida	5	Guinardia flaccida	5		
+Guinardia flaccida	6	Guinardia flaccida	6		
+Guinardia flaccida	7	Guinardia flaccida	7		
+Guinardia flaccida	8	Guinardia flaccida	8		
+Guinardia flaccida	9	Guinardia flaccida	9		
+Guinardia flaccida	10	Guinardia flaccida			
+Guinardia flaccida	11	Guinardia flaccida			
+Guinardia flaccida	12	Guinardia flaccida			
+Guinardia flaccida	13	Guinardia flaccida			
+Guinardia flaccida	14	Guinardia flaccida			
+Guinardia flaccida	32	Guinardia flaccida			
+Guinardia striata	1	Guinardia striata	1		
+Guinardia striata	2	Guinardia striata			
+Guinardia striata	32	Guinardia striata			
+Gymnodiniales spp	0	Gymnodiniales			
+Gymnodiniales spp	1	Gymnodiniales	1		
+Gymnodiniales spp	2	Gymnodiniales	2		
+Gymnodiniales spp	3	Gymnodiniales	3		
+Gymnodiniales spp	4	Gymnodiniales	4		
+Gymnodiniales spp	5	Gymnodiniales	5		
+Gymnodiniales spp	6	Gymnodiniales	6		
+Gymnodiniales spp	7	Gymnodiniales	7		
+Gymnodiniales spp	8	Gymnodiniales	8		
+Gymnodiniales spp	9	Gymnodiniales	9		
+Gymnodiniales spp	10	Gymnodiniales	10		
+Gymnodiniales spp	11	Gymnodiniales	11		
+Gymnodiniales spp	12	Gymnodiniales	12		
+Gymnodiniales spp	13	Gymnodiniales	13		
+Gymnodiniales spp	14	Gymnodiniales	14		
+Gymnodiniales spp	15	Gymnodiniales	15		
+Gymnodiniales spp	16	Gymnodiniales	16		
+Gymnodiniales spp	17	Gymnodiniales	17		
+Gymnodiniales spp	18	Gymnodiniales	18		
+Gymnodiniales spp	19	Gymnodiniales	19		
+Gymnodiniales spp	20	Gymnodiniales	20		
+Gymnodiniales spp	21	Gymnodiniales	21		
+Gymnodiniales spp	22	Gymnodiniales	22		
+Gymnodiniales spp	23	Gymnodiniales	23		
+Gymnodiniales spp	24	Gymnodiniales	24		
+Gymnodiniales spp	32	Gymnodiniales			
+Gymnodinium abbreviatum	32	Gymnodinium abbreviatum			
+Gymnodinium albulum	1	Gymnodinium albulum	1		
+Gymnodinium albulum	32	Gymnodinium albulum			
+Gymnodinium aureolum	1	Gymnodinium aureolum	1		
+Gymnodinium aureolum	2	Gymnodinium aureolum	2		
+Gymnodinium aureolum	32	Gymnodinium aureolum			
+Gymnodinium elongatum	0	Lessardia elongata			
+Gymnodinium elongatum	1	Lessardia elongata	1		
+Gymnodinium elongatum	32	Lessardia elongata			
+Gymnodinium endofasciculum	1	Gymnodinium endofasciculum			
+Gymnodinium endofasciculum	32	Gymnodinium endofasciculum			
+Gymnodinium galeatum	0	Gymnodinium			
+Gymnodinium galeatum	1	Gymnodinium	3		
+Gymnodinium galeatum	32	Gymnodinium			
+Gymnodinium gracile	1	Gymnodinium gracile	1		
+Gymnodinium gracile	2	Gymnodinium gracile	2		
+Gymnodinium gracile	3	Gymnodinium gracile	3		
+Gymnodinium gracile	32	Gymnodinium gracile			
+Gymnodinium halophilum	0	Gymnodinium halophilum			
+Gymnodinium halophilum	1	Gymnodinium halophilum	1		
+Gymnodinium halophilum	32	Gymnodinium halophilum			
+Gymnodinium heterostriatum	32	Gymnodinium heterostriatum			
+Gymnodinium lebourae	1	Gymnodinium lebourae			
+Gymnodinium lebourae	32	Gymnodinium lebourae			
+Gymnodinium lohmannii	32	Gymnodinium lohmannii			
+Gymnodinium micrum	0	Karlodinium micrum			
+Gymnodinium micrum	1	Karlodinium micrum	1		
+Gymnodinium micrum	32	Karlodinium micrum			
+Gymnodinium ostenfeldii	1	Gymnodinium ostenfeldii	1		
+Gymnodinium ostenfeldii	32	Gymnodinium ostenfeldii			
+Gymnodinium pigmentosum	1	Gymnodinium pigmentosum			
+Gymnodinium pigmentosum	32	Gymnodinium pigmentosum			
+Gymnodinium pygmaeum	1	Gymnodinium pygmaeum			
+Gymnodinium pygmaeum	32	Gymnodinium pygmaeum			
+Gymnodinium roseostigma	1	Gymnodinium	1		
+Gymnodinium roseostigma	32	Gymnodinium			
+Gymnodinium rubrocinctum	1	Gymnodinium rubrocinctum			
+Gymnodinium rubrocinctum	32	Gymnodinium rubrocinctum			
+Gymnodinium rubrum	1	Gymnodinium rubrum			
+Gymnodinium rubrum	32	Gymnodinium rubrum			
+Gymnodinium sanguineum	1	Gymnodinium sanguineum	1		
+Gymnodinium sanguineum	2	Gymnodinium sanguineum	2		
+Gymnodinium sanguineum	3	Gymnodinium sanguineum	3		
+Gymnodinium sanguineum	32	Gymnodinium sanguineum			
+Gymnodinium simplex	1	Gymnodinium simplex	1		
+Gymnodinium simplex	2	Gymnodinium simplex	2		
+Gymnodinium simplex	3	Gymnodinium simplex	3		
+Gymnodinium simplex	32	Gymnodinium simplex			
+Gymnodinium sp	5	Gymnodinium	5		
+Gymnodinium sp_1	32	Gymnodinium			
+Gymnodinium spp	1	Gymnodinium	1		
+Gymnodinium spp	2	Gymnodinium	2		
+Gymnodinium spp	3	Gymnodinium	3		
+Gymnodinium spp	4	Gymnodinium	4		
+Gymnodinium spp	5	Gymnodinium	5		
+Gymnodinium spp	6	Gymnodinium	6		
+Gymnodinium spp	7	Gymnodinium	7		
+Gymnodinium spp	8	Gymnodinium	8		
+Gymnodinium spp	9	Gymnodinium	9		
+Gymnodinium spp	10	Gymnodinium	10		
+Gymnodinium spp	11	Gymnodinium	11		
+Gymnodinium spp	12	Gymnodinium	12		
+Gymnodinium spp	13	Gymnodinium	13		
+Gymnodinium spp	14	Gymnodinium	14		
+Gymnodinium spp	15	Gymnodinium	15		
+Gymnodinium spp	16	Gymnodinium	16		
+Gymnodinium spp	17	Gymnodinium	17		
+Gymnodinium spp	32	Gymnodinium			
+Gymnodinium verruculosum	0	Gymnodinium verruculosum			
+Gymnodinium verruculosum	1	Gymnodinium verruculosum	1		
+Gymnodinium verruculosum	32	Gymnodinium verruculosum			
+Gymnodinium vestificii	1	Gymnodinium vestificii	1		
+Gymnodinium vestificii	2	Gymnodinium vestificii	2		
+Gymnodinium vestificii	3	Gymnodinium vestificii	3		
+Gymnodinium vestificii	4	Gymnodinium vestificii	4		
+Gymnodinium vestificii	5	Gymnodinium vestificii	5		
+Gymnodinium vestificii	32	Gymnodinium vestificii			
+Gyrodinium aciculatum	0	Gyrodinium aciculatum			
+Gyrodinium calyptroglyphe	1	Gyrodinium calyptroglyphe	1		
+Gyrodinium calyptroglyphe	32	Gyrodinium calyptroglyphe			
+Gyrodinium crassum	1	Gyrodinium crassum	1		
+Gyrodinium crassum	32	Gyrodinium crassum			
+Gyrodinium dominans	1	Gyrodinium dominans	1		
+Gyrodinium dominans	32	Gyrodinium dominans			
+Gyrodinium estuariale	0	Gyrodinium estuariale			
+Gyrodinium estuariale	32	Gyrodinium estuariale			
+Gyrodinium flagellare	0	Gyrodinium flagellare			
+Gyrodinium flagellare	1	Gyrodinium flagellare	1		
+Gyrodinium flagellare	32	Gyrodinium flagellare			
+Gyrodinium fusiforme	1	Gyrodinium fusiforme	4		
+Gyrodinium fusiforme	2	Gyrodinium fusiforme	1		
+Gyrodinium fusiforme	3	Gyrodinium fusiforme	2		
+Gyrodinium fusiforme	4	Gyrodinium fusiforme	4		
+Gyrodinium fusiforme	5	Gyrodinium fusiforme			
+Gyrodinium fusiforme	32	Gyrodinium fusiforme			
+Gyrodinium longum	1	Gyrodinium longum			
+Gyrodinium longum	32	Gyrodinium longum			
+Gyrodinium sp	21	Gyrodinium			
+Gyrodinium sp	22	Gyrodinium			
+Gyrodinium sp	23	Gyrodinium			
+Gyrodinium sp	24	Gyrodinium			
+Gyrodinium sp	25	Gyrodinium			
+Gyrodinium sp	26	Gyrodinium			
+Gyrodinium sp	27	Gyrodinium			
+Gyrodinium sp	28	Gyrodinium			
+Gyrodinium sp	29	Gyrodinium			
+Gyrodinium sp	30	Gyrodinium			
+Gyrodinium sp	31	Gyrodinium			
+Gyrodinium spirale	1	Gyrodinium spirale	1		
+Gyrodinium spirale	2	Gyrodinium spirale	4		
+Gyrodinium spirale	3	Gyrodinium spirale	5		
+Gyrodinium spirale	4	Gyrodinium spirale	3		
+Gyrodinium spirale	5	Gyrodinium spirale	1		
+Gyrodinium spirale	6	Gyrodinium spirale	6		
+Gyrodinium spirale	7	Gyrodinium spirale	3		
+Gyrodinium spirale	8	Gyrodinium spirale	8		
+Gyrodinium spirale	9	Gyrodinium spirale			
+Gyrodinium spirale	10	Gyrodinium spirale			
+Gyrodinium spirale	11	Gyrodinium spirale			
+Gyrodinium spirale	32	Gyrodinium spirale			
+Gyrodinium spp	1	Gyrodinium	1		
+Gyrodinium spp	2	Gyrodinium	2		
+Gyrodinium spp	3	Gyrodinium	3		
+Gyrodinium spp	4	Gyrodinium	4		
+Gyrodinium spp	5	Gyrodinium	5		
+Gyrodinium spp	6	Gyrodinium	6		
+Gyrodinium spp	7	Gyrodinium	7		
+Gyrodinium spp	8	Gyrodinium	8		
+Gyrodinium spp	9	Gyrodinium	9		
+Gyrodinium spp	10	Gyrodinium	10		
+Gyrodinium spp	11	Gyrodinium	11		
+Gyrodinium spp	12	Gyrodinium	12		
+Gyrodinium spp	13	Gyrodinium	13		
+Gyrodinium spp	14	Gyrodinium	14		
+Gyrodinium spp	15	Gyrodinium	15		
+Gyrodinium spp	16	Gyrodinium	16		
+Gyrodinium spp	17	Gyrodinium	17		
+Gyrodinium spp	32	Gyrodinium			
+Gyrodinium undulans	1	Gyrodinium undulans			
+Gyrodinium undulans	32	Gyrodinium undulans			
+Gyrosigma acuminatum	1	Gyrosigma acuminatum	1		
+Gyrosigma acuminatum	2	Gyrosigma acuminatum	4		
+Gyrosigma acuminatum	32	Gyrosigma acuminatum			
+Gyrosigma attenuatum	1	Gyrosigma attenuatum	2		
+Gyrosigma attenuatum	2	Gyrosigma attenuatum	3		
+Gyrosigma attenuatum	3	Gyrosigma attenuatum	5		
+Gyrosigma attenuatum	4	Gyrosigma attenuatum	4		
+Gyrosigma attenuatum	5	Gyrosigma attenuatum	6		
+Gyrosigma attenuatum	32	Gyrosigma attenuatum			
+Gyrosigma balticum	1	Gyrosigma balticum	1		
+Gyrosigma balticum	32	Gyrosigma balticum			
+Gyrosigma eximium	1	Gyrosigma eximium	1		
+Gyrosigma eximium	32	Gyrosigma eximium			
+Gyrosigma fasciola	1	Gyrosigma fasciola	1		
+Gyrosigma fasciola	32	Gyrosigma fasciola			
+Gyrosigma macrum	1	Gyrosigma macrum	1		
+Gyrosigma macrum	2	Gyrosigma macrum	2		
+Gyrosigma macrum	32	Gyrosigma macrum			
+Gyrosigma spp	1	Gyrosigma	1		
+Gyrosigma spp	2	Gyrosigma			
+Gyrosigma spp	3	Gyrosigma			
+Gyrosigma spp	32	Gyrosigma			
+Gyrosigma strigilis	1	Gyrosigma strigilis	1		
+Gyrosigma strigilis	32	Gyrosigma strigilis			
+Gyrosigma/Pleurosigma spp	1				
+Halosphaera sp	1	Halosphaera			
+Halosphaera sp	2	Halosphaera			
+Halosphaera spp	1	Halosphaera			
+Halosphaera spp	3	Halosphaera			
+Halosphaera spp	4	Halosphaera			
+Halosphaera spp	5	Halosphaera			
+Halosphaera spp	6	Halosphaera			
+Halosphaera spp	7	Halosphaera			
+Halosphaera spp	32	Halosphaera			
+Haptophyceae spp	1	Prymnesiophyceae			
+Haptophyceae spp	2	Prymnesiophyceae			
+Haptophyceae spp	32	Prymnesiophyceae			
+Helicostomella sp	32	Helicostomella			
+Helicostomella spp	32	Helicostomella			
+Helicostomella subulata	2	Helicostomella subulata			
+Helicostomella subulata	32	Helicostomella subulata			
+Helicotheca tamesis	1	Helicotheca tamesis			
+Helicotheca tamesis	32	Helicotheca tamesis			
+Hemiselmis virescens	0	Hemiselmis virescens			
+Hemiselmis virescens	1	Hemiselmis virescens	1		
+Hemiselmis virescens	32	Hemiselmis virescens			
+Heterocapsa arctica subsp. frigida	1	Heterocapsa arctica subsp. frigida	1		
+Heterocapsa arctica subsp. frigida	32	Heterocapsa arctica subsp. frigida			
+Heterocapsa cf.minima	2	Heterocapsa minima	2		
+Heterocapsa cf.minima	32	Heterocapsa minima			
+Heterocapsa minima	0	Heterocapsa minima			
+Heterocapsa minima	1	Heterocapsa minima	1		
+Heterocapsa minima	2	Heterocapsa minima	2		
+Heterocapsa minima	32	Heterocapsa minima			
+Heterocapsa rotundata	1	Heterocapsa rotundata	1		
+Heterocapsa rotundata	2	Heterocapsa rotundata	2		
+Heterocapsa rotundata	3	Heterocapsa rotundata			
+Heterocapsa rotundata	4	Heterocapsa rotundata			
+Heterocapsa rotundata	32	Heterocapsa rotundata			
+Heterocapsa spp	1	Heterocapsa	1		
+Heterocapsa spp	2	Heterocapsa	2		
+Heterocapsa spp	3	Heterocapsa	3		
+Heterocapsa spp	4	Heterocapsa	4		
+Heterocapsa spp	5	Heterocapsa	5		
+Heterocapsa spp	6	Heterocapsa	6		
+Heterocapsa spp	7	Heterocapsa	7		
+Heterocapsa spp	8	Heterocapsa	8		
+Heterocapsa spp	32	Heterocapsa			
+Heterocapsa triquetra	1	Heterocapsa triquetra	1		
+Heterocapsa triquetra	2	Heterocapsa triquetra	2		
+Heterocapsa triquetra	3	Heterocapsa triquetra	3		
+Heterocapsa triquetra	4	Heterocapsa triquetra	4		
+Heterocapsa triquetra	5	Heterocapsa triquetra	5		
+Heterocapsa triquetra	6	Heterocapsa triquetra	6		
+Heterocapsa triquetra	32	Heterocapsa triquetra			
+Heteroleibleinia kuetzingii	1	Heteroleibleinia kuetzingii			
+Heteroleibleinia kuetzingii	32	Heteroleibleinia kuetzingii			
+Heteroleibleinia spp	1	Heteroleibleinia			
+Heteroleibleinia spp	32	Heteroleibleinia			
+Heterophrys myriapoda	0			Ciliophora	2
+Heterosigma akashiwo	1	Heterosigma akashiwo	1		
+Heterosigma akashiwo	32	Heterosigma akashiwo			
+Heterosigma spp	1	Heterosigma			
+Heterosigma spp	32	Heterosigma			
+Jaaginema geminatum	1	Jaaginema geminatum			
+Jaaginema spp	1	Jaaginema			
+Jaaginema subtilissimum	1	Jaaginema subtilissimum			
+Karenia mikimotoi	1	Karenia mikimotoi	1		
+Karenia mikimotoi	2	Karenia mikimotoi	2		
+Karenia mikimotoi	32	Karenia mikimotoi			
+Karenia sp	32	Karenia			
+Karlodinium micrum	1	Karlodinium micrum	1		
+Karlodinium micrum	2	Karlodinium micrum			
+Karlodinium micrum	32	Karlodinium micrum			
+Katablepharis remigera	1	Kathablepharis remigera	1		
+Katablepharis remigera	2	Kathablepharis remigera	2		
+Katablepharis remigera	3	Kathablepharis remigera	3		
+Katablepharis remigera	32	Kathablepharis remigera			
+Katodinium glaucum	1	Katodinium glaucum	1		
+Katodinium glaucum	2	Katodinium glaucum	2		
+Katodinium glaucum	3	Katodinium glaucum	3		
+Katodinium glaucum	4	Katodinium glaucum	4		
+Katodinium glaucum	5	Katodinium glaucum	5		
+Katodinium glaucum	6	Katodinium glaucum	6		
+Katodinium glaucum	32	Katodinium glaucum			
+Katodinium spp	1	Katodinium	1		
+Katodinium spp	2	Katodinium	2		
+Katodinium spp	3	Katodinium	3		
+Katodinium spp	32	Katodinium			
+Kirchneriella contorta	1	Kirchneriella contorta	1		
+Kirchneriella contorta	32	Kirchneriella contorta			
+Kirchneriella lunaris	1	Kirchneriella lunaris	1		
+Kirchneriella lunaris	32	Kirchneriella lunaris			
+Kofoidinium velelloides	32	Kofoidinium velelloides			
+Koliella longiseta forma longiseta	1	Koliella longiseta f. longiseta	1		
+Koliella longiseta forma longiseta	32	Koliella longiseta f. longiseta			
+Komma caudata	1	Komma caudata	1		
+Komma caudata	32	Komma caudata			
+Kryptoperidinium foliaceum	1	Kryptoperidinium foliaceum	1		
+Kryptoperidinium foliaceum	32	Kryptoperidinium foliaceum			
+Laboea spp	1	Laboea			
+Laboea spp	32	Laboea			
+Laboea strobila	2	Laboea strobila			
+Laboea strobila	1	Laboea strobila	1		
+Laboea strobila	2	Laboea strobila			
+Laboea strobila	32	Laboea strobila			
+Lagerheimia ciliata	1	Lagerheimia ciliata	1		
+Lagerheimia ciliata	32	Lagerheimia ciliata			
+Lagerheimia citriformis	1	Lagerheimia citriformis	1		
+Lagerheimia citriformis	32	Lagerheimia citriformis			
+Lagerheimia genevensis	1	Lagerheimia genevensis	1		
+Lagerheimia genevensis	32	Lagerheimia genevensis			
+Lagerheimia longiseta	1	Lagerheimia longiseta			
+Lagerheimia longiseta	32	Lagerheimia longiseta			
+Lagerheimia subsalsa	1	Lagerheimia subsalsa	1		
+Lagerheimia subsalsa	2	Lagerheimia subsalsa	2		
+Lagerheimia subsalsa	32	Lagerheimia subsalsa			
+Lagerheimia wratislaviensis	1	Lagerheimia wratislaviensis	1		
+Lagerheimia wratislaviensis	2	Lagerheimia wratislaviensis	2		
+Lagerheimia wratislaviensis	32	Lagerheimia wratislaviensis			
+Lauderia annulata	1	Lauderia annulata	1		
+Lauderia annulata	2	Lauderia annulata	3		
+Lauderia annulata	3	Lauderia annulata	3		
+Lauderia annulata	4	Lauderia annulata			
+Lauderia annulata	5	Lauderia annulata			
+Lauderia annulata	6	Lauderia annulata			
+Lauderia annulata	32	Lauderia annulata			
+Leegaardiella ovalis	0	Leegaardiella ovalis			
+Leegaardiella ovalis	32	Leegaardiella ovalis			
+Leegaardiella sol	0	Leegaardiella sol			
+Leegaardiella sol	32	Leegaardiella sol			
+Leegardiella ovalis	32	Ciliophora		Leegardiella ovalis	32
+Leibleinia epiphytica	1	Leibleinia epiphytica			
+Leibleinia spp	1	Leibleinia			
+Lemmermanniella parva	1	Lemmermanniella parva	1		
+Lemmermanniella parva	2	Lemmermanniella parva	2		
+Lemmermanniella parva	3	Lemmermanniella parva	3		
+Lemmermanniella parva	4	Lemmermanniella parva	4		
+Lemmermanniella parva	5	Lemmermanniella parva	5		
+Lemmermanniella parva	32	Lemmermanniella parva			
+Lennoxia faveolata	0	Lennoxia faveolata			
+Lennoxia faveolata	1	Lennoxia faveolata			
+Lennoxia faveolata	2	Lennoxia faveolata			
+Lennoxia faveolata	32	Lennoxia faveolata			
+Lepocinclis ovum	1	Lepocinclis ovum	1		
+Lepocinclis ovum	2	Lepocinclis ovum	2		
+Lepocinclis ovum	32	Lepocinclis ovum			
+Leptocylindrus danicus	0	Leptocylindrus danicus			
+Leptocylindrus danicus	1	Leptocylindrus danicus	1		
+Leptocylindrus danicus	2	Leptocylindrus danicus	2		
+Leptocylindrus danicus	3	Leptocylindrus danicus	3		
+Leptocylindrus danicus	4	Leptocylindrus danicus	5		
+Leptocylindrus danicus	5	Leptocylindrus danicus	6		
+Leptocylindrus danicus	6	Leptocylindrus danicus	7		
+Leptocylindrus danicus	7	Leptocylindrus danicus	8		
+Leptocylindrus danicus	8	Leptocylindrus danicus	7		
+Leptocylindrus danicus	9	Leptocylindrus danicus	9		
+Leptocylindrus danicus	10	Leptocylindrus danicus			
+Leptocylindrus danicus	11	Leptocylindrus danicus			
+Leptocylindrus danicus	32	Leptocylindrus danicus			
+Leptocylindrus minimus	0	Leptocylindrus minimus			
+Leptocylindrus minimus	1	Leptocylindrus minimus	1		
+Leptocylindrus minimus	2	Leptocylindrus minimus			
+Leptocylindrus minimus	32	Leptocylindrus minimus			
+Leptolyngbya spp	1	Leptolyngbya			
+Leptolyngbya tenuis	1	Leptolyngbya tenuis			
+Lessardia elongata	1	Lessardia elongata	1		
+Lessardia elongata	32	Lessardia elongata			
+Leucocryptos marina	0	Leucocryptos marina			
+Leucocryptos marina	1	Leucocryptos marina	1		
+Leucocryptos marina	2	Leucocryptos marina	2		
+Leucocryptos marina	32	Leucocryptos marina			
+Licmophora abbreviata	1	Licmophora abbreviata	1		
+Licmophora abbreviata	32	Licmophora abbreviata			
+Licmophora gracilis var. gracilis	1	Licmophora gracilis var. gracilis	1		
+Licmophora gracilis var. gracilis	32	Licmophora gracilis var. gracilis			
+Licmophora spp	1	Licmophora	1		
+Licmophora spp	32	Licmophora			
+Limnothrix planctonica	1	Limnothrix planctonica	1		
+Limnothrix planctonica	2	Limnothrix planctonica	2		
+Limnothrix planctonica	3	Limnothrix planctonica	3		
+Limnothrix planctonica	32	Limnothrix planctonica			
+Limnothrix redekei	1	Limnothrix redekei	1		
+Limnothrix redekei	2	Limnothrix redekei	2		
+Limnothrix redekei	32	Limnothrix redekei			
+Limnothrix spp	1	Limnothrix	1		
+Limnothrix spp	2	Limnothrix	2		
+Limnothrix spp	3	Limnothrix	3		
+Limnothrix spp	4	Limnothrix	4		
+Limnothrix spp	32	Limnothrix			
+Lingulodinium polyedrum	1	Lingulodinium polyedrum	1		
+Lingulodinium polyedrum	2	Lingulodinium polyedrum	2		
+Lingulodinium polyedrum	3	Lingulodinium polyedrum	3		
+Lingulodinium polyedrum	4	Lingulodinium polyedrum	4		
+Lingulodinium polyedrum	32	Lingulodinium polyedrum			
+Lioloma elongatum	0				
+Lioloma elongatum	2				
+Lithodesmium undulatum	0	Lithodesmium undulatum			
+Lithodesmium undulatum	1	Lithodesmium undulatum	1		
+Lithodesmium undulatum	2	Lithodesmium undulatum			
+Lithodesmium undulatum	32	Lithodesmium undulatum			
+Lohmanniella oviformis	0	Lohmanniella oviformis			
+Lohmanniella oviformis	32	Lohmanniella oviformis			
+Lohmanniella sp	32	Lohmanniella			
+Lohmanniella sp?	0	Lohmanniella			
+Lohmanniella spp	1	Lohmanniella			
+Lohmanniella spp	32	Lohmanniella			
+Lyngbya aestuarii	1	Lyngbya aestuarii	1		
+Lyngbya aestuarii	32	Lyngbya aestuarii			
+Lyngbya majuscula	1	Lyngbya majuscula			
+Lyngbya majuscula	32	Lyngbya majuscula			
+Lyngbya spp	1	Lyngbya			
+Lyngbya spp	32	Lyngbya			
+Mallomonas acaroides	1	Mallomonas acaroides	1		
+Mallomonas acaroides	32	Mallomonas acaroides			
+Mallomonas akrokomos	1	Mallomonas akrokomos	1		
+Mallomonas akrokomos	32	Mallomonas akrokomos			
+Mallomonas caudata	1	Mallomonas caudata	1		
+Mallomonas caudata	32	Mallomonas caudata			
+Mantoniella squamata	0	Mantoniella squamata			
+Mantoniella squamata	1	Mantoniella squamata	1		
+Mantoniella squamata	32	Mantoniella squamata			
+Mastogloia smithii var. smithii	1	Mastogloia smithii var. smithii	1		
+Mastogloia smithii var. smithii	32	Mastogloia smithii var. smithii			
+Melosira arctica	32	Melosira arctica			
+Melosira moniliformis	32	Melosira moniliformis			
+Melosira nummuloides	1	Melosira nummuloides	1		
+Melosira nummuloides	2	Melosira nummuloides	2		
+Melosira nummuloides	32	Melosira nummuloides			
+Melosira spp	1	Melosira			
+Melosira spp	2	Melosira			
+Melosira spp	32	Melosira			
+Melosira varians	1	Melosira varians	1		
+Melosira varians	2	Melosira varians	2		
+Melosira varians	3	Melosira varians	3		
+Melosira varians	32	Melosira varians			
+Meridion circulare	1	Meridion circulare			
+Meridion circulare	2	Meridion circulare			
+Meridion circulare	32	Meridion circulare			
+Meringosphaera mediterranea	1	Meringosphaera mediterranea			
+Meringosphaera mediterranea	32	Meringosphaera mediterranea			
+Meringosphaera spp	32	Meringosphaera			
+Merismopedia elegans	1	Merismopedia elegans	1		
+Merismopedia elegans	2	Merismopedia elegans	2		
+Merismopedia elegans	32	Merismopedia elegans			
+Merismopedia glauca	1	Merismopedia glauca	1		
+Merismopedia glauca	2	Merismopedia glauca	2		
+Merismopedia glauca	32	Merismopedia glauca			
+Merismopedia punctata	1	Merismopedia punctata	1		
+Merismopedia punctata	2	Merismopedia punctata	2		
+Merismopedia punctata	3	Merismopedia punctata	3		
+Merismopedia punctata	32	Merismopedia punctata			
+Merismopedia spp	1	Merismopedia	1		
+Merismopedia spp	2	Merismopedia	2		
+Merismopedia spp	3	Merismopedia	3		
+Merismopedia spp	4	Merismopedia	4		
+Merismopedia spp	5	Merismopedia	5		
+Merismopedia spp	6	Merismopedia	6		
+Merismopedia spp	7	Merismopedia	7		
+Merismopedia spp	8	Merismopedia	8		
+Merismopedia spp	9	Merismopedia	9		
+Merismopedia spp	10	Merismopedia	10		
+Merismopedia spp	11	Merismopedia	11		
+Merismopedia spp	12	Merismopedia	12		
+Merismopedia spp	32	Merismopedia			
+Merismopedia tenuissima	1	Merismopedia tenuissima	1		
+Merismopedia tenuissima	2	Merismopedia tenuissima	2		
+Merismopedia tenuissima	3	Merismopedia tenuissima	3		
+Merismopedia tenuissima	4	Merismopedia tenuissima	4		
+Merismopedia tenuissima	5	Merismopedia tenuissima	5		
+Merismopedia tenuissima	32	Merismopedia tenuissima			
+Merismopedia warmingiana	1	Merismopedia warmingiana	1		
+Merismopedia warmingiana	2	Merismopedia warmingiana	2		
+Merismopedia warmingiana	3	Merismopedia warmingiana	3		
+Merismopedia warmingiana	4	Merismopedia warmingiana	4		
+Merismopedia warmingiana	5	Merismopedia warmingiana	5		
+Merismopedia warmingiana	6	Merismopedia warmingiana	6		
+Merismopedia warmingiana	32	Merismopedia warmingiana			
+Mesodinium rubrum	1	Mesodinium rubrum	1		
+Mesodinium rubrum	2	Mesodinium rubrum	2		
+Mesodinium rubrum	3	Mesodinium rubrum	3		
+Mesodinium rubrum	4	Mesodinium rubrum	4		
+Mesodinium rubrum	5	Mesodinium rubrum	5		
+Mesodinium rubrum	6	Mesodinium rubrum	6		
+Mesodinium rubrum	7	Mesodinium rubrum	7		
+Mesodinium rubrum	8	Mesodinium rubrum	8		
+Mesodinium rubrum	9	Mesodinium rubrum	9		
+Mesodinium rubrum	32	Mesodinium rubrum			
+Mesoporos perforatus	0	Mesoporos perforatus			
+Mesoporos perforatus	1	Mesoporos perforatus			
+Mesoporos perforatus	32	Mesoporos perforatus			
+Meuniera membranacea	1	Meuniera membranacea			
+Meuniera membranacea	32	Meuniera membranacea			
+Micracanthodinium claytonii	1	Micracanthodinium claytonii			
+Micracanthodinium claytonii	32	Micracanthodinium claytonii			
+Micractinium pusillum	1	Micractinium pusillum	1		
+Micractinium pusillum	2	Micractinium pusillum	2		
+Micractinium pusillum	32	Micractinium pusillum			
+Microcystis aeruginosa	1	Microcystis aeruginosa	1		
+Microcystis aeruginosa	2	Microcystis aeruginosa	2		
+Microcystis aeruginosa	3	Microcystis aeruginosa	3		
+Microcystis aeruginosa	4	Microcystis aeruginosa	4		
+Microcystis aeruginosa	32	Microcystis aeruginosa			
+Microcystis flos-aquae	1	Microcystis flos-aquae	1		
+Microcystis flos-aquae	2	Microcystis flos-aquae	2		
+Microcystis flos-aquae	3	Microcystis flos-aquae	3		
+Microcystis flos-aquae	4	Microcystis flos-aquae	4		
+Microcystis flos-aquae	32	Microcystis flos-aquae			
+Microcystis ichtyoblabe	1	Microcystis ichtyoblabe	1		
+Microcystis ichtyoblabe	2	Microcystis ichtyoblabe	2		
+Microcystis ichtyoblabe	3	Microcystis ichtyoblabe	3		
+Microcystis ichtyoblabe	4	Microcystis ichtyoblabe	4		
+Microcystis ichtyoblabe	32	Microcystis ichtyoblabe			
+Microcystis novacekii	1	Microcystis novacekii	1		
+Microcystis novacekii	2	Microcystis novacekii	2		
+Microcystis novacekii	3	Microcystis novacekii	3		
+Microcystis novacekii	4	Microcystis novacekii	4		
+Microcystis novacekii	32	Microcystis novacekii			
+Microcystis wesenbergii	1	Microcystis wesenbergii	1		
+Microcystis wesenbergii	2	Microcystis wesenbergii	2		
+Microcystis wesenbergii	3	Microcystis wesenbergii	3		
+Microcystis wesenbergii	4	Microcystis wesenbergii	4		
+Microcystis wesenbergii	32	Microcystis wesenbergii			
+Micromonas pusilla	0	Micromonas pusilla			
+Micromonas pusilla	1	Micromonas pusilla	1		
+Micromonas pusilla	32	Micromonas pusilla			
+Misc spp	1				
+Misc spp	2				
+Misc spp	3				
+Monoraphidium arcuatum	1	Monoraphidium arcuatum	1		
+Monoraphidium arcuatum	2	Monoraphidium arcuatum	2		
+Monoraphidium arcuatum	3	Monoraphidium arcuatum	3		
+Monoraphidium arcuatum	4	Monoraphidium arcuatum	4		
+Monoraphidium arcuatum	32	Monoraphidium arcuatum			
+Monoraphidium convolutum	1	Monoraphidium convolutum	1		
+Monoraphidium convolutum	2	Monoraphidium convolutum	2		
+Monoraphidium convolutum	3	Monoraphidium convolutum	3		
+Monoraphidium convolutum	4	Monoraphidium convolutum	4		
+Monoraphidium convolutum	32	Monoraphidium convolutum			
+Monoraphidium mirabile	1	Monoraphidium mirabile	1		
+Monoraphidium mirabile	2	Monoraphidium mirabile	2		
+Monoraphidium mirabile	32	Monoraphidium mirabile			
+Naked amoeba	0	?bort			
+Naked spp	1	Gymnodiniales spp	2		
+Naked spp	2	Gymnodiniales spp	3		
+Naked spp	3	Gymnodiniales spp	3		
+Naked spp	4	Gymnodiniales spp	13		
+Naked spp	5	Gymnodiniales spp	5		
+Naked spp	6	Gymnodiniales spp	6		
+Naked spp	7	Gymnodiniales spp	7		
+Naked spp	8	Gymnodiniales spp	8		
+Naked spp	9	Gymnodiniales spp	8		
+Naked spp	10	Gymnodiniales spp	8		
+Naked spp	11	Gymnodiniales spp	14		
+Naked spp	12	Gymnodiniales spp	8		
+Naked spp	13	Gymnodiniales spp	1		
+Naked spp	14	Gymnodiniales spp	1		
+Navicula capitata var. capitata	1	Navicula capitata var. capitata	1		
+Navicula capitata var. capitata	2	Navicula capitata var. capitata	2		
+Navicula capitata var. capitata	3	Navicula capitata var. capitata	3		
+Navicula capitata var. capitata	4	Navicula capitata var. capitata	4		
+Navicula capitata var. capitata	32	Navicula capitata var. capitata			
+Navicula capitata var. hungarica	1	Navicula capitata var. hungarica	1		
+Navicula capitata var. hungarica	32	Navicula capitata var. hungarica			
+Navicula cari	1	Navicula cari	1		
+Navicula cari	32	Navicula cari			
+Navicula cryptocephala	1	Navicula cryptocephala	1		
+Navicula cryptocephala	32	Navicula cryptocephala			
+Navicula digitoradiata	1	Navicula digitoradiata	1		
+Navicula digitoradiata	32	Navicula digitoradiata			
+Navicula gregaria	1	Navicula gregaria	1		
+Navicula gregaria	32	Navicula gregaria			
+Navicula lesmonensis	1	Navicula lesmonensis	1		
+Navicula lesmonensis	32	Navicula lesmonensis			
+Navicula meniscus	1	Navicula meniscus	1		
+Navicula meniscus	32	Navicula meniscus			
+Navicula palpebralis	1	Navicula palpebralis	1		
+Navicula palpebralis	32	Navicula palpebralis			
+Navicula peregrina var. peregrina	1	Navicula peregrina var. peregrina	1		
+Navicula peregrina var. peregrina	2	Navicula peregrina var. peregrina	2		
+Navicula peregrina var. peregrina	3	Navicula peregrina var. peregrina	3		
+Navicula peregrina var. peregrina	32	Navicula peregrina var. peregrina			
+Navicula platystoma	1	Navicula platystoma	1		
+Navicula platystoma	32	Navicula platystoma			
+Navicula reinhardtii	1	Navicula reinhardtii	1		
+Navicula reinhardtii	32	Navicula reinhardtii			
+Navicula rhynchocephala	1	Navicula rhynchocephala	1		
+Navicula rhynchocephala	32	Navicula rhynchocephala			
+Navicula spp	1	Navicula	1		
+Navicula spp	2	Navicula	2		
+Navicula spp	3	Navicula	3		
+Navicula spp	4	Navicula	4		
+Navicula spp	5	Navicula	5		
+Navicula spp	32	Navicula			
+Navicula tansitans var. transitans	1	Navicula	1		
+Navicula transitans	1	Navicula transitans			
+Navicula transitans	32	Navicula transitans			
+Navicula transitans var. derasa f. delicatula	0	Navicula transitans var. derasa f. delicatula			
+Navicula transitans var. derasa f. delicatula	1	Navicula transitans var. derasa f. delicatula			
+Navicula transitans var. derasa f. delicatula	2	Navicula transitans var. derasa f. delicatula			
+Navicula transitans var. derasa f. delicatula	3	Navicula transitans var. derasa f. delicatula			
+Navicula transitans var. derasa f. delicatula	32	Navicula transitans var. derasa f. delicatula			
+Navicula transitans var. derasa f. derasa	0	Navicula transitans			
+Navicula tripunctata	1	Navicula tripunctata	1		
+Navicula tripunctata	32	Navicula tripunctata			
+Navicula viridula	1	Navicula viridula			
+Navicula viridula	32	Navicula viridula			
+Nematopsides vigilans	32	Proterythropsis vigilans			32
+Neoccalyptrella robusta	1	Neocalyptrella robusta	1		
+Neoccalyptrella robusta	32	Neocalyptrella robusta			32
+Nephrochlamys subsolitaria	1	Nephrochlamys subsolitaria	1		
+Nephrochlamys subsolitaria	32	Nephrochlamys subsolitaria			
+Nephroselmis pyriformis	0	Nephroselmis pyriformis			
+Nephroselmis spp	0	Nephroselmis			
+Nephroselmis spp	1	Nephroselmis	1		
+Nephroselmis spp	32	Nephroselmis			
+Nitzschia aff.americana	0	Nitzschia			
+Nitzschia aff.americana	1	Nitzschia	1		
+Nitzschia aff.americana	32	Nitzschia			
+Nitzschia longissima	1	Nitzschia longissima	1		
+Nitzschia longissima	2	Nitzschia longissima	2		
+Nitzschia longissima	3	Nitzschia longissima	3		
+Nitzschia longissima	4	Nitzschia longissima			
+Nitzschia longissima	32	Nitzschia longissima			
+Nitzschia reversa	0	Nitzschia			
+Nitzschia reversa	1	Nitzschia	1		
+Nitzschia reversa	32	Nitzschia			
+Nitzschia sigmoidea	1	Nitzschia sigmoidea	1		
+Nitzschia sigmoidea	32	Nitzschia sigmoidea			
+Nitzschia spp	1	Nitzschia	1		
+Nitzschia spp	2	Nitzschia	2		
+Nitzschia spp	3	Nitzschia	3		
+Nitzschia spp	4	Nitzschia	4		
+Nitzschia spp	5	Nitzschia	5		
+Nitzschia spp	6	Nitzschia	6		
+Nitzschia spp	7	Nitzschia	7		
+Nitzschia spp	8	Nitzschia	8		
+Nitzschia spp	9	Nitzschia	9		
+Nitzschia spp	10	Nitzschia	10		
+Nitzschia spp	11	Nitzschia	11		
+Nitzschia spp	12	Nitzschia	12		
+Nitzschia spp	13	Nitzschia			
+Nitzschia spp	14	Nitzschia			
+Nitzschia spp	15	Nitzschia			
+Nitzschia spp	32	Nitzschia			
+Nitzschia vitrea	1	Nitzschia vitrea	1		
+Nitzschia vitrea	32	Nitzschia vitrea			
+Noctiluca scintillans	0	Noctiluca scintillans			
+Noctiluca scintillans	1	Noctiluca scintillans	1		
+Noctiluca scintillans	2	Noctiluca scintillans	2		
+Noctiluca scintillans	3	Noctiluca scintillans	3		
+Noctiluca scintillans	4	Noctiluca scintillans	4		
+Noctiluca scintillans	32	Noctiluca scintillans			
+Nodularia baltica	1	Nodularia baltica	1		
+Nodularia baltica	32	Nodularia baltica			
+Nodularia harveyana	1	Nodularia harveyana	1		
+Nodularia harveyana	32	Nodularia harveyana			
+Nodularia litorea	1	Nodularia litorea	1		
+Nodularia litorea	32	Nodularia litorea			
+Nodularia spumigena	1	Nodularia spumigena	1		
+Nodularia spumigena	2	Nodularia spumigena	2		
+Nodularia spumigena	3	Nodularia spumigena	3		
+Nodularia spumigena	4	Nodularia spumigena	4		
+Nodularia spumigena	32	Nodularia spumigena			
+Oblea rotunda_complex	1	Oblea			
+Oblea rotunda_complex	2	Oblea			
+Oblea rotunda_complex	3	Oblea			
+Oblea rotunda_complex	32	Oblea			
+Odontella aurita	0	Odontella aurita			
+Odontella aurita	1	Odontella aurita	1		
+Odontella aurita	32	Odontella aurita			
+Odontella mobiliensis	1	Odontella mobiliensis	1		
+Odontella mobiliensis	32	Odontella mobiliensis			
+Odontella regia	32	Odontella regia			
+Odontella sinensis	1	Odontella sinensis	1		
+Odontella sinensis	32	Odontella sinensis			
+Oidentifierade_celler spp	32	Unicell spp			32
+Ollicola vangoorii	0	Ollicola vangoorii			
+Ollicola vangoorii	1	Ollicola vangoorii	1		
+Ollicola vangoorii	32	Ollicola vangoorii			
+Oocystis parva	1	Oocystis parva	1		
+Oocystis parva	32	Oocystis parva			
+Oocystis pelagica	1	Oocystis pelagica	1		
+Oocystis pelagica	32	Oocystis pelagica			
+Oocystis rhomboidea	1	Oocystis rhomboidea	1		
+Oocystis rhomboidea	32	Oocystis rhomboidea			
+Oocystis solitaria	1	Oocystis solitaria	1		
+Oocystis solitaria	2	Oocystis solitaria	2		
+Oocystis solitaria	3	Oocystis solitaria	3		
+Oocystis solitaria	4	Oocystis solitaria	4		
+Oocystis solitaria	5	Oocystis solitaria	5		
+Oocystis solitaria	6	Oocystis solitaria	6		
+Oocystis solitaria	32	Oocystis solitaria			
+Oodinium poucheti	0	Dinophyceae spp			32
+Oscillatoria chlorina	1	Oscillatoria chlorina	1		
+Oscillatoria chlorina	32	Oscillatoria chlorina			
+Oscillatoria limosa	1	Oscillatoria limosa	1		
+Oscillatoria limosa	2	Oscillatoria limosa	2		
+Oscillatoria limosa	32	Oscillatoria limosa			
+Oscillatoriales spp	1	Oscillatoriales	1		
+Oscillatoriales spp	2	Oscillatoriales	2		
+Oscillatoriales spp	3	Oscillatoriales	3		
+Oscillatoriales spp	4	Oscillatoriales	4		
+Oscillatoriales spp	5	Oscillatoriales	5		
+Oscillatoriales spp	6	Oscillatoriales	6		
+Oscillatoriales spp	7	Oscillatoriales	7		
+Oscillatoriales spp	32	Oscillatoriales			
+Oxyrrhis marina	1	Oxyrrhis marina	1		
+Oxyrrhis marina	32	Oxyrrhis marina			
+Oxytoxum criophilum	2	Oxytoxum criophilum			
+Oxytoxum criophilum	32	Oxytoxum criophilum			
+Oxytoxum gracile	3	Oxytoxum gracile			
+Oxytoxum gracile	32	Oxytoxum gracile			
+Oxytoxum spp	1	Oxytoxum	1		
+Oxytoxum spp	32	Oxytoxum			
+Pachysphaera spp	1	Pachysphaera	1		
+Pachysphaera spp	2	Pachysphaera	2		
+Pachysphaera spp	32	Pachysphaera			
+Pandorina morum	1	Pandorina morum	1		
+Pandorina morum	2	Pandorina morum	2		
+Pandorina morum	3	Pandorina morum	3		
+Pandorina morum	4	Pandorina morum	4		
+Pandorina morum	5	Pandorina morum	5		
+Pandorina morum	6	Pandorina morum	6		
+Pandorina morum	7	Pandorina morum	7		
+Pandorina morum	8	Pandorina morum	8		
+Pandorina morum	9	Pandorina morum	9		
+Pandorina morum	10	Pandorina morum	10		
+Pandorina morum	11	Pandorina morum	11		
+Pandorina morum	12	Pandorina morum	12		
+Pandorina morum	13	Pandorina morum	13		
+Pandorina morum	14	Pandorina morum	14		
+Pandorina morum	15	Pandorina morum	15		
+Pandorina morum	16	Pandorina morum	16		
+Pandorina morum	17	Pandorina morum	17		
+Pandorina morum	18	Pandorina morum	18		
+Pandorina morum	19	Pandorina morum	19		
+Pandorina morum	20	Pandorina morum	20		
+Pandorina morum	21	Pandorina morum	21		
+Pandorina morum	32	Pandorina morum			
+Pannus spp	1	Pannus	1		
+Pannus spp	32	Pannus			
+Pannus spumosus	1	Pannus spumosus	1		
+Pannus spumosus	2	Pannus spumosus	2		
+Pannus spumosus	3	Pannus spumosus	3		
+Pannus spumosus	32	Pannus spumosus			
+Parafavella spp	32	Parafavella			
+Paralia sulcata	0	Paralia sulcata			
+Paralia sulcata	1	Paralia sulcata	1		
+Paralia sulcata	32	Paralia sulcata			
+Paraphysomonas spp	1	Paraphysomonas	1		
+Paraphysomonas spp	2	Paraphysomonas	2		
+Paraphysomonas spp	32	Paraphysomonas			
+Paulinella ovalis	0	Paulinella ovalis			
+Paulinella ovalis	32	Paulinella ovalis			
+Paulsenella sp	32	Dinophyceae spp			32
+Pavlova spp	1	Pavlova	1		
+Pediastrum angulosum var. angulosum	1	Pediastrum angulosum var. angulosum	1		
+Pediastrum angulosum var. angulosum	32	Pediastrum angulosum var. angulosum			
+Pediastrum biradiatum	1	Pediastrum biradiatum	1		
+Pediastrum biradiatum	2	Pediastrum biradiatum	2		
+Pediastrum biradiatum	32	Pediastrum biradiatum			
+Pediastrum boryanum var. longicorne	1	Pediastrum boryanum var. longicorne	1		
+Pediastrum boryanum var. longicorne	32	Pediastrum boryanum var. longicorne			
+Pediastrum duplex	32	Pediastrum duplex			
+Pediastrum integrum	1	Pediastrum integrum	1		
+Pediastrum integrum	32	Pediastrum integrum			
+Pediastrum kawraiskyi	1	Pediastrum kawraiskyi	1		
+Pediastrum kawraiskyi	32	Pediastrum kawraiskyi			
+Pediastrum privum	1	Pediastrum privum			
+Pediastrum simplex	1	Pediastrum simplex	1		
+Pediastrum simplex	2	Pediastrum simplex	2		
+Pediastrum simplex	32	Pediastrum simplex			
+Pediastrum spp	32	Pediastrum			
+Pediastrum tetras	1	Pediastrum tetras	4		
+Pediastrum tetras	2	Pediastrum tetras	2		
+Pediastrum tetras	3	Pediastrum tetras	3		
+Pediastrum tetras	4	Pediastrum tetras	2		
+Pediastrum tetras	5	Pediastrum tetras	3		
+Pediastrum tetras	6	Pediastrum tetras	3		
+Pediastrum tetras	32	Pediastrum tetras			
+Pennales spp	1	Bacillariophyceae	1		
+Pennales spp	2	Bacillariophyceae	2		
+Pennales spp	3	Bacillariophyceae	3		
+Pennales spp	4	Bacillariophyceae	4		
+Pennales spp	5	Bacillariophyceae	5		
+Pennales spp	6	Bacillariophyceae	6		
+Pennales spp	7	Bacillariophyceae	7		
+Pennales spp	8	Bacillariophyceae	8		
+Pennales spp	9	Bacillariophyceae	9		
+Pennales spp	10	Bacillariophyceae	10		
+Pennales spp	11	Bacillariophyceae	11		
+Pennales spp	12	Bacillariophyceae	12		
+Pennales spp	13	Bacillariophyceae	13		
+Pennales spp	14	Bacillariophyceae	14		
+Pennales spp	15	Bacillariophyceae	15		
+Pennales spp	16	Bacillariophyceae	16		
+Pennales spp	17	Bacillariophyceae	17		
+Pennales spp	18	Bacillariophyceae	18		
+Pennales spp	19	Bacillariophyceae	19		
+Pennales spp	20	Bacillariophyceae	20		
+Pennales spp	21	Bacillariophyceae	21		
+Pennales spp	32	Bacillariophyceae			
+Pennate diatom	1	Pennales spp	2		
+Pennate diatom	2	Pennales spp	6		
+Pentapharsodinium dalei	1	Pentapharsodinium dalei	1		
+Pentapharsodinium dalei	2	Pentapharsodinium dalei	2		
+Pentapharsodinium dalei	3	Pentapharsodinium dalei	3		
+Pentapharsodinium dalei	32	Pentapharsodinium dalei			
+Peridiniales spp	0	Peridiniales			
+Peridiniales spp	1	Peridiniales	1		
+Peridiniales spp	2	Peridiniales	2		
+Peridiniales spp	3	Peridiniales	3		
+Peridiniales spp	4	Peridiniales	4		
+Peridiniales spp	5	Peridiniales	5		
+Peridiniales spp	6	Peridiniales	6		
+Peridiniales spp	7	Peridiniales	7		
+Peridiniales spp	8	Peridiniales	8		
+Peridiniales spp	9	Peridiniales	9		
+Peridiniales spp	10	Peridiniales	10		
+Peridiniales spp	11	Peridiniales	11		
+Peridiniales spp	12	Peridiniales	12		
+Peridiniales spp	13	Peridiniales	13		
+Peridiniales spp	14	Peridiniales	14		
+Peridiniales spp	15	Peridiniales	15		
+Peridiniales spp	16	Peridiniales	16		
+Peridiniales spp	17	Peridiniales	17		
+Peridiniales spp	18	Peridiniales	18		
+Peridiniales spp	19	Peridiniales	19		
+Peridiniales spp	20	Peridiniales	20		
+Peridiniales spp	21	Peridiniales	21		
+Peridiniales spp	22	Peridiniales	22		
+Peridiniales spp	23	Peridiniales	23		
+Peridiniales spp	24	Peridiniales	24		
+Peridiniales spp	32	Peridiniales			
+Peridiniella catenata	1	Peridiniella catenata	1		
+Peridiniella catenata	2	Peridiniella catenata	2		
+Peridiniella catenata	3	Peridiniella catenata	3		
+Peridiniella catenata	4	Peridiniella catenata	4		
+Peridiniella catenata	5	Peridiniella catenata	5		
+Peridiniella catenata	32	Peridiniella catenata			
+Peridiniella danica	1	Peridiniella danica			
+Peridiniella danica	6	Peridiniella danica			
+Peridiniella danica	32	Peridiniella danica			
+Peridiniopsis penardiforme	1	Peridiniopsis penardiforme			
+Peridiniopsis penardiforme	32	Peridiniopsis penardiforme			
+Peridiniopsis polonicum	1	Peridiniopsis polonicum			
+Peridiniopsis polonicum	32	Peridiniopsis polonicum			
+Peridiniopsis spp	1	Peridiniopsis			
+Peridiniopsis spp	32	Peridiniopsis			
+Peridinium cinctum	1	Peridinium cinctum	1		
+Peridinium cinctum	32	Peridinium cinctum			
+Peridinium quinquecorne	32	Peridinium quinquecorne			
+Peridinium quinquecorne		Peridinium quinquecorne			
+Phacus longicauda	1	Phacus longicauda	1		
+Phacus longicauda	32	Phacus longicauda			
+Phacus pleuronectes	1	Phacus pleuronectes	1		
+Phacus pleuronectes	32	Phacus pleuronectes			
+Phacus pyrum	1	Phacus pyrum	1		
+Phacus pyrum	32	Phacus pyrum			
+Phacus spp	1	Phacus	1		
+Phacus spp	2	Phacus	2		
+Phacus spp	32	Phacus			
+Phaeocystis cells	0	Phaeocystis			
+Phaeocystis colonycells	0	Phaeocystis			
+Phaeocystis pouchetii	1	Phaeocystis pouchetii	1		
+Phaeocystis pouchetii	2	Phaeocystis pouchetii	2		
+Phaeocystis pouchetii	32	Phaeocystis pouchetii			
+Phaeocystis spp	1	Phaeocystis	1		
+Phaeocystis spp	32	Phaeocystis			
+Phaeocystis spp_colony	32	Phaeocystis			
+Phaeocystis spp_swarmers	32	Phaeocystis			
+Phaeocystis swarmers	0	Phaeocystis			
+Phaeodactylum tricornutum	1	Phaeodactylum tricornutum	2		
+Phaeodactylum tricornutum	2	Phaeodactylum tricornutum			
+Phaeodactylum tricornutum	3	Phaeodactylum tricornutum			
+Phaeodactylum tricornutum	32	Phaeodactylum tricornutum			
+Phalacroma rotundatum	1	Dinophysis rotundata	1		
+Phalacroma rotundatum	2	Dinophysis rotundata	2		
+Phalacroma rotundatum	3	Dinophysis rotundata	3		
+Phalacroma rotundatum	4	Dinophysis rotundata	4		
+Phalacroma rotundatum	32	Dinophysis rotundata			32
+Phormidium amphibium	1	Phormidium amphibium	1		
+Phormidium amphibium	32	Phormidium amphibium			
+Plagioselmis prolonga	1	Plagioselmis prolonga	1		
+Plagioselmis prolonga	2	Plagioselmis prolonga	2		
+Plagioselmis prolonga	3	Plagioselmis prolonga	3		
+Plagioselmis prolonga	32	Plagioselmis prolonga			
+Plagioselmis spp	1	Plagioselmis	1		
+Plagioselmis spp	2	Plagioselmis	2		
+Plagioselmis spp	3	Plagioselmis	3		
+Plagioselmis spp	32	Plagioselmis			
+Plagiotropis/Tropidoneis spp	0	Pennales	10		
+Planctococcus sphaerocystiformis	1	Planctococcus sphaerocystiformis	1		
+Planctococcus sphaerocystiformis	32	Planctococcus sphaerocystiformis			
+Planctonema lauterbornii	2	Planctonema lauterbornii	2		
+Planctonema lauterbornii	32	Planctonema lauterbornii			
+Planktonema lauterbornii	1	Planctonema lauterbornii	1		
+Planktothrix mougeotii	1	Planktothrix mougeotii	1		
+Planktothrix mougeotii	32	Planktothrix mougeotii			
+Planktothrix spp	1	Planktothrix	1		
+Planktothrix spp	2	Planktothrix	2		
+Planktothrix spp	3	Planktothrix	3		
+Planktothrix spp	5	Planktothrix			
+Planktothrix spp	32	Planktothrix			
+Pleurochrysis spp	1	Pleurochrysis	1		
+Pleurochrysis spp	32	Pleurochrysis			
+Pleurosigma clevei	0	Pleurosigma			
+Pleurosigma clevei	1	Pleurosigma	1		
+Pleurosigma spp	1	Pleurosigma	1		
+Pleurosigma spp	2	Pleurosigma			
+Pleurosigma spp	3	Pleurosigma			
+Pleurosigma spp	4	Pleurosigma			
+Pleurosigma spp	32	Pleurosigma			
+Polykrikos schwartzii	1	Polykrikos schwartzii	1		
+Polykrikos schwartzii	2	Polykrikos schwartzii	2		
+Polykrikos schwartzii	3	Polykrikos schwartzii	3		
+Polykrikos schwartzii	4	Polykrikos schwartzii	4		
+Polykrikos schwartzii	5	Polykrikos schwartzii	5		
+Polykrikos schwartzii	6	Polykrikos schwartzii	6		
+Polykrikos schwartzii	7	Polykrikos schwartzii	7		
+Polykrikos schwartzii	32	Polykrikos schwartzii			
+Polykrikos spp	32	Polykrikos			
+Porosira glacialis	0	Porosira glacialis			
+Porosira glacialis	1	Porosira glacialis	1		
+Porosira glacialis	2	Porosira glacialis	2		
+Porosira glacialis	3	Porosira glacialis	3		
+Porosira glacialis	4	Porosira glacialis	4		
+Porosira glacialis	5	Porosira glacialis	5		
+Porosira glacialis	6	Porosira glacialis	6		
+Porosira glacialis	7	Porosira glacialis	7		
+Porosira glacialis	8	Porosira glacialis	8		
+Porosira glacialis	9	Porosira glacialis	9		
+Porosira glacialis	10	Porosira glacialis	10		
+Porosira glacialis	11	Porosira glacialis	11		
+Porosira glacialis	32	Porosira glacialis			
+Prasinophyceae spp_swarmer	32	Prasinophyceae			
+Prasinophyceae swarmer	32	Prasinophyceae			
+Preperidinium meunieri	32	Preperidinium meunieri			
+Proboscia alata	1	Proboscia alata	1		
+Proboscia alata	2	Proboscia alata	2		
+Proboscia alata	3	Proboscia alata	3		
+Proboscia alata	4	Proboscia alata	4		
+Proboscia alata	5	Proboscia alata	5		
+Proboscia alata	6	Proboscia alata	6		
+Proboscia alata	7	Proboscia alata	7		
+Proboscia alata	8	Proboscia alata	8		
+Proboscia alata	9	Proboscia alata			
+Proboscia alata	10	Proboscia alata			
+Proboscia alata	11	Proboscia alata			
+Proboscia alata	12	Proboscia alata			
+Proboscia alata	13	Proboscia alata			
+Proboscia alata	14	Proboscia alata			
+Proboscia alata	15	Proboscia alata			
+Proboscia alata	16	Proboscia alata			
+Proboscia alata	17	Proboscia alata			
+Proboscia alata	18	Proboscia alata			
+Proboscia alata	19	Proboscia alata			
+Proboscia alata	20	Proboscia alata			
+Proboscia alata	21	Proboscia alata			
+Proboscia alata	22	Proboscia alata			
+Proboscia alata	32	Proboscia alata			
+Prochlorotrix spp	1				
+Prochlorotrix spp	32				
+Pronoctiluca pelagica	0	Pronoctiluca pelagica			
+Pronoctiluca pelagica	1	Pronoctiluca pelagica	1		
+Pronoctiluca pelagica	32	Pronoctiluca pelagica			
+Prorocentrum aporum	0	Prorocentrum aporum			
+Prorocentrum aporum	32	Prorocentrum aporum			
+Prorocentrum balticum	1	Prorocentrum balticum	1		
+Prorocentrum balticum	2	Prorocentrum balticum	2		
+Prorocentrum balticum	3	Prorocentrum balticum	3		
+Prorocentrum balticum	32	Prorocentrum balticum			
+Prorocentrum lima	1	Prorocentrum lima	1		
+Prorocentrum lima	32	Prorocentrum lima			
+Prorocentrum micans	1	Prorocentrum micans	1		
+Prorocentrum micans	2	Prorocentrum micans	4		
+Prorocentrum micans	3	Prorocentrum micans	3		
+Prorocentrum micans	4	Prorocentrum micans	3		
+Prorocentrum micans	5	Prorocentrum micans			
+Prorocentrum micans	32	Prorocentrum micans			
+Prorocentrum minimum	1	Prorocentrum minimum	1		
+Prorocentrum minimum	2	Prorocentrum minimum	2		
+Prorocentrum minimum	3	Prorocentrum minimum	3		
+Prorocentrum minimum	32	Prorocentrum minimum			
+Prorocentrum redfeldii	1	Prorocentrum redfeldii	1		
+Prorocentrum redfeldii	32	Prorocentrum redfeldii			
+Prorocentrum triestinum	0	Prorocentrum triestinum			
+Prorocentrum triestinum	1	Prorocentrum triestinum			
+Prorocentrum triestinum	2	Prorocentrum triestinum			
+Prorocentrum triestinum	32	Prorocentrum triestinum			
+Prostomes spp	1			Ciliophora	5
+Prostomes spp	2			Ciliophora	3
+Prostomes spp	3			Ciliophora	4
+Prostomes spp	4			Ciliophora	9
+Prostomes spp	5			Ciliophora	2
+Prostomes spp	6			Ciliophora	8
+Prostomes spp	7			Ciliophora	12
+Prostomes spp	8			Ciliophora	7
+Prostomes spp	32			Ciliophora	32
+Proterythropsis vigilans	1	Proterythropsis vigilans	1		
+Proterythropsis vigilans	2	Proterythropsis vigilans	2		
+Proterythropsis vigilans	32	Proterythropsis vigilans			
+Protoceratium reticulatum	1	Protoceratium reticulatum	1		
+Protoceratium reticulatum	2	Protoceratium reticulatum	2		
+Protoceratium reticulatum	3	Protoceratium reticulatum	3		
+Protoceratium reticulatum	5	Protoceratium reticulatum			
+Protoceratium reticulatum	32	Protoceratium reticulatum			
+Protoceratium retrestingspore	0	Protoceratium			
+Protoperidinium achromaticum	1	Protoperidinium achromaticum	1		
+Protoperidinium achromaticum	2	Protoperidinium achromaticum	2		
+Protoperidinium achromaticum	32	Protoperidinium achromaticum			
+Protoperidinium bipes	1	Protoperidinium bipes	1		
+Protoperidinium bipes	2	Protoperidinium bipes	2		
+Protoperidinium bipes	3	Protoperidinium bipes	3		
+Protoperidinium bipes	4	Protoperidinium bipes			
+Protoperidinium bipes	32	Protoperidinium bipes			
+Protoperidinium brevipes	1	Protoperidinium brevipes	1		
+Protoperidinium brevipes	2	Protoperidinium brevipes	2		
+Protoperidinium brevipes	3	Protoperidinium brevipes	3		
+Protoperidinium brevipes	4	Protoperidinium brevipes	4		
+Protoperidinium brevipes	32	Protoperidinium brevipes			
+Protoperidinium brochii	1	Protoperidinium brochii			
+Protoperidinium brochii	32	Protoperidinium brochii			
+Protoperidinium cerasus	1	Protoperidinium cerasus	1		
+Protoperidinium cerasus	32	Protoperidinium cerasus			
+Protoperidinium conicoides	1	Protoperidinium conicoides	1		
+Protoperidinium conicoides	2	Protoperidinium conicoides	2		
+Protoperidinium conicoides	3	Protoperidinium conicoides	3		
+Protoperidinium conicoides	32	Protoperidinium conicoides			
+Protoperidinium conicum	0	Protoperidinium conicum			
+Protoperidinium conicum	1	Protoperidinium conicum	1		
+Protoperidinium conicum	2	Protoperidinium conicum	2		
+Protoperidinium conicum	3	Protoperidinium conicum	3		
+Protoperidinium conicum	4	Protoperidinium conicum	4		
+Protoperidinium conicum	5	Protoperidinium conicum	5		
+Protoperidinium conicum	32	Protoperidinium conicum			
+Protoperidinium crassipes	1	Protoperidinium crassipes	1		
+Protoperidinium crassipes	32	Protoperidinium crassipes			
+Protoperidinium crassipes/curtipes	1	Protoperidinium crassipes	1		
+Protoperidinium crassipes/curtipes	2	Protoperidinium crassipes	1		
+Protoperidinium crassipes/curtipes	32	Protoperidinium crassipes			
+Protoperidinium curtipes	0	Protoperidinium curtipes			
+Protoperidinium curtipes	1	Protoperidinium curtipes	1		
+Protoperidinium curtipes	32	Protoperidinium curtipes			
+Protoperidinium curtipes/crassipes	32	Protoperidinium curtipes			
+Protoperidinium curvipes	1	Protoperidinium curvipes	1		
+Protoperidinium curvipes	32	Protoperidinium curvipes			
+Protoperidinium depressum	1	Protoperidinium depressum	1		
+Protoperidinium depressum	2	Protoperidinium depressum	2		
+Protoperidinium depressum	3	Protoperidinium depressum	1		
+Protoperidinium depressum	4	Protoperidinium depressum	4		
+Protoperidinium depressum	5	Protoperidinium depressum	5		
+Protoperidinium depressum	6	Protoperidinium depressum			
+Protoperidinium depressum	7	Protoperidinium depressum			
+Protoperidinium depressum	32	Protoperidinium depressum			
+Protoperidinium divergens	0	Protoperidinium divergens			
+Protoperidinium divergens	1	Protoperidinium divergens	1		
+Protoperidinium divergens	2	Protoperidinium divergens	2		
+Protoperidinium divergens	3	Protoperidinium divergens	3		
+Protoperidinium divergens	4	Protoperidinium divergens			
+Protoperidinium divergens	32	Protoperidinium divergens			
+Protoperidinium granii	1	Protoperidinium granii	1		
+Protoperidinium granii	2	Protoperidinium granii	2		
+Protoperidinium granii	3	Protoperidinium granii	3		
+Protoperidinium granii	4	Protoperidinium granii	4		
+Protoperidinium granii	5	Protoperidinium granii	5		
+Protoperidinium granii	6	Protoperidinium granii	6		
+Protoperidinium granii	7	Protoperidinium granii	7		
+Protoperidinium granii	32	Protoperidinium granii			
+Protoperidinium leonis	0	Protoperidinium leonis			
+Protoperidinium leonis	1	Protoperidinium leonis	1		
+Protoperidinium leonis	32	Protoperidinium leonis			
+Protoperidinium longispinum	1	Protoperidinium longispinum	1		
+Protoperidinium longispinum	32	Protoperidinium longispinum			
+Protoperidinium marielebourae	0	Protoperidinium marielebourae			
+Protoperidinium marielebourae	32	Protoperidinium marielebourae			
+Protoperidinium minutum	1	Protoperidinium minutum	1		
+Protoperidinium minutum	2	Protoperidinium minutum	2		
+Protoperidinium minutum	32	Protoperidinium minutum			
+Protoperidinium oblongum	1	Protoperidinium oblongum	3		
+Protoperidinium oblongum	2	Protoperidinium oblongum	2		
+Protoperidinium oblongum	3	Protoperidinium oblongum	3		
+Protoperidinium oblongum	4	Protoperidinium oblongum	4		
+Protoperidinium oblongum	5	Protoperidinium oblongum	5		
+Protoperidinium oblongum	32	Protoperidinium oblongum			
+Protoperidinium oblongum var. latidorsale	0	Protoperidinium oblongum			
+Protoperidinium oblongum var. latidorsale	1	Protoperidinium oblongum	1		
+Protoperidinium oblongum var. latidorsale	32	Protoperidinium oblongum			
+Protoperidinium pallidum	0	Protoperidinium pallidum			
+Protoperidinium pallidum	1	Protoperidinium pallidum	1		
+Protoperidinium pallidum	2	Protoperidinium pallidum	2		
+Protoperidinium pallidum	3	Protoperidinium pallidum	3		
+Protoperidinium pallidum	32	Protoperidinium pallidum			
+Protoperidinium pellucidum	1	Protoperidinium pellucidum	1		
+Protoperidinium pellucidum	2	Protoperidinium pellucidum	2		
+Protoperidinium pellucidum	3	Protoperidinium pellucidum	3		
+Protoperidinium pellucidum	4	Protoperidinium pellucidum	4		
+Protoperidinium pellucidum	5	Protoperidinium pellucidum	5		
+Protoperidinium pellucidum	6	Protoperidinium pellucidum	6		
+Protoperidinium pellucidum	32	Protoperidinium pellucidum			
+Protoperidinium pentagonum	1	Protoperidinium pentagonum	1		
+Protoperidinium pentagonum	32	Protoperidinium pentagonum			
+Protoperidinium punctulatum	1	Protoperidinium punctulatum			
+Protoperidinium punctulatum	32	Protoperidinium punctulatum			
+Protoperidinium spC	0	Protoperidinium			
+Protoperidinium spC	1	Protoperidinium	9		
+Protoperidinium spp	1	Protoperidinium	1		
+Protoperidinium spp	2	Protoperidinium	2		
+Protoperidinium spp	3	Protoperidinium	3		
+Protoperidinium spp	4	Protoperidinium	4		
+Protoperidinium spp	5	Protoperidinium	5		
+Protoperidinium spp	6	Protoperidinium	6		
+Protoperidinium spp	7	Protoperidinium	7		
+Protoperidinium spp	8	Protoperidinium	8		
+Protoperidinium spp	9	Protoperidinium	9		
+Protoperidinium spp	10	Protoperidinium	12		
+Protoperidinium spp	11	Protoperidinium	11		
+Protoperidinium spp	12	Protoperidinium	12		
+Protoperidinium spp	13	Protoperidinium	13		
+Protoperidinium spp	14	Protoperidinium			
+Protoperidinium spp	15	Protoperidinium			
+Protoperidinium spp	16	Protoperidinium			
+Protoperidinium spp	17	Protoperidinium			
+Protoperidinium spp	18	Protoperidinium			
+Protoperidinium spp	32	Protoperidinium			
+Protoperidinium steinii	1	Protoperidinium steinii	1		
+Protoperidinium steinii	2	Protoperidinium steinii	2		
+Protoperidinium steinii	3	Protoperidinium steinii	6		
+Protoperidinium steinii	4	Protoperidinium steinii	7		
+Protoperidinium steinii	5	Protoperidinium steinii	7		
+Protoperidinium steinii	6	Protoperidinium steinii	3		
+Protoperidinium steinii	7	Protoperidinium steinii	6		
+Protoperidinium steinii	8	Protoperidinium steinii			
+Protoperidinium steinii	10	Protoperidinium steinii			
+Protoperidinium steinii	32	Protoperidinium steinii			
+Protoperidinium thorianum	1	Protoperidinium thorianum	1		
+Protoperidinium thorianum	2	Protoperidinium thorianum	2		
+Protoperidinium thorianum	32	Protoperidinium thorianum			
+Pseudanabaena acicularis	1	Pseudanabaena acicularis	1		
+Pseudanabaena acicularis	32	Pseudanabaena acicularis			
+Pseudanabaena spp	32	Pseudanabaena			
+Pseudochattonella farcimen	2		1	Pseudochattonella farcimen	2
+Pseudochattonella farcimen	5			Pseudochattonella farcimen	5
+Pseudochattonella farcimen	6			Pseudochattonella farcimen	6
+Pseudochattonella farcimen	32			Pseudochattonella farcimen	32
+Pseudochattonella spp	32			Pseudochattonella spp	32
+Pseudodifflugia sp	0				
+Pseudodifflugia sp	32				
+Pseudo-nitzschia americana	1	Pseudo-nitzschia americana			
+Pseudo-nitzschia calliantha	1	Pseudo-nitzschia calliantha	1		
+Pseudo-nitzschia calliantha	2	Pseudo-nitzschia calliantha			
+Pseudo-nitzschia calliantha	32	Pseudo-nitzschia calliantha			
+Pseudo-nitzschia delicatissima	1	Pseudo-nitzschia delicatissima	1		
+Pseudo-nitzschia delicatissima	2	Pseudo-nitzschia delicatissima	2		
+Pseudo-nitzschia delicatissima	3	Pseudo-nitzschia delicatissima	3		
+Pseudo-nitzschia delicatissima	32	Pseudo-nitzschia delicatissima			
+Pseudo-nitzschia delicatissima-group	1	Pseudo-nitzschia delicatissima-group	4		
+Pseudo-nitzschia delicatissima-group	2	Pseudo-nitzschia delicatissima-group	2		
+Pseudo-nitzschia delicatissima-group	3	Pseudo-nitzschia delicatissima-group	3		
+Pseudo-nitzschia delicatissima-group	4	Pseudo-nitzschia delicatissima-group	5		
+Pseudo-nitzschia delicatissima-group	32	Pseudo-nitzschia delicatissima-group			
+Pseudo-nitzschia pseudodelicatissima	0	Pseudo-nitzschia pseudodelicatissima			
+Pseudo-nitzschia pseudodelicatissima	1	Pseudo-nitzschia pseudodelicatissima	1		
+Pseudo-nitzschia pseudodelicatissima	2	Pseudo-nitzschia pseudodelicatissima			
+Pseudo-nitzschia pseudodelicatissima	3	Pseudo-nitzschia pseudodelicatissima			
+Pseudo-nitzschia pseudodelicatissima	32	Pseudo-nitzschia pseudodelicatissima			
+Pseudo-nitzschia pungens	0	Pseudo-nitzschia pungens			
+Pseudo-nitzschia pungens	1	Pseudo-nitzschia pungens	1		
+Pseudo-nitzschia pungens	2	Pseudo-nitzschia pungens	2		
+Pseudo-nitzschia pungens	3	Pseudo-nitzschia pungens	3		
+Pseudo-nitzschia pungens	4	Pseudo-nitzschia pungens	4		
+Pseudo-nitzschia pungens	32	Pseudo-nitzschia pungens			
+Pseudo-nitzschia seriata forma obtusa	1	Pseudo-nitzschia seriata	1		
+Pseudo-nitzschia seriata forma seriata	1	Pseudo-nitzschia seriata f. seriata	1		
+Pseudo-nitzschia seriata forma seriata	2	Pseudo-nitzschia seriata f. seriata	2		
+Pseudo-nitzschia seriata forma seriata	3	Pseudo-nitzschia seriata f. seriata	3		
+Pseudo-nitzschia seriata forma seriata	4	Pseudo-nitzschia seriata f. seriata	4		
+Pseudo-nitzschia seriata forma seriata	5	Pseudo-nitzschia seriata f. seriata			
+Pseudo-nitzschia seriata forma seriata	6	Pseudo-nitzschia seriata f. seriata			
+Pseudo-nitzschia seriata forma seriata	7	Pseudo-nitzschia seriata f. seriata			
+Pseudo-nitzschia seriata forma seriata	32	Pseudo-nitzschia seriata f. seriata			
+Pseudo-nitzschia seriata-group	1	Pseudo-nitzschia seriata-group	5		
+Pseudo-nitzschia seriata-group	2	Pseudo-nitzschia seriata-group	2		
+Pseudo-nitzschia seriata-group	3	Pseudo-nitzschia seriata-group	3		
+Pseudo-nitzschia seriata-group	5	Pseudo-nitzschia seriata-group			
+Pseudo-nitzschia seriata-group	32	Pseudo-nitzschia seriata-group			
+Pseudo-nitzschia spp	1	Pseudo-nitzschia	1		
+Pseudo-nitzschia spp	2	Pseudo-nitzschia	2		
+Pseudo-nitzschia spp	3	Pseudo-nitzschia	3		
+Pseudo-nitzschia spp	4	Pseudo-nitzschia	3		
+Pseudo-nitzschia spp	5	Pseudo-nitzschia			
+Pseudo-nitzschia spp	6	Pseudo-nitzschia			
+Pseudo-nitzschia spp	7	Pseudo-nitzschia			
+Pseudo-nitzschia spp	8	Pseudo-nitzschia			
+Pseudo-nitzschia spp	9	Pseudo-nitzschia			
+Pseudo-nitzschia spp	10	Pseudo-nitzschia			
+Pseudo-nitzschia spp	11	Pseudo-nitzschia			
+Pseudo-nitzschia spp	32	Pseudo-nitzschia			
+Pseudopedinella cf.pyriforme	32	Pseudopedinella			
+Pseudopedinella pyriforme	0	Pseudopedinella pyriforme			
+Pseudopedinella pyriforme	1	Pseudopedinella pyriforme	1		
+Pseudopedinella pyriforme	2	Pseudopedinella pyriforme	2		
+Pseudopedinella pyriforme	32	Pseudopedinella pyriforme			
+Pseudopedinella spp	1	Pseudopedinella	1		
+Pseudopedinella spp	2	Pseudopedinella	2		
+Pseudopedinella spp	3	Pseudopedinella	3		
+Pseudopedinella spp	4	Pseudopedinella	4		
+Pseudopedinella spp	5	Pseudopedinella	5		
+Pseudopedinella spp	32	Pseudopedinella			
+Pseudopedinella tricostata	0	Pseudopedinella tricostata			
+Pseudopedinella tricostata	1	Pseudopedinella tricostata	1		
+Pseudopedinella tricostata	2	Pseudopedinella tricostata	2		
+Pseudopedinella tricostata	3	Pseudopedinella tricostata	3		
+Pseudopedinella tricostata	32	Pseudopedinella tricostata			
+Pseudoscourfieldia marina	0	Pseudoscourfieldia marina			
+Pseudoscourfieldia marina	1	Pseudoscourfieldia marina	1		
+Pseudoscourfieldia marina	32	Pseudoscourfieldia marina			
+Pseudoscourfieldia spp	1	Pseudoscourfieldia	1		
+Pseudoscourfieldia spp	2	Pseudoscourfieldia	1		
+Pseudoscourfieldia spp	32	Pseudoscourfieldia			
+Pseudosolenia calcar-avis	1	Pseudosolenia calcar-avis			
+Pseudosolenia calcar-avis	32	Pseudosolenia calcar-avis			
+Pterosperma spp	1	Pterosperma	1		
+Pterosperma spp	2	Pterosperma	3		
+Pterosperma spp	3	Pterosperma	2		
+Pterosperma spp	4	Pterosperma	5		
+Pterosperma spp	5	Pterosperma	4		
+Pterosperma spp	32	Pterosperma			
+Pterosperma vanhoeffenii	0	Pterosperma vanhoeffenii			
+Pterosperma vanhoeffenii	32	Pterosperma vanhoeffenii			
+Ptychocylis urnula	32	Ptychocylis urnula			
+Pyramimonas disomata	0	Pyramimonas disomata			
+Pyramimonas disomata	32	Pyramimonas disomata			
+Pyramimonas longicauda	1	Pyramimonas longicauda			
+Pyramimonas longicauda	32	Pyramimonas longicauda			
+Pyramimonas spp	0	Pyramimonas			
+Pyramimonas spp	1	Pyramimonas	1		
+Pyramimonas spp	2	Pyramimonas	2		
+Pyramimonas spp	3	Pyramimonas	3		
+Pyramimonas spp	4	Pyramimonas	4		
+Pyramimonas spp	32	Pyramimonas			
+Pyramimonas virginica	0	Pyramimonas virginica			
+Pyramimonas virginica	1	Pyramimonas virginica	1		
+Pyramimonas virginica	2	Pyramimonas virginica	2		
+Pyramimonas virginica	32	Pyramimonas virginica			
+Pyrocystis lunula	32	Pyrocystis lunula			
+Pyrophacus horologicum	1	Pyrophacus horologicum	3		
+Pyrophacus horologicum	32	Pyrophacus horologicum			
+Quadricoccus ellipticus	1	Quadricoccus ellipticus	1		
+Quadricoccus ellipticus	2	Quadricoccus ellipticus	2		
+Quadricoccus ellipticus	32	Quadricoccus ellipticus			
+Quadricoccus euryhalinicus	0	Quadricoccus euryhalinicus			
+Quadricoccus euryhalinicus	1	Quadricoccus euryhalinicus	1		
+Quadricoccus euryhalinicus	32	Quadricoccus euryhalinicus			
+Quadricoccus verrucosus	1	Quadricoccus verrucosus	1		
+Quadricoccus verrucosus	32	Quadricoccus verrucosus			
+Radiocystis geminata	1	Radiocystis geminata	1		
+Radiocystis geminata	2	Radiocystis geminata	2		
+Radiocystis geminata	3	Radiocystis geminata	3		
+Radiocystis geminata	4	Radiocystis geminata	4		
+Radiocystis geminata	32	Radiocystis geminata			
+Radiocystis spp	1	Radiocystis			
+Raphidocelis sigmoidea	1	Raphidocelis sigmoidea	1		
+Raphidocelis sigmoidea	32	Raphidocelis sigmoidea			
+Rhabdoderma compositum	1	Rhabdoderma compositum			
+Rhabdoderma lineare	1	Rhabdoderma lineare	1		
+Rhabdoderma lineare	2	Rhabdoderma lineare	1		
+Rhabdoderma lineare	32	Rhabdoderma lineare			
+Rhabdoderma spp	1	Rhabdoderma	1		
+Rhabdoderma spp	2	Rhabdoderma	2		
+Rhabdoderma spp	32	Rhabdoderma			
+Rhabdogloea ellipsoidea	1	Rhabdogloea ellipsoidea			
+Rhabdogloea ellipsoidea	32	Rhabdogloea ellipsoidea			
+Rhabdogloea minuta	1	Rhabdogloea minuta			
+Rhabdogloea minuta	32	Rhabdogloea minuta			
+Rhabdogloea spp	1	Rhabdogloea			
+Rhabdogloea spp	32	Rhabdogloea			
+Rhaphoneis amphiceros	1	Rhaphoneis amphiceros			
+Rhaphoneis amphiceros	32	Rhaphoneis amphiceros			
+Rhizomonas setigera	32	Rhizomonas setigera			
+Rhizomonas setigera_colonies	0	Rhizomonas			
+Rhizosolenia hebetata forma semispina	1	Rhizosolenia hebetata f. semispina	1		
+Rhizosolenia hebetata forma semispina	2	Rhizosolenia hebetata f. semispina	2		
+Rhizosolenia hebetata forma semispina	3	Rhizosolenia hebetata f. semispina	3		
+Rhizosolenia hebetata forma semispina	4	Rhizosolenia hebetata f. semispina	4		
+Rhizosolenia hebetata forma semispina	5	Rhizosolenia hebetata f. semispina	5		
+Rhizosolenia hebetata forma semispina	6	Rhizosolenia hebetata f. semispina	6		
+Rhizosolenia hebetata forma semispina	7	Rhizosolenia hebetata f. semispina	7		
+Rhizosolenia hebetata forma semispina	8	Rhizosolenia hebetata f. semispina			
+Rhizosolenia hebetata forma semispina	9	Rhizosolenia hebetata f. semispina			
+Rhizosolenia hebetata forma semispina	32	Rhizosolenia hebetata f. semispina			
+Rhizosolenia imbricata	1	Rhizosolenia imbricata	2		
+Rhizosolenia imbricata	2	Rhizosolenia imbricata	1		
+Rhizosolenia imbricata	3	Rhizosolenia imbricata			
+Rhizosolenia imbricata	32	Rhizosolenia imbricata			
+Rhizosolenia pungens	1	Rhizosolenia pungens	1		
+Rhizosolenia pungens	2	Rhizosolenia pungens	2		
+Rhizosolenia pungens	3	Rhizosolenia pungens	3		
+Rhizosolenia pungens	4	Rhizosolenia pungens	4		
+Rhizosolenia pungens	5	Rhizosolenia pungens	5		
+Rhizosolenia pungens	6	Rhizosolenia pungens	6		
+Rhizosolenia pungens	7	Rhizosolenia pungens	7		
+Rhizosolenia pungens	8	Rhizosolenia pungens	8		
+Rhizosolenia pungens	9	Rhizosolenia pungens			
+Rhizosolenia pungens	32	Rhizosolenia pungens			
+Rhizosolenia setigera	1	Rhizosolenia setigera	1		
+Rhizosolenia setigera	2	Rhizosolenia setigera	2		
+Rhizosolenia setigera	3	Rhizosolenia setigera	3		
+Rhizosolenia setigera	4	Rhizosolenia setigera	4		
+Rhizosolenia setigera	5	Rhizosolenia setigera	5		
+Rhizosolenia setigera	6	Rhizosolenia setigera	6		
+Rhizosolenia setigera	7	Rhizosolenia setigera	7		
+Rhizosolenia setigera	8	Rhizosolenia setigera	8		
+Rhizosolenia setigera	9	Rhizosolenia setigera			
+Rhizosolenia setigera	10	Rhizosolenia setigera			
+Rhizosolenia setigera	32	Rhizosolenia setigera			
+Rhizosolenia setigera_restingspores	10	Rhizosolenia			
+Rhizosolenia spp	1	Rhizosolenia	1		
+Rhizosolenia spp	2	Rhizosolenia	5		
+Rhizosolenia spp	3	Rhizosolenia	4		
+Rhizosolenia spp	4	Rhizosolenia	3		
+Rhizosolenia spp	5	Rhizosolenia	2		
+Rhizosolenia spp	6	Rhizosolenia			
+Rhizosolenia spp	7	Rhizosolenia			
+Rhizosolenia spp	8	Rhizosolenia			
+Rhizosolenia spp	32	Rhizosolenia			
+Rhizosolenia styliformis	1	Rhizosolenia styliformis	2		
+Rhizosolenia styliformis	32	Rhizosolenia styliformis			
+Rhodomonas baltica	1	Rhodomonas baltica	1		
+Rhodomonas baltica	32	Rhodomonas baltica			
+Rhodomonas lacustris var. lacustris	1	Rhodomonas lacustris var. lacustris	1		
+Rhodomonas lacustris var. lacustris	32	Rhodomonas lacustris var. lacustris			
+Rhodomonas lacustris var. nannoplanctica	1	Rhodomonas lacustris var. nannoplanctica	1		
+Rhodomonas lacustris var. nannoplanctica	32	Rhodomonas lacustris var. nannoplanctica			
+Rhodomonas marina	0	Rhodomonas marina			
+Rhodomonas marina	1	Rhodomonas marina	1		
+Rhodomonas marina	32	Rhodomonas marina			
+Rhodomonas spp	1	Rhodomonas	1		
+Rhodomonas spp	2	Rhodomonas	2		
+Rhodomonas spp	32	Rhodomonas			
+Rhoicosphenia abbreviata	1	Rhoicosphenia abbreviata	1		
+Rhoicosphenia abbreviata	2	Rhoicosphenia abbreviata	2		
+Rhoicosphenia abbreviata	32	Rhoicosphenia abbreviata			
+Round brown	0	Unicell spp	7		
+Round brown	1	Unicell spp	7		
+Scenedesmus acuminatus	1	Scenedesmus acuminatus	1		
+Scenedesmus acuminatus	2	Scenedesmus acuminatus	2		
+Scenedesmus acuminatus	3	Scenedesmus acuminatus	3		
+Scenedesmus acuminatus	4	Scenedesmus acuminatus	3		
+Scenedesmus acuminatus	5	Scenedesmus acuminatus	4		
+Scenedesmus acuminatus	6	Scenedesmus acuminatus			
+Scenedesmus acuminatus	32	Scenedesmus acuminatus			
+Scenedesmus acutiformis	1	Scenedesmus acutiformis	1		
+Scenedesmus acutiformis	32	Scenedesmus acutiformis			
+Scenedesmus apiculatus	1	Scenedesmus apiculatus	1		
+Scenedesmus apiculatus	32	Scenedesmus apiculatus			
+Scenedesmus arcuatus var. arcuatus	1	Scenedesmus arcuatus var. arcuatus	1		
+Scenedesmus arcuatus var. arcuatus	2	Scenedesmus arcuatus var. arcuatus	2		
+Scenedesmus arcuatus var. arcuatus	32	Scenedesmus arcuatus var. arcuatus			
+Scenedesmus bicaudatus	1	Desmodesmus armatus v. bicaudatus	1		
+Scenedesmus bicaudatus	32	Desmodesmus armatus v. bicaudatus			
+Scenedesmus caudato-aculeolatus	1	Scenedesmus caudato-aculeolatus	1		
+Scenedesmus caudato-aculeolatus	32	Scenedesmus caudato-aculeolatus			
+Scenedesmus ellipticus	1	Scenedesmus ellipticus	1		
+Scenedesmus ellipticus	2	Scenedesmus ellipticus	2		
+Scenedesmus ellipticus	3	Scenedesmus ellipticus	3		
+Scenedesmus ellipticus	4	Scenedesmus ellipticus	4		
+Scenedesmus ellipticus	5	Scenedesmus ellipticus	5		
+Scenedesmus ellipticus	6	Scenedesmus ellipticus	5		
+Scenedesmus ellipticus	32	Scenedesmus ellipticus			
+Scenedesmus obtusus	1	Scenedesmus obtusus	1		
+Scenedesmus obtusus	2	Scenedesmus obtusus	2		
+Scenedesmus obtusus	3	Scenedesmus obtusus	3		
+Scenedesmus obtusus	32	Scenedesmus obtusus			
+Scenedesmus parvus	1	Scenedesmus parvus	1		
+Scenedesmus parvus	32	Scenedesmus parvus			
+Scenedesmus soli	1	Scenedesmus	1		
+Scenedesmus soli	32	Scenedesmus			
+Scenedesmus spp	1	Scenedesmus	2		
+Scenedesmus spp	2	Scenedesmus	2		
+Scenedesmus spp	3	Scenedesmus	3		
+Scenedesmus spp	32	Scenedesmus			
+Schroederia setigera	1	Schroederia setigera	1		
+Schroederia setigera	2	Schroederia setigera	2		
+Schroederia setigera	32	Schroederia setigera			
+Sclerodinium calyptroglyphe	0	Sclerodinium calyptroglyphe			
+Sclerodinium calyptroglyphe	1	Sclerodinium calyptroglyphe			
+Sclerodinium calyptroglyphe	32	Sclerodinium calyptroglyphe			
+Scrippsiella faroense	1	Scrippsiella-complex spp	11		
+Scrippsiella faroense	32	Scrippsiella			
+Scrippsiella hangoei	1	Scrippsiella hangoei	1		
+Scrippsiella hangoei	2	Scrippsiella hangoei	2		
+Scrippsiella hangoei	3	Scrippsiella hangoei	3		
+Scrippsiella hangoei	4	Scrippsiella hangoei	4		
+Scrippsiella hangoei	5	Scrippsiella hangoei	5		
+Scrippsiella hangoei	6	Scrippsiella hangoei	6		
+Scrippsiella hangoei	7	Scrippsiella hangoei	7		
+Scrippsiella hangoei	8	Scrippsiella hangoei	8		
+Scrippsiella hangoei	32	Scrippsiella hangoei			
+Scrippsiella sp	0	Scrippsiella			
+Scrippsiella sp	1	Scrippsiella	1		
+Scrippsiella sp	32	Scrippsiella			
+Scrippsiella spp	0	Scrippsiella			
+Scrippsiella spp	1	Scrippsiella	1		
+Scrippsiella spp	2	Scrippsiella	2		
+Scrippsiella spp	3	Scrippsiella	3		
+Scrippsiella spp	32	Scrippsiella			
+Scrippsiella trochoidea	1	Scrippsiella trochoidea	1		
+Scrippsiella trochoidea	2	Scrippsiella trochoidea	2		
+Scrippsiella trochoidea	3	Scrippsiella trochoidea	3		
+Scrippsiella trochoidea	32	Scrippsiella trochoidea			
+Scrippsiella-complex spp	3	Scrippsiella complex spp	3		
+Scrippsiella-complex spp	4	Scrippsiella complex spp	1		
+Scrippsiella-complex spp	32	Scrippsiella complex spp			32
+Scrippsiella-group spp	1	Scrippsiella complex spp	1		
+Scrippsiella-group spp	2	Scrippsiella complex spp	2		
+Scrippsiella-group spp	3	Scrippsiella complex spp	3		
+Scrippsiella-group spp	32	Scrippsiella complex spp			32
+Scuticociliate sp	0			Ciliophora	2
+Scuticociliates spp	0			Ciliophora	4
+Scuticociliates spp	1			Ciliophora	2
+Scuticociliates spp	2			Ciliophora	2
+Scuticociliates spp	32			Ciliophora	32
+Selenastrum bibraianum	1	Selenastrum bibraianum	1		
+Selenastrum bibraianum	32	Selenastrum bibraianum			
+Selenastrum gracile	1	Selenastrum gracile	1		
+Selenastrum gracile	32	Selenastrum gracile			
+Skeletonema costatum	1	Skeletonema costatum	1		
+Skeletonema costatum	2	Skeletonema costatum	2		
+Skeletonema costatum	3	Skeletonema costatum	3		
+Skeletonema costatum	4	Skeletonema costatum	4		
+Skeletonema costatum	5	Skeletonema costatum	5		
+Skeletonema costatum	6	Skeletonema costatum	6		
+Skeletonema costatum	7	Skeletonema costatum	7		
+Skeletonema costatum	8	Skeletonema costatum	8		
+Skeletonema costatum	9	Skeletonema costatum	9		
+Skeletonema costatum	10	Skeletonema costatum	10		
+Skeletonema costatum	11	Skeletonema costatum	11		
+Skeletonema costatum	12	Skeletonema costatum	12		
+Skeletonema costatum	13	Skeletonema costatum	13		
+Skeletonema costatum	14	Skeletonema costatum	14		
+Skeletonema costatum	15	Skeletonema costatum	15		
+Skeletonema costatum	16	Skeletonema costatum	16		
+Skeletonema costatum	17	Skeletonema costatum	17		
+Skeletonema costatum	18	Skeletonema costatum	18		
+Skeletonema costatum	19	Skeletonema costatum	19		
+Skeletonema costatum	20	Skeletonema costatum	20		
+Skeletonema costatum	21	Skeletonema costatum	21		
+Skeletonema costatum	22	Skeletonema costatum	22		
+Skeletonema costatum	23	Skeletonema costatum	23		
+Skeletonema costatum	32	Skeletonema costatum			
+Skeletonema subsalsum	1	Skeletonema subsalsum	1		
+Skeletonema subsalsum	2	Skeletonema subsalsum	2		
+Skeletonema subsalsum	3	Skeletonema subsalsum	3		
+Skeletonema subsalsum	4	Skeletonema subsalsum	4		
+Skeletonema subsalsum	5	Skeletonema subsalsum	5		
+Skeletonema subsalsum	6	Skeletonema subsalsum	6		
+Skeletonema subsalsum	7	Skeletonema subsalsum	7		
+Skeletonema subsalsum	8	Skeletonema subsalsum	8		
+Skeletonema subsalsum	32	Skeletonema subsalsum			
+Snowella fennica	1	Snowella fennica	1		
+Snowella fennica	2	Snowella fennica	2		
+Snowella fennica	3	Snowella fennica	3		
+Snowella fennica	4	Snowella fennica	4		
+Snowella fennica	32	Snowella fennica			
+Spathulodinium pseudonoctiluca	1	Spathulodinium pseudonoctiluca	1		
+Spathulodinium pseudonoctiluca	32	Spathulodinium pseudonoctiluca			
+Spatulodinium pseudonoctiluca	32	Spathulodinium pseudonoctiluca			
+Sphaerocystis planctonica	1	Sphaerocystis planctonica	1		
+Sphaerocystis planctonica	32	Sphaerocystis planctonica			
+Sphaerocystis schroeteri	1	Sphaerocystis schroeteri	1		
+Sphaerocystis schroeteri	2	Sphaerocystis schroeteri	2		
+Sphaerocystis schroeteri	3	Sphaerocystis schroeteri	3		
+Sphaerocystis schroeteri	32	Sphaerocystis schroeteri			
+Spiral protist	0				
+Spirulina major	1	Spirulina major	1		
+Spirulina major	32	Spirulina major			
+Spirulina spp	1	Spirulina	1		
+Spirulina spp	2	Spirulina	2		
+Spirulina spp	32	Spirulina			
+Spirulina subsalsa	1	Spirulina subsalsa	1		
+Spjut ciliate	0			Ciliophora	1
+Staurastrum spp	1	Staurastrum	1		
+Staurastrum spp	32	Staurastrum			
+Staurosira construens var. binodis	1	Staurosira construens var. binodis	1		
+Staurosira construens var. binodis	32	Staurosira construens var. binodis			
+Staurosira construens var. construens	1	Staurosira construens var. construens	1		
+Staurosira construens var. construens	32	Staurosira construens var. construens			
+Staurosira construens var. venter	1	Staurosira construens var. venter	1		
+Staurosira construens var. venter	32	Staurosira construens var. venter			
+Stellarima stellaris	0	Stellarima stellaris			
+Stellarima stellaris	1	Stellarima stellaris	4		
+Stellarima stellaris	2	Stellarima stellaris	2		
+Stellarima stellaris	3	Stellarima stellaris	1		
+Stellarima stellaris	4	Stellarima stellaris	3		
+Stellarima stellaris	5	Stellarima stellaris			
+Stellarima stellaris	6	Stellarima stellaris			
+Stellarima stellaris	8	Stellarima stellaris			
+Stellarima stellaris	32	Stellarima stellaris			
+Stenosemella sp	32	Stenosemella			
+Stenosemella spp	1	Stenosemella			
+Stenosemella spp	32	Stenosemella			
+Stephanodiscus binderanus	1	Stephanodiscus binderanus	1		
+Stephanodiscus binderanus	2	Stephanodiscus binderanus	2		
+Stephanodiscus binderanus	3	Stephanodiscus binderanus	4		
+Stephanodiscus binderanus	32	Stephanodiscus binderanus			
+Stephanodiscus hantzschii	1	Stephanodiscus hantzschii	1		
+Stephanodiscus hantzschii	2	Stephanodiscus hantzschii	2		
+Stephanodiscus hantzschii	3	Stephanodiscus hantzschii	3		
+Stephanodiscus hantzschii	4	Stephanodiscus hantzschii	4		
+Stephanodiscus hantzschii	5	Stephanodiscus hantzschii	5		
+Stephanodiscus hantzschii	32	Stephanodiscus hantzschii			
+Stephanodiscus minutulus	1	Stephanodiscus minutulus	1		
+Stephanodiscus minutulus	32	Stephanodiscus minutulus			
+Stephanodiscus rotula	1	Stephanodiscus rotula	1		
+Stephanodiscus rotula	2	Stephanodiscus rotula	2		
+Stephanodiscus rotula	3	Stephanodiscus rotula	3		
+Stephanodiscus rotula	4	Stephanodiscus rotula	4		
+Stephanodiscus rotula	5	Stephanodiscus rotula	5		
+Stephanodiscus rotula	32	Stephanodiscus rotula			
+Stephanodiscus spp	1	Stephanodiscus	1		
+Stephanodiscus spp	2	Stephanodiscus	2		
+Stephanodiscus spp	3	Stephanodiscus	3		
+Stephanodiscus spp	4	Stephanodiscus	4		
+Stephanodiscus spp	32	Stephanodiscus			
+Stephanopyxis turris	0	Stephanopyxis turris			
+Stephanopyxis turris	1	Stephanopyxis turris	1		
+Stephanopyxis turris	2	Stephanopyxis turris			
+Stephanopyxis turris	32	Stephanopyxis turris			
+Striatella unipunctata	1	Striatella unipunctata	1		
+Striatella unipunctata	32	Striatella unipunctata			
+Strobilidium epacrum	32	Strobilidium			
+Strobilidium sphaericum	1	Strobilidium sphaericum			
+Strobilidium sphaericum	32	Strobilidium sphaericum			
+Strobilidium spp	0	Strobilidium			
+Strobilidium spp	1	Strobilidium			
+Strobilidium spp	2	Strobilidium			
+Strobilidium spp	32	Strobilidium			
+Strombidinopsis sp	32	Strombidinopsis			
+Strombidinopsis spA	0	Strombidinopsis			
+Strombidinopsis spp	1	Strombidinopsis			
+Strombidinopsis spp	2	Strombidinopsis			
+Strombidinopsis spp	3	Strombidinopsis			
+Strombidium chlorophilum	1	Strombidium chlorophilum			
+Strombidium lynni	1	Strombidium			
+Strombidium sp	8	Strombidium			
+Strombidium sp.3	1	Strombidium			
+Strombidium sp.A	1	Strombidium			
+Strombidium sp.B	2	Strombidium			
+Strombidium spp	1	Strombidium			
+Strombidium spp	7	Strombidium			
+Strombidium spp	8	Strombidium			
+Strombidium spp	9	Strombidium			
+Strombidium spp	10	Strombidium			
+Strombidium spp	11	Strombidium			
+Strombidium spp	12	Strombidium			
+Strombidium spp	13	Strombidium			
+Strombidium spp	2	Strombidium			
+Strombidium spp	3	Strombidium			
+Strombidium spp	4	Strombidium			
+Strombidium spp	5	Strombidium			
+Strombidium spp	6	Strombidium			
+Strombidium spp	32	Strombidium			
+Strombidium/Tontonia spp	0			Ciliophora	2
+Strombidium/Tontonia spp	2			Ciliophora	4
+Surirella biseriata	1	Surirella biseriata	1		
+Surirella biseriata	2	Surirella biseriata	2		
+Surirella biseriata	32	Surirella biseriata			
+Surirella capronii	1	Surirella capronii	1		
+Surirella capronii	2	Surirella capronii	2		
+Surirella capronii	3	Surirella capronii	3		
+Surirella capronii	32	Surirella capronii			
+Surirella crumena	1	Surirella crumena	1		
+Surirella crumena	2	Surirella crumena	2		
+Surirella crumena	32	Surirella crumena			
+Surirella minuta	1	Surirella minuta	1		
+Surirella minuta	2	Surirella minuta	2		
+Surirella minuta	32	Surirella minuta			
+Surirella robusta	1	Surirella robusta	1		
+Surirella robusta	32	Surirella robusta			
+Synechococcus sp	1	Synechococcus	1		
+Synechococcus sp	2	Synechococcus	1		
+Synechococcus sp	3	Synechococcus	3		
+Synechococcus sp	4	Synechococcus	3		
+Synechococcus sp	5	Synechococcus			
+Synechococcus sp	6	Synechococcus			
+Synechococcus sp	32	Synechococcus			
+Synechocystis sp	1	Synechocystis			
+Synechocystis sp	32	Synechocystis			
+Synedra acus var. acus	1	Synedra acus var. acus	1		
+Synedra acus var. acus	2	Synedra acus var. acus	2		
+Synedra acus var. acus	3	Synedra acus var. acus	3		
+Synedra acus var. acus	32	Synedra acus var. acus			
+Synedra ulna	1	Synedra ulna			
+Synedra ulna	2	Synedra ulna			
+Synedra ulna	3	Synedra ulna			
+Synedra ulna	32	Synedra ulna			
+Synura spp	1	Synura	1		
+Synura spp	32	Synura			
+Synura uvella	1	Synura uvella	1		
+Synura uvella	2	Synura uvella	2		
+Synura uvella	32	Synura uvella			
+Tabellaria fenestrata	1	Tabellaria fenestrata	1		
+Tabellaria fenestrata	2	Tabellaria fenestrata	2		
+Tabellaria fenestrata	3	Tabellaria fenestrata	3		
+Tabellaria fenestrata	32	Tabellaria fenestrata			
+Tabularia fasciculata	1	Tabularia fasciculata	1		
+Tabularia fasciculata	2	Tabularia fasciculata	2		
+Tabularia fasciculata	3	Tabularia fasciculata	3		
+Tabularia fasciculata	4	Tabularia fasciculata	4		
+Tabularia fasciculata	32	Tabularia fasciculata			
+Teleaulax acuta	1	Teleaulax acuta	1		
+Teleaulax acuta	2	Teleaulax acuta	2		
+Teleaulax acuta	3	Teleaulax acuta	3		
+Teleaulax acuta	32	Teleaulax acuta			
+Teleaulax amphioxeia	1	Teleaulax amphioxeia	1		
+Teleaulax amphioxeia	2	Teleaulax amphioxeia	2		
+Teleaulax amphioxeia	3	Teleaulax amphioxeia	3		
+Teleaulax amphioxeia	4	Teleaulax amphioxeia			
+Teleaulax amphioxeia	32	Teleaulax amphioxeia			
+Teleaulax spp	1	Teleaulax	1		
+Teleaulax spp	2	Teleaulax	2		
+Teleaulax spp	3	Teleaulax	3		
+Teleaulax spp	4	Teleaulax	4		
+Teleaulax spp	32	Teleaulax			
+Telonema spp	1	Telonema	1		
+Telonema spp	32	Telonema			
+Telonema subtile	0	Telonema subtile			
+Telonema subtile	1	Telonema subtile	1		
+Telonema subtile	2	Telonema subtile	2		
+Telonema subtile	32	Telonema subtile			
+Tetraëdron caudatum	1	Tetraëdron caudatum	1		
+Tetraëdron caudatum	32	Tetraëdron caudatum			
+Tetraëdron minimum	1	Tetraëdron minimum	1		
+Tetraëdron minimum	2	Tetraëdron minimum	2		
+Tetraselmis cordiformis	1	Tetraselmis cordiformis	1		
+Tetraselmis cordiformis	32	Tetraselmis cordiformis			
+Tetraspora lemmermannii	1	Tetraspora lemmermannii	1		
+Tetraspora lemmermannii	32	Tetraspora lemmermannii			
+Tetrastrum elegans	1	Tetrastrum elegans	1		
+Tetrastrum elegans	2	Tetrastrum elegans	2		
+Tetrastrum spp	1	Tetrastrum	1		
+Tetrastrum spp	32	Tetrastrum			
+Tetrastrum staurogeniaeforme	1	Tetrastrum staurogeniaeforme	1		
+Tetrastrum staurogeniaeforme	2	Tetrastrum staurogeniaeforme	2		
+Thalassionema nitzschioides	1	Thalassionema nitzschioides	1		
+Thalassionema nitzschioides	2	Thalassionema nitzschioides	2		
+Thalassionema nitzschioides	3	Thalassionema nitzschioides	3		
+Thalassionema nitzschioides	4	Thalassionema nitzschioides	4		
+Thalassionema nitzschioides	5	Thalassionema nitzschioides	5		
+Thalassionema nitzschioides	6	Thalassionema nitzschioides	6		
+Thalassionema nitzschioides	7	Thalassionema nitzschioides	7		
+Thalassionema nitzschioides	8	Thalassionema nitzschioides	8		
+Thalassionema nitzschioides	9	Thalassionema nitzschioides			
+Thalassionema nitzschioides	10	Thalassionema nitzschioides			
+Thalassionema nitzschioides	11	Thalassionema nitzschioides			
+Thalassionema nitzschioides	12	Thalassionema nitzschioides			
+Thalassionema nitzschioides	13	Thalassionema nitzschioides			
+Thalassionema nitzschioides	14	Thalassionema nitzschioides			
+Thalassionema nitzschioides	15	Thalassionema nitzschioides			
+Thalassionema nitzschioides	32	Thalassionema nitzschioides			
+Thalassionema spp	32	Thalassionema			
+Thalassiosira angulata	0	Thalassiosira angulata			
+Thalassiosira angulata	1	Thalassiosira angulata	1		
+Thalassiosira angulata	2	Thalassiosira angulata	2		
+Thalassiosira angulata	3	Thalassiosira angulata	3		
+Thalassiosira angulata	4	Thalassiosira angulata	4		
+Thalassiosira angulata	5	Thalassiosira angulata	5		
+Thalassiosira angulata	6	Thalassiosira angulata	6		
+Thalassiosira angulata	7	Thalassiosira angulata	7		
+Thalassiosira angulata	8	Thalassiosira angulata	8		
+Thalassiosira angulata	32	Thalassiosira angulata			
+Thalassiosira anguste-lineata	1	Thalassiosira anguste-lineata	1		
+Thalassiosira anguste-lineata	2	Thalassiosira anguste-lineata	2		
+Thalassiosira anguste-lineata	3	Thalassiosira anguste-lineata	3		
+Thalassiosira anguste-lineata	4	Thalassiosira anguste-lineata	4		
+Thalassiosira anguste-lineata	5	Thalassiosira anguste-lineata	5		
+Thalassiosira anguste-lineata	6	Thalassiosira anguste-lineata	6		
+Thalassiosira anguste-lineata	32	Thalassiosira anguste-lineata			
+Thalassiosira constricta	1	Thalassiosira constricta	1		
+Thalassiosira constricta	2	Thalassiosira constricta	2		
+Thalassiosira constricta	32	Thalassiosira constricta			
+Thalassiosira constricta forma restingspores	0	Thalassiosira constricta			
+Thalassiosira constricta_restingspore	0	Thalassiosira			
+Thalassiosira constricta_restingspore	32	Thalassiosira			
+Thalassiosira decipiens	1	Thalassiosira decipiens	1		
+Thalassiosira decipiens	2	Thalassiosira decipiens	2		
+Thalassiosira decipiens	3	Thalassiosira decipiens	3		
+Thalassiosira decipiens	32	Thalassiosira decipiens			
+Thalassiosira delicatula	0	Thalassiosira delicatula			
+Thalassiosira delicatula	1	Thalassiosira delicatula			
+Thalassiosira delicatula	2	Thalassiosira delicatula			
+Thalassiosira delicatula	3	Thalassiosira delicatula			
+Thalassiosira delicatula	4	Thalassiosira delicatula			
+Thalassiosira delicatula	32	Thalassiosira delicatula			
+Thalassiosira eccentrica	1	Thalassiosira eccentrica	1		
+Thalassiosira eccentrica	2	Thalassiosira eccentrica	2		
+Thalassiosira eccentrica	32	Thalassiosira eccentrica			
+Thalassiosira gravida	1	Thalassiosira gravida	1		
+Thalassiosira gravida	2	Thalassiosira gravida	2		
+Thalassiosira gravida	32	Thalassiosira gravida			
+Thalassiosira guillardii	1	Thalassiosira guillardii	1		
+Thalassiosira guillardii	32	Thalassiosira guillardii			
+Thalassiosira hyperborea var. pelagica	1	Thalassiosira hyperborea var. pelagica	1		
+Thalassiosira hyperborea var. pelagica	32	Thalassiosira hyperborea var. pelagica			
+Thalassiosira lacustris	1	Thalassiosira lacustris	1		
+Thalassiosira lacustris	2	Thalassiosira lacustris	2		
+Thalassiosira lacustris	3	Thalassiosira lacustris	3		
+Thalassiosira lacustris	4	Thalassiosira lacustris	4		
+Thalassiosira lacustris	32	Thalassiosira lacustris			
+Thalassiosira levanderi	1	Thalassiosira levanderi	1		
+Thalassiosira levanderi	2	Thalassiosira levanderi	2		
+Thalassiosira levanderi	3	Thalassiosira levanderi	3		
+Thalassiosira levanderi	4	Thalassiosira levanderi	4		
+Thalassiosira levanderi	5	Thalassiosira levanderi	5		
+Thalassiosira levanderi	6	Thalassiosira levanderi			
+Thalassiosira levanderi	32	Thalassiosira levanderi			
+Thalassiosira minima	1	Thalassiosira minima	1		
+Thalassiosira minima	2	Thalassiosira minima			
+Thalassiosira minima	3	Thalassiosira minima			
+Thalassiosira minima	32	Thalassiosira minima			
+Thalassiosira nordenskioeldii	1	Thalassiosira nordenskioeldii	1		
+Thalassiosira nordenskioeldii	2	Thalassiosira nordenskioeldii	2		
+Thalassiosira nordenskioeldii	3	Thalassiosira nordenskioeldii	3		
+Thalassiosira nordenskioeldii	4	Thalassiosira nordenskioeldii	4		
+Thalassiosira nordenskioeldii	5	Thalassiosira nordenskioeldii	5		
+Thalassiosira nordenskioeldii	6	Thalassiosira nordenskioeldii	6		
+Thalassiosira nordenskioeldii	32	Thalassiosira nordenskioeldii			
+Thalassiosira nordenskioeldii_restingspore	1	Thalassiosira nordenskioeldii	2		
+Thalassiosira nordenskioeldii_restingspore	5	Thalassiosira nordenskioeldii	2		
+Thalassiosira nordenskioeldii_restingspore	6	Thalassiosira nordenskioeldii	6		
+Thalassiosira proschkinae	1	Thalassiosira proschkinae	1		
+Thalassiosira proschkinae	32	Thalassiosira proschkinae			
+Thalassiosira pseudonana	1	Thalassiosira pseudonana	1		
+Thalassiosira pseudonana	2	Thalassiosira pseudonana	2		
+Thalassiosira pseudonana	32	Thalassiosira pseudonana			
+Thalassiosira punctigera	1	Thalassiosira punctigera	1		
+Thalassiosira punctigera	2	Thalassiosira punctigera	2		
+Thalassiosira punctigera	3	Thalassiosira punctigera	3		
+Thalassiosira punctigera	4	Thalassiosira punctigera			
+Thalassiosira punctigera	5	Thalassiosira punctigera			
+Thalassiosira punctigera	6	Thalassiosira punctigera			
+Thalassiosira punctigera	32	Thalassiosira punctigera			
+Thalassiosira rotula	0	Thalassiosira rotula			
+Thalassiosira rotula	1	Thalassiosira rotula	1		
+Thalassiosira rotula	2	Thalassiosira rotula	4		
+Thalassiosira rotula	3	Thalassiosira rotula	5		
+Thalassiosira rotula	4	Thalassiosira rotula	4		
+Thalassiosira rotula	5	Thalassiosira rotula	3		
+Thalassiosira rotula	32	Thalassiosira rotula			
+Thalassiosira spp	1	Thalassiosira	1		
+Thalassiosira spp	2	Thalassiosira	2		
+Thalassiosira spp	3	Thalassiosira	3		
+Thalassiosira spp	4	Thalassiosira	4		
+Thalassiosira spp	5	Thalassiosira	5		
+Thalassiosira spp	6	Thalassiosira	6		
+Thalassiosira spp	7	Thalassiosira	7		
+Thalassiosira spp	8	Thalassiosira	8		
+Thalassiosira spp	9	Thalassiosira	9		
+Thalassiosira spp	10	Thalassiosira	10		
+Thalassiosira spp	11	Thalassiosira	11		
+Thalassiosira spp	12	Thalassiosira	12		
+Thalassiosira spp	32	Thalassiosira			
+Thalassiosira weissflogii	1	Thalassiosira weissflogii	1		
+Thalassiosira weissflogii	2	Thalassiosira weissflogii	3		
+Thalassiosira weissflogii	32	Thalassiosira weissflogii			
+Thalassiothrix longissima	1	Thalassiothrix longissima	1		
+Thalassiothrix longissima	32	Thalassiothrix longissima			
+Thekate spp	0	Peridiniales spp	2		
+Thekate spp	1	Peridiniales spp	2		
+Thekate spp	2	Peridiniales spp	3		
+Thekate spp	3	Peridiniales spp	5		
+Thekate spp	4	Peridiniales spp	6		
+Thekate spp	5	Peridiniales spp	7		
+Thekate spp	6	Peridiniales spp	4		
+Thekate spp	7	Peridiniales spp	1		
+Thekate spp	8	Peridiniales spp	7		
+Thekate spp	9	Peridiniales spp	4		
+Tiarina fusus	0	Tiarina fusus			
+Tiarina fusus	1	Tiarina fusus			
+Tiarina fusus	32	Tiarina fusus			
+Tintinnid sp	1			Ciliophora	2
+Tintinnid sp	2			Ciliophora	32
+Tintinnid sp	3			Ciliophora	4
+Tintinnid sp	4			Ciliophora	4
+Tintinnid sp	5			Ciliophora	5
+Tintinnidium musicola	32				
+Tintinnids spp	0			Ciliophora	32
+Tintinnopsis spp	0	Tintinnopsis			
+Tintinnopsis spp	1	Tintinnopsis			
+Tintinnopsis spp	2	Tintinnopsis			
+Tintinnopsis spp	3	Tintinnopsis			
+Tintinnopsis spp	4	Tintinnopsis			
+Tintinnopsis spp	5	Tintinnopsis			
+Tintinnopsis spp	6	Tintinnopsis			
+Tintinnopsis spp	32	Tintinnopsis			
+Tintinnopsis tubulosa	0	Tintinnopsis			
+Tintinnopsis tubulosa	32	Tintinnopsis			
+Tontonia spp	1	Tontonia			
+Tontonia spp	2	Tontonia			
+Tontonia spp	3	Tontonia			
+Tontonia spp	4	Tontonia			
+Tontonia spp	5	Tontonia			
+Tontonia spp	6	Tontonia			
+Tontonia spp	32	Tontonia			
+Torodinium robustum	1	Torodinium robustum	1		
+Torodinium robustum	2	Torodinium robustum	4		
+Torodinium robustum	3	Torodinium robustum	5		
+Torodinium robustum	4	Torodinium robustum	3		
+Torodinium robustum	5	Torodinium robustum	2		
+Torodinium robustum	6	Torodinium robustum	7		
+Torodinium robustum	7	Torodinium robustum	6		
+Torodinium robustum	32	Torodinium robustum			
+Torodinium teredo	0	Torodinium teredo			
+Torodinium teredo	1	Torodinium teredo			
+Torodinium teredo	2	Torodinium teredo			
+Trachelomonas spp	1	Trachelomonas	1		
+Trachelomonas spp	2	Trachelomonas	2		
+Trachelomonas spp	32	Trachelomonas			
+Trachelomonas volvocina	1	Trachelomonas volvocina	1		
+Trachelomonas volvocina	32	Trachelomonas volvocina			
+Treubaria triappendiculata	1	Treubaria triappendiculata	1		
+Treubaria triappendiculata	2	Treubaria triappendiculata	2		
+Treubaria triappendiculata	3	Treubaria triappendiculata	3		
+Treubaria triappendiculata	4	Treubaria triappendiculata	4		
+Treubaria triappendiculata	32	Treubaria triappendiculata			
+Unicell spp	5	Unicell spp	5		
+Unicell spp	6	Unicell spp	6		
+Unicell spp	7	Unicell spp	7		
+Unicell spp	8	Unicell spp	5		
+Unicell spp	9	Unicell spp	6		
+Unicell spp	10	Unicell spp	6		
+Unicell spp	11	Unicell spp	6		
+Unicell spp	12	Unicell spp	7		
+Unicell spp	13	Unicell spp	7		
+Unicell spp	14	Unicell spp			
+Unicell spp	15	Unicell spp			
+Unicell spp	16	Unicell spp			
+Unicell spp	17	Unicell spp			
+Unicell spp	18	Unicell spp			
+Unicell spp	19	Unicell spp			
+Unicell spp	20	Unicell spp			
+Unicell spp	21	Unicell spp			
+Unicell spp	32	Unicell spp			32
+Unicell spp	1	Unicell spp	1		
+Unicell spp	2	Unicell spp	2		
+Unicell spp	3	Unicell spp	3		
+Unicell spp	4	Unicell spp	4		
+Unidentified_tintinnids spp	32			Ciliophora	32
+Uniflagellate spB	0	Flagellates spp	3		
+Uroglena americana	1	Uroglena americana	1		
+Uroglena americana	32	Uroglena americana			
+Uronema sp	0	Uronema			
+Uronema spp	1	Uronema			
+Uronema spp	32	Uronema			
+Vanella spp	32				
+Warnowia parva	1	Warnowia parva			
+Warnowia parva	32	Warnowia parva			
+Warnowia spp	32	Warnowia			
+Verrucophora farcimen	32	Verrucophora farcimen			
+Westella botryoides	1	Westella botryoides	1		
+Westella botryoides	2	Westella botryoides	2		
+Westella botryoides	3	Westella botryoides	3		
+Westella botryoides	32	Westella botryoides			
+White bead spp	2				
+White bead spp	1				
+Willea irregularis	1	Willea irregularis	1		
+Willea irregularis	2	Willea irregularis	2		
+Willea irregularis	3	Willea irregularis	3		
+Willea irregularis	32	Willea irregularis			
+Woronichinia fusca	1	Woronichinia fusca	1		
+Woronichinia fusca	2	Woronichinia fusca	2		
+Woronichinia fusca	3	Woronichinia fusca	3		
+Woronichinia fusca	4	Woronichinia fusca	4		
+Woronichinia fusca	32	Woronichinia fusca			
+Woronichinia karelica	1	Woronichinia karelica	1		
+Woronichinia karelica	2	Woronichinia karelica	2		
+Woronichinia karelica	3	Woronichinia karelica	3		
+Woronichinia karelica	4	Woronichinia karelica	4		
+Woronichinia karelica	32	Woronichinia karelica			
+Woronichinia naegeliana	1	Woronichinia naegeliana	1		
+Woronichinia naegeliana	2	Woronichinia naegeliana	2		
+Woronichinia naegeliana	3	Woronichinia naegeliana	3		
+Woronichinia naegeliana	4	Woronichinia naegeliana	4		
+Woronichinia naegeliana	32	Woronichinia naegeliana			
+Woronichinia spp	1	Woronichinia	1		
+Woronichinia spp	2	Woronichinia	2		
+Woronichinia spp	3	Woronichinia	3		
+Woronichinia spp	4	Woronichinia	4		
+Woronichinia spp	32	Woronichinia			

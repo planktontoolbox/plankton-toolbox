@@ -90,6 +90,6 @@ class TemplateActivity(activity_base.ActivityBase):
 
     def __test(self):
         """ """
-#        self._writeToLog("Name: " + self.__emailedit.text())
-        utils.Logger().info("Name: " + self.__emailedit.text())
+#        self._writeToLog("Name: " + unicode(self.__emailedit.text()))
+        utils.Logger().info("Name: " + unicode(self.__emailedit.text()))
         

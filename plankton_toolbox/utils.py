@@ -67,6 +67,7 @@ class Logger(object):
         
     def error(self, message):
         """ Accumulates errors. Increment counter if it already exists. """
+        message = unicode(message)
         message = 'ERROR: ' + message
         if message in self.__errors:
             self.__errors[message] += 1
@@ -75,6 +76,7 @@ class Logger(object):
         
     def warning(self, message):
         """ Accumulates warnings. Increment counter if it already exists. """
+        message = unicode(message)
         message = 'WARNING: ' + message
         if message in self.__warnings:
             self.__warnings[message] += 1
@@ -83,6 +85,7 @@ class Logger(object):
         
     def info(self, message):
         """ Used for direct logging. """
+        message = unicode(message)
         if self.__logtarget:
             self.__logtarget.writeToLog(time.strftime("%Y-%m-%d %H:%M:%S") + ': ' + message)
         else:

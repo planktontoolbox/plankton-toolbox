@@ -29,6 +29,8 @@ Main window for the Plankton toolbox.
 """
 
 import time
+import codecs
+
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.utils as utils
@@ -54,9 +56,15 @@ class MainWindow(QtGui.QMainWindow):
         self.setWindowTitle(self.tr("Plankton toolbox"))
         # Logging. Always log to plankton_toolbox_log.txt. Also use  
         # the Log tool when it is available.
-        self.__logfile = open('plankton_toolbox_log.txt', 'w')
+        
+        
+#        self.__logfile = open('plankton_toolbox_log.txt', 'w')        
+        self.__logfile = codecs.open('plankton_toolbox_log.txt', mode = 'w', encoding = 'iso-8859-1')
+
+        
+        
         self.__logfile.write('Plankton-toolbox. ' +
-                             time.strftime("%Y-%m-%d %H:%M:%S") +'\n\n')
+                             time.strftime("%Y-%m-%d %H:%M:%S") +'\r\n\r\n')
         self.__logtool = None #
         utils.Logger().setLogTarget(self) # Logger should log here. 
         # Setup main window.
@@ -212,7 +220,7 @@ class MainWindow(QtGui.QMainWindow):
     def writeToLog(self, message):
         """ Log to file and to the log tool when available. """
 #        self.console.addItem(message)
-        self.__logfile.write(message + '\n')
+        self.__logfile.write(message + '\r\n')
         self.__logfile.flush()        
         # Search for the console tool. Note: Not available during startup.
         if not self.__logtool:

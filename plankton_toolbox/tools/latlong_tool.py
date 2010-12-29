@@ -390,12 +390,12 @@ class LatLongTool(tool_base.ToolBase):
         
     def __rt90_calculate(self, qstring):
         """ """
-        if ((self.__rt90X.text() == "") or (self.__rt90Y.text() == "")):
+        if ((unicode(self.__rt90X.text()) == "") or (unicode(self.__rt90Y.text()) == "")):
             self.__latitude = None
             self.__longitude = None
         else:
-            x = float(self.__rt90X.text().replace(",", "."))
-            y = float(self.__rt90Y.text().replace(",", "."))
+            x = float(unicode(self.__rt90X.text()).replace(",", "."))
+            y = float(unicode(self.__rt90Y.text()).replace(",", "."))
             converter = SwedishGeoPositionConverter(self.__rt90Proj.currentText())
             self.__latitude, self.__longitude = converter.gridToGeodetic(x, y)
         self.__update_lat()
@@ -407,12 +407,12 @@ class LatLongTool(tool_base.ToolBase):
         
     def __sweref99_calculate(self, qstring):
         """ """
-        if ((self.__sweref99N.text() == "") or (self.__sweref99E.text() == "")):
+        if ((unicode(self.__sweref99N.text()) == "") or (unicode(self.__sweref99E.text()) == "")):
             self.__latitude = None
             self.__longitude = None
         else:
-            n = float(self.__sweref99E.text().replace(",", "."))
-            e = float(self.__sweref99E.text().replace(",", "."))
+            n = float(unicode(self.__sweref99E.text()).replace(",", "."))
+            e = float(unicode(self.__sweref99E.text()).replace(",", "."))
             converter = SwedishGeoPositionConverter(self.__sweref99Proj.currentText())
             self.__latitude, self.__longitude = converter.gridToGeodetic(n, e)
         self.__update_lat()
@@ -478,17 +478,17 @@ class LatLongTool(tool_base.ToolBase):
 
     def __open_googlemaps(self):
         """ Launch web browser and use maps.google.com to display position. """
-        if (len(self.__latDd.text()) == 0) or (len(self.__longDd.text()) == 0):
+        if (len(unicode(self.__latDd.text())) == 0) or (len(unicode(self.__longDd.text())) == 0):
             utils.Logger().info("Failed to open maps.google.com. No values for lat/long.")
             return
-        webbrowser.open("http://maps.google.com/maps/?ll=" + self.__latDd.text() + "," + self.__longDd.text())
+        webbrowser.open("http://maps.google.com/maps/?ll=" + unicode(self.__latDd.text()) + "," + unicode(self.__longDd.text()))
         
     def __open_latlongmellifica(self):
         """ Launch web browser and use latlong.mellifica.se to display position. """
-        if (len(self.__latDd.text()) == 0) or (len(self.__longDd.text()) == 0):
+        if (len(unicode(self.__latDd.text())) == 0) or (len(unicode(self.__longDd.text())) == 0):
             utils.Logger().info("Failed to open latlong.mellifica.se. No values for lat/long.")
             return
-        webbrowser.open("http://latlong.mellifica.se/?latlong=" + self.__latDd.text() + "," + self.__longDd.text())
+        webbrowser.open("http://latlong.mellifica.se/?latlong=" + unicode(self.__latDd.text()) + "," + unicode(self.__longDd.text()))
         
         
 
@@ -501,7 +501,7 @@ class LatLongTool(tool_base.ToolBase):
 #        clipboard = QtGui.QApplication.clipboard()
 #        if clipboard.mimeData().hasText():
 #            self.__fromTable.clearContents()
-#            rows = clipboard.text().split("\n") # All whitespaces splits.
+#            rows = unicode(clipboard.text()).split("\r\n") # All whitespaces splits.
 #            index = 0
 #            for row in rows[:]:
 #                items = row.split("\t")
@@ -522,7 +522,7 @@ class LatLongTool(tool_base.ToolBase):
         clipboard = QtGui.QApplication.clipboard()
         if clipboard.mimeData().hasText():
             self.__fromTable.clearContents()
-            rows = clipboard.text().split("\n") # All whitespaces splits.
+            rows = unicode(clipboard.text()).split("\r\n") # All whitespaces splits.
             index = 0
             for row in rows[:]:
                 items = row.split("\t")

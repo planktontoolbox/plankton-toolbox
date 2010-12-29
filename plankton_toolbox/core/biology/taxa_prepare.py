@@ -77,8 +77,8 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
         self.__createNameTypeDict() # Maps from name type id to name type.
         
         # === TAXON file ===
-        utils.Logger().info("Reading: " + dir + 'species_dyntaxa_taxon.txt')
-        taxonFile = open(dir + 'species_dyntaxa_taxon.txt', 'r')
+        utils.Logger().info("Reading: " + dir + '/dyntaxa_taxon.txt')
+        taxonFile = open(dir + '/dyntaxa_taxon.txt', 'r')
         separator = '\t' # Tab as separator.
         for line in taxonFile:
             if len(self.__taxonHeader) == 0:
@@ -125,8 +125,8 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
         taxonFile.close()
         
         # === HIER file ===
-        utils.Logger().info("Reading: " + dir + 'species_dyntaxa_hier.txt')
-        hierFile = open(dir + 'species_dyntaxa_hier.txt', 'r')
+        utils.Logger().info("Reading: " + dir + '/dyntaxa_hier.txt')
+        hierFile = open(dir + '/dyntaxa_hier.txt', 'r')
         separator = '\t' # Tab as separator.
         for line in hierFile:
             if len(self.__hierHeader) == 0:
@@ -169,8 +169,8 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
         hierFile.close()
         
         # === NAMES file ===
-        utils.Logger().info("Reading: " + dir + 'species_dyntaxa_names.txt')
-        namesFile = open(dir + 'species_dyntaxa_names.txt', 'r')
+        utils.Logger().info("Reading: " + dir + '/dyntaxa_names.txt')
+        namesFile = open(dir + '/dyntaxa_names.txt', 'r')
         separator = '\t' # Tab as separator.
         for line in namesFile:
             if len(self.__namesHeader) == 0:
@@ -377,7 +377,8 @@ class PreparePegTextFile(PrepareDataSources):
         if (importFileHeader == 'Filament: length of cell (\xb5m)'): return 'Filament: length of cell, um' # Modified
         if (importFileHeader == 'Calculated Carbon pg/counting unit        (Menden-Deuer & Lessard 2000)'): return 'Calculated Carbon pg/counting unit' # Modified
         if (importFileHeader == 'Comment on Carbon calculation'): return 'Comment on Carbon calculation'
-        if (importFileHeader == 'CORRECTION / ADDITION                            2009'): return 'CORRECTION/ADDITION 2009' # Modified
+        if (importFileHeader == 'CORRECTION / ADDITION                            2009'): return 'Correction/addition 2009' # Modified
+        if (importFileHeader == 'CORRECTION / ADDITION                            2010'): return 'Correction/addition 2010' # Modified
         return importFileHeader     
         
     def __isTaxonRelated(self, column):
