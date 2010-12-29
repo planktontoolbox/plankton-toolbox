@@ -31,7 +31,8 @@
 #import date
 #import datetime
 from abc import abstractmethod
-import json as json
+import codecs
+import json
 import plankton_toolbox.utils as utils
 
 class DataSources(object):
@@ -62,7 +63,8 @@ class JsonFile(DataSources):
         """ """
         if file == None:
             raise UserWarning('File name is missing.')
-        indata = open(file, 'r')
+###        indata = open(file, 'r')
+        indata = codecs.open(file, mode = 'r', encoding = encoding)
         self._taxaObject.clearMetadata()
         self._taxaObject.clearTaxonList()
         jsonimport = json.loads(indata.read(), encoding = encoding)

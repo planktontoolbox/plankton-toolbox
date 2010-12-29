@@ -33,7 +33,8 @@ stored in the json format, but they can be prepared from various sources.
 #import date
 from abc import abstractmethod
 import datetime
-#import json as json
+import codecs
+import json
 import plankton_toolbox.utils as utils
 
 class PrepareDataSources(object):
@@ -78,7 +79,8 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
         
         # === TAXON file ===
         utils.Logger().info("Reading: " + dir + '/dyntaxa_taxon.txt')
-        taxonFile = open(dir + '/dyntaxa_taxon.txt', 'r')
+###     taxonFile = open(dir + '/dyntaxa_taxon.txt', 'r')
+        taxonFile = codecs.open(dir + '/dyntaxa_taxon.txt', mode = 'r', encoding = 'iso-8859-1')
         separator = '\t' # Tab as separator.
         for line in taxonFile:
             if len(self.__taxonHeader) == 0:
@@ -126,7 +128,8 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
         
         # === HIER file ===
         utils.Logger().info("Reading: " + dir + '/dyntaxa_hier.txt')
-        hierFile = open(dir + '/dyntaxa_hier.txt', 'r')
+###        hierFile = open(dir + '/dyntaxa_hier.txt', 'r')
+        hierFile = codecs.open(dir + '/dyntaxa_hier.txt', mode = 'r', encoding = 'iso-8859-1')
         separator = '\t' # Tab as separator.
         for line in hierFile:
             if len(self.__hierHeader) == 0:
@@ -170,7 +173,8 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
         
         # === NAMES file ===
         utils.Logger().info("Reading: " + dir + '/dyntaxa_names.txt')
-        namesFile = open(dir + '/dyntaxa_names.txt', 'r')
+###        namesFile = open(dir + '/dyntaxa_names.txt', 'r')
+        namesFile = codecs.open(dir + '/dyntaxa_names.txt', mode = 'r', encoding = 'iso-8859-1')
         separator = '\t' # Tab as separator.
         for line in namesFile:
             if len(self.__namesHeader) == 0:
@@ -300,7 +304,8 @@ class PreparePegTextFile(PrepareDataSources):
         self.__taxa = self._taxaObject.getTaxonList()
         
         utils.Logger().info("Reading: " + file)
-        pegFile = open(file, 'r')
+###        pegFile = open(file, 'r')
+        pegFile = codecs.open(file, mode = 'r', encoding = 'iso-8859-1')
         separator = '\t' # Tab as separator.
         for line in pegFile:
             if len(self.__header) == 0:

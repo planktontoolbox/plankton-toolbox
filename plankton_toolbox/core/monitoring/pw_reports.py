@@ -64,9 +64,8 @@ class PwReportMJ1(PwReports):
         
         # Load translation file between SmhiPhytoplanktonList and PEG list.  
         taxon_size_translation_dict = {}
-#        translateFile = codecs.open(self.__translationFileName, mode = 'r', encoding = 'utf-8')
-#        translateFile = open('planktondata/resources/smhi_pw_to_peg.txt', 'r')
-        translateFile = open(self.__translationFileName, 'r')
+###        translateFile = open(self.__translationFileName, 'r')
+        translateFile = codecs.open(self.__translationFileName, mode = 'r', encoding = encoding)
         separator = '\t' # Tab as separator.
         for row in translateFile:
             row_list = row.split(separator)
@@ -77,7 +76,7 @@ class PwReportMJ1(PwReports):
         
         out = None
         try:
-            out = codecs.open(fileName, mode = 'w', encoding = 'iso-8859-1')
+            out = codecs.open(fileName, mode = 'w', encoding = encoding)
             separator = '\t' # Use tab as item separator.
 
             out.write( 'Station' + separator + # Index 0.

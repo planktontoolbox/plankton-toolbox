@@ -62,7 +62,7 @@ class SharkwebDownload(MonitoringFiles):
             raise UserWarning('Parameters are missing.')
         # URL and parameters. Use unicode and utf-8 to handle swedish characters.
         url = u'http://test.mellifica.org/sharkweb/shark_php.php'
-        parameters = dict([k, v.encode('utf-8')] for k, v in parameters.items())
+        parameters = dict([k, v.encode(encoding)] for k, v in parameters.items())
         params = urllib.urlencode(parameters)
         #
         utils.Logger().info('DEBUG: URL: ' + url)
@@ -119,7 +119,7 @@ class PwCsv(MonitoringFiles):
             raise UserWarning('File name is missing.')
         file = None
         try:
-            file = codecs.open(fileName, mode = 'r', encoding = 'iso-8859-1')
+            file = codecs.open(fileName, mode = 'r', encoding = encoding)
             separator = ',' # Use ',' as item separator.
             
             # Read data header. Same header used for data and aggregated data.
