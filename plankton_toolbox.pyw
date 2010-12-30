@@ -30,7 +30,7 @@ Plankton toolbox...
 
 import sys
 import PyQt4.QtGui as QtGui
-import plankton_toolbox.main_window as main_window
+import plankton_toolbox.toolbox.main_window as main_window
 
 if __name__ == '__main__':
     """

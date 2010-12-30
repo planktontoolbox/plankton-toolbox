@@ -27,7 +27,7 @@
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import webbrowser
-import plankton_toolbox.utils as utils
+import plankton_toolbox.toolbox.utils as utils
 import plankton_toolbox.tools.tool_base as tool_base
 from plankton_toolbox.core.map_projections.swedish_geoposition_converter import SwedishGeoPositionConverter
 import plankton_toolbox.core.map_projections.latlong_dd_dm_dms as latlong
