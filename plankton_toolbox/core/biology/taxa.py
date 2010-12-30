@@ -56,13 +56,13 @@ class Taxa(object):
         """ """
         return self._data
         
-    def getIdToTaxonMap(self):
-        """ """
-        return self._idToTaxonMap
-        
-    def getNameToTaxonMap(self):
-        """ """
-        return self._nameToTaxonMap
+#    def getIdToTaxonMap(self):
+#        """ """
+#        return self._idToTaxonMap
+#        
+#    def getNameToTaxonMap(self):
+#        """ """
+#        return self._nameToTaxonMap
         
     def getTaxonListSortedBy(self, sortField):
         """ """
@@ -83,8 +83,7 @@ class Taxa(object):
             self._createNameToTaxonMap() # On demand
         if self._nameToTaxonMap.has_key(taxonName):
             return self._nameToTaxonMap[taxonName]
-        else:
-            return None
+        return None
     
     @abstractmethod
     def _createIdToTaxonLookup(self):
@@ -104,6 +103,7 @@ class Dyntaxa(Taxa):
     """
     def __init__(self):
         """ """
+        # Initialize parent.
         super(Dyntaxa, self).__init__()
 
 
@@ -114,7 +114,9 @@ class Peg(Taxa):
     Download from: http://www.ices.dk/env/repfor/index.asp
     """
     def __init__(self):
-        """ """
+        """ """  
+        self.__nameAndSizeList = None
+        # Initialize parent.
         super(Peg, self).__init__()
 
     def _createNameToTaxonMap(self):
@@ -122,12 +124,45 @@ class Peg(Taxa):
         for taxon in self._data:
             self._nameToTaxonMap[taxon['Species']] = taxon
 
+    def getSizeclassItem(self, taxonName, size):
+        """ """
+        for sizeclass in self.getTaxonByName(taxonName)['Size classes']:
+            if unicode(sizeclass['Size class']) == size:
+                return sizeclass
+        return None
+
+    def __createNameAndSizeList(self):
+        """ 
+        Used when a sorted list of taxon/sizes is needed.
+        Format: <taxon>:<sizeclass>.
+        """
+        self.__nameAndSizeList = []
+        for taxon in self._data:
+            for sizeclass in taxon['Size classes']:
+                self.__nameAndSizeList.append(taxon['Species'] + ':' + str(sizeclass['Size class']))
+
+    def getData(self, row, column):
+        """ Used by table models. """
+        if self.__nameAndSizeList == None:
+            self.__createNameAndSizeList()
+        if column == 0:
+            return self.__nameAndSizeList[row].split(':')[0] 
+        if column == 1:
+            return self.__nameAndSizeList[row].split(':')[1] 
+
+    def getRowCount(self):
+        """ Used by table models. """
+        if self.__nameAndSizeList == None:
+            self.__createNameAndSizeList()
+        return len(self.__nameAndSizeList)
+
 
 class MarineSpecies(Taxa):
     """ 
     """
     def __init__(self):
         """ """
+        # Initialize parent.
         super(MarineSpecies, self).__init__()
 
 
@@ -136,5 +171,6 @@ class Ioc(Taxa):
     """
     def __init__(self):
         """ """
+        # Initialize parent.
         super(Ioc, self).__init__()
 

@@ -25,43 +25,26 @@
 # THE SOFTWARE.
 
 """
+TODO
 """
 
-import PyQt4.QtGui as QtGui
-import PyQt4.QtCore as QtCore
-import plankton_toolbox.tools.tool_base as tool_base
-import plankton_toolbox.core.biology.taxa as taxa
-import plankton_toolbox.core.biology.taxa_sources as taxa_sources
-#import plankton_toolbox.core.biology.taxa_prepare as taxa_prepare
+import plankton_toolbox.toolbox.utils as utils
 
-class ToolboxSettingsTool(tool_base.ToolBase):
-    """
+@singleton
+class ToolboxSync(object):
     """
     
-    def __init__(self, name, parentwidget):
+    """
+    def __init__(self):
         """ """
-        # Initialize parent.
-        super(ToolboxSettingsTool, self).__init__(name, parentwidget)
-        # Create model.
-        self.__peg_data = taxa.Peg()
-        importer = taxa_sources.JsonFile(taxaObject = self.__peg_data)
-        importer.importTaxa(file = unicode('planktondata/resources/smhi_extended_peg.json'))
+        # TODO: Only initial implementation. Settings should be stores and loaded automatically. 
+        self.__settings = {}
         
-    def _createContent(self):
-        """ """
-        content = self._createScrollableContent()
-        contentLayout = QtGui.QVBoxLayout()
-        content.setLayout(contentLayout)
-        contentLayout.addLayout(self.__contentTest1())
-        contentLayout.addStretch(5)
-
-    def __contentTest1(self):
-        """ """
-        # Active widgets and connections.
-        self.__nameedit = QtGui.QLineEdit('smhi_extended_peg.json')
-        # Layout widgets.
-        form1 = QtGui.QFormLayout()
-        form1.addRow("Used resource:", self.__nameedit);
-        #
-        return form1
-
+#    def getValue(self, key):
+#        """ """
+#        self.__logtarget = target
+#
+#    def setValue(self, key, value):
+#        """ """
+#        self.__settings[key] = [value]
+        

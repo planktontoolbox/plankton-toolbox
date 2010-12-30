@@ -43,9 +43,10 @@ class PwReportMJ1(PwReports):
     """
     def __init__(self):
         """ """
-        super(PwReportMJ1, self).__init__()
 #        self.__peg = None
 #        self.__translationFileName = None
+        # Initialize parent.
+        super(PwReportMJ1, self).__init__()
         
     def setPeg(self, peg):
         """ """

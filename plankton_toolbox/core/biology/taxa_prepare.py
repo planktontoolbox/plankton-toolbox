@@ -61,6 +61,7 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
     """
     def __init__(self, taxaObject = None):
         """ """
+        # Initialize parent.
         super(PrepareDyntaxaDbTablesAsTextFiles, self).__init__(taxaObject)
 
     def importTaxa(self, dir = None):
@@ -296,6 +297,7 @@ class PreparePegTextFile(PrepareDataSources):
     """
     def __init__(self, taxaObject = None):
         """ """
+        # Initialize parent.
         super(PreparePegTextFile, self).__init__(taxaObject)
 
     def importTaxa(self, file = None):

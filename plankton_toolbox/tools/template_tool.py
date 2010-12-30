@@ -38,6 +38,7 @@ class TemplateTool(tool_base.ToolBase):
     
     def __init__(self, name, parentwidget):
         """ """
+        # Initialize parent.
         super(TemplateTool, self).__init__(name, parentwidget)
 
     def _createContent(self):

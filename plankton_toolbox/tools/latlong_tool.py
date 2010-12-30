@@ -38,7 +38,6 @@ class LatLongTool(tool_base.ToolBase):
     
     def __init__(self, name, parentWidget):
         """ """
-        super(LatLongTool, self).__init__(name, parentWidget)
         # User input data.
         self.__lat_dd = None
         self.__lat_dm = None
@@ -54,6 +53,8 @@ class LatLongTool(tool_base.ToolBase):
         self.__e_sweref99 = None
         self.__latitude = None # Decimal degrees. Type=float.
         self.__longitude = None # Decimal degrees. Type=float.
+        # Initialize parent.
+        super(LatLongTool, self).__init__(name, parentWidget)
  
     def _createContent(self):
         """ """

@@ -34,7 +34,7 @@ import plankton_toolbox.activities.create_reports_activity as create_reports_act
 import plankton_toolbox.activities.prepare_resources_activity as prepare_resources_activity
 #import plankton_toolbox.activities.template_activity as template_activity
 
-class ActivityManager():
+class ActivityManager(object):
     """ 
     """
     

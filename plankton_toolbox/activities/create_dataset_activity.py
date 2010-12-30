@@ -37,6 +37,7 @@ class CreateDatasetActivity(activity_base.ActivityBase):
     
     def __init__(self, name, parentwidget):
         """ """
+        # Initialize parent.
         super(CreateDatasetActivity, self).__init__(name, parentwidget)
 
     def _createContent(self):

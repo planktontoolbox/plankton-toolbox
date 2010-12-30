@@ -44,8 +44,9 @@ class CreateReportsActivity(activity_base.ActivityBase):
     
     def __init__(self, name, parentwidget):
         """ """
-        super(CreateReportsActivity, self).__init__(name, parentwidget)
         self._samplefiles = {}
+        # Initialize parent.
+        super(CreateReportsActivity, self).__init__(name, parentwidget)
 
     def _createContent(self):
         """ """

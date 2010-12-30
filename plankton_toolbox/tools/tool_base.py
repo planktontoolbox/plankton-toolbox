@@ -38,6 +38,7 @@ class ToolBase(QtGui.QDockWidget):
     
     def __init__(self, name, parentwidget):
         """ """
+        # Initialize parent.
         super(ToolBase, self).__init__(name, parentwidget)
         self._parent = parentwidget
         

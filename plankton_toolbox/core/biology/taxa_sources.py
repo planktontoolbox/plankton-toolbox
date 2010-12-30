@@ -57,6 +57,7 @@ class JsonFile(DataSources):
     """ Mainly used to load resource files. """
     def __init__(self, taxaObject = None):
         """ """
+        # Initialize parent.
         super(JsonFile, self).__init__(taxaObject)
 
     def importTaxa(self, file = None, encoding = 'utf-8'):
@@ -107,6 +108,7 @@ class DyntaxaSoap(DataSources):
     """ For future use. """
     def __init__(self, taxaObject = None):
         """ """
+        # Initialize parent.
         super(DyntaxaSoap, self).__init__(taxaObject)
 
 #    def importTaxa(self, url = None):
@@ -117,6 +119,7 @@ class MarineSpeciesSoap(DataSources):
     """ For future use. """
     def __init__(self, taxaObject = None):
         """ """
+        # Initialize parent.
         super(MarineSpeciesSoap, self).__init__(taxaObject)
 
 #    def importTaxa(self, url = None):
@@ -127,6 +130,7 @@ class CouchDb(DataSources):
     """ Used for test. """
     def __init__(self, taxaObject = None):
         """ """
+        # Initialize parent.
         super(CouchDb, self).__init__(taxaObject)
 
 #    def importTaxa(self, url = None):
@@ -140,6 +144,7 @@ class GoogleAppEngine(DataSources):
     """ Used for test. """
     def __init__(self, taxaObject = None):
         """ """
+        # Initialize parent.
         super(GoogleAppEngine, self).__init__(taxaObject)
 
 #    def importTaxa(self, url = None):
