@@ -59,6 +59,24 @@ class ToolBase(QtGui.QDockWidget):
         self._writeToStatusBar("")
 #        self._writeToLog(name + " loaded.")
 
+    def _createScrollableContent(self):
+        """ 
+        Creates the scrollable part of the tool content. 
+        Used by subclasses, if needed.
+        """
+        content = QtGui.QWidget()
+        toolwidget = QtGui.QWidget(self._parent)
+        self.setWidget(toolwidget)        
+        # Add scroll.
+        mainscroll = QtGui.QScrollArea()
+        mainscroll.setFrameShape(QtGui.QFrame.NoFrame)
+        mainscroll.setWidget(content)
+        mainscroll.setWidgetResizable(True)
+        mainlayout = QtGui.QVBoxLayout()
+        mainlayout.addWidget(mainscroll)
+        toolwidget.setLayout(mainlayout)
+        return content 
+
     @abstractmethod
     def _createContent(self):
         """ 
@@ -75,6 +93,6 @@ class ToolBase(QtGui.QDockWidget):
         """ 
         Used to write log messages. Depending on the main window
         settings they will appear on different locations, for example
-        in log file and/or in log tool window. 
+        in log file and/or in the log tool window. 
         """
         self._parent.writeToLog(message)

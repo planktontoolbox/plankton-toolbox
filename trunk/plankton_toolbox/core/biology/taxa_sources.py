@@ -33,7 +33,7 @@
 from abc import abstractmethod
 import codecs
 import json
-import plankton_toolbox.utils as utils
+import plankton_toolbox.toolbox.utils as utils
 
 class DataSources(object):
     """

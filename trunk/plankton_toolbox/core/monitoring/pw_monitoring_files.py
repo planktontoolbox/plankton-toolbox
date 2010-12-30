@@ -32,7 +32,7 @@ import codecs
 import json
 import urllib
 import string
-import plankton_toolbox.utils as utils
+import plankton_toolbox.toolbox.utils as utils
 
 
 class MonitoringFiles(object):

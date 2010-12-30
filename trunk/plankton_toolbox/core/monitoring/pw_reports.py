@@ -29,7 +29,7 @@
 """
 
 import codecs
-import plankton_toolbox.utils as utils
+import plankton_toolbox.toolbox.utils as utils
 
 class PwReports(object):
     """ 
