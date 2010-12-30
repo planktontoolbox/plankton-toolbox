@@ -48,8 +48,9 @@ class SharkwebDownload(MonitoringFiles):
     """
     def __init__(self):
         """ """
-        super(SharkwebDownload, self).__init__()
         self._dataset = {} # Dataset containing the json result set.
+        # Initialize parent.
+        super(SharkwebDownload, self).__init__()
 
     def clear(self):
         """ """
@@ -108,10 +109,11 @@ class PwCsv(MonitoringFiles):
     """
     def __init__(self):
         """ """
-        super(PwCsv, self).__init__()
         self._sample = {} # Information related to sample.
         self._data = {} # Data set containing header and rows.
         self._aggregated_data = {} # Precalculated aggregations of data.
+        # Initialize parent.
+        super(PwCsv, self).__init__()
 
     def importFile(self, fileName = None, encoding = 'utf-8'):
         """ """

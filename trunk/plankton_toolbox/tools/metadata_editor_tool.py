@@ -37,6 +37,7 @@ class MetadataEditorTool(tool_base.ToolBase):
     
     def __init__(self, name, parentwidget):
         """ """
+        # Initialize parent.
         super(MetadataEditorTool, self).__init__(name, parentwidget)
 
     def _createContent(self):

@@ -38,6 +38,7 @@ class ActivityBase(QtGui.QWidget):
     
     def __init__(self, name, parentwidget):
         """ """
+        # Initialize parent.
         super(ActivityBase, self).__init__(parentwidget)
         self._parent = parentwidget
         

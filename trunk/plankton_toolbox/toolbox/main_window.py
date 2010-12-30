@@ -47,6 +47,7 @@ class MainWindow(QtGui.QMainWindow):
     """
     def __init__(self):
         """ """
+        # Initialize parent.
         super(MainWindow, self).__init__()
         self.__settings = QtCore.QSettings()
         self.__toolmanager = tool_manager.ToolManager(self)

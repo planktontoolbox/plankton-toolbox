@@ -40,11 +40,12 @@ class SpeciesBrowserTool(tool_base.ToolBase):
     
     def __init__(self, name, parentwidget):
         """ """
-        super(SpeciesBrowserTool, self).__init__(name, parentwidget)
         # Create model.
         self.__peg_data = taxa.Peg()
         importer = taxa_sources.JsonFile(taxaObject = self.__peg_data)
         importer.importTaxa(file = unicode('planktondata/resources/smhi_extended_peg.json'))
+        # Initialize parent.
+        super(SpeciesBrowserTool, self).__init__(name, parentwidget)
         
     def _createContent(self):
         """ """
@@ -180,8 +181,8 @@ class TreeItem(object):
 
 class TreeModel(QtCore.QAbstractItemModel):
     def __init__(self, headers, data, parent=None):
+        # Initialize parent.
         super(TreeModel, self).__init__(parent)
-
         rootData = [header for header in headers]
         self.rootItem = TreeItem(rootData)
         self.setupModelData(data.split("\n"), self.rootItem)

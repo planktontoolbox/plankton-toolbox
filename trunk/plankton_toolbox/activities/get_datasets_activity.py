@@ -42,6 +42,7 @@ class GetDatasetsActivity(activity_base.ActivityBase):
     
     def __init__(self, name, parentwidget):
         """ """
+        # Initialize parent.
         super(GetDatasetsActivity, self).__init__(name, parentwidget)
 
     def _createContent(self):
@@ -170,7 +171,7 @@ class GetDatasetsActivity(activity_base.ActivityBase):
         self.__tableView.setAlternatingRowColors(True)
         self.__tableView.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
 #        self.__tableView.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
-        # Model, data nad selection        
+        # Model, data and selection        
         self.__dataset = pw_monitoring_files.SharkwebDownload()
         self.__model = ResultTableModel(self.__dataset)
         self.__tableView.setModel(self.__model)        
@@ -252,9 +253,12 @@ class GetDatasetsActivity(activity_base.ActivityBase):
 
 
 class ResultTableModel(QtCore.QAbstractTableModel):
+    """
+    """
     def __init__(self, dataset):
-        super(ResultTableModel, self).__init__()
         self.__dataset = dataset
+        # Initialize parent.
+        super(ResultTableModel, self).__init__()
         
     def rowCount(self, parent=QtCore.QModelIndex()):
         """ """

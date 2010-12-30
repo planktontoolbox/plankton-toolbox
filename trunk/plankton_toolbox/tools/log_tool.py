@@ -38,6 +38,7 @@ class LogTool(tool_base.ToolBase):
     
     def __init__(self, name, parentwidget):
         """ """
+        # Initialize parent.
         super(LogTool, self).__init__(name, parentwidget)
 
     def _createContent(self):

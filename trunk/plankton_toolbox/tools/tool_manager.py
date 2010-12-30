@@ -37,12 +37,13 @@ import plankton_toolbox.tools.taxon_images_tool as taxon_images_tool
 import plankton_toolbox.tools.latlong_tool as latlong_tool
 #import plankton_toolbox.tools.template_tool as template_tool
 
-class ToolManager():
+class ToolManager(object):
     """ 
     """
     
     def __init__(self, parentwidget):
         """ """
+        # Initialize parent.
         self._parent = parentwidget
         self.__toollist = [] # List of tools derived from ToolsBase.        
 

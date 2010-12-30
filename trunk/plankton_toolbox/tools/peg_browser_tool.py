@@ -25,6 +25,30 @@
 # THE SOFTWARE.
 
 """
+Sample part from the resource file:
+
+            "Author": "(P. Richter) Kom\u00e1rek & Anagnostidis 1995", 
+            "Class": "Nostocophyceae (Cyanophyceae)", 
+            "Division": "CYANOPHYTA (CYANOBACTERIA)", 
+            "Order": "CHROOCOCCALES", 
+            "Size classes": [
+                {
+                    "Calculated Carbon pg/counting unit": 4.0, 
+                    "Calculated volume, um3": 22.0, 
+                    "Comment on Carbon calculation": "based on individual cell", 
+                    "Diameter(d1), um": 3.5, 
+                    "Filament: length of cell, um": "-", 
+                    "Formula": "?/6*d^3", 
+                    "Geometric shape": "sphere", 
+                    "No. of cells/counting unit": 1.0, 
+                    "Size class": 1, 
+                    "Size range": "3-4", 
+                    "Trophy": "AU", 
+                    "Unit": "cell"
+                }, 
+                ... 
+            ], 
+            "Species": "Aphanocapsa reinboldii"
 """
 
 import PyQt4.QtGui as QtGui
@@ -40,311 +64,141 @@ class PegBrowserTool(tool_base.ToolBase):
     
     def __init__(self, name, parentwidget):
         """ """
-        super(PegBrowserTool, self).__init__(name, parentwidget)
         # Create model.
         self.__peg_data = taxa.Peg()
         importer = taxa_sources.JsonFile(taxaObject = self.__peg_data)
         importer.importTaxa(file = unicode('planktondata/resources/smhi_extended_peg.json'))
+        # Initialize parent.
+        super(PegBrowserTool, self).__init__(name, parentwidget)
         
     def _createContent(self):
         """ """
         content = self._createScrollableContent()
+#        contentLayout = QtGui.QHBoxLayout()
         contentLayout = QtGui.QVBoxLayout()
+#        contentLayout = QtGui.QGridLayout()
         content.setLayout(contentLayout)
-        contentLayout.addLayout(self.__contentTest1())
-        contentLayout.addLayout(self.__contentTest2())
-        contentLayout.addStretch(5)
+        contentLayout.addLayout(self.__contentTaxonList())
+        contentLayout.addLayout(self.__contentPegItem())
+#        contentLayout.addLayout(self.__contentTaxonList(), 0, 0, 1, 1)
+#        contentLayout.addLayout(self.__contentPegItem(), 0, 1, 1, 1)
 
-    def __contentTest1(self):
+    def __contentTaxonList(self):
         """ """
-        # Active widgets and connections.
-        self.__nameedit = QtGui.QLineEdit('smhi_extended_peg.json')
-#        self.__emailedit = QtGui.QLineEdit("<Email>")
-#        self.__customerlist = QtGui.QListWidget()        
-        # Layout widgets.
-        form1 = QtGui.QFormLayout()
-        form1.addRow("Used resource:", self.__nameedit);
-#        form1.addRow("&Email:", self.__emailedit);
-#        form1.addRow("&Projects:", self.__customerlist);
-        #
-        return form1
-
-    def __contentTest2(self):
-        """ """
-        grid1 = QtGui.QVBoxLayout()
-        self.__view = QtGui.QTreeView()
-        grid1.addWidget(self.__view)
-        self.__view.setAlternatingRowColors(True)
-        self.__view.setSelectionBehavior(QtGui.QAbstractItemView.SelectItems)
-        self.__view.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
-        self.__view.setAnimated(False)
-        self.__view.setAllColumnsShowFocus(True)
+        layout = QtGui.QVBoxLayout()
+        self.__tableView = QtGui.QTableView()
+        layout.addWidget(self.__tableView)
+        self.__tableView.setAlternatingRowColors(True)
+        self.__tableView.setSelectionBehavior(QtGui.QAbstractItemView.SelectItems)
+        self.__tableView.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
         
         headers = QtCore.QStringList()
         headers << self.tr("Title") << self.tr("Description")
-        
-#        model = TreeModel(headers, QtCore.QString(file.readAll()))
-#        self.__view.setModel(model)
-#        for column in range(model.columnCount(QtCore.QModelIndex())):
-#            self.__view.resizeColumnToContents(column)
+        # Model, data and selection        
+        self.__model = PegTableModel(self.__peg_data)
+        self.__tableView.setModel(self.__model)
+        selectionModel = QtGui.QItemSelectionModel(self.__model, self.__tableView)
+        self.__tableView.setSelectionModel(selectionModel)
+        self.__tableView.horizontalHeader().setStretchLastSection(True)
+        self.connect(selectionModel, QtCore.SIGNAL("currentChanged(QModelIndex, QModelIndex)"), self.__test)
+        self.connect(selectionModel, QtCore.SIGNAL("selectionChanged(QModelIndex, QModelIndex)"), self.__test2)
+        # Note: Time-consuming.
+        self.__tableView.resizeColumnsToContents()
+        self.__tableView.resizeRowsToContents()
         #
-        return grid1
-
-    def __test(self):
+        return layout
+    
+    def __test(self, index):
         """ """
-        self._writeToLog("Name: " + unicode(self.__nameedit.text()))
+#        taxonName = self.__tableView.item(index.row(), 1).data(QtCore.Qt.DisplayRole).toString()
+#        sizeclass = self.__tableView.item(index.row(), 2).data(QtCore.Qt.DisplayRole).toString() 
+        taxonName = self.__peg_data.getData(index.row(), 0)
+        size = self.__peg_data.getData(index.row(), 1)
+        #
+        taxon = self.__peg_data.getTaxonByName(taxonName)
+        self.__species_label.setText('<b>' + taxon.get('Species', '-') + '</b>')
+        self.__author_label.setText(taxon.get('Author', '-'))
+        self.__class_label.setText(taxon.get('Class', '-'))
+        self.__division_label.setText(taxon.get('Division', '-'))
+        self.__order_label.setText(taxon.get('Order', '-'))
+        #
+        sizeclass = self.__peg_data.getSizeclassItem(taxonName, size)
+        self.__size_class_label.setText('<b>' + unicode(sizeclass.get('Size class', '-')) + '</b>')
+        self.__thropy_label.setText(sizeclass.get('Trophy', '-'))
+        self.__shape_label.setText(sizeclass.get('Geometric shape', '-'))
+        self.__formula_label.setText(sizeclass.get('Formula', '-'))
+        self.__volume_label.setText(unicode(sizeclass.get('Calculated volume, um3', '-')))
+        self.__carbon_label.setText(unicode(sizeclass.get('Calculated Carbon pg/counting unit', '-')))
+
+    def __test2(self, index, index2):
+        """ """
+        print("TEST2..." + "%f" % index.row() + " %f" % index.column())
+        self.__test(index)
+
+    def __contentPegItem(self):
+        """ """
+        # Active widgets and connections.
+        # Species level.
+        self.__species_label = QtGui.QLabel('-')
+        self.__author_label = QtGui.QLabel('-')
+        self.__class_label = QtGui.QLabel('-')
+        self.__division_label = QtGui.QLabel('-')
+        self.__order_label = QtGui.QLabel('-')
+        # Sizeclass level.
+        self.__size_class_label = QtGui.QLabel('-')
+        self.__thropy_label = QtGui.QLabel('-')
+        self.__shape_label = QtGui.QLabel('-')
+        self.__formula_label = QtGui.QLabel('-')
+        self.__volume_label = QtGui.QLabel('-')
+        self.__carbon_label = QtGui.QLabel('-')
+        # Layout widgets.
+        layout = QtGui.QFormLayout()
+        layout.addRow("<b><u>Species:</u></b>", None);
+        layout.addRow("Taxon name:", self.__species_label);
+        layout.addRow("Author:", self.__author_label);
+        layout.addRow("Class:", self.__class_label);
+        layout.addRow("Division:", self.__division_label);
+        layout.addRow("Order:", self.__order_label);
+        layout.addRow("<b><u>Size class:</u></b>", None);
+        layout.addRow("Size class:", self.__size_class_label);
+        layout.addRow("Trophy:", self.__thropy_label);
+        layout.addRow("Used resource:", self.__shape_label);
+        layout.addRow("Used resource:", self.__formula_label);
+        layout.addRow("Calculated volume:", self.__volume_label);
+        layout.addRow("Calculated Carbon:", self.__carbon_label);
+        #
+        return layout
+
+class PegTableModel(QtCore.QAbstractTableModel):
+    """ 
+    """
+    def __init__(self, dataset):
+        self.__dataset = dataset
+        # Initialize parent.
+        super(PegTableModel, self).__init__()
         
-        
-#############################################################        
-class TreeItem(object):
-    def __init__(self, data, parent=None):
-        self.parentItem = parent
-        self.itemData = data
-        self.childItems = []
-
-    def child(self, row):
-        return self.childItems[row]
-
-    def childCount(self):
-        return len(self.childItems)
-
-    def childNumber(self):
-        if self.parentItem != None:
-            return self.parentItem.childItems.index(self)
-        return 0
-
-    def columnCount(self):
-        return len(self.itemData)
-
-    def data(self, column):
-        return self.itemData[column]
-
-    def insertChildren(self, position, count, columns):
-        if position < 0 or position > len(self.childItems):
-            return False
-
-        for row in range(count):
-            data = [QtCore.QVariant() for v in range(columns)]
-            item = TreeItem(data, self)
-            self.childItems.insert(position, item)
-
-        return True
-
-    def insertColumns(self, position, columns):
-        if position < 0 or position > len(self.itemData):
-            return False
-
-        for column in range(columns):
-            self.itemData.insert(position, QtCore.QVariant())
-
-        for child in self.childItems:
-            child.insertColumns(position, columns)
-
-        return True
-
-    def parent(self):
-        return self.parentItem
-
-    def removeChildren(self, position, count):
-        if position < 0 or position + count > len(self.childItems):
-            return False
-
-        for row in range(count):
-            self.childItems.pop(position)
-
-        return True
-
-    def removeColumns(self, position, columns):
-        if position < 0 or position + columns > len(self.itemData):
-            return False
-
-        for column in range(columns):
-            self.itemData.pop(position)
-
-        for child in self.childItems:
-            child.removeColumns(position, columns)
-
-        return True
-
-    def setData(self, column, value):
-        if column < 0 or column >= len(self.itemData):
-            return False
-
-        if type(value) == type(QtCore.QVariant()):
-            self.itemData[column] = value.toString()
-        else:
-            self.itemData[column] = value
-
-        return True
-
-
-class TreeModel(QtCore.QAbstractItemModel):
-    def __init__(self, headers, data, parent=None):
-        super(TreeModel, self).__init__(parent)
-
-        rootData = [header for header in headers]
-        self.rootItem = TreeItem(rootData)
-        self.setupModelData(data.split("\n"), self.rootItem)
+    def rowCount(self, parent=QtCore.QModelIndex()):
+        """ """
+        return self.__dataset.getRowCount()
 
     def columnCount(self, parent=QtCore.QModelIndex()):
-        return self.rootItem.columnCount()
-
-    def data(self, index, role):
-        if not index.isValid():
-            return QtCore.QVariant()
-
-        if role != QtCore.Qt.DisplayRole and role != QtCore.Qt.EditRole:
-            return QtCore.QVariant()
-
-        item = self.getItem(index)
-        return QtCore.QVariant(item.data(index.column()))
-
-    def flags(self, index):
-        if not index.isValid():
-            return 0
-
-        return QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
-
-    def getItem(self, index):
-        if index.isValid():
-            item = index.internalPointer()
-            if item:
-                return item
-
-        return self.rootItem
+        """ """
+        return 3
 
     def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
+        """ Columns: row, taxon, sizeclass. """
         if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
-            return QtCore.QVariant(self.rootItem.data(section))
-
+            if section == 1:
+                return QtCore.QVariant('Taxon')
+            elif section == 2:
+                return QtCore.QVariant('Sizeclass')
         return QtCore.QVariant()
 
-    def index(self, row, column, parent=QtCore.QModelIndex()):
-        if parent.isValid() and parent.column() != 0:
-            return QtCore.QModelIndex()
-
-        parentItem = self.getItem(parent)
-        childItem = parentItem.child(row)
-        if childItem:
-            return self.createIndex(row, column, childItem)
-        else:
-            return QtCore.QModelIndex()
-
-    def insertColumns(self, position, columns, parent=QtCore.QModelIndex()):
-        self.beginInsertColumns(parent, position, position + columns - 1)
-        success = self.rootItem.insertColumns(position, columns)
-        self.endInsertColumns()
-
-        return success
-
-    def insertRows(self, position, rows, parent=QtCore.QModelIndex()):
-        parentItem = self.getItem(parent)
-        self.beginInsertRows(parent, position, position + rows - 1)
-        success = parentItem.insertChildren(position, rows,
-                self.rootItem.columnCount())
-        self.endInsertRows()
-
-        return success
-
-    def parent(self, index):
-        if not index.isValid():
-            return QtCore.QModelIndex()
-
-        childItem = self.getItem(index)
-        parentItem = childItem.parent()
-
-        if parentItem == self.rootItem:
-            return QtCore.QModelIndex()
-
-        return self.createIndex(parentItem.childNumber(), 0, parentItem)
-
-    def removeColumns(self, position, columns, parent=QtCore.QModelIndex()):
-        self.beginRemoveColumns(parent, position, position + columns - 1)
-        success = self.rootItem.removeColumns(position, columns)
-        self.endRemoveColumns()
-
-#        if self.rootItem.columnCount() == 0:
-#            self.removeRows(0, rowCount())
-
-        return success
-
-    def removeRows(self, position, rows, parent=QtCore.QModelIndex()):
-        parentItem = self.getItem(parent)
-
-        self.beginRemoveRows(parent, position, position + rows - 1)
-        success = parentItem.removeChildren(position, rows)
-        self.endRemoveRows()
-
-        return success
-
-    def rowCount(self, parent=QtCore.QModelIndex()):
-        parentItem = self.getItem(parent)
-
-        return parentItem.childCount()
-
-    def setData(self, index, value, role=QtCore.Qt.EditRole):
-        if role != QtCore.Qt.EditRole:
-            return False
-
-        item = self.getItem(index)
-        result = item.setData(index.column(), value)
-
-        if result:
-            self.dataChanged.emit(index, index)
-
-        return result
-
-    def setHeaderData(self, section, orientation, value, role=QtCore.Qt.EditRole):
-        if role != QtCore.Qt.EditRole or orientation != QtCore.Qt.Horizontal:
-            return False
-
-        result = self.rootItem.setData(section, value)
-        if result:
-            self.headerDataChanged.emit(orientation, section, section)
-
-        return result
-
-    def setupModelData(self, lines, parent):
-        parents = [parent]
-        indentations = [0]
-
-        number = 0
-
-        while number < len(lines):
-            position = 0
-            while position < len(lines[number]):
-                if lines[number][position] != " ":
-                    break
-                position += 1
-
-            lineData = lines[number][position:].trimmed()
-
-            if not lineData.isEmpty():
-                # Read the column data from the rest of the line.
-                columnStrings = lineData.split("\t",
-                        QtCore.QString.SkipEmptyParts)
-                columnData = []
-                for column in range(len(columnStrings)):
-                    columnData.append(columnStrings[column])
-
-                if position > indentations[-1]:
-                    # The last child of the current parent is now the new
-                    # parent unless the current parent has no children.
-
-                    if parents[-1].childCount() > 0:
-                        parents.append(parents[-1].child(parents[-1].childCount() - 1))
-                        indentations.append(position)
-
-                else:
-                    while position < indentations[-1] and len(parents) > 0:
-                        parents.pop()
-                        indentations.pop()
-
-                # Append a new item to the current parent's list of children.
-                parent = parents[-1]
-                parent.insertChildren(parent.childCount(), 1,
-                        self.rootItem.columnCount())
-                for column in range(len(columnData)):
-                    parent.child(parent.childCount() -1).setData(column, columnData[column])
-
-            number += 1
+    def data(self, index=QtCore.QModelIndex(), role=QtCore.Qt.DisplayRole):
+        """ """
+        if role == QtCore.Qt.DisplayRole:
+            if index.isValid():
+                if index.column() == 0: # First column for row number.
+                    return  QtCore.QVariant(index.row() + 1)
+                return QtCore.QVariant(self.__dataset.getData(index.row(), index.column() - 1))
+        return QtCore.QVariant()
