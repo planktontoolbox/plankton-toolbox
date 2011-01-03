@@ -3,7 +3,7 @@
 #
 # Project: Plankton toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2011 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -212,41 +212,41 @@ class CreateReportsActivity(activity_base.ActivityBase):
             if self.__report_list.currentIndex() == 1:
                 # === Report: MJ1 ===
                 utils.Logger().info("Selected report: MJ1")
-                peg = taxa.Peg()
-                importer = taxa_sources.JsonFile(taxaObject = peg)
-                importer.importTaxa(file = unicode(self.__pegfile_edit.text()))
+#                peg = taxa.Peg()
+#                importer = taxa_sources.JsonFile(taxaObject = peg)
+#                importer.importTaxa(file = unicode(self.__pegfile_edit.text()))
                 # Create exporter object.
                 report = pw_reports.PwReportMJ1()
-                utils.Logger().info("Used PEG list: " + unicode(self.__pegfile_edit.text()))
-                utils.Logger().info("Used translation file: " + unicode(self.__translatefile_edit.text()))
-                report.setPeg(peg)
-                report.setTaxonSizeClassTranslationFile(unicode(self.__translatefile_edit.text()))
+#                utils.Logger().info("Used PEG list: " + unicode(self.__pegfile_edit.text()))
+#                utils.Logger().info("Used translation file: " + unicode(self.__translatefile_edit.text()))
+#                report.setPeg(peg)
+#                report.setTaxonSizeClassTranslationFile(unicode(self.__translatefile_edit.text()))
                 report.exportFile(self._samplefiles, unicode(self.__tofile_edit.text()))
             elif self.__report_list.currentIndex() == 2:
                 # === Report: MJ1 ===
                 utils.Logger().info("Selected report: MJ2")
-                peg = taxa.Peg()
-                importer = taxa_sources.JsonFile(taxaObject = peg)
-                importer.importTaxa(file = unicode(self.__pegfile_edit.text()))
+#                peg = taxa.Peg()
+#                importer = taxa_sources.JsonFile(taxaObject = peg)
+#                importer.importTaxa(file = unicode(self.__pegfile_edit.text()))
                 # Create exporter object.
                 report = pw_reports.PwReportMJ1()
-                utils.Logger().info("Used PEG list: " + unicode(self.__pegfile_edit.text()))
-                utils.Logger().info("Used translation file: " + unicode(self.__translatefile_edit.text()))
-                report.setPeg(peg)
-                report.setTaxonSizeClassTranslationFile(unicode(self.__translatefile_edit.text()))
+#                utils.Logger().info("Used PEG list: " + unicode(self.__pegfile_edit.text()))
+#                utils.Logger().info("Used translation file: " + unicode(self.__translatefile_edit.text()))
+#                report.setPeg(peg)
+#                report.setTaxonSizeClassTranslationFile(unicode(self.__translatefile_edit.text()))
                 report.exportFile(self._samplefiles, unicode(self.__tofile_edit.text()))
             elif self.__report_list.currentIndex() == 3:
                 # === Report: MJ1 ===
                 utils.Logger().info("Selected report: ATS1")
-                peg = taxa.Peg()
-                importer = taxa_sources.JsonFile(taxaObject = peg)
-                importer.importTaxa(file = unicode(self.__pegfile_edit.text()))
+#                peg = taxa.Peg()
+#                importer = taxa_sources.JsonFile(taxaObject = peg)
+#                importer.importTaxa(file = unicode(self.__pegfile_edit.text()))
                 # Create exporter object.
                 report = pw_reports.PwReportMJ1()
-                utils.Logger().info("Used PEG list: " + unicode(self.__pegfile_edit.text()))
-                utils.Logger().info("Used translation file: " + unicode(self.__translatefile_edit.text()))
-                report.setPeg(peg)
-                report.setTaxonSizeClassTranslationFile(unicode(self.__translatefile_edit.text()))
+#                utils.Logger().info("Used PEG list: " + unicode(self.__pegfile_edit.text()))
+#                utils.Logger().info("Used translation file: " + unicode(self.__translatefile_edit.text()))
+#                report.setPeg(peg)
+#                report.setTaxonSizeClassTranslationFile(unicode(self.__translatefile_edit.text()))
                 report.exportFile(self._samplefiles, unicode(self.__tofile_edit.text()), encoding = 'iso-8859-1')
             else:
                 raise UserWarning('The selected report type is not implemented.')

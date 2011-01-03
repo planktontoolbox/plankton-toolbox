@@ -3,7 +3,7 @@
 #
 # Project: Plankton toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2011 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -30,21 +30,72 @@ Contains settings for the Plankton toolbox application.
 
 import plankton_toolbox.toolbox.utils as utils
 
-@singleton
-class Settings(object):
+@utils.singleton
+class ToolboxSettings(object):
     """
     Contains settings for the Plankton toolbox application. 
     """
     def __init__(self):
         """ """
-        # TODO: Only initial implementation. Settings should be stores and loaded automatically. 
         self.__settings = {}
+        self.__default_settings = {
+            "Settings": {
+                "Decimal delimiter": ","
+            },
+            "Resources": {
+                "Taxa": {
+                    "Filepath": "planktondata/resources/smhi_dv_dyntaxa.json",
+                },
+                "PEG": {
+                    "Filepath": "planktondata/resources/smhi_extended_peg.json",
+                    "Translate PW to PEG": True,
+                    "PW to PEG filepath": "planktondata/resources/smhi_pw_to_extended_peg.txt",
+                    "Translate PEG to Dyntaxa": False,
+                    "PEG to Dyntaxa filepath": "planktondata/resources/smhi_peg_to_dyntaxa.txt"
+                },
+                "IOC": {
+                    "Filepath": ""
+                }
+            },
+            "Datasets": {
+                "Dataset types": {
+                    "PW": {
+                    },
+                    "Generic table": {
+                    },
+                    "Sharkweb": {
+                        "URL": "",
+                        "Header language": "en"
+                    }
+                }
+            }
+        }
         
-    def getValue(self, key):
+    def loadSettings(self):
         """ """
-        self.__logtarget = target
+        self.__settings = self.__default_settings # TODO
 
-    def setValue(self, key, value):
+    def saveSettings(self):
         """ """
-        self.__settings[key] = [value]
+        # TODO
+
+    def getValue(self, compoundkey):
+        """ Use compound key with field delimiter ':'. """
+        current_level_item = self.__settings
+        # Split the key and walk down in dictionaries.
+        # Current_level_item will became value at last level.
+        for keypart in compoundkey.split(':'):
+            current_level_item = current_level_item[keypart]
+        return current_level_item
+
+    def setValue(self, compoundkey, value):
+        """ Use compound key with field delimiter ':'. """
+        current_level_item = self.__settings
+        last_used_dict = current_level_item
+        #Split the key and walk down in dictionaries.
+        # Current_level_item will became value at last level.
+        for keypart in compoundkey.split(':'):
+            last_used_dict = current_level_item
+            current_level_item = current_level_item[keypart]
+        last_used_dict[keypart] = value
         

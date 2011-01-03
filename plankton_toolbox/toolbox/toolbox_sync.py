@@ -3,7 +3,7 @@
 #
 # Project: Plankton toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2011 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -30,21 +30,11 @@ TODO
 
 import plankton_toolbox.toolbox.utils as utils
 
-@singleton
+@utils.singleton
 class ToolboxSync(object):
     """
     
     """
     def __init__(self):
         """ """
-        # TODO: Only initial implementation. Settings should be stores and loaded automatically. 
-        self.__settings = {}
-        
-#    def getValue(self, key):
-#        """ """
-#        self.__logtarget = target
-#
-#    def setValue(self, key, value):
-#        """ """
-#        self.__settings[key] = [value]
         

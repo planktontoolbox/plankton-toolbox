@@ -3,7 +3,7 @@
 #
 # Project: Plankton toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2011 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -42,10 +42,6 @@ class ToolboxSettingsTool(tool_base.ToolBase):
         """ """
         # Initialize parent.
         super(ToolboxSettingsTool, self).__init__(name, parentwidget)
-        # Create model.
-        self.__peg_data = taxa.Peg()
-        importer = taxa_sources.JsonFile(taxaObject = self.__peg_data)
-        importer.importTaxa(file = unicode('planktondata/resources/smhi_extended_peg.json'))
         
     def _createContent(self):
         """ """

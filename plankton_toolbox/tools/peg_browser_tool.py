@@ -3,7 +3,7 @@
 #
 # Project: Plankton toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2011 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -30,6 +30,7 @@ Sample part from the resource file:
             "Author": "(P. Richter) Kom\u00e1rek & Anagnostidis 1995", 
             "Class": "Nostocophyceae (Cyanophyceae)", 
             "Division": "CYANOPHYTA (CYANOBACTERIA)", 
+            "Dyntaxa id": "CYANOPHYTA (CYANOBACTERIA)", 
             "Order": "CHROOCOCCALES", 
             "Size classes": [
                 {
@@ -42,6 +43,7 @@ Sample part from the resource file:
                     "Geometric shape": "sphere", 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 1, 
+                    "Size class PW": 1, 
                     "Size range": "3-4", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -49,6 +51,7 @@ Sample part from the resource file:
                 ... 
             ], 
             "Species": "Aphanocapsa reinboldii"
+            "Species PW": "Aphanocapsa reinboldii"
 """
 
 import PyQt4.QtGui as QtGui
@@ -57,6 +60,7 @@ import plankton_toolbox.tools.tool_base as tool_base
 import plankton_toolbox.core.biology.taxa as taxa
 import plankton_toolbox.core.biology.taxa_sources as taxa_sources
 #import plankton_toolbox.core.biology.taxa_prepare as taxa_prepare
+import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
 
 class PegBrowserTool(tool_base.ToolBase):
     """
@@ -65,9 +69,10 @@ class PegBrowserTool(tool_base.ToolBase):
     def __init__(self, name, parentwidget):
         """ """
         # Create model.
-        self.__peg_data = taxa.Peg()
-        importer = taxa_sources.JsonFile(taxaObject = self.__peg_data)
-        importer.importTaxa(file = unicode('planktondata/resources/smhi_extended_peg.json'))
+        self.__peg_data = toolbox_resources.ToolboxResources().getPegResource()
+#        self.__peg_data = taxa.Peg()
+#        importer = taxa_sources.JsonFile(taxaObject = self.__peg_data)
+#        importer.importTaxa(file = unicode('planktondata/resources/smhi_extended_peg.json'))
         # Initialize parent.
         super(PegBrowserTool, self).__init__(name, parentwidget)
         

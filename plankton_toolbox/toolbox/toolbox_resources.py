@@ -25,22 +25,53 @@
 # THE SOFTWARE.
 
 """
-Plankton toolbox...
+
 """
 
-import sys
-import PyQt4.QtGui as QtGui
-import plankton_toolbox.toolbox.main_window as main_window
+import plankton_toolbox.toolbox.utils as utils
+import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
+import plankton_toolbox.core.biology.taxa as taxa
+import plankton_toolbox.core.biology.taxa_sources as taxa_sources
 
-if __name__ == '__main__':
+@utils.singleton
+class ToolboxResources(object):
     """
-    Main application code for the Plankton toolbox.
     """
-    app = QtGui.QApplication(sys.argv)
-    app.setOrganizationName("SMHI, Swedish Meteorological and Hydrological Institute")
-    app.setOrganizationDomain("smhi.se")
-    app.setApplicationName("Plankton toolbox")
-#    app.setWindowIcon(":/plankton_toolbox_icon.png") # TODO.
-    window = main_window.MainWindow()
-    window.show()
-    sys.exit(app.exec_())
+    def __init__(self):
+        """ """
+        self.__taxa_resource = None
+        self.__peg_resource = None
+        self.__ioc_resource = None 
+        
+    def loadResources(self):
+        """ """
+        self.__loadTaxaResource()
+        self.__loadPegResource()
+        self.__loadIocResource()
+
+    def __loadTaxaResource(self):
+        """ """
+
+        
+    def __loadPegResource(self):
+        """ """
+        self.__peg_resource = taxa.Peg()
+        importer = taxa_sources.JsonFile(taxaObject = self.__peg_resource)
+        filepath = toolbox_settings.ToolboxSettings().getValue('Resources:PEG:Filepath')
+        importer.importTaxa(file = filepath)
+        
+    def __loadIocResource(self):
+        """ """
+        # TODO.
+        
+    def getTaxaResource(self):
+        """ """
+        return self.__taxa_resource
+        
+    def getPegResource(self):
+        """ """
+        return self.__peg_resource
+        
+    def getIocResource(self):
+        """ """
+        return self.__ioc_resource
