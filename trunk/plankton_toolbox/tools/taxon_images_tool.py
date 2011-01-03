@@ -3,7 +3,7 @@
 #
 # Project: Plankton toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2011 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy

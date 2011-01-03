@@ -3,7 +3,7 @@
 #
 # Project: Plankton toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2011 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -48,13 +48,13 @@ class PwReportMJ1(PwReports):
         # Initialize parent.
         super(PwReportMJ1, self).__init__()
         
-    def setPeg(self, peg):
-        """ """
-        self.__peg = peg
-
-    def setTaxonSizeClassTranslationFile(self, fileName):
-        """ """
-        self.__translationFileName = fileName
+#    def setPeg(self, peg):
+#        """ """
+#        self.__peg = peg
+#
+#    def setTaxonSizeClassTranslationFile(self, fileName):
+#        """ """
+#        self.__translationFileName = fileName
 
     def exportFile(self, pw_sample_dict = None, fileName = None, encoding = 'utf-8'):
         """ """

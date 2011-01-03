@@ -3,7 +3,7 @@
 #
 # Project: Mellifica toolbox. http://toolbox.mellifica.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010 Arnold Andreasson
+# Copyright (c) 2010-2011 Arnold Andreasson
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy

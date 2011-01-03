@@ -3,7 +3,7 @@
 #
 # Project: Plankton toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2011 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -36,6 +36,8 @@ import plankton_toolbox.toolbox.utils as utils
 import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.activities.activity_manager as activity_manager
 import plankton_toolbox.tools.log_tool as log_tool
+import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
+import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
 
 __version__ = '0.0.1' # Plankton-toolbox version.
 
@@ -56,13 +58,7 @@ class MainWindow(QtGui.QMainWindow):
         self.setWindowTitle(self.tr("Plankton toolbox"))
         # Logging. Always log to plankton_toolbox_log.txt. Also use  
         # the Log tool when it is available.
-        
-        
-###        self.__logfile = open('plankton_toolbox_log.txt', 'w')        
         self.__logfile = codecs.open('plankton_toolbox_log.txt', mode = 'w', encoding = 'iso-8859-1')
-
-        
-        
         self.__logfile.write('Plankton-toolbox. ' +
                              time.strftime("%Y-%m-%d %H:%M:%S") +'\r\n\r\n')
         self.__logtool = None #
@@ -73,6 +69,11 @@ class MainWindow(QtGui.QMainWindow):
         self.__createStatusBar()
         self.__activity = None
         self.__createCentralWidget()
+        #
+        QtGui.QApplication.processEvents() # Make some part visible during startup.
+        # Load settings and resources.
+        toolbox_settings.ToolboxSettings().loadSettings()
+        toolbox_resources.ToolboxResources().loadResources()
         # Set up activities and tools.
         self.__toolmanager.initTools()
         self.__activitymanager.initActivities()
@@ -84,6 +85,7 @@ class MainWindow(QtGui.QMainWindow):
         # Reloads last used window positions.
         self.restoreState(self.__settings.value("MainWindow/State").toByteArray());
         self.setGeometry(self.__settings.value("MainWindow/Geometry").toRect());
+
 
     def closeEvent(self, event):
         """ Called on application shutdown. """

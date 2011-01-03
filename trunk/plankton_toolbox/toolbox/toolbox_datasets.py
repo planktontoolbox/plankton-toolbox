@@ -25,22 +25,15 @@
 # THE SOFTWARE.
 
 """
-Plankton toolbox...
+Contains settings for the Plankton toolbox application.
 """
 
-import sys
-import PyQt4.QtGui as QtGui
-import plankton_toolbox.toolbox.main_window as main_window
+import plankton_toolbox.toolbox.utils as utils
 
-if __name__ == '__main__':
+@utils.singleton
+class ToolboxDatasets(object):
     """
-    Main application code for the Plankton toolbox.
+    Contains settings for the Plankton toolbox application. 
     """
-    app = QtGui.QApplication(sys.argv)
-    app.setOrganizationName("SMHI, Swedish Meteorological and Hydrological Institute")
-    app.setOrganizationDomain("smhi.se")
-    app.setApplicationName("Plankton toolbox")
-#    app.setWindowIcon(":/plankton_toolbox_icon.png") # TODO.
-    window = main_window.MainWindow()
-    window.show()
-    sys.exit(app.exec_())
+    def __init__(self):
+        """ """

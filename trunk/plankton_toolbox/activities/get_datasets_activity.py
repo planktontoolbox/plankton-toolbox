@@ -3,7 +3,7 @@
 #
 # Project: Plankton toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2011 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -171,6 +171,18 @@ class GetDatasetsActivity(activity_base.ActivityBase):
         self.__tableView.setAlternatingRowColors(True)
         self.__tableView.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
 #        self.__tableView.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+
+
+
+        self.__tableView.verticalHeader().setDefaultSectionSize(20)
+#        self.__tableView.horizontalHeader().resizeSections(QtGui.QHeaderView.ResizeToContents)
+#        self.__tableView.setSortingEnabled(True)
+
+
+
+
+
+
         # Model, data and selection        
         self.__dataset = pw_monitoring_files.SharkwebDownload()
         self.__model = ResultTableModel(self.__dataset)
@@ -209,8 +221,11 @@ class GetDatasetsActivity(activity_base.ActivityBase):
     def __refreshTable(self):
         """ """
         self.__model.reset() # Model data has changed.
-#        self.__tableView.resizeColumnsToContents()
+#        self.__tableView.horizontalHeader().resizeSections(QtGui.QHeaderView.ResizeToContents)
+        self.__tableView.resizeColumnsToContents()
 #        self.__tableView.resizeRowsToContents()
+#        self.__tableView.resizeColumnToContents(0) # First row.....
+#        self.__tableView.resizeColumnToContents(self.__model.rowCount()) # Last row.....
 
     def __getData(self):
         """ """
