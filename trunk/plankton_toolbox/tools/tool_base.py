@@ -41,42 +41,22 @@ class ToolBase(QtGui.QDockWidget):
         # Initialize parent.
         super(ToolBase, self).__init__(name, parentwidget)
         self._parent = parentwidget
-        
+        #
         self._writeToStatusBar("Loading " + name + "...")
-#        self._writeToLog("Loading " + name + "...")
-        
+        #        
         self.setObjectName(name)
+        #
         self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea | 
                              QtCore.Qt.BottomDockWidgetArea)
         self.setBaseSize(600,600)
-
+        #
         self._createContent() # Adds specific content. Abstract.
-        
+        #
         self._parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, self)
-        
-        #  Toggles show/hide from the Tools menu inc the main window.
+        #  Toggles show/hide from the Tools menu in the main window.
         self._parent.toolsmenu.addAction(self.toggleViewAction())
-
+        #
         self._writeToStatusBar("")
-#        self._writeToLog(name + " loaded.")
-
-    def _createScrollableContent(self):
-        """ 
-        Creates the scrollable part of the tool content. 
-        Used by subclasses, if needed.
-        """
-        content = QtGui.QWidget()
-        toolwidget = QtGui.QWidget(self._parent)
-        self.setWidget(toolwidget)        
-        # Add scroll.
-        mainscroll = QtGui.QScrollArea()
-        mainscroll.setFrameShape(QtGui.QFrame.NoFrame)
-        mainscroll.setWidget(content)
-        mainscroll.setWidgetResizable(True)
-        mainlayout = QtGui.QVBoxLayout()
-        mainlayout.addWidget(mainscroll)
-        toolwidget.setLayout(mainlayout)
-        return content 
 
     @abstractmethod
     def _createContent(self):
@@ -85,6 +65,24 @@ class ToolBase(QtGui.QDockWidget):
         Note: Abstract. Should be implemented by subclasses. 
         """
         pass
+
+    def _createScrollableContent(self):
+        """ 
+        Creates the scrollable part of the tool content. 
+        Used by subclasses, if needed.
+        """
+        content = QtGui.QWidget()
+        widget = QtGui.QWidget()
+        self.setWidget(widget)        
+        # Add scroll.
+        mainscroll = QtGui.QScrollArea()
+        mainscroll.setFrameShape(QtGui.QFrame.NoFrame)
+        mainscroll.setWidget(content)
+        mainscroll.setWidgetResizable(True)
+        mainlayout = QtGui.QVBoxLayout()
+        mainlayout.addWidget(mainscroll)
+        widget.setLayout(mainlayout)
+        return content 
 
     def _writeToStatusBar(self, message):
         """ Used to write short messages to the main window status bar. """

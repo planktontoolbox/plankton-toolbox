@@ -107,6 +107,14 @@ class PegBrowserTool(tool_base.ToolBase):
         self.__tableView.horizontalHeader().setStretchLastSection(True)
         self.connect(selectionModel, QtCore.SIGNAL("currentChanged(QModelIndex, QModelIndex)"), self.__test)
         self.connect(selectionModel, QtCore.SIGNAL("selectionChanged(QModelIndex, QModelIndex)"), self.__test2)
+        
+                
+#        self.connect(toolbox_resources.ToolboxResources(), QtCore.SIGNAL("peg_loaded"), self.__model.reset)
+        self.connect(toolbox_resources.ToolboxResources(), QtCore.SIGNAL("peg_loaded"), self.__test3)
+
+
+        
+        
         # Note: Time-consuming.
         self.__tableView.resizeColumnsToContents()
         self.__tableView.resizeRowsToContents()
@@ -140,6 +148,14 @@ class PegBrowserTool(tool_base.ToolBase):
         print("TEST2..." + "%f" % index.row() + " %f" % index.column())
         self.__test(index)
 
+    def __test3(self):
+        """ """
+        print("TEST3...")
+        self.__peg_data = toolbox_resources.ToolboxResources().getPegResource()
+        self.__model.setDataset(self.__peg_data)
+        self.__model.reset()
+        self.__tableView.resizeColumnsToContents()
+        
     def __contentPegItem(self):
         """ """
         # Active widgets and connections.
@@ -182,9 +198,16 @@ class PegTableModel(QtCore.QAbstractTableModel):
         # Initialize parent.
         super(PegTableModel, self).__init__()
         
+    def setDataset(self, dataset):
+        """ """
+        self.__dataset = dataset
+        
     def rowCount(self, parent=QtCore.QModelIndex()):
         """ """
-        return self.__dataset.getRowCount()
+        if self.__dataset:
+            return self.__dataset.getRowCount()
+        else:
+            return 0
 
     def columnCount(self, parent=QtCore.QModelIndex()):
         """ """

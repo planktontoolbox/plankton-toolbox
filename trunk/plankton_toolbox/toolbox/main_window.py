@@ -51,48 +51,60 @@ class MainWindow(QtGui.QMainWindow):
         """ """
         # Initialize parent.
         super(MainWindow, self).__init__()
-        self.__settings = QtCore.QSettings()
-        self.__toolmanager = tool_manager.ToolManager(self)
-        self.__activitymanager = activity_manager.ActivityManager(self)
-        self.toolsmenu = None # Public.
         self.setWindowTitle(self.tr("Plankton toolbox"))
-        # Logging. Always log to plankton_toolbox_log.txt. Also use  
-        # the Log tool when it is available.
+        # Note: Tools menue is public.
+        self.toolsmenu = None
+        # Load settings.
+        self.__ui_settings = QtCore.QSettings()
+        toolbox_settings.ToolboxSettings().loadSettings(self.__ui_settings)
+        # Logging. Always log to plankton_toolbox_log.txt. Use the Log tool when  
+        # it is available.
         self.__logfile = codecs.open('plankton_toolbox_log.txt', mode = 'w', encoding = 'iso-8859-1')
         self.__logfile.write('Plankton-toolbox. ' +
                              time.strftime("%Y-%m-%d %H:%M:%S") +'\r\n\r\n')
-        self.__logtool = None #
-        utils.Logger().setLogTarget(self) # Logger should log here. 
+        self.__logtool = None # Should be initiated later.
+        utils.Logger().setLogTarget(self) # Logger should log here (to self.writeToLog()). 
         # Setup main window.
         self.__createActions()
         self.__createMenu()
         self.__createStatusBar()
         self.__activity = None
         self.__createCentralWidget()
-        #
+        
+        
+        # TODO: Check this.
         QtGui.QApplication.processEvents() # Make some part visible during startup.
-        # Load settings and resources.
-        toolbox_settings.ToolboxSettings().loadSettings()
-        toolbox_resources.ToolboxResources().loadResources()
+        
+        
+        # Load resources.
+###        toolbox_resources.ToolboxResources().loadResources()
+        
+        
         # Set up activities and tools.
+        self.__toolmanager = tool_manager.ToolManager(self)
         self.__toolmanager.initTools()
+        self.__activitymanager = activity_manager.ActivityManager(self)
         self.__activitymanager.initActivities()
         # Add tools to selector.
         self.__createContentSelectors()
         # Initial size. Used if state/geometry not stored.
         self.resize(800, 600)
         self.move(100, 100)        
-        # Reloads last used window positions.
-        self.restoreState(self.__settings.value("MainWindow/State").toByteArray());
-        self.setGeometry(self.__settings.value("MainWindow/Geometry").toRect());
-
+        # Loads last used window positions.
+        self.restoreState(self.__ui_settings.value("MainWindow/State").toByteArray());
+        self.setGeometry(self.__ui_settings.value("MainWindow/Geometry").toRect());
+        # Load resources when the main event loop has started.
+        QtCore.QTimer.singleShot(1000, toolbox_resources.ToolboxResources().loadResources)
+        
 
     def closeEvent(self, event):
         """ Called on application shutdown. """
         # Stores current window positions.
-        self.__settings.setValue("MainWindow/State", self.saveState());
-        self.__settings.setValue("MainWindow/Geometry", self.geometry());
+        self.__ui_settings.setValue("MainWindow/State", self.saveState());
+        self.__ui_settings.setValue("MainWindow/Geometry", self.geometry());
         self.__logfile.close
+        # Save toolbox settings.
+        toolbox_settings.ToolboxSettings().saveSettings(self.__ui_settings)
     
     def __createMenu(self):
         """ 
@@ -136,14 +148,12 @@ class MainWindow(QtGui.QMainWindow):
         activitiesgroup = QtGui.QGroupBox("Activities")
         grid1.addWidget(activitiesgroup)
         activitiesvbox = QtGui.QVBoxLayout()
-        activitiesgroup.setLayout(activitiesvbox)
-        
-###        
+        activitiesgroup.setLayout(activitiesvbox)        
+### TODO:        
 #        activitiestree = QtGui.QTreeWidget()
 #        activitiesvbox.addWidget(activitiestree)
 #        activitiestree.setHeaderHidden(True)
 ###
-        
         # For tools.
         toolsgroup = QtGui.QGroupBox("Tools")
         grid1.addWidget(toolsgroup)        
@@ -154,21 +164,16 @@ class MainWindow(QtGui.QMainWindow):
         # Add one button for each activity. Create stacked widgets.
         for activity in self.__activitymanager.getActivityList():
             button = QtGui.QPushButton(activity.objectName())
-            activitiesvbox.addWidget(button) # Adds to stack.
-                     
-###
+            activitiesvbox.addWidget(button) # Adds to stack.                  
+### TODO:
 #            treeitem = QtGui.QTreeWidgetItem(activitiestree, [activity.objectName()])            
 #            treeitem = QtGui.QTreeWidgetItem(treeitem, [activity.objectName()])
-###
-
-            
+###         
             # The activity is called to select stack item by object, not index.
             self.connect(button, QtCore.SIGNAL("clicked()"), activity.showInMainWindow)
-
-###            
+### TODO:          
 #            self.connect(activitiestree, QtCore.SIGNAL("itemClicked(QTreeWidgetItem *, int)"), activity.showInMainWindow)
 ###            
-            
             # Create one layer in the stacked activity widget.
             self.__activitystack.addWidget(activity)
         activitiesvbox.addStretch(5)
@@ -184,7 +189,6 @@ class MainWindow(QtGui.QMainWindow):
     def showActivity(self, activity):
         """ """
         self.__activityheader.setText('<b>' + activity.objectName() + '</b>')
-#        self.__activitybox.setTitle(activity.objectName())
         self.__activitystack.setCurrentWidget(activity)
     
     def __createCentralWidget(self):
@@ -196,14 +200,13 @@ class MainWindow(QtGui.QMainWindow):
         self.__activityheader = QtGui.QLabel("<b>Activity not selected...</b>", self)
         self.__activityheader.setAlignment(QtCore.Qt.AlignHCenter)
         self.__activitystack = QtGui.QStackedLayout()
-        
         # Layout widgets.
-        widget1 = QtGui.QWidget(self) 
-        grid1 = QtGui.QVBoxLayout()
-        widget1.setLayout(grid1)
-        self.setCentralWidget(widget1)
-        grid1.addWidget(self.__activityheader)
-        grid1.addLayout(self.__activitystack)
+        widget = QtGui.QWidget(self) 
+        layout = QtGui.QVBoxLayout()
+        widget.setLayout(layout)
+        self.setCentralWidget(widget)
+        layout.addWidget(self.__activityheader)
+        layout.addLayout(self.__activitystack)
         # Dummy stack content.
         dummy = QtGui.QWidget(self)
         self.__activitystack.addWidget(dummy)
@@ -214,7 +217,7 @@ class MainWindow(QtGui.QMainWindow):
         self.__quitaction.setShortcut(self.tr("Ctrl+Q"))
         self.__quitaction.setStatusTip(self.tr("Quit the application"))
         self.__quitaction.triggered.connect(self.close)
-
+        #
         self.__aboutaction = QtGui.QAction(self.tr("&About"), self)
         self.__aboutaction.setStatusTip(self.tr("Show the application's About box"))
         self.__aboutaction.triggered.connect(self.__about)
@@ -229,7 +232,7 @@ class MainWindow(QtGui.QMainWindow):
             for tool in self.__toolmanager.getToolList():
                 if type(tool) == log_tool.LogTool:
                     self.__logtool = tool
-                            
+        # Log message.                   
         if self.__logtool: self.__logtool.writeToLog(message)
 
     def __about(self):
@@ -241,7 +244,7 @@ class MainWindow(QtGui.QMainWindow):
 <b>Plankton toolbox</b> version %s
 </p>
 <p>
-Plankton toolbox is an application... (TODO)  
+Plankton toolbox is an application... (TODO:)  
 </p>
 <p>
 Developed in Python 2.6 and Qt/PyQt4. Released under the MIT license.

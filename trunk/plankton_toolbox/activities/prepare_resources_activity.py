@@ -46,8 +46,18 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
 
     def _createContent(self):
         """ """
-        # === GroupBox: dyntaxabox === 
-        dyntaxabox = QtGui.QGroupBox("Dynamic taxa", self)
+        content = self._createScrollableContent()
+        contentLayout = QtGui.QVBoxLayout()
+        content.setLayout(contentLayout)
+        # Tab widget for single point or table. 
+        tabWidget = QtGui.QTabWidget()
+        contentLayout.addWidget(tabWidget)
+        tabWidget.addTab(self._createContentDyntaxa(), "Dyntaxa")
+        tabWidget.addTab(self._createContentPeg(), "PEG")
+        
+    def _createContentDyntaxa(self):
+        """ """        
+        dyntaxawidget = QtGui.QWidget()
         # Active widgets and connections.
         self.__dyntaxasource_list = QtGui.QComboBox()
         self.__dyntaxasource_list.addItems(["<select>",
@@ -88,10 +98,13 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
         dyntaxalayout = QtGui.QVBoxLayout()
         dyntaxalayout.addLayout(form1)
         dyntaxalayout.addLayout(hbox1)
-        dyntaxabox.setLayout(dyntaxalayout)
+        dyntaxawidget.setLayout(dyntaxalayout)
+        #
+        return dyntaxawidget
 
-        # === GroupBox: pegbox === 
-        pegbox = QtGui.QGroupBox("PEG, Plankton Expert Group", self)
+    def _createContentPeg(self):
+        """ """
+        pegboxwidget = QtGui.QWidget()
         # Active widgets and connections.
         self.__pegfromfile_edit = QtGui.QLineEdit("")
         self.__pegfrom_button = QtGui.QPushButton("Browse...")
@@ -124,26 +137,10 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
         peglayout = QtGui.QVBoxLayout()
         peglayout.addLayout(form1)
         peglayout.addLayout(hbox1)
-        pegbox.setLayout(peglayout)
-         
-        # === Main level layout. ===
-        content = QtGui.QWidget()
-        contentLayout = QtGui.QVBoxLayout()
-        content.setLayout(contentLayout)
-        contentLayout.addWidget(dyntaxabox)
-        contentLayout.addWidget(pegbox)
-        contentLayout.addStretch(5)
-        # Add scroll.
-        mainscroll = QtGui.QScrollArea()
-        mainscroll.setFrameShape(QtGui.QFrame.NoFrame)
-#        mainscroll.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding)) # TEST
-        mainscroll.setWidget(content)
-        mainscroll.setWidgetResizable(True)
-        mainlayout = QtGui.QVBoxLayout()
-        mainlayout.addWidget(mainscroll)
-        self.setLayout(mainlayout)
+        pegboxwidget.setLayout(peglayout)
+        #
+        return pegboxwidget
 
-#self.connect(self.___dyntaxafrom_button, QtCore.SIGNAL("clicked()"), self.__dyntaxaFromBrowse) ###                
     def __dyntaxaFromBrowse(self):
         """ """
         # Show directory dialog box.
@@ -162,7 +159,6 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
 #        if filepath:
 #            self.__dyntaxafromdirectory_edit.setText(filepath)
 
-#self.connect(self.__dyntaxato_button, QtCore.SIGNAL("clicked()"), self.__dyntaxaToBrowse) ###                
     def __dyntaxaToBrowse(self):
         """ """
         dirdialog = QtGui.QFileDialog(self)
@@ -171,7 +167,6 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
         if filepath:
             self.__dyntaxatofile_edit.setText(filepath)
 
-#self.connect(self.___pegfrom_button, QtCore.SIGNAL("clicked()"), self.__pegFromBrowse) ###                
     def __pegFromBrowse(self):
         """ """
         dirdialog = QtGui.QFileDialog(self)
@@ -180,7 +175,6 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
         if filepath:
             self.__pegfromfile_edit.setText(filepath)
 
-#self.connect(self.__pegto_button, QtCore.SIGNAL("clicked()"), self.__pegToBrowse) ###                
     def __pegToBrowse(self):
         """ """
         dirdialog = QtGui.QFileDialog(self)
@@ -255,4 +249,3 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
             utils.Logger().logAllErrors()    
             utils.Logger().info("Prepare PEG. Ended.")
             self._writeToStatusBar("")
-
