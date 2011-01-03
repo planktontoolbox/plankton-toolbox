@@ -41,29 +41,43 @@ class ActivityBase(QtGui.QWidget):
         # Initialize parent.
         super(ActivityBase, self).__init__(parentwidget)
         self._parent = parentwidget
-        
+        #
         self._writeToStatusBar("Loading " + name + "...")
-#        self._writeToLog("Loading " + name + "...")
-        
+        #
         self.setObjectName(name)
-
+        #
         self._createContent() # Adds specific content. Abstract.
-        
+        #
         self._writeToStatusBar("")
-#        self._writeToLog(name + " loaded.")
-
-    @abstractmethod
-    def _createContent(self):
-        """ 
-        Used to create the content of the activity window.
-        Note: Abstract. Should be implemented by subclasses. 
-        """
-        pass
 
     def showInMainWindow(self):
         """ """
         self._parent.showActivity(self)
     
+    @abstractmethod
+    def _createContent(self):
+        """ 
+        Used to create the content of the activity window.
+        Note: Abstract. Should be implemented by subclasses.
+        """
+        pass
+
+    def _createScrollableContent(self):
+        """ 
+        Creates the scrollable part of the activity content.
+        Used by subclasses, if needed.
+        """
+        content = QtGui.QWidget()
+        # Add scroll.
+        mainscroll = QtGui.QScrollArea()
+        mainscroll.setFrameShape(QtGui.QFrame.NoFrame)
+        mainscroll.setWidget(content)
+        mainscroll.setWidgetResizable(True)
+        mainlayout = QtGui.QVBoxLayout()
+        mainlayout.addWidget(mainscroll)
+        self.setLayout(mainlayout)
+        return content 
+
     def _writeToStatusBar(self, message):
         """ Used to write short messages to the main window status bar. """
         self._parent.statusBar().showMessage(message)

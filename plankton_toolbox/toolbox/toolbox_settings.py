@@ -71,13 +71,17 @@ class ToolboxSettings(object):
             }
         }
         
-    def loadSettings(self):
+    def loadSettings(self, ui_settings):
         """ """
-        self.__settings = self.__default_settings # TODO
+### TODO:
+###        self.__settings = ui_settings.value('Toolbox settings')
+###        if not self.__settings:
+        self.__settings = self.__default_settings # Use default if not stored earlier.
 
-    def saveSettings(self):
+    def saveSettings(self, ui_settings):
         """ """
-        # TODO
+### TODO:
+###        ui_settings.setValue('Toolbox settings', self.__settings)
 
     def getValue(self, compoundkey):
         """ Use compound key with field delimiter ':'. """

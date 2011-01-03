@@ -25,7 +25,7 @@
 # THE SOFTWARE.
 
 """
-Plankton toolbox...
+Plankton toolbox.
 """
 
 import sys
@@ -34,13 +34,13 @@ import plankton_toolbox.toolbox.main_window as main_window
 
 if __name__ == '__main__':
     """
-    Main application code for the Plankton toolbox.
+    Main application for the Plankton toolbox.
     """
     app = QtGui.QApplication(sys.argv)
     app.setOrganizationName("SMHI, Swedish Meteorological and Hydrological Institute")
     app.setOrganizationDomain("smhi.se")
     app.setApplicationName("Plankton toolbox")
-#    app.setWindowIcon(":/plankton_toolbox_icon.png") # TODO.
+#    app.setWindowIcon(":/plankton_toolbox_icon.png") # TODO:.
     window = main_window.MainWindow()
     window.show()
     sys.exit(app.exec_())

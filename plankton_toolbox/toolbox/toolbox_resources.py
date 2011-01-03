@@ -28,13 +28,16 @@
 
 """
 
+import PyQt4.QtGui as QtGui
+import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils as utils
 import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 import plankton_toolbox.core.biology.taxa as taxa
 import plankton_toolbox.core.biology.taxa_sources as taxa_sources
 
 @utils.singleton
-class ToolboxResources(object):
+###class ToolboxResources(object):
+class ToolboxResources(QtCore.QObject):
     """
     """
     def __init__(self):
@@ -42,6 +45,8 @@ class ToolboxResources(object):
         self.__taxa_resource = None
         self.__peg_resource = None
         self.__ioc_resource = None 
+#        super(ToolboxResources, self).__init__(None)
+        QtCore.QObject.__init__(self) # TODO: Check...
         
     def loadResources(self):
         """ """
@@ -59,10 +64,12 @@ class ToolboxResources(object):
         importer = taxa_sources.JsonFile(taxaObject = self.__peg_resource)
         filepath = toolbox_settings.ToolboxSettings().getValue('Resources:PEG:Filepath')
         importer.importTaxa(file = filepath)
+        # Emit signal.
+        self.emit(QtCore.SIGNAL('peg_loaded'))
         
     def __loadIocResource(self):
         """ """
-        # TODO.
+        # TODO:.
         
     def getTaxaResource(self):
         """ """

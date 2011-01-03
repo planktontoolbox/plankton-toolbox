@@ -156,11 +156,11 @@ class PwCsv(MonitoringFiles):
                 row = file.readline()
                          
             # Read total counted.
-            row = file.readline() # Not used...TODO
+            row = file.readline() # Not used...TODO:
             row = file.readline() # Empty.
             
             # Read total counted.
-            row = file.readline() # Not used...TODO
+            row = file.readline() # Not used...TODO:
             row = file.readline() # Empty.
             
             # Read champer and magnification info.
@@ -170,7 +170,7 @@ class PwCsv(MonitoringFiles):
                 rowitems = []
                 for item in row.split(separator):
                     rowitems.append(item.strip().strip('"').strip())
-#                self._aggregated_data['rows'].append(rowitems) # Not used...TODO 
+#                self._aggregated_data['rows'].append(rowitems) # Not used...TODO: 
                 row = file.readline()
                          
             # Read info related to sample.
