@@ -25,6 +25,7 @@
 # THE SOFTWARE.
 
 """
+Template for new activities.
 """
 
 import PyQt4.QtGui as QtGui
@@ -34,63 +35,55 @@ import plankton_toolbox.activities.activity_base as activity_base
 
 class TemplateActivity(activity_base.ActivityBase):
     """
-    This is a template for new activities.
+    Template class for new activities.
     """
     
     def __init__(self, name, parentwidget):
         """ """
-        # Initialize parent.
+        # Initialize parent. Should be called after other 
+        # initialization since the base class calls _createContent().
         super(TemplateActivity, self).__init__(name, parentwidget)
 
     def _createContent(self):
         """ """
-        # === GroupBox: templatebox === 
-        templatebox = QtGui.QGroupBox("Member info", self)
+        content = self._createScrollableContent()
+        contentLayout = QtGui.QVBoxLayout()
+        content.setLayout(contentLayout)
+        contentLayout.addLayout(self.__contentPersonInfo())
+        contentLayout.addLayout(self.__contentButtons())
+        contentLayout.addStretch(5)
+
+    def __contentPersonInfo(self):
+        """ """
         # Active widgets and connections.
         self.__nameedit = QtGui.QLineEdit("<Name>")
         self.__emailedit = QtGui.QLineEdit("<Email>")
         self.__customerlist = QtGui.QListWidget()
-        self.__testbutton = QtGui.QPushButton("Write email to log")
-        self.connect(self.__testbutton, QtCore.SIGNAL("clicked()"), self.__test)                
-        # Layout widgets.
-        form1 = QtGui.QFormLayout()
-        form1.addRow("&Name:", self.__nameedit);
-        form1.addRow("&Email:", self.__emailedit);
-        form1.addRow("&Projects:", self.__customerlist);
-        #
-        hbox1 = QtGui.QHBoxLayout()
-        hbox1.addStretch(5)
-        hbox1.addWidget(self.__testbutton)
-        #
-        templatelayout = QtGui.QVBoxLayout()
-        templatelayout.addLayout(form1)
-        templatelayout.addLayout(hbox1)
-        templatelayout.addStretch(5)
-        templatebox.setLayout(templatelayout)
-        # === Main level layout. ===
-        content = QtGui.QWidget()
-        contentLayout = QtGui.QVBoxLayout()
-        content.setLayout(contentLayout)
-        contentLayout.addWidget(templatebox)
-        contentLayout.addStretch(5)
-        # Add scroll.
-        mainscroll = QtGui.QScrollArea()
-        mainscroll.setFrameShape(QtGui.QFrame.NoFrame)
-#        mainscroll.setViewportMargins(20, 20, 20, 20) # TEST. 
-        mainscroll.setWidget(content)
-        mainscroll.setWidgetResizable(True)
-        mainlayout = QtGui.QVBoxLayout()
-        mainlayout.addWidget(mainscroll)
-        self.setLayout(mainlayout)
+        # Layout.
+        layout = QtGui.QFormLayout()
+        layout.addRow("&Name:", self.__nameedit);
+        layout.addRow("&Email:", self.__emailedit);
+        layout.addRow("&Projects:", self.__customerlist);
         # Test data.
         self.__customerlist.addItems(QtCore.QStringList()
-            << "First project."
-            << "Second project.")
-        # 
-#        self._writeToLog("The template activity was successfully created.")
+            << "<First project.>"
+            << "<Second project.>")
+        #
+        return layout
+
+    def __contentButtons(self):
+        """ """
+        # Active widgets and connections.
+        self.__testbutton = QtGui.QPushButton("Write name to log")
+        self.connect(self.__testbutton, QtCore.SIGNAL("clicked()"), self.__test)                
+        # Layout.
+        layout = QtGui.QHBoxLayout()
+        layout.addStretch(5)
+        layout.addWidget(self.__testbutton)
+        #
+        return layout
 
     def __test(self):
         """ """
-#        self._writeToLog("Name: " + unicode(self.__emailedit.text()))
         utils.Logger().info("Name: " + unicode(self.__emailedit.text()))
         

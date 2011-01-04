@@ -37,40 +37,32 @@ class TaxonImagesTool(tool_base.ToolBase):
     
     def __init__(self, name, parentwidget):
         """ """
-        # Initialize parent.
+        # Initialize parent. Should be called after other 
+        # initialization since the base class calls _createContent().
         super(TaxonImagesTool, self).__init__(name, parentwidget)
 
     def _createContent(self):
         """ """
-        mainwidget = QtGui.QWidget(self._parent)
-        self.setWidget(mainwidget)
+        content = self._createScrollableContent()
+        contentLayout = QtGui.QVBoxLayout()
+        content.setLayout(contentLayout)
+        contentLayout.addLayout(self.__contentImage())
+        contentLayout.addStretch(5)
 
-        # TODO: Test image...
-
+    def __contentImage(self):
+        """ """
+        layout = QtGui.QVBoxLayout()
         label = QtGui.QLabel('<b>Incertae sedis</b>');
         label.setAlignment(QtCore.Qt.AlignHCenter)
         imagelabel = QtGui.QLabel();
         imagelabel.setAlignment(QtCore.Qt.AlignHCenter)
         image = QtGui.QImage('planktondata/cache/images/Incertae_sedis.jpg')
         imagelabel.setPixmap(QtGui.QPixmap.fromImage(image))
-        
-        # === Main level layout. ===
-        content = QtGui.QWidget()
-        contentLayout = QtGui.QVBoxLayout()
-        content.setLayout(contentLayout)
-        contentLayout.addWidget(label)
-        contentLayout.addWidget(imagelabel)
-        contentLayout.addStretch(5)
-        # Add scroll.
-        mainscroll = QtGui.QScrollArea()
-        mainscroll.setFrameShape(QtGui.QFrame.NoFrame)
-        mainscroll.setBackgroundRole(QtGui.QPalette.Dark)
-        mainscroll.setWidget(content)
-        mainscroll.setWidgetResizable(True)
-        mainlayout = QtGui.QVBoxLayout()
-        mainlayout.addWidget(mainscroll)
-        mainwidget.setLayout(mainlayout)
-
+        layout.addWidget(label)
+        layout.addWidget(imagelabel)
+        #
+        return layout
+    
     def __test(self):
         """ """
         self._writeToLog("Name: " + unicode(self.__nameedit.text()))

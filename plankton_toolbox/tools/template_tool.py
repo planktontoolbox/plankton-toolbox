@@ -25,53 +25,64 @@
 # THE SOFTWARE.
 
 """
+Template for new tools.
 """
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
+import plankton_toolbox.toolbox.utils as utils
 import plankton_toolbox.tools.tool_base as tool_base
 
 class TemplateTool(tool_base.ToolBase):
     """
-    This is a simple tool to be used as a template when creating new tools.
+    Template class for new tools.
     """
     
     def __init__(self, name, parentwidget):
         """ """
-        # Initialize parent.
+        # Initialize parent. Should be called after other 
+        # initialization since the base class calls _createContent().
         super(TemplateTool, self).__init__(name, parentwidget)
 
     def _createContent(self):
         """ """
-        mainwidget = QtGui.QWidget(self._parent)
-        self.setWidget(mainwidget)
+        content = self._createScrollableContent()
+        contentLayout = QtGui.QVBoxLayout()
+        content.setLayout(contentLayout)
+        contentLayout.addLayout(self.__contentPersonInfo())
+        contentLayout.addLayout(self.__contentButtons())
+        contentLayout.addStretch(5)
+
+    def __contentPersonInfo(self):
+        """ """
         # Active widgets and connections.
         self.__nameedit = QtGui.QLineEdit("<Name>")
         self.__emailedit = QtGui.QLineEdit("<Email>")
         self.__customerlist = QtGui.QListWidget()
-        self.__testbutton = QtGui.QPushButton("Write name to log")
-        self.connect(self.__testbutton, QtCore.SIGNAL("clicked()"), self.__test)                
-        # Layout widgets.
-        form1 = QtGui.QFormLayout()
-        form1.addRow("&Name:", self.__nameedit);
-        form1.addRow("&Email:", self.__emailedit);
-        form1.addRow("&Projects:", self.__customerlist);
-        hbox1 = QtGui.QHBoxLayout()
-        hbox1.addStretch(5)
-        hbox1.addWidget(self.__testbutton)
-        # Top level layout.
-        toplayout = QtGui.QVBoxLayout()
-        toplayout.addLayout(form1)
-        toplayout.addLayout(hbox1)
-        toplayout.addStretch(5)
-        mainwidget.setLayout(toplayout)
+        # Layout.
+        layout = QtGui.QFormLayout()
+        layout.addRow("&Name:", self.__nameedit);
+        layout.addRow("&Email:", self.__emailedit);
+        layout.addRow("&Projects:", self.__customerlist);
         # Test data.
         self.__customerlist.addItems(QtCore.QStringList()
-            << "First project."
-            << "Second project.")
-        # 
-#        self._writeToLog("The template tool was successfully created.")
+            << "<First project.>"
+            << "<Second project.>")
+        #
+        return layout
+
+    def __contentButtons(self):
+        """ """
+        # Active widgets and connections.
+        self.__testbutton = QtGui.QPushButton("Write name to log")
+        self.connect(self.__testbutton, QtCore.SIGNAL("clicked()"), self.__test)                
+        # Layout.
+        layout = QtGui.QHBoxLayout()
+        layout.addStretch(5)
+        layout.addWidget(self.__testbutton)
+        #
+        return layout
 
     def __test(self):
         """ """
-        self._writeToLog("Name: " + unicode(self.__nameedit.text()))
+        utils.Logger().info("Name: " + unicode(self.__emailedit.text()))

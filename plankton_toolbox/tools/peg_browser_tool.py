@@ -73,20 +73,17 @@ class PegBrowserTool(tool_base.ToolBase):
 #        self.__peg_data = taxa.Peg()
 #        importer = taxa_sources.JsonFile(taxaObject = self.__peg_data)
 #        importer.importTaxa(file = unicode('planktondata/resources/smhi_extended_peg.json'))
-        # Initialize parent.
+        # Initialize parent. Should be called after other 
+        # initialization since the base class calls _createContent().
         super(PegBrowserTool, self).__init__(name, parentwidget)
         
     def _createContent(self):
         """ """
         content = self._createScrollableContent()
-#        contentLayout = QtGui.QHBoxLayout()
         contentLayout = QtGui.QVBoxLayout()
-#        contentLayout = QtGui.QGridLayout()
         content.setLayout(contentLayout)
         contentLayout.addLayout(self.__contentTaxonList())
         contentLayout.addLayout(self.__contentPegItem())
-#        contentLayout.addLayout(self.__contentTaxonList(), 0, 0, 1, 1)
-#        contentLayout.addLayout(self.__contentPegItem(), 0, 1, 1, 1)
 
     def __contentTaxonList(self):
         """ """
@@ -121,6 +118,40 @@ class PegBrowserTool(tool_base.ToolBase):
         #
         return layout
     
+    def __contentPegItem(self):
+        """ """
+        # Active widgets and connections.
+        # Species level.
+        self.__species_label = QtGui.QLabel('-')
+        self.__author_label = QtGui.QLabel('-')
+        self.__class_label = QtGui.QLabel('-')
+        self.__division_label = QtGui.QLabel('-')
+        self.__order_label = QtGui.QLabel('-')
+        # Sizeclass level.
+        self.__size_class_label = QtGui.QLabel('-')
+        self.__thropy_label = QtGui.QLabel('-')
+        self.__shape_label = QtGui.QLabel('-')
+        self.__formula_label = QtGui.QLabel('-')
+        self.__volume_label = QtGui.QLabel('-')
+        self.__carbon_label = QtGui.QLabel('-')
+        # Layout widgets.
+        layout = QtGui.QFormLayout()
+        layout.addRow("<b><u>Species:</u></b>", None);
+        layout.addRow("Taxon name:", self.__species_label);
+        layout.addRow("Author:", self.__author_label);
+        layout.addRow("Class:", self.__class_label);
+        layout.addRow("Division:", self.__division_label);
+        layout.addRow("Order:", self.__order_label);
+        layout.addRow("<b><u>Size class:</u></b>", None);
+        layout.addRow("Size class:", self.__size_class_label);
+        layout.addRow("Trophy:", self.__thropy_label);
+        layout.addRow("Used resource:", self.__shape_label);
+        layout.addRow("Used resource:", self.__formula_label);
+        layout.addRow("Calculated volume:", self.__volume_label);
+        layout.addRow("Calculated Carbon:", self.__carbon_label);
+        #
+        return layout
+
     def __test(self, index):
         """ """
 #        taxonName = self.__tableView.item(index.row(), 1).data(QtCore.Qt.DisplayRole).toString()
@@ -156,40 +187,6 @@ class PegBrowserTool(tool_base.ToolBase):
         self.__model.reset()
         self.__tableView.resizeColumnsToContents()
         
-    def __contentPegItem(self):
-        """ """
-        # Active widgets and connections.
-        # Species level.
-        self.__species_label = QtGui.QLabel('-')
-        self.__author_label = QtGui.QLabel('-')
-        self.__class_label = QtGui.QLabel('-')
-        self.__division_label = QtGui.QLabel('-')
-        self.__order_label = QtGui.QLabel('-')
-        # Sizeclass level.
-        self.__size_class_label = QtGui.QLabel('-')
-        self.__thropy_label = QtGui.QLabel('-')
-        self.__shape_label = QtGui.QLabel('-')
-        self.__formula_label = QtGui.QLabel('-')
-        self.__volume_label = QtGui.QLabel('-')
-        self.__carbon_label = QtGui.QLabel('-')
-        # Layout widgets.
-        layout = QtGui.QFormLayout()
-        layout.addRow("<b><u>Species:</u></b>", None);
-        layout.addRow("Taxon name:", self.__species_label);
-        layout.addRow("Author:", self.__author_label);
-        layout.addRow("Class:", self.__class_label);
-        layout.addRow("Division:", self.__division_label);
-        layout.addRow("Order:", self.__order_label);
-        layout.addRow("<b><u>Size class:</u></b>", None);
-        layout.addRow("Size class:", self.__size_class_label);
-        layout.addRow("Trophy:", self.__thropy_label);
-        layout.addRow("Used resource:", self.__shape_label);
-        layout.addRow("Used resource:", self.__formula_label);
-        layout.addRow("Calculated volume:", self.__volume_label);
-        layout.addRow("Calculated Carbon:", self.__carbon_label);
-        #
-        return layout
-
 class PegTableModel(QtCore.QAbstractTableModel):
     """ 
     """

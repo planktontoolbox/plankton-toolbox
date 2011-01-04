@@ -47,6 +47,17 @@ class GetDatasetsActivity(activity_base.ActivityBase):
 
     def _createContent(self):
         """ """
+        content = self._createScrollableContent()
+        contentLayout = QtGui.QVBoxLayout()
+        content.setLayout(contentLayout)
+        # Tab widget. 
+        tabWidget = QtGui.QTabWidget()
+        contentLayout.addWidget(tabWidget)
+        tabWidget.addTab(self.__contentSharkweb(), "Sharkweb")
+#        tabWidget.addTab(self.__content???(), "???")
+        
+    def __contentSharkweb(self):
+        """ """
         """ """
         # === GroupBox: selectionbox === 
         selectionbox = QtGui.QGroupBox("Selection", self)
@@ -201,22 +212,13 @@ class GetDatasetsActivity(activity_base.ActivityBase):
         resultlayout.addWidget(self.__tableView)
         resultbox.setLayout(resultlayout)
 
-        
-        # === Main level layout. ===
-        content = QtGui.QWidget()
-        contentLayout = QtGui.QVBoxLayout()
-        content.setLayout(contentLayout)
-        contentLayout.addWidget(selectionbox)
-        contentLayout.addWidget(resultbox)
-#        contentLayout.addStretch(5)
-        # Add scroll.
-        mainscroll = QtGui.QScrollArea()
-        mainscroll.setFrameShape(QtGui.QFrame.NoFrame)
-        mainscroll.setWidget(content)
-        mainscroll.setWidgetResizable(True)
-        mainlayout = QtGui.QVBoxLayout()
-        mainlayout.addWidget(mainscroll)
-        self.setLayout(mainlayout)
+        widget = QtGui.QWidget()        
+        layout = QtGui.QVBoxLayout()
+        widget.setLayout(layout)
+        layout.addWidget(selectionbox)
+        layout.addWidget(resultbox)
+        #
+        return widget
 
     def __refreshTable(self):
         """ """

@@ -138,12 +138,17 @@ class MainWindow(QtGui.QMainWindow):
         widget1 = QtGui.QWidget()
         dock.setWidget(widget1)
         grid1 = QtGui.QVBoxLayout()
-        widget1.setLayout(grid1)
+        widget1.setLayout(grid1)        
+#        grid1.setMargin(0)
+#        grid1.setSpacing(0)
         # For activites.        
         activitiesgroup = QtGui.QGroupBox("Activities")
         grid1.addWidget(activitiesgroup)
         activitiesvbox = QtGui.QVBoxLayout()
-        activitiesgroup.setLayout(activitiesvbox)        
+        activitiesgroup.setLayout(activitiesvbox)
+#        activitiesvbox.setMargin(0)
+#        activitiesvbox.setSpacing(0)
+        
 ### TODO:        
 #        activitiestree = QtGui.QTreeWidget()
 #        activitiesvbox.addWidget(activitiestree)
@@ -155,6 +160,8 @@ class MainWindow(QtGui.QMainWindow):
         toolsvbox = QtGui.QVBoxLayout()
         toolsgroup.setLayout(toolsvbox)
         grid1.addStretch(5)
+#        toolsvbox.setMargin(0)
+#        toolsvbox.setSpacing(0)
 
         # Add one button for each activity. Create stacked widgets.
         for activity in self.__activitymanager.getActivityList():
@@ -194,11 +201,15 @@ class MainWindow(QtGui.QMainWindow):
         """
         self.__activityheader = QtGui.QLabel("<b>Activity not selected...</b>", self)
         self.__activityheader.setAlignment(QtCore.Qt.AlignHCenter)
-        self.__activitystack = QtGui.QStackedLayout()
+        self.__activitystack = QtGui.QStackedLayout()        
+#        self.__activitystack.setMargin(0)
+#        self.__activitystack.setSpacing(0)
         # Layout widgets.
         widget = QtGui.QWidget(self) 
         layout = QtGui.QVBoxLayout()
         widget.setLayout(layout)
+#        layout.setMargin(0)
+#        layout.setSpacing(0)
         self.setCentralWidget(widget)
         layout.addWidget(self.__activityheader)
         layout.addLayout(self.__activitystack)
