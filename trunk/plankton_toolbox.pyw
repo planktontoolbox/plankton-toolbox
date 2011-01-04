@@ -25,7 +25,12 @@
 # THE SOFTWARE.
 
 """
-Plankton toolbox.
+Main module of the application Plankton toolbox.
+
+Organization name, domain and application name are used by QSettings. Settings
+are stored in the register on Windows (path: "HKEY_CURRENT_USER/Software/SMHI/
+Plankton toolbox"), in $HOME/.config on Linux and in $HOME/Library/Preferences 
+on Mac OS X.
 """
 
 import sys
@@ -37,7 +42,7 @@ if __name__ == '__main__':
     Main application for the Plankton toolbox.
     """
     app = QtGui.QApplication(sys.argv)
-    app.setOrganizationName("SMHI, Swedish Meteorological and Hydrological Institute")
+    app.setOrganizationName("SMHI")
     app.setOrganizationDomain("smhi.se")
     app.setApplicationName("Plankton toolbox")
 #    app.setWindowIcon(":/plankton_toolbox_icon.png") # TODO:.
