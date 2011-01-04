@@ -140,6 +140,8 @@ class Peg(Taxa):
         for taxon in self._data:
             for sizeclass in taxon['Size classes']:
                 self.__nameAndSizeList.append(taxon['Species'] + ':' + str(sizeclass['Size class']))
+        # Sort.
+        self.__nameAndSizeList.sort()
 
     def getData(self, row, column):
         """ Used by table models. """

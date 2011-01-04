@@ -181,27 +181,15 @@ class GetDatasetsActivity(activity_base.ActivityBase):
         self.__tableView = QtGui.QTableView()
         self.__tableView.setAlternatingRowColors(True)
         self.__tableView.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
-#        self.__tableView.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
-
-
-
-        self.__tableView.verticalHeader().setDefaultSectionSize(20)
-#        self.__tableView.horizontalHeader().resizeSections(QtGui.QHeaderView.ResizeToContents)
-#        self.__tableView.setSortingEnabled(True)
-
-
-
-
-
-
+        #self.__tableView.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        self.__tableView.verticalHeader().setDefaultSectionSize(18)
         # Model, data and selection        
         self.__dataset = pw_monitoring_files.SharkwebDownload()
         self.__model = ResultTableModel(self.__dataset)
         self.__tableView.setModel(self.__model)        
-        selectionModel = QtGui.QItemSelectionModel(self.__model, self.__tableView)
+        selectionModel = QtGui.QItemSelectionModel(self.__model)
         self.__tableView.setSelectionModel(selectionModel)
-#        self.__tableView.resizeColumnsToContents()
-#        self.__tableView.resizeRowsToContents()
+        self.__tableView.resizeColumnsToContents()
         #
         self.connect(selectionModel, QtCore.SIGNAL("currentChanged(QModelIndex, QModelIndex)"), self.__test)
         self.connect(selectionModel, QtCore.SIGNAL("selectionChanged(QModelIndex, QModelIndex)"), self.__test2)
@@ -223,11 +211,7 @@ class GetDatasetsActivity(activity_base.ActivityBase):
     def __refreshTable(self):
         """ """
         self.__model.reset() # Model data has changed.
-#        self.__tableView.horizontalHeader().resizeSections(QtGui.QHeaderView.ResizeToContents)
         self.__tableView.resizeColumnsToContents()
-#        self.__tableView.resizeRowsToContents()
-#        self.__tableView.resizeColumnToContents(0) # First row.....
-#        self.__tableView.resizeColumnToContents(self.__model.rowCount()) # Last row.....
 
     def __getData(self):
         """ """
@@ -283,20 +267,19 @@ class ResultTableModel(QtCore.QAbstractTableModel):
 
     def columnCount(self, parent=QtCore.QModelIndex()):
         """ """
-        return self.__dataset.getColumnCount() + 1 # First column for row number.
+        return self.__dataset.getColumnCount()
 
     def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
         """ """
         if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
-            if section > 0: # First column for row number.
-                return QtCore.QVariant(self.__dataset.getHeader(section - 1))
+            return QtCore.QVariant(self.__dataset.getHeader(section))
+        if orientation == QtCore.Qt.Vertical and role == QtCore.Qt.DisplayRole:
+            return QtCore.QVariant(section + 1)
         return QtCore.QVariant()
 
     def data(self, index=QtCore.QModelIndex(), role=QtCore.Qt.DisplayRole):
         """ """
         if role == QtCore.Qt.DisplayRole:
             if index.isValid():
-                if index.column() == 0: # First column for row number.
-                    return  QtCore.QVariant(index.row() + 1)
-                return QtCore.QVariant(self.__dataset.getData(index.row(), index.column() - 1))
+                return QtCore.QVariant(self.__dataset.getData(index.row(), index.column()))
         return QtCore.QVariant()
