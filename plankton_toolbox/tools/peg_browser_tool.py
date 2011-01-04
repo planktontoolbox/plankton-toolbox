@@ -57,8 +57,8 @@ Sample part from the resource file:
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.tools.tool_base as tool_base
-import plankton_toolbox.core.biology.taxa as taxa
-import plankton_toolbox.core.biology.taxa_sources as taxa_sources
+#import plankton_toolbox.core.biology.taxa as taxa
+#import plankton_toolbox.core.biology.taxa_sources as taxa_sources
 #import plankton_toolbox.core.biology.taxa_prepare as taxa_prepare
 import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
 
@@ -90,31 +90,22 @@ class PegBrowserTool(tool_base.ToolBase):
         layout = QtGui.QVBoxLayout()
         self.__tableView = QtGui.QTableView()
         layout.addWidget(self.__tableView)
+        #
         self.__tableView.setAlternatingRowColors(True)
-        self.__tableView.setSelectionBehavior(QtGui.QAbstractItemView.SelectItems)
         self.__tableView.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
-        
-        headers = QtCore.QStringList()
-        headers << self.tr("Title") << self.tr("Description")
+        self.__tableView.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        self.__tableView.verticalHeader().setDefaultSectionSize(18)
         # Model, data and selection        
         self.__model = PegTableModel(self.__peg_data)
         self.__tableView.setModel(self.__model)
-        selectionModel = QtGui.QItemSelectionModel(self.__model, self.__tableView)
+        selectionModel = QtGui.QItemSelectionModel(self.__model)
         self.__tableView.setSelectionModel(selectionModel)
-        self.__tableView.horizontalHeader().setStretchLastSection(True)
-        self.connect(selectionModel, QtCore.SIGNAL("currentChanged(QModelIndex, QModelIndex)"), self.__test)
-        self.connect(selectionModel, QtCore.SIGNAL("selectionChanged(QModelIndex, QModelIndex)"), self.__test2)
-        
-                
-#        self.connect(toolbox_resources.ToolboxResources(), QtCore.SIGNAL("peg_loaded"), self.__model.reset)
-        self.connect(toolbox_resources.ToolboxResources(), QtCore.SIGNAL("peg_loaded"), self.__test3)
-
-
-        
-        
-        # Note: Time-consuming.
         self.__tableView.resizeColumnsToContents()
-        self.__tableView.resizeRowsToContents()
+        #
+        self.connect(selectionModel, QtCore.SIGNAL("currentChanged(QModelIndex, QModelIndex)"), self.__showItemInfo)
+        self.connect(selectionModel, QtCore.SIGNAL("selectionChanged(QModelIndex, QModelIndex)"), self.__showItemInfo)
+        # Used when toolbox resource has changed.        
+        self.connect(toolbox_resources.ToolboxResources(), QtCore.SIGNAL("peg_loaded"), self.__pegRefresh)
         #
         return layout
     
@@ -145,22 +136,24 @@ class PegBrowserTool(tool_base.ToolBase):
         layout.addRow("<b><u>Size class:</u></b>", None);
         layout.addRow("Size class:", self.__size_class_label);
         layout.addRow("Trophy:", self.__thropy_label);
-        layout.addRow("Used resource:", self.__shape_label);
-        layout.addRow("Used resource:", self.__formula_label);
+        layout.addRow("Geometric shape:", self.__shape_label);
+        layout.addRow("Formula:", self.__formula_label);
         layout.addRow("Calculated volume:", self.__volume_label);
-        layout.addRow("Calculated Carbon:", self.__carbon_label);
+        layout.addRow("Calculated carbon:", self.__carbon_label);
         #
         return layout
 
-    def __test(self, index):
+    def __showItemInfo(self, index):
         """ """
-#        taxonName = self.__tableView.item(index.row(), 1).data(QtCore.Qt.DisplayRole).toString()
-#        sizeclass = self.__tableView.item(index.row(), 2).data(QtCore.Qt.DisplayRole).toString() 
+#        name_index = self.__model.createIndex(index.row(), 0)
+#        size_index = self.__model.createIndex(index.row(), 1)
+#        taxonName = self.__model.data(name_index).toString()
+#        size = self.__model.data(size_index).toString() 
         taxonName = self.__peg_data.getData(index.row(), 0)
         size = self.__peg_data.getData(index.row(), 1)
         #
         taxon = self.__peg_data.getTaxonByName(taxonName)
-        self.__species_label.setText('<b>' + taxon.get('Species', '-') + '</b>')
+        self.__species_label.setText('<b><i>' + taxon.get('Species', '-') + '</i></b>')
         self.__author_label.setText(taxon.get('Author', '-'))
         self.__class_label.setText(taxon.get('Class', '-'))
         self.__division_label.setText(taxon.get('Division', '-'))
@@ -174,18 +167,12 @@ class PegBrowserTool(tool_base.ToolBase):
         self.__volume_label.setText(unicode(sizeclass.get('Calculated volume, um3', '-')))
         self.__carbon_label.setText(unicode(sizeclass.get('Calculated Carbon pg/counting unit', '-')))
 
-    def __test2(self, index, index2):
+    def __pegRefresh(self):
         """ """
-        print("TEST2..." + "%f" % index.row() + " %f" % index.column())
-        self.__test(index)
-
-    def __test3(self):
-        """ """
-        print("TEST3...")
         self.__peg_data = toolbox_resources.ToolboxResources().getPegResource()
         self.__model.setDataset(self.__peg_data)
         self.__model.reset()
-        self.__tableView.resizeColumnsToContents()
+        self.__tableView.resizeColumnsToContents() # TODO: Check if time-consuming...
         
 class PegTableModel(QtCore.QAbstractTableModel):
     """ 
@@ -208,22 +195,22 @@ class PegTableModel(QtCore.QAbstractTableModel):
 
     def columnCount(self, parent=QtCore.QModelIndex()):
         """ """
-        return 3
+        return 2
 
     def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
-        """ Columns: row, taxon, sizeclass. """
+        """ Columns: Taxon, Sizeclass. """
         if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
-            if section == 1:
+            if section == 0:
                 return QtCore.QVariant('Taxon')
-            elif section == 2:
-                return QtCore.QVariant('Sizeclass')
+            elif section == 1:
+                return QtCore.QVariant('Sizeclass')            
+        if orientation == QtCore.Qt.Vertical and role == QtCore.Qt.DisplayRole:
+            return QtCore.QVariant(section + 1)
         return QtCore.QVariant()
 
     def data(self, index=QtCore.QModelIndex(), role=QtCore.Qt.DisplayRole):
         """ """
         if role == QtCore.Qt.DisplayRole:
             if index.isValid():
-                if index.column() == 0: # First column for row number.
-                    return  QtCore.QVariant(index.row() + 1)
-                return QtCore.QVariant(self.__dataset.getData(index.row(), index.column() - 1))
+                return QtCore.QVariant(self.__dataset.getData(index.row(), index.column()))
         return QtCore.QVariant()

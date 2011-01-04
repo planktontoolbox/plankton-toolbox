@@ -74,6 +74,15 @@ class CreateReportsActivity(activity_base.ActivityBase):
         
         self.__fromdirectory_button = QtGui.QPushButton("Browse...")
         self.__files_table = QtGui.QTableWidget()
+        #
+        self.__files_table.setAlternatingRowColors(True)
+        self.__files_table.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
+        self.__files_table.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        self.__files_table.verticalHeader().setDefaultSectionSize(18)
+        self.__files_table.setColumnCount(1)
+        self.__files_table.horizontalHeader().setStretchLastSection(True)
+        self.__files_table.setHorizontalHeaderLabels(["File"])
+        #
         self.connect(self.__fromdirectory_button, QtCore.SIGNAL("clicked()"), self.__fromDirectoryBrowse)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
@@ -163,8 +172,6 @@ class CreateReportsActivity(activity_base.ActivityBase):
         if dirpath:
             self.__fromdirectory_edit.setText(dirpath)
             self._samplefiles.clear()
-            self.__files_table.setColumnCount(1)
-            self.__files_table.horizontalHeader().setStretchLastSection(True)
             # Add files in selected directory to QTableWidget.
             for row, filename in enumerate(os.listdir(unicode(self.__fromdirectory_edit.text()))):
                 if os.path.splitext(unicode(filename))[1] in ['.csv', '.CSV']:
