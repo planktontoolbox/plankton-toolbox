@@ -26,6 +26,11 @@
 
 """
 Main window for the Plankton toolbox.
+
+The layout is an activity area in the middle, activity and tool selector to the
+left and movable tools to the right and at the bottom. Activites are handled as 
+stacked widgets and tools are dockable widgets. The activity and tool selector
+is also dockable.
 """
 
 import time
@@ -44,17 +49,15 @@ __version__ = '0.0.1' # Plankton-toolbox version.
 class MainWindow(QtGui.QMainWindow):
     """ 
     Main window for the Plankton toolbox application.
-    The main window state and geometry is stored and reloaded 
-    to obtain last used window positions and layout.
     """
     def __init__(self):
         """ """
         # Initialize parent.
         super(MainWindow, self).__init__()
         self.setWindowTitle(self.tr("Plankton toolbox"))
-        # Note: Tools menue is public.
+        # Note: Tools menu is public.
         self.toolsmenu = None
-        # Load settings.
+        # Load toolbox settings.
         self.__ui_settings = QtCore.QSettings()
         toolbox_settings.ToolboxSettings().loadSettings(self.__ui_settings)
         # Logging. Always log to plankton_toolbox_log.txt. Use the Log tool when  
@@ -70,16 +73,6 @@ class MainWindow(QtGui.QMainWindow):
         self.__createStatusBar()
         self.__activity = None
         self.__createCentralWidget()
-        
-        
-        # TODO: Check this.
-        QtGui.QApplication.processEvents() # Make some part visible during startup.
-        
-        
-        # Load resources.
-###        toolbox_resources.ToolboxResources().loadResources()
-        
-        
         # Set up activities and tools.
         self.__toolmanager = tool_manager.ToolManager(self)
         self.__toolmanager.initTools()
@@ -87,19 +80,21 @@ class MainWindow(QtGui.QMainWindow):
         self.__activitymanager.initActivities()
         # Add tools to selector.
         self.__createContentSelectors()
-        # Initial size. Used if state/geometry not stored.
-        self.resize(800, 600)
-        self.move(100, 100)        
         # Loads last used window positions.
-        self.restoreState(self.__ui_settings.value("MainWindow/State").toByteArray());
-        self.setGeometry(self.__ui_settings.value("MainWindow/Geometry").toRect());
+        self.setGeometry(self.__ui_settings.value("MainWindow/Geometry").toRect())
+        self.restoreState(self.__ui_settings.value("MainWindow/State").toByteArray())        
+        size = self.__ui_settings.value("MainWindow/Size", QtCore.QVariant(QtCore.QSize(900, 400))).toSize()
+        position = self.__ui_settings.value("MainWindow/Position", QtCore.QVariant(QtCore.QPoint(100, 50))).toPoint()
+        self.resize(size)
+        self.move(position)        
         # Load resources when the main event loop has started.
-        QtCore.QTimer.singleShot(1000, toolbox_resources.ToolboxResources().loadResources)
+        QtCore.QTimer.singleShot(10, toolbox_resources.ToolboxResources().loadResources)
         
-
     def closeEvent(self, event):
         """ Called on application shutdown. """
         # Stores current window positions.
+        self.__ui_settings.setValue("MainWindow/Size", QtCore.QVariant(self.size()))
+        self.__ui_settings.setValue("MainWindow/Position", QtCore.QVariant(self.pos()))
         self.__ui_settings.setValue("MainWindow/State", self.saveState());
         self.__ui_settings.setValue("MainWindow/Geometry", self.geometry());
         self.__logfile.close

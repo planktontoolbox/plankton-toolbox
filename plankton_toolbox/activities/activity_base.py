@@ -45,8 +45,8 @@ class ActivityBase(QtGui.QWidget):
         self._writeToStatusBar("Loading " + name + "...")
         #
         self.setObjectName(name)
-        #
-        self._createContent() # Adds specific content. Abstract.
+        # Add specific content. Abstract, implemented by subclasses.
+        self._createContent()
         #
         self._writeToStatusBar("")
 

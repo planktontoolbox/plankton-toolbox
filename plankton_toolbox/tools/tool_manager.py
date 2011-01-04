@@ -25,6 +25,7 @@
 # THE SOFTWARE.
 
 """
+Tool manager.
 """
 
 import plankton_toolbox.tools.log_tool as log_tool
@@ -38,7 +39,8 @@ import plankton_toolbox.tools.latlong_tool as latlong_tool
 #import plankton_toolbox.tools.template_tool as template_tool
 
 class ToolManager(object):
-    """ 
+    """
+    The tool manager is used to set up available tools. 
     """
     
     def __init__(self, parentwidget):

@@ -25,6 +25,7 @@
 # THE SOFTWARE.
 
 """
+Activity manager.
 """
 
 import plankton_toolbox.activities.create_dataset_activity as create_dataset_activity
@@ -36,6 +37,7 @@ import plankton_toolbox.activities.prepare_resources_activity as prepare_resourc
 
 class ActivityManager(object):
     """ 
+    The activity manager is used to set up available activites. 
     """
     
     def __init__(self, parentwidget):
