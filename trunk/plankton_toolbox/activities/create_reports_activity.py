@@ -50,6 +50,17 @@ class CreateReportsActivity(activity_base.ActivityBase):
 
     def _createContent(self):
         """ """
+        content = self._createScrollableContent()
+        contentLayout = QtGui.QVBoxLayout()
+        content.setLayout(contentLayout)
+        # Tab widget. 
+        tabWidget = QtGui.QTabWidget()
+        contentLayout.addWidget(tabWidget)
+        tabWidget.addTab(self.__contentPwReport(), "PW")
+#        tabWidget.addTab(self.__content???(), "???")
+
+    def __contentPwReport(self):
+        """ """
         # === GroupBox: databox === 
         databox = QtGui.QGroupBox("Select data files", self)
         # Active widgets and connections.
@@ -129,22 +140,16 @@ class CreateReportsActivity(activity_base.ActivityBase):
         hbox1.addWidget(self.__createreport_button)
         
         # === Main level layout. ===
-        content = QtGui.QWidget()
-        contentLayout = QtGui.QVBoxLayout()
-        content.setLayout(contentLayout)
-        contentLayout.addWidget(databox)
-        contentLayout.addWidget(resourcebox)
-        contentLayout.addWidget(reportbox)
-        contentLayout.addLayout(hbox1)
-        contentLayout.addStretch(5)
-        # Add scroll.
-        mainscroll = QtGui.QScrollArea()
-        mainscroll.setFrameShape(QtGui.QFrame.NoFrame)
-        mainscroll.setWidget(content)
-        mainscroll.setWidgetResizable(True)
-        mainlayout = QtGui.QVBoxLayout()
-        mainlayout.addWidget(mainscroll)
-        self.setLayout(mainlayout)
+        widget = QtGui.QWidget()
+        layout = QtGui.QVBoxLayout()
+        widget.setLayout(layout)
+        layout.addWidget(databox)
+        layout.addWidget(resourcebox)
+        layout.addWidget(reportbox)
+        layout.addLayout(hbox1)
+        layout.addStretch(5)
+        #
+        return widget
                 
     def __fromDirectoryBrowse(self):
         """ """

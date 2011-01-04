@@ -40,7 +40,8 @@ class ToolboxSettingsTool(tool_base.ToolBase):
     
     def __init__(self, name, parentwidget):
         """ """
-        # Initialize parent.
+        # Initialize parent. Should be called after other 
+        # initialization since the base class calls _createContent().
         super(ToolboxSettingsTool, self).__init__(name, parentwidget)
         
     def _createContent(self):
@@ -56,8 +57,8 @@ class ToolboxSettingsTool(tool_base.ToolBase):
         # Active widgets and connections.
         self.__nameedit = QtGui.QLineEdit('smhi_extended_peg.json')
         # Layout widgets.
-        form1 = QtGui.QFormLayout()
-        form1.addRow("Used resource:", self.__nameedit);
+        layout = QtGui.QFormLayout()
+        layout.addRow("Used resource:", self.__nameedit);
         #
-        return form1
+        return layout
 

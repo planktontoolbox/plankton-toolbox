@@ -37,15 +37,21 @@ class TaxonFactsTool(tool_base.ToolBase):
     
     def __init__(self, name, parentwidget):
         """ """
-        # Initialize parent.
+        # Initialize parent. Should be called after other 
+        # initialization since the base class calls _createContent().
         super(TaxonFactsTool, self).__init__(name, parentwidget)
 
     def _createContent(self):
         """ """
-        mainwidget = QtGui.QWidget(self._parent)
-        self.setWidget(mainwidget)
+        content = self._createScrollableContent()
+        contentLayout = QtGui.QVBoxLayout()
+        content.setLayout(contentLayout)
+        contentLayout.addLayout(self.__contentFacts())
+#        contentLayout.addStretch(5)
 
-        # TODO: Test facts...
+    def __contentFacts(self):
+        """ """
+        layout = QtGui.QVBoxLayout()
 
         label = QtGui.QLabel('<b>Dinophysis acuta Ehrenberg 1839</b>');
         label.setAlignment(QtCore.Qt.AlignHCenter)
@@ -131,22 +137,11 @@ class TaxonFactsTool(tool_base.ToolBase):
 </tbody>        
         """)
 
-        # === Main level layout. ===
-        content = QtGui.QWidget()
-        contentLayout = QtGui.QVBoxLayout()
-        content.setLayout(contentLayout)
-        contentLayout.addWidget(label)
-        contentLayout.addWidget(text)
-        # Add scroll.
-        mainscroll = QtGui.QScrollArea()
-        mainscroll.setFrameShape(QtGui.QFrame.NoFrame)
-        mainscroll.setBackgroundRole(QtGui.QPalette.Dark)
-        mainscroll.setWidget(content)
-        mainscroll.setWidgetResizable(True)
-        mainlayout = QtGui.QVBoxLayout()
-        mainlayout.addWidget(mainscroll)
-        mainwidget.setLayout(mainlayout)
-
+        layout.addWidget(label)
+        layout.addWidget(text)
+        #
+        return layout
+    
     def __test(self):
         """ """
         self._writeToLog("Name: " + unicode(self.__nameedit.text()))

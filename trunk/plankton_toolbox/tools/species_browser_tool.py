@@ -44,7 +44,8 @@ class SpeciesBrowserTool(tool_base.ToolBase):
         self.__peg_data = taxa.Peg()
         importer = taxa_sources.JsonFile(taxaObject = self.__peg_data)
         importer.importTaxa(file = unicode('planktondata/resources/smhi_extended_peg.json'))
-        # Initialize parent.
+        # Initialize parent. Should be called after other 
+        # initialization since the base class calls _createContent().
         super(SpeciesBrowserTool, self).__init__(name, parentwidget)
         
     def _createContent(self):
@@ -63,18 +64,18 @@ class SpeciesBrowserTool(tool_base.ToolBase):
 #        self.__emailedit = QtGui.QLineEdit("<Email>")
 #        self.__customerlist = QtGui.QListWidget()        
         # Layout widgets.
-        form1 = QtGui.QFormLayout()
-        form1.addRow("Used resource:", self.__nameedit);
+        layout = QtGui.QFormLayout()
+        layout.addRow("Used resource:", self.__nameedit);
 #        form1.addRow("&Email:", self.__emailedit);
 #        form1.addRow("&Projects:", self.__customerlist);
         #
-        return form1
+        return layout
 
     def __contentTest2(self):
         """ """
-        grid1 = QtGui.QVBoxLayout()
+        layout = QtGui.QVBoxLayout()
         self.__view = QtGui.QTreeView()
-        grid1.addWidget(self.__view)
+        layout.addWidget(self.__view)
         self.__view.setAlternatingRowColors(True)
         self.__view.setSelectionBehavior(QtGui.QAbstractItemView.SelectItems)
         self.__view.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
@@ -89,7 +90,7 @@ class SpeciesBrowserTool(tool_base.ToolBase):
 #        for column in range(model.columnCount(QtCore.QModelIndex())):
 #            self.__view.resizeColumnToContents(column)
 #        #
-        return grid1
+        return layout
 
     def __test(self):
         """ """

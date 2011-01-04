@@ -71,9 +71,16 @@ class ActivityBase(QtGui.QWidget):
         # Add scroll.
         mainscroll = QtGui.QScrollArea()
         mainscroll.setFrameShape(QtGui.QFrame.NoFrame)
+#        mainscroll.setBackgroundRole(QtGui.QPalette.Light)     
+#        mainscroll.setBackgroundRole(QtGui.QPalette.Midlight)     
+#        mainscroll.setBackgroundRole(QtGui.QPalette.Dark)     
+#        mainscroll.setBackgroundRole(QtGui.QPalette.Mid)     
+#        mainscroll.setBackgroundRole(QtGui.QPalette.Shadow)     
         mainscroll.setWidget(content)
         mainscroll.setWidgetResizable(True)
         mainlayout = QtGui.QVBoxLayout()
+        mainlayout.setMargin(0)
+        mainlayout.setSpacing(0)
         mainlayout.addWidget(mainscroll)
         self.setLayout(mainlayout)
         return content 

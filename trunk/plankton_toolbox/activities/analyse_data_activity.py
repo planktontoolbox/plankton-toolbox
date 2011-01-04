@@ -42,32 +42,30 @@ class AnalyseDataActivity(activity_base.ActivityBase):
 
     def _createContent(self):
         """ """
-        # Active widgets and connections.
-#        self.__nameedit = QtGui.QLineEdit("<Name>")
-#        self.__emailedit = QtGui.QLineEdit("<Email>")
-#        self.__customerlist = QtGui.QListWidget()
-#        self.__testbutton = QtGui.QPushButton("Write name to log")
-#        self.connect(self.__testbutton, QtCore.SIGNAL("clicked()"), self.__test)                
-        # Layout widgets.
-#        form1 = QtGui.QFormLayout()
-#        form1.addRow("&Name:", self.__nameedit);
-#        form1.addRow("&Email:", self.__emailedit);
-#        form1.addRow("&Projects:", self.__customerlist);
-#        hbox1 = QtGui.QHBoxLayout()
-#        hbox1.addStretch(5)
-#        hbox1.addWidget(self.__testbutton)
-        # Top level layout.
-        toplayout = QtGui.QVBoxLayout()
-#        toplayout.addLayout(form1)
-#        toplayout.addLayout(hbox1)
-        toplayout.addStretch(5)
-        self.setLayout(toplayout)
-        # Test data.
-#        self.__customerlist.addItems(QtCore.QStringList()
-#            << "First project."
-#            << "Second project.")
-        # 
+        content = self._createScrollableContent()
+        contentLayout = QtGui.QVBoxLayout()
+        content.setLayout(contentLayout)
+        contentLayout.addLayout(self.__contentPart1())
+        contentLayout.addLayout(self.__contentPart2())
+        contentLayout.addStretch(5)
 
-#    def __test(self):
-#        """ """
-#        self._writeToLog("Name: " + unicode(self.__nameedit.text()))
+    def __contentPart1(self):
+        """ """
+        # Active widgets and connections.
+
+        # Layout.
+        layout = QtGui.QFormLayout()
+
+        #
+        return layout
+
+    def __contentPart2(self):
+        """ """
+        # Active widgets and connections.
+
+        # Layout.
+        layout = QtGui.QHBoxLayout()
+
+        #
+        return layout
+

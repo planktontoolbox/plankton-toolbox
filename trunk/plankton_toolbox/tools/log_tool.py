@@ -38,32 +38,46 @@ class LogTool(tool_base.ToolBase):
     
     def __init__(self, name, parentwidget):
         """ """
-        # Initialize parent.
+        # Initialize parent. Should be called after other 
+        # initialization since the base class calls _createContent().
         super(LogTool, self).__init__(name, parentwidget)
 
     def _createContent(self):
         """ """
-        mainwidget = QtGui.QWidget(self._parent)
-        self.setWidget(mainwidget)
+        content = self._createScrollableContent()
+        contentLayout = QtGui.QVBoxLayout()
+        content.setLayout(contentLayout)
+        contentLayout.addLayout(self.__contentButtons())
+        contentLayout.addLayout(self.__contentLogArea())
+
+    def __contentButtons(self):
+        """ """
         # Active widgets and connections.
-        self.__clearbutton = QtGui.QPushButton("Clear", mainwidget)
-        self.__limitedit = QtGui.QLineEdit("1000", mainwidget)
+        self.__clearbutton = QtGui.QPushButton("Clear")
+        self.__limitedit = QtGui.QLineEdit("1000")
         self.__limitedit.setMaximumWidth(60)        
+        self.connect(self.__clearbutton, QtCore.SIGNAL("clicked()"), self.__clearLog)      
+        # Layout.
+        layout = QtGui.QHBoxLayout()
+        limitlabel = QtGui.QLabel("Row limit: ")
+        layout.addStretch(5)
+        layout.addWidget(limitlabel)
+        layout.addWidget(self.__limitedit)
+        layout.addWidget(self.__clearbutton)
+        #
+        return layout
+
+    def __contentLogArea(self):
+        """ """
+        # Active widgets and connections.
         self.__logarea = QtGui.QListWidget(self)
         self.connect(self.__clearbutton, QtCore.SIGNAL("clicked()"), self.__clearLog)      
-        # Layout widgets.
-        limitlabel = QtGui.QLabel("Row limit: ", mainwidget)
-        hbox1 = QtGui.QHBoxLayout()
-        hbox1.addStretch(5)
-        hbox1.addWidget(limitlabel)
-        hbox1.addWidget(self.__limitedit)
-        hbox1.addWidget(self.__clearbutton)
-        # Top level layout.
-        toplayout = QtGui.QVBoxLayout()
-        toplayout.addLayout(hbox1)
-        toplayout.addWidget(self.__logarea)
-        mainwidget.setLayout(toplayout)
-        
+        # Layout.
+        layout = QtGui.QHBoxLayout()
+        layout.addWidget(self.__logarea)
+        #
+        return layout
+
     def writeToLog(self, message):
         """ """
         self.__logarea.addItem(message)

@@ -37,7 +37,8 @@ class MetadataEditorTool(tool_base.ToolBase):
     
     def __init__(self, name, parentwidget):
         """ """
-        # Initialize parent.
+        # Initialize parent. Should be called after other 
+        # initialization since the base class calls _createContent().
         super(MetadataEditorTool, self).__init__(name, parentwidget)
 
     def _createContent(self):
@@ -56,12 +57,12 @@ class MetadataEditorTool(tool_base.ToolBase):
         self.__emailedit = QtGui.QLineEdit("<Email>")
         self.__customerlist = QtGui.QListWidget()        
         # Layout widgets.
-        form1 = QtGui.QFormLayout()
-        form1.addRow("&Name:", self.__nameedit);
-        form1.addRow("&Email:", self.__emailedit);
-        form1.addRow("&Projects:", self.__customerlist);
+        layout = QtGui.QFormLayout()
+        layout.addRow("&Name:", self.__nameedit);
+        layout.addRow("&Email:", self.__emailedit);
+        layout.addRow("&Projects:", self.__customerlist);
         #
-        return form1
+        return layout
 
     def __contentTest2(self):
         """ """
@@ -69,11 +70,11 @@ class MetadataEditorTool(tool_base.ToolBase):
         self.__testbutton = QtGui.QPushButton("Write name to log")
         self.connect(self.__testbutton, QtCore.SIGNAL("clicked()"), self.__test)   
         # Active widgets and connections.
-        hbox1 = QtGui.QHBoxLayout()
-        hbox1.addStretch(5)
-        hbox1.addWidget(self.__testbutton)
+        layout = QtGui.QHBoxLayout()
+        layout.addStretch(5)
+        layout.addWidget(self.__testbutton)
         #
-        return hbox1
+        return layout
 
     def __test(self):
         """ """

@@ -49,7 +49,7 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
         content = self._createScrollableContent()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
-        # Tab widget for single point or table. 
+        # Tab widget. 
         tabWidget = QtGui.QTabWidget()
         contentLayout.addWidget(tabWidget)
         tabWidget.addTab(self._createContentDyntaxa(), "Dyntaxa")

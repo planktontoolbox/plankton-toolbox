@@ -112,4 +112,3 @@ class Logger(object):
         for message in self.__warnings:
             self.info(message + ' (' + unicode(self.__warnings[message]) + ' times)')
         
-        
