@@ -36,49 +36,60 @@ import plankton_toolbox.core.biology.taxa as taxa
 import plankton_toolbox.core.biology.taxa_sources as taxa_sources
 
 @utils.singleton
-###class ToolboxResources(object):
 class ToolboxResources(QtCore.QObject):
     """
     """
     def __init__(self):
         """ """
-        self.__taxa_resource = None
-        self.__peg_resource = None
-        self.__ioc_resource = None 
-#        super(ToolboxResources, self).__init__(None)
+        self.__dyntaxa = taxa.Dyntaxa() 
+        self.__peg = taxa.Peg()
+        self.__ioc = taxa.Ioc()
+        # 
+        ###super(ToolboxResources, self).__init__(None)
         QtCore.QObject.__init__(self) # TODO: Check...
         
     def loadResources(self):
         """ """
-        self.__loadTaxaResource()
-        self.__loadPegResource()
-        self.__loadIocResource()
+        self.__loadDyntaxa()
+        self.__loadPeg()
+        self.__loadIoc()
 
-    def __loadTaxaResource(self):
+    def __loadDyntaxa(self):
         """ """
-
+        self.__dyntaxa.clear()
+        importer = taxa_sources.JsonFile(taxaObject = self.__dyntaxa)
+        filepath = toolbox_settings.ToolboxSettings().getValue('Resources:Dyntaxa:Filepath')
+        importer.importTaxa(file = filepath)
+        # Emit signal.
+        self.emit(QtCore.SIGNAL('dyntaxaResourceLoaded'))
+        utils.Logger().info('Toolbox resources: Dyntaxa loaded (' +  
+                            unicode(len(self.__dyntaxa.getTaxonList())) + ' taxon).')
         
-    def __loadPegResource(self):
+    def __loadPeg(self):
         """ """
-        self.__peg_resource = taxa.Peg()
-        importer = taxa_sources.JsonFile(taxaObject = self.__peg_resource)
+        self.__peg.clear()
+        importer = taxa_sources.JsonFile(taxaObject = self.__peg)
         filepath = toolbox_settings.ToolboxSettings().getValue('Resources:PEG:Filepath')
         importer.importTaxa(file = filepath)
         # Emit signal.
-        self.emit(QtCore.SIGNAL('peg_loaded'))
-        
-    def __loadIocResource(self):
+        self.emit(QtCore.SIGNAL('pegResourceLoaded'))
+        utils.Logger().info('Toolbox resources: PEG loaded (' +  
+                            unicode(self.__peg.getRowCount()) + ' sizeclasses).')
+
+    def __loadIoc(self):
         """ """
-        # TODO:.
+#        if not self.__ioc_resource:
+#            self.__ioc_resource =  
         
-    def getTaxaResource(self):
+    def getResourceDyntaxa(self):
         """ """
-        return self.__taxa_resource
+        return self.__dyntaxa
         
-    def getPegResource(self):
+    def getResourcePeg(self):
         """ """
-        return self.__peg_resource
+        return self.__peg
         
-    def getIocResource(self):
+    def getResourceIoc(self):
         """ """
-        return self.__ioc_resource
+        return self.__ioc
+

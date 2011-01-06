@@ -41,8 +41,8 @@ class SpeciesBrowserTool(tool_base.ToolBase):
     def __init__(self, name, parentwidget):
         """ """
         # Create model.
-        self.__peg_data = taxa.Peg()
-        importer = taxa_sources.JsonFile(taxaObject = self.__peg_data)
+        self.__taxa_data = taxa.Taxa()
+        importer = taxa_sources.JsonFile(taxaObject = self.__taxa_data)
         importer.importTaxa(file = unicode('planktondata/resources/smhi_extended_peg.json'))
         # Initialize parent. Should be called after other 
         # initialization since the base class calls _createContent().
@@ -65,9 +65,9 @@ class SpeciesBrowserTool(tool_base.ToolBase):
 #        self.__customerlist = QtGui.QListWidget()        
         # Layout widgets.
         layout = QtGui.QFormLayout()
-        layout.addRow("Used resource:", self.__nameedit);
-#        form1.addRow("&Email:", self.__emailedit);
-#        form1.addRow("&Projects:", self.__customerlist);
+        layout.addRow("Used resource:", self.__nameedit)
+#        form1.addRow("&Email:", self.__emailedit)
+#        form1.addRow("&Projects:", self.__customerlist)
         #
         return layout
 

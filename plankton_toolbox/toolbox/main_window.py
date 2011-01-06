@@ -89,14 +89,17 @@ class MainWindow(QtGui.QMainWindow):
         self.move(position)        
         # Load resources when the main event loop has started.
         QtCore.QTimer.singleShot(10, toolbox_resources.ToolboxResources().loadResources)
+        #
+        utils.Logger().info('Plankton toolbox started.')
+
         
     def closeEvent(self, event):
         """ Called on application shutdown. """
         # Stores current window positions.
         self.__ui_settings.setValue("MainWindow/Size", QtCore.QVariant(self.size()))
         self.__ui_settings.setValue("MainWindow/Position", QtCore.QVariant(self.pos()))
-        self.__ui_settings.setValue("MainWindow/State", self.saveState());
-        self.__ui_settings.setValue("MainWindow/Geometry", self.geometry());
+        self.__ui_settings.setValue("MainWindow/State", self.saveState())
+        self.__ui_settings.setValue("MainWindow/Geometry", self.geometry())
         self.__logfile.close
         # Save toolbox settings.
         toolbox_settings.ToolboxSettings().saveSettings(self.__ui_settings)

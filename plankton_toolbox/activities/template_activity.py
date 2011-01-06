@@ -61,9 +61,9 @@ class TemplateActivity(activity_base.ActivityBase):
         self.__customerlist = QtGui.QListWidget()
         # Layout.
         layout = QtGui.QFormLayout()
-        layout.addRow("&Name:", self.__nameedit);
-        layout.addRow("&Email:", self.__emailedit);
-        layout.addRow("&Projects:", self.__customerlist);
+        layout.addRow("&Name:", self.__nameedit)
+        layout.addRow("&Email:", self.__emailedit)
+        layout.addRow("&Projects:", self.__customerlist)
         # Test data.
         self.__customerlist.addItems(QtCore.QStringList()
             << "<First project.>"

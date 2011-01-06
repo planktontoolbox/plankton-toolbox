@@ -52,9 +52,9 @@ class TaxonImagesTool(tool_base.ToolBase):
     def __contentImage(self):
         """ """
         layout = QtGui.QVBoxLayout()
-        label = QtGui.QLabel('<b>Incertae sedis</b>');
+        label = QtGui.QLabel('<b><i>Incertae sedis</i></b>')
         label.setAlignment(QtCore.Qt.AlignHCenter)
-        imagelabel = QtGui.QLabel();
+        imagelabel = QtGui.QLabel()
         imagelabel.setAlignment(QtCore.Qt.AlignHCenter)
         image = QtGui.QImage('planktondata/cache/images/Incertae_sedis.jpg')
         imagelabel.setPixmap(QtGui.QPixmap.fromImage(image))

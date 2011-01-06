@@ -30,6 +30,7 @@
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils as utils
+import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 import plankton_toolbox.activities.activity_base as activity_base
 import plankton_toolbox.core.biology.taxa as taxa
 import plankton_toolbox.core.biology.taxa_sources as taxa_sources
@@ -47,99 +48,130 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
     def _createContent(self):
         """ """
         content = self._createScrollableContent()
-        contentLayout = QtGui.QVBoxLayout()
-        content.setLayout(contentLayout)
+        layout = QtGui.QVBoxLayout()
+        content.setLayout(layout)
         # Tab widget. 
-        tabWidget = QtGui.QTabWidget()
-        contentLayout.addWidget(tabWidget)
-        tabWidget.addTab(self._createContentDyntaxa(), "Dyntaxa")
-        tabWidget.addTab(self._createContentPeg(), "PEG")
+        widget = QtGui.QTabWidget()
+        layout.addWidget(widget)
+        widget.addTab(self._createContentDyntaxa(), "Dyntaxa")
+        widget.addTab(self._createContentPeg(), "PEG")
         
     def _createContentDyntaxa(self):
         """ """        
-        dyntaxawidget = QtGui.QWidget()
+        widget = QtGui.QWidget()
         # Active widgets and connections.
         self.__dyntaxasource_list = QtGui.QComboBox()
         self.__dyntaxasource_list.addItems(["<select>",
-                                            "Dyntaxa, SOAP",
-                                            "Dyntaxa, REST",
+                                            "(Dyntaxa, SOAP)",
+                                            "(Dyntaxa, REST)",
                                             "Dyntaxa, DB-tables as text files"])
         self.__dyntaxafromdirectory_edit = QtGui.QLineEdit("")
-        self.___dyntaxafrom_button = QtGui.QPushButton("Browse...")
-        self.__dyntaxatofile_edit = QtGui.QLineEdit("planktondata/resources/smhi_dv_dyntaxa.json")        
+        self.__dyntaxafrom_button = QtGui.QPushButton("Browse...")
+        # Get filepath from toolbox settings.
+        filepath = toolbox_settings.ToolboxSettings().getValue('Resources:Dyntaxa:Filepath')
+        self.__dyntaxatofile_edit = QtGui.QLineEdit(filepath)        
         self.__dyntaxato_button = QtGui.QPushButton("Browse...")
         self.__dyntaxametadata_table = QtGui.QTableWidget()
         self.__dyntaxametadata_button = QtGui.QPushButton("Edit metadata...")
         self.__dyntaxaprepare_button = QtGui.QPushButton("Create resource")
-        self.connect(self.___dyntaxafrom_button, QtCore.SIGNAL("clicked()"), self.__dyntaxaFromBrowse)               
+        self.connect(self.__dyntaxafrom_button, QtCore.SIGNAL("clicked()"), self.__dyntaxaFromBrowse)               
         self.connect(self.__dyntaxato_button, QtCore.SIGNAL("clicked()"), self.__dyntaxaToBrowse)               
-        self.connect(self.__dyntaxametadata_button, QtCore.SIGNAL("clicked()"), self.__copyDyntaxaMetadata)                
+        self.connect(self.__dyntaxametadata_button, QtCore.SIGNAL("clicked()"), self.__editDyntaxaMetadata)                
         self.connect(self.__dyntaxaprepare_button, QtCore.SIGNAL("clicked()"), self.__prepareDyntaxa)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
+        row = 0
         label1 = QtGui.QLabel("Source type:")
-        form1.addWidget(label1, 0, 0, 1, 1)
-        form1.addWidget(self.__dyntaxasource_list, 0, 1, 1, 1);
+        form1.addWidget(label1, row, 0, 1, 1)
+        form1.addWidget(self.__dyntaxasource_list, row, 1, 1, 1)
+        row += 1
         label2 = QtGui.QLabel("From directory:")
-        form1.addWidget(label2, 1, 0, 1, 1)
-        form1.addWidget(self.__dyntaxafromdirectory_edit, 1, 1, 1, 9)
-        form1.addWidget(self.___dyntaxafrom_button, 1, 10, 1, 1)
+        form1.addWidget(label2, row, 0, 1, 1)
+        form1.addWidget(self.__dyntaxafromdirectory_edit, row, 1, 1, 9)
+        form1.addWidget(self.__dyntaxafrom_button, row, 10, 1, 1)
+        row += 1
         label3 = QtGui.QLabel("To file:")
-        form1.addWidget(label3, 2, 0, 1, 1)
-        form1.addWidget(self.__dyntaxatofile_edit, 2, 1, 1, 9)
-        form1.addWidget(self.__dyntaxato_button, 2, 10, 1, 1)
+        form1.addWidget(label3, row, 0, 1, 1)
+        form1.addWidget(self.__dyntaxatofile_edit, row, 1, 1, 9)
+        form1.addWidget(self.__dyntaxato_button, row, 10, 1, 1)
+        row += 1
         label4 = QtGui.QLabel("Metadata:")
-        form1.addWidget(label4, 3, 0, 1, 1)
-        form1.addWidget(self.__dyntaxametadata_table, 3, 1, 10, 10)
+        form1.addWidget(label4, row, 0, 1, 1)
+        form1.addWidget(self.__dyntaxametadata_table, row, 1, 10, 10)
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(5)
         hbox1.addWidget(self.__dyntaxametadata_button)
         hbox1.addWidget(self.__dyntaxaprepare_button)
-        dyntaxalayout = QtGui.QVBoxLayout()
-        dyntaxalayout.addLayout(form1)
-        dyntaxalayout.addLayout(hbox1)
-        dyntaxawidget.setLayout(dyntaxalayout)
+        layout = QtGui.QVBoxLayout()
+        layout.addLayout(form1)
+        layout.addLayout(hbox1)
+        widget.setLayout(layout)
         #
-        return dyntaxawidget
+        return widget
 
     def _createContentPeg(self):
         """ """
-        pegboxwidget = QtGui.QWidget()
+        widget = QtGui.QWidget()
         # Active widgets and connections.
-        self.__pegfromfile_edit = QtGui.QLineEdit("")
+        self.__pegfromfile_edit = QtGui.QLineEdit("../../../../data/planktondata/originalfiles/smhi_extended_peg_version_2010-10-26.txt")
+###        self.__pegfromfile_edit = QtGui.QLineEdit("")
         self.__pegfrom_button = QtGui.QPushButton("Browse...")
-        self.__pegtofile_edit = QtGui.QLineEdit("planktondata/resources/smhi_extended_peg.json")
-        self.__pegto_button = QtGui.QPushButton("Browse...")
+        # Get filepath from toolbox settings.
+        filepath = toolbox_settings.ToolboxSettings().getValue('Resources:PEG:Filepath')
+        self.__pegtofile_edit = QtGui.QLineEdit(filepath)
+        self.__pegto_button = QtGui.QPushButton("Browse...")        
+        self.__pwtopegfile_edit = QtGui.QLineEdit("../../../../data/planktondata/originalfiles/smhi_pw_to_extended_peg.txt")
+###        self.__pwtopegfile_edit = QtGui.QLineEdit("")
+        self.__pwtopegfile_button = QtGui.QPushButton("Browse...")
+        self.__pegtodyntaxafile_edit = QtGui.QLineEdit("../../../../data/planktondata/originalfiles/smhi_peg_to_dyntaxa.txt")
+###        self.__pegtodyntaxafile_edit = QtGui.QLineEdit("")
+        self.__pegtodyntaxafile_button = QtGui.QPushButton("Browse...")
         self.__pegmetadata_table = QtGui.QTableWidget()
-        self.__pegmetadata_button = QtGui.QPushButton("Edit metadata from...")
+        self.__pegmetadata_button = QtGui.QPushButton("Edit metadata...")
         self.__pegprepare_button = QtGui.QPushButton("Create resource")
+        #
         self.connect(self.__pegfrom_button, QtCore.SIGNAL("clicked()"), self.__pegFromBrowse)              
-        self.connect(self.__pegto_button, QtCore.SIGNAL("clicked()"), self.__pegToBrowse)          
-        self.connect(self.__pegmetadata_button, QtCore.SIGNAL("clicked()"), self.__copyPegMetadata)                
+        self.connect(self.__pegto_button, QtCore.SIGNAL("clicked()"), self.__pegToBrowse)
+        self.connect(self.__pwtopegfile_button, QtCore.SIGNAL("clicked()"), self.__pwToPegFileBrowse)
+        self.connect(self.__pegtodyntaxafile_button, QtCore.SIGNAL("clicked()"), self.__pegToDyntaxaFileBrowse)
+        self.connect(self.__pegmetadata_button, QtCore.SIGNAL("clicked()"), self.__editPegMetadata)                
         self.connect(self.__pegprepare_button, QtCore.SIGNAL("clicked()"), self.__preparePeg)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
+        row = 0
         label1 = QtGui.QLabel("From file:")
-        form1.addWidget(label1, 0, 0, 1, 1)
-        form1.addWidget(self.__pegfromfile_edit, 0, 1, 1, 9);
-        form1.addWidget(self.__pegfrom_button, 0, 10, 1, 1);
+        form1.addWidget(label1, row, 0, 1, 1)
+        form1.addWidget(self.__pegfromfile_edit, row, 1, 1, 9)
+        form1.addWidget(self.__pegfrom_button, row, 10, 1, 1)
+        row += 1
+        label2 = QtGui.QLabel("Translate PW to PEG file:")
+        form1.addWidget(label2, row, 0, 1, 1)
+        form1.addWidget(self.__pwtopegfile_edit, row, 1, 1, 9)
+        form1.addWidget(self.__pwtopegfile_button, row, 10, 1, 1)
+        row += 1
+        label2 = QtGui.QLabel("Translate PEG to Dyntaxa file:")
+        form1.addWidget(label2, row, 0, 1, 1)
+        form1.addWidget(self.__pegtodyntaxafile_edit, row, 1, 1, 9)
+        form1.addWidget(self.__pegtodyntaxafile_button, row, 10, 1, 1)
+        row += 1
         label2 = QtGui.QLabel("To file:")
-        form1.addWidget(label2, 1, 0, 1, 1)
-        form1.addWidget(self.__pegtofile_edit, 1, 1, 1, 9)
-        form1.addWidget(self.__pegto_button, 1, 10, 1, 1)
+        form1.addWidget(label2, row, 0, 1, 1)
+        form1.addWidget(self.__pegtofile_edit, row, 1, 1, 9)
+        form1.addWidget(self.__pegto_button, row, 10, 1, 1)
+        row += 1
         label3 = QtGui.QLabel("Metadata:")
-        form1.addWidget(label3, 2, 0, 1, 1)
-        form1.addWidget(self.__pegmetadata_table, 2, 1, 10, 10)
+        form1.addWidget(label3, row, 0, 1, 1)
+        form1.addWidget(self.__pegmetadata_table, row, 1, 10, 10)
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(5)
         hbox1.addWidget(self.__pegmetadata_button)
         hbox1.addWidget(self.__pegprepare_button)
-        peglayout = QtGui.QVBoxLayout()
-        peglayout.addLayout(form1)
-        peglayout.addLayout(hbox1)
-        pegboxwidget.setLayout(peglayout)
+        layout = QtGui.QVBoxLayout()
+        layout.addLayout(form1)
+        layout.addLayout(hbox1)
+        widget.setLayout(layout)
         #
-        return pegboxwidget
+        return widget
 
     def __dyntaxaFromBrowse(self):
         """ """
@@ -175,6 +207,24 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
         if filepath:
             self.__pegfromfile_edit.setText(filepath)
 
+# self.connect(self.__pwtopegfile_button, QtCore.SIGNAL("clicked()"), self.__pwToPegFileBrowse)
+    def __pwToPegFileBrowse(self):
+        """ """
+        dirdialog = QtGui.QFileDialog(self)
+        dirdialog.setDirectory(unicode(self.__pwtopegfile_edit.text()))
+        filepath = dirdialog.getOpenFileName()
+        if filepath:
+            self.__pwtopegfile_edit.setText(filepath)
+
+# self.connect(self.__pegtodyntaxafile_button, QtCore.SIGNAL("clicked()"), self.__pegToDyntaxaFileBrowse)
+    def __pegToDyntaxaFileBrowse(self):
+        """ """
+        dirdialog = QtGui.QFileDialog(self)
+        dirdialog.setDirectory(unicode(self.__pegtodyntaxafile_edit.text()))
+        filepath = dirdialog.getOpenFileName()
+        if filepath:
+            self.__pegtodyntaxafile_edit.setText(filepath)
+
     def __pegToBrowse(self):
         """ """
         dirdialog = QtGui.QFileDialog(self)
@@ -183,7 +233,7 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
         if filepath:
             self.__pegtofile_edit.setText(filepath)
 
-    def __copyDyntaxaMetadata(self):
+    def __editDyntaxaMetadata(self):
         """ """
         QtGui.QMessageBox.information(self, 'Metadata', 'Not implemented.')
 
@@ -218,7 +268,7 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
             utils.Logger().info("Prepare dyntaxa. Ended.")
             self._writeToStatusBar("")
 
-    def __copyPegMetadata(self):
+    def __editPegMetadata(self):
         """ """
         QtGui.QMessageBox.information(self, 'Metadata', 'Not implemented.')
 
@@ -231,6 +281,10 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
             peg = taxa.Peg()
             importer = taxa_prepare.PreparePegTextFile(taxaObject = peg)
             importer.importTaxa(file = unicode(self.__pegfromfile_edit.text()))
+            # New:
+            importer.addPwToPeg(file = unicode(self.__pwtopegfile_edit.text()))
+            importer.addDyntaxaToPeg(file = unicode(self.__pegtodyntaxafile_edit.text()))
+            #
             utils.Logger().info('Number of PEG taxa: ' + str(len(peg.getTaxonList())))                
             exporter = taxa_sources.JsonFile(taxaObject = peg)
             exporter.exportTaxa(file = unicode(self.__pegtofile_edit.text()), encoding = 'iso-8859-1')

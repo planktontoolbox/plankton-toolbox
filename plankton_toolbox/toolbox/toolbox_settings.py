@@ -28,29 +28,29 @@
 Contains settings for the Plankton toolbox application.
 """
 
+import pickle
+import copy
+import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils as utils
 
 @utils.singleton
-class ToolboxSettings(object):
+class ToolboxSettings(QtCore.QObject):
     """
     Contains settings for the Plankton toolbox application. 
     """
     def __init__(self):
         """ """
-        self.__settings = {}
         self.__default_settings = {
-            "Settings": {
+            "General": {
                 "Decimal delimiter": ","
             },
             "Resources": {
-                "Taxa": {
+                "Dyntaxa": {
                     "Filepath": "planktondata/resources/smhi_dv_dyntaxa.json",
                 },
                 "PEG": {
                     "Filepath": "planktondata/resources/smhi_extended_peg.json",
-                    "Translate PW to PEG": True,
                     "PW to PEG filepath": "planktondata/resources/smhi_pw_to_extended_peg.txt",
-                    "Translate PEG to Dyntaxa": False,
                     "PEG to Dyntaxa filepath": "planktondata/resources/smhi_peg_to_dyntaxa.txt"
                 },
                 "IOC": {
@@ -70,18 +70,31 @@ class ToolboxSettings(object):
                 }
             }
         }
+        self.__settings = self.__default_settings
+        #
+        QtCore.QObject.__init__(self) # TODO: Check...
         
     def loadSettings(self, ui_settings):
-        """ """
-### TODO:
-###        self.__settings = ui_settings.value('Toolbox settings')
-###        if not self.__settings:
-        self.__settings = self.__default_settings # Use default if not stored earlier.
+        """ Load settings from QtCore.QSettings object. """
+        serialized_settings = ui_settings.value('Toolbox settings', QtCore.QVariant('')).toByteArray()
+        if len(serialized_settings) == 0:
+            self.__settings = self.__default_settings # Use default if not stored earlier.
+        else:
+            self.__settings = pickle.loads(serialized_settings)
+        # Emit signal.
+        self.emit(QtCore.SIGNAL('settingsChanged'))
 
     def saveSettings(self, ui_settings):
+        """ Store settings to QtCore.QSettings object."""
+        serialized_settings = pickle.dumps(self.__settings)
+        ui_settings.setValue('Toolbox settings', QtCore.QVariant(serialized_settings))
+
+    def restoreDefault(self):
         """ """
-### TODO:
-###        ui_settings.setValue('Toolbox settings', self.__settings)
+        # Deep copy needed.
+        self.__settings = copy.deepcopy(self.__default_settings)
+        # Emit signal.
+        self.emit(QtCore.SIGNAL('settingsChanged'))
 
     def getValue(self, compoundkey):
         """ Use compound key with field delimiter ':'. """
@@ -102,4 +115,6 @@ class ToolboxSettings(object):
             last_used_dict = current_level_item
             current_level_item = current_level_item[keypart]
         last_used_dict[keypart] = value
+#        # Emit signal.
+#        self.emit(QtCore.SIGNAL('settingsChanged'))
         

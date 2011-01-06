@@ -58,9 +58,9 @@ class MetadataEditorTool(tool_base.ToolBase):
         self.__customerlist = QtGui.QListWidget()        
         # Layout widgets.
         layout = QtGui.QFormLayout()
-        layout.addRow("&Name:", self.__nameedit);
-        layout.addRow("&Email:", self.__emailedit);
-        layout.addRow("&Projects:", self.__customerlist);
+        layout.addRow("&Name:", self.__nameedit)
+        layout.addRow("&Email:", self.__emailedit)
+        layout.addRow("&Projects:", self.__customerlist)
         #
         return layout
 
