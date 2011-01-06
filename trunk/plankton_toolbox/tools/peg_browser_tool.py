@@ -69,10 +69,7 @@ class PegBrowserTool(tool_base.ToolBase):
     def __init__(self, name, parentwidget):
         """ """
         # Create model.
-        self.__peg_data = toolbox_resources.ToolboxResources().getPegResource()
-#        self.__peg_data = taxa.Peg()
-#        importer = taxa_sources.JsonFile(taxaObject = self.__peg_data)
-#        importer.importTaxa(file = unicode('planktondata/resources/smhi_extended_peg.json'))
+        self.__peg_object = toolbox_resources.ToolboxResources().getResourcePeg()
         # Initialize parent. Should be called after other 
         # initialization since the base class calls _createContent().
         super(PegBrowserTool, self).__init__(name, parentwidget)
@@ -84,6 +81,8 @@ class PegBrowserTool(tool_base.ToolBase):
         content.setLayout(contentLayout)
         contentLayout.addLayout(self.__contentTaxonList())
         contentLayout.addLayout(self.__contentPegItem())
+        # Used when toolbox resource has changed.        
+        self.connect(toolbox_resources.ToolboxResources(), QtCore.SIGNAL("pegResourceLoaded"), self.__pegRefresh)
 
     def __contentTaxonList(self):
         """ """
@@ -96,7 +95,7 @@ class PegBrowserTool(tool_base.ToolBase):
         self.__tableView.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         self.__tableView.verticalHeader().setDefaultSectionSize(18)
         # Model, data and selection        
-        self.__model = PegTableModel(self.__peg_data)
+        self.__model = PegTableModel(self.__peg_object)
         self.__tableView.setModel(self.__model)
         selectionModel = QtGui.QItemSelectionModel(self.__model)
         self.__tableView.setSelectionModel(selectionModel)
@@ -104,8 +103,6 @@ class PegBrowserTool(tool_base.ToolBase):
         #
         self.connect(selectionModel, QtCore.SIGNAL("currentChanged(QModelIndex, QModelIndex)"), self.__showItemInfo)
         self.connect(selectionModel, QtCore.SIGNAL("selectionChanged(QModelIndex, QModelIndex)"), self.__showItemInfo)
-        # Used when toolbox resource has changed.        
-        self.connect(toolbox_resources.ToolboxResources(), QtCore.SIGNAL("peg_loaded"), self.__pegRefresh)
         #
         return layout
     
@@ -127,19 +124,19 @@ class PegBrowserTool(tool_base.ToolBase):
         self.__carbon_label = QtGui.QLabel('-')
         # Layout widgets.
         layout = QtGui.QFormLayout()
-        layout.addRow("<b><u>Species:</u></b>", None);
-        layout.addRow("Taxon name:", self.__species_label);
-        layout.addRow("Author:", self.__author_label);
-        layout.addRow("Class:", self.__class_label);
-        layout.addRow("Division:", self.__division_label);
-        layout.addRow("Order:", self.__order_label);
-        layout.addRow("<b><u>Size class:</u></b>", None);
-        layout.addRow("Size class:", self.__size_class_label);
-        layout.addRow("Trophy:", self.__thropy_label);
-        layout.addRow("Geometric shape:", self.__shape_label);
-        layout.addRow("Formula:", self.__formula_label);
-        layout.addRow("Calculated volume:", self.__volume_label);
-        layout.addRow("Calculated carbon:", self.__carbon_label);
+        layout.addRow("<b><u>Species:</u></b>", None)
+        layout.addRow("Taxon name:", self.__species_label)
+        layout.addRow("Author:", self.__author_label)
+        layout.addRow("Class:", self.__class_label)
+        layout.addRow("Division:", self.__division_label)
+        layout.addRow("Order:", self.__order_label)
+        layout.addRow("<b><u>Size class:</u></b>", None)
+        layout.addRow("Size class:", self.__size_class_label)
+        layout.addRow("Trophy:", self.__thropy_label)
+        layout.addRow("Geometric shape:", self.__shape_label)
+        layout.addRow("Formula:", self.__formula_label)
+        layout.addRow("Calculated volume:", self.__volume_label)
+        layout.addRow("Calculated carbon:", self.__carbon_label)
         #
         return layout
 
@@ -149,17 +146,17 @@ class PegBrowserTool(tool_base.ToolBase):
 #        size_index = self.__model.createIndex(index.row(), 1)
 #        taxonName = self.__model.data(name_index).toString()
 #        size = self.__model.data(size_index).toString() 
-        taxonName = self.__peg_data.getData(index.row(), 0)
-        size = self.__peg_data.getData(index.row(), 1)
+        taxonName = self.__peg_object.getData(index.row(), 0)
+        size = self.__peg_object.getData(index.row(), 1)
         #
-        taxon = self.__peg_data.getTaxonByName(taxonName)
+        taxon = self.__peg_object.getTaxonByName(taxonName)
         self.__species_label.setText('<b><i>' + taxon.get('Species', '-') + '</i></b>')
         self.__author_label.setText(taxon.get('Author', '-'))
         self.__class_label.setText(taxon.get('Class', '-'))
         self.__division_label.setText(taxon.get('Division', '-'))
         self.__order_label.setText(taxon.get('Order', '-'))
         #
-        sizeclass = self.__peg_data.getSizeclassItem(taxonName, size)
+        sizeclass = self.__peg_object.getSizeclassItem(taxonName, size)
         self.__size_class_label.setText('<b>' + unicode(sizeclass.get('Size class', '-')) + '</b>')
         self.__thropy_label.setText(sizeclass.get('Trophy', '-'))
         self.__shape_label.setText(sizeclass.get('Geometric shape', '-'))
@@ -169,8 +166,6 @@ class PegBrowserTool(tool_base.ToolBase):
 
     def __pegRefresh(self):
         """ """
-        self.__peg_data = toolbox_resources.ToolboxResources().getPegResource()
-        self.__model.setDataset(self.__peg_data)
         self.__model.reset()
         self.__tableView.resizeColumnsToContents() # TODO: Check if time-consuming...
         

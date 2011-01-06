@@ -40,29 +40,29 @@ class Taxa(object):
         self._idToTaxonMap = {} # For fast lookup.
         self._nameToTaxonMap = {} # For fast lookup.
         
-    def clearMetadata(self):
+    def clear(self):
         """ """
         self._metadata.clear()
+        self._metadata.clear()
+        del self._data[:] # Clear the list.
+        self._idToTaxonMap.clear()
+        self._nameToTaxonMap.clear()
         
     def getMetadata(self):
         """ """
         return self._metadata
         
-    def clearTaxonList(self):
-        """ """
-        del self._data[:]
-        
     def getTaxonList(self):
         """ """
         return self._data
         
-#    def getIdToTaxonMap(self):
-#        """ """
-#        return self._idToTaxonMap
-#        
-#    def getNameToTaxonMap(self):
-#        """ """
-#        return self._nameToTaxonMap
+    def getIdToTaxonMap(self):
+        """ """
+        return self._idToTaxonMap
+        
+    def getNameToTaxonMap(self):
+        """ """
+        return self._nameToTaxonMap
         
     def getTaxonListSortedBy(self, sortField):
         """ """
@@ -106,6 +106,15 @@ class Dyntaxa(Taxa):
         # Initialize parent.
         super(Dyntaxa, self).__init__()
 
+    def _createNameToTaxonMap(self):
+        """ """
+        for taxon in self._data:
+            name = taxon.get('Valid name', None)
+            if name:
+                self._nameToTaxonMap[name] = taxon
+            else:
+                print('DBUG: Name missing.')
+            
 
 class Peg(Taxa):
     """
@@ -119,6 +128,11 @@ class Peg(Taxa):
         # Initialize parent.
         super(Peg, self).__init__()
 
+    def clear(self):
+        """ """
+        self.__nameAndSizeList = None
+        super(Peg, self).clear()
+        
     def _createNameToTaxonMap(self):
         """ """
         for taxon in self._data:
@@ -133,7 +147,7 @@ class Peg(Taxa):
 
     def __createNameAndSizeList(self):
         """ 
-        Used when a sorted list of taxon/sizes is needed.
+        Used when a sorted list of taxon/size is needed.
         Format: <taxon>:<sizeclass>.
         """
         self.__nameAndSizeList = []

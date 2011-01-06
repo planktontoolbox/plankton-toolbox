@@ -71,6 +71,8 @@ class LogTool(tool_base.ToolBase):
         """ """
         # Active widgets and connections.
         self.__logarea = QtGui.QListWidget(self)
+        self.__logarea.setMinimumHeight(20)
+        self.__logarea.setMinimumWidth(100)
         self.connect(self.__clearbutton, QtCore.SIGNAL("clicked()"), self.__clearLog)      
         # Layout.
         layout = QtGui.QHBoxLayout()

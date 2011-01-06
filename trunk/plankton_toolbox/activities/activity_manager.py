@@ -47,9 +47,9 @@ class ActivityManager(object):
 
     def initActivities(self):
         """ Activity activator. """
-        self.__activitylist.append(create_dataset_activity.CreateDatasetActivity("Create dataset", self._parent))
+        self.__activitylist.append(create_dataset_activity.CreateDatasetActivity("(Create dataset)", self._parent))
         self.__activitylist.append(get_datasets_activity.GetDatasetsActivity("Get datasets", self._parent))
-        self.__activitylist.append(analyse_data_activity.AnalyseDataActivity("Analyse data", self._parent))
+        self.__activitylist.append(analyse_data_activity.AnalyseDataActivity("(Analyse data)", self._parent))
         self.__activitylist.append(create_reports_activity.CreateReportsActivity("Create reports", self._parent))
         self.__activitylist.append(prepare_resources_activity.PrepareResourcesActivity("Prepare resources", self._parent))
 #        self.__activitylist.append(template_activity.TemplateActivity("(Activity template)", self._parent))

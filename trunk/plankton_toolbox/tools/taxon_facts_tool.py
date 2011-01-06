@@ -53,7 +53,7 @@ class TaxonFactsTool(tool_base.ToolBase):
         """ """
         layout = QtGui.QVBoxLayout()
 
-        label = QtGui.QLabel('<b>Dinophysis acuta Ehrenberg 1839</b>');
+        label = QtGui.QLabel('<b><i>Dinophysis acuta</i> Ehrenberg 1839</b>')
         label.setAlignment(QtCore.Qt.AlignHCenter)
         text = QtGui.QTextBrowser()
         text.setHtml("""

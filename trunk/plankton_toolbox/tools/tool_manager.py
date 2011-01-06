@@ -54,11 +54,11 @@ class ToolManager(object):
         # The log tool should be loaded before other tools.
         self.__toollist.append(toolbox_settings_tool.ToolboxSettingsTool("Toolbox settings", self._parent))
         self.__toollist.append(log_tool.LogTool("Log tool", self._parent))
-        self.__toollist.append(metadata_editor_tool.MetadataEditorTool("Metadata editor", self._parent))
-        self.__toollist.append(species_browser_tool.SpeciesBrowserTool("Species browser", self._parent))
+        self.__toollist.append(metadata_editor_tool.MetadataEditorTool("(Metadata editor)", self._parent))
+        self.__toollist.append(species_browser_tool.SpeciesBrowserTool("(Species browser)", self._parent))
         self.__toollist.append(peg_browser_tool.PegBrowserTool("PEG browser", self._parent))
-        self.__toollist.append(taxon_facts_tool.TaxonFactsTool("Taxon facts", self._parent))
-        self.__toollist.append(taxon_images_tool.TaxonImagesTool("Taxon images", self._parent))
+        self.__toollist.append(taxon_facts_tool.TaxonFactsTool("(Taxon facts)", self._parent))
+        self.__toollist.append(taxon_images_tool.TaxonImagesTool("(Taxon images)", self._parent))
         self.__toollist.append(latlong_tool.LatLongTool("Latlong", self._parent))
 #        self.__toollist.append(template_tool.TemplateTool("(Tool template)", self._parent))
         

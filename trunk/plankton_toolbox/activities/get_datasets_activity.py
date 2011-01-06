@@ -182,6 +182,7 @@ class GetDatasetsActivity(activity_base.ActivityBase):
         self.__tableView.setAlternatingRowColors(True)
         self.__tableView.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
         #self.__tableView.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        self.__tableView.setSelectionMode(QtGui.QAbstractItemView.ContiguousSelection)
         self.__tableView.verticalHeader().setDefaultSectionSize(18)
         # Model, data and selection        
         self.__dataset = pw_monitoring_files.SharkwebDownload()
@@ -283,3 +284,18 @@ class ResultTableModel(QtCore.QAbstractTableModel):
             if index.isValid():
                 return QtCore.QVariant(self.__dataset.getData(index.row(), index.column()))
         return QtCore.QVariant()
+    
+
+### TODO: Add copy to clipboard for multiple cells. Sample code: ###
+#
+#selection = self.table.selectionModel() #self.table = QAbstractItemView
+#indexes = selection.selectedIndexes()
+#
+#columns = indexes[-1].column() - indexes[0].column() + 1
+#rows = len(indexes) / columns
+#textTable = [[""] * columns for i in xrange(rows)]
+#
+#for i, index in enumerate(indexes):
+# textTable[i % rows][i / rows] = unicode(self.model.data(index).toString()) #self.model = QAbstractItemModel 
+#
+#return "\n".join(("\t".join(i) for i in textTable))

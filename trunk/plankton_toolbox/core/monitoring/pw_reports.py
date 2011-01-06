@@ -97,7 +97,7 @@ class PwReportMJ1(PwReports):
                         '100-um pieces/L' + separator + # Index 13.
                         'Biovolume mm3/L' + separator + # Index 14.
                         '\r\n'
-                        );
+                        )
                         
             for pw_sample in pw_sample_dict.values():
                 # Sample keys: 'Sample Id', 'Counted on', 'Chamber diam.', 
