@@ -146,17 +146,17 @@ class PegBrowserTool(tool_base.ToolBase):
 #        size_index = self.__model.createIndex(index.row(), 1)
 #        taxonName = self.__model.data(name_index).toString()
 #        size = self.__model.data(size_index).toString() 
-        taxonName = self.__peg_object.getData(index.row(), 0)
-        size = self.__peg_object.getData(index.row(), 1)
+###        taxonName = self.__peg_object.getData(index.row(), 0)
+###        size = self.__peg_object.getData(index.row(), 1)
         #
-        taxon = self.__peg_object.getTaxonByName(taxonName)
+        taxon = self.__peg_object.getNameAndSizeList()[index.row()][0]
         self.__species_label.setText('<b><i>' + taxon.get('Species', '-') + '</i></b>')
         self.__author_label.setText(taxon.get('Author', '-'))
         self.__class_label.setText(taxon.get('Class', '-'))
         self.__division_label.setText(taxon.get('Division', '-'))
         self.__order_label.setText(taxon.get('Order', '-'))
         #
-        sizeclass = self.__peg_object.getSizeclassItem(taxonName, size)
+        sizeclass = self.__peg_object.getNameAndSizeList()[index.row()][1]
         self.__size_class_label.setText('<b>' + unicode(sizeclass.get('Size class', '-')) + '</b>')
         self.__thropy_label.setText(sizeclass.get('Trophy', '-'))
         self.__shape_label.setText(sizeclass.get('Geometric shape', '-'))
@@ -174,6 +174,7 @@ class PegTableModel(QtCore.QAbstractTableModel):
     """
     def __init__(self, dataset):
         self.__dataset = dataset
+#        self.__nameandsizelist = self.__dataset.getNameAndSizeList()
         # Initialize parent.
         super(PegTableModel, self).__init__()
         
@@ -184,21 +185,25 @@ class PegTableModel(QtCore.QAbstractTableModel):
     def rowCount(self, parent=QtCore.QModelIndex()):
         """ """
         if self.__dataset:
-            return self.__dataset.getRowCount()
+            return len(self.__dataset.getNameAndSizeList())
         else:
             return 0
 
     def columnCount(self, parent=QtCore.QModelIndex()):
         """ """
-        return 2
+        return 4
 
     def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
         """ Columns: Taxon, Sizeclass. """
         if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
             if section == 0:
-                return QtCore.QVariant('Taxon')
+                return QtCore.QVariant('PEG name')
             elif section == 1:
                 return QtCore.QVariant('Sizeclass')            
+            elif section == 2:
+                return QtCore.QVariant('Dyntaxa id')            
+            elif section == 3:
+                return QtCore.QVariant('Dyntaxa name')            
         if orientation == QtCore.Qt.Vertical and role == QtCore.Qt.DisplayRole:
             return QtCore.QVariant(section + 1)
         return QtCore.QVariant()
@@ -207,5 +212,44 @@ class PegTableModel(QtCore.QAbstractTableModel):
         """ """
         if role == QtCore.Qt.DisplayRole:
             if index.isValid():
-                return QtCore.QVariant(self.__dataset.getData(index.row(), index.column()))
+                if index.column() == 0:
+                    peg = self.__dataset.getNameAndSizeList()[index.row()][0]
+                    return QtCore.QVariant(peg.get('Species', ''))
+                if index.column() == 1:
+                    sizeclass = self.__dataset.getNameAndSizeList()[index.row()][1]
+                    return QtCore.QVariant(sizeclass.get('Size class', ''))
+                if index.column() == 2:
+                    peg = self.__dataset.getNameAndSizeList()[index.row()][0]
+                    return QtCore.QVariant(peg.get('Dyntaxa id', ''))
+                if index.column() == 3:
+                    peg = self.__dataset.getNameAndSizeList()[index.row()][0]
+                    dyntaxaresource = toolbox_resources.ToolboxResources().getResourceDyntaxa()
+                    dyntaxa = dyntaxaresource.getTaxonById(peg.get('Dyntaxa id', ''))
+                    if dyntaxa:
+                        return QtCore.QVariant(dyntaxa.get('Valid name', ''))
+                    else:
+                        return QtCore.QVariant()
         return QtCore.QVariant()
+
+
+
+
+#    def getData(self, row, column):
+#        """ Used by table models. """
+#        if self.__nameAndSizeList == None:
+#            self.__createNameAndSizeList()
+#        if column == 0:
+##            return self.__nameAndSizeList[row].split(':')[0] 
+#            return self.__nameAndSizeList[row][0].get('Species', '')
+#        if column == 1:
+##            return self.__nameAndSizeList[row].split(':')[1] 
+#            return self.__nameAndSizeList[row][1].get('Size class', '') 
+#
+#    def getRowCount(self):
+#        """ Used by table models. """
+#        if self.__nameAndSizeList == None:
+#            self.__createNameAndSizeList()
+#        return len(self.__nameAndSizeList)
+    
+
+

@@ -35,6 +35,7 @@ import plankton_toolbox.activities.activity_base as activity_base
 import plankton_toolbox.core.biology.taxa as taxa
 import plankton_toolbox.core.biology.taxa_sources as taxa_sources
 import plankton_toolbox.core.biology.taxa_prepare as taxa_prepare
+import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
 
 class PrepareResourcesActivity(activity_base.ActivityBase):
     """
@@ -267,6 +268,8 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
             utils.Logger().logAllErrors()    
             utils.Logger().info("Prepare dyntaxa. Ended.")
             self._writeToStatusBar("")
+        # Reload resources.
+        toolbox_resources.ToolboxResources().loadResources()
 
     def __editPegMetadata(self):
         """ """
@@ -303,3 +306,5 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
             utils.Logger().logAllErrors()    
             utils.Logger().info("Prepare PEG. Ended.")
             self._writeToStatusBar("")
+        # Reload resources.
+        toolbox_resources.ToolboxResources().loadResources()

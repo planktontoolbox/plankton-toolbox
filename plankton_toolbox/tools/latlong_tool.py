@@ -66,7 +66,7 @@ class LatLongTool(tool_base.ToolBase):
         tabWidget = QtGui.QTabWidget()
         contentLayout.addWidget(tabWidget)
         tabWidget.addTab(self.__createContentSinglePoint(), "Single point")
-        tabWidget.addTab(self.__createContentMultiplePoints(), "Multiple points")
+        tabWidget.addTab(self.__createContentMultiplePoints(), "(Multiple points)")
 
     def __createContentSinglePoint(self):
         """ """
