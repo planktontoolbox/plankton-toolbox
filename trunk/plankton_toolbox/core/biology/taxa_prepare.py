@@ -76,7 +76,7 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
         self.__nameTypeDict = None
         # These parts of the Taxa object will be modified during import.
         self.__taxa = self._taxaObject.getTaxonList()
-        self.__idToTaxon = self._taxaObject.getIdToTaxonMap()
+        self.__idToTaxon = self._taxaObject.getIdToTaxonDict()
         
         self.__createTaxonTypeDict() # Maps from taxon type id to taxon type.
         self.__createNameTypeDict() # Maps from name type id to name type.
@@ -491,6 +491,19 @@ class PreparePegTextFile(PrepareDataSources):
         # Use the toolbox resource dyntaxa.
         dyntaxa = toolbox_resources.ToolboxResources().getResourceDyntaxa()
         
+        # Load translation file.
+        translate_dict = {}
+        translateFile = codecs.open(file, mode = 'r', encoding = 'iso-8859-1')
+        separator = '\t' # Tab as separator.
+        for row in translateFile:
+            items = map(string.strip, row.split(separator))
+            if len(items) > 1:
+                pegname = items[0]
+                dyntaxaname = items[1] 
+                translate_dict[pegname] = dyntaxaname
+        translateFile.close()
+        
+        
         print('DEBUG: Dyntaxa add to PEG.')
         for pegtaxon in self.__taxa:
             # Add PW name at taxon level.
@@ -501,7 +514,6 @@ class PreparePegTextFile(PrepareDataSources):
             taxon = dyntaxa.getTaxonByName(pegname)
             if taxon:
                 pegtaxon['Dyntaxa id'] = taxon['Taxon id']
-                print ('DEBUG: PEGNAME MATCH........')
                 continue
             # Check if PW-name match.
             taxon = dyntaxa.getTaxonByName(pwname)
@@ -510,10 +522,12 @@ class PreparePegTextFile(PrepareDataSources):
                 print ('DEBUG: PWNAME MATCH............................................................')
                 continue
             # Check translatefile.
-            print ('DEBUG: TODO MATCH FILE... ' + pegname)
+#            print ('DEBUG: TODO MATCH FILE... ' + pegname)
+            taxon = dyntaxa.getTaxonByName(translate_dict.get(pegname, ''))
+            if taxon:
+                pegtaxon['Dyntaxa id'] = taxon['Taxon id']
+                utils.Logger().info('PEG to Dyntaxa translation file used. PEG name: ' + pegname)                           
             
-            
-
         print('DEBUG: Dyntaxa added to PEG.')
        
 

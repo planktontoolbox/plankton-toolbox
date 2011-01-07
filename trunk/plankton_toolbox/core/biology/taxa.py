@@ -37,16 +37,16 @@ class Taxa(object):
     def __init__(self):
         self._metadata = {} # Metadata for the dataset.
         self._data = [] # List of taxon objects.
-        self._idToTaxonMap = {} # For fast lookup.
-        self._nameToTaxonMap = {} # For fast lookup.
+        self._idToTaxonDict = {} # For fast lookup.
+        self._nameToTaxonDict = {} # For fast lookup.
         
     def clear(self):
         """ """
         self._metadata.clear()
         self._metadata.clear()
         del self._data[:] # Clear the list.
-        self._idToTaxonMap.clear()
-        self._nameToTaxonMap.clear()
+        self._idToTaxonDict.clear()
+        self._nameToTaxonDict.clear()
         
     def getMetadata(self):
         """ """
@@ -56,13 +56,13 @@ class Taxa(object):
         """ """
         return self._data
         
-    def getIdToTaxonMap(self):
+    def getIdToTaxonDict(self):
         """ """
-        return self._idToTaxonMap
+        return self._idToTaxonDict
         
-    def getNameToTaxonMap(self):
+    def getNameToTaxonDict(self):
         """ """
-        return self._nameToTaxonMap
+        return self._nameToTaxonDict
         
     def getTaxonListSortedBy(self, sortField):
         """ """
@@ -70,30 +70,30 @@ class Taxa(object):
         
     def getTaxonById(self, taxonId):
         """ """
-        if len(self._idToTaxonMap) == 0:
+        if len(self._idToTaxonDict) == 0:
             self._createIdToTaxonLookup() # On demand
-        if self._idToTaxonMap.has_key(taxonId):
-            return self._idToTaxonMap[taxonId]
+        if self._idToTaxonDict.has_key(taxonId):
+            return self._idToTaxonDict[taxonId]
         else:
             return None
     
     def getTaxonByName(self, taxonName):
         """ """
-        if len(self._nameToTaxonMap) == 0:
-            self._createNameToTaxonMap() # On demand
-        if self._nameToTaxonMap.has_key(taxonName):
-            return self._nameToTaxonMap[taxonName]
+        if len(self._nameToTaxonDict) == 0:
+            self._createNameToTaxonDict() # On demand
+        if self._nameToTaxonDict.has_key(taxonName):
+            return self._nameToTaxonDict[taxonName]
         return None
     
     @abstractmethod
     def _createIdToTaxonLookup(self):
         """ """
-#        raise UserWarning('Not implemented: _createNameToTaxonMap.')
+#        raise UserWarning('Not implemented: _createNameToTaxonDict.')
 
     @abstractmethod
-    def _createNameToTaxonMap(self):
+    def _createNameToTaxonDict(self):
         """ """
-#        raise UserWarning('Not implemented: _createNameToTaxonMap.')
+#        raise UserWarning('Not implemented: _createNameToTaxonDict.')
 
         
 class Dyntaxa(Taxa):
@@ -106,14 +106,23 @@ class Dyntaxa(Taxa):
         # Initialize parent.
         super(Dyntaxa, self).__init__()
 
-    def _createNameToTaxonMap(self):
+    def _createIdToTaxonLookup(self):
+        """ """
+        for taxon in self._data:
+            id = taxon.get('Taxon id', None)
+            if id:
+                self._idToTaxonDict[id] = taxon
+            else:
+                print('DEBUG: Name missing.')
+            
+    def _createNameToTaxonDict(self):
         """ """
         for taxon in self._data:
             name = taxon.get('Valid name', None)
             if name:
-                self._nameToTaxonMap[name] = taxon
+                self._nameToTaxonDict[name] = taxon
             else:
-                print('DBUG: Name missing.')
+                print('DEBUG: Name missing.')
             
 
 class Peg(Taxa):
@@ -133,10 +142,10 @@ class Peg(Taxa):
         self.__nameAndSizeList = None
         super(Peg, self).clear()
         
-    def _createNameToTaxonMap(self):
+    def _createNameToTaxonDict(self):
         """ """
         for taxon in self._data:
-            self._nameToTaxonMap[taxon['Species']] = taxon
+            self._nameToTaxonDict[taxon['Species']] = taxon
 
     def getSizeclassItem(self, taxonName, size):
         """ """
@@ -145,32 +154,38 @@ class Peg(Taxa):
                 return sizeclass
         return None
 
-    def __createNameAndSizeList(self):
+    def getNameAndSizeList(self):
         """ 
         Used when a sorted list of taxon/size is needed.
-        Format: <taxon>:<sizeclass>.
+        Format: [[taxon], [sizeclass], ...]
         """
+        if self.__nameAndSizeList == None:
+            self.__createNameAndSizeList()
+        return self.__nameAndSizeList
+            
+    def __createNameAndSizeList(self):
+        """ """
         self.__nameAndSizeList = []
         for taxon in self._data:
             for sizeclass in taxon['Size classes']:
-                self.__nameAndSizeList.append(taxon['Species'] + ':' + str(sizeclass['Size class']))
+                self.__nameAndSizeList.append([taxon, sizeclass])
         # Sort.
-        self.__nameAndSizeList.sort()
+        self.__nameAndSizeList.sort(nameandsize_sort) # Sort function defined below.
 
-    def getData(self, row, column):
-        """ Used by table models. """
-        if self.__nameAndSizeList == None:
-            self.__createNameAndSizeList()
-        if column == 0:
-            return self.__nameAndSizeList[row].split(':')[0] 
-        if column == 1:
-            return self.__nameAndSizeList[row].split(':')[1] 
-
-    def getRowCount(self):
-        """ Used by table models. """
-        if self.__nameAndSizeList == None:
-            self.__createNameAndSizeList()
-        return len(self.__nameAndSizeList)
+# Sort function for name and size list.
+def nameandsize_sort(s1, s2):
+    """ """
+    # Check names first.
+    name1 = s1[0]['Species']
+    name2 = s2[0]['Species']
+    if name1 < name2: return -1
+    if name1 > name2: return 1
+    # Names are equal, check sizes.
+    size1 = s1[1]['Size class']
+    size2 = s2[1]['Size class']
+    if size1 < size2: return -1
+    if size1 > size2: return 1
+    return 0 # Both are equal.
 
 
 class MarineSpecies(Taxa):

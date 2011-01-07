@@ -74,7 +74,7 @@ class ToolboxResources(QtCore.QObject):
         # Emit signal.
         self.emit(QtCore.SIGNAL('pegResourceLoaded'))
         utils.Logger().info('Toolbox resources: PEG loaded (' +  
-                            unicode(self.__peg.getRowCount()) + ' sizeclasses).')
+                            unicode(len(self.__peg.getNameAndSizeList())) + ' sizeclasses).')
 
     def __loadIoc(self):
         """ """
