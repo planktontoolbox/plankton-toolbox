@@ -103,9 +103,15 @@ class Dyntaxa(Taxa):
     """
     def __init__(self):
         """ """
+        self.__nameSortedList = None
         # Initialize parent.
         super(Dyntaxa, self).__init__()
 
+    def clear(self):
+        """ """
+        self.__nameSortedList = None
+        super(Dyntaxa, self).clear()
+        
     def _createIdToTaxonLookup(self):
         """ """
         for taxon in self._data:
@@ -124,6 +130,33 @@ class Dyntaxa(Taxa):
             else:
                 print('DEBUG: Name missing.')
             
+    def getNameSortedList(self):
+        """ 
+        Used when a sorted list of taxon is needed.
+        Format: [taxon, ...]
+        """
+        if self.__nameSortedList == None:
+            self.__createNameSortedList()
+        return self.__nameSortedList
+            
+    def __createNameSortedList(self):
+        """ """
+        self.__nameSortedList = []
+        for taxon in self._data:
+            self.__nameSortedList.append(taxon)
+        # Sort.
+        self.__nameSortedList.sort(dyntaxaname_sort) # Sort function defined below.
+
+# Sort function for name and size list.
+def dyntaxaname_sort(s1, s2):
+    """ """
+    # Check names first.
+    name1 = s1.get('Valid name', '')
+    name2 = s2.get('Valid name', '')
+    if name1 < name2: return -1
+    if name1 > name2: return 1
+    return 0 # Both are equal.
+
 
 class Peg(Taxa):
     """
@@ -170,10 +203,10 @@ class Peg(Taxa):
             for sizeclass in taxon['Size classes']:
                 self.__nameAndSizeList.append([taxon, sizeclass])
         # Sort.
-        self.__nameAndSizeList.sort(nameandsize_sort) # Sort function defined below.
+        self.__nameAndSizeList.sort(pegnameandsize_sort) # Sort function defined below.
 
 # Sort function for name and size list.
-def nameandsize_sort(s1, s2):
+def pegnameandsize_sort(s1, s2):
     """ """
     # Check names first.
     name1 = s1[0]['Species']

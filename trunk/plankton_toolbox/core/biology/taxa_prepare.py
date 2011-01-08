@@ -167,9 +167,10 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
                 if (dateFrom <= now) and (now <= dateTo):
                     if underid in self.__idToTaxon:
                         taxon = self.__idToTaxon[underid]
-                        if relationid == '0':
-                            taxon['Parent id'] = ''
-                        elif relationid == '2':
+                        if relationid == 0:
+                            pass
+#                            taxon['Parent id'] = ''
+                        elif relationid == 2:
                             taxon['Parent id'] = agarid
                     else:
                         utils.Logger().error('Can not find Taxon id(hier): ' + underid)
