@@ -57,9 +57,6 @@ Sample part from the resource file:
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.tools.tool_base as tool_base
-#import plankton_toolbox.core.biology.taxa as taxa
-#import plankton_toolbox.core.biology.taxa_sources as taxa_sources
-#import plankton_toolbox.core.biology.taxa_prepare as taxa_prepare
 import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
 
 class PegBrowserTool(tool_base.ToolBase):
@@ -142,12 +139,6 @@ class PegBrowserTool(tool_base.ToolBase):
 
     def __showItemInfo(self, index):
         """ """
-#        name_index = self.__model.createIndex(index.row(), 0)
-#        size_index = self.__model.createIndex(index.row(), 1)
-#        taxonName = self.__model.data(name_index).toString()
-#        size = self.__model.data(size_index).toString() 
-###        taxonName = self.__peg_object.getData(index.row(), 0)
-###        size = self.__peg_object.getData(index.row(), 1)
         #
         taxon = self.__peg_object.getNameAndSizeList()[index.row()][0]
         self.__species_label.setText('<b><i>' + taxon.get('Species', '-') + '</i></b>')
@@ -230,26 +221,4 @@ class PegTableModel(QtCore.QAbstractTableModel):
                     else:
                         return QtCore.QVariant()
         return QtCore.QVariant()
-
-
-
-
-#    def getData(self, row, column):
-#        """ Used by table models. """
-#        if self.__nameAndSizeList == None:
-#            self.__createNameAndSizeList()
-#        if column == 0:
-##            return self.__nameAndSizeList[row].split(':')[0] 
-#            return self.__nameAndSizeList[row][0].get('Species', '')
-#        if column == 1:
-##            return self.__nameAndSizeList[row].split(':')[1] 
-#            return self.__nameAndSizeList[row][1].get('Size class', '') 
-#
-#    def getRowCount(self):
-#        """ Used by table models. """
-#        if self.__nameAndSizeList == None:
-#            self.__createNameAndSizeList()
-#        return len(self.__nameAndSizeList)
-    
-
 
