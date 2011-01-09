@@ -80,6 +80,8 @@ class DyntaxaBrowserTool(tool_base.ToolBase):
         """ """
         # Active widgets and connections.
         # Species level.
+        self.__scientificname_label = QtGui.QLabel('-')
+#        self.__author_label = QtGui.QLabel('-')
         self.__hierarchy_label = QtGui.QLabel('-')
 #        self.__author_label = QtGui.QLabel('-')
 #        self.__class_label = QtGui.QLabel('-')
@@ -94,7 +96,9 @@ class DyntaxaBrowserTool(tool_base.ToolBase):
 #        self.__carbon_label = QtGui.QLabel('-')
         # Layout widgets.
         layout = QtGui.QFormLayout()
-        layout.addRow("<b><u>Species:</u></b>", None)
+#        layout.addRow("<b><u>Species:</u></b>", None)
+        layout.addRow("Scientific name:", self.__scientificname_label)
+#        layout.addRow("Author:", self.__author_label)
         layout.addRow("Hierarchy:", self.__hierarchy_label)
 #        layout.addRow("Author:", self.__author_label)
 #        layout.addRow("Class:", self.__class_label)
@@ -120,10 +124,15 @@ class DyntaxaBrowserTool(tool_base.ToolBase):
 ###        size = self.__dyntaxa_object.getData(index.row(), 1)
         #
         taxon = self.__dyntaxa_object.getNameSortedList()[index.row()]
-        
+        self.__scientificname_label.setText(
+            '<b>' + 
+            '<i>' + taxon.get('Scientific name', '') + '</i>' + 
+            '&nbsp;&nbsp;&nbsp;' + taxon.get('Scientific name author', '') + 
+            '</b>')
+        # Build hierarchy.
         hier = ''
         delimiter = ''
-        name = taxon.get('Valid name', None)
+        name = taxon.get('Scientific name', None)
         while name != None:
             hier = name + delimiter + hier
             delimiter = ' - '
@@ -131,12 +140,11 @@ class DyntaxaBrowserTool(tool_base.ToolBase):
             parentid = taxon.get('Parent id', None)
             taxon = self.__dyntaxa_object.getTaxonById(parentid)
             if taxon:
-                name = taxon.get('Valid name', None)
-
-            
-        
-        
-        
+                name = taxon.get('Scientific name', None)
+            if len(hier) > 1000: # If infinite loops related to error in parent id. 
+                self.__hierarchy_label.setText('ERROR: Hierachy too long: ' + hier)
+                print('ERROR: Hierachy too long: ' + hier)
+                return
         self.__hierarchy_label.setText(hier)
 #        self.__author_label.setText(taxon.get('Author', '-'))
 #        self.__class_label.setText(taxon.get('Class', '-'))
@@ -179,7 +187,7 @@ class DyntaxaTableModel(QtCore.QAbstractTableModel):
 
     def columnCount(self, parent=QtCore.QModelIndex()):
         """ """
-        return 5
+        return 6
 
     def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
         """ Columns: Dyntaxa id, Dyntaxa name. """
@@ -189,10 +197,12 @@ class DyntaxaTableModel(QtCore.QAbstractTableModel):
             elif section == 1:
                 return QtCore.QVariant('Scientific name')            
             elif section == 2:
-                return QtCore.QVariant('Swedish')            
+                return QtCore.QVariant('Type')            
             elif section == 3:
-                return QtCore.QVariant('ITIS')            
+                return QtCore.QVariant('Swedish')            
             elif section == 4:
+                return QtCore.QVariant('ITIS')            
+            elif section == 5:
                 return QtCore.QVariant('ERMS')            
         if orientation == QtCore.Qt.Vertical and role == QtCore.Qt.DisplayRole:
             return QtCore.QVariant(section + 1)
@@ -207,20 +217,23 @@ class DyntaxaTableModel(QtCore.QAbstractTableModel):
                     return QtCore.QVariant(sizeclass.get('Taxon id', ''))
                 if index.column() == 1:
                     taxon = self.__dataset.getNameSortedList()[index.row()]
-                    return QtCore.QVariant(taxon.get('Valid name', ''))
+                    return QtCore.QVariant(taxon.get('Scientific name', ''))
                 if index.column() == 2:
                     taxon = self.__dataset.getNameSortedList()[index.row()]
-                    for nameitem in taxon['Names']:
-                        if nameitem['Name type'] == 'Swedish':
-                            return QtCore.QVariant(nameitem.get('Name', ''))
+                    return QtCore.QVariant(taxon.get('Taxon type', ''))
                 if index.column() == 3:
                     taxon = self.__dataset.getNameSortedList()[index.row()]
-                    for nameitem in taxon['Names']:
-                        if nameitem['Name type'] == 'ITIS-number':
+                    for nameitem in taxon.get('Names', []):
+                        if nameitem['Name type'] == 'Swedish':
                             return QtCore.QVariant(nameitem.get('Name', ''))
                 if index.column() == 4:
                     taxon = self.__dataset.getNameSortedList()[index.row()]
-                    for nameitem in taxon['Names']:
+                    for nameitem in taxon.get('Names', []):
+                        if nameitem['Name type'] == 'ITIS-number':
+                            return QtCore.QVariant(nameitem.get('Name', ''))
+                if index.column() == 5:
+                    taxon = self.__dataset.getNameSortedList()[index.row()]
+                    for nameitem in taxon.get('Names', []):
                         if nameitem['Name type'] == 'ERMS-name':
                             return QtCore.QVariant(nameitem.get('Name', ''))
         return QtCore.QVariant()

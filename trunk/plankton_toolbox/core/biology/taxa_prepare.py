@@ -226,10 +226,10 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
                         if not ('Names' in taxon):
                             taxon['Names'] = [] # Create list for names.
                         taxon['Names'].append(nameDict)
-                        # Create valid name/author for easy access.
+                        # Create Scientific name/author for easy access.
                         if namntypid == 0:
-                            taxon['Valid name'] = namn
-                            taxon['Valid author'] = auktor
+                            taxon['Scientific name'] = namn
+                            taxon['Scientific name author'] = auktor
                     else:
                         utils.Logger().error('Can not find Taxon id(name): ' + str(underid))                
         namesFile.close()

@@ -107,7 +107,7 @@ class PegBrowserTool(tool_base.ToolBase):
         """ """
         # Active widgets and connections.
         # Species level.
-        self.__species_label = QtGui.QLabel('-')
+        self.__scientificname_label = QtGui.QLabel('-')
         self.__author_label = QtGui.QLabel('-')
         self.__class_label = QtGui.QLabel('-')
         self.__division_label = QtGui.QLabel('-')
@@ -122,7 +122,7 @@ class PegBrowserTool(tool_base.ToolBase):
         # Layout widgets.
         layout = QtGui.QFormLayout()
         layout.addRow("<b><u>Species:</u></b>", None)
-        layout.addRow("Taxon name:", self.__species_label)
+        layout.addRow("Scientific name:", self.__scientificname_label)
         layout.addRow("Author:", self.__author_label)
         layout.addRow("Class:", self.__class_label)
         layout.addRow("Division:", self.__division_label)
@@ -141,7 +141,7 @@ class PegBrowserTool(tool_base.ToolBase):
         """ """
         #
         taxon = self.__peg_object.getNameAndSizeList()[index.row()][0]
-        self.__species_label.setText('<b><i>' + taxon.get('Species', '-') + '</i></b>')
+        self.__scientificname_label.setText('<b><i>' + taxon.get('Species', '-') + '</i></b>')
         self.__author_label.setText(taxon.get('Author', '-'))
         self.__class_label.setText(taxon.get('Class', '-'))
         self.__division_label.setText(taxon.get('Division', '-'))
@@ -217,7 +217,7 @@ class PegTableModel(QtCore.QAbstractTableModel):
                     dyntaxaresource = toolbox_resources.ToolboxResources().getResourceDyntaxa()
                     dyntaxa = dyntaxaresource.getTaxonById(peg.get('Dyntaxa id', ''))
                     if dyntaxa:
-                        return QtCore.QVariant(dyntaxa.get('Valid name', ''))
+                        return QtCore.QVariant(dyntaxa.get('Scientific name', ''))
                     else:
                         return QtCore.QVariant()
         return QtCore.QVariant()
