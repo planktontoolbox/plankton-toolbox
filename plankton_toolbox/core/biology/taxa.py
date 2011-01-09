@@ -124,7 +124,7 @@ class Dyntaxa(Taxa):
     def _createNameToTaxonDict(self):
         """ """
         for taxon in self._data:
-            name = taxon.get('Valid name', None)
+            name = taxon.get('Scientific name', None)
             if name:
                 self._nameToTaxonDict[name] = taxon
             else:
@@ -151,8 +151,8 @@ class Dyntaxa(Taxa):
 def dyntaxaname_sort(s1, s2):
     """ """
     # Check names first.
-    name1 = s1.get('Valid name', '')
-    name2 = s2.get('Valid name', '')
+    name1 = s1.get('Scientific name', '')
+    name2 = s2.get('Scientific name', '')
     if name1 < name2: return -1
     if name1 > name2: return 1
     return 0 # Both are equal.
