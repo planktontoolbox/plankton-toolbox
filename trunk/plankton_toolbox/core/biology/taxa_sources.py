@@ -60,22 +60,22 @@ class JsonFile(DataSources):
         # Initialize parent.
         super(JsonFile, self).__init__(taxaObject)
 
-    def importTaxa(self, file = None, encoding = 'utf-8'):
+    def importTaxa(self, file = None, encode = 'utf-8'):
         """ """
         if file == None:
             raise UserWarning('File name is missing.')
 ###        indata = open(file, 'r')
-        indata = codecs.open(file, mode = 'r', encoding = encoding)
+        indata = codecs.open(file, mode = 'r', encoding = encode)
         self._taxaObject.clear()
-        jsonimport = json.loads(indata.read(), encoding = encoding)
+        jsonimport = json.loads(indata.read(), encoding = encode)
         self._taxaObject.getMetadata().update(jsonimport['metadata'])
         self._taxaObject.getTaxonList().extend(jsonimport['data'])
 # OLD:
 #        self._taxaObject.getTaxonList().extend(
-#                    json.loads(indata.read(), encoding = encoding))
+#                    json.loads(indata.read(), encoding = encode))
         indata.close()
 
-    def exportTaxa(self, file = None, encoding = 'utf-8'):
+    def exportTaxa(self, file = None, encode = 'utf-8'):
         """ """
         utils.Logger().info("Writes taxa to: " + file)
         if file == None:
@@ -85,11 +85,11 @@ class JsonFile(DataSources):
         jsonexport = {}
         jsonexport['metadata'] = self._taxaObject.getMetadata()
         jsonexport['data'] = self._taxaObject.getTaxonList()
-        outdata.write(json.dumps(jsonexport, encoding = encoding, 
+        outdata.write(json.dumps(jsonexport, encoding = encode, 
                                  sort_keys=True, indent=4))
 # OLD:        
 #        outdata.write(json.dumps(self._taxaObject.getTaxonList(), 
-#                                 encoding = encoding, sort_keys=True, indent=4))
+#                                 encoding = encode, sort_keys=True, indent=4))
         outdata.close()
 
 

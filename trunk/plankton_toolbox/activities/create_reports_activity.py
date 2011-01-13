@@ -25,6 +25,13 @@
 # THE SOFTWARE.
 
 """
+The Create reports activity contains the UI-part to be used when creating
+reports based on datasets content. Implemented datsets/reports are:
+- PW: PW-files (*.csv) can be imported and reports for MJ1, MJ2 and ATS1 can be 
+      generated. These reports are stored as tab separated text files that can
+      be easily edited in MS Excel or similar spreadsheet application.
+       
+       
 """
 
 import os
@@ -32,8 +39,8 @@ import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils as utils
 import plankton_toolbox.activities.activity_base as activity_base
-import plankton_toolbox.core.biology.taxa as taxa
-import plankton_toolbox.core.biology.taxa_sources as taxa_sources
+#import plankton_toolbox.core.biology.taxa as taxa
+#import plankton_toolbox.core.biology.taxa_sources as taxa_sources
 import plankton_toolbox.core.monitoring.pw_monitoring_files as pw_monitoring_files
 import plankton_toolbox.core.monitoring.pw_reports as pw_reports
 
@@ -57,6 +64,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
         tabWidget = QtGui.QTabWidget()
         contentLayout.addWidget(tabWidget)
         tabWidget.addTab(self.__contentPwReport(), "PW")
+        tabWidget.setTabToolTip(0, "Creates report from PW (*.csv) files.")
 #        tabWidget.addTab(self.__content???(), "???")
 
     def __contentPwReport(self):
@@ -65,13 +73,9 @@ class CreateReportsActivity(activity_base.ActivityBase):
         databox = QtGui.QGroupBox("Select data files", self)
         # Active widgets and connections.
         
-        
-        
-#        self.__fromdirectory_edit = QtGui.QLineEdit("")
-        self.__fromdirectory_edit = QtGui.QLineEdit("../../../../data/planktondata/phytowin_files")
-
-        
-        
+###        self.__fromdirectory_edit = QtGui.QLineEdit("")
+        self.__fromdirectory_edit = QtGui.QLineEdit("../../../../data/planktondata/phytowin_files") # TODO: Use toolbox settings.
+        #
         self.__fromdirectory_button = QtGui.QPushButton("Browse...")
         self.__files_table = QtGui.QTableWidget()
         #
@@ -96,29 +100,6 @@ class CreateReportsActivity(activity_base.ActivityBase):
         datalayout = QtGui.QVBoxLayout()
         datalayout.addLayout(form1)
         databox.setLayout(datalayout)
-        
-        # === GroupBox: resourcebox === 
-        resourcebox = QtGui.QGroupBox("Select resources", self)
-        # Active widgets and connections.
-        self.__pegfile_edit = QtGui.QLineEdit("planktondata/resources/smhi_extended_peg.json")
-        self.__pegfile_button = QtGui.QPushButton("Browse...")
-        self.__translatefile_edit = QtGui.QLineEdit("planktondata/resources/smhi_pw_to_extended_peg.txt")
-        self.__translatefile_button = QtGui.QPushButton("Browse...")
-        self.connect(self.__pegfile_button, QtCore.SIGNAL("clicked()"), self.__pegFileBrowse)                
-        self.connect(self.__translatefile_button, QtCore.SIGNAL("clicked()"), self.__translateFileBrowse)                
-        # Layout widgets.
-        form1 = QtGui.QGridLayout()
-        label1 = QtGui.QLabel("PEG:")
-        form1.addWidget(label1, 0, 0, 1, 1)
-        form1.addWidget(self.__pegfile_edit, 0, 1, 1, 9)
-        form1.addWidget(self.__pegfile_button, 0, 10, 1, 1)
-        label2 = QtGui.QLabel("Translate PW to PEG:")
-        form1.addWidget(label2, 1, 0, 1, 1)
-        form1.addWidget(self.__translatefile_edit, 1, 1, 1, 9)
-        form1.addWidget(self.__translatefile_button, 1, 10, 1, 1)
-        resourcelayout = QtGui.QVBoxLayout()
-        resourcelayout.addLayout(form1)
-        resourcebox.setLayout(resourcelayout)
         
         # === GroupBox: reportbox === 
         reportbox = QtGui.QGroupBox("Select report", self)
@@ -153,7 +134,6 @@ class CreateReportsActivity(activity_base.ActivityBase):
         layout = QtGui.QVBoxLayout()
         widget.setLayout(layout)
         layout.addWidget(databox)
-        layout.addWidget(resourcebox)
         layout.addWidget(reportbox)
         layout.addLayout(hbox1)
         layout.addStretch(5)
@@ -207,8 +187,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
         try:
             # Add selected files to filelist.
             self._samplefiles.clear()                
-            for index in range(self.__files_table.rowCount() - 1):
-#            for item in self.__files_table.items():
+            for index in range(self.__files_table.rowCount()):
                 item = self.__files_table.item(index, 0)
                 if item.checkState(): # Check if selected by user.
                     # When reading from a table the display rule must be used.
@@ -218,48 +197,27 @@ class CreateReportsActivity(activity_base.ActivityBase):
             for samplefile in self._samplefiles:                
                 utils.Logger().info('Reading ' + samplefile + '...')        
                 sampledata = pw_monitoring_files.PwCsv()
-                sampledata.importFile(unicode(self.__fromdirectory_edit.text()) + '/' + samplefile, encoding = 'iso-8859-1')
+                sampledata.importFile(unicode(self.__fromdirectory_edit.text()) + '/' + samplefile, encode = 'iso-8859-1')
                 self._samplefiles[samplefile] = sampledata  # With data.
             # Check which report to generate.        
-            if self.__report_list.currentIndex() == 1:
+            if self.__report_list.currentIndex() == 1: # Report: MJ1
                 # === Report: MJ1 ===
                 utils.Logger().info("Selected report: MJ1")
-#                peg = taxa.Peg()
-#                importer = taxa_sources.JsonFile(taxaObject = peg)
-#                importer.importTaxa(file = unicode(self.__pegfile_edit.text()))
-                # Create exporter object.
                 report = pw_reports.PwReportMJ1()
-#                utils.Logger().info("Used PEG list: " + unicode(self.__pegfile_edit.text()))
-#                utils.Logger().info("Used translation file: " + unicode(self.__translatefile_edit.text()))
-#                report.setPeg(peg)
-#                report.setTaxonSizeClassTranslationFile(unicode(self.__translatefile_edit.text()))
-                report.exportFile(self._samplefiles, unicode(self.__tofile_edit.text()))
-            elif self.__report_list.currentIndex() == 2:
+                report.createReport(self._samplefiles, unicode(self.__tofile_edit.text()))
+            elif self.__report_list.currentIndex() == 2: # Report: MJ2
                 # === Report: MJ1 ===
                 utils.Logger().info("Selected report: MJ2")
-#                peg = taxa.Peg()
-#                importer = taxa_sources.JsonFile(taxaObject = peg)
-#                importer.importTaxa(file = unicode(self.__pegfile_edit.text()))
-                # Create exporter object.
                 report = pw_reports.PwReportMJ1()
-#                utils.Logger().info("Used PEG list: " + unicode(self.__pegfile_edit.text()))
-#                utils.Logger().info("Used translation file: " + unicode(self.__translatefile_edit.text()))
-#                report.setPeg(peg)
-#                report.setTaxonSizeClassTranslationFile(unicode(self.__translatefile_edit.text()))
-                report.exportFile(self._samplefiles, unicode(self.__tofile_edit.text()))
-            elif self.__report_list.currentIndex() == 3:
+###                report = pw_reports.PwReportMJ2()
+                report.createReport(self._samplefiles, unicode(self.__tofile_edit.text()))
+            elif self.__report_list.currentIndex() == 3: # Report: ATS1
                 # === Report: MJ1 ===
                 utils.Logger().info("Selected report: ATS1")
-#                peg = taxa.Peg()
-#                importer = taxa_sources.JsonFile(taxaObject = peg)
-#                importer.importTaxa(file = unicode(self.__pegfile_edit.text()))
-                # Create exporter object.
                 report = pw_reports.PwReportMJ1()
-#                utils.Logger().info("Used PEG list: " + unicode(self.__pegfile_edit.text()))
-#                utils.Logger().info("Used translation file: " + unicode(self.__translatefile_edit.text()))
-#                report.setPeg(peg)
-#                report.setTaxonSizeClassTranslationFile(unicode(self.__translatefile_edit.text()))
-                report.exportFile(self._samplefiles, unicode(self.__tofile_edit.text()), encoding = 'iso-8859-1')
+###                report = pw_reports.PwReportATS1()
+#                report.createReport(self._samplefiles, unicode(self.__tofile_edit.text()), encode = 'iso-8859-1')
+                report.createReport(self._samplefiles, unicode(self.__tofile_edit.text()), encode = 'utf-8')
             else:
                 raise UserWarning('The selected report type is not implemented.')
         except UserWarning, e:

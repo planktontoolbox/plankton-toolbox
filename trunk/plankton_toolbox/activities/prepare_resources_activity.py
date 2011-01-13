@@ -250,7 +250,7 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
                 importer.importTaxa(unicode(self.__dyntaxafromdirectory_edit.text()))
                 utils.Logger().info('Number of dyntaxa taxa: ' + str(len(dt.getTaxonList())))
                 exporter = taxa_sources.JsonFile(taxaObject = dt)
-                exporter.exportTaxa(file = unicode(self.__dyntaxatofile_edit.text()), encoding = 'iso-8859-1')
+                exporter.exportTaxa(file = unicode(self.__dyntaxatofile_edit.text()), encode = 'iso-8859-1')
             else:
                 raise UserWarning('The selected data source type is not implemented.')
         except UserWarning, e:
@@ -269,7 +269,7 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
             utils.Logger().info("Prepare dyntaxa. Ended.")
             self._writeToStatusBar("")
         # Reload resources.
-        toolbox_resources.ToolboxResources().loadResources()
+        toolbox_resources.ToolboxResources().loadAllResources()
 
     def __editPegMetadata(self):
         """ """
@@ -290,7 +290,7 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
             #
             utils.Logger().info('Number of PEG taxa: ' + str(len(peg.getTaxonList())))                
             exporter = taxa_sources.JsonFile(taxaObject = peg)
-            exporter.exportTaxa(file = unicode(self.__pegtofile_edit.text()), encoding = 'iso-8859-1')
+            exporter.exportTaxa(file = unicode(self.__pegtofile_edit.text()), encode = 'iso-8859-1')
         except UserWarning, e:
             utils.Logger().error("UserWarning: " + unicode(e))
             QtGui.QMessageBox.warning(self, "Warning", unicode(e))
@@ -307,4 +307,4 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
             utils.Logger().info("Prepare PEG. Ended.")
             self._writeToStatusBar("")
         # Reload resources.
-        toolbox_resources.ToolboxResources().loadResources()
+        toolbox_resources.ToolboxResources().loadAllResources()

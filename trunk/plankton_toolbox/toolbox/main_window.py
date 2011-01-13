@@ -88,7 +88,8 @@ class MainWindow(QtGui.QMainWindow):
         self.resize(size)
         self.move(position)        
         # Load resources when the main event loop has started.
-        QtCore.QTimer.singleShot(10, toolbox_resources.ToolboxResources().loadResources)
+        if toolbox_settings.ToolboxSettings().getValue('Resources:Load at startup'):
+            QtCore.QTimer.singleShot(10, toolbox_resources.ToolboxResources().loadAllResources)
         #
         utils.Logger().info('Plankton toolbox started.')
 

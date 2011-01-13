@@ -28,7 +28,7 @@
 """
 
 import PyQt4.QtGui as QtGui
-import PyQt4.QtCore as QtCore
+#import PyQt4.QtCore as QtCore
 import plankton_toolbox.activities.activity_base as activity_base
 
 class CreateDatasetActivity(activity_base.ActivityBase):
