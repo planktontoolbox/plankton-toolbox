@@ -28,7 +28,7 @@
 """
 
 import PyQt4.QtGui as QtGui
-import PyQt4.QtCore as QtCore
+#import PyQt4.QtCore as QtCore
 from abc import abstractmethod
 
 class ActivityBase(QtGui.QWidget):

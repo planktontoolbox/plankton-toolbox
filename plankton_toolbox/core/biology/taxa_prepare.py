@@ -34,7 +34,7 @@ stored in the json format, but they can be prepared from various sources.
 from abc import abstractmethod
 import datetime
 import codecs
-import json
+#import json
 import string
 import plankton_toolbox.toolbox.utils as utils
 import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
@@ -127,7 +127,7 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
                 if not(taxonid in self.__idToTaxon):
                     self.__idToTaxon[taxonid] = taxonDict # Updates Taxa object.
                 else:
-                    utils.Logger().warning("Duplicate taxon id: " + str(taxonid) )
+                    utils.Logger().info("Duplicate taxon id: " + str(taxonid) )
         taxonFile.close()
         
         # === HIER file ===
@@ -173,7 +173,7 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
                         elif relationid == 2:
                             taxon['Parent id'] = agarid
                     else:
-                        utils.Logger().error('Can not find Taxon id(hier): ' + underid)
+                        utils.Logger().info('Can not find Taxon id(hier): ' + underid)
         hierFile.close()
         
         # === NAMES file ===
@@ -231,7 +231,7 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
                             taxon['Scientific name'] = namn
                             taxon['Scientific name author'] = auktor
                     else:
-                        utils.Logger().error('Can not find Taxon id(name): ' + str(underid))                
+                        utils.Logger().info('Can not find Taxon id(name): ' + str(underid))                
         namesFile.close()
         
     def __cleanUpString(self,value):
@@ -340,7 +340,7 @@ class PreparePegTextFile(PrepareDataSources):
                                     # Use string format if not valid numeric. 
                                     sizeClassDict[self.__header[column]] = value.strip()
                                     
-#                                    utils.Logger().error('ERROR float:' + value + '     ' + value.strip().replace(',', '.').replace(' ', ''))
+#                                    utils.Logger().info('ERROR float:' + value + '     ' + value.strip().replace(',', '.').replace(' ', ''))
                                     
                             else:
                                 sizeClassDict[self.__header[column]] = value.strip()

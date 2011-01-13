@@ -545,22 +545,44 @@ class LatLongTool(tool_base.ToolBase):
 
     def __calculateTable(self):
         """ """
-        fromConverter = SwedishGeoPositionConverter(self.__fromFormatComboBox.currentText())
-        toConverter = SwedishGeoPositionConverter(self.__toFormatComboBox.currentText())
+        fromFormat = self.__fromFormatComboBox.currentText()
+        toFormat = self.__toFormatComboBox.currentText()
         
         for index in range(self.__fromTable.rowCount()):
+            # Read from table.
             item1 = self.__fromTable.item(index, 0)
             item2 = self.__fromTable.item(index, 1)
             from_1 = unicode(item1.data(QtCore.Qt.DisplayRole).toString())
             from_2 = unicode(item2.data(QtCore.Qt.DisplayRole).toString())
-            
-            from_1 = float(from_1.replace(",", "."))
-            from_2 = float(from_2.replace(",", "."))
-            
-
-            dd_1, dd_2 = fromConverter.gridToGeodetic(from_1, from_2)
-            to_1, to_2 = toConverter.geodeticToGrid(dd_1, dd_2)
-                    
+            #
+            from_1 = from_1.strip().replace(",", ".")
+            from_2 = from_2.strip().replace(",", ".")                
+            try:
+                from_1 = float(from_1)
+                from_2 = float(from_2)
+            except ValueError:
+                continue
+            # From.
+            if fromFormat == 'latlong_dd':
+                dd_1, dd_2 = from_1, from_2
+            elif fromFormat == 'latlong_dm':
+                pass
+            elif fromFormat == 'latlong_dms':
+                pass
+            else:
+                fromConverter = SwedishGeoPositionConverter(self.__fromFormatComboBox.currentText())
+                dd_1, dd_2 = fromConverter.gridToGeodetic(from_1, from_2)
+            # To.
+            if toFormat == 'latlong_dd':
+                to_1, to_2 =  dd_1, dd_2
+            elif toFormat == 'latlong_dm':
+                pass
+            elif toFormat == 'latlong_dms':
+                pass
+            else:
+                toConverter = SwedishGeoPositionConverter(self.__toFormatComboBox.currentText())
+                to_1, to_2 = toConverter.geodeticToGrid(dd_1, dd_2)
+            #        
             self.__toTable.setItem(index, 0, QtGui.QTableWidgetItem(unicode(to_1)))
             self.__toTable.setItem(index, 1,QtGui.QTableWidgetItem(unicode(to_2)))            
 

@@ -55,7 +55,8 @@ class ToolboxSettings(QtCore.QObject):
                 },
                 "IOC": {
                     "Filepath": ""
-                }
+                },
+                "Load at startup": False 
             },
             "Datasets": {
                 "Dataset types": {
@@ -102,19 +103,22 @@ class ToolboxSettings(QtCore.QObject):
         # Split the key and walk down in dictionaries.
         # Current_level_item will became value at last level.
         for keypart in compoundkey.split(':'):
-            current_level_item = current_level_item[keypart]
+            current_level_item = current_level_item.get(keypart, None)
         return current_level_item
+        pass
 
     def setValue(self, compoundkey, value):
         """ Use compound key with field delimiter ':'. """
         current_level_item = self.__settings
         last_used_dict = current_level_item
-        #Split the key and walk down in dictionaries.
-        # Current_level_item will became value at last level.
+        # Split the key and walk down in dictionaries.
+        # Current_level_item will became value at final level.
         for keypart in compoundkey.split(':'):
             last_used_dict = current_level_item
-            current_level_item = current_level_item[keypart]
+            current_level_item = current_level_item.get(keypart, None)
+#        last_used_dict.setdefault(keypart, value)
         last_used_dict[keypart] = value
+        pass
 #        # Emit signal.
 #        self.emit(QtCore.SIGNAL('settingsChanged'))
         
