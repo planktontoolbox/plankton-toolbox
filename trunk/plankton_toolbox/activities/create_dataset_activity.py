@@ -45,27 +45,35 @@ class CreateDatasetActivity(activity_base.ActivityBase):
         content = self._createScrollableContent()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
-        contentLayout.addLayout(self.__contentPart1())
-        contentLayout.addLayout(self.__contentPart2())
-        contentLayout.addStretch(5)
+        # Tab widget. 
+        tabWidget = QtGui.QTabWidget()
+        contentLayout.addWidget(tabWidget)
+        tabWidget.addTab(self.__contentNewFormat(), "(New format...)")
+        tabWidget.addTab(self.__contentPW(), "(PW)")
 
-    def __contentPart1(self):
+    def __contentNewFormat(self):
         """ """
         # Active widgets and connections.
 
         # Layout.
-        layout = QtGui.QFormLayout()
-
+        widget = QtGui.QWidget()        
+        layout = QtGui.QVBoxLayout()
+        widget.setLayout(layout)
+#        layout.addWidget(selectionbox)
+#        layout.addWidget(resultbox)
         #
-        return layout
+        return widget
 
-    def __contentPart2(self):
+    def __contentPW(self):
         """ """
         # Active widgets and connections.
 
         # Layout.
-        layout = QtGui.QHBoxLayout()
-
+        widget = QtGui.QWidget()        
+        layout = QtGui.QVBoxLayout()
+        widget.setLayout(layout)
+#        layout.addWidget(selectionbox)
+#        layout.addWidget(resultbox)
         #
-        return layout
+        return widget
 

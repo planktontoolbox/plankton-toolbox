@@ -54,10 +54,18 @@ class GetDatasetsActivity(activity_base.ActivityBase):
         tabWidget = QtGui.QTabWidget()
         contentLayout.addWidget(tabWidget)
         tabWidget.addTab(self.__contentSharkweb(), "Sharkweb")
-#        tabWidget.addTab(self.__content???(), "???")
+        tabWidget.addTab(self.__contentPW(), "(PW)")
+
+#        """ """
+#        content = self._createScrollableContent()
+#        contentLayout = QtGui.QVBoxLayout()
+#        content.setLayout(contentLayout)
+#        contentLayout.addLayout(self.__contentPart1())
+#        contentLayout.addLayout(self.__contentPart2())
+#        contentLayout.addStretch(5)
+
         
     def __contentSharkweb(self):
-        """ """
         """ """
         # === GroupBox: selectionbox === 
         selectionbox = QtGui.QGroupBox("Selection", self)
@@ -209,6 +217,19 @@ class GetDatasetsActivity(activity_base.ActivityBase):
         #
         return widget
 
+    def __contentPW(self):
+        """ """
+        # Active widgets and connections.
+
+        # Layout.
+        widget = QtGui.QWidget()        
+        layout = QtGui.QVBoxLayout()
+        widget.setLayout(layout)
+#        layout.addWidget(selectionbox)
+#        layout.addWidget(resultbox)
+        #
+        return widget
+        
     def __refreshTable(self):
         """ """
         self.__model.reset() # Model data has changed.

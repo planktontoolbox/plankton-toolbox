@@ -56,7 +56,7 @@ class ToolboxSettings(QtCore.QObject):
                 "IOC": {
                     "Filepath": ""
                 },
-                "Load at startup": False 
+                "Load at startup": True 
             },
             "Datasets": {
                 "Dataset types": {

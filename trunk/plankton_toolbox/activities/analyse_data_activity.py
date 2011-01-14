@@ -45,27 +45,64 @@ class AnalyseDataActivity(activity_base.ActivityBase):
         content = self._createScrollableContent()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
-        contentLayout.addLayout(self.__contentPart1())
-        contentLayout.addLayout(self.__contentPart2())
-        contentLayout.addStretch(5)
+        # Tab widget. 
+        tabWidget = QtGui.QTabWidget()
+        contentLayout.addWidget(tabWidget)
+        tabWidget.addTab(self.__contentSelectDataset(), "(Select dataset)")
+        tabWidget.addTab(self.__contentFilterData(), "(Filter data)")
+        tabWidget.addTab(self.__contentAggregateData(), "(Aggregate data)")
+        tabWidget.addTab(self.__contentExportResult(), "(Save result)")
 
-    def __contentPart1(self):
+    def __contentSelectDataset(self):
         """ """
         # Active widgets and connections.
 
         # Layout.
-        layout = QtGui.QFormLayout()
-
+        widget = QtGui.QWidget()        
+        layout = QtGui.QVBoxLayout()
+        widget.setLayout(layout)
+#        layout.addWidget(selectionbox)
+#        layout.addWidget(resultbox)
         #
-        return layout
+        return widget
 
-    def __contentPart2(self):
+    def __contentFilterData(self):
         """ """
         # Active widgets and connections.
 
         # Layout.
-        layout = QtGui.QHBoxLayout()
-
+        widget = QtGui.QWidget()        
+        layout = QtGui.QVBoxLayout()
+        widget.setLayout(layout)
+#        layout.addWidget(selectionbox)
+#        layout.addWidget(resultbox)
         #
-        return layout
+        return widget
+
+    def __contentAggregateData(self):
+        """ """
+        # Active widgets and connections.
+
+        # Layout.
+        widget = QtGui.QWidget()        
+        layout = QtGui.QVBoxLayout()
+        widget.setLayout(layout)
+#        layout.addWidget(selectionbox)
+#        layout.addWidget(resultbox)
+        #
+        return widget
+
+    def __contentExportResult(self):
+        """ """
+        # Active widgets and connections.
+
+        # Layout.
+        widget = QtGui.QWidget()        
+        layout = QtGui.QVBoxLayout()
+        widget.setLayout(layout)
+#        layout.addWidget(selectionbox)
+#        layout.addWidget(resultbox)
+        #
+        return widget
+
 

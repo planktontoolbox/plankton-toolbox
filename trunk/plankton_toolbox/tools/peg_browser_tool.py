@@ -78,6 +78,7 @@ class PegBrowserTool(tool_base.ToolBase):
         content.setLayout(contentLayout)
         contentLayout.addLayout(self.__contentTaxonList())
         contentLayout.addLayout(self.__contentPegItem())
+        contentLayout.addLayout(self.__contentDyntaxaControl())
         # Used when toolbox resource has changed.        
         self.connect(toolbox_resources.ToolboxResources(), QtCore.SIGNAL("pegResourceLoaded"), self.__pegRefresh)
 
@@ -137,6 +138,18 @@ class PegBrowserTool(tool_base.ToolBase):
         #
         return layout
 
+    def __contentDyntaxaControl(self):
+        """ """
+        # Active widgets and connections.
+        self.__loadresource_button = QtGui.QPushButton("Load PEG resource")
+        self.connect(self.__loadresource_button, QtCore.SIGNAL("clicked()"), self.__loadResource)                
+        # Layout widgets.
+        layout = QtGui.QHBoxLayout()
+        layout.addStretch(5)
+        layout.addWidget(self.__loadresource_button)
+        #
+        return layout
+
     def __showItemInfo(self, index):
         """ """
         #
@@ -154,6 +167,10 @@ class PegBrowserTool(tool_base.ToolBase):
         self.__formula_label.setText(sizeclass.get('Formula', '-'))
         self.__volume_label.setText(unicode(sizeclass.get('Calculated volume, um3', '-')))
         self.__carbon_label.setText(unicode(sizeclass.get('Calculated Carbon pg/counting unit', '-')))
+
+    def __loadResource(self):
+        """ """
+        toolbox_resources.ToolboxResources().loadResourcePeg()
 
     def __pegRefresh(self):
         """ """
