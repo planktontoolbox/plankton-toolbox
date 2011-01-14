@@ -197,7 +197,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
             for samplefile in self._samplefiles:                
                 utils.Logger().info('Reading ' + samplefile + '...')        
                 sampledata = pw_monitoring_files.PwCsv()
-                sampledata.importFile(unicode(self.__fromdirectory_edit.text()) + '/' + samplefile, encode = 'iso-8859-1')
+                sampledata.importFile(unicode(self.__fromdirectory_edit.text()) + '/' + samplefile)
                 self._samplefiles[samplefile] = sampledata  # With data.
             # Check which report to generate.        
             if self.__report_list.currentIndex() == 1: # Report: MJ1
@@ -213,10 +213,8 @@ class CreateReportsActivity(activity_base.ActivityBase):
             elif self.__report_list.currentIndex() == 3: # Report: ATS1
                 # === Report: MJ1 ===
                 utils.Logger().info("Selected report: ATS1")
-                report = pw_reports.PwReportMJ1()
-###                report = pw_reports.PwReportATS1()
-#                report.createReport(self._samplefiles, unicode(self.__tofile_edit.text()), encode = 'iso-8859-1')
-                report.createReport(self._samplefiles, unicode(self.__tofile_edit.text()), encode = 'utf-8')
+                report = pw_reports.PwReportATS1()
+                report.createReport(self._samplefiles, unicode(self.__tofile_edit.text()))
             else:
                 raise UserWarning('The selected report type is not implemented.')
         except UserWarning, e:
