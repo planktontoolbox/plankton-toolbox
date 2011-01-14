@@ -109,7 +109,6 @@ class PegBrowserTool(tool_base.ToolBase):
         # Active widgets and connections.
         # Species level.
         self.__scientificname_label = QtGui.QLabel('-')
-        self.__author_label = QtGui.QLabel('-')
         self.__class_label = QtGui.QLabel('-')
         self.__division_label = QtGui.QLabel('-')
         self.__order_label = QtGui.QLabel('-')
@@ -124,7 +123,6 @@ class PegBrowserTool(tool_base.ToolBase):
         layout = QtGui.QFormLayout()
         layout.addRow("<b><u>Species:</u></b>", None)
         layout.addRow("Scientific name:", self.__scientificname_label)
-        layout.addRow("Author:", self.__author_label)
         layout.addRow("Class:", self.__class_label)
         layout.addRow("Division:", self.__division_label)
         layout.addRow("Order:", self.__order_label)
@@ -154,8 +152,11 @@ class PegBrowserTool(tool_base.ToolBase):
         """ """
         #
         taxon = self.__peg_object.getNameAndSizeList()[index.row()][0]
-        self.__scientificname_label.setText('<b><i>' + taxon.get('Species', '-') + '</i></b>')
-        self.__author_label.setText(taxon.get('Author', '-'))
+        self.__scientificname_label.setText(
+            '<b>' + 
+            '<i>' + taxon.get('Species', '') + '</i>' + 
+            '&nbsp;&nbsp;&nbsp;' + taxon.get('Author', '') + 
+            '</b>')
         self.__class_label.setText(taxon.get('Class', '-'))
         self.__division_label.setText(taxon.get('Division', '-'))
         self.__order_label.setText(taxon.get('Order', '-'))
