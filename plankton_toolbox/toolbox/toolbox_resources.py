@@ -54,9 +54,9 @@ class ToolboxResources(QtCore.QObject):
         
     def loadAllResources(self):
         """ """
-        self.__loadResourceDyntaxa()
-        self.__loadResourcePeg()
-        self.__loadResourceIoc()
+        self.loadResourceDyntaxa()
+        self.loadResourcePeg()
+        self.loadResourceIoc()
 
     def loadResourceDyntaxa(self):
         """ """

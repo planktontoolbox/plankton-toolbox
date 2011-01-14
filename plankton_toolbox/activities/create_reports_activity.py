@@ -102,11 +102,11 @@ class CreateReportsActivity(activity_base.ActivityBase):
         databox.setLayout(datalayout)
         
         # === GroupBox: reportbox === 
-        reportbox = QtGui.QGroupBox("Select report", self)
+        reportbox = QtGui.QGroupBox("Create report", self)
         # Active widgets and connections.
         self.__report_list = QtGui.QComboBox()
         self.__report_list.addItems(["<select>",
-                                     "MJ Report 1",
+                                     "MJ Report 1 (Håvprover inom 24 timmar)",
                                      "MJ Report 2",
                                      "ATS Report 1"])
         self.__tofile_edit = QtGui.QLineEdit("report.txt")
@@ -120,22 +120,22 @@ class CreateReportsActivity(activity_base.ActivityBase):
         label2 = QtGui.QLabel("To file:")
         form1.addWidget(label2, 1, 0, 1, 1)
         form1.addWidget(self.__tofile_edit, 1, 1, 1, 9)
-        reportlayout = QtGui.QVBoxLayout()
-        reportlayout.addLayout(form1)
-        reportbox.setLayout(reportlayout)
-        
-        # === Button: Generate report ===
+        #
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(5)
         hbox1.addWidget(self.__createreport_button)
-        
+        #
+        reportlayout = QtGui.QVBoxLayout()
+        reportlayout.addLayout(form1)
+        reportlayout.addLayout(hbox1)
+        reportbox.setLayout(reportlayout)
         # === Main level layout. ===
         widget = QtGui.QWidget()
         layout = QtGui.QVBoxLayout()
         widget.setLayout(layout)
         layout.addWidget(databox)
         layout.addWidget(reportbox)
-        layout.addLayout(hbox1)
+#        layout.addLayout(hbox1) # 
         layout.addStretch(5)
         #
         return widget
@@ -208,8 +208,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
             elif self.__report_list.currentIndex() == 2: # Report: MJ2
                 # === Report: MJ1 ===
                 utils.Logger().info("Selected report: MJ2")
-                report = pw_reports.PwReportMJ1()
-###                report = pw_reports.PwReportMJ2()
+                report = pw_reports.PwReportMJ2()
                 report.createReport(self._samplefiles, unicode(self.__tofile_edit.text()))
             elif self.__report_list.currentIndex() == 3: # Report: ATS1
                 # === Report: MJ1 ===

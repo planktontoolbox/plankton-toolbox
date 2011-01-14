@@ -73,7 +73,7 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
         self.__dyntaxatofile_edit = QtGui.QLineEdit(filepath)        
         self.__dyntaxato_button = QtGui.QPushButton("Browse...")
         self.__dyntaxametadata_table = QtGui.QTableWidget()
-        self.__dyntaxametadata_button = QtGui.QPushButton("Edit metadata...")
+        self.__dyntaxametadata_button = QtGui.QPushButton("(Edit metadata...)")
         self.__dyntaxaprepare_button = QtGui.QPushButton("Create resource")
         self.connect(self.__dyntaxafrom_button, QtCore.SIGNAL("clicked()"), self.__dyntaxaFromBrowse)               
         self.connect(self.__dyntaxato_button, QtCore.SIGNAL("clicked()"), self.__dyntaxaToBrowse)               
@@ -128,7 +128,7 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
 ###        self.__pegtodyntaxafile_edit = QtGui.QLineEdit("")
         self.__pegtodyntaxafile_button = QtGui.QPushButton("Browse...")
         self.__pegmetadata_table = QtGui.QTableWidget()
-        self.__pegmetadata_button = QtGui.QPushButton("Edit metadata...")
+        self.__pegmetadata_button = QtGui.QPushButton("(Edit metadata...)")
         self.__pegprepare_button = QtGui.QPushButton("Create resource")
         #
         self.connect(self.__pegfrom_button, QtCore.SIGNAL("clicked()"), self.__pegFromBrowse)              
