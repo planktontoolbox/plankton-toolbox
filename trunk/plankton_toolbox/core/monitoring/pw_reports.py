@@ -204,7 +204,8 @@ def pw_report_1_sort(s1, s2):
     if s1[2] > s2[2]: return 1
     #
     return 0 # Both are equal.
-        
+
+
 class PwReportMJ2(PwReports):
     """ 
     """
@@ -216,8 +217,161 @@ class PwReportMJ2(PwReports):
         super(PwReportMJ2, self).__init__()
         
     def createReport(self, samplefiles_dict = None, reportFileName = None):
-        """ """
-    
+        """ 
+        This report has one row for each species and one column for each sample.
+        """
+        # Check indata.
+        if samplefiles_dict == None:
+            raise UserWarning('Samples are missing.')
+        if reportFileName == None:
+            raise UserWarning('File name is missing.')
+        # Load resources, if not loaded before.
+        if not toolbox_resources.ToolboxResources().isResourcePegLoaded():
+            toolbox_resources.ToolboxResources().loadResourcePeg()
+        pegresource = toolbox_resources.ToolboxResources().getResourcePeg()
+        if not toolbox_resources.ToolboxResources().isResourceDyntaxaLoaded():
+            toolbox_resources.ToolboxResources().loadResourceDyntaxa()
+        dyntaxaresource = toolbox_resources.ToolboxResources().getResourceDyntaxa()
+        if not toolbox_resources.ToolboxResources().isResourceIocLoaded():
+            toolbox_resources.ToolboxResources().loadResourceIoc()
+        iocresource = toolbox_resources.ToolboxResources().getResourceIoc()
+        # Prepare lookup dictionary for PW-names in the PEG resource.
+        pwnametopegtaxon_dict = {}
+        for species in pegresource.getTaxonList():
+            pwname = species.get('Species PW', None)
+            if pwname:
+                pwnametopegtaxon_dict[species['Species PW']] = species
+        #
+        # Part 1: Create header rows with columns for sample related data.
+        #
+        samplefilenames = samplefiles_dict.keys()
+        samplefilenames.sort() # Filenames used to set up column order.           
+        # 
+        numberofcolumns = 3 + len(samplefilenames)
+        header_row_1 = [unicode()] * numberofcolumns 
+        header_row_2 = [unicode()] * numberofcolumns 
+        header_row_3 = [unicode()] * numberofcolumns 
+        header_row_4 = [unicode()] * numberofcolumns 
+        header_row_1[2] = u'Station:'
+        header_row_2[2] = u'Provtagningsdatum:'
+        header_row_3[2] = u'Datum för analys:'
+        header_row_4[2] = u'Analys utförd av:'
+        # Iterate over file to create columns.
+        for filenameindex, samplefilename in enumerate(samplefilenames):
+            # Keywords in the PW sample dictionary: 
+            #    'Sample Id', 'Counted on', 'Chamber diam.', 
+            #    'Sampler', 'Latitude', 'StatName', 'Sample by', 'Date', 
+            #    'Sedim. time (hr)', 'No. Depths', 'Counted by', 
+            #    'Max. Depth', 'Longitude', 'Project', 'Depth', 
+            #    'Min. Depth', 'Time', 'Mixed volume', 'StatNo', 
+            #    'Comment', 'Sample size', 'Amt. preservative', 
+            #    'Sedim. volume', 'Ship', 'Preservative'
+            pw_samplefile = samplefiles_dict[samplefilename]
+            header_row_1[3 + filenameindex] = pw_samplefile._sample.get('StatName', '')
+            header_row_2[3 + filenameindex] = pw_samplefile._sample.get('Date', '')
+            header_row_3[3 + filenameindex] = pw_samplefile._sample.get('Counted on', '')
+            header_row_4[3 + filenameindex] = pw_samplefile._sample.get('Counted by', '')
+        #
+        # Part 2: Iterate over all rows in all samples. Create a dictionary with 
+        #         species as keys and lists of abundances for each sample.
+        #         Example: "Incertae sedis": [1234.5, 1234.5, 1234.5, 1234.5]
+        species_sample_dict = {}
+        # Iterate over sample files.
+        samplefilenames = samplefiles_dict.keys()
+        samplefilenames.sort()           
+        for filenameindex, samplefilename in enumerate(samplefilenames):
+            pw_samplefile = samplefiles_dict[samplefilename]
+            # Iterate over the data rows
+            for pw_datarow in pw_samplefile._data['rows']:
+                # Species name
+                pw_speciesname = pw_datarow[0]
+                # Abundance.     
+                coeff = pw_datarow[5].replace(',', '.')
+                units = pw_datarow[4].replace(',', '.')        
+                abundance = unicode(float(coeff) * float(units)).replace('.', ',')
+                #         
+                if species_sample_dict.has_key(pw_speciesname):
+                    species_sample_dict[pw_speciesname][filenameindex] = abundance
+                else:
+                    species_sample_dict[pw_speciesname] = [unicode()] * len(samplefilenames)
+                    species_sample_dict[pw_speciesname][filenameindex] = abundance
+        #
+        # Part 3: Create the species rows in the report.        
+        #
+        species_rows = []
+        # Iterate over species in the dictionary.
+        for pw_species in species_sample_dict.keys():
+            # Get PEG item.
+            speciesname = 'PW-name: ' + pw_species # Only used if PEG item is missing.
+            pegtaxon = pwnametopegtaxon_dict.get(pw_species, None)
+            taxonomicclass = ''
+            if pegtaxon:
+                speciesname = pegtaxon.get('Species', '-') # Only used if Dyntaxa item is missing.
+                # Get 'taxonomic class' from Dyntaxa.
+                dyntaxataxon = dyntaxaresource.getTaxonById(pegtaxon.get('Dyntaxa id', '--'))
+                if dyntaxataxon:
+                    speciesname = dyntaxataxon.get('Scientific name', '---')
+                    # Iterate upwards until taxonomic class level is reached.
+                    while dyntaxataxon and (taxonomicclass == ''):
+                        if dyntaxataxon.get('Taxon type', '') == 'Class':
+                            taxonomicclass = dyntaxataxon.get('Scientific name', '----') 
+                        parentid = dyntaxataxon.get('Parent id', None)
+                        dyntaxataxon = dyntaxaresource.getTaxonById(parentid)
+                if taxonomicclass == '': 
+                    taxonomicclass = 'PEG: ' + pegtaxon.get('Class', '') # Only used if Dyntaxa item is missing.
+            # Put the row together.
+            row = [unicode()] * numberofcolumns
+            row[0] = taxonomicclass
+            row[1] = '' # Pot. harmful. TODO: Read from IOC resource.
+            row[2] = speciesname
+            for index, abund in enumerate(species_sample_dict[pw_species]):
+                row[3 + index] = abund
+            # Add the row the report.
+            species_rows.append(row)
+        # Sort the outdata list before writing to file. 
+        species_rows.sort(pw_report_2_sort) # Sort function defined below.
+        #
+        # Part 4: Put all parts together and write to file.
+        #
+        out = None
+        try:
+            out = codecs.open(reportFileName, mode = 'w', encoding = 'iso-8859-1')
+            separator = '\t' # Use tab as item separator.
+            rowseparator = '\r\n' # Use CR/LF as row delimiter.
+            # Header rows for sample part.
+            out.write('\t'.join(map(unicode, header_row_1)) + rowseparator)
+            out.write('\t'.join(map(unicode, header_row_2)) + rowseparator)
+            out.write('\t'.join(map(unicode, header_row_3)) + rowseparator)
+            out.write('\t'.join(map(unicode, header_row_4)) + rowseparator)
+            # Header for species part.
+            headerrow = 'Klass' + separator + \
+                        'Pot. giftig' + separator + \
+                        'Art'# Index 2.
+            for filenameindex, samplefilename in enumerate(samplefilenames):
+                headerrow += separator + 'Förekomst' 
+            out.write(headerrow + rowseparator)
+            # Species data.
+            for row in species_rows:
+                # Use tab as column separator and CR/LF as row delimiter.
+                out.write(separator.join(map(unicode, row)) + rowseparator)
+        except (IOError, OSError):
+            raise
+        finally:
+            if out: out.close()
+
+# Sort function for PW report.
+def pw_report_2_sort(s1, s2):
+    """ """
+    # Class.
+    if s1[0] < s2[0]: return -1
+    if s1[0] > s2[0]: return 1
+    # Scientific name
+    if s1[2] < s2[2]: return -1
+    if s1[2] > s2[2]: return 1
+    #
+    return 0 # Both are equal.
+
+
 class PwReportATS1(PwReports):
     """ 
     """
@@ -342,7 +496,7 @@ class PwReportATS1(PwReports):
         # Sort the outdata list before writing to file. 
         
         # Sort.
-        out_rows.sort(pw_report_2_sort) # Sort function defined below.
+        out_rows.sort(pw_report_3_sort) # Sort function defined below.
 
         # Write to file.
         out = None
@@ -378,7 +532,7 @@ class PwReportATS1(PwReports):
             if out: out.close()
 
 # Sort function for PW report.
-def pw_report_2_sort(s1, s2):
+def pw_report_3_sort(s1, s2):
     """ """
     # Station.
     if s1[0] < s2[0]: return -1
