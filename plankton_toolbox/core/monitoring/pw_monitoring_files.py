@@ -114,13 +114,13 @@ class PwCsv(MonitoringFiles):
         # Initialize parent.
         super(PwCsv, self).__init__()
 
-    def importFile(self, fileName = None, encode = 'utf-8'):
+    def importFile(self, fileName = None):
         """ """
         if fileName == None:
             raise UserWarning('File name is missing.')
         file = None
         try:
-            file = codecs.open(fileName, mode = 'r', encoding = encode)
+            file = codecs.open(fileName, mode = 'r', encoding = 'iso-8859-1')
             separator = ',' # Use ',' as item separator.
             
             # Read data header. Same header used for data and aggregated data.
