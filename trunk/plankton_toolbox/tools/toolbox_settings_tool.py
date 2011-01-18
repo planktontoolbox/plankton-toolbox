@@ -85,11 +85,11 @@ class ToolboxSettingsTool(tool_base.ToolBase):
         layout2 = QtGui.QFormLayout()
         box.setLayout(layout2)
         layout2.addRow("<b>Dyntaxa</b>", None)
-        layout2.addRow("Filepath:", self.__dyntaxafilepath_edit)
+        layout2.addRow("Filepath (.json):", self.__dyntaxafilepath_edit)
         layout2.addRow("<b>PEG</b>", None)
-        layout2.addRow("Filepath:", self.__pegfilepath_edit)
-        layout2.addRow("<b>IOC</b>", None)
-        layout2.addRow("Filepath:", self.__iocfilepath_edit)
+        layout2.addRow("Filepath (.json):", self.__pegfilepath_edit)
+        layout2.addRow("<b>Harmful plankton</b>", None)
+        layout2.addRow("Filepath (.json):", self.__iocfilepath_edit)
         layout2.addRow(None, self.__loadresources_checkbox)
         #
         return layout
@@ -124,7 +124,7 @@ class ToolboxSettingsTool(tool_base.ToolBase):
         self.__delimiter_edit.setText(toolbox_settings.ToolboxSettings().getValue('General:Decimal delimiter'))
         self.__dyntaxafilepath_edit.setText(toolbox_settings.ToolboxSettings().getValue('Resources:Dyntaxa:Filepath'))
         self.__pegfilepath_edit.setText(toolbox_settings.ToolboxSettings().getValue('Resources:PEG:Filepath'))
-        self.__iocfilepath_edit.setText(toolbox_settings.ToolboxSettings().getValue('Resources:IOC:Filepath'))
+        self.__iocfilepath_edit.setText(toolbox_settings.ToolboxSettings().getValue('Resources:Harmful plankton:Filepath'))
         #
         loadresources = toolbox_settings.ToolboxSettings().getValue('Resources:Load at startup')
         if loadresources:
@@ -147,7 +147,7 @@ class ToolboxSettingsTool(tool_base.ToolBase):
         toolbox_settings.ToolboxSettings().setValue('General:Decimal delimiter', unicode(self.__delimiter_edit.text()))
         toolbox_settings.ToolboxSettings().setValue('Resources:Dyntaxa:Filepath', unicode(self.__dyntaxafilepath_edit.text()))
         toolbox_settings.ToolboxSettings().setValue('Resources:PEG:Filepath', unicode(self.__pegfilepath_edit.text()))
-        toolbox_settings.ToolboxSettings().setValue('Resources:IOC:Filepath', unicode(self.__iocfilepath_edit.text()))
+        toolbox_settings.ToolboxSettings().setValue('Resources:Harmful plankton:Filepath', unicode(self.__iocfilepath_edit.text()))
         if self.__loadresources_checkbox.checkState() == QtCore.Qt.Checked:
             toolbox_settings.ToolboxSettings().setValue('Resources:Load at startup', True)
         else:

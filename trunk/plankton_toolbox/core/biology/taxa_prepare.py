@@ -490,6 +490,7 @@ class PreparePegTextFile(PrepareDataSources):
             return
         
         # Use the toolbox resource dyntaxa.
+        toolbox_resources.ToolboxResources().loadUnloadedResourceDyntaxa()
         dyntaxa = toolbox_resources.ToolboxResources().getResourceDyntaxa()
         
         # Load translation file.
@@ -531,6 +532,57 @@ class PreparePegTextFile(PrepareDataSources):
             
         print('DEBUG: Dyntaxa added to PEG.')
        
+
+class PrepareHarmfulMicroAlgae(PrepareDataSources):
+    """ 
+    """
+    def __init__(self, taxaObject = None):
+        """ """
+        # Initialize parent.
+        super(PrepareHarmfulMicroAlgae, self).__init__(taxaObject)
+
+    def importTaxa(self, file = None):
+        """ """
+        self.__header = []
+        self.__taxa = self._taxaObject.getTaxonList()
+        
+        # Load needed resources, if not loaded before.
+        toolbox_resources.ToolboxResources().loadUnloadedResourceDyntaxa()
+        dyntaxa = toolbox_resources.ToolboxResources().getResourceDyntaxa()
+        #
+        utils.Logger().info("Reading: " + file)
+        harmfulFile = codecs.open(file, mode = 'r', encoding = 'iso-8859-1')
+        separator = '\t' # Tab as separator.
+        for row in harmfulFile:
+            if len(self.__header) == 0:
+                # Store header columns. They will be used as keys i the taxon dictionary.
+                importFileHeader = map(string.strip, row.split(separator))
+                for columnName in importFileHeader: 
+                    self.__header.append(columnName.strip())
+            else:
+                # Add each row as a taxon.
+                taxonDict = {}
+                for column, value in enumerate(map(string.strip, row.split(separator))):
+                    if len(value) > 0:
+                        if self.__header[column] == 'Aphia id':
+                            taxonDict[self.__header[column]] = int(value) # Integer value.
+                        else:
+                            taxonDict[self.__header[column]] = value # String value.
+                self.__taxa.append(taxonDict)
+                # Check if the scientific name exists in Dyntaxa. Add Taxon-id if it does.
+                dyntaxataxon = dyntaxa.getTaxonByName(taxonDict.get('Scientific name', ''))
+                if dyntaxataxon:
+                    dyntaxaid = dyntaxataxon.get('Taxon id', None)
+                    if dyntaxaid:
+                        taxonDict['Dyntaxa id'] = dyntaxaid # Integer value.
+
+
+
+
+
+
+
+
 
 
 

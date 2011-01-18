@@ -25,51 +25,28 @@
 # THE SOFTWARE.
 
 """
-Sample part from the resource file:
 
-            "Author": "(P. Richter) Kom\u00e1rek & Anagnostidis 1995", 
-            "Class": "Nostocophyceae (Cyanophyceae)", 
-            "Division": "CYANOPHYTA (CYANOBACTERIA)", 
-            "Dyntaxa id": "CYANOPHYTA (CYANOBACTERIA)", 
-            "Order": "CHROOCOCCALES", 
-            "Size classes": [
-                {
-                    "Calculated Carbon pg/counting unit": 4.0, 
-                    "Calculated volume, um3": 22.0, 
-                    "Comment on Carbon calculation": "based on individual cell", 
-                    "Diameter(d1), um": 3.5, 
-                    "Filament: length of cell, um": "-", 
-                    "Formula": "?/6*d^3", 
-                    "Geometric shape": "sphere", 
-                    "No. of cells/counting unit": 1.0, 
-                    "Size class": 1, 
-                    "Size class PW": 1, 
-                    "Size range": "3-4", 
-                    "Trophy": "AU", 
-                    "Unit": "cell"
-                }, 
-                ... 
-            ], 
-            "Species": "Aphanocapsa reinboldii"
-            "Species PW": "Aphanocapsa reinboldii"
 """
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
+import webbrowser
+import plankton_toolbox.toolbox.utils as utils
 import plankton_toolbox.tools.tool_base as tool_base
 import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
 
-class PegBrowserTool(tool_base.ToolBase):
+class HarmfulPlanktonBrowserTool(tool_base.ToolBase):
     """
     """
     
     def __init__(self, name, parentwidget):
         """ """
         # Create model.
-        self.__peg_object = toolbox_resources.ToolboxResources().getResourcePeg()
+        self.__harmfulplankton_object = toolbox_resources.ToolboxResources().getResourceHarmfulPlankton()
+        self.__marinespecies_url = None
         # Initialize parent. Should be called after other 
         # initialization since the base class calls _createContent().
-        super(PegBrowserTool, self).__init__(name, parentwidget)
+        super(HarmfulPlanktonBrowserTool, self).__init__(name, parentwidget)
         
     def _createContent(self):
         """ """
@@ -77,10 +54,10 @@ class PegBrowserTool(tool_base.ToolBase):
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
         contentLayout.addLayout(self.__contentTaxonList())
-        contentLayout.addLayout(self.__contentPegItem())
-        contentLayout.addLayout(self.__contentDyntaxaControl())
+        contentLayout.addLayout(self.__contentItem())
+        contentLayout.addLayout(self.__contentControl())
         # Used when toolbox resource has changed.        
-        self.connect(toolbox_resources.ToolboxResources(), QtCore.SIGNAL("pegResourceLoaded"), self.__pegRefresh)
+        self.connect(toolbox_resources.ToolboxResources(), QtCore.SIGNAL("harmfulPlanktonResourceLoaded"), self.__harmfulPlanktonRefresh)
 
     def __contentTaxonList(self):
         """ """
@@ -93,7 +70,7 @@ class PegBrowserTool(tool_base.ToolBase):
         self.__tableView.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         self.__tableView.verticalHeader().setDefaultSectionSize(18)
         # Model, data and selection        
-        self.__model = PegTableModel(self.__peg_object)
+        self.__model = HarmfulPlanktonTableModel(self.__harmfulplankton_object)
         self.__tableView.setModel(self.__model)
         selectionModel = QtGui.QItemSelectionModel(self.__model)
         self.__tableView.setSelectionModel(selectionModel)
@@ -104,42 +81,28 @@ class PegBrowserTool(tool_base.ToolBase):
         #
         return layout
     
-    def __contentPegItem(self):
+    def __contentItem(self):
         """ """
         # Active widgets and connections.
-        # Species level.
         self.__scientificname_label = QtGui.QLabel('-')
-        self.__class_label = QtGui.QLabel('-')
-        self.__division_label = QtGui.QLabel('-')
-        self.__order_label = QtGui.QLabel('-')
-        # Sizeclass level.
-        self.__size_class_label = QtGui.QLabel('-')
-        self.__thropy_label = QtGui.QLabel('-')
-        self.__shape_label = QtGui.QLabel('-')
-        self.__formula_label = QtGui.QLabel('-')
-        self.__volume_label = QtGui.QLabel('-')
-        self.__carbon_label = QtGui.QLabel('-')
+        self.__openmarinespecies = QtGui.QPushButton("Open marinespecies.org")
+        self.connect(self.__openmarinespecies, QtCore.SIGNAL("clicked()"), self.__openMarineSpecies)                
         # Layout widgets.
-        layout = QtGui.QFormLayout()
-        layout.addRow("<b><u>Species:</u></b>", None)
-        layout.addRow("Scientific name:", self.__scientificname_label)
-        layout.addRow("Class:", self.__class_label)
-        layout.addRow("Division:", self.__division_label)
-        layout.addRow("Order:", self.__order_label)
-        layout.addRow("<b><u>Size class:</u></b>", None)
-        layout.addRow("Size class:", self.__size_class_label)
-        layout.addRow("Trophy:", self.__thropy_label)
-        layout.addRow("Geometric shape:", self.__shape_label)
-        layout.addRow("Formula:", self.__formula_label)
-        layout.addRow("Calculated volume:", self.__volume_label)
-        layout.addRow("Calculated carbon:", self.__carbon_label)
+        form = QtGui.QFormLayout()
+        form.addRow("Scientific name:", self.__scientificname_label)
+        hbox = QtGui.QHBoxLayout()
+        hbox.addWidget(self.__openmarinespecies)
+        hbox.addStretch(5)
+        layout = QtGui.QVBoxLayout()
+        layout.addLayout(form)
+        layout.addLayout(hbox)
         #
         return layout
 
-    def __contentDyntaxaControl(self):
+    def __contentControl(self):
         """ """
         # Active widgets and connections.
-        self.__loadresource_button = QtGui.QPushButton("Load PEG resource")
+        self.__loadresource_button = QtGui.QPushButton("Load harmful plankton resource")
         self.connect(self.__loadresource_button, QtCore.SIGNAL("clicked()"), self.__loadResource)                
         # Layout widgets.
         layout = QtGui.QHBoxLayout()
@@ -151,43 +114,52 @@ class PegBrowserTool(tool_base.ToolBase):
     def __showItemInfo(self, index):
         """ """
         #
-        taxon = self.__peg_object.getNameAndSizeList()[index.row()][0]
+        taxon = self.__harmfulplankton_object.getSortedNameList()[index.row()]
         self.__scientificname_label.setText(
             '<b>' + 
-            '<i>' + taxon.get('Species', '') + '</i>' + 
+            '<i>' + taxon.get('Scientific name', '') + '</i>' + 
             '&nbsp;&nbsp;&nbsp;' + taxon.get('Author', '') + 
             '</b>')
-        self.__class_label.setText(taxon.get('Class', '-'))
-        self.__division_label.setText(taxon.get('Division', '-'))
-        self.__order_label.setText(taxon.get('Order', '-'))
-        #
-        sizeclass = self.__peg_object.getNameAndSizeList()[index.row()][1]
-        self.__size_class_label.setText('<b>' + unicode(sizeclass.get('Size class', '-')) + '</b>')
-        self.__thropy_label.setText(sizeclass.get('Trophy', '-'))
-        self.__shape_label.setText(sizeclass.get('Geometric shape', '-'))
-        self.__formula_label.setText(sizeclass.get('Formula', '-'))
-        self.__volume_label.setText(unicode(sizeclass.get('Calculated volume, um3', '-')))
-        self.__carbon_label.setText(unicode(sizeclass.get('Calculated Carbon pg/counting unit', '-')))
+        self.__marinespecies_url = \
+                u'http://www.marinespecies.org/' + \
+                u'hab/aphia.php?p=taxdetails&id=' + \
+                unicode(taxon['Aphia id'])
+
+
+    def __openMarineSpecies(self):
+        """ Launch web browser and use show marked species at marinespecies.org. """
+        if not self.__marinespecies_url:
+            utils.Logger().info("Failed to open www.marinespecies.org. No row selected.")
+            return
+        webbrowser.open(self.__marinespecies_url)
 
     def __loadResource(self):
         """ """
         # All resources are needed.
         toolbox_resources.ToolboxResources().loadUnloadedResourceDyntaxa()
-        toolbox_resources.ToolboxResources().loadResourcePeg()
+        toolbox_resources.ToolboxResources().loadResourceHarmfulPlankton()
 
-    def __pegRefresh(self):
+    def __harmfulPlanktonRefresh(self):
         """ """
+        self.__marinespecies_url = None
         self.__model.reset()
-        self.__tableView.resizeColumnsToContents() # TODO: Check if time-consuming...
+        self.__tableView.resizeColumnsToContents() # Only visible columns.
         
-class PegTableModel(QtCore.QAbstractTableModel):
-    """ 
+class HarmfulPlanktonTableModel(QtCore.QAbstractTableModel):
+    """
+    Example:
+            {
+                "Aphia id": 246835, 
+                "Author": "Balech, 1990", 
+                "Scientific name": "Alexandrium andersonii"
+            },... 
+ 
     """
     def __init__(self, dataset):
         self.__dataset = dataset
 #        self.__nameandsizelist = self.__dataset.getNameAndSizeList()
         # Initialize parent.
-        super(PegTableModel, self).__init__()
+        super(HarmfulPlanktonTableModel, self).__init__()
         
     def setDataset(self, dataset):
         """ """
@@ -196,7 +168,7 @@ class PegTableModel(QtCore.QAbstractTableModel):
     def rowCount(self, parent=QtCore.QModelIndex()):
         """ """
         if self.__dataset:
-            return len(self.__dataset.getNameAndSizeList())
+            return len(self.__dataset.getSortedNameList())
         else:
             return 0
 
@@ -208,9 +180,9 @@ class PegTableModel(QtCore.QAbstractTableModel):
         """ Columns: Taxon, Sizeclass. """
         if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
             if section == 0:
-                return QtCore.QVariant('PEG name')
+                return QtCore.QVariant('Scientific name')
             elif section == 1:
-                return QtCore.QVariant('Sizeclass')            
+                return QtCore.QVariant('Aphia id')            
             elif section == 2:
                 return QtCore.QVariant('Dyntaxa id')            
             elif section == 3:
@@ -224,18 +196,18 @@ class PegTableModel(QtCore.QAbstractTableModel):
         if role == QtCore.Qt.DisplayRole:
             if index.isValid():
                 if index.column() == 0:
-                    peg = self.__dataset.getNameAndSizeList()[index.row()][0]
-                    return QtCore.QVariant(peg.get('Species', ''))
+                    harmfulplankton = self.__dataset.getSortedNameList()[index.row()]
+                    return QtCore.QVariant(harmfulplankton.get('Scientific name', ''))
                 if index.column() == 1:
-                    sizeclass = self.__dataset.getNameAndSizeList()[index.row()][1]
-                    return QtCore.QVariant(sizeclass.get('Size class', ''))
+                    sizeclass = self.__dataset.getSortedNameList()[index.row()]
+                    return QtCore.QVariant(sizeclass.get('Aphia id', ''))
                 if index.column() == 2:
-                    peg = self.__dataset.getNameAndSizeList()[index.row()][0]
-                    return QtCore.QVariant(peg.get('Dyntaxa id', ''))
+                    harmfulplankton = self.__dataset.getSortedNameList()[index.row()]
+                    return QtCore.QVariant(harmfulplankton.get('Dyntaxa id', ''))
                 if index.column() == 3:
-                    peg = self.__dataset.getNameAndSizeList()[index.row()][0]
+                    harmfulplankton = self.__dataset.getSortedNameList()[index.row()]
                     dyntaxaresource = toolbox_resources.ToolboxResources().getResourceDyntaxa()
-                    dyntaxa = dyntaxaresource.getTaxonById(peg.get('Dyntaxa id', ''))
+                    dyntaxa = dyntaxaresource.getTaxonById(harmfulplankton.get('Dyntaxa id', ''))
                     if dyntaxa:
                         return QtCore.QVariant(dyntaxa.get('Scientific name', ''))
                     else:

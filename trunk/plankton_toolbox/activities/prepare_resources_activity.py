@@ -56,6 +56,7 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
         layout.addWidget(widget)
         widget.addTab(self._createContentDyntaxa(), "Dyntaxa")
         widget.addTab(self._createContentPeg(), "PEG")
+        widget.addTab(self._createContentHarmfulPlankton(), "Harmful plankton")
         
     def _createContentDyntaxa(self):
         """ """        
@@ -91,7 +92,7 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
         form1.addWidget(self.__dyntaxafromdirectory_edit, row, 1, 1, 9)
         form1.addWidget(self.__dyntaxafrom_button, row, 10, 1, 1)
         row += 1
-        label3 = QtGui.QLabel("To file:")
+        label3 = QtGui.QLabel("To file (.json):")
         form1.addWidget(label3, row, 0, 1, 1)
         form1.addWidget(self.__dyntaxatofile_edit, row, 1, 1, 9)
         form1.addWidget(self.__dyntaxato_button, row, 10, 1, 1)
@@ -140,22 +141,22 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         row = 0
-        label1 = QtGui.QLabel("From file:")
+        label1 = QtGui.QLabel("From file (.txt):")
         form1.addWidget(label1, row, 0, 1, 1)
         form1.addWidget(self.__pegfromfile_edit, row, 1, 1, 9)
         form1.addWidget(self.__pegfrom_button, row, 10, 1, 1)
         row += 1
-        label2 = QtGui.QLabel("Translate PW to PEG file:")
+        label2 = QtGui.QLabel("Translate PW to PEG file (.txt):")
         form1.addWidget(label2, row, 0, 1, 1)
         form1.addWidget(self.__pwtopegfile_edit, row, 1, 1, 9)
         form1.addWidget(self.__pwtopegfile_button, row, 10, 1, 1)
         row += 1
-        label2 = QtGui.QLabel("Translate PEG to Dyntaxa file:")
+        label2 = QtGui.QLabel("Translate PEG to Dyntaxa file (.txt):")
         form1.addWidget(label2, row, 0, 1, 1)
         form1.addWidget(self.__pegtodyntaxafile_edit, row, 1, 1, 9)
         form1.addWidget(self.__pegtodyntaxafile_button, row, 10, 1, 1)
         row += 1
-        label2 = QtGui.QLabel("To file:")
+        label2 = QtGui.QLabel("To file (.json):")
         form1.addWidget(label2, row, 0, 1, 1)
         form1.addWidget(self.__pegtofile_edit, row, 1, 1, 9)
         form1.addWidget(self.__pegto_button, row, 10, 1, 1)
@@ -167,6 +168,53 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
         hbox1.addStretch(5)
         hbox1.addWidget(self.__pegmetadata_button)
         hbox1.addWidget(self.__pegprepare_button)
+        layout = QtGui.QVBoxLayout()
+        layout.addLayout(form1)
+        layout.addLayout(hbox1)
+        widget.setLayout(layout)
+        #
+        return widget
+
+    def _createContentHarmfulPlankton(self):
+        """ """
+        widget = QtGui.QWidget()
+        # Active widgets and connections.
+        self.__harmfulfromfile_edit = QtGui.QLineEdit("../../../../data/planktondata/originalfiles/smhi_harmful_plankton.txt")
+###        self.__harmfulfromfile_edit = QtGui.QLineEdit("")
+        self.__harmfulfrom_button = QtGui.QPushButton("Browse...")
+        # Get filepath from toolbox settings.
+        filepath = toolbox_settings.ToolboxSettings().getValue('Resources:Harmful plankton:Filepath')
+        self.__harmfultofile_edit = QtGui.QLineEdit(filepath)
+        self.__harmfulto_button = QtGui.QPushButton("Browse...")        
+        #
+        self.__harmfulmetadata_table = QtGui.QTableWidget()
+        self.__harmfulmetadata_button = QtGui.QPushButton("(Edit metadata...)")
+        self.__harmfulprepare_button = QtGui.QPushButton("Create resource")
+        #
+        self.connect(self.__harmfulfrom_button, QtCore.SIGNAL("clicked()"), self.__harmfulFromBrowse)              
+        self.connect(self.__harmfulto_button, QtCore.SIGNAL("clicked()"), self.__harmfulToBrowse)
+        self.connect(self.__harmfulmetadata_button, QtCore.SIGNAL("clicked()"), self.__editHarmfulMetadata)                
+        self.connect(self.__harmfulprepare_button, QtCore.SIGNAL("clicked()"), self.__prepareHarmful)                
+        # Layout widgets.
+        form1 = QtGui.QGridLayout()
+        row = 0
+        label1 = QtGui.QLabel("From file (.txt):")
+        form1.addWidget(label1, row, 0, 1, 1)
+        form1.addWidget(self.__harmfulfromfile_edit, row, 1, 1, 9)
+        form1.addWidget(self.__harmfulfrom_button, row, 10, 1, 1)
+        row += 1
+        label2 = QtGui.QLabel("To file (.json):")
+        form1.addWidget(label2, row, 0, 1, 1)
+        form1.addWidget(self.__harmfultofile_edit, row, 1, 1, 9)
+        form1.addWidget(self.__harmfulto_button, row, 10, 1, 1)
+        row += 1
+        label3 = QtGui.QLabel("Metadata:")
+        form1.addWidget(label3, row, 0, 1, 1)
+        form1.addWidget(self.__harmfulmetadata_table, row, 1, 10, 10)
+        hbox1 = QtGui.QHBoxLayout()
+        hbox1.addStretch(5)
+        hbox1.addWidget(self.__harmfulmetadata_button)
+        hbox1.addWidget(self.__harmfulprepare_button)
         layout = QtGui.QVBoxLayout()
         layout.addLayout(form1)
         layout.addLayout(hbox1)
@@ -269,7 +317,7 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
             utils.Logger().info("Prepare dyntaxa. Ended.")
             self._writeToStatusBar("")
         # Reload resources.
-        toolbox_resources.ToolboxResources().loadAllResources()
+        toolbox_resources.ToolboxResources().loadResourceDyntaxa()
 
     def __editPegMetadata(self):
         """ """
@@ -307,4 +355,56 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
             utils.Logger().info("Prepare PEG. Ended.")
             self._writeToStatusBar("")
         # Reload resources.
-        toolbox_resources.ToolboxResources().loadAllResources()
+        toolbox_resources.ToolboxResources().loadResourcePeg()
+
+    def __harmfulFromBrowse(self):
+        """ """
+        dirdialog = QtGui.QFileDialog(self)
+        dirdialog.setDirectory(unicode(self.__harmfulfromfile_edit.text()))
+        filepath = dirdialog.getOpenFileName()
+        if filepath:
+            self.__harmfulfromfile_edit.setText(filepath)
+
+    def __harmfulToBrowse(self):
+        """ """
+        dirdialog = QtGui.QFileDialog(self)
+        dirdialog.setDirectory(unicode(self.__harmfultofile_edit.text()))
+        filepath = dirdialog.getOpenFileName()
+        if filepath:
+            self.__harmfultofile_edit.setText(filepath)
+
+    def __editHarmfulMetadata(self):
+        """ """
+        QtGui.QMessageBox.information(self, 'Metadata', 'Not implemented.')
+
+    def __prepareHarmful(self):
+        """ """
+        utils.Logger().info("Prepare Harmful plankton. Started.")
+        utils.Logger().clear()
+        self._writeToStatusBar("Prepare Harmful plankton.")
+        try:
+            harmful = taxa.HarmfulPlankton()
+            importer = taxa_prepare.PrepareHarmfulMicroAlgae(taxaObject = harmful)
+            importer.importTaxa(file = unicode(self.__harmfulfromfile_edit.text()))
+            #
+            utils.Logger().info('Number of Harmful plankton taxa: ' + str(len(harmful.getTaxonList())))                
+            exporter = taxa_sources.JsonFile(taxaObject = harmful)
+            exporter.exportTaxa(file = unicode(self.__harmfultofile_edit.text()), encode = 'iso-8859-1')
+        except UserWarning, e:
+            utils.Logger().error("UserWarning: " + unicode(e))
+            QtGui.QMessageBox.warning(self, "Warning", unicode(e))
+        except (IOError, OSError), e:
+            utils.Logger().error("Error: " + unicode(e))
+            QtGui.QMessageBox.warning(self, "Error", unicode(e))
+        except Exception, e:
+            utils.Logger().error("Failed on exception: " + unicode(e))
+            QtGui.QMessageBox.warning(self, "Exception", unicode(e))
+            raise
+        finally:
+            utils.Logger().logAllWarnings()    
+            utils.Logger().logAllErrors()    
+            utils.Logger().info("Prepare Harmful plankton. Ended.")
+            self._writeToStatusBar("")
+        # Reload resources.
+        toolbox_resources.ToolboxResources().loadResourceHarmfulPlankton()
+
