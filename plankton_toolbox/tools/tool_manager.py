@@ -33,6 +33,7 @@ import plankton_toolbox.tools.log_tool as log_tool
 import plankton_toolbox.tools.metadata_editor_tool as metadata_editor_tool
 import plankton_toolbox.tools.dyntaxa_browser_tool as dyntaxa_browser_tool
 import plankton_toolbox.tools.peg_browser_tool as peg_browser_tool
+import plankton_toolbox.tools.harmful_plankton_browser_tool as harmful_plankton_browser_tool
 import plankton_toolbox.tools.taxon_facts_tool as taxon_facts_tool
 import plankton_toolbox.tools.taxon_images_tool as taxon_images_tool
 import plankton_toolbox.tools.latlong_tool as latlong_tool
@@ -57,6 +58,7 @@ class ToolManager(object):
         self.__toollist.append(metadata_editor_tool.MetadataEditorTool("(Metadata editor)", self._parent))
         self.__toollist.append(dyntaxa_browser_tool.DyntaxaBrowserTool("Dyntaxa browser", self._parent))
         self.__toollist.append(peg_browser_tool.PegBrowserTool("PEG browser", self._parent))
+        self.__toollist.append(harmful_plankton_browser_tool.HarmfulPlanktonBrowserTool("Harmful plankton", self._parent))
         self.__toollist.append(taxon_facts_tool.TaxonFactsTool("(Taxon facts)", self._parent))
         self.__toollist.append(taxon_images_tool.TaxonImagesTool("(Taxon images)", self._parent))
         self.__toollist.append(latlong_tool.LatLongTool("Latlong", self._parent))

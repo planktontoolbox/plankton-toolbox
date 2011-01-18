@@ -53,8 +53,8 @@ class ToolboxSettings(QtCore.QObject):
                     "PW to PEG filepath": "planktondata/resources/smhi_pw_to_extended_peg.txt",
                     "PEG to Dyntaxa filepath": "planktondata/resources/smhi_peg_to_dyntaxa.txt"
                 },
-                "IOC": {
-                    "Filepath": ""
+                "Harmful plankton": {
+                    "Filepath": "planktondata/resources/smhi_harmful_plankton.json"
                 },
                 "Load at startup": True 
             },
@@ -103,9 +103,12 @@ class ToolboxSettings(QtCore.QObject):
         # Split the key and walk down in dictionaries.
         # Current_level_item will became value at last level.
         for keypart in compoundkey.split(':'):
-            current_level_item = current_level_item.get(keypart, None)
-        return current_level_item
-        pass
+            if current_level_item:
+                current_level_item = current_level_item.get(keypart, None)
+        if current_level_item:
+            return current_level_item
+        else:
+            return ''
 
     def setValue(self, compoundkey, value):
         """ Use compound key with field delimiter ':'. """
@@ -116,6 +119,9 @@ class ToolboxSettings(QtCore.QObject):
         for keypart in compoundkey.split(':'):
             last_used_dict = current_level_item
             current_level_item = current_level_item.get(keypart, None)
+            if not current_level_item:
+                last_used_dict[keypart] = {}
+                current_level_item = last_used_dict[keypart]
 #        last_used_dict.setdefault(keypart, value)
         last_used_dict[keypart] = value
         pass

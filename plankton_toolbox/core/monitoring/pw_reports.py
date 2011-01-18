@@ -42,6 +42,7 @@ class PwReports(object):
         
 class PwReportMJ1(PwReports):
     """ 
+    This report has one row for each species and one column for each sample.
     """
     def __init__(self):
         """ """
@@ -52,7 +53,6 @@ class PwReportMJ1(PwReports):
         
     def createReport(self, samplefiles_dict = None, reportFileName = None):
         """ 
-        This report has one row for each species and one column for each sample.
         """
         # Check indata.
         if samplefiles_dict == None:
@@ -60,15 +60,10 @@ class PwReportMJ1(PwReports):
         if reportFileName == None:
             raise UserWarning('File name is missing.')
         # Load resources, if not loaded before.
-        if not toolbox_resources.ToolboxResources().isResourcePegLoaded():
-            toolbox_resources.ToolboxResources().loadResourcePeg()
+        toolbox_resources.ToolboxResources().loadUnloadedResources()
         pegresource = toolbox_resources.ToolboxResources().getResourcePeg()
-        if not toolbox_resources.ToolboxResources().isResourceDyntaxaLoaded():
-            toolbox_resources.ToolboxResources().loadResourceDyntaxa()
         dyntaxaresource = toolbox_resources.ToolboxResources().getResourceDyntaxa()
-        if not toolbox_resources.ToolboxResources().isResourceIocLoaded():
-            toolbox_resources.ToolboxResources().loadResourceIoc()
-        iocresource = toolbox_resources.ToolboxResources().getResourceIoc()
+        harmfulresource = toolbox_resources.ToolboxResources().getResourceHarmfulPlankton()
         # Prepare lookup dictionary for PW-names in the PEG resource.
         pwnametopegtaxon_dict = {}
         for species in pegresource.getTaxonList():
@@ -79,7 +74,7 @@ class PwReportMJ1(PwReports):
         # Part 1: Create header rows with columns for sample related data.
         #
         samplefilenames = samplefiles_dict.keys()
-        samplefilenames.sort() # Filenames used to set up column order.           
+        samplefilenames.sort() # Filenames in alphabetic sort order is used to set up column order.           
         # 
         numberofcolumns = 3 + len(samplefilenames)
         header_row_1 = [unicode()] * numberofcolumns 
@@ -197,6 +192,9 @@ class PwReportMJ1(PwReports):
 def pw_report_1_sort(s1, s2):
     """ """
     # Class.
+    # Empty strings should be at the end.
+    if (s1[0] != '') and (s2[0] == ''): return -1
+    if (s1[0] == '') and (s2[0] != ''): return 1
     if s1[0] < s2[0]: return -1
     if s1[0] > s2[0]: return 1
     # Scientific name
@@ -226,15 +224,11 @@ class PwReportMJ2(PwReports):
         if reportFileName == None:
             raise UserWarning('File name is missing.')
         # Load resources, if not loaded before.
-        if not toolbox_resources.ToolboxResources().isResourcePegLoaded():
-            toolbox_resources.ToolboxResources().loadResourcePeg()
+        # Load resources, if not loaded before.
+        toolbox_resources.ToolboxResources().loadUnloadedResources()
         pegresource = toolbox_resources.ToolboxResources().getResourcePeg()
-        if not toolbox_resources.ToolboxResources().isResourceDyntaxaLoaded():
-            toolbox_resources.ToolboxResources().loadResourceDyntaxa()
         dyntaxaresource = toolbox_resources.ToolboxResources().getResourceDyntaxa()
-        if not toolbox_resources.ToolboxResources().isResourceIocLoaded():
-            toolbox_resources.ToolboxResources().loadResourceIoc()
-        iocresource = toolbox_resources.ToolboxResources().getResourceIoc()
+        harmfulresource = toolbox_resources.ToolboxResources().getResourceHarmfulPlankton()
         # Prepare lookup dictionary for PW-names in the PEG resource.
         pwnametopegtaxon_dict = {}
         for species in pegresource.getTaxonList():
@@ -287,8 +281,14 @@ class PwReportMJ2(PwReports):
                 pw_speciesname = pw_datarow[0]
                 # Abundance.     
                 coeff = pw_datarow[5].replace(',', '.')
-                units = pw_datarow[4].replace(',', '.')        
-                abundance = unicode(float(coeff) * float(units)).replace('.', ',')
+                units = pw_datarow[4].replace(',', '.')
+                try:        
+                    abundance = unicode(float(coeff) * float(units)).replace('.', ',')
+                except Exception, e:
+                    abundance = '<error>'
+                    utils.Logger().error('Wrong format for coeff or units: ' + 
+                                         'coeff: ' + unicode(coeff) + 
+                                         'units: ' + unicode(units))
                 #         
                 if species_sample_dict.has_key(pw_speciesname):
                     species_sample_dict[pw_speciesname][filenameindex] = abundance
@@ -390,15 +390,11 @@ class PwReportATS1(PwReports):
         if reportFileName == None:
             raise UserWarning('File name is missing.')
         # Load resources, if not loaded before.
-        if not toolbox_resources.ToolboxResources().isResourcePegLoaded():
-            toolbox_resources.ToolboxResources().loadResourcePeg()
+        # Load resources, if not loaded before.
+        toolbox_resources.ToolboxResources().loadUnloadedResources()
         pegresource = toolbox_resources.ToolboxResources().getResourcePeg()
-        if not toolbox_resources.ToolboxResources().isResourceDyntaxaLoaded():
-            toolbox_resources.ToolboxResources().loadResourceDyntaxa()
         dyntaxaresource = toolbox_resources.ToolboxResources().getResourceDyntaxa()
-        if not toolbox_resources.ToolboxResources().isResourceIocLoaded():
-            toolbox_resources.ToolboxResources().loadResourceIoc()
-        iocresource = toolbox_resources.ToolboxResources().getResourceIoc()
+        harmfulresource = toolbox_resources.ToolboxResources().getResourceHarmfulPlankton()
         # Prepare lookup dictionary for PW-names in the PEG resource.
         pwnametopegtaxon_dict = {}
         for species in pegresource.getTaxonList():
@@ -541,6 +537,9 @@ def pw_report_3_sort(s1, s2):
     if s1[1] < s2[1]: return -1
     if s1[1] > s2[1]: return 1
     # Scientific name.
+    # Empty strings should be at the end.
+    if (s1[9] != '') and (s2[9] == ''): return -1
+    if (s1[9] == '') and (s2[9] != ''): return 1
     if s1[9] < s2[9]: return -1
     if s1[9] > s2[9]: return 1
     # Size class No.

@@ -136,7 +136,7 @@ class DyntaxaBrowserTool(tool_base.ToolBase):
 ###        taxonName = self.__dyntaxa_object.getData(index.row(), 0)
 ###        size = self.__dyntaxa_object.getData(index.row(), 1)
         #
-        taxon = self.__dyntaxa_object.getNameSortedList()[index.row()]
+        taxon = self.__dyntaxa_object.getSortedNameList()[index.row()]
         self.__scientificname_label.setText(
             '<b>' + 
             '<i>' + taxon.get('Scientific name', '') + '</i>' + 
@@ -198,7 +198,7 @@ class DyntaxaTableModel(QtCore.QAbstractTableModel):
     def rowCount(self, parent=QtCore.QModelIndex()):
         """ """
         if self.__dataset:
-            return len(self.__dataset.getNameSortedList())
+            return len(self.__dataset.getSortedNameList())
         else:
             return 0
 
@@ -230,26 +230,26 @@ class DyntaxaTableModel(QtCore.QAbstractTableModel):
         if role == QtCore.Qt.DisplayRole:
             if index.isValid():
                 if index.column() == 0:
-                    sizeclass = self.__dataset.getNameSortedList()[index.row()]
+                    sizeclass = self.__dataset.getSortedNameList()[index.row()]
                     return QtCore.QVariant(sizeclass.get('Taxon id', ''))
                 if index.column() == 1:
-                    taxon = self.__dataset.getNameSortedList()[index.row()]
+                    taxon = self.__dataset.getSortedNameList()[index.row()]
                     return QtCore.QVariant(taxon.get('Scientific name', ''))
                 if index.column() == 2:
-                    taxon = self.__dataset.getNameSortedList()[index.row()]
+                    taxon = self.__dataset.getSortedNameList()[index.row()]
                     return QtCore.QVariant(taxon.get('Taxon type', ''))
                 if index.column() == 3:
-                    taxon = self.__dataset.getNameSortedList()[index.row()]
+                    taxon = self.__dataset.getSortedNameList()[index.row()]
                     for nameitem in taxon.get('Names', []):
                         if nameitem['Name type'] == 'Swedish':
                             return QtCore.QVariant(nameitem.get('Name', ''))
                 if index.column() == 4:
-                    taxon = self.__dataset.getNameSortedList()[index.row()]
+                    taxon = self.__dataset.getSortedNameList()[index.row()]
                     for nameitem in taxon.get('Names', []):
                         if nameitem['Name type'] == 'ITIS-number':
                             return QtCore.QVariant(nameitem.get('Name', ''))
                 if index.column() == 5:
-                    taxon = self.__dataset.getNameSortedList()[index.row()]
+                    taxon = self.__dataset.getSortedNameList()[index.row()]
                     for nameitem in taxon.get('Names', []):
                         if nameitem['Name type'] == 'ERMS-name':
                             return QtCore.QVariant(nameitem.get('Name', ''))

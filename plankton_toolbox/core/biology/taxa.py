@@ -57,12 +57,8 @@ class Taxa(object):
         return self._data
         
     def getIdToTaxonDict(self):
-        """ """
+        """ Note: No loading on demand. Use getTaxonById() instead. """
         return self._idToTaxonDict
-        
-    def getNameToTaxonDict(self):
-        """ """
-        return self._nameToTaxonDict
         
     def getTaxonListSortedBy(self, sortField):
         """ """
@@ -71,7 +67,7 @@ class Taxa(object):
     def getTaxonById(self, taxonId):
         """ """
         if len(self._idToTaxonDict) == 0:
-            self._createIdToTaxonLookup() # On demand
+            self._createIdToTaxonLookup() # On demand. Should be implemented in subclasses.
         if self._idToTaxonDict.has_key(taxonId):
             return self._idToTaxonDict[taxonId]
         else:
@@ -80,20 +76,18 @@ class Taxa(object):
     def getTaxonByName(self, taxonName):
         """ """
         if len(self._nameToTaxonDict) == 0:
-            self._createNameToTaxonDict() # On demand
+            self._createNameToTaxonDict() # On demand. Should be implemented in subclasses.
         if self._nameToTaxonDict.has_key(taxonName):
             return self._nameToTaxonDict[taxonName]
         return None
     
     @abstractmethod
     def _createIdToTaxonLookup(self):
-        """ """
-#        raise UserWarning('Not implemented: _createNameToTaxonDict.')
+        """ Note: Abstract. """
 
     @abstractmethod
     def _createNameToTaxonDict(self):
-        """ """
-#        raise UserWarning('Not implemented: _createNameToTaxonDict.')
+        """ Note: Abstract. """
 
         
 class Dyntaxa(Taxa):
@@ -103,17 +97,17 @@ class Dyntaxa(Taxa):
     """
     def __init__(self):
         """ """
-        self.__nameSortedList = None
+        self.__sortedNameList = None
         # Initialize parent.
         super(Dyntaxa, self).__init__()
 
     def clear(self):
         """ """
-        self.__nameSortedList = None
+        self.__sortedNameList = None
         super(Dyntaxa, self).clear()
         
     def _createIdToTaxonLookup(self):
-        """ """
+        """ Note: Implementation of abstract method. """
         for taxon in self._data:
             id = taxon.get('Taxon id', None)
             if id:
@@ -122,7 +116,7 @@ class Dyntaxa(Taxa):
                 print('DEBUG: Name missing.')
             
     def _createNameToTaxonDict(self):
-        """ """
+        """ Note: Implementation of abstract method. """
         for taxon in self._data:
             name = taxon.get('Scientific name', None)
             if name:
@@ -130,24 +124,20 @@ class Dyntaxa(Taxa):
             else:
                 print('DEBUG: Name missing.')
             
-    def getNameSortedList(self):
+    def getSortedNameList(self):
         """ 
         Used when a sorted list of taxon is needed.
         Format: [taxon, ...]
         """
-        if self.__nameSortedList == None:
-            self.__createNameSortedList()
-        return self.__nameSortedList
+        if self.__sortedNameList == None:
+            self.__sortedNameList = []
+            for taxon in self._data:
+                self.__sortedNameList.append(taxon)
+            # Sort.
+            self.__sortedNameList.sort(dyntaxaname_sort) # Sort function defined below.
+        return self.__sortedNameList
             
-    def __createNameSortedList(self):
-        """ """
-        self.__nameSortedList = []
-        for taxon in self._data:
-            self.__nameSortedList.append(taxon)
-        # Sort.
-        self.__nameSortedList.sort(dyntaxaname_sort) # Sort function defined below.
-
-# Sort function for name and size list.
+# Sort function for scientific name list.
 def dyntaxaname_sort(s1, s2):
     """ """
     # Check names first.
@@ -176,7 +166,7 @@ class Peg(Taxa):
         super(Peg, self).clear()
         
     def _createNameToTaxonDict(self):
-        """ """
+        """ Note: Implementation of abstract method. """
         for taxon in self._data:
             self._nameToTaxonDict[taxon['Species']] = taxon
 
@@ -193,26 +183,22 @@ class Peg(Taxa):
         Format: [[taxon], [sizeclass], ...]
         """
         if self.__nameAndSizeList == None:
-            self.__createNameAndSizeList()
+            self.__nameAndSizeList = []
+            for taxon in self._data:
+                for sizeclass in taxon['Size classes']:
+                    self.__nameAndSizeList.append([taxon, sizeclass])
+            # Sort.
+            self.__nameAndSizeList.sort(pegnameandsize_sort) # Sort function defined below.
         return self.__nameAndSizeList
             
-    def __createNameAndSizeList(self):
-        """ """
-        self.__nameAndSizeList = []
-        for taxon in self._data:
-            for sizeclass in taxon['Size classes']:
-                self.__nameAndSizeList.append([taxon, sizeclass])
-        # Sort.
-        self.__nameAndSizeList.sort(pegnameandsize_sort) # Sort function defined below.
-
 # Sort function for name and size list.
 def pegnameandsize_sort(s1, s2):
     """ """
-    # Check names first.
+    # Check names.
     name1 = s1[0]['Species']
     name2 = s2[0]['Species']
-    if name1 < name2: return -1
     if name1 > name2: return 1
+    if name1 < name2: return -1
     # Names are equal, check sizes.
     size1 = s1[1]['Size class']
     size2 = s2[1]['Size class']
@@ -230,11 +216,57 @@ class MarineSpecies(Taxa):
         super(MarineSpecies, self).__init__()
 
 
-class Ioc(Taxa):
+class HarmfulPlankton(Taxa):
     """ 
     """
     def __init__(self):
         """ """
+        self.__sortedNameList = None
         # Initialize parent.
-        super(Ioc, self).__init__()
+        super(HarmfulPlankton, self).__init__()
 
+    def clear(self):
+        """ """
+        self.__sortedNameList = None
+        super(HarmfulPlankton, self).clear()
+        
+    def _createIdToTaxonLookup(self):
+        """ Note: Implementation of abstract method. """
+        for taxon in self._data:
+            id = taxon.get('Taxon id', None)
+            if id:
+                self._idToTaxonDict[id] = taxon
+            else:
+                print('DEBUG: Name missing.')
+            
+    def _createNameToTaxonDict(self):
+        """ Note: Implementation of abstract method. """
+        for taxon in self._data:
+            name = taxon.get('Scientific name', None)
+            if name:
+                self._nameToTaxonDict[name] = taxon
+            else:
+                print('DEBUG: Name missing.')
+            
+    def getSortedNameList(self):
+        """ 
+        Used when a sorted list of taxon is needed.
+        Format: [taxon, ...]
+        """
+        if self.__sortedNameList == None:
+            self.__sortedNameList = []
+            for taxon in self._data:
+                self.__sortedNameList.append(taxon)
+            # Sort.
+            self.__sortedNameList.sort(harmfulplankton_sort) # Sort function defined below.
+        return self.__sortedNameList
+
+# Sort function for scientific name list.
+def harmfulplankton_sort(s1, s2):
+    """ """
+    # Check names first.
+    name1 = s1.get('Scientific name', '')
+    name2 = s2.get('Scientific name', '')
+    if name1 < name2: return -1
+    if name1 > name2: return 1
+    return 0 # Both are equal.
