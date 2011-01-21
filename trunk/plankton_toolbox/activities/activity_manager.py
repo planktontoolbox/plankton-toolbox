@@ -29,7 +29,7 @@ Activity manager.
 """
 
 import plankton_toolbox.activities.create_dataset_activity as create_dataset_activity
-import plankton_toolbox.activities.get_datasets_activity as get_datasets_activity
+import plankton_toolbox.activities.get_data_activity as get_data_activity
 import plankton_toolbox.activities.analyse_data_activity as analyse_data_activity
 import plankton_toolbox.activities.create_reports_activity as create_reports_activity
 import plankton_toolbox.activities.prepare_resources_activity as prepare_resources_activity
@@ -48,7 +48,7 @@ class ActivityManager(object):
     def initActivities(self):
         """ Activity activator. """
         self.__activitylist.append(create_dataset_activity.CreateDatasetActivity("(Create dataset)", self._parent))
-        self.__activitylist.append(get_datasets_activity.GetDatasetsActivity("Get datasets", self._parent))
+        self.__activitylist.append(get_data_activity.GetDataActivity("Get data", self._parent))
         self.__activitylist.append(analyse_data_activity.AnalyseDataActivity("(Analyse data)", self._parent))
         self.__activitylist.append(create_reports_activity.CreateReportsActivity("Create reports", self._parent))
         self.__activitylist.append(prepare_resources_activity.PrepareResourcesActivity("Prepare resources", self._parent))
