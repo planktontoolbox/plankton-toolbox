@@ -111,7 +111,7 @@ class PwReportMJ1(PwReports):
         for filenameindex, samplefilename in enumerate(samplefilenames):
             pw_samplefile = samplefiles_dict[samplefilename]
             # Iterate over the data rows
-            for pw_datarow in pw_samplefile._data['rows']:
+            for pw_datarow in pw_samplefile._rows:
                 # Species name
                 pw_speciesname = pw_datarow[0]
                 # Abundance.     
@@ -173,11 +173,11 @@ class PwReportMJ1(PwReports):
             out.write('\t'.join(map(unicode, header_row_3)) + rowseparator)
             out.write('\t'.join(map(unicode, header_row_4)) + rowseparator)
             # Header for species part.
-            headerrow = 'Klass' + separator + \
-                        'Pot. giftig' + separator + \
-                        'Art'# Index 2.
+            headerrow = u'Klass' + separator + \
+                        u'Pot. giftig' + separator + \
+                        u'Art'# Index 2.
             for filenameindex, samplefilename in enumerate(samplefilenames):
-                headerrow += separator + 'Förekomst' 
+                headerrow += separator + u'Förekomst' 
             out.write(headerrow + rowseparator)
             # Species data.
             for row in species_rows:
@@ -276,7 +276,7 @@ class PwReportMJ2(PwReports):
         for filenameindex, samplefilename in enumerate(samplefilenames):
             pw_samplefile = samplefiles_dict[samplefilename]
             # Iterate over the data rows
-            for pw_datarow in pw_samplefile._data['rows']:
+            for pw_datarow in pw_samplefile._rows:
                 # Species name
                 pw_speciesname = pw_datarow[0]
                 # Abundance.     
@@ -344,11 +344,11 @@ class PwReportMJ2(PwReports):
             out.write('\t'.join(map(unicode, header_row_3)) + rowseparator)
             out.write('\t'.join(map(unicode, header_row_4)) + rowseparator)
             # Header for species part.
-            headerrow = 'Klass' + separator + \
-                        'Pot. giftig' + separator + \
-                        'Art'# Index 2.
+            headerrow = u'Klass' + separator + \
+                        u'Pot. giftig' + separator + \
+                        u'Art'# Index 2.
             for filenameindex, samplefilename in enumerate(samplefilenames):
-                headerrow += separator + 'Förekomst' 
+                headerrow += separator + u'Förekomst' 
             out.write(headerrow + rowseparator)
             # Species data.
             for row in species_rows:
@@ -418,7 +418,7 @@ class PwReportATS1(PwReports):
             #    'Sedim. volume', 'Ship', 'Preservative'
             #
             # Iterate over the data rows
-            for pw_datarow in pw_samplefile._data['rows']:
+            for pw_datarow in pw_samplefile._rows:
                 # Keywords in the PW sample data rows:
                 #    'Species', 'A/H', 'Size', 'Descr', 'Units', 
                 #    'Coeff', 'Units/l', 'ww mg/m3', '\xb5gC/m3']
@@ -500,23 +500,23 @@ class PwReportATS1(PwReports):
             out = codecs.open(reportFileName, mode = 'w', encoding = 'iso-8859-1')
             separator = '\t' # Use tab as item separator.
             #
-            out.write( 'Station' + separator + # Index 0.
-                        'Date' + separator + # Index 1.
-                        'Analysis date' + separator + # Index 2.
-                        'Min depth m' + separator + # Index 3.
-                        'Max depth m' + separator + # Index 4.
-                        'Order' + separator + # Index 5.
-                        'Trophy' + separator + # Index 6.
-                        'Pot Harmful' + separator + # Index 7.
-                        'Author' + separator + # Index 8.
-                        'Species' + separator + # Index 9.
-                        'SFLAG (sp., spp., cf., group, complex, cyst)' + separator + # Index 10.
-                        'Size class No' + separator + # Index 11.
+            out.write( u'Station' + separator + # Index 0.
+                        u'Date' + separator + # Index 1.
+                        u'Analysis date' + separator + # Index 2.
+                        u'Min depth m' + separator + # Index 3.
+                        u'Max depth m' + separator + # Index 4.
+                        u'Order' + separator + # Index 5.
+                        u'Trophy' + separator + # Index 6.
+                        u'Pot Harmful' + separator + # Index 7.
+                        u'Author' + separator + # Index 8.
+                        u'Species' + separator + # Index 9.
+                        u'SFLAG (sp., spp., cf., group, complex, cyst)' + separator + # Index 10.
+                        u'Size class No' + separator + # Index 11.
 #                        'Cells/L, RED= 100-um pieces/L' + separator + # Index 12.
-                        'Cells/L' + separator + # Index 12.
-                        '100-um pieces/L' + separator + # Index 13.
-                        'Biovolume mm3/L' + separator + # Index 14.
-                        '\r\n'
+                        u'Cells/L' + separator + # Index 12.
+                        u'100-um pieces/L' + separator + # Index 13.
+                        u'Biovolume mm3/L' + separator + # Index 14.
+                        u'\r\n'
                         )
             
             for row in out_rows:

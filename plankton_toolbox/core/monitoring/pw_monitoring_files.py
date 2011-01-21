@@ -41,21 +41,53 @@ class MonitoringFiles(object):
     """
     def __init__(self):
         """ """
-        self._metadata = {} # Metadata for the dataset.
-
+        self._metadata = {}
+        self._header = []
+        self._rows = []
         
+    def clear(self):
+        """ """
+        self._metadata = {}
+        self._header = []
+        self._rows = []
+
+    def getMetadata(self):
+        """ """
+        return self._metadata
+
+    def getHeader(self):
+        """ """
+        return self._header
+
+    def getRows(self):
+        """ """
+        return self._rows
+
+    def getHeaderItem(self, column):
+        """ Can be called from QAbstractTableModel. """
+        return self._header[column]
+
+    def getDataItem(self, row, column):
+        """ Can be called from QAbstractTableModel. """
+        return self._rows[row][column]
+
+    def getColumnCount(self):
+        """ Can be called from QAbstractTableModel. """
+        return len(self._header)
+
+    def getRowCount(self):
+        """ Can be called from QAbstractTableModel. """
+        return len(self._rows)
+
+
+
 class SharkwebDownload(MonitoringFiles):
     """ 
     """
     def __init__(self):
         """ """
-        self._dataset = {} # Dataset containing the json result set.
         # Initialize parent.
         super(SharkwebDownload, self).__init__()
-
-    def clear(self):
-        """ """
-        self._dataset = {}
 
     def readData(self, parameters = None, encode = 'utf-8'):
         """ """
@@ -71,36 +103,50 @@ class SharkwebDownload(MonitoringFiles):
         utils.Logger().info('DEBUG: Parameters: ' + params)
         #   
         f = urllib.urlopen(url, params)
-        self._dataset['data'] = []
         for row, line in enumerate(f.readlines()):
             # Use this if data is delivered in rows with tab separated fields.
             if row == 0:
-                self._dataset['headers'] = map(string.strip, line.split('\t'))
+                self._header = map(string.strip, line.split('\t'))
             else:
-                self._dataset['data'].append(map(string.strip, line.split('\t')))
+                self._rows.append(map(string.strip, line.split('\t')))
 #            # Use this if data is delivered in the Json format.
 #            self._dataset = json.loads(line, encoding = encode)
-        utils.Logger().info('Received rows: ' + str(len(self._dataset['data'])))
-            
-    def getHeader(self, column):
-        if self._dataset.has_key('headers'): 
-            return self._dataset['headers'][column]
-        return ''
+        utils.Logger().info('Received rows: ' + str(len(self._rows)))
 
-    def getData(self, row, column):
-        if self._dataset.has_key('data'): 
-            return self._dataset['data'][row][column]
-        return ''
 
-    def getColumnCount(self):
-        if self._dataset.has_key('headers'): 
-            return len(self._dataset['headers'])
-        return 0
+class ExcelXlsx(MonitoringFiles):
+    """ 
+    """
+    def __init__(self):
+        """ """
+        # Initialize parent.
+        super(ExcelXlsx, self).__init__()
 
-    def getRowCount(self):
-        if self._dataset.has_key('data'): 
-            return len(self._dataset['data'])
-        return 0
+    def readData(self, parameters = None, encode = 'utf-8'):
+        """ """
+        self.clear()
+        
+        
+        if parameters == None:
+            raise UserWarning('Parameters are missing.')
+        # URL and parameters. Use unicode and utf-8 to handle swedish characters.
+        url = u'http://test.mellifica.org/sharkweb/shark_php.php'
+        parameters = dict([k, v.encode(encode)] for k, v in parameters.items())
+        params = urllib.urlencode(parameters)
+        #
+        utils.Logger().info('DEBUG: URL: ' + url)
+        utils.Logger().info('DEBUG: Parameters: ' + params)
+        #   
+        f = urllib.urlopen(url, params)
+        for row, line in enumerate(f.readlines()):
+            # Use this if data is delivered in rows with tab separated fields.
+            if row == 0:
+                self._header = map(string.strip, line.split('\t'))
+            else:
+                self._rows.append(map(string.strip, line.split('\t')))
+#            # Use this if data is delivered in the Json format.
+#            self._dataset = json.loads(line, encoding = encode)
+        utils.Logger().info('Received rows: ' + str(len(self._rows)))
 
 
 class PwCsv(MonitoringFiles):
@@ -109,10 +155,16 @@ class PwCsv(MonitoringFiles):
     def __init__(self):
         """ """
         self._sample = {} # Information related to sample.
-        self._data = {} # Data set containing header and rows.
-        self._aggregated_data = {} # Pre-calculated aggregations of data.
+        self._aggregated_rows = [] # Pre-calculated aggregations of data.
         # Initialize parent.
         super(PwCsv, self).__init__()
+
+    def clear(self):
+        """ """
+        self._sample = {}
+        self._aggregated_rows = []
+        # Initialize parent.
+        super(PwCsv, self).clear()
 
     def importFile(self, fileName = None):
         """ """
@@ -124,34 +176,32 @@ class PwCsv(MonitoringFiles):
             separator = ',' # Use ',' as item separator.
             
             # Read data header. Same header used for data and aggregated data.
-            self._data['header'] = []
-            self._aggregated_data['header'] = []
+            self._header = []
             for headeritem in file.readline().split(separator):
                 item = headeritem.strip().strip('"').strip()
-                self._data['header'].append(item)
-                self._aggregated_data['header'].append(item)
+                self._header.append(item)
                 
             # Empty line.
             file.readline()
             
             # Read data rows. Continue until empty line occurs.
-            self._data['rows'] = []
+            self._rows = []
             row = file.readline()
             while len(row.strip()) > 0:
                 rowitems = []
                 for item in row.split(separator):
                     rowitems.append(item.strip().strip('"').strip())
-                self._data['rows'].append(rowitems) 
+                self._rows.append(rowitems) 
                 row = file.readline()
             
             # Read aggregated data rows. Continue until empty line occurs.
-            self._aggregated_data['rows'] = []
+            self._aggregated_rows = []
             row = file.readline()
             while len(row.strip()) > 0:
                 rowitems = []
                 for item in row.split(separator):
                     rowitems.append(item.strip().strip('"').strip())
-                self._aggregated_data['rows'].append(rowitems) 
+                self._aggregated_rows.append(rowitems) 
                 row = file.readline()
                          
             # Read total counted.
@@ -162,7 +212,7 @@ class PwCsv(MonitoringFiles):
             row = file.readline() # Not used...TODO:
             row = file.readline() # Empty.
             
-            # Read champer and magnification info.
+            # Read chamber and magnification info.
 #            self._aggregated_data['rows'] = []
             row = file.readline()
             while len(row.strip()) > 0:
@@ -191,10 +241,36 @@ class PwCsv(MonitoringFiles):
         outdata = open(file, 'w')
         
         jsonexport = {}
-        jsonexport['metadata'] = {}
+        jsonexport['metadata'] = self._metadata
         jsonexport['sample'] = self._sample
-        jsonexport['data'] = self._data
-        jsonexport['aggregated_data'] = self._aggregated_data
+        jsonexport['header'] = self._rows
+        jsonexport['rows'] = self._rows
+        jsonexport['aggregated_rows'] = self._aggregated_rows
         outdata.write(json.dumps(jsonexport, encoding = encode, 
                                  sort_keys=True, indent=4))
         outdata.close()
+
+
+class PwCsvTable(MonitoringFiles):
+    """ 
+    """
+    def __init__(self):
+        """ """
+        self._sample = {} # Information related to sample.
+        self._data = {} # Data set containing header and rows.
+        self._aggregated_data = {} # Pre-calculated aggregations of data.
+        # Initialize parent.
+        super(PwCsvTable, self).__init__()
+
+    def clear(self):
+        """ """
+
+    def importFile(self, fileName = None):
+        """ """
+        sample = PwCsv()
+        sample.importFile(fileName)
+        self._header = sample.getHeader() # Overwrite if multiple files are read.
+        for row in sample.getRows():
+            self._rows.append(row)
+
+
