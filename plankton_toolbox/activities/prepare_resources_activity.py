@@ -82,24 +82,24 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
         self.connect(self.__dyntaxaprepare_button, QtCore.SIGNAL("clicked()"), self.__prepareDyntaxa)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
-        row = 0
+        gridrow = 0
         label1 = QtGui.QLabel("Source type:")
-        form1.addWidget(label1, row, 0, 1, 1)
-        form1.addWidget(self.__dyntaxasource_list, row, 1, 1, 1)
-        row += 1
+        form1.addWidget(label1, gridrow, 0, 1, 1)
+        form1.addWidget(self.__dyntaxasource_list, gridrow, 1, 1, 1)
+        gridrow += 1
         label2 = QtGui.QLabel("From directory:")
-        form1.addWidget(label2, row, 0, 1, 1)
-        form1.addWidget(self.__dyntaxafromdirectory_edit, row, 1, 1, 9)
-        form1.addWidget(self.__dyntaxafrom_button, row, 10, 1, 1)
-        row += 1
+        form1.addWidget(label2, gridrow, 0, 1, 1)
+        form1.addWidget(self.__dyntaxafromdirectory_edit, gridrow, 1, 1, 9)
+        form1.addWidget(self.__dyntaxafrom_button, gridrow, 10, 1, 1)
+        gridrow += 1
         label3 = QtGui.QLabel("To file (.json):")
-        form1.addWidget(label3, row, 0, 1, 1)
-        form1.addWidget(self.__dyntaxatofile_edit, row, 1, 1, 9)
-        form1.addWidget(self.__dyntaxato_button, row, 10, 1, 1)
-        row += 1
+        form1.addWidget(label3, gridrow, 0, 1, 1)
+        form1.addWidget(self.__dyntaxatofile_edit, gridrow, 1, 1, 9)
+        form1.addWidget(self.__dyntaxato_button, gridrow, 10, 1, 1)
+        gridrow += 1
         label4 = QtGui.QLabel("Metadata:")
-        form1.addWidget(label4, row, 0, 1, 1)
-        form1.addWidget(self.__dyntaxametadata_table, row, 1, 10, 10)
+        form1.addWidget(label4, gridrow, 0, 1, 1)
+        form1.addWidget(self.__dyntaxametadata_table, gridrow, 1, 10, 10)
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(5)
         hbox1.addWidget(self.__dyntaxametadata_button)
@@ -140,34 +140,36 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
         self.connect(self.__pegprepare_button, QtCore.SIGNAL("clicked()"), self.__preparePeg)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
-        row = 0
+        gridrow = 0
         label1 = QtGui.QLabel("From file (.txt):")
-        form1.addWidget(label1, row, 0, 1, 1)
-        form1.addWidget(self.__pegfromfile_edit, row, 1, 1, 9)
-        form1.addWidget(self.__pegfrom_button, row, 10, 1, 1)
-        row += 1
+        form1.addWidget(label1, gridrow, 0, 1, 1)
+        form1.addWidget(self.__pegfromfile_edit, gridrow, 1, 1, 9)
+        form1.addWidget(self.__pegfrom_button, gridrow, 10, 1, 1)
+        gridrow += 1
         label2 = QtGui.QLabel("Translate PW to PEG file (.txt):")
-        form1.addWidget(label2, row, 0, 1, 1)
-        form1.addWidget(self.__pwtopegfile_edit, row, 1, 1, 9)
-        form1.addWidget(self.__pwtopegfile_button, row, 10, 1, 1)
-        row += 1
+        form1.addWidget(label2, gridrow, 0, 1, 1)
+        form1.addWidget(self.__pwtopegfile_edit, gridrow, 1, 1, 9)
+        form1.addWidget(self.__pwtopegfile_button, gridrow, 10, 1, 1)
+        gridrow += 1
         label2 = QtGui.QLabel("Translate PEG to Dyntaxa file (.txt):")
-        form1.addWidget(label2, row, 0, 1, 1)
-        form1.addWidget(self.__pegtodyntaxafile_edit, row, 1, 1, 9)
-        form1.addWidget(self.__pegtodyntaxafile_button, row, 10, 1, 1)
-        row += 1
+        form1.addWidget(label2, gridrow, 0, 1, 1)
+        form1.addWidget(self.__pegtodyntaxafile_edit, gridrow, 1, 1, 9)
+        form1.addWidget(self.__pegtodyntaxafile_button, gridrow, 10, 1, 1)
+        gridrow += 1
         label2 = QtGui.QLabel("To file (.json):")
-        form1.addWidget(label2, row, 0, 1, 1)
-        form1.addWidget(self.__pegtofile_edit, row, 1, 1, 9)
-        form1.addWidget(self.__pegto_button, row, 10, 1, 1)
-        row += 1
+        form1.addWidget(label2, gridrow, 0, 1, 1)
+        form1.addWidget(self.__pegtofile_edit, gridrow, 1, 1, 9)
+        form1.addWidget(self.__pegto_button, gridrow, 10, 1, 1)
+        gridrow += 1
         label3 = QtGui.QLabel("Metadata:")
-        form1.addWidget(label3, row, 0, 1, 1)
-        form1.addWidget(self.__pegmetadata_table, row, 1, 10, 10)
+        form1.addWidget(label3, gridrow, 0, 1, 1)
+        form1.addWidget(self.__pegmetadata_table, gridrow, 1, 10, 10)
+        #
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(5)
         hbox1.addWidget(self.__pegmetadata_button)
         hbox1.addWidget(self.__pegprepare_button)
+        #
         layout = QtGui.QVBoxLayout()
         layout.addLayout(form1)
         layout.addLayout(hbox1)
@@ -197,24 +199,26 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
         self.connect(self.__harmfulprepare_button, QtCore.SIGNAL("clicked()"), self.__prepareHarmful)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
-        row = 0
+        gridrow = 0
         label1 = QtGui.QLabel("From file (.txt):")
-        form1.addWidget(label1, row, 0, 1, 1)
-        form1.addWidget(self.__harmfulfromfile_edit, row, 1, 1, 9)
-        form1.addWidget(self.__harmfulfrom_button, row, 10, 1, 1)
-        row += 1
+        form1.addWidget(label1, gridrow, 0, 1, 1)
+        form1.addWidget(self.__harmfulfromfile_edit, gridrow, 1, 1, 9)
+        form1.addWidget(self.__harmfulfrom_button, gridrow, 10, 1, 1)
+        gridrow += 1
         label2 = QtGui.QLabel("To file (.json):")
-        form1.addWidget(label2, row, 0, 1, 1)
-        form1.addWidget(self.__harmfultofile_edit, row, 1, 1, 9)
-        form1.addWidget(self.__harmfulto_button, row, 10, 1, 1)
-        row += 1
+        form1.addWidget(label2, gridrow, 0, 1, 1)
+        form1.addWidget(self.__harmfultofile_edit, gridrow, 1, 1, 9)
+        form1.addWidget(self.__harmfulto_button, gridrow, 10, 1, 1)
+        gridrow += 1
         label3 = QtGui.QLabel("Metadata:")
-        form1.addWidget(label3, row, 0, 1, 1)
-        form1.addWidget(self.__harmfulmetadata_table, row, 1, 10, 10)
+        form1.addWidget(label3, gridrow, 0, 1, 1)
+        form1.addWidget(self.__harmfulmetadata_table, gridrow, 1, 10, 10)
+        #
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(5)
         hbox1.addWidget(self.__harmfulmetadata_button)
         hbox1.addWidget(self.__harmfulprepare_button)
+        #
         layout = QtGui.QVBoxLayout()
         layout.addLayout(form1)
         layout.addLayout(hbox1)

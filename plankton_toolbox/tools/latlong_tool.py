@@ -156,32 +156,32 @@ class LatLongTool(tool_base.ToolBase):
         singleLayout.addWidget(latLongGroup, 0, 0)
         latLongLayout =  QtGui.QGridLayout()
         latLongGroup.setLayout(latLongLayout)
-        #
+        gridrow = 0
         latitudLabel = QtGui.QLabel("Latitud")
         longitudLabel = QtGui.QLabel("Longitud")
-        latLongLayout.addWidget(latitudLabel, 0, 1, 1, 1, QtCore.Qt.AlignHCenter)
-        latLongLayout.addWidget(longitudLabel, 0, 2, 1, 1, QtCore.Qt.AlignHCenter)
-        #
+        latLongLayout.addWidget(latitudLabel, gridrow, 1, 1, 1, QtCore.Qt.AlignHCenter)
+        latLongLayout.addWidget(longitudLabel, gridrow, 2, 1, 1, QtCore.Qt.AlignHCenter)
+        gridrow += 1
         latDdLabel = QtGui.QLabel("Degree:")
-        latLongLayout.addWidget(latDdLabel, 1, 0)
-        latLongLayout.addWidget(self.__latDd, 1, 1)
-        latLongLayout.addWidget(self.__longDd, 1, 2)
-        #
+        latLongLayout.addWidget(latDdLabel, gridrow, 0)
+        latLongLayout.addWidget(self.__latDd, gridrow, 1)
+        latLongLayout.addWidget(self.__longDd, gridrow, 2)
+        gridrow += 1
         latDmLabel = QtGui.QLabel("Deg/min:")
-        latLongLayout.addWidget(latDmLabel, 2, 0)
-        latLongLayout.addWidget(self.__latDm, 2, 1)
-        latLongLayout.addWidget(self.__longDm, 2, 2)
-        #
+        latLongLayout.addWidget(latDmLabel, gridrow, 0)
+        latLongLayout.addWidget(self.__latDm, gridrow, 1)
+        latLongLayout.addWidget(self.__longDm, gridrow, 2)
+        gridrow += 1
         latDmsLabel = QtGui.QLabel("Deg/min/sec:")
-        latLongLayout.addWidget(latDmsLabel, 3, 0)
-        latLongLayout.addWidget(self.__latDms, 3, 1)
-        latLongLayout.addWidget(self.__longDms, 3, 2)                
+        latLongLayout.addWidget(latDmsLabel, gridrow, 0)
+        latLongLayout.addWidget(self.__latDms, gridrow, 1)
+        latLongLayout.addWidget(self.__longDms, gridrow, 2)                
         # Single, rt90.        
         rt90Group = QtGui.QGroupBox("RT 90")
         singleLayout.addWidget(rt90Group, 1, 0)
         rt90Layout =  QtGui.QGridLayout()
         rt90Group.setLayout(rt90Layout)
-        #
+#        gridrow = 0
         rt90ProjWidget = QtGui.QWidget()
         rt90ProjLayout = QtGui.QHBoxLayout()
         rt90ProjWidget.setLayout(rt90ProjLayout)
@@ -190,20 +190,22 @@ class LatLongTool(tool_base.ToolBase):
         rt90ProjLayout.addWidget(rt90ProjLabel)
         rt90ProjLayout.addWidget(self.__rt90Proj)
         rt90ProjLayout.addStretch(5)
-        #
+        gridrow = 0
         rt90XLabel = QtGui.QLabel("X:")
         rt90YLabel = QtGui.QLabel("Y:")
-        rt90Layout.addWidget(rt90ProjWidget, 0, 0, 1, 4)
-        rt90Layout.addWidget(rt90XLabel, 1, 0)
-        rt90Layout.addWidget(self.__rt90X, 1, 1)
-        rt90Layout.addWidget(rt90YLabel, 1, 2)
+        rt90Layout.addWidget(rt90ProjWidget, gridrow, 0, 1, 4)
+        rt90Layout.addWidget(rt90XLabel, gridrow, 0)
+        gridrow += 1
+        rt90Layout.addWidget(self.__rt90X, gridrow, 1)
+        
+        rt90Layout.addWidget(rt90YLabel, gridrow, 2)
         rt90Layout.addWidget(self.__rt90Y, 1, 3)        
         # Single, sweref 99 dd mm.        
         sweref99Group = QtGui.QGroupBox("SWEREF 99 TM, SWEREF 99 dd mm")
         singleLayout.addWidget(sweref99Group, 2, 0)
         sweref99Layout = QtGui.QGridLayout()
         sweref99Group.setLayout(sweref99Layout)
-        #
+#        gridrow = 0
         sweref99ProjWidget = QtGui.QWidget()
         sweref99ProjLayout = QtGui.QHBoxLayout()
         sweref99ProjWidget.setLayout(sweref99ProjLayout)
@@ -212,20 +214,21 @@ class LatLongTool(tool_base.ToolBase):
         sweref99ProjLayout.addWidget(sweref99ProjLabel)
         sweref99ProjLayout.addWidget(self.__sweref99Proj)
         sweref99ProjLayout.addStretch(5)
-        #
+        gridrow = 0
         sweref99NLabel = QtGui.QLabel("N:")
         sweref99ELabel = QtGui.QLabel("E:")
         sweref99Layout.addWidget(sweref99ProjWidget, 0, 0, 1, 4)
+        gridrow += 1
         sweref99Layout.addWidget(sweref99NLabel, 1, 0)
         sweref99Layout.addWidget(self.__sweref99N, 1, 1)
         sweref99Layout.addWidget(sweref99ELabel, 1, 2)
         sweref99Layout.addWidget(self.__sweref99E, 1, 3)
-        #
+        gridrow += 1
         hbox = QtGui.QHBoxLayout()
         singleLayout.addLayout(hbox, 3, 0)
         hbox.addWidget(self.__opengooglemaps)
         hbox.addWidget(self.__openlatlongmellifica)
-        #
+        gridrow += 1
         singleLayout.setRowStretch(4, 5)
         
         return singleWidget
@@ -315,23 +318,27 @@ class LatLongTool(tool_base.ToolBase):
         multipleLayout.addWidget(multipleFromGroup)
         fromGrid =  QtGui.QGridLayout()
         multipleFromGroup.setLayout(fromGrid)
+        gridrow = 0
+        fromFormatLabel = QtGui.QLabel("<b>Format:</b>")
+        fromGrid.addWidget(fromFormatLabel, gridrow, 0, 1, 1, QtCore.Qt.AlignLeft)
+        fromGrid.addWidget(self.__fromFormatComboBox, gridrow, 1, 1, 8, QtCore.Qt.AlignLeft)
+        gridrow += 1
+        fromGrid.addWidget(self.__pasteFromClipboardButton, gridrow, 0, 1, 9)
+        gridrow += 1
+        fromGrid.addWidget(self.__fromTable, gridrow, 0, 1, 9)
         #
         multipleToGroup = QtGui.QGroupBox("To position")
         multipleLayout.addWidget(multipleToGroup)
         toGrid =  QtGui.QGridLayout()
         multipleToGroup.setLayout(toGrid)
-        #
-        fromFormatLabel = QtGui.QLabel("<b>Format:</b>")
-        fromGrid.addWidget(fromFormatLabel, 0, 0, 1, 1, QtCore.Qt.AlignLeft)
-        fromGrid.addWidget(self.__fromFormatComboBox, 0, 1, 1, 8, QtCore.Qt.AlignLeft)
-        fromGrid.addWidget(self.__pasteFromClipboardButton, 1, 0, 1, 9)
-        fromGrid.addWidget(self.__fromTable, 2, 0, 1, 9)
-
+        gridrow = 0
         toFormatLabel = QtGui.QLabel("<b>Format:</b>")
-        toGrid.addWidget(toFormatLabel, 0, 0, 1, 1, QtCore.Qt.AlignLeft)
-        toGrid.addWidget(self.__toFormatComboBox, 0, 1, 1, 8, QtCore.Qt.AlignLeft)
-        toGrid.addWidget(self.__copyToClipboardButton, 1, 0, 1, 9)
-        toGrid.addWidget(self.__toTable, 2, 0, 1, 9)
+        toGrid.addWidget(toFormatLabel, gridrow, 0, 1, 1, QtCore.Qt.AlignLeft)
+        toGrid.addWidget(self.__toFormatComboBox, gridrow, 1, 1, 8, QtCore.Qt.AlignLeft)
+        gridrow += 1
+        toGrid.addWidget(self.__copyToClipboardButton, gridrow, 0, 1, 9)
+        gridrow += 1
+        toGrid.addWidget(self.__toTable, gridrow, 0, 1, 9)
                 
         return multipleWidget
     

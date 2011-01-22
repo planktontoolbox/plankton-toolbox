@@ -41,7 +41,7 @@ import plankton_toolbox.toolbox.utils as utils
 import plankton_toolbox.activities.activity_base as activity_base
 #import plankton_toolbox.core.biology.taxa as taxa
 #import plankton_toolbox.core.biology.taxa_sources as taxa_sources
-import plankton_toolbox.core.monitoring.pw_monitoring_files as pw_monitoring_files
+import plankton_toolbox.core.monitoring.monitoring_files as monitoring_files
 import plankton_toolbox.core.monitoring.pw_reports as pw_reports
 
 ###class PwReportsActivity(activity_base.ActivityBase):
@@ -90,13 +90,15 @@ class CreateReportsActivity(activity_base.ActivityBase):
         self.connect(self.__fromdirectory_button, QtCore.SIGNAL("clicked()"), self.__fromDirectoryBrowse)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
+        gridrow = 0
         label1 = QtGui.QLabel("From directory:")
-        form1.addWidget(label1, 0, 0, 1, 1)
-        form1.addWidget(self.__fromdirectory_edit, 0, 1, 1, 9)
-        form1.addWidget(self.__fromdirectory_button, 0, 10, 1, 1)
+        form1.addWidget(label1, gridrow, 0, 1, 1)
+        form1.addWidget(self.__fromdirectory_edit, gridrow, 1, 1, 9)
+        form1.addWidget(self.__fromdirectory_button, gridrow, 10, 1, 1)
+        gridrow += 1
         label2 = QtGui.QLabel("Files (CSV):")
-        form1.addWidget(label2, 1, 0, 1, 1)
-        form1.addWidget(self.__files_table, 1, 1, 10, 10)       
+        form1.addWidget(label2, gridrow, 0, 1, 1)
+        form1.addWidget(self.__files_table, gridrow, 1, 10, 10)       
         datalayout = QtGui.QVBoxLayout()
         datalayout.addLayout(form1)
         databox.setLayout(datalayout)
@@ -114,12 +116,14 @@ class CreateReportsActivity(activity_base.ActivityBase):
         self.connect(self.__createreport_button, QtCore.SIGNAL("clicked()"), self.__createPwReport)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
+        gridrow = 0
         label1 = QtGui.QLabel("Report type:")
-        form1.addWidget(label1, 0, 0, 1, 1)
-        form1.addWidget(self.__report_list, 0, 1, 1, 1)
+        form1.addWidget(label1, gridrow, 0, 1, 1)
+        form1.addWidget(self.__report_list, gridrow, 1, 1, 1)
+        gridrow += 1
         label2 = QtGui.QLabel("To file:")
-        form1.addWidget(label2, 1, 0, 1, 1)
-        form1.addWidget(self.__tofile_edit, 1, 1, 1, 9)
+        form1.addWidget(label2, gridrow, 0, 1, 1)
+        form1.addWidget(self.__tofile_edit, gridrow, 1, 1, 9)
         #
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(5)
@@ -196,7 +200,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
             # Read files and add data as values in the sample file list.        
             for samplefile in self._samplefiles:                
                 utils.Logger().info('Reading ' + samplefile + '...')        
-                sampledata = pw_monitoring_files.PwCsv()
+                sampledata = monitoring_files.PwCsv()
                 sampledata.importFile(unicode(self.__fromdirectory_edit.text()) + '/' + samplefile)
                 self._samplefiles[samplefile] = sampledata  # With data.
             # Check which report to generate.        

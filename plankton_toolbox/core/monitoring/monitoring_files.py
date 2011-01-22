@@ -64,21 +64,20 @@ class MonitoringFiles(object):
         return self._rows
 
     def getHeaderItem(self, column):
-        """ Can be called from QAbstractTableModel. """
+        """ Used for calls from QAbstractTableModel. """
         return self._header[column]
 
     def getDataItem(self, row, column):
-        """ Can be called from QAbstractTableModel. """
+        """ Used for calls from QAbstractTableModel. """
         return self._rows[row][column]
 
     def getColumnCount(self):
-        """ Can be called from QAbstractTableModel. """
+        """ Used for calls from QAbstractTableModel. """
         return len(self._header)
 
     def getRowCount(self):
-        """ Can be called from QAbstractTableModel. """
+        """ Used for calls from QAbstractTableModel. """
         return len(self._rows)
-
 
 
 class SharkwebDownload(MonitoringFiles):
@@ -154,17 +153,21 @@ class PwCsv(MonitoringFiles):
     """
     def __init__(self):
         """ """
-        self._sample = {} # Information related to sample.
+        self._sample_info = {} # Information related to sample.
         self._aggregated_rows = [] # Pre-calculated aggregations of data.
         # Initialize parent.
         super(PwCsv, self).__init__()
 
     def clear(self):
         """ """
-        self._sample = {}
+        self._sample_info = {}
         self._aggregated_rows = []
         # Initialize parent.
         super(PwCsv, self).clear()
+
+    def getSampleInfo(self):
+        """ """
+        return self._sample_info
 
     def importFile(self, fileName = None):
         """ """
@@ -226,7 +229,7 @@ class PwCsv(MonitoringFiles):
             row = file.readline()
             while len(row.strip()) > 0:
                 key, value = row.split(separator)
-                self._sample[key.strip().strip('"').strip()] = value.strip().strip('"').strip()
+                self._sample_info[key.strip().strip('"').strip()] = value.strip().strip('"').strip()
                 row = file.readline()
                 
         except (IOError, OSError):
@@ -242,7 +245,7 @@ class PwCsv(MonitoringFiles):
         
         jsonexport = {}
         jsonexport['metadata'] = self._metadata
-        jsonexport['sample'] = self._sample
+        jsonexport['sample_info'] = self._sample_info
         jsonexport['header'] = self._rows
         jsonexport['rows'] = self._rows
         jsonexport['aggregated_rows'] = self._aggregated_rows
@@ -252,25 +255,75 @@ class PwCsv(MonitoringFiles):
 
 
 class PwCsvTable(MonitoringFiles):
-    """ 
+    """
+    PW data organised in table format. Sample data are added to each row.
+    It is possible to aggregate data from multiple PW files. 
     """
     def __init__(self):
         """ """
-        self._sample = {} # Information related to sample.
-        self._data = {} # Data set containing header and rows.
-        self._aggregated_data = {} # Pre-calculated aggregations of data.
         # Initialize parent.
         super(PwCsvTable, self).__init__()
 
-    def clear(self):
-        """ """
-
     def importFile(self, fileName = None):
-        """ """
+        """
+            # Keywords in the PW sample dictionary: 
+            #    'Sample Id', 'Counted on', 'Chamber diam.', 
+            #    'Sampler', 'Latitude', 'StatName', 'Sample by', 'Date', 
+            #    'Sedim. time (hr)', 'No. Depths', 'Counted by', 
+            #    'Max. Depth', 'Longitude', 'Project', 'Depth', 
+            #    'Min. Depth', 'Time', 'Mixed volume', 'StatNo', 
+            #    'Comment', 'Sample size', 'Amt. preservative', 
+            #    'Sedim. volume', 'Ship', 'Preservative'
+        """
         sample = PwCsv()
         sample.importFile(fileName)
-        self._header = sample.getHeader() # Overwrite if multiple files are read.
+        
+        moreheaders = ['Sample Id', 'Counted on', 'Chamber diam.', 
+            'Sampler', 'Latitude', 'StatName', 'Sample by', 'Date', 
+            'Sedim. time (hr)', 'No. Depths', 'Counted by', 
+            'Max. Depth', 'Longitude', 'Project', 'Depth', 
+            'Min. Depth', 'Time', 'Mixed volume', 'StatNo', 
+            'Comment', 'Sample size', 'Amt. preservative', 
+            'Sedim. volume', 'Ship', 'Preservative']
+
+        
+        self._header = moreheaders + sample.getHeader() # Overwrite if multiple files are read.
+        sampleinfo = sample.getSampleInfo()
         for row in sample.getRows():
-            self._rows.append(row)
+            newrow = []
+            index = 0
+            #
+            newrow.append(sampleinfo['Sample Id']) 
+            newrow.append(sampleinfo['Counted on']) 
+            newrow.append(sampleinfo['Chamber diam.']) 
+            newrow.append(sampleinfo['Sampler']) 
+            newrow.append(sampleinfo['Latitude']) 
+            newrow.append(sampleinfo['StatName']) 
+            newrow.append(sampleinfo['Sample by']) 
+            newrow.append(sampleinfo['Date']) 
+            newrow.append(sampleinfo['Sedim. time (hr)']) 
+            newrow.append(sampleinfo['No. Depths']) 
+            newrow.append(sampleinfo['Counted by']) 
+            newrow.append(sampleinfo['Max. Depth']) 
+            newrow.append(sampleinfo['Longitude']) 
+            newrow.append(sampleinfo['Project']) 
+            newrow.append(sampleinfo['Depth']) 
+            newrow.append(sampleinfo['Min. Depth']) 
+            newrow.append(sampleinfo['Time']) 
+            newrow.append(sampleinfo['Mixed volume']) 
+            newrow.append(sampleinfo['StatNo']) 
+            newrow.append(sampleinfo['Comment']) 
+            newrow.append(sampleinfo['Sample size']) 
+            newrow.append(sampleinfo['Amt. preservative']) 
+            newrow.append(sampleinfo['Sedim. volume']) 
+            newrow.append(sampleinfo['Ship']) 
+            newrow.append(sampleinfo['Preservative'])
+            #
+            for item in row:
+                newrow.append(item)
+                index += 1
+            #
+            self._rows.append(newrow)
+
 
 
