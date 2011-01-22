@@ -34,14 +34,14 @@ import os
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.activities.activity_base as activity_base
-import plankton_toolbox.core.monitoring.pw_monitoring_files as pw_monitoring_files
+import plankton_toolbox.core.monitoring.monitoring_files as monitoring_files
 
 class GetDataActivity(activity_base.ActivityBase):
     """
-    """
-    
+    """    
     def __init__(self, name, parentwidget):
         """ """
+        self.__dataset = monitoring_files.MonitoringFiles() # Empty dataset.
         self._pwsamplefiles = {}
         # Initialize parent.
         super(GetDataActivity, self).__init__(name, parentwidget)
@@ -51,44 +51,53 @@ class GetDataActivity(activity_base.ActivityBase):
         content = self._createScrollableContent()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
-        # Tab widget. 
-#        tabWidget = QtGui.QTabWidget()
-#        contentLayout.addWidget(tabWidget)
-#        tabWidget.addTab(self.__contentSharkweb(), "Sharkweb")
-#        tabWidget.addTab(self.__contentPW(), "(PW)")
-#        tabWidget.addTab(self.__contentXlsx(), "(Excel (.xlsx))")
+        #
         contentLayout.addWidget(self.__contentSelectData())
         contentLayout.addWidget(self.__contentResultTable())
         contentLayout.addWidget(self.__contentSaveResult())
         
-
-#        """ """
-#        content = self._createScrollableContent()
-#        contentLayout = QtGui.QVBoxLayout()
-#        content.setLayout(contentLayout)
-#        contentLayout.addLayout(self.__contentPart1())
-#        contentLayout.addLayout(self.__contentPart2())
-#        contentLayout.addStretch(5)
-
-        
     def __contentSelectData(self):
         """ """
-        # === GroupBox: selectdatabox === 
+        # Active widgets and connections.
         selectdatabox = QtGui.QGroupBox("Select data", self)
         tabWidget = QtGui.QTabWidget()
         tabWidget.addTab(self.__contentSharkweb(), "Sharkweb")
         tabWidget.addTab(self.__contentPW(), "PW")
         tabWidget.addTab(self.__contentXlsx(), "(Excel (.xlsx))")
-        #
+        # Layout widgets.
         layout = QtGui.QVBoxLayout()
-#        resultlayout.addLayout(self.__tableView)
         layout.addWidget(tabWidget)
         selectdatabox.setLayout(layout)        
         #
         return selectdatabox
 
     def __contentSharkweb(self):
-        """ """
+        """ 
+        Code sample from Javascript:
+            var action = 'download_sample';
+            var url = "shark_save.php?action=" + action + 
+                "&bounds=" + encodeURIComponent(getBounds()) +
+                "&year_from=" + encodeURIComponent($('sample_select_year_from').value) +
+                "&year_to=" + encodeURIComponent($('sample_select_year_to').value) +
+                "&month=" + encodeURIComponent(get_selected_month_list()) +
+                "&datatype=" + encodeURIComponent($('sample_select_datatype').value) +
+                "&parameter=" + encodeURIComponent($('sample_select_parameter').value) +
+                "&project_code=" + encodeURIComponent($('sample_select_project_code').value) +
+                "&orderer=" + encodeURIComponent($('sample_select_orderer').value) +
+                "&station_name=" + encodeURIComponent($('sample_select_station_name').value) +
+                "&station_name_option=" + encodeURIComponent($('sample_select_station_name_option').value) +
+                "&taxon_name=" + encodeURIComponent($('sample_select_taxon').value) +
+                "&taxon_name_option=" + encodeURIComponent($('sample_select_taxon_option').value) +
+                "&sample_table_view=" + encodeURIComponent($('sample_select_table_view').value) +
+                "&delimiters=" + encodeURIComponent($('misc_download_delimiters').value) +
+                "&lineend=" + encodeURIComponent($('misc_download_lineend').value) +
+                "&headerlang=" + encodeURIComponent($('misc_settings_header_language').value);
+                // sample_table_view alternatives:
+                // "sample_std",
+                // "sample_hyd",
+                // "sample_martrans",
+                // "sample_bio_agg",
+        """
         # Active widgets and connections.
         self.__bounds_edit = QtGui.QLineEdit("")
         self.__year_from_edit = QtGui.QLineEdit("2008")
@@ -108,43 +117,12 @@ class GetDataActivity(activity_base.ActivityBase):
         self.__lineend_edit = QtGui.QLineEdit("unix")
         self.__limit_edit = QtGui.QLineEdit("2000")
         self.__headerlang_edit = QtGui.QLineEdit("sv")
-        
+        #
         self.__get_data_button = QtGui.QPushButton("Get data")
-        self.connect(self.__get_data_button, QtCore.SIGNAL("clicked()"), self.__getData)
-                
-#function download_sample() {
-#    var action = '';
-#    if ($('sample_select_table_view').value == 'map') {
-#        action = 'download_sample_position';
-#    } else {
-#        action = 'download_sample';
-#    }
-#    var url = "shark_save.php?action=" + action + 
-#        "&bounds=" + encodeURIComponent(getBounds()) +
-#        "&year_from=" + encodeURIComponent($('sample_select_year_from').value) +
-#        "&year_to=" + encodeURIComponent($('sample_select_year_to').value) +
-#        "&month=" + encodeURIComponent(get_selected_month_list()) +
-#        "&datatype=" + encodeURIComponent($('sample_select_datatype').value) +
-#        "&parameter=" + encodeURIComponent($('sample_select_parameter').value) +
-#        "&project_code=" + encodeURIComponent($('sample_select_project_code').value) +
-#        "&orderer=" + encodeURIComponent($('sample_select_orderer').value) +
-#        "&station_name=" + encodeURIComponent($('sample_select_station_name').value) +
-#        "&station_name_option=" + encodeURIComponent($('sample_select_station_name_option').value) +
-#        "&taxon_name=" + encodeURIComponent($('sample_select_taxon').value) +
-#        "&taxon_name_option=" + encodeURIComponent($('sample_select_taxon_option').value) +
-#        "&sample_table_view=" + encodeURIComponent($('sample_select_table_view').value) +
-#        "&delimiters=" + encodeURIComponent($('misc_download_delimiters').value) +
-#        "&lineend=" + encodeURIComponent($('misc_download_lineend').value) +
-#        "&headerlang=" + encodeURIComponent($('misc_settings_header_language').value);
-        
-#"sample_std",
-#"sample_hyd",
-#"sample_martrans",
-#"sample_bio_agg",
-
+        self.connect(self.__get_data_button, QtCore.SIGNAL("clicked()"), self.__getSharkwebData)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
-        # Labels
+        gridrow = 0
         label00 = QtGui.QLabel("Year")
         label01 = QtGui.QLabel("-")
         label02 = QtGui.QLabel("Datatype")
@@ -157,96 +135,52 @@ class GetDataActivity(activity_base.ActivityBase):
         label09 = QtGui.QLabel("Species/taxon")
         label10 = QtGui.QLabel("Header language")
         label11 = QtGui.QLabel("Column set")
-        # Row 1
-        form1.addWidget(label00, 0, 0, 1, 3)
-        form1.addWidget(label02, 0, 3, 1, 1)
-        form1.addWidget(label03, 0, 4, 1, 2)
-        # Row 2
-        form1.addWidget(self.__year_from_edit, 1, 0, 1, 1)
-        form1.addWidget(label01, 1, 1, 1, 1)
-        form1.addWidget(self.__year_to_edit, 1, 2, 1, 1)        
-        form1.addWidget(self.__datatype_edit, 1, 3, 1, 1)        
-        form1.addWidget(self.__project_code_edit, 1, 4, 1, 2)
-        # Row 3
-        form1.addWidget(label04, 2, 0, 1, 1)
-#        form1.addWidget(, 2, 0, 1, 1)
-#        form1.addWidget(, 2, 0, 1, 1)
-        form1.addWidget(label05, 2, 3, 1, 1)
-        form1.addWidget(label06, 2, 4, 1, 1)
-        form1.addWidget(label07, 2, 5, 1, 1)
-        # Row 4
-        form1.addWidget(self.__month_edit, 3, 0, 1, 3)
-        form1.addWidget(self.__parameter_edit, 3, 3, 1, 1)
-        form1.addWidget(self.__orderer_edit, 3, 4, 1, 1)
-        form1.addWidget(self.__deliverer_edit, 3, 5, 1, 1)
-        # Row 5
-        form1.addWidget(label08, 4, 3, 1, 1)
-        # Row 6
-        form1.addWidget(self.__station_name_edit, 5, 3, 1, 2)
-        form1.addWidget(self.__station_name_option_edit, 5, 5, 1, 1)
-        # Row 7
-        form1.addWidget(label09, 6, 3, 1, 1)
-        # Row 8
-        form1.addWidget(self.__taxon_name_edit, 7, 3, 1, 2)
-        form1.addWidget(self.__taxon_name_option_edit, 7, 5, 1, 1)
-        # Row 9
-        form1.addWidget(label10, 8, 4, 1, 1)
-        form1.addWidget(label11, 8, 5, 1, 1)
-        # Row 10
-        form1.addWidget(self.__headerlang_edit, 9, 4, 1, 1)
-        form1.addWidget(self.__sample_table_view_edit, 9, 5, 1, 1)
-#        # Row 10
-#        form1.addWidget(self.__get_data_button, 10, 5, 1, 1)
+        gridrow += 1
+        form1.addWidget(label00, gridrow, 0, 1, 3)
+        form1.addWidget(label02, gridrow, 3, 1, 1)
+        form1.addWidget(label03, gridrow, 4, 1, 2)
+        gridrow += 1
+        form1.addWidget(self.__year_from_edit, gridrow, 0, 1, 1)
+        form1.addWidget(label01, gridrow, 1, 1, 1)
+        form1.addWidget(self.__year_to_edit, gridrow, 2, 1, 1)        
+        form1.addWidget(self.__datatype_edit, gridrow, 3, 1, 1)        
+        form1.addWidget(self.__project_code_edit, gridrow, 4, 1, 2)
+        gridrow += 1
+        form1.addWidget(label04, gridrow, 0, 1, 1)
+        form1.addWidget(label05, gridrow, 3, 1, 1)
+        form1.addWidget(label06, gridrow, 4, 1, 1)
+        form1.addWidget(label07, gridrow, 5, 1, 1)
+        gridrow += 1
+        form1.addWidget(self.__month_edit, gridrow, 0, 1, 3)
+        form1.addWidget(self.__parameter_edit, gridrow, 3, 1, 1)
+        form1.addWidget(self.__orderer_edit, gridrow, 4, 1, 1)
+        form1.addWidget(self.__deliverer_edit, gridrow, 5, 1, 1)
+        gridrow += 1
+        form1.addWidget(label08, gridrow, 3, 1, 1)
+        gridrow += 1
+        form1.addWidget(self.__station_name_edit, gridrow, 3, 1, 2)
+        form1.addWidget(self.__station_name_option_edit, gridrow, 5, 1, 1)
+        gridrow += 1
+        form1.addWidget(label09, gridrow, 3, 1, 1)
+        gridrow += 1
+        form1.addWidget(self.__taxon_name_edit, gridrow, 3, 1, 2)
+        form1.addWidget(self.__taxon_name_option_edit, gridrow, 5, 1, 1)
+        gridrow += 1
+        form1.addWidget(label10, gridrow, 4, 1, 1)
+        form1.addWidget(label11, gridrow, 5, 1, 1)
+        gridrow += 1
+        form1.addWidget(self.__headerlang_edit, gridrow, 4, 1, 1)
+        form1.addWidget(self.__sample_table_view_edit, gridrow, 5, 1, 1)
         #
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(5)
         hbox1.addWidget(self.__get_data_button)
-        #
-
-#        datalayout = QtGui.QVBoxLayout()
-#        datalayout.addLayout(form1)
-#        selectionbox.setLayout(datalayout)
-###        selectionbox.setLayout(form1)
-        
-#        # === GroupBox: resultbox === 
-#        resultbox = QtGui.QGroupBox("Result table", self)
-#        # Active widgets and connections.
-#        self.__tableView = QtGui.QTableView()
-#        self.__tableView.setAlternatingRowColors(True)
-#        self.__tableView.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
-#        #self.__tableView.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
-#        self.__tableView.setSelectionMode(QtGui.QAbstractItemView.ContiguousSelection)
-#        self.__tableView.verticalHeader().setDefaultSectionSize(18)
-#        # Model, data and selection        
-#        self.__dataset = pw_monitoring_files.SharkwebDownload()
-#        self.__model = ResultTableModel(self.__dataset)
-#        self.__tableView.setModel(self.__model)        
-#        selectionModel = QtGui.QItemSelectionModel(self.__model)
-#        self.__tableView.setSelectionModel(selectionModel)
-#        self.__tableView.resizeColumnsToContents()
-#        #
-#        self.connect(selectionModel, QtCore.SIGNAL("currentChanged(QModelIndex, QModelIndex)"), self.__test)
-#        self.connect(selectionModel, QtCore.SIGNAL("selectionChanged(QModelIndex, QModelIndex)"), self.__test2)
-#        
-#        # Layout widgets.
-#        resultlayout = QtGui.QVBoxLayout()
-##        resultlayout.addLayout(self.__tableView)
-#        resultlayout.addWidget(self.__tableView)
-#        resultbox.setLayout(resultlayout)
-
-#        widget = QtGui.QWidget()        
-#        layout = QtGui.QVBoxLayout()
-#        widget.setLayout(layout)
-#        layout.addWidget(selectionbox)
-##        layout.addWidget(resultbox)
-        #
-#        return form1
+        # Layout widgets.
         widget = QtGui.QWidget()        
         layout = QtGui.QVBoxLayout()
         widget.setLayout(layout)
         layout.addLayout(form1)
         layout.addLayout(hbox1)
-#        layout.addWidget(resultbox)
         #
         return widget
 
@@ -254,7 +188,6 @@ class GetDataActivity(activity_base.ActivityBase):
         """ """
         # Active widgets and connections.
         self.__pwfromdirectory_edit = QtGui.QLineEdit("../../../../data/planktondata/phytowin_files") # TODO: Use toolbox settings.
-        #
         self.__pwfromdirectory_button = QtGui.QPushButton("Browse...")
         #
         self.__files_table = QtGui.QTableWidget()
@@ -265,20 +198,21 @@ class GetDataActivity(activity_base.ActivityBase):
         self.__files_table.setColumnCount(1)
         self.__files_table.horizontalHeader().setStretchLastSection(True)
         self.__files_table.setHorizontalHeaderLabels(["File"])
-        #
         self.__getpwdata_button = QtGui.QPushButton("Get data")
         #
         self.connect(self.__pwfromdirectory_button, QtCore.SIGNAL("clicked()"), self.__pwFromDirectoryBrowse)                
         self.connect(self.__getpwdata_button, QtCore.SIGNAL("clicked()"), self.__getPwData)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
+        gridrow = 0
         label1 = QtGui.QLabel("From directory:")
-        form1.addWidget(label1, 0, 0, 1, 1)
-        form1.addWidget(self.__pwfromdirectory_edit, 0, 1, 1, 9)
-        form1.addWidget(self.__pwfromdirectory_button, 0, 10, 1, 1)
+        form1.addWidget(label1, gridrow, 0, 1, 1)
+        form1.addWidget(self.__pwfromdirectory_edit, gridrow, 1, 1, 9)
+        form1.addWidget(self.__pwfromdirectory_button, gridrow, 10, 1, 1)
+        gridrow += 1
         label2 = QtGui.QLabel("Files (CSV):")
-        form1.addWidget(label2, 1, 0, 1, 1)
-        form1.addWidget(self.__files_table, 1, 1, 10, 10)
+        form1.addWidget(label2, gridrow, 0, 1, 1)
+        form1.addWidget(self.__files_table, gridrow, 1, 10, 10)
         #
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(5)
@@ -300,14 +234,13 @@ class GetDataActivity(activity_base.ActivityBase):
         widget = QtGui.QWidget()        
         layout = QtGui.QVBoxLayout()
         widget.setLayout(layout)
-#        layout.addWidget(selectionbox)
-#        layout.addWidget(resultbox)
+#        layout.addWidget()
+#        layout.addWidget()
         #
         return widget
         
     def __contentResultTable(self):
         """ """
-        # === GroupBox: resultbox === 
         resultbox = QtGui.QGroupBox("Result table", self)
         # Active widgets and connections.
         self.__tableView = QtGui.QTableView()
@@ -317,7 +250,6 @@ class GetDataActivity(activity_base.ActivityBase):
         self.__tableView.setSelectionMode(QtGui.QAbstractItemView.ContiguousSelection)
         self.__tableView.verticalHeader().setDefaultSectionSize(18)
         # Model, data and selection        
-        self.__dataset = pw_monitoring_files.SharkwebDownload()
         self.__model = ResultTableModel(self.__dataset)
         self.__tableView.setModel(self.__model)        
         selectionModel = QtGui.QItemSelectionModel(self.__model)
@@ -326,10 +258,8 @@ class GetDataActivity(activity_base.ActivityBase):
         #
         self.connect(selectionModel, QtCore.SIGNAL("currentChanged(QModelIndex, QModelIndex)"), self.__test)
         self.connect(selectionModel, QtCore.SIGNAL("selectionChanged(QModelIndex, QModelIndex)"), self.__test2)
-        
         # Layout widgets.
         layout = QtGui.QVBoxLayout()
-#        resultlayout.addLayout(self.__tableView)
         layout.addWidget(self.__tableView)
         resultbox.setLayout(layout)        
         #
@@ -341,18 +271,28 @@ class GetDataActivity(activity_base.ActivityBase):
         # Active widgets and connections.
         self.__saveformat_list = QtGui.QComboBox()
         self.__saveformat_list.addItems(["Tab separated text file (.txt)",
-                                         "(Excel (.xlsx))"])
-        self.__tofile_edit = QtGui.QLineEdit("data.txt")
+                                         "Excel (.xlsx)"])
+        self.__savetodirectory_edit = QtGui.QLineEdit("../../../../data/planktondata/phytowin_files") # TODO: Use toolbox settings.
+        self.__savetodirectory_button = QtGui.QPushButton("Browse...")
+        self.__savetofile_edit = QtGui.QLineEdit("data.txt")
         self.__savedata_button = QtGui.QPushButton("Save")
-        self.connect(self.__savedata_button, QtCore.SIGNAL("clicked()"), self.__saveData)                
+####        self.connect(self.__saveformat_list, QtCore.SIGNAL("????()"), self.__????) # TODO: Switch between data.txt & data.xlsx.                
+        self.connect(self.__savedata_button, QtCore.SIGNAL("clicked()"), self.__saveResultData)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
+        gridrow = 0
         label1 = QtGui.QLabel("Format:")
-        form1.addWidget(label1, 0, 0, 1, 1)
-        form1.addWidget(self.__saveformat_list, 0, 1, 1, 1)
+        form1.addWidget(label1, gridrow, 0, 1, 1)
+        form1.addWidget(self.__saveformat_list, gridrow, 1, 1, 1)
+        gridrow += 1
+        label1 = QtGui.QLabel("To directory:")
+        form1.addWidget(label1, gridrow, 0, 1, 1)
+        form1.addWidget(self.__savetodirectory_edit, gridrow, 1, 1, 9)
+        form1.addWidget(self.__savetodirectory_button, gridrow, 10, 1, 1)
+        gridrow += 1
         label2 = QtGui.QLabel("To file:")
-        form1.addWidget(label2, 1, 0, 1, 1)
-        form1.addWidget(self.__tofile_edit, 1, 1, 1, 9)
+        form1.addWidget(label2, gridrow, 0, 1, 1)
+        form1.addWidget(self.__savetofile_edit, gridrow, 1, 1, 9)
         #
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(5)
@@ -365,18 +305,20 @@ class GetDataActivity(activity_base.ActivityBase):
         #
         return saveresultbox
         
-        
-    def __refreshTable(self):
+    def __refreshResultTable(self):
         """ """
         self.__model.reset() # Model data has changed.
         self.__tableView.resizeColumnsToContents()
 
-    def __getData(self):
+    def __getSharkwebData(self):
         """ """
         self.__dataset.clear()
-        self.__refreshTable()
+        self.__refreshResultTable()
         QtGui.QApplication.processEvents()
-        
+        #
+        self.__dataset = monitoring_files.SharkwebDownload()
+        self.__model.setDataset(self.__dataset)
+        #
         parameters = {}
         parameters['action'] = unicode('download_sample') # Not json
 #        parameters['action'] = unicode('get_sample_table') # Json
@@ -400,9 +342,9 @@ class GetDataActivity(activity_base.ActivityBase):
         parameters['headerlang'] = unicode(self.__headerlang_edit.text())
         # Get data.
         self.__dataset.readData(parameters)
-        self.__refreshTable()
+        self.__refreshResultTable()
 
-    def __saveData(self):
+    def __saveResultData(self):
         """ """
         
 #self.connect(self.__pwfromdirectory_button, QtCore.SIGNAL("clicked()"), self.__pwFromDirectoryBrowse)                
@@ -420,7 +362,7 @@ class GetDataActivity(activity_base.ActivityBase):
             self.__pwfromdirectory_edit.setText(dirpath)
             self._pwsamplefiles.clear()
             # Add files in selected directory to QTableWidget.
-            for row, filename in enumerate(os.listdir(unicode(self.__pwfromdirectory_edit.text()))):
+            for row, filename in enumerate(sorted(os.listdir(unicode(self.__pwfromdirectory_edit.text())))):
                 if os.path.splitext(unicode(filename))[1] in ['.csv', '.CSV']:
                     self.__files_table.setRowCount(row + 1)
                     item = QtGui.QTableWidgetItem(unicode(filename))
@@ -430,6 +372,23 @@ class GetDataActivity(activity_base.ActivityBase):
 #self.connect(self.__getpwdata_button, QtCore.SIGNAL("clicked()"), self.__getPwData)                
     def __getPwData(self):
         """ """
+        self.__dataset.clear()
+        self.__refreshResultTable()
+        QtGui.QApplication.processEvents()
+        #
+        self.__dataset = monitoring_files.PwCsvTable()
+        self.__model.setDataset(self.__dataset)
+        #
+        for index in range(self.__files_table.rowCount()):
+            item = self.__files_table.item(index, 0)
+            if item.checkState(): # Check if selected by user.
+                # When reading from a table the display rule must be used.
+                filename = unicode(item.data(QtCore.Qt.DisplayRole).toString())
+                print(self.__pwfromdirectory_edit.text())
+                print(filename)
+                self.__dataset.importFile(self.__pwfromdirectory_edit.text() + '/' + filename)
+        #        
+        self.__refreshResultTable()
         
 
     def __test(self, index):
@@ -445,10 +404,15 @@ class ResultTableModel(QtCore.QAbstractTableModel):
     """
     """
     def __init__(self, dataset):
+        """ """
         self.__dataset = dataset
         # Initialize parent.
         super(ResultTableModel, self).__init__()
         
+    def setDataset(self, dataset):
+        """ """
+        self.__dataset = dataset
+
     def rowCount(self, parent=QtCore.QModelIndex()):
         """ """
         return self.__dataset.getRowCount()
@@ -471,18 +435,4 @@ class ResultTableModel(QtCore.QAbstractTableModel):
             if index.isValid():
                 return QtCore.QVariant(self.__dataset.getDataItem(index.row(), index.column()))
         return QtCore.QVariant()
-    
 
-### TODO: Add copy to clipboard for multiple cells. Sample code: ###
-#
-#selection = self.table.selectionModel() #self.table = QAbstractItemView
-#indexes = selection.selectedIndexes()
-#
-#columns = indexes[-1].column() - indexes[0].column() + 1
-#rows = len(indexes) / columns
-#textTable = [[""] * columns for i in xrange(rows)]
-#
-#for i, index in enumerate(indexes):
-# textTable[i % rows][i / rows] = unicode(self.model.data(index).toString()) #self.model = QAbstractItemModel 
-#
-#return "\n".join(("\t".join(i) for i in textTable))
