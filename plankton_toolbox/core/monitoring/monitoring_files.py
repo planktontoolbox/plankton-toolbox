@@ -35,8 +35,12 @@ import urllib
 import string
 import plankton_toolbox.toolbox.utils as utils
 # Openpyxl is not included in python(xy).
-try: import openpyxl.reader.excel as excel
-except ImportError: print('Python package openpyxl missing.')
+try: 
+    import openpyxl.workbook as excelworkbook
+    import openpyxl.reader.excel as excelreader
+    import openpyxl.writer.excel as excelwriter
+except ImportError: 
+    print('Python package openpyxl missing.')
 
 class MonitoringFiles(object):
     """ 
@@ -93,13 +97,46 @@ class MonitoringFiles(object):
         except Exception:
             return ''
 
-    def SaveAsTextFile(self):
+    def SaveAsTextFile(self, fileName):
         """ """
-        print('SaveAsTextFile')
+        if fileName == None:
+            raise UserWarning('File name is missing.')
+        try:
+            out = codecs.open(fileName, mode = 'w', encoding = 'iso-8859-1')
+            separator = '\t' # Use tab as item separator.
+            # Header.
+            out.write(separator.join(map(unicode, self._header)) + '\r\n')
+            # Rows.
+            for row in self._rows:
+                # Use tab as column separator and CR/LF as row delimiter.
+                out.write(separator.join(map(unicode, row)) + '\r\n')
+        except (IOError, OSError):
+            utils.Logger().info("Failed to write to file: " + fileName)
+            raise
+        finally:
+            if out: out.close()
 
-    def SaveExcelXlsxFile(self):
+    def SaveExcelXlsxFile(self, fileName):
         """ """
-        print('SaveExcelXlsxFile')
+        if fileName == None:
+            raise UserWarning('File name is missing.')
+        try:
+            workbook = excelworkbook.Workbook() # Create workbook.
+            worksheet = workbook.get_active_sheet() # Workbooks contains at least one worksheet.
+            # Header.
+            for columnindex, item in enumerate(self._header):
+                cell = worksheet.cell(row=0, column=columnindex)
+                cell.value = unicode(item)
+            # Rows.
+            for rowindex, row in enumerate(self._rows):
+                for columnindex, item in enumerate(row):
+                    cell = worksheet.cell(row=rowindex, column=columnindex)
+                    cell.value = unicode(item)
+            #    
+            excelwriter.save_workbook(workbook, fileName)
+        except (IOError, OSError):
+            utils.Logger().info("Failed to write to file: " + fileName)
+            raise
 
 class TextFile(MonitoringFiles):
     """ 
@@ -149,7 +186,7 @@ class ExcelXlsxFile(MonitoringFiles):
             raise UserWarning('File name is missing.')
         #
         try:
-            workbook = excel.load_workbook(fileName)
+            workbook = excelreader.load_workbook(fileName)
 ###            print workbook.get_sheet_names()
             worksheet = workbook.get_active_sheet()
 ###            cell = worksheet.cell('B3')
