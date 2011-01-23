@@ -48,10 +48,10 @@ class CreateDatasetActivity(activity_base.ActivityBase):
         # Tab widget. 
         tabWidget = QtGui.QTabWidget()
         contentLayout.addWidget(tabWidget)
-        tabWidget.addTab(self.__contentNewFormat(), "(New format...)")
         tabWidget.addTab(self.__contentPW(), "(PW)")
+        tabWidget.addTab(self.__contentNewFormat(), "(New format...)")
 
-    def __contentNewFormat(self):
+    def __contentPW(self):
         """ """
         # Active widgets and connections.
 
@@ -64,7 +64,7 @@ class CreateDatasetActivity(activity_base.ActivityBase):
         #
         return widget
 
-    def __contentPW(self):
+    def __contentNewFormat(self):
         """ """
         # Active widgets and connections.
 
