@@ -487,10 +487,12 @@ class GetDataActivity(activity_base.ActivityBase):
         
     def __saveData(self):
         """ """
+        filename = self.__savetodirectory_edit.text()  + '/' + \
+                   self.__savetofile_edit.text()
         if self.__saveformat_list.currentIndex() == 0: # Text file.
-            self.__dataset.SaveAsTextFile()
+            self.__dataset.SaveAsTextFile(unicode(filename))
         elif self.__saveformat_list.currentIndex() == 1: # Xlsx file.
-            self.__dataset.SaveExcelXlsxFile()
+            self.__dataset.SaveExcelXlsxFile(unicode(filename))
         
     def __refreshResultTable(self):
         """ """
