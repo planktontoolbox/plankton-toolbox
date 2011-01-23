@@ -34,7 +34,9 @@ import json
 import urllib
 import string
 import plankton_toolbox.toolbox.utils as utils
-
+# Openpyxl is not included in python(xy).
+try: import openpyxl.reader.excel as excel
+except ImportError: print('Python package openpyxl missing.')
 
 class MonitoringFiles(object):
     """ 
@@ -65,19 +67,116 @@ class MonitoringFiles(object):
 
     def getHeaderItem(self, column):
         """ Used for calls from QAbstractTableModel. """
-        return self._header[column]
+        try:
+            return self._header[column]
+        except Exception:
+            return ''
 
     def getDataItem(self, row, column):
         """ Used for calls from QAbstractTableModel. """
-        return self._rows[row][column]
+        try:
+            return self._rows[row][column]
+        except Exception:
+            return ''
 
     def getColumnCount(self):
         """ Used for calls from QAbstractTableModel. """
-        return len(self._header)
+        try:
+            return len(self._header)
+        except Exception:
+            return ''
 
     def getRowCount(self):
         """ Used for calls from QAbstractTableModel. """
-        return len(self._rows)
+        try:
+            return len(self._rows)
+        except Exception:
+            return ''
+
+    def SaveAsTextFile(self):
+        """ """
+        print('SaveAsTextFile')
+
+    def SaveExcelXlsxFile(self):
+        """ """
+        print('SaveExcelXlsxFile')
+
+class TextFile(MonitoringFiles):
+    """ 
+    """
+    def __init__(self):
+        """ """
+        # Initialize parent.
+        super(TextFile, self).__init__()
+
+    def readFile(self, fileName = None, separator = '\t'):
+        """ """
+        if fileName == None:
+            raise UserWarning('File name is missing.')
+        #
+        try:
+            #
+            file = codecs.open(fileName, mode = 'r', encoding = 'iso-8859-1')
+            #
+            for index, row in enumerate(file):
+                if index == 0: # First row is assumed to be the header row.
+                    for headeritem in map(string.strip, row.split(separator)):
+                        self._header.append(headeritem)
+                else:
+                    newrow = []
+                    for item in map(string.strip, row.split(separator)):
+                        newrow.append(item)
+                    self._rows.append(newrow)
+        #  
+        except (IOError, OSError):
+            utils.Logger().info("Can't read text file.")
+            raise
+        finally:
+            if file: file.close() 
+
+
+class ExcelXlsxFile(MonitoringFiles):
+    """ 
+    """
+    def __init__(self):
+        """ """
+        # Initialize parent.
+        super(ExcelXlsxFile, self).__init__()
+
+    def readFile(self, fileName = None, separator = '\t'):
+        """ """
+        if fileName == None:
+            raise UserWarning('File name is missing.')
+        #
+        try:
+            workbook = excel.load_workbook(fileName)
+###            print workbook.get_sheet_names()
+            worksheet = workbook.get_active_sheet()
+###            cell = worksheet.cell('B3')
+###            print(cell)
+###            cell_value = worksheet.cell('B3').value
+###            print(cell_value)
+            for row in xrange(0, worksheet.get_highest_row()): 
+                if row == 0: # First row is assumed to be the header row.
+                    for col in xrange(0, worksheet.get_highest_column()):
+                        value = worksheet.cell(row=row, column=col).value
+                        if value:
+                            self._header.append(unicode(value))
+                        else:
+                            self._header.append(u'')
+                else:
+                    newrow = []
+                    for col in xrange(0, worksheet.get_highest_column()):
+                        value = worksheet.cell(row=row, column=col).value
+                        if value:
+                            newrow.append(unicode(value))
+                        else:
+                            newrow.append(u'')
+                    self._rows.append(newrow)        
+        #  
+        except Exception:
+            utils.Logger().info("Can't read Excel (.xlsx) file. The python package openpyxl is needed to import Excel files.")
+            raise
 
 
 class SharkwebDownload(MonitoringFiles):
@@ -88,49 +187,14 @@ class SharkwebDownload(MonitoringFiles):
         # Initialize parent.
         super(SharkwebDownload, self).__init__()
 
-    def readData(self, parameters = None, encode = 'utf-8'):
+    def getData(self, parameters = None):
         """ """
         self.clear()
         if parameters == None:
             raise UserWarning('Parameters are missing.')
         # URL and parameters. Use unicode and utf-8 to handle swedish characters.
         url = u'http://test.mellifica.org/sharkweb/shark_php.php'
-        parameters = dict([k, v.encode(encode)] for k, v in parameters.items())
-        params = urllib.urlencode(parameters)
-        #
-        utils.Logger().info('DEBUG: URL: ' + url)
-        utils.Logger().info('DEBUG: Parameters: ' + params)
-        #   
-        f = urllib.urlopen(url, params)
-        for row, line in enumerate(f.readlines()):
-            # Use this if data is delivered in rows with tab separated fields.
-            if row == 0:
-                self._header = map(string.strip, line.split('\t'))
-            else:
-                self._rows.append(map(string.strip, line.split('\t')))
-#            # Use this if data is delivered in the Json format.
-#            self._dataset = json.loads(line, encoding = encode)
-        utils.Logger().info('Received rows: ' + str(len(self._rows)))
-
-
-class ExcelXlsx(MonitoringFiles):
-    """ 
-    """
-    def __init__(self):
-        """ """
-        # Initialize parent.
-        super(ExcelXlsx, self).__init__()
-
-    def readData(self, parameters = None, encode = 'utf-8'):
-        """ """
-        self.clear()
-        
-        
-        if parameters == None:
-            raise UserWarning('Parameters are missing.')
-        # URL and parameters. Use unicode and utf-8 to handle swedish characters.
-        url = u'http://test.mellifica.org/sharkweb/shark_php.php'
-        parameters = dict([k, v.encode(encode)] for k, v in parameters.items())
+        parameters = dict([k, v.encode('utf-8')] for k, v in parameters.items())
         params = urllib.urlencode(parameters)
         #
         utils.Logger().info('DEBUG: URL: ' + url)
@@ -169,7 +233,7 @@ class PwCsv(MonitoringFiles):
         """ """
         return self._sample_info
 
-    def importFile(self, fileName = None):
+    def readFile(self, fileName = None):
         """ """
         if fileName == None:
             raise UserWarning('File name is missing.')
@@ -264,7 +328,7 @@ class PwCsvTable(MonitoringFiles):
         # Initialize parent.
         super(PwCsvTable, self).__init__()
 
-    def importFile(self, fileName = None):
+    def readFile(self, fileName = None):
         """
             # Keywords in the PW sample dictionary: 
             #    'Sample Id', 'Counted on', 'Chamber diam.', 
@@ -276,7 +340,7 @@ class PwCsvTable(MonitoringFiles):
             #    'Sedim. volume', 'Ship', 'Preservative'
         """
         sample = PwCsv()
-        sample.importFile(fileName)
+        sample.readFile(fileName)
         
         moreheaders = ['Sample Id', 'Counted on', 'Chamber diam.', 
             'Sampler', 'Latitude', 'StatName', 'Sample by', 'Date', 

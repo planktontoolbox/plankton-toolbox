@@ -201,7 +201,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
             for samplefile in self._samplefiles:                
                 utils.Logger().info('Reading ' + samplefile + '...')        
                 sampledata = monitoring_files.PwCsv()
-                sampledata.importFile(unicode(self.__fromdirectory_edit.text()) + '/' + samplefile)
+                sampledata.readFile(unicode(self.__fromdirectory_edit.text()) + '/' + samplefile)
                 self._samplefiles[samplefile] = sampledata  # With data.
             # Check which report to generate.        
             if self.__report_list.currentIndex() == 1: # Report: MJ1
