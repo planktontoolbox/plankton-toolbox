@@ -122,7 +122,7 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
         filepath = toolbox_settings.ToolboxSettings().getValue('Resources:PEG:Filepath')
         self.__pegtofile_edit = QtGui.QLineEdit(filepath)
         self.__pegto_button = QtGui.QPushButton("Browse...")        
-        self.__pwtopegfile_edit = QtGui.QLineEdit("../../../../data/planktondata/originalfiles/smhi_pw_to_extended_peg.txt")
+        self.__pwtopegfile_edit = QtGui.QLineEdit("../../../../data/planktondata/originalfiles/translate_pw_to_smhi_extended_peg.txt")
 ###        self.__pwtopegfile_edit = QtGui.QLineEdit("")
         self.__pwtopegfile_button = QtGui.QPushButton("Browse...")
         self.__pegtodyntaxafile_edit = QtGui.QLineEdit("../../../../data/planktondata/originalfiles/smhi_peg_to_dyntaxa.txt")

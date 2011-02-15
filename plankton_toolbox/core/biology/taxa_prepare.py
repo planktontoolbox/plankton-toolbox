@@ -439,37 +439,41 @@ class PreparePegTextFile(PrepareDataSources):
             pwsize = '' 
             pegname = ''
             pegsize = ''
-            extendedpegname = ''
-            extendedpegsize = ''
+#            extendedpegname = ''
+#            extendedpegsize = ''
             if len(items) > 3:
                 pwname = items[0]
                 pwsize = items[1] 
                 pegname = items[2]
                 pegsize = items[3]                
-                # Column 5 and 6 may be used for references to taxon/sizes in the extended part
-                # of the PEG list.
-                if len(items) > 4: extendedpegname = items[4]
-                if len(items) > 5: extendedpegsize = items[5]
-                if (len(pegname) == 0) and ((len(extendedpegname) > 0)):
-                    pegname = extendedpegname
-                    print('DEBUG: extendedpegname:' + extendedpegname)
-                if (len(pegsize) == 0) and ((len(extendedpegsize) > 0)):
-                    pegsize = extendedpegsize
-                    print('DEBUG: extendedpegsize:' + extendedpegsize)
-                #
+                sflag = items[4]                
+#                # Column 5 and 6 may be used for references to taxon/sizes in the extended part
+#                # of the PEG list.
+#                if len(items) > 4: extendedpegname = items[4]
+#                if len(items) > 5: extendedpegsize = items[5]
+#                if (len(pegname) == 0) and ((len(extendedpegname) > 0)):
+#                    pegname = extendedpegname
+#                    print('DEBUG: extendedpegname:' + extendedpegname)
+#                if (len(pegsize) == 0) and ((len(extendedpegsize) > 0)):
+#                    pegsize = extendedpegsize
+#                    print('DEBUG: extendedpegsize:' + extendedpegsize)
+#                #
                 if (not pw_name_dict.has_key(pegname)) and (len(pwname) > 0):
-                    pw_name_dict[pegname] = pwname
+                    pw_name_dict[pegname] = pwname + ':' + sflag
                 pw_sizeclass_dict[pegname + ':' + pegsize] = pwname + ':' + pwsize
-                print('DEBUG: pw_sizeclass_dict: ' + pegname + ':' + pegsize + ' = ' + pwname + ':' + pwsize)           
+#                print('DEBUG: pw_sizeclass_dict: ' + pegname + ':' + pegsize + ' = ' + pwname + ':' + pwsize)           
         translateFile.close()
         #
         print('DEBUG: PW add to PEG.')
         
         for pegtaxon in self.__taxa:
             # Add PW name at taxon level.
-            pwname = pw_name_dict.get(pegtaxon['Species'], '')
-            if pwname: 
+            pwnameandsflag = pw_name_dict.get(pegtaxon['Species'], '')
+            if pwnameandsflag:
+                pwname, sflag = pwnameandsflag.split(':')
                 pegtaxon['Species PW'] = pwname
+                if sflag:
+                    pegtaxon['Species PW SFLAG'] = sflag
             for pegsizeclass in pegtaxon['Size classes']:
                 # Add PW sizeclass.
                 pwnameandsize = pw_sizeclass_dict.get(pegtaxon['Species'] + ':' + str(pegsizeclass['Size class']), '')

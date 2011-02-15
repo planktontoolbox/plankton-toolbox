@@ -96,10 +96,10 @@ class PwReportMJ1(PwReports):
             #    'Comment', 'Sample size', 'Amt. preservative', 
             #    'Sedim. volume', 'Ship', 'Preservative'
             pw_samplefile = samplefiles_dict[samplefilename]
-            header_row_1[3 + filenameindex] = pw_samplefile._sample.get('StatName', '')
-            header_row_2[3 + filenameindex] = pw_samplefile._sample.get('Date', '')
-            header_row_3[3 + filenameindex] = pw_samplefile._sample.get('Counted on', '')
-            header_row_4[3 + filenameindex] = pw_samplefile._sample.get('Counted by', '')
+            header_row_1[3 + filenameindex] = pw_samplefile._sample_info.get('StatName', '')
+            header_row_2[3 + filenameindex] = pw_samplefile._sample_info.get('Date', '')
+            header_row_3[3 + filenameindex] = pw_samplefile._sample_info.get('Counted on', '')
+            header_row_4[3 + filenameindex] = pw_samplefile._sample_info.get('Counted by', '')
         #
         # Part 2: Iterate over all rows in all samples. Create a dictionary with 
         #         species as keys and lists of abundances for each sample.
@@ -261,10 +261,10 @@ class PwReportMJ2(PwReports):
             #    'Comment', 'Sample size', 'Amt. preservative', 
             #    'Sedim. volume', 'Ship', 'Preservative'
             pw_samplefile = samplefiles_dict[samplefilename]
-            header_row_1[3 + filenameindex] = pw_samplefile._sample.get('StatName', '')
-            header_row_2[3 + filenameindex] = pw_samplefile._sample.get('Date', '')
-            header_row_3[3 + filenameindex] = pw_samplefile._sample.get('Counted on', '')
-            header_row_4[3 + filenameindex] = pw_samplefile._sample.get('Counted by', '')
+            header_row_1[3 + filenameindex] = pw_samplefile._sample_info.get('StatName', '')
+            header_row_2[3 + filenameindex] = pw_samplefile._sample_info.get('Date', '')
+            header_row_3[3 + filenameindex] = pw_samplefile._sample_info.get('Counted on', '')
+            header_row_4[3 + filenameindex] = pw_samplefile._sample_info.get('Counted by', '')
         #
         # Part 2: Iterate over all rows in all samples. Create a dictionary with 
         #         species as keys and lists of abundances for each sample.
@@ -426,11 +426,11 @@ class PwReportATS1(PwReports):
                 # Clear one row.
                 out_row = [unicode()]*15 # 15 columns.
                 #
-                out_row[0] = pw_samplefile._sample.get('StatName', '') # To column: Station        
-                out_row[1] = pw_samplefile._sample.get('Date', '') # To column: Date         
-                out_row[2] = pw_samplefile._sample.get('Counted on', '') # To column: Analysis date         
-                out_row[3] = pw_samplefile._sample.get('Min. Depth', '') # To column: Min depth m         
-                out_row[4] = pw_samplefile._sample.get('Max. Depth', '') # To column: Max depth m                    
+                out_row[0] = pw_samplefile._sample_info.get('StatName', '') # To column: Station        
+                out_row[1] = pw_samplefile._sample_info.get('Date', '') # To column: Date         
+                out_row[2] = pw_samplefile._sample_info.get('Counted on', '') # To column: Analysis date         
+                out_row[3] = pw_samplefile._sample_info.get('Min. Depth', '') # To column: Min depth m         
+                out_row[4] = pw_samplefile._sample_info.get('Max. Depth', '') # To column: Max depth m                    
                 # Look up species and size in peg.
                 pw_species = pw_datarow[0]
                 pw_size = pw_datarow[2]
@@ -472,7 +472,7 @@ class PwReportATS1(PwReports):
                 if pegtaxon: out_row[9] = pegtaxon.get('Species', '') # To column: Species
                 if out_row[9] == '': 
                     out_row[9] = 'PW-name: ' + pw_species # Use PW name if not found in PEG.         
-                if pegtaxon: out_row[10] = '' # SFLAG   
+                if pegtaxon: out_row[10] = pegtaxon.get('Species PW SFLAG', '') # SFLAG   
                 #     
                 if pegsizeclass: out_row[11] = str(pegsizeclass.get('Size class', '')) # To column: Size class No
                 coeff = pw_datarow[5].replace(',', '.')

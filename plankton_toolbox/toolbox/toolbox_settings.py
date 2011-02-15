@@ -50,7 +50,7 @@ class ToolboxSettings(QtCore.QObject):
                 },
                 "PEG": {
                     "Filepath": "planktondata/resources/smhi_extended_peg.json",
-                    "PW to PEG filepath": "planktondata/resources/smhi_pw_to_extended_peg.txt",
+                    "PW to PEG filepath": "planktondata/resources/translate_pw_to_smhi_extended_peg.txt",
                     "PEG to Dyntaxa filepath": "planktondata/resources/smhi_peg_to_dyntaxa.txt"
                 },
                 "Harmful plankton": {
