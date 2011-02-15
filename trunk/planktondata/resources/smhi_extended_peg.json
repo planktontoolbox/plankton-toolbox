@@ -2606,7 +2606,8 @@
                 }
             ], 
             "Species": "Coelomoron", 
-            "Species PW": "Coelomoron spp"
+            "Species PW": "Coelomoron spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Grunow in Rabenhorst 1865", 
@@ -3576,7 +3577,6 @@
                     "Geometric shape": "sphere", 
                     "No. of cells/counting unit": 20.0, 
                     "Size class": 2, 
-                    "Size class PW": 2, 
                     "Size range": "1-3", 
                     "Trophy": "AU", 
                     "Unit": "colony"
@@ -3591,7 +3591,6 @@
                     "Geometric shape": "sphere", 
                     "No. of cells/counting unit": 50.0, 
                     "Size class": 3, 
-                    "Size class PW": 3, 
                     "Size range": "1-3", 
                     "Trophy": "AU", 
                     "Unit": "colony"
@@ -3606,7 +3605,6 @@
                     "Geometric shape": "sphere", 
                     "No. of cells/counting unit": 100.0, 
                     "Size class": 4, 
-                    "Size class PW": 4, 
                     "Size range": "1-3", 
                     "Trophy": "AU", 
                     "Unit": "colony"
@@ -3621,7 +3619,6 @@
                     "Geometric shape": "sphere", 
                     "No. of cells/counting unit": 200.0, 
                     "Size class": 5, 
-                    "Size class PW": 5, 
                     "Size range": "1-3", 
                     "Trophy": "AU", 
                     "Unit": "colony"
@@ -3653,6 +3650,7 @@
                     "Height(h), um": 1.2, 
                     "No. of cells/counting unit": 20.0, 
                     "Size class": 7, 
+                    "Size class PW": 2, 
                     "Size range": "1x1.5", 
                     "Trophy": "AU", 
                     "Unit": "colony"
@@ -3668,6 +3666,7 @@
                     "Height(h), um": 1.2, 
                     "No. of cells/counting unit": 50.0, 
                     "Size class": 8, 
+                    "Size class PW": 3, 
                     "Size range": "1x1.5", 
                     "Trophy": "AU", 
                     "Unit": "colony"
@@ -3683,6 +3682,7 @@
                     "Height(h), um": 1.2, 
                     "No. of cells/counting unit": 100.0, 
                     "Size class": 9, 
+                    "Size class PW": 4, 
                     "Size range": "1x1.5", 
                     "Trophy": "AU", 
                     "Unit": "colony"
@@ -3698,13 +3698,15 @@
                     "Height(h), um": 1.2, 
                     "No. of cells/counting unit": 200.0, 
                     "Size class": 10, 
+                    "Size class PW": 5, 
                     "Size range": "1x1.5", 
                     "Trophy": "AU", 
                     "Unit": "colony"
                 }
             ], 
             "Species": "Cyanodictyon", 
-            "Species PW": "Cyanodictyon sp"
+            "Species PW": "Cyanodictyon sp", 
+            "Species PW SFLAG": "SP"
         }, 
         {
             "Author": "Hickel 1985", 
@@ -3885,7 +3887,8 @@
                 }
             ], 
             "Species": "Cyanonephron", 
-            "Species PW": "Cyanonephron spp"
+            "Species PW": "Cyanonephron spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Clements & Shantz 1909", 
@@ -3962,7 +3965,8 @@
                 }
             ], 
             "Species": "Eucapsis", 
-            "Species PW": "Eucapsis spp"
+            "Species PW": "Eucapsis spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "K\u00fctzing 1836", 
@@ -4911,7 +4915,8 @@
                 }
             ], 
             "Species": "Merismopedia", 
-            "Species PW": "Merismopedia spp"
+            "Species PW": "Merismopedia spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(K\u00fctzing) K\u00fctzing 1846", 
@@ -5521,7 +5526,8 @@
                 }
             ], 
             "Species": "Pannus spumosus", 
-            "Species PW": "Pannus spumosus"
+            "Species PW": "Pannus spumosus", 
+            "Species PW SFLAG": "SP"
         }, 
         {
             "Class": "Nostocophyceae (Cyanophyceae)", 
@@ -5574,7 +5580,8 @@
                 }
             ], 
             "Species": "Pannus", 
-            "Species PW": "Pannus spp"
+            "Species PW": "Pannus spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Skuja 1948", 
@@ -5733,7 +5740,8 @@
                 }
             ], 
             "Species": "Rhabdoderma", 
-            "Species PW": "Rhabdoderma spp"
+            "Species PW": "Rhabdoderma spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Kom\u00e1rek & Hind\u00e1k 1988", 
@@ -6173,7 +6181,7 @@
                     "Geometric shape": "sphere", 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 1, 
-                    "Size class PW": 2, 
+                    "Size class PW": 3, 
                     "Size range": "2", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -6188,6 +6196,7 @@
                     "Geometric shape": "sphere", 
                     "No. of cells/counting unit": 10.0, 
                     "Size class": 2, 
+                    "Size class PW": 4, 
                     "Size range": "2", 
                     "Trophy": "AU", 
                     "Unit": "colony"
@@ -6202,7 +6211,6 @@
                     "Geometric shape": "sphere", 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 3, 
-                    "Size class PW": 4, 
                     "Size range": "3", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -6223,7 +6231,8 @@
                 }
             ], 
             "Species": "Synechococcus", 
-            "Species PW": "Synechococcus sp"
+            "Species PW": "Synechococcus sp", 
+            "Species PW SFLAG": "SP"
         }, 
         {
             "Author": "(Lemmermann) Kom\u00e1rek & Hind\u00e1k 1988", 
@@ -6691,7 +6700,8 @@
                 }
             ], 
             "Species": "Woronichinia", 
-            "Species PW": "Woronichinia spp"
+            "Species PW": "Woronichinia spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(Woloszynska) Meffert 1988", 
@@ -6867,7 +6877,8 @@
                 }
             ], 
             "Species": "Limnothrix", 
-            "Species PW": "Limnothrix spp"
+            "Species PW": "Limnothrix spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(Mertens in J\u00fcrgens) Liebman ex Gomont 1892", 
@@ -7086,7 +7097,8 @@
                 }
             ], 
             "Species": "Oscillatoriales", 
-            "Species PW": "Oscillatoriales spp"
+            "Species PW": "Oscillatoriales spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(C.A. Agardh ex Gomont) Anagnostidis & Kom\u00e1rek 1988", 
@@ -7497,7 +7509,8 @@
                 }
             ], 
             "Species": "Planktothrix", 
-            "Species PW": "Planktothrix spp"
+            "Species PW": "Planktothrix spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(Nygaard) Anagnostidis et Komarek 1988", 
@@ -7645,7 +7658,8 @@
                 }
             ], 
             "Species": "Pseudanabaena", 
-            "Species PW": "Pseudanabaena spp"
+            "Species PW": "Pseudanabaena spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Class": "Nostocophyceae (Cyanophyceae)", 
@@ -7824,7 +7838,8 @@
                 }
             ], 
             "Species": "Spirulina", 
-            "Species PW": "Spirulina spp"
+            "Species PW": "Spirulina spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(Skuja) Anagnostidis & Kom\u00e1rek 1988", 
@@ -8364,7 +8379,8 @@
                 }
             ], 
             "Species": "Anabaena spiroides", 
-            "Species PW": "Anabaena spiroides"
+            "Species PW": "Anabaena spiroides", 
+            "Species PW SFLAG": "SP"
         }, 
         {
             "Author": "(Carmichael ex Harvey in Hooker) Lagerheim ex Bornet & Flahault 1886", 
@@ -8544,7 +8560,8 @@
                 }
             ], 
             "Species": "Anabaena", 
-            "Species PW": "Anabaena spp"
+            "Species PW": "Anabaena spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "V. Miller 1923", 
@@ -8918,7 +8935,8 @@
                 }
             ], 
             "Species": "Aphanizomenon", 
-            "Species PW": "Aphanizomenon sp"
+            "Species PW": "Aphanizomenon sp", 
+            "Species PW SFLAG": "SP"
         }, 
         {
             "Author": "J.E. Smith ex P. Richter 1894", 
@@ -9003,7 +9021,8 @@
                 }
             ], 
             "Species": "Gloeotrichia", 
-            "Species PW": "Gloeotrichia spp"
+            "Species PW": "Gloeotrichia spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Kom\u00e1rek et al. 1993", 
@@ -9159,7 +9178,8 @@
                 }
             ], 
             "Species": "Nodularia spumigena", 
-            "Species PW": "Nodularia spumigena"
+            "Species PW": "Nodularia spumigena", 
+            "Species PW SFLAG": "SP"
         }, 
         {
             "Class": "Nostocophyceae (Cyanophyceae)", 
@@ -9815,7 +9835,8 @@
                 }
             ], 
             "Species": "Cryptomonas", 
-            "Species PW": "Cryptomonas spp"
+            "Species PW": "Cryptomonas spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Droop 1955", 
@@ -10015,7 +10036,8 @@
                 }
             ], 
             "Species": "Plagioselmis", 
-            "Species PW": "Plagioselmis spp"
+            "Species PW": "Plagioselmis spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Karsten 1898", 
@@ -10179,7 +10201,8 @@
                 }
             ], 
             "Species": "Rhodomonas", 
-            "Species PW": "Rhodomonas spp"
+            "Species PW": "Rhodomonas spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(Butcher) Hill 1991", 
@@ -10361,7 +10384,8 @@
                 }
             ], 
             "Species": "Teleaulax", 
-            "Species PW": "Teleaulax spp"
+            "Species PW": "Teleaulax spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Class": "Cryptophyceae", 
@@ -10379,6 +10403,7 @@
                     "Height(h), um": 3.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 1, 
+                    "Size class PW": 1, 
                     "Size range": "3x2", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -10393,6 +10418,7 @@
                     "Height(h), um": 6.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 2, 
+                    "Size class PW": 2, 
                     "Size range": "6x3.5", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -10407,6 +10433,7 @@
                     "Height(h), um": 8.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 3, 
+                    "Size class PW": 3, 
                     "Size range": "8x4.5", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -10421,6 +10448,7 @@
                     "Height(h), um": 10.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 4, 
+                    "Size class PW": 4, 
                     "Size range": "10x5", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -10435,6 +10463,7 @@
                     "Height(h), um": 11.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 5, 
+                    "Size class PW": 5, 
                     "Size range": "10-12x7", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -10454,7 +10483,9 @@
                     "Unit": "cell"
                 }
             ], 
-            "Species": "Cryptomonadales"
+            "Species": "Cryptomonadales", 
+            "Species PW": "Crypt sp", 
+            "Species PW SFLAG": "SP"
         }, 
         {
             "Author": "(Gran) Lillick", 
@@ -11375,7 +11406,8 @@
                 }
             ], 
             "Species": "Dinophysis", 
-            "Species PW": "Dinophysis spp"
+            "Species PW": "Dinophysis spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(Hirasaki) G. Hansen & Moestrup", 
@@ -11627,7 +11659,8 @@
                 }
             ], 
             "Species": "Amphidinium sphenoides", 
-            "Species PW": "Amphidinium sphenoides"
+            "Species PW": "Amphidinium sphenoides", 
+            "Species PW SFLAG": "SP"
         }, 
         {
             "Author": "Clapar\u00e8de & Lachmann 1859", 
@@ -11902,7 +11935,8 @@
                 }
             ], 
             "Species": "Amphidinium", 
-            "Species PW": "Amphidinium sp.A"
+            "Species PW": "Amphidinium sp.A", 
+            "Species PW SFLAG": "SP"
         }, 
         {
             "Author": "Elbr\u00e4chter & Tilmann", 
@@ -11952,7 +11986,8 @@
                 }
             ], 
             "Species": "Azadinium spinosum", 
-            "Species PW": "Azadinium spinosum"
+            "Species PW": "Azadinium spinosum", 
+            "Species PW SFLAG": "SP"
         }, 
         {
             "Author": "Lebour 1925", 
@@ -12049,7 +12084,8 @@
                 }
             ], 
             "Species": "Cochlodinium", 
-            "Species PW": "Cochlodinium spA"
+            "Species PW": "Cochlodinium spA", 
+            "Species PW SFLAG": "SP"
         }, 
         {
             "Author": "Lindemann 1928", 
@@ -13641,7 +13677,8 @@
                 }
             ], 
             "Species": "Gyrodinium spirale", 
-            "Species PW": "Gyrodinium spirale"
+            "Species PW": "Gyrodinium spirale", 
+            "Species PW SFLAG": "SP"
         }, 
         {
             "Author": "Kofoid & Swezy 1921", 
@@ -14213,7 +14250,8 @@
                 }
             ], 
             "Species": "Gyrodinium", 
-            "Species PW": "Gyrodinium sp"
+            "Species PW": "Gyrodinium sp", 
+            "Species PW SFLAG": "SP"
         }, 
         {
             "Author": "(Miyake et Kominami ex Oda) G. Hansen & Moestrup", 
@@ -14275,7 +14313,7 @@
                     "Length(l1), um": 13.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 1, 
-                    "Size class PW": 1, 
+                    "Size class PW": 2, 
                     "Size range": "13-17x10", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -14505,7 +14543,8 @@
                 }
             ], 
             "Species": "Katodinium", 
-            "Species PW": "Katodinium spp"
+            "Species PW": "Katodinium spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Saldarriaga et Taylor", 
@@ -14973,7 +15012,7 @@
                     "Geometric shape": "sphere-10%", 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 1, 
-                    "Size class PW": 1, 
+                    "Size class PW": 14, 
                     "Size range": "<10", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -14987,7 +15026,7 @@
                     "Geometric shape": "sphere-10%", 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 2, 
-                    "Size class PW": 2, 
+                    "Size class PW": 1, 
                     "Size range": "10-15", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -15071,7 +15110,7 @@
                     "Geometric shape": "sphere-10%", 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 8, 
-                    "Size class PW": 8, 
+                    "Size class PW": 12, 
                     "Size range": "70", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -15146,7 +15185,7 @@
                     "Height(h), um": 34.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 13, 
-                    "Size class PW": 13, 
+                    "Size class PW": 4, 
                     "Size range": "27-40", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -15161,7 +15200,7 @@
                     "Height(h), um": 45.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 14, 
-                    "Size class PW": 14, 
+                    "Size class PW": 11, 
                     "Size range": "40-50", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -15646,7 +15685,8 @@
                 }
             ], 
             "Species": "Gymnodiniales", 
-            "Species PW": "Gymnodiniales spp"
+            "Species PW": "Dinoflagellate spp_naked", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Dujardin 1841", 
@@ -16848,7 +16888,8 @@
                 }
             ], 
             "Species": "Heterocapsa minima", 
-            "Species PW": "Heterocapsa cf.minima"
+            "Species PW": "Heterocapsa cf.minima", 
+            "Species PW SFLAG": "CF."
         }, 
         {
             "Author": "(Lohmann) Hansen 1995", 
@@ -17120,7 +17161,8 @@
                 }
             ], 
             "Species": "Heterocapsa", 
-            "Species PW": "Heterocapsa spp"
+            "Species PW": "Heterocapsa spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(Stein) Lindemann 1924", 
@@ -19160,7 +19202,8 @@
                 }
             ], 
             "Species": "Protoperidinium", 
-            "Species PW": "Protoperidinium spC"
+            "Species PW": "Protoperidinium spC", 
+            "Species PW SFLAG": "SP"
         }, 
         {
             "Author": "(Schiller) Larsen in Larsen et al. 1995", 
@@ -20200,7 +20243,8 @@
                 }
             ], 
             "Species": "Peridiniales", 
-            "Species PW": "Peridiniales spp"
+            "Species PW": "Dinoflagellate spp_thecal", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Halim 1960", 
@@ -20457,7 +20501,8 @@
                 }
             ], 
             "Species": "Alexandrium", 
-            "Species PW": "Alexandrium spp"
+            "Species PW": "Alexandrium spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(E. Balech) Dodge 1989", 
@@ -21333,7 +21378,8 @@
                 }
             ], 
             "Species": "Gonyaulax spinifera", 
-            "Species PW": "Gonyaulax spinifera"
+            "Species PW": "Gonyaulax spinifera", 
+            "Species PW SFLAG": "SP"
         }, 
         {
             "Author": "Sournia 1973", 
@@ -21499,7 +21545,8 @@
                 }
             ], 
             "Species": "Gonyaulax", 
-            "Species PW": "Gonyaulax spp"
+            "Species PW": "Gonyaulax spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(Stein) Dodge 1989", 
@@ -21596,7 +21643,8 @@
                 }
             ], 
             "Species": "Oxytoxum", 
-            "Species PW": "Oxytoxum spp"
+            "Species PW": "Oxytoxum spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(Levander) Balech 1977", 
@@ -22056,7 +22104,8 @@
                 }
             ], 
             "Species": "Dinophyceae", 
-            "Species PW": "Dinophyceae spp"
+            "Species PW": "Dinophyceae spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Lohmann 1903", 
@@ -22352,7 +22401,8 @@
                 }
             ], 
             "Species": "Chrysochromulina", 
-            "Species PW": "Chrysochromulina spp"
+            "Species PW": "Chrysochromulina spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(Lohmann) Hay & Mohler 1967", 
@@ -22527,7 +22577,8 @@
                 }
             ], 
             "Species": "Pleurochrysis", 
-            "Species PW": "Pleurochrysis spp"
+            "Species PW": "Pleurochrysis spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Massart ex Conrad 1926", 
@@ -22593,7 +22644,8 @@
                 }
             ], 
             "Species": "Pavlova", 
-            "Species PW": "Pavlova spp"
+            "Species PW": "Pavlova spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Ruttner", 
@@ -22940,7 +22992,8 @@
                 }
             ], 
             "Species": "Paraphysomonas", 
-            "Species PW": "Paraphysomonas spp"
+            "Species PW": "Paraphysomonas spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Vyssotzsky, 1887", 
@@ -23354,7 +23407,8 @@
                 }
             ], 
             "Species": "Pseudopedinella", 
-            "Species PW": "Pseudopedinella cf.pyriforme"
+            "Species PW": "Pseudopedinella cf.pyriforme", 
+            "Species PW SFLAG": "CF."
         }, 
         {
             "Class": "Chrysophyceae", 
@@ -23375,7 +23429,8 @@
                 }
             ], 
             "Species": "Chrysophyceae", 
-            "Species PW": "Chrysophyceae spp"
+            "Species PW": "Chrysophyceae spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Ehrenberg 1839", 
@@ -23395,6 +23450,20 @@
                     "Size class": 1, 
                     "Size class PW": 1, 
                     "Size range": "16", 
+                    "Trophy": "AU", 
+                    "Unit": "cell"
+                }, 
+                {
+                    "Calculated Carbon pg/counting unit": 889.0, 
+                    "Calculated volume, um3": 7065.0, 
+                    "Correction/addition 2010": "\"Ann-Turi 2010-12-21;smhi_extended_peg_version_2010-10-26\"", 
+                    "Diameter(d1), um": 30.0, 
+                    "Filament: length of cell, um": "-", 
+                    "Formula": "?/12*d^3", 
+                    "Geometric shape": "half sphere", 
+                    "No. of cells/counting unit": 1.0, 
+                    "Size class": 2, 
+                    "Size range": "25-35", 
                     "Trophy": "AU", 
                     "Unit": "cell"
                 }
@@ -23481,7 +23550,8 @@
                 }
             ], 
             "Species": "Dictyocha speculum", 
-            "Species PW": "Dictyocha speculum"
+            "Species PW": "Dictyocha speculum", 
+            "Species PW SFLAG": "SP"
         }, 
         {
             "Author": "Eikrem, Edvardsen et Throndsen", 
@@ -23866,7 +23936,8 @@
                 }
             ], 
             "Species": "Synura", 
-            "Species PW": "Synura spp"
+            "Species PW": "Synura spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(BRUN) SIMONS.1979", 
@@ -25845,12 +25916,14 @@
                     "Height(h), um": 16.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 1, 
+                    "Size class PW": 3, 
                     "Size range": "9x16", 
                     "Trophy": "AU", 
                     "Unit": "cell"
                 }
             ], 
-            "Species": "Chaetoceros anastomosans v. externa"
+            "Species": "Chaetoceros anastomosans v. externa", 
+            "Species PW": "Chaetoceros anastomosans var. externa"
         }, 
         {
             "Author": "J.W. Bailey 1854", 
@@ -26184,6 +26257,7 @@
                     "Height(h), um": 4.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 1, 
+                    "Size class PW": 1, 
                     "Size range": "5x3-5", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -26200,6 +26274,7 @@
                     "Height(h), um": 10.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 2, 
+                    "Size class PW": 2, 
                     "Size range": "6-7x9-11", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -26216,6 +26291,7 @@
                     "Height(h), um": 13.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 3, 
+                    "Size class PW": 3, 
                     "Size range": "7x13", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -26232,6 +26308,7 @@
                     "Height(h), um": 14.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 4, 
+                    "Size class PW": 4, 
                     "Size range": "11x14", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -26253,7 +26330,8 @@
                     "Unit": "cell"
                 }
             ], 
-            "Species": "Chaetoceros ceratosporus v. ceratosporus"
+            "Species": "Chaetoceros ceratosporus v. ceratosporus", 
+            "Species PW": "Chaetoceros ceratosporus ceratosporus var."
         }, 
         {
             "Author": "(Meunier) K.G. Jensen & Moestrup 1998", 
@@ -26815,7 +26893,7 @@
                     "Height(h), um": 22.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 1, 
-                    "Size class PW": 2, 
+                    "Size class PW": 1, 
                     "Size range": "10-12x20-24", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -27463,6 +27541,7 @@
                     "Height(h), um": 14.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 1, 
+                    "Size class PW": 1, 
                     "Size range": "15-25x10-18", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -27479,6 +27558,7 @@
                     "Height(h), um": 21.5, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 2, 
+                    "Size class PW": 2, 
                     "Size range": "25-35x18-25", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -27499,7 +27579,8 @@
                     "Unit": "cell"
                 }
             ], 
-            "Species": "Chaetoceros didymus v. didymus"
+            "Species": "Chaetoceros didymus v. didymus", 
+            "Species PW": "Chaetoceros didymus var. didymus"
         }, 
         {
             "Author": "(Lauder) Gran & Yendo 1914", 
@@ -27519,12 +27600,14 @@
                     "Height(h), um": 20.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 1, 
+                    "Size class PW": 1, 
                     "Size range": "20-30 x 15-25", 
                     "Trophy": "AU", 
                     "Unit": "cell"
                 }
             ], 
-            "Species": "Chaetoceros didymus v. protuberans"
+            "Species": "Chaetoceros didymus v. protuberans", 
+            "Species PW": "Chaetoceros didymus var. protuberans"
         }, 
         {
             "Author": "Grunow in Van Heurck 1882", 
@@ -28645,7 +28728,7 @@
                 }
             ], 
             "Species": "Chaetoceros socialis f. socialis", 
-            "Species PW": "Chaetoceros socialis forma socialis"
+            "Species PW": "Chaetoceros scoialis forma socialis"
         }, 
         {
             "Author": "Proschkina-Lavrenko 1963", 
@@ -28746,6 +28829,7 @@
                     "Height(h), um": 4.5, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 1, 
+                    "Size class PW": 1, 
                     "Size range": "2.4x4.5", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -28762,6 +28846,7 @@
                     "Height(h), um": 12.5, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 2, 
+                    "Size class PW": 2, 
                     "Size range": "3x8-17", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -28778,6 +28863,7 @@
                     "Height(h), um": 20.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 3, 
+                    "Size class PW": 3, 
                     "Size range": "3x18-22", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -28794,6 +28880,7 @@
                     "Height(h), um": 12.5, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 4, 
+                    "Size class PW": 4, 
                     "Size range": "4x8-17", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -28810,6 +28897,7 @@
                     "Height(h), um": 21.5, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 5, 
+                    "Size class PW": 5, 
                     "Size range": "4x18-25", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -28826,6 +28914,7 @@
                     "Height(h), um": 5.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 6, 
+                    "Size class PW": 6, 
                     "Size range": "5x5", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -28842,6 +28931,7 @@
                     "Height(h), um": 12.5, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 7, 
+                    "Size class PW": 7, 
                     "Size range": "5x8-17", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -28858,6 +28948,7 @@
                     "Height(h), um": 20.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 8, 
+                    "Size class PW": 8, 
                     "Size range": "5x18-22", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -28874,6 +28965,7 @@
                     "Height(h), um": 13.5, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 9, 
+                    "Size class PW": 9, 
                     "Size range": "6x10-17", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -28890,6 +28982,7 @@
                     "Height(h), um": 18.5, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 10, 
+                    "Size class PW": 10, 
                     "Size range": "6x17-20", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -28906,6 +28999,7 @@
                     "Height(h), um": 10.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 11, 
+                    "Size class PW": 11, 
                     "Size range": "7-8x10", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -28922,12 +29016,14 @@
                     "Height(h), um": 12.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 12, 
+                    "Size class PW": 12, 
                     "Size range": "8x12", 
                     "Trophy": "AU", 
                     "Unit": "cell"
                 }
             ], 
-            "Species": "Chaetoceros subtilis v. subtilis"
+            "Species": "Chaetoceros subtilis v. subtilis", 
+            "Species PW": "Chaetoceros subtilis var. subtilis"
         }, 
         {
             "Author": "Meunier 1913", 
@@ -29072,6 +29168,7 @@
                     "Height(h), um": 10.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 1, 
+                    "Size class PW": 1, 
                     "Size range": "2x8-12", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -29088,6 +29185,7 @@
                     "Height(h), um": 7.5, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 2, 
+                    "Size class PW": 2, 
                     "Size range": "3x6-9", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -29104,6 +29202,7 @@
                     "Height(h), um": 11.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 3, 
+                    "Size class PW": 3, 
                     "Size range": "3x10-12", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -29120,6 +29219,7 @@
                     "Height(h), um": 13.5, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 4, 
+                    "Size class PW": 4, 
                     "Size range": "3x13-14", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -29136,12 +29236,14 @@
                     "Height(h), um": 10.5, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 5, 
+                    "Size class PW": 5, 
                     "Size range": "4x10-11", 
                     "Trophy": "AU", 
                     "Unit": "cell"
                 }
             ], 
-            "Species": "Chaetoceros throndsenii v. throndsenii"
+            "Species": "Chaetoceros throndsenii v. throndsenii", 
+            "Species PW": "Chaetoceros throndsenii var. throndsenii"
         }, 
         {
             "Author": "Brightwell", 
@@ -29705,7 +29807,8 @@
                 }
             ], 
             "Species": "Chaetoceros", 
-            "Species PW": "Chaetoceros borealia-group"
+            "Species PW": "Chaetoceros borealia-group", 
+            "Species PW SFLAG": "GROUP"
         }, 
         {
             "Author": "Grunow 1884", 
@@ -30505,7 +30608,8 @@
                 }
             ], 
             "Species": "Coscinodiscus", 
-            "Species PW": "Coscinodiscus spp"
+            "Species PW": "Coscinodiscus spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(Fricke in A. Schmidt) Round 1982", 
@@ -34498,7 +34602,8 @@
                 }
             ], 
             "Species": "Stephanodiscus", 
-            "Species PW": "Stephanodiscus spp"
+            "Species PW": "Stephanodiscus spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(Greville & Arnott in Gregory) Ralfs in Pritchard 1861", 
@@ -36129,6 +36234,7 @@
                     "Height(h), um": 3.2999999999999998, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 1, 
+                    "Size class PW": 1, 
                     "Size range": "3-7", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -36144,6 +36250,7 @@
                     "Height(h), um": 6.5, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 2, 
+                    "Size class PW": 2, 
                     "Size range": "7-12", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -36159,6 +36266,7 @@
                     "Height(h), um": 9.8000000000000007, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 3, 
+                    "Size class PW": 3, 
                     "Size range": "12-17", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -36174,6 +36282,7 @@
                     "Height(h), um": 10.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 4, 
+                    "Size class PW": 4, 
                     "Size range": "17-22", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -36189,6 +36298,7 @@
                     "Height(h), um": 12.5, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 5, 
+                    "Size class PW": 5, 
                     "Size range": "22-27", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -36204,6 +36314,7 @@
                     "Height(h), um": 15.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 6, 
+                    "Size class PW": 6, 
                     "Size range": "27-32", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -36219,6 +36330,7 @@
                     "Height(h), um": 17.5, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 7, 
+                    "Size class PW": 7, 
                     "Size range": "32-40", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -36234,6 +36346,7 @@
                     "Height(h), um": 22.5, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 8, 
+                    "Size class PW": 8, 
                     "Size range": "40-50", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -36249,6 +36362,7 @@
                     "Height(h), um": 27.5, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 9, 
+                    "Size class PW": 9, 
                     "Size range": "50-60", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -36264,6 +36378,7 @@
                     "Height(h), um": 19.5, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 10, 
+                    "Size class PW": 10, 
                     "Size range": "60-70", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -36279,6 +36394,7 @@
                     "Height(h), um": 24.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 11, 
+                    "Size class PW": 11, 
                     "Size range": "70-90", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -36294,12 +36410,81 @@
                     "Height(h), um": 30.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 12, 
+                    "Size class PW": 12, 
                     "Size range": "90-110", 
+                    "Trophy": "AU", 
+                    "Unit": "cell"
+                }, 
+                {
+                    "Calculated Carbon pg/counting unit": 10203.0, 
+                    "Calculated volume, um3": 406944.0, 
+                    "Comment": "\"6; HD fac.=0.3\"", 
+                    "Correction/addition 2010": "\"Ann-Turi 2010-12-21;smhi_extended_peg_version_2010-10-26\"", 
+                    "Diameter(d1), um": 120.0, 
+                    "Filament: length of cell, um": "-", 
+                    "Formula": "?/4*d^2*h", 
+                    "Geometric shape": "cylinder", 
+                    "Height(h), um": 36.0, 
+                    "No. of cells/counting unit": 1.0, 
+                    "Size class": 13, 
+                    "Size class PW": 15, 
+                    "Size range": "110-130", 
+                    "Trophy": "AU", 
+                    "Unit": "cell"
+                }, 
+                {
+                    "Calculated Carbon pg/counting unit": 14846.0, 
+                    "Calculated volume, um3": 646212.0, 
+                    "Comment": "\"6; HD fac.=0.3\"", 
+                    "Correction/addition 2010": "\"Ann-Turi 2010-12-21;smhi_extended_peg_version_2010-10-26\"", 
+                    "Diameter(d1), um": 140.0, 
+                    "Filament: length of cell, um": "-", 
+                    "Formula": "?/4*d^2*h", 
+                    "Geometric shape": "cylinder", 
+                    "Height(h), um": 42.0, 
+                    "No. of cells/counting unit": 1.0, 
+                    "Size class": 14, 
+                    "Size range": "130-150", 
+                    "Trophy": "AU", 
+                    "Unit": "cell"
+                }, 
+                {
+                    "Calculated Carbon pg/counting unit": 20545.0, 
+                    "Calculated volume, um3": 964608.0, 
+                    "Comment": "\"6; HD fac.=0.3\"", 
+                    "Correction/addition 2010": "\"Ann-Turi 2010-12-21;smhi_extended_peg_version_2010-10-26\"", 
+                    "Diameter(d1), um": 160.0, 
+                    "Filament: length of cell, um": "-", 
+                    "Formula": "?/4*d^2*h", 
+                    "Geometric shape": "cylinder", 
+                    "Height(h), um": 48.0, 
+                    "No. of cells/counting unit": 1.0, 
+                    "Size class": 15, 
+                    "Size range": "150-170", 
+                    "Trophy": "AU", 
+                    "Unit": "cell"
+                }, 
+                {
+                    "Calculated Carbon pg/counting unit": 27362.0, 
+                    "Calculated volume, um3": 1373436.0, 
+                    "Comment": "\"6; HD fac.=0.3\"", 
+                    "Correction/addition 2010": "\"Ann-Turi 2010-12-21;smhi_extended_peg_version_2010-10-26\"", 
+                    "Diameter(d1), um": 180.0, 
+                    "Filament: length of cell, um": "-", 
+                    "Formula": "?/4*d^2*h", 
+                    "Geometric shape": "cylinder", 
+                    "Height(h), um": 54.0, 
+                    "No. of cells/counting unit": 1.0, 
+                    "Size class": 16, 
+                    "Size class PW": 19, 
+                    "Size range": "170-190", 
                     "Trophy": "AU", 
                     "Unit": "cell"
                 }
             ], 
-            "Species": "Centrales"
+            "Species": "Centrales", 
+            "Species PW": "Centrales spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Grunow in Cleve & Grunow 1880", 
@@ -37230,7 +37415,8 @@
                 }
             ], 
             "Species": "Cocconeis", 
-            "Species PW": "Cocconeis spp"
+            "Species PW": "Cocconeis spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(Ehrenberg) Reimann & J. Lewin 1958", 
@@ -37848,7 +38034,8 @@
                 }
             ], 
             "Species": "Diploneis", 
-            "Species PW": "Diploneis spp"
+            "Species PW": "Diploneis spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Ehrenberg", 
@@ -37876,7 +38063,8 @@
                 }
             ], 
             "Species": "Eunotia", 
-            "Species PW": "Eunotia spp"
+            "Species PW": "Eunotia spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Desmazi\u00e8res 1825", 
@@ -38139,7 +38327,8 @@
                 }
             ], 
             "Species": "Fragilaria", 
-            "Species PW": "Fragilaria spp"
+            "Species PW": "Fragilaria spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(Ralfs) Williams & Round 1988", 
@@ -38653,7 +38842,8 @@
                 }
             ], 
             "Species": "Gyrosigma", 
-            "Species PW": "Gyrosigma spp"
+            "Species PW": "Gyrosigma spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Thomsen & Buck, 1993", 
@@ -38844,7 +39034,8 @@
                 }
             ], 
             "Species": "Licmophora", 
-            "Species PW": "Licmophora spp"
+            "Species PW": "Licmophora spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Thwaites in W. Smith 1856", 
@@ -39586,7 +39777,8 @@
                 }
             ], 
             "Species": "Navicula", 
-            "Species PW": "Navicula spp"
+            "Species PW": "Navicula spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(K\u00fctzing) W. Smith 1853", 
@@ -40685,7 +40877,8 @@
                 }
             ], 
             "Species": "Pseudo-nitzschia", 
-            "Species PW": "Pseudo-nitzschia spp"
+            "Species PW": "Pseudo-nitzschia spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(Schultze) Sundstr\u00f6m 1986", 
@@ -42262,7 +42455,8 @@
                 }
             ], 
             "Species": "Pennales", 
-            "Species PW": "Plagiotropis/Tropidoneis spp"
+            "Species PW": "Plagiotropis/Tropidoneis spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(A. Braun) Fott 1960", 
@@ -42308,7 +42502,6 @@
                     "Height(h), um": 15.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 1, 
-                    "Size class PW": 1, 
                     "Size range": "10-20", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -42342,8 +42535,7 @@
                     "Unit": "cell"
                 }
             ], 
-            "Species": "Chattonella verruculosa", 
-            "Species PW": "Chattonella verruculosa"
+            "Species": "Chattonella verruculosa"
         }, 
         {
             "Author": "(Hada) Hada 1987", 
@@ -42595,7 +42787,8 @@
                 }
             ], 
             "Species": "Euglena", 
-            "Species PW": "Euglena sp"
+            "Species PW": "Euglena sp", 
+            "Species PW SFLAG": "SP"
         }, 
         {
             "Author": "Steuer 1904", 
@@ -43157,7 +43350,8 @@
                 }
             ], 
             "Species": "Eutreptiella", 
-            "Species PW": "Eutreptiella spp"
+            "Species PW": "Eutreptiella spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(Ehrenberg) Lemmermann 1901", 
@@ -43322,7 +43516,8 @@
                 }
             ], 
             "Species": "Phacus", 
-            "Species PW": "Phacus spp"
+            "Species PW": "Phacus spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(Perty) Stein 1878 emend. Deflandre", 
@@ -43411,7 +43606,8 @@
                 }
             ], 
             "Species": "Trachelomonas", 
-            "Species PW": "Trachelomonas spp"
+            "Species PW": "Trachelomonas spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Class": "Euglenophyceae", 
@@ -43484,7 +43680,8 @@
                 }
             ], 
             "Species": "Euglenales", 
-            "Species PW": "Euglenales spp"
+            "Species PW": "Euglenales spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(Manton & Parke) Desikachary 1972", 
@@ -43625,7 +43822,8 @@
                 }
             ], 
             "Species": "Nephroselmis", 
-            "Species PW": "Nephroselmis spp"
+            "Species PW": "Nephroselmis spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Ostenfeld", 
@@ -43665,7 +43863,8 @@
                 }
             ], 
             "Species": "Pachysphaera", 
-            "Species PW": "Pachysphaera spp"
+            "Species PW": "Pachysphaera spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(Throndsen) Manton 1975", 
@@ -43734,7 +43933,8 @@
                 }
             ], 
             "Species": "Pseudoscourfieldia", 
-            "Species PW": "Pseudoscourfieldia spp"
+            "Species PW": "Pseudoscourfieldia spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Pouchet 1893", 
@@ -43815,7 +44015,8 @@
                 }
             ], 
             "Species": "Pterosperma", 
-            "Species PW": "Pterosperma spp"
+            "Species PW": "Pterosperma spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Schmarda 1850", 
@@ -43980,7 +44181,8 @@
                 }
             ], 
             "Species": "Pyramimonas", 
-            "Species PW": "Pyramimonas spp"
+            "Species PW": "Pyramimonas spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "(H.J. Carter) F. Stein 1878", 
@@ -44633,7 +44835,8 @@
                 }
             ], 
             "Species": "Closterium", 
-            "Species PW": "Closterium spp"
+            "Species PW": "Closterium spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Corda ex Ralfs 1848", 
@@ -44692,7 +44895,8 @@
                 }
             ], 
             "Species": "Cosmarium", 
-            "Species PW": "Cosmarium spp"
+            "Species PW": "Cosmarium spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "C.A. Agardh 1824", 
@@ -44786,7 +44990,8 @@
                 }
             ], 
             "Species": "Staurastrum", 
-            "Species PW": "Staurastrum spp"
+            "Species PW": "Staurastrum spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Diesing 1866 emend. Franc\u00e9 1893", 
@@ -46328,7 +46533,8 @@
                 }
             ], 
             "Species": "Coelastrum sphaericum", 
-            "Species PW": "Coelastrum sphaericum"
+            "Species PW": "Coelastrum sphaericum", 
+            "Species PW SFLAG": "SP"
         }, 
         {
             "Author": "Morren 1830", 
@@ -47298,7 +47504,8 @@
                 }
             ], 
             "Species": "Desmodesmus spinosus", 
-            "Species PW": "Desmodesmus spinosus"
+            "Species PW": "Desmodesmus spinosus", 
+            "Species PW SFLAG": "SP"
         }, 
         {
             "Author": "N\u00e4geli 1849", 
@@ -49425,7 +49632,8 @@
                 }
             ], 
             "Species": "Planctococcus sphaerocystiformis", 
-            "Species PW": "Planctococcus sphaerocystiformis"
+            "Species PW": "Planctococcus sphaerocystiformis", 
+            "Species PW SFLAG": "SP"
         }, 
         {
             "Author": "Hortob\u00e1gyi 1973", 
@@ -50267,6 +50475,7 @@
                     "Length(l1), um": 14.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 1, 
+                    "Size class PW": 1, 
                     "Size range": "12-16", 
                     "Trophy": "AU", 
                     "Unit": "cell", 
@@ -50319,7 +50528,8 @@
                     "Width(w), um": 10.0
                 }
             ], 
-            "Species": "Tetra\u00ebdron caudatum"
+            "Species": "Tetra\u00ebdron caudatum", 
+            "Species PW": "Tetra\u00ebdron caudatum"
         }, 
         {
             "Author": "(A. Braun) Hansgirg 1888", 
@@ -50338,6 +50548,7 @@
                     "Length(l1), um": 9.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 1, 
+                    "Size class PW": 1, 
                     "Size range": "8-10", 
                     "Trophy": "AU", 
                     "Unit": "cell", 
@@ -50353,6 +50564,7 @@
                     "Length(l1), um": 12.5, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 2, 
+                    "Size class PW": 2, 
                     "Size range": "10-15", 
                     "Trophy": "AU", 
                     "Unit": "cell", 
@@ -50389,7 +50601,8 @@
                     "Width(w), um": 8.0
                 }
             ], 
-            "Species": "Tetra\u00ebdron minimum"
+            "Species": "Tetra\u00ebdron minimum", 
+            "Species PW": "Tetra\u00ebdron minimum"
         }, 
         {
             "Author": "Playfair 1917", 
@@ -50492,7 +50705,8 @@
                 }
             ], 
             "Species": "Tetrastrum", 
-            "Species PW": "Tetrastrum spp"
+            "Species PW": "Tetrastrum spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Bernard 1908", 
@@ -51346,7 +51560,8 @@
                 }
             ], 
             "Species": "Cryptaulax", 
-            "Species PW": "Cryptaulax spp"
+            "Species PW": "Cryptaulax spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Skuja 1948", 
@@ -51398,6 +51613,7 @@
                     "Length(l1), um": 8.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 1, 
+                    "Size class PW": 1, 
                     "Size range": "5-6x7-9", 
                     "Trophy": "HT", 
                     "Unit": "cell"
@@ -51412,6 +51628,7 @@
                     "Length(l1), um": 10.0, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 2, 
+                    "Size class PW": 2, 
                     "Size range": "6-8x8-12", 
                     "Trophy": "HT", 
                     "Unit": "cell"
@@ -51426,12 +51643,14 @@
                     "Length(l1), um": 13.5, 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 3, 
+                    "Size class PW": 3, 
                     "Size range": "8-10x12-15", 
                     "Trophy": "HT", 
                     "Unit": "cell"
                 }
             ], 
-            "Species": "Katablepharis remigera"
+            "Species": "Katablepharis remigera", 
+            "Species PW": "Katablepharis remigera"
         }, 
         {
             "Author": "Skuja 1939", 
@@ -51626,7 +51845,8 @@
                 }
             ], 
             "Species": "Telonema", 
-            "Species PW": "Telonema spp"
+            "Species PW": "Telonema spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Lohmann 1908", 
@@ -52586,7 +52806,8 @@
                 }
             ], 
             "Species": "Chlorodendrales", 
-            "Species PW": "Chlorodendrales spp"
+            "Species PW": "Chlorodendrales spp", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Division": "INCERTAE SEDIS", 
@@ -52609,7 +52830,8 @@
                 }
             ], 
             "Species": "Commation spp", 
-            "Species PW": "Commation sp"
+            "Species PW": "Commation sp", 
+            "Species PW SFLAG": "SP"
         }, 
         {
             "Class": "Litostomatea", 
@@ -52619,10 +52841,12 @@
                 {
                     "Correction/addition 2010": "smhi_extended_peg_version_2010-10-26", 
                     "Size class": 32, 
+                    "Size class PW": 32, 
                     "Trophy": "HT"
                 }
             ], 
-            "Species": "Leegardiella ovalis"
+            "Species": "Leegardiella ovalis", 
+            "Species PW": "Leegardiella ovalis"
         }, 
         {
             "Author": "Eikrem, Edvardsen et Throndsen", 
@@ -52640,7 +52864,6 @@
                     "Geometric shape": "sphere", 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 1, 
-                    "Size class PW": 2, 
                     "Size range": "5-10", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -52655,6 +52878,7 @@
                     "Geometric shape": "sphere", 
                     "No. of cells/counting unit": 1.0, 
                     "Size class": 2, 
+                    "Size class PW": 2, 
                     "Size range": "10-15", 
                     "Trophy": "AU", 
                     "Unit": "cell"
@@ -52820,7 +53044,8 @@
                 }
             ], 
             "Species": "Cyanobacteria spp_filaments", 
-            "Species PW": "Cyanobacteria spp_filaments"
+            "Species PW": "Cyanobacteria spp_filaments", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Class": "Nostocophyceae (Cyanophyceae)", 
@@ -52838,7 +53063,8 @@
                 }
             ], 
             "Species": "Cyanobacteria spp_colony", 
-            "Species PW": "Cyanobacteria spp_colony"
+            "Species PW": "Cyanobacteria spp_colony", 
+            "Species PW SFLAG": "SPP"
         }, 
         {
             "Author": "Sarno & Zingone, 2005", 
@@ -53008,6 +53234,7 @@
             "Species PW": "Kofoidinium velelloides"
         }, 
         {
+            "Author": "(Peragallo) Hern\u00e1ndez-Becerril", 
             "Class": "Diatomophyceae (Bacillariophyceae)", 
             "Division": "CHRYSOPHYTA (HETEROKONTOPHYTA)", 
             "Order": "EUPODISCALES (BIDDULPHIALES, CENTRALES)", 
@@ -53028,9 +53255,12 @@
                     "Unit": "cell"
                 }
             ], 
-            "Species": "Proboscia alata v. indica"
+            "Species": "Proboscia indica"
         }, 
         {
+            "Class": "Chlorophyceae", 
+            "Division": "CHLOROPHYTA", 
+            "Order": "VOLVOCALES", 
             "SFLAG": "spp.", 
             "Size classes": [
                 {
@@ -53057,6 +53287,62 @@
                 }
             ], 
             "Species": "Oltmannsiellopsis"
+        }, 
+        {
+            "Author": "(Paulsen) Okolodkov et Dodge 1995", 
+            "Class": "Dinophyceae", 
+            "Division": "DINOPHYTA (PYRROPHYTA)", 
+            "Dyntaxa id": 238293, 
+            "Order": "PERIDINIALES", 
+            "Size classes": [
+                {
+                    "Calculated Carbon pg/counting unit": 373.0, 
+                    "Calculated volume, um3": 2805.0, 
+                    "Comment": "HD fac.=0.67", 
+                    "Correction/addition 2010": "\"A-TS_2010-12-02; smhi_extended_peg_version_2010-10-26\"", 
+                    "Diameter(d1), um": 20.0, 
+                    "Diameter(d2), um": 13.0, 
+                    "Filament: length of cell, um": "-", 
+                    "Formula": "?/6*l*d1*d2", 
+                    "Geometric shape": "flattened ellipsoid", 
+                    "Length(l1), um": 20.0, 
+                    "No. of cells/counting unit": 1.0, 
+                    "Size class": 1, 
+                    "Size class PW": 6, 
+                    "Size range": "18-22", 
+                    "Trophy": "HT", 
+                    "Unit": "cell"
+                }
+            ], 
+            "Species": "Peridiniella danica", 
+            "Species PW": "Peridiniella danica"
+        }, 
+        {
+            "Author": "Ehrenberg 1845", 
+            "Class": "Diatomophyceae (Bacillariophyceae)", 
+            "Division": "CHRYSOPHYTA (HETEROKONTOPHYTA)", 
+            "Dyntaxa id": 237323, 
+            "Order": "EUPODISCALES(CENTRALES)", 
+            "Size classes": [
+                {
+                    "Calculated Carbon pg/counting unit": 92.0, 
+                    "Calculated volume, um3": 1227.0, 
+                    "Correction/addition 2010": "\"Marie Johansen, Ann-Turi Skjevik, Lars Edler 2010; smhi_extended_peg_version_2010-10-26\"", 
+                    "Diameter(d1), um": 12.5, 
+                    "Diameter(d2), um": 6.25, 
+                    "Formula": "?/4*d1*d2*h", 
+                    "Geometric shape": "oval cylinder", 
+                    "Height(h), um": 20.0, 
+                    "No. of cells/counting unit": 1.0, 
+                    "Size class": 1, 
+                    "Size class PW": 3, 
+                    "Size range": "10-15x 15-25", 
+                    "Trophy": "AU", 
+                    "Unit": "cell"
+                }
+            ], 
+            "Species": "Chaetoceros didymus", 
+            "Species PW": "Chaetoceros didymus"
         }
     ], 
     "metadata": {}
