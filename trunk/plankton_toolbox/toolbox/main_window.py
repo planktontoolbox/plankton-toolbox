@@ -91,7 +91,8 @@ class MainWindow(QtGui.QMainWindow):
         if toolbox_settings.ToolboxSettings().getValue('Resources:Load at startup'):
             QtCore.QTimer.singleShot(10, toolbox_resources.ToolboxResources().loadAllResources)
         #
-        utils.Logger().info('Plankton toolbox started.')
+        utils.Logger().log('Plankton toolbox started.')
+        utils.Logger().log('Note: Log rows are sent to the "Log tool" and written to "plankton_toolbox_log.txt".\r\n')
 
         
     def closeEvent(self, event):

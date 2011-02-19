@@ -292,7 +292,7 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
 
     def __prepareDyntaxa(self):
         """ """
-        utils.Logger().info("Prepare dyntaxa. Started.")
+        utils.Logger().log("Prepare dyntaxa. Started.")
         utils.Logger().clear()
         self._writeToStatusBar("Prepare dyntaxa.")
         try:
@@ -300,7 +300,7 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
                 dt = taxa.Dyntaxa()
                 importer = taxa_prepare.PrepareDyntaxaDbTablesAsTextFiles(taxaObject = dt)
                 importer.importTaxa(unicode(self.__dyntaxafromdirectory_edit.text()))
-                utils.Logger().info('Number of dyntaxa taxa: ' + str(len(dt.getTaxonList())))
+                utils.Logger().log('Number of dyntaxa taxa: ' + str(len(dt.getTaxonList())))
                 exporter = taxa_sources.JsonFile(taxaObject = dt)
                 exporter.exportTaxa(file = unicode(self.__dyntaxatofile_edit.text()), encode = 'iso-8859-1')
             else:
@@ -329,7 +329,7 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
 
     def __preparePeg(self):
         """ """
-        utils.Logger().info("Prepare PEG. Started.")
+        utils.Logger().log("Prepare PEG. Started.")
         utils.Logger().clear()
         self._writeToStatusBar("Prepare PEG.")
         try:
@@ -340,7 +340,7 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
             importer.addPwToPeg(file = unicode(self.__pwtopegfile_edit.text()))
             importer.addDyntaxaToPeg(file = unicode(self.__pegtodyntaxafile_edit.text()))
             #
-            utils.Logger().info('Number of PEG taxa: ' + str(len(peg.getTaxonList())))                
+            utils.Logger().log('Number of PEG taxa: ' + str(len(peg.getTaxonList())))                
             exporter = taxa_sources.JsonFile(taxaObject = peg)
             exporter.exportTaxa(file = unicode(self.__pegtofile_edit.text()), encode = 'iso-8859-1')
         except UserWarning, e:
@@ -356,7 +356,7 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
         finally:
             utils.Logger().logAllWarnings()    
             utils.Logger().logAllErrors()    
-            utils.Logger().info("Prepare PEG. Ended.")
+            utils.Logger().log("Prepare PEG. Ended.")
             self._writeToStatusBar("")
         # Reload resources.
         toolbox_resources.ToolboxResources().loadResourcePeg()
@@ -383,7 +383,7 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
 
     def __prepareHarmful(self):
         """ """
-        utils.Logger().info("Prepare Harmful plankton. Started.")
+        utils.Logger().log("Prepare Harmful plankton. Started.")
         utils.Logger().clear()
         self._writeToStatusBar("Prepare Harmful plankton.")
         try:
@@ -391,7 +391,7 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
             importer = taxa_prepare.PrepareHarmfulMicroAlgae(taxaObject = harmful)
             importer.importTaxa(file = unicode(self.__harmfulfromfile_edit.text()))
             #
-            utils.Logger().info('Number of Harmful plankton taxa: ' + str(len(harmful.getTaxonList())))                
+            utils.Logger().log('Number of Harmful plankton taxa: ' + str(len(harmful.getTaxonList())))                
             exporter = taxa_sources.JsonFile(taxaObject = harmful)
             exporter.exportTaxa(file = unicode(self.__harmfultofile_edit.text()), encode = 'iso-8859-1')
         except UserWarning, e:
@@ -407,7 +407,7 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
         finally:
             utils.Logger().logAllWarnings()    
             utils.Logger().logAllErrors()    
-            utils.Logger().info("Prepare Harmful plankton. Ended.")
+            utils.Logger().log("Prepare Harmful plankton. Ended.")
             self._writeToStatusBar("")
         # Reload resources.
         toolbox_resources.ToolboxResources().loadResourceHarmfulPlankton()

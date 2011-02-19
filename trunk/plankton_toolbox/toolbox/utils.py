@@ -26,16 +26,13 @@
 
 """
 This module contains utilities for the Plankton toolbox project.
-
-TODO: Use accumulated warnings and errors only when asked for. Log directly otherwise. 
-
 """
 
 import time
 
 def singleton(cls):
     """
-    This is an implementation of the Singleton pattern by using decorator.
+    This is an implementation of the Singleton pattern by using decorators.
     Usage example:
         @singleton
         class MyClass:
@@ -52,41 +49,29 @@ def singleton(cls):
 class Logger(object):
     """
     Utility class for logging.
-    Info are used for direct logging. Errors and warnings are accumulated. 
+    Normal logging is done by calling log('message').
+    Tagged log rows can be of the types Info, Warning and Error.
+    Similar log rows can be accumulated and printed with info about the number 
+    of times they occurred. 
     """
     def __init__(self):
         self.__logtarget = None
-        self.__errors = {} # Contains accumulated errors and counter.
-        self.__warnings = {} # Contains accumulated warnings and counter.
+        self.__accumulatedloggingactive = False
+        self.__infoacc = {} # Contains accumulated info rows and counter.
+        self.__warningacc = {} # Contains accumulated warnings and counter.
+        self.__erroracc = {} # Contains accumulated errors and counter.
         
     def setLogTarget(self, target):
-        """ Target must be an object containing a method named writeToLog. """
+        """ Target must be an object containing a method named writeToLog(message). """
         self.__logtarget = target
 
     def clear(self):
-        """ """
-        self.__errors.clear()
-        self.__warnings.clear()
+        """ Clears all accumulated log rows. """
+        self.__infoacc.clear()
+        self.__warningacc.clear()
+        self.__erroracc.clear()
         
-    def error(self, message):
-        """ Accumulates errors. Increment counter if it already exists. """
-        message = unicode(message)
-        message = 'ERROR: ' + message
-        if message in self.__errors:
-            self.__errors[message] += 1
-        else:
-            self.__errors[message] = 1
-        
-    def warning(self, message):
-        """ Accumulates warnings. Increment counter if it already exists. """
-        message = unicode(message)
-        message = 'WARNING: ' + message
-        if message in self.__warnings:
-            self.__warnings[message] += 1
-        else:
-            self.__warnings[message] = 1
-        
-    def info(self, message):
+    def log(self, message):
         """ Used for direct logging. """
         message = unicode(message)
         if self.__logtarget:
@@ -94,21 +79,77 @@ class Logger(object):
         else:
             print(time.strftime("%Y-%m-%d %H:%M:%S") + ': ' + message)
         
-    def getError(self):
-        """ """
-        return self.__errors
+    def info(self, message):
+        """ Accumulates info rows. Increment counter if it already exists. """
+        message = unicode(message)
+        message = 'INFO: ' + message
+        if self.__accumulatedloggingactive:
+            if message in self.__info:
+                self.__infoacc[message] += 1
+            else:
+                self.__infoacc[message] = 1
+        else:
+            self.log(message)
+
+    def warning(self, message):
+        """ Accumulates warnings. Increment counter if it already exists. """
+        message = unicode(message)
+        message = 'WARNING: ' + message
+        if self.__accumulatedloggingactive:
+            if message in self.__warningacc:
+                self.__warningacc[message] += 1
+            else:
+                self.__warningacc[message] = 1
+        else:
+            self.log(message)
         
-    def getWarning(self):
+    def error(self, message):
+        """ Accumulates errors. Increment counter if it already exists. """
+        message = unicode(message)
+        message = 'ERROR: ' + message
+        if self.__accumulatedloggingactive:
+            if message in self.__erroracc:
+                self.__erroracc[message] += 1
+            else:
+                self.__erroracc[message] = 1
+        else:
+            self.log(message)
+            
+    def startAccumulatedLogging(self):
         """ """
-        return self.__warnings
+        self.clear()
+        self.__accumulatedloggingactive = True
         
-    def logAllErrors(self):
-        """ Log all the content in the accumulated error list. """
-        for message in self.__errors:
-            self.info(message + ' (' + unicode(self.__errors[message]) + ' times)')
+    def logAllAccumulatedRows(self):
+        """ """
+        self.__accumulatedloggingactive = False
+        self.log('Accumulated log summary:')
+        self.logAllInfoRows()
+        self.logAllWarnings()
+        self.logAllErrors()        
+        errorcount = sum(self.__erroracc.values())
+        warningcount = sum(self.__warningacc.values())
+        if errorcount == 0:
+            self.log('- Errors: 0.')
+        else:
+            self.log('- ERRORS: ' + unicode(errorcount) + '.')
+        if warningcount == 0:
+            self.log('- Warnings: 0.')
+        else:
+            self.log('- WARNINGS: ' + unicode(warningcount) + '.')
+        self.clear()
+        
+    def logAllInfoRows(self):
+        """ Log all the content in the accumulated info row list. """
+        for message in self.__infoacc:
+            self.log('- ' + message + ' (' + unicode(self.__infoacc[message]) + ' times)')
         
     def logAllWarnings(self):
         """ Log all the content in the accumulated warning list. """
-        for message in self.__warnings:
-            self.info(message + ' (' + unicode(self.__warnings[message]) + ' times)')
+        for message in self.__warningacc:
+            self.log('- ' + message + ' (' + unicode(self.__warningacc[message]) + ' times)')
         
+    def logAllErrors(self):
+        """ Log all the content in the accumulated error list. """
+        for message in self.__erroracc:
+            self.log('- ' + message + ' (' + unicode(self.__erroracc[message]) + ' times)')

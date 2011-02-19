@@ -38,6 +38,7 @@ import plankton_toolbox.core.biology.taxa_sources as taxa_sources
 @utils.singleton
 class ToolboxResources(QtCore.QObject):
     """
+    Resources are datasets that are commonly used in the Plankton toolbox.
     """
     def __init__(self):
         """ """
@@ -47,10 +48,9 @@ class ToolboxResources(QtCore.QObject):
         self.__dyntaxaloaded = False 
         self.__pegloaded = False
         self.__harmfulplanktonloaded = False
-        
         # 
         ###super(ToolboxResources, self).__init__(None)
-        QtCore.QObject.__init__(self) # TODO: Check...
+        QtCore.QObject.__init__(self) # TODO: Check why super not works.
         
     def loadAllResources(self):
         """ """
@@ -82,7 +82,7 @@ class ToolboxResources(QtCore.QObject):
         # Emit signal.
         self.__dyntaxaloaded = True 
         self.emit(QtCore.SIGNAL('dyntaxaResourceLoaded'))
-        utils.Logger().info('Toolbox resources: Dyntaxa loaded (' +  
+        utils.Logger().log('Toolbox resources: Dyntaxa loaded (' +  
                             unicode(len(self.__dyntaxa.getTaxonList())) + ' taxon).')
         
     def loadUnloadedResourcePeg(self):
@@ -100,7 +100,7 @@ class ToolboxResources(QtCore.QObject):
         # Emit signal.
         self.__pegloaded = True
         self.emit(QtCore.SIGNAL('pegResourceLoaded'))
-        utils.Logger().info('Toolbox resources: PEG loaded (' +  
+        utils.Logger().log('Toolbox resources: PEG loaded (' +  
                             unicode(len(self.__peg.getNameAndSizeList())) + ' sizeclasses).')
 
     def loadUnloadedResourceHarmfulPlankton(self):
@@ -118,7 +118,7 @@ class ToolboxResources(QtCore.QObject):
         # Emit signal.
         self.__harmfulplanktonloaded = True
         self.emit(QtCore.SIGNAL('harmfulPlanktonResourceLoaded'))
-        utils.Logger().info('Toolbox resources: Harmful plankton loaded (' +  
+        utils.Logger().log('Toolbox resources: Harmful plankton loaded (' +  
                             unicode(len(self.__harmfulplankton.getTaxonList())) + ' taxon).')
         
     def getResourceDyntaxa(self):

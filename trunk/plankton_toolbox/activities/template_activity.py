@@ -85,5 +85,5 @@ class TemplateActivity(activity_base.ActivityBase):
 
     def __test(self):
         """ """
-        utils.Logger().info("Name: " + unicode(self.__emailedit.text()))
+        utils.Logger().log("Name: " + unicode(self.__emailedit.text()))
         

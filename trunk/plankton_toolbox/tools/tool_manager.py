@@ -53,8 +53,8 @@ class ToolManager(object):
     def initTools(self):
         """ Tool activator. """
         # The log tool should be loaded before other tools.
-        self.__toollist.append(toolbox_settings_tool.ToolboxSettingsTool("Toolbox settings", self._parent))
         self.__toollist.append(log_tool.LogTool("Log tool", self._parent))
+        self.__toollist.append(toolbox_settings_tool.ToolboxSettingsTool("Toolbox settings", self._parent))
         self.__toollist.append(metadata_editor_tool.MetadataEditorTool("(Metadata editor)", self._parent))
         self.__toollist.append(dyntaxa_browser_tool.DyntaxaBrowserTool("Dyntaxa browser", self._parent))
         self.__toollist.append(peg_browser_tool.PegBrowserTool("PEG browser", self._parent))

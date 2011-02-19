@@ -100,7 +100,7 @@ class ToolboxSettings(QtCore.QObject):
     def getValue(self, compoundkey):
         """ Use compound key with field delimiter ':'. """
         current_level_item = self.__settings
-        # Split the key and walk down in dictionaries.
+        # Split the key and walk down in dictionary hierarchy..
         # Current_level_item will became value at last level.
         for keypart in compoundkey.split(':'):
             if current_level_item:
@@ -114,7 +114,7 @@ class ToolboxSettings(QtCore.QObject):
         """ Use compound key with field delimiter ':'. """
         current_level_item = self.__settings
         last_used_dict = current_level_item
-        # Split the key and walk down in dictionaries.
+        # Split the key and walk down in dictionary hierarchy.
         # Current_level_item will became value at final level.
         for keypart in compoundkey.split(':'):
             last_used_dict = current_level_item
@@ -122,9 +122,7 @@ class ToolboxSettings(QtCore.QObject):
             if not current_level_item:
                 last_used_dict[keypart] = {}
                 current_level_item = last_used_dict[keypart]
-#        last_used_dict.setdefault(keypart, value)
         last_used_dict[keypart] = value
-        pass
 #        # Emit signal.
 #        self.emit(QtCore.SIGNAL('settingsChanged'))
-        
+       

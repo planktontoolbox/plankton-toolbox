@@ -171,9 +171,13 @@ class PegBrowserTool(tool_base.ToolBase):
 
     def __loadResource(self):
         """ """
-        # All resources are needed.
-        toolbox_resources.ToolboxResources().loadUnloadedResourceDyntaxa()
-        toolbox_resources.ToolboxResources().loadResourcePeg()
+        # Dyntaxa is needed to load PEG.
+        self._writeToStatusBar("Loading PEG resource...")
+        try:
+            toolbox_resources.ToolboxResources().loadUnloadedResourceDyntaxa()
+            toolbox_resources.ToolboxResources().loadResourcePeg()
+        finally:
+            self._writeToStatusBar("")
 
     def __pegRefresh(self):
         """ """

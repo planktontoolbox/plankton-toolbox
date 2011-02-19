@@ -185,9 +185,9 @@ class CreateReportsActivity(activity_base.ActivityBase):
         if self.__report_list.currentIndex() == 0:
             QtGui.QMessageBox.information(self, "Info", 'Report type must be selected.')
             return        
-        utils.Logger().info("PW reports. Started.")
-        utils.Logger().clear()
-        self._writeToStatusBar("Generating PW report.")
+        utils.Logger().log("PW reports started...")
+        utils.Logger().startAccumulatedLogging()
+        self._writeToStatusBar("Generating PW report...")
         try:
             # Add selected files to filelist.
             self._samplefiles.clear()                
@@ -199,24 +199,24 @@ class CreateReportsActivity(activity_base.ActivityBase):
                     self._samplefiles[key] = None # With no data.
             # Read files and add data as values in the sample file list.        
             for samplefile in self._samplefiles:                
-                utils.Logger().info('Reading ' + samplefile + '...')        
+                utils.Logger().log('Reading ' + samplefile + '...')        
                 sampledata = monitoring_files.PwCsv()
                 sampledata.readFile(unicode(self.__fromdirectory_edit.text()) + '/' + samplefile)
                 self._samplefiles[samplefile] = sampledata  # With data.
             # Check which report to generate.        
             if self.__report_list.currentIndex() == 1: # Report: MJ1
                 # === Report: MJ1 ===
-                utils.Logger().info("Selected report: MJ1")
+                utils.Logger().log("Selected report: MJ1")
                 report = pw_reports.PwReportMJ1()
                 report.createReport(self._samplefiles, unicode(self.__tofile_edit.text()))
             elif self.__report_list.currentIndex() == 2: # Report: MJ2
                 # === Report: MJ1 ===
-                utils.Logger().info("Selected report: MJ2")
+                utils.Logger().log("Selected report: MJ2")
                 report = pw_reports.PwReportMJ2()
                 report.createReport(self._samplefiles, unicode(self.__tofile_edit.text()))
             elif self.__report_list.currentIndex() == 3: # Report: ATS1
                 # === Report: MJ1 ===
-                utils.Logger().info("Selected report: ATS1")
+                utils.Logger().log("Selected report: ATS1")
                 report = pw_reports.PwReportATS1()
                 report.createReport(self._samplefiles, unicode(self.__tofile_edit.text()))
             else:
@@ -232,9 +232,8 @@ class CreateReportsActivity(activity_base.ActivityBase):
             QtGui.QMessageBox.warning(self, "Exception", unicode(e))
             raise
         finally:
-            utils.Logger().logAllWarnings()    
-            utils.Logger().logAllErrors()    
-            utils.Logger().info("PW reports. Ended.")
+            utils.Logger().logAllAccumulatedRows()    
+            utils.Logger().log("PW reports finished.\r\n")
             self._writeToStatusBar("")
 
 

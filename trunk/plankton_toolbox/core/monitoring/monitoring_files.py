@@ -111,7 +111,7 @@ class MonitoringFiles(object):
                 # Use tab as column separator and CR/LF as row delimiter.
                 out.write(separator.join(map(unicode, row)) + '\r\n')
         except (IOError, OSError):
-            utils.Logger().info("Failed to write to file: " + fileName)
+            utils.Logger().log("Failed to write to file: " + fileName)
             raise
         finally:
             if out: out.close()
@@ -135,7 +135,7 @@ class MonitoringFiles(object):
             #    
             excelwriter.save_workbook(workbook, fileName)
         except (IOError, OSError):
-            utils.Logger().info("Failed to write to file: " + fileName)
+            utils.Logger().log("Failed to write to file: " + fileName)
             raise
 
 class TextFile(MonitoringFiles):
@@ -166,7 +166,7 @@ class TextFile(MonitoringFiles):
                     self._rows.append(newrow)
         #  
         except (IOError, OSError):
-            utils.Logger().info("Can't read text file.")
+            utils.Logger().log("Can't read text file.")
             raise
         finally:
             if file: file.close() 
@@ -212,7 +212,7 @@ class ExcelXlsxFile(MonitoringFiles):
                     self._rows.append(newrow)        
         #  
         except Exception:
-            utils.Logger().info("Can't read Excel (.xlsx) file. The python package openpyxl is needed to import Excel files.")
+            utils.Logger().log("Can't read Excel (.xlsx) file. The python package openpyxl is needed to import Excel files.")
             raise
 
 
@@ -234,8 +234,8 @@ class SharkwebDownload(MonitoringFiles):
         parameters = dict([k, v.encode('utf-8')] for k, v in parameters.items())
         params = urllib.urlencode(parameters)
         #
-        utils.Logger().info('DEBUG: URL: ' + url)
-        utils.Logger().info('DEBUG: Parameters: ' + params)
+        utils.Logger().log('DEBUG: URL: ' + url)
+        utils.Logger().log('DEBUG: Parameters: ' + params)
         #   
         f = urllib.urlopen(url, params)
         for row, line in enumerate(f.readlines()):
@@ -246,7 +246,7 @@ class SharkwebDownload(MonitoringFiles):
                 self._rows.append(map(string.strip, line.split('\t')))
 #            # Use this if data is delivered in the Json format.
 #            self._dataset = json.loads(line, encoding = encode)
-        utils.Logger().info('Received rows: ' + str(len(self._rows)))
+        utils.Logger().log('Received rows: ' + str(len(self._rows)))
 
 
 class PwCsv(MonitoringFiles):
