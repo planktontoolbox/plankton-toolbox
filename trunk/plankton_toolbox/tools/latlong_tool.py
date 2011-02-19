@@ -66,7 +66,7 @@ class LatLongTool(tool_base.ToolBase):
         tabWidget = QtGui.QTabWidget()
         contentLayout.addWidget(tabWidget)
         tabWidget.addTab(self.__createContentSinglePoint(), "Single point")
-        tabWidget.addTab(self.__createContentMultiplePoints(), "(Multiple points)")
+        tabWidget.addTab(self.__createContentMultiplePoints(), "Multiple points")
 
     def __createContentSinglePoint(self):
         """ """
@@ -267,12 +267,14 @@ class LatLongTool(tool_base.ToolBase):
         self.connect(self.__pasteFromClipboardButton, QtCore.SIGNAL("clicked()"), self.__pasteFromClipboard)
         self.__fromTable = QtGui.QTableWidget()
         self.__fromTable.setColumnCount(2)
-        self.__fromTable.setHorizontalHeaderLabels(["Latitude", "Longitude"])
+#        self.__fromTable.setHorizontalHeaderLabels(["Latitude", "Longitude"])
 #        self.__fromTable.setRowCount(20)
         self.__fromTable.setAlternatingRowColors(True)
         self.__fromTable.verticalHeader().setDefaultSectionSize(18)
         self.__fromTable.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
-        self.__fromTable.horizontalHeader().setStretchLastSection(True)
+#        self.__fromTable.horizontalHeader().setStretchLastSection(True)
+        # User for manually entered data.
+        self.connect(self.__fromTable, QtCore.SIGNAL("cellChanged(int, int)"), self.__calculateTable)
         #
         self.__toFormatComboBox = QtGui.QComboBox()
         self.__toFormatComboBox.addItems([  "latlong_dd",
@@ -303,12 +305,14 @@ class LatLongTool(tool_base.ToolBase):
         self.connect(self.__copyToClipboardButton, QtCore.SIGNAL("clicked()"), self.__copyToClipboard)
         self.__toTable = QtGui.QTableWidget()
         self.__toTable.setColumnCount(2)
-        self.__toTable.setHorizontalHeaderLabels(["N", "E"])
+#        self.__toTable.setHorizontalHeaderLabels(["N", "E"])
 #        self.__toTable.setRowCount(20)
         self.__toTable.setAlternatingRowColors(True)
         self.__toTable.verticalHeader().setDefaultSectionSize(18)
         self.__toTable.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
-        self.__toTable.horizontalHeader().setStretchLastSection(True)
+#        self.__toTable.horizontalHeader().setStretchLastSection(True)
+        #
+        self.__setColumnHeader()
         
         # === Layout. ===
         multipleLayout = QtGui.QHBoxLayout()
@@ -517,6 +521,7 @@ class LatLongTool(tool_base.ToolBase):
 
     def __pasteFromClipboard(self):
         """ """
+        self.__fromTable.blockSignals(True)
         self.__fromTable.clearContents()
         self.__toTable.clearContents()
         clipboard = QtGui.QApplication.clipboard()
@@ -527,89 +532,173 @@ class LatLongTool(tool_base.ToolBase):
             for index, row in enumerate(rows):
                 items = row.split("\t") # Column separator in clip board.
                 if len(items) >= 1:
-                    self.__fromTable.setItem(index, 0, QtGui.QTableWidgetItem(items[0]))
+                    try:
+                        float(items[0].strip().replace(",", ".")) # Check if valid format.
+                        self.__fromTable.setItem(index, 0, QtGui.QTableWidgetItem(items[0]))
+                    except ValueError:
+                        self.__fromTable.setItem(index, 0, QtGui.QTableWidgetItem(''))
                 if len(items) >= 2:
-                    self.__fromTable.setItem(index, 1,QtGui.QTableWidgetItem( items[1]))            
+                    try:
+                        float(items[1].strip().replace(",", ".")) # Check if valid format.
+                        self.__fromTable.setItem(index, 1, QtGui.QTableWidgetItem(items[1]))
+                    except ValueError:
+                        self.__fromTable.setItem(index, 1, QtGui.QTableWidgetItem(''))
         self.__fromTable.resizeColumnsToContents()
-        
+        self.__fromTable.blockSignals(False)
+          
         self.__calculateTable()
-
-#                try:
-#                    if items[0]:
-#                        if float(items[0].replace(',', '.')):
-#                            self.__fromTable.setItem(index, 0, QtGui.QTableWidgetItem(items[0].replace(',', '.')))
-#                except ValueError: # Catch float errors.
-#                    pass
-#                try:
-#                    if items[1]:
-#                        if float(items[1].replace(',', '.')):
-#                            self.__fromTable.setItem(index, 1, QtGui.QTableWidgetItem(items[1].replace(',', '.')))
-#                except ValueError: # Catch float errors.
-#                    pass
 
     def __copyToClipboard(self):
         """ """
+        clipboard = QtGui.QApplication.clipboard()
+        clipboardstring = ''
+        for index in range(self.__toTable.rowCount()):
+            # Read from table.
+            item_1 = self.__toTable.item(index, 0)
+            if item_1:
+                to_1 = unicode(item_1.data(QtCore.Qt.DisplayRole).toString())
+            else:
+                to_1 = ''
+            item_2 = self.__toTable.item(index, 1)
+            if item_2:
+                to_2 = unicode(item_2.data(QtCore.Qt.DisplayRole).toString())
+            else:
+                to_2 = ''
+            clipboardstring += to_1 + '\t' + to_2 + '\n'
+        clipboard.setText(clipboardstring)
 
     def __calculateTable(self):
         """ """
-        fromFormat = self.__fromFormatComboBox.currentText()
-        toFormat = self.__toFormatComboBox.currentText()
-        
+        fromFormat = unicode(self.__fromFormatComboBox.currentText())
+        toFormat = unicode(self.__toFormatComboBox.currentText())
+        #
+        fromConverter = SwedishGeoPositionConverter(self.__fromFormatComboBox.currentText())
+        toConverter = SwedishGeoPositionConverter(self.__toFormatComboBox.currentText())
+        #
+        self.__setColumnHeader()
+        # 
         for index in range(self.__fromTable.rowCount()):
             # Read from table.
-            item1 = self.__fromTable.item(index, 0)
-            item2 = self.__fromTable.item(index, 1)
-            from_1 = unicode(item1.data(QtCore.Qt.DisplayRole).toString())
-            from_2 = unicode(item2.data(QtCore.Qt.DisplayRole).toString())
+            item_1 = self.__fromTable.item(index, 0)
+            item_2 = self.__fromTable.item(index, 1)
+            if (not item_1) or (not item_2) :
+                self.__toTable.setItem(index, 0, QtGui.QTableWidgetItem(unicode('')))
+                self.__toTable.setItem(index, 1,QtGui.QTableWidgetItem(unicode('')))            
+                continue # Go to next row.
+            from_1 = unicode(item_1.data(QtCore.Qt.DisplayRole).toString())
+            from_2 = unicode(item_2.data(QtCore.Qt.DisplayRole).toString())
             #
             from_1 = from_1.strip().replace(",", ".")
             from_2 = from_2.strip().replace(",", ".")                
-            try:
-                from_1 = float(from_1)
-                from_2 = float(from_2)
-            except ValueError:
-                continue
+            if (from_1 == '') or (from_2 == '') :
+                self.__toTable.setItem(index, 0, QtGui.QTableWidgetItem(unicode('')))
+                self.__toTable.setItem(index, 1,QtGui.QTableWidgetItem(unicode('')))            
+                continue # Go to next row.
             # From.
             if fromFormat == 'latlong_dd':
-                dd_1, dd_2 = from_1, from_2
+                dd_1 = latlong.convert_lat_from_dd(from_1)
+                dd_2 = latlong.convert_long_from_dd(from_2)
             elif fromFormat == 'latlong_dm':
-                pass
+                dd_1 = latlong.convert_lat_from_dm(from_1)
+                dd_2 = latlong.convert_long_from_dm(from_2)
             elif fromFormat == 'latlong_dms':
-                pass
+                dd_1 = latlong.convert_lat_from_dms(from_1)
+                dd_2 = latlong.convert_long_from_dms(from_2)
             else:
-                fromConverter = SwedishGeoPositionConverter(self.__fromFormatComboBox.currentText())
-                dd_1, dd_2 = fromConverter.gridToGeodetic(from_1, from_2)
+#                fromConverter = SwedishGeoPositionConverter(self.__fromFormatComboBox.currentText())
+                dd_1, dd_2 = fromConverter.gridToGeodetic(float(from_1), float(from_2))
+            #
+            if (not dd_1) or (not dd_2) :
+                self.__toTable.setItem(index, 0, QtGui.QTableWidgetItem(unicode('')))
+                self.__toTable.setItem(index, 1,QtGui.QTableWidgetItem(unicode('')))            
+                continue # Go to next row.
             # To.
             if toFormat == 'latlong_dd':
-                to_1, to_2 =  dd_1, dd_2
+                to_1, to_2 = dd_1, dd_2
             elif toFormat == 'latlong_dm':
-                pass
+                to_1 = latlong.convert_lat_to_dm(dd_1)
+                to_2 = latlong.convert_long_to_dm(dd_2)
             elif toFormat == 'latlong_dms':
-                pass
+                to_1 = latlong.convert_lat_to_dms(dd_1)
+                to_2 = latlong.convert_long_to_dms(dd_2)
             else:
-                toConverter = SwedishGeoPositionConverter(self.__toFormatComboBox.currentText())
+#                toConverter = SwedishGeoPositionConverter(self.__toFormatComboBox.currentText())
                 to_1, to_2 = toConverter.geodeticToGrid(dd_1, dd_2)
-            #        
+            #
+            if toFormat == 'latlong_dd':
+                to_1 = unicode(' %.6f' %(to_1)).replace(".", ",")
+                to_2 = unicode(' %.6f' %(to_2)).replace(".", ",")
+            elif toFormat in ['latlong_dm', 'latlong_dms']:
+                to_1 = unicode(to_1).replace(".", ",")
+                to_2 = unicode(to_2).replace(".", ",")
+            else:
+                to_1 = unicode(' %.3f' %(to_1)).replace(".", ",")
+                to_2 = unicode(' %.3f' %(to_2)).replace(".", ",")
             self.__toTable.setItem(index, 0, QtGui.QTableWidgetItem(unicode(to_1)))
             self.__toTable.setItem(index, 1,QtGui.QTableWidgetItem(unicode(to_2)))            
-
+        #
         self.__toTable.resizeColumnsToContents()
 
-#        x = float(unicode(self.__rt90X.text()).replace(",", "."))
-#        y = float(unicode(self.__rt90Y.text()).replace(",", "."))
-#        converter = SwedishGeoPositionConverter(self.__rt90Proj.currentText())
-#        self.__latitude, self.__longitude = converter.gridToGeodetic(x, y)
-#        
-#        self.__update_lat()
-#        self.__update_long()
-#        self.__update_sweref99()
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+    def __setColumnHeader(self):
+        """ Column names differ depending on selected projections. """
+        fromFormat = self.__fromFormatComboBox.currentText()
+        toFormat = self.__toFormatComboBox.currentText()
+        # From columns.
+        if fromFormat in (["latlong_dd"]):
+            self.__fromTable.setHorizontalHeaderLabels(["Latitude DD", "Longitude DD"])
+        if fromFormat in (["latlong_dm"]):
+            self.__fromTable.setHorizontalHeaderLabels(["Latitude DM", "Longitude DM"])
+        if fromFormat in (["latlong_dms"]):
+            self.__fromTable.setHorizontalHeaderLabels(["Latitude DMS", "Longitude DMS"])
+        if fromFormat in ([ "rt90_7.5_gon_v",
+                            "rt90_5.0_gon_v",
+                            "rt90_2.5_gon_v",
+                            "rt90_0.0_gon_v",
+                            "rt90_2.5_gon_o",
+                            "rt90_5.0_gon_o"]):
+            self.__fromTable.setHorizontalHeaderLabels(["     X     ", "     Y     "])
+        if fromFormat in ([ "sweref_99_tm",
+                            "sweref_99_1200",
+                            "sweref_99_1330",
+                            "sweref_99_1500",
+                            "sweref_99_1630",
+                            "sweref_99_1800",
+                            "sweref_99_1415",
+                            "sweref_99_1545",
+                            "sweref_99_1715",
+                            "sweref_99_1845",
+                            "sweref_99_2015",
+                            "sweref_99_2145",
+                            "sweref_99_2315"]):
+            self.__fromTable.setHorizontalHeaderLabels(["     N     ", "     E     "])
+        # To columns.
+        if toFormat in (["latlong_dd"]):
+            self.__toTable.setHorizontalHeaderLabels(["Latitude DD", "Longitude DD"])
+        if toFormat in (["latlong_dm"]):
+            self.__toTable.setHorizontalHeaderLabels(["Latitude DM", "Longitude DM"])
+        if toFormat in (["latlong_dms"]):
+            self.__toTable.setHorizontalHeaderLabels(["Latitude DMS", "Longitude DMS"])
+        if toFormat in ([ "rt90_7.5_gon_v",
+                            "rt90_5.0_gon_v",
+                            "rt90_2.5_gon_v",
+                            "rt90_0.0_gon_v",
+                            "rt90_2.5_gon_o",
+                            "rt90_5.0_gon_o"]):
+            self.__toTable.setHorizontalHeaderLabels(["     X     ", "     Y     "])
+        if toFormat in ([ "sweref_99_tm",
+                            "sweref_99_1200",
+                            "sweref_99_1330",
+                            "sweref_99_1500",
+                            "sweref_99_1630",
+                            "sweref_99_1800",
+                            "sweref_99_1415",
+                            "sweref_99_1545",
+                            "sweref_99_1715",
+                            "sweref_99_1845",
+                            "sweref_99_2015",
+                            "sweref_99_2145",
+                            "sweref_99_2315"]):
+            self.__toTable.setHorizontalHeaderLabels(["     N     ", "     E     "])
+        #
+        self.__fromTable.resizeColumnsToContents()
+        self.__toTable.resizeColumnsToContents()
