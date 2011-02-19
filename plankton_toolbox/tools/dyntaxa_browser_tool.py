@@ -83,7 +83,7 @@ class DyntaxaBrowserTool(tool_base.ToolBase):
         # Species level.
         self.__scientificname_label = QtGui.QLabel('-')
 #        self.__author_label = QtGui.QLabel('-')
-        self.__hierarchy_label = QtGui.QLabel('-')
+        self.__classification_label = QtGui.QLabel('-')
 #        self.__author_label = QtGui.QLabel('-')
 #        self.__class_label = QtGui.QLabel('-')
 #        self.__division_label = QtGui.QLabel('-')
@@ -100,7 +100,7 @@ class DyntaxaBrowserTool(tool_base.ToolBase):
 #        layout.addRow("<b><u>Species:</u></b>", None)
         layout.addRow("Scientific name:", self.__scientificname_label)
 #        layout.addRow("Author:", self.__author_label)
-        layout.addRow("Hierarchy:", self.__hierarchy_label)
+        layout.addRow("Classification:", self.__classification_label)
 #        layout.addRow("Author:", self.__author_label)
 #        layout.addRow("Class:", self.__class_label)
 #        layout.addRow("Division:", self.__division_label)
@@ -142,7 +142,7 @@ class DyntaxaBrowserTool(tool_base.ToolBase):
             '<i>' + taxon.get('Scientific name', '') + '</i>' + 
             '&nbsp;&nbsp;&nbsp;' + taxon.get('Scientific name author', '') + 
             '</b>')
-        # Build hierarchy.
+        # Build classification hierarchy.
         hier = ''
         delimiter = ''
         name = taxon.get('Scientific name', None)
@@ -155,10 +155,10 @@ class DyntaxaBrowserTool(tool_base.ToolBase):
             if taxon:
                 name = taxon.get('Scientific name', None)
             if len(hier) > 1000: # If infinite loops related to error in parent id. 
-                self.__hierarchy_label.setText('ERROR: Hierachy too long: ' + hier)
+                self.__classification_label.setText('ERROR: Hierachy too long: ' + hier)
                 print('ERROR: Hierachy too long: ' + hier)
                 return
-        self.__hierarchy_label.setText(hier)
+        self.__classification_label.setText(hier)
 #        self.__author_label.setText(taxon.get('Author', '-'))
 #        self.__class_label.setText(taxon.get('Class', '-'))
 #        self.__division_label.setText(taxon.get('Division', '-'))

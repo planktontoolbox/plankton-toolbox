@@ -82,7 +82,7 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
         self.__createNameTypeDict() # Maps from name type id to name type.
         
         # === TAXON file ===
-        utils.Logger().info("Reading: " + dir + '/dyntaxa_taxon.txt')
+        utils.Logger().log("Reading: " + dir + '/dyntaxa_taxon.txt')
 ###     taxonFile = open(dir + '/dyntaxa_taxon.txt', 'r')
         taxonFile = codecs.open(dir + '/dyntaxa_taxon.txt', mode = 'r', encoding = 'iso-8859-1')
         separator = '\t' # Tab as separator.
@@ -127,11 +127,11 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
                 if not(taxonid in self.__idToTaxon):
                     self.__idToTaxon[taxonid] = taxonDict # Updates Taxa object.
                 else:
-                    utils.Logger().info("Duplicate taxon id: " + str(taxonid) )
+                    utils.Logger().log("Duplicate taxon id: " + str(taxonid) )
         taxonFile.close()
         
         # === HIER file ===
-        utils.Logger().info("Reading: " + dir + '/dyntaxa_hier.txt')
+        utils.Logger().log("Reading: " + dir + '/dyntaxa_hier.txt')
 ###        hierFile = open(dir + '/dyntaxa_hier.txt', 'r')
         hierFile = codecs.open(dir + '/dyntaxa_hier.txt', mode = 'r', encoding = 'iso-8859-1')
         separator = '\t' # Tab as separator.
@@ -177,7 +177,7 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
         hierFile.close()
         
         # === NAMES file ===
-        utils.Logger().info("Reading: " + dir + '/dyntaxa_names.txt')
+        utils.Logger().log("Reading: " + dir + '/dyntaxa_names.txt')
 ###        namesFile = open(dir + '/dyntaxa_names.txt', 'r')
         namesFile = codecs.open(dir + '/dyntaxa_names.txt', mode = 'r', encoding = 'iso-8859-1')
         separator = '\t' # Tab as separator.
@@ -309,7 +309,7 @@ class PreparePegTextFile(PrepareDataSources):
         self.__header = []
         self.__taxa = self._taxaObject.getTaxonList()
         
-        utils.Logger().info("Reading: " + file)
+        utils.Logger().log("Reading: " + file)
 ###        pegFile = open(file, 'r')
         pegFile = codecs.open(file, mode = 'r', encoding = 'iso-8859-1')
         separator = '\t' # Tab as separator.
@@ -532,7 +532,7 @@ class PreparePegTextFile(PrepareDataSources):
             taxon = dyntaxa.getTaxonByName(translate_dict.get(pegname, ''))
             if taxon:
                 pegtaxon['Dyntaxa id'] = taxon['Taxon id']
-                utils.Logger().info('PEG to Dyntaxa translation file used. PEG name: ' + pegname)                           
+                utils.Logger().log('PEG to Dyntaxa translation file used. PEG name: ' + pegname)                           
             
         print('DEBUG: Dyntaxa added to PEG.')
        
@@ -554,7 +554,7 @@ class PrepareHarmfulMicroAlgae(PrepareDataSources):
         toolbox_resources.ToolboxResources().loadUnloadedResourceDyntaxa()
         dyntaxa = toolbox_resources.ToolboxResources().getResourceDyntaxa()
         #
-        utils.Logger().info("Reading: " + file)
+        utils.Logger().log("Reading: " + file)
         harmfulFile = codecs.open(file, mode = 'r', encoding = 'iso-8859-1')
         separator = '\t' # Tab as separator.
         for row in harmfulFile:

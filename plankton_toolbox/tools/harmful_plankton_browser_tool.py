@@ -85,17 +85,15 @@ class HarmfulPlanktonBrowserTool(tool_base.ToolBase):
         """ """
         # Active widgets and connections.
         self.__scientificname_label = QtGui.QLabel('-')
-        self.__openmarinespecies = QtGui.QPushButton("Open marinespecies.org")
-        self.connect(self.__openmarinespecies, QtCore.SIGNAL("clicked()"), self.__openMarineSpecies)                
         # Layout widgets.
         form = QtGui.QFormLayout()
         form.addRow("Scientific name:", self.__scientificname_label)
-        hbox = QtGui.QHBoxLayout()
-        hbox.addWidget(self.__openmarinespecies)
-        hbox.addStretch(5)
+#        hbox = QtGui.QHBoxLayout()
+#        hbox.addWidget(self.__openmarinespecies)
+#        hbox.addStretch(5)
         layout = QtGui.QVBoxLayout()
         layout.addLayout(form)
-        layout.addLayout(hbox)
+#        layout.addLayout(hbox)
         #
         return layout
 
@@ -104,8 +102,11 @@ class HarmfulPlanktonBrowserTool(tool_base.ToolBase):
         # Active widgets and connections.
         self.__loadresource_button = QtGui.QPushButton("Load harmful plankton resource")
         self.connect(self.__loadresource_button, QtCore.SIGNAL("clicked()"), self.__loadResource)                
+        self.__openmarinespecies = QtGui.QPushButton("Open marinespecies.org")
+        self.connect(self.__openmarinespecies, QtCore.SIGNAL("clicked()"), self.__openMarineSpecies)                
         # Layout widgets.
         layout = QtGui.QHBoxLayout()
+        layout.addWidget(self.__openmarinespecies)
         layout.addStretch(5)
         layout.addWidget(self.__loadresource_button)
         #
@@ -129,7 +130,7 @@ class HarmfulPlanktonBrowserTool(tool_base.ToolBase):
     def __openMarineSpecies(self):
         """ Launch web browser and use show marked species at marinespecies.org. """
         if not self.__marinespecies_url:
-            utils.Logger().info("Failed to open www.marinespecies.org. No row selected.")
+            utils.Logger().log("Failed to open www.marinespecies.org. No row selected.")
             return
         webbrowser.open(self.__marinespecies_url)
 

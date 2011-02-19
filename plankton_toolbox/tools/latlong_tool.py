@@ -502,14 +502,14 @@ class LatLongTool(tool_base.ToolBase):
     def __open_googlemaps(self):
         """ Launch web browser and use maps.google.com to display position. """
         if (len(unicode(self.__latDd.text())) == 0) or (len(unicode(self.__longDd.text())) == 0):
-            utils.Logger().info("Failed to open maps.google.com. No values for lat/long.")
+            utils.Logger().log("Failed to open maps.google.com. No values for lat/long.")
             return
         webbrowser.open("http://maps.google.com/maps/?ll=" + unicode(self.__latDd.text()) + "," + unicode(self.__longDd.text()))
         
     def __open_latlongmellifica(self):
         """ Launch web browser and use latlong.mellifica.se to display position. """
         if (len(unicode(self.__latDd.text())) == 0) or (len(unicode(self.__longDd.text())) == 0):
-            utils.Logger().info("Failed to open latlong.mellifica.se. No values for lat/long.")
+            utils.Logger().log("Failed to open latlong.mellifica.se. No values for lat/long.")
             return
         webbrowser.open("http://latlong.mellifica.se/?latlong=" + unicode(self.__latDd.text()) + "," + unicode(self.__longDd.text()))
         

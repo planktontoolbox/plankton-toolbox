@@ -77,7 +77,7 @@ class JsonFile(DataSources):
 
     def exportTaxa(self, file = None, encode = 'utf-8'):
         """ """
-        utils.Logger().info("Writes taxa to: " + file)
+        utils.Logger().log("Writes taxa to: " + file)
         if file == None:
             raise UserWarning('File name is missing.')
         outdata = open(file, 'w')
