@@ -68,12 +68,11 @@ def convert_long_from_dd(value):
         r"""^\s*([EW\-\+]?)\s*(\d{1,3})([\.\,]\d*)?\s*([EW]?)\s*$""") 
     match = regex.match(value.upper())
     if match:
-        print('MATCH:')
-        print('1: ' + str(match.group(1)))
-        print('2: ' + str(match.group(2)))
-        print('3: ' + str(match.group(3)))
-        print('4: ' + str(match.group(4)))
-
+#        print('MATCH:')
+#        print('1: ' + str(match.group(1)))
+#        print('2: ' + str(match.group(2)))
+#        print('3: ' + str(match.group(3)))
+#        print('4: ' + str(match.group(4)))
         if ((match.group(2) != '') and (match.group(2) != None)):
             longitude = float(match.group(2))
         if ((match.group(3) != '') and (match.group(3) != None) and (match.group(3).replace(",", ".") != ".")):
