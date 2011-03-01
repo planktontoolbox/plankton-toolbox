@@ -25,7 +25,7 @@
 # THE SOFTWARE.
 
 """
-Contains settings for the Plankton Toolbox application.
+
 """
 
 import plankton_toolbox.toolbox.utils as utils
@@ -33,7 +33,6 @@ import plankton_toolbox.toolbox.utils as utils
 @utils.singleton
 class ToolboxDatasets(object):
     """
-    Contains settings for the Plankton Toolbox application. 
     """
     def __init__(self):
         """ """
