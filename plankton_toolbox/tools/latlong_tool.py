@@ -66,7 +66,9 @@ class LatLongTool(tool_base.ToolBase):
         tabWidget = QtGui.QTabWidget()
         contentLayout.addWidget(tabWidget)
         tabWidget.addTab(self.__createContentSinglePoint(), "Single point")
-        tabWidget.addTab(self.__createContentMultiplePoints(), "Multiple points")
+        tabWidget.addTab(self.__createContentMultiplePoints(), "Multiple points")        
+#        contentLayout.addLayout(self.__createContentControl())
+
 
     def __createContentSinglePoint(self):
         """ """
@@ -194,10 +196,9 @@ class LatLongTool(tool_base.ToolBase):
         rt90XLabel = QtGui.QLabel("X:")
         rt90YLabel = QtGui.QLabel("Y:")
         rt90Layout.addWidget(rt90ProjWidget, gridrow, 0, 1, 4)
-        rt90Layout.addWidget(rt90XLabel, gridrow, 0)
         gridrow += 1
-        rt90Layout.addWidget(self.__rt90X, gridrow, 1)
-        
+        rt90Layout.addWidget(rt90XLabel, gridrow, 0)
+        rt90Layout.addWidget(self.__rt90X, gridrow, 1)        
         rt90Layout.addWidget(rt90YLabel, gridrow, 2)
         rt90Layout.addWidget(self.__rt90Y, 1, 3)        
         # Single, sweref 99 dd mm.        
@@ -205,7 +206,7 @@ class LatLongTool(tool_base.ToolBase):
         singleLayout.addWidget(sweref99Group, 2, 0)
         sweref99Layout = QtGui.QGridLayout()
         sweref99Group.setLayout(sweref99Layout)
-#        gridrow = 0
+        #
         sweref99ProjWidget = QtGui.QWidget()
         sweref99ProjLayout = QtGui.QHBoxLayout()
         sweref99ProjWidget.setLayout(sweref99ProjLayout)
@@ -214,23 +215,26 @@ class LatLongTool(tool_base.ToolBase):
         sweref99ProjLayout.addWidget(sweref99ProjLabel)
         sweref99ProjLayout.addWidget(self.__sweref99Proj)
         sweref99ProjLayout.addStretch(5)
-        gridrow = 0
+        #
         sweref99NLabel = QtGui.QLabel("N:")
         sweref99ELabel = QtGui.QLabel("E:")
         sweref99Layout.addWidget(sweref99ProjWidget, 0, 0, 1, 4)
-        gridrow += 1
+        #
         sweref99Layout.addWidget(sweref99NLabel, 1, 0)
         sweref99Layout.addWidget(self.__sweref99N, 1, 1)
         sweref99Layout.addWidget(sweref99ELabel, 1, 2)
         sweref99Layout.addWidget(self.__sweref99E, 1, 3)
-        gridrow += 1
+        #
+        viewInBrowserLabel = QtGui.QLabel("\nView current position in web browser:")
+        singleLayout.addWidget(viewInBrowserLabel, 3, 0)
         hbox = QtGui.QHBoxLayout()
-        singleLayout.addLayout(hbox, 3, 0)
+        singleLayout.addLayout(hbox, 4, 0)
         hbox.addWidget(self.__opengooglemaps)
         hbox.addWidget(self.__openlatlongmellifica)
-        gridrow += 1
-        singleLayout.setRowStretch(4, 5)
-        
+        hbox.addStretch(2)
+        #
+        singleLayout.setRowStretch(5, 5)
+        #
         return singleWidget
         
     def __createContentMultiplePoints(self):
@@ -312,14 +316,19 @@ class LatLongTool(tool_base.ToolBase):
         self.__toTable.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
 #        self.__toTable.horizontalHeader().setStretchLastSection(True)
         #
+        self.__clear_button = QtGui.QPushButton("Clear")
+        self.connect(self.__clear_button, QtCore.SIGNAL("clicked()"), self.__clear)                
+        # Update headers.
         self.__setColumnHeader()
         
         # === Layout. ===
-        multipleLayout = QtGui.QHBoxLayout()
+        multipleLayout = QtGui.QVBoxLayout()
         multipleWidget.setLayout(multipleLayout)
+        hLayout = QtGui.QHBoxLayout()
+        multipleLayout.addLayout(hLayout)
         #
         multipleFromGroup = QtGui.QGroupBox("From position")
-        multipleLayout.addWidget(multipleFromGroup)
+        hLayout.addWidget(multipleFromGroup)
         fromGrid =  QtGui.QGridLayout()
         multipleFromGroup.setLayout(fromGrid)
         gridrow = 0
@@ -332,7 +341,7 @@ class LatLongTool(tool_base.ToolBase):
         fromGrid.addWidget(self.__fromTable, gridrow, 0, 1, 9)
         #
         multipleToGroup = QtGui.QGroupBox("To position")
-        multipleLayout.addWidget(multipleToGroup)
+        hLayout.addWidget(multipleToGroup)
         toGrid =  QtGui.QGridLayout()
         multipleToGroup.setLayout(toGrid)
         gridrow = 0
@@ -343,10 +352,36 @@ class LatLongTool(tool_base.ToolBase):
         toGrid.addWidget(self.__copyToClipboardButton, gridrow, 0, 1, 9)
         gridrow += 1
         toGrid.addWidget(self.__toTable, gridrow, 0, 1, 9)
-                
+        #
+        hBoxLayout = QtGui.QHBoxLayout()
+        hBoxLayout.addWidget(self.__clear_button)
+        hBoxLayout.addStretch(5)
+        multipleLayout.addLayout(hBoxLayout)
+
         return multipleWidget
     
+#    def __createContentControl(self):
+#        """ """
+#        # Active widgets and connections.
+#        self.__clear_button = QtGui.QPushButton("Clear")
+#        self.connect(self.__clear_button, QtCore.SIGNAL("clicked()"), self.__clear)                
+#        # Layout widgets.
+#        layout = QtGui.QHBoxLayout()
+#        layout.addWidget(self.__clear_button)
+#        layout.addStretch(5)
+#        #
+#        return layout
+
 # === Single methods. ===
+
+    def __clear(self):
+        """ """
+        self.__fromTable.clearContents()
+        self.__toTable.clearContents()
+        self.__fromTable.setRowCount(0)
+        self.__toTable.setRowCount(0)
+        self.__fromTable.resizeColumnsToContents()
+        self.__toTable.resizeColumnsToContents()
 
     def set_latitude_longitude(self, lat, lon):
         """ 

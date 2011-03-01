@@ -44,7 +44,7 @@ import plankton_toolbox.tools.log_tool as log_tool
 import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
 
-__version__ = '0.0.1' # Plankton-toolbox version.
+__version__ = '0.0.1' # Plankton Toolbox version.
 
 class MainWindow(QtGui.QMainWindow):
     """ 
@@ -63,7 +63,7 @@ class MainWindow(QtGui.QMainWindow):
         # Logging. Always log to plankton_toolbox_log.txt. Use the Log tool when  
         # it is available.
         self.__logfile = codecs.open('plankton_toolbox_log.txt', mode = 'w', encoding = 'iso-8859-1')
-        self.__logfile.write('Plankton-toolbox. ' +
+        self.__logfile.write('Plankton Toolbox. ' +
                              time.strftime("%Y-%m-%d %H:%M:%S") +'\r\n\r\n')
         self.__logtool = None # Should be initiated later.
         utils.Logger().setLogTarget(self) # Logger should log here (to self.writeToLog()). 
