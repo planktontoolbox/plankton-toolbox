@@ -531,18 +531,25 @@ class LatLongTool(tool_base.ToolBase):
             self.__toTable.setRowCount(len(rows))
             for index, row in enumerate(rows):
                 items = row.split("\t") # Column separator in clip board.
+#                if unicode(self.__fromFormatComboBox.currentText()) in (u'latlong_dm', u'latlong_dms'):
+#                    # Formats DM and DMS are not pure numeric values. 
                 if len(items) >= 1:
-                    try:
-                        float(items[0].strip().replace(",", ".")) # Check if valid format.
-                        self.__fromTable.setItem(index, 0, QtGui.QTableWidgetItem(items[0]))
-                    except ValueError:
-                        self.__fromTable.setItem(index, 0, QtGui.QTableWidgetItem(''))
+                    self.__fromTable.setItem(index, 0, QtGui.QTableWidgetItem(items[0]))
                 if len(items) >= 2:
-                    try:
-                        float(items[1].strip().replace(",", ".")) # Check if valid format.
-                        self.__fromTable.setItem(index, 1, QtGui.QTableWidgetItem(items[1]))
-                    except ValueError:
-                        self.__fromTable.setItem(index, 1, QtGui.QTableWidgetItem(''))
+                    self.__fromTable.setItem(index, 1, QtGui.QTableWidgetItem(items[1]))
+#                else:
+#                    if len(items) >= 1:
+#                        try:
+#                            float(items[0].strip().replace(",", ".")) # Check if valid format.
+#                            self.__fromTable.setItem(index, 0, QtGui.QTableWidgetItem(items[0]))
+#                        except ValueError:
+#                            self.__fromTable.setItem(index, 0, QtGui.QTableWidgetItem(''))
+#                    if len(items) >= 2:
+#                        try:
+#                            float(items[1].strip().replace(",", ".")) # Check if valid format.
+#                            self.__fromTable.setItem(index, 1, QtGui.QTableWidgetItem(items[1]))
+#                        except ValueError:
+#                            self.__fromTable.setItem(index, 1, QtGui.QTableWidgetItem(''))
         self.__fromTable.resizeColumnsToContents()
         self.__fromTable.blockSignals(False)
           
@@ -605,8 +612,10 @@ class LatLongTool(tool_base.ToolBase):
                 dd_1 = latlong.convert_lat_from_dms(from_1)
                 dd_2 = latlong.convert_long_from_dms(from_2)
             else:
-#                fromConverter = SwedishGeoPositionConverter(self.__fromFormatComboBox.currentText())
-                dd_1, dd_2 = fromConverter.gridToGeodetic(float(from_1), float(from_2))
+                try:
+                    dd_1, dd_2 = fromConverter.gridToGeodetic(float(from_1), float(from_2))
+                except:
+                    continue # Go to next row.
             #
             if (not dd_1) or (not dd_2) :
                 self.__toTable.setItem(index, 0, QtGui.QTableWidgetItem(unicode('')))

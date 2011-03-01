@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """ 
-Project: Plankton toolbox. http://plankton-toolbox.org
+Project: Plankton Toolbox. http://plankton-toolbox.org
 
 Creates single file package for MS Windows: plankton_toolbox.exe
 

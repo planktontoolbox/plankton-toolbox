@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:iso-8859-1 -*-
 #
-# Project: Plankton toolbox. http://plankton-toolbox.org
+# Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
 # Copyright (c) 2010-2011 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
@@ -25,7 +25,7 @@
 # THE SOFTWARE.
 
 """
-Main window for the Plankton toolbox.
+Main window for the Plankton Toolbox.
 
 The layout is an activity area in the middle, activity and tool selector to the
 left and movable tools to the right and at the bottom. Activites are handled as 
@@ -48,13 +48,13 @@ __version__ = '0.0.1' # Plankton-toolbox version.
 
 class MainWindow(QtGui.QMainWindow):
     """ 
-    Main window for the Plankton toolbox application.
+    Main window for the Plankton Toolbox application.
     """
     def __init__(self):
         """ """
         # Initialize parent.
         super(MainWindow, self).__init__()
-        self.setWindowTitle(self.tr("Plankton toolbox"))
+        self.setWindowTitle(self.tr("Plankton Toolbox"))
         # Note: Tools menu is public.
         self.toolsmenu = None
         # Load toolbox settings.
@@ -91,7 +91,7 @@ class MainWindow(QtGui.QMainWindow):
         if toolbox_settings.ToolboxSettings().getValue('Resources:Load at startup'):
             QtCore.QTimer.singleShot(10, toolbox_resources.ToolboxResources().loadAllResources)
         #
-        utils.Logger().log('Plankton toolbox started.')
+        utils.Logger().log('Plankton Toolbox started.')
         utils.Logger().log('Note: Log rows are sent to the "Log tool" and written to "plankton_toolbox_log.txt".\r\n')
 
         
@@ -126,7 +126,7 @@ class MainWindow(QtGui.QMainWindow):
         write messages here by calling <i>_writeToStatusBar</i> located in the 
         tool base class.
         """
-        self.statusBar().showMessage(self.tr("Plankton toolbox."))
+        self.statusBar().showMessage(self.tr("Plankton Toolbox."))
 
     def __createContentSelectors(self):
         """ 
@@ -248,14 +248,14 @@ class MainWindow(QtGui.QMainWindow):
 
     def __about(self):
         """ """
-        QtGui.QMessageBox.about(self, self.tr("About Plankton toolbox"),
+        QtGui.QMessageBox.about(self, self.tr("About Plankton Toolbox"),
                 self.tr(
 """
 <p>
-<b>Plankton toolbox</b> version %s
+<b>Plankton Toolbox</b> version %s
 </p>
 <p>
-Plankton toolbox is an application... (TODO:)  
+Plankton Toolbox is an application... (TODO:)  
 </p>
 <p>
 Developed in Python 2.6 and Qt/PyQt4. Released under the MIT license.

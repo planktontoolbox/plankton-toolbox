@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:iso-8859-1 -*-
 #
-# Project: Plankton toolbox. http://plankton-toolbox.org
+# Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
 # Copyright (c) 2010-2011 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
@@ -33,7 +33,7 @@ from abc import abstractmethod
 
 class ActivityBase(QtGui.QWidget):
     """
-    Abstract base class for activities in Plankton toolbox.
+    Abstract base class for activities in Plankton Toolbox.
     """
     
     def __init__(self, name, parentwidget):

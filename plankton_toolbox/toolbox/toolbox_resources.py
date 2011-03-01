@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:iso-8859-1 -*-
 #
-# Project: Plankton toolbox. http://plankton-toolbox.org
+# Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
 # Copyright (c) 2010-2011 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
@@ -38,7 +38,7 @@ import plankton_toolbox.core.biology.taxa_sources as taxa_sources
 @utils.singleton
 class ToolboxResources(QtCore.QObject):
     """
-    Resources are datasets that are commonly used in the Plankton toolbox.
+    Resources are datasets that are commonly used in the Plankton Toolbox.
     """
     def __init__(self):
         """ """

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:iso-8859-1 -*-
 #
-# Project: Plankton toolbox. http://plankton-toolbox.org
+# Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
 # Copyright (c) 2010-2011 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
@@ -25,11 +25,11 @@
 # THE SOFTWARE.
 
 """
-Main module of the application Plankton toolbox.
+Main module of the application Plankton Toolbox.
 
 Organization name, domain and application name are used by QSettings. Settings
 are stored in the register on Windows (path: "HKEY_CURRENT_USER/Software/SMHI/
-Plankton toolbox"), in $HOME/.config on Linux and in $HOME/Library/Preferences 
+Plankton Toolbox"), in $HOME/.config on Linux and in $HOME/Library/Preferences 
 on Mac OS X.
 """
 
@@ -39,12 +39,12 @@ import plankton_toolbox.toolbox.main_window as main_window
 
 if __name__ == '__main__':
     """
-    Main application for the Plankton toolbox.
+    Main application for the Plankton Toolbox.
     """
     app = QtGui.QApplication(sys.argv)
     app.setOrganizationName("SMHI")
     app.setOrganizationDomain("smhi.se")
-    app.setApplicationName("Plankton toolbox")
+    app.setApplicationName("Plankton Toolbox")
 #    app.setWindowIcon(":/plankton_toolbox_icon.png") # TODO:.
     window = main_window.MainWindow()
     window.show()
