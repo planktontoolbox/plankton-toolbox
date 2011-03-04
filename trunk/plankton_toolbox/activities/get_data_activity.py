@@ -488,6 +488,25 @@ class GetDataActivity(activity_base.ActivityBase):
         
     def __saveData(self):
         """ """
+
+
+
+
+
+
+#            # Filepath.            
+#            reportfilepath = ''
+#            if len(unicode(self.__todirectory_edit.text())) > 0:
+#                reportfilepath = unicode(self.__todirectory_edit.text()) + '/'
+#            reportfilepath += unicode(self.__tofile_edit.text())
+        
+        
+        
+        
+        
+        
+        
+        
         filename = self.__savetodirectory_edit.text()  + '/' + \
                    self.__savetofile_edit.text()
         if self.__saveformat_list.currentIndex() == 0: # Text file.

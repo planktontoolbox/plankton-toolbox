@@ -439,14 +439,15 @@ class PreparePegTextFile(PrepareDataSources):
             pwsize = '' 
             pegname = ''
             pegsize = ''
+            sflag = ''
 #            extendedpegname = ''
 #            extendedpegsize = ''
             if len(items) > 3:
                 pwname = items[0]
                 pwsize = items[1] 
                 pegname = items[2]
-                pegsize = items[3]                
-                sflag = items[4]                
+                pegsize = items[3]
+                if len(items) > 4: sflag = items[4]                
 #                # Column 5 and 6 may be used for references to taxon/sizes in the extended part
 #                # of the PEG list.
 #                if len(items) > 4: extendedpegname = items[4]
@@ -462,6 +463,8 @@ class PreparePegTextFile(PrepareDataSources):
                     pw_name_dict[pegname] = pwname + ':' + sflag
                 pw_sizeclass_dict[pegname + ':' + pegsize] = pwname + ':' + pwsize
 #                print('DEBUG: pw_sizeclass_dict: ' + pegname + ':' + pegsize + ' = ' + pwname + ':' + pwsize)           
+            else:
+                print("DEBUG: TranslateFile, row to short: " + unicode(row))
         translateFile.close()
         #
         print('DEBUG: PW add to PEG.')
@@ -479,7 +482,10 @@ class PreparePegTextFile(PrepareDataSources):
                 pwnameandsize = pw_sizeclass_dict.get(pegtaxon['Species'] + ':' + str(pegsizeclass['Size class']), '')
                 pwsize = pwnameandsize.split(':')
                 if len(pwsize) > 1:
-                    pegsizeclass['Size class PW'] = int(pwsize[1])
+                    try:
+                        pegsizeclass['Size class PW'] = int(pwsize[1])
+                    except:
+                        print('ERROR: Invalid sizeclass for: ' + pwnameandsize)
 
         print('DEBUG: PW added to PEG.')
 
@@ -520,15 +526,16 @@ class PreparePegTextFile(PrepareDataSources):
             taxon = dyntaxa.getTaxonByName(pegname)
             if taxon:
                 pegtaxon['Dyntaxa id'] = taxon['Taxon id']
+                pegtaxon['Dyntaxa name'] = taxon['Scientific name']
                 continue
             # Check if PW-name match.
             taxon = dyntaxa.getTaxonByName(pwname)
             if taxon:
                 pegtaxon['Dyntaxa id'] = taxon['Taxon id']
-                print ('DEBUG: PWNAME MATCH............................................................')
+                print('DEBUG: PWNAME MATCH............................................................')
                 continue
             # Check translatefile.
-#            print ('DEBUG: TODO MATCH FILE... ' + pegname)
+#            print('DEBUG: TODO MATCH FILE... ' + pegname)
             taxon = dyntaxa.getTaxonByName(translate_dict.get(pegname, ''))
             if taxon:
                 pegtaxon['Dyntaxa id'] = taxon['Taxon id']
