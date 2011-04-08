@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding:iso-8859-1 -*-
+# -*- coding:utf-8 -*-
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
@@ -62,7 +62,8 @@ class MainWindow(QtGui.QMainWindow):
         toolbox_settings.ToolboxSettings().loadSettings(self.__ui_settings)
         # Logging. Always log to plankton_toolbox_log.txt. Use the Log tool when  
         # it is available.
-        self.__logfile = codecs.open('plankton_toolbox_log.txt', mode = 'w', encoding = 'iso-8859-1')
+        txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
+        self.__logfile = codecs.open('plankton_toolbox_log.txt', mode = 'w', encoding = txtencode)
         self.__logfile.write('Plankton Toolbox. ' +
                              time.strftime("%Y-%m-%d %H:%M:%S") +'\r\n\r\n')
         self.__logtool = None # Should be initiated later.

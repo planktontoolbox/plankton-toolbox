@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding:iso-8859-1 -*-
+# -*- coding:utf-8 -*-
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
@@ -301,8 +301,8 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
                 importer = taxa_prepare.PrepareDyntaxaDbTablesAsTextFiles(taxaObject = dt)
                 importer.importTaxa(unicode(self.__dyntaxafromdirectory_edit.text()))
                 utils.Logger().log('Number of dyntaxa taxa: ' + str(len(dt.getTaxonList())))
-                exporter = taxa_sources.JsonFile(taxaObject = dt)
-                exporter.exportTaxa(file = unicode(self.__dyntaxatofile_edit.text()), encode = 'iso-8859-1')
+                exporter = taxa_sources.JsonFile(taxaObject = dt)                
+                exporter.exportTaxa(file = unicode(self.__dyntaxatofile_edit.text()))
             else:
                 raise UserWarning('The selected data source type is not implemented.')
         except UserWarning, e:
@@ -342,7 +342,7 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
             #
             utils.Logger().log('Number of PEG taxa: ' + str(len(peg.getTaxonList())))                
             exporter = taxa_sources.JsonFile(taxaObject = peg)
-            exporter.exportTaxa(file = unicode(self.__pegtofile_edit.text()), encode = 'iso-8859-1')
+            exporter.exportTaxa(file = unicode(self.__pegtofile_edit.text()))
         except UserWarning, e:
             utils.Logger().error("UserWarning: " + unicode(e))
             QtGui.QMessageBox.warning(self, "Warning", unicode(e))
@@ -393,7 +393,7 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
             #
             utils.Logger().log('Number of Harmful plankton taxa: ' + str(len(harmful.getTaxonList())))                
             exporter = taxa_sources.JsonFile(taxaObject = harmful)
-            exporter.exportTaxa(file = unicode(self.__harmfultofile_edit.text()), encode = 'iso-8859-1')
+            exporter.exportTaxa(file = unicode(self.__harmfultofile_edit.text()))
         except UserWarning, e:
             utils.Logger().error("UserWarning: " + unicode(e))
             QtGui.QMessageBox.warning(self, "Warning", unicode(e))

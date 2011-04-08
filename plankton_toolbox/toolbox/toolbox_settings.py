@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding:iso-8859-1 -*-
+# -*- coding:utf-8 -*-
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
@@ -42,6 +42,8 @@ class ToolboxSettings(QtCore.QObject):
         """ """
         self.__default_settings = {
             "General": {
+                "Character encoding, txt-files": "cp1252",
+                "Character encoding, json-files": "cp1252",
                 "Decimal delimiter": ","
             },
             "Resources": {
@@ -97,7 +99,7 @@ class ToolboxSettings(QtCore.QObject):
         # Emit signal.
         self.emit(QtCore.SIGNAL('settingsChanged'))
 
-    def getValue(self, compoundkey):
+    def getValue(self, compoundkey, default = ''):
         """ Use compound key with field delimiter ':'. """
         current_level_item = self.__settings
         # Split the key and walk down in dictionary hierarchy..
@@ -108,7 +110,7 @@ class ToolboxSettings(QtCore.QObject):
         if current_level_item:
             return current_level_item
         else:
-            return ''
+            return default
 
     def setValue(self, compoundkey, value):
         """ Use compound key with field delimiter ':'. """

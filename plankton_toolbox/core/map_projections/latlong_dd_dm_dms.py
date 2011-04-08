@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding:iso-8859-1 -*-
+# -*- coding:utf-8 -*-
 #
 # Project: Mellifica toolbox. http://toolbox.mellifica.org
 # Author: Arnold Andreasson, info@mellifica.se
@@ -60,8 +60,8 @@ def convert_lat_from_dd(value):
 
 def convert_long_from_dd(value):
     """ Converts from input format. """
-##    value = value.replace(/[E]/gi, 'E') # Note: Ö=Öst for swedish users.
-##    value = value.replace(/[WV]/gi, 'W') # Note: V=Väst for swedish users.
+##    value = value.replace(/[E]/gi, 'E') # Note: Ã–=Ã–st for swedish users.
+##    value = value.replace(/[WV]/gi, 'W') # Note: V=VÃ¤st for swedish users.
 #    value = regexp.compile('/[E]/gi').sub('E', value)
 #    value = regexp.compile('/[WV]/gi').sub('W', value)
     regex = re.compile(

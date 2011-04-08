@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding:iso-8859-1 -*-
+# -*- coding:utf-8 -*-
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
@@ -170,7 +170,7 @@ class GetDataActivity(activity_base.ActivityBase):
         self.__project_code_edit = QtGui.QLineEdit("")
         self.__orderer_edit = QtGui.QLineEdit("")
         self.__deliverer_edit = QtGui.QLineEdit("")
-        self.__station_name_edit = QtGui.QLineEdit("släggö, by15")
+        self.__station_name_edit = QtGui.QLineEdit(u'slÃ¤ggÃ¶, by15')
         self.__station_name_option_edit = QtGui.QLineEdit("station_list")
         self.__taxon_name_edit = QtGui.QLineEdit("Dinophyceae")
         self.__taxon_name_option_edit = QtGui.QLineEdit("class")

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding:iso-8859-1 -*-
+# -*- coding:utf-8 -*-
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
@@ -30,6 +30,7 @@
 
 import codecs
 import plankton_toolbox.toolbox.utils as utils
+import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
 
 
@@ -83,8 +84,8 @@ class PwReportMJ1(PwReports):
         header_row_4 = [unicode()] * numberofcolumns 
         header_row_1[2] = u'Station:'
         header_row_2[2] = u'Provtagningsdatum:'
-        header_row_3[2] = u'Datum för analys:'
-        header_row_4[2] = u'Analys utförd av:'
+        header_row_3[2] = u'Datum fÃ¶r analys:'
+        header_row_4[2] = u'Analys utfÃ¶rd av:'
         # Iterate over file to create columns.
         for filenameindex, samplefilename in enumerate(samplefilenames):
             # Keywords in the PW sample dictionary: 
@@ -164,7 +165,8 @@ class PwReportMJ1(PwReports):
         #
         out = None
         try:
-            out = codecs.open(reportFileName, mode = 'w', encoding = 'iso-8859-1')
+            txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
+            out = codecs.open(reportFileName, mode = 'w', encoding = txtencode)
             separator = '\t' # Use tab as item separator.
             rowseparator = '\r\n' # Use CR/LF as row delimiter.
             # Header rows for sample part.
@@ -177,7 +179,7 @@ class PwReportMJ1(PwReports):
                         u'Pot. giftig' + separator + \
                         u'Art'# Index 2.
             for filenameindex, samplefilename in enumerate(samplefilenames):
-                headerrow += separator + u'Förekomst' 
+                headerrow += separator + u'FÃ¶rekomst' 
             out.write(headerrow + rowseparator)
             # Species data.
             for row in species_rows:
@@ -248,8 +250,8 @@ class PwReportMJ2(PwReports):
         header_row_4 = [unicode()] * numberofcolumns 
         header_row_1[2] = u'Station:'
         header_row_2[2] = u'Provtagningsdatum:'
-        header_row_3[2] = u'Datum för analys:'
-        header_row_4[2] = u'Analys utförd av:'
+        header_row_3[2] = u'Datum fÃ¶r analys:'
+        header_row_4[2] = u'Analys utfÃ¶rd av:'
         # Iterate over file to create columns.
         for filenameindex, samplefilename in enumerate(samplefilenames):
             # Keywords in the PW sample dictionary: 
@@ -335,7 +337,8 @@ class PwReportMJ2(PwReports):
         #
         out = None
         try:
-            out = codecs.open(reportFileName, mode = 'w', encoding = 'iso-8859-1')
+            txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
+            out = codecs.open(reportFileName, mode = 'w', encoding = txtencode)
             separator = '\t' # Use tab as item separator.
             rowseparator = '\r\n' # Use CR/LF as row delimiter.
             # Header rows for sample part.
@@ -348,7 +351,7 @@ class PwReportMJ2(PwReports):
                         u'Pot. giftig' + separator + \
                         u'Art'# Index 2.
             for filenameindex, samplefilename in enumerate(samplefilenames):
-                headerrow += separator + u'Förekomst' 
+                headerrow += separator + u'FÃ¶rekomst' 
             out.write(headerrow + rowseparator)
             # Species data.
             for row in species_rows:
@@ -497,10 +500,11 @@ class PwReportATS1(PwReports):
         # Write to file.
         out = None
         try:
-            out = codecs.open(reportFileName, mode = 'w', encoding = 'iso-8859-1')
+            txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
+            out = codecs.open(reportFileName, mode = 'w', encoding = txtencode)
             separator = '\t' # Use tab as item separator.
             #
-            out.write( u'Station' + separator + # Index 0.
+            out.write(  u'Station' + separator + # Index 0.
                         u'Date' + separator + # Index 1.
                         u'Analysis date' + separator + # Index 2.
                         u'Min depth m' + separator + # Index 3.
@@ -517,7 +521,7 @@ class PwReportATS1(PwReports):
                         u'100-um pieces/L' + separator + # Index 13.
                         u'Biovolume mm3/L' + separator + # Index 14.
                         u'\r\n'
-                        )
+                    )
             
             for row in out_rows:
                 # Use tab as column separator and CR/LF as row delimiter.
