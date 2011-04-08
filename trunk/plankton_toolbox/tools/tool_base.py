@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding:iso-8859-1 -*-
+# -*- coding:utf-8 -*-
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding:iso-8859-1 -*-
+# -*- coding:utf-8 -*-
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
@@ -34,6 +34,7 @@ from abc import abstractmethod
 import codecs
 import json
 import plankton_toolbox.toolbox.utils as utils
+import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 
 class DataSources(object):
     """
@@ -60,36 +61,29 @@ class JsonFile(DataSources):
         # Initialize parent.
         super(JsonFile, self).__init__(taxaObject)
 
-    def importTaxa(self, file = None, encode = 'utf-8'):
+    def importTaxa(self, file = None):
         """ """
         if file == None:
             raise UserWarning('File name is missing.')
-###        indata = open(file, 'r')
-        indata = codecs.open(file, mode = 'r', encoding = encode)
+        jsonencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, json-files', 'cp1252')
+        indata = codecs.open(file, mode = 'r', encoding = jsonencode)
         self._taxaObject.clear()
-        jsonimport = json.loads(indata.read(), encoding = encode)
+        jsonimport = json.loads(indata.read(), encoding = jsonencode)
         self._taxaObject.getMetadata().update(jsonimport['metadata'])
         self._taxaObject.getTaxonList().extend(jsonimport['data'])
-# OLD:
-#        self._taxaObject.getTaxonList().extend(
-#                    json.loads(indata.read(), encoding = encode))
-        indata.close()
 
-    def exportTaxa(self, file = None, encode = 'utf-8'):
+    def exportTaxa(self, file = None):
         """ """
         utils.Logger().log("Writes taxa to: " + file)
         if file == None:
             raise UserWarning('File name is missing.')
+        jsonencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, json-files', 'cp1252')
         outdata = open(file, 'w')
-        
         jsonexport = {}
         jsonexport['metadata'] = self._taxaObject.getMetadata()
         jsonexport['data'] = self._taxaObject.getTaxonList()
-        outdata.write(json.dumps(jsonexport, encoding = encode, 
+        outdata.write(json.dumps(jsonexport, encoding = jsonencode, 
                                  sort_keys=True, indent=4))
-# OLD:        
-#        outdata.write(json.dumps(self._taxaObject.getTaxonList(), 
-#                                 encoding = encode, sort_keys=True, indent=4))
         outdata.close()
 
 

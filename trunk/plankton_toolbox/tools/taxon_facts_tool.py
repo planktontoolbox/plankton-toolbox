@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding:iso-8859-1 -*-
+# -*- coding:utf-8 -*-
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
@@ -126,10 +126,10 @@ class TaxonFactsTool(tool_base.ToolBase):
     <tr>
         <th>Literature</th>
         <td><p id="data_literature">
-        Drebes, G. 1974. Marines Phytoplankton, Eine Auswahl der Helgoländer Planktonalgen (Diatomeen, Peridineen). Georg Thieme Verlag, Stuttgart. 186 pp.<br/><br/>
+        Drebes, G. 1974. Marines Phytoplankton, Eine Auswahl der HelgolÃ¤nder Planktonalgen (Diatomeen, Peridineen). Georg Thieme Verlag, Stuttgart. 186 pp.<br/><br/>
         Hansen, G. 1993a. Dimorphic individuals of<i> Dinophysis acuta</i> and <i>D.  norvegica</i> (Dinophyceae) from Danish waters. Phycologia. 32: 73-75.<br/><br/>
-        Hansen, G. &amp; Larsen, J. 1992. Dinoflagellater i danske farvande. In: Thomsen, H. A. (ed.) Plankton i de indre danske farvande. Havforskning fra Miljöstyrelsen, Copenhagen, p. 45-155.<br/><br/>
-        Larsen, J. &amp; Moestrup, Ö. 1992. Potentially toxic phytoplankton. 2. Genus <i>Dinophysis</i> (Dinophyceae). In: Lindley, J. A. (ed.) ICES Identification leaflets for plankton. International Council for the exploration of the sea, Copenhagen, p. 1-12.<br/><br/>
+        Hansen, G. &amp; Larsen, J. 1992. Dinoflagellater i danske farvande. In: Thomsen, H. A. (ed.) Plankton i de indre danske farvande. Havforskning fra MiljÃ¶styrelsen, Copenhagen, p. 45-155.<br/><br/>
+        Larsen, J. &amp; Moestrup, Ã–. 1992. Potentially toxic phytoplankton. 2. Genus <i>Dinophysis</i> (Dinophyceae). In: Lindley, J. A. (ed.) ICES Identification leaflets for plankton. International Council for the exploration of the sea, Copenhagen, p. 1-12.<br/><br/>
         Steidinger, K. A. &amp; Tangen, K. 1996. Dinoflagellates. In: Tomas, C. R. (ed.) Identifying marine diatoms and dinoflagellates. Academic Press, Inc., San Diego, p. 387-584.<br/><br/>
         </p></td>
 

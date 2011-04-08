@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding:iso-8859-1 -*-
+# -*- coding:utf-8 -*-
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
@@ -34,6 +34,7 @@ import json
 import urllib
 import string
 import plankton_toolbox.toolbox.utils as utils
+import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 # Openpyxl is not included in python(xy).
 try: 
     import openpyxl.workbook as excelworkbook
@@ -102,7 +103,8 @@ class MonitoringFiles(object):
         if fileName == None:
             raise UserWarning('File name is missing.')
         try:
-            out = codecs.open(fileName, mode = 'w', encoding = 'iso-8859-1')
+            txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
+            out = codecs.open(fileName, mode = 'w', encoding = txtencode)
             separator = '\t' # Use tab as item separator.
             # Header.
             out.write(separator.join(map(unicode, self._header)) + '\r\n')
@@ -153,7 +155,8 @@ class TextFile(MonitoringFiles):
         #
         try:
             #
-            file = codecs.open(fileName, mode = 'r', encoding = 'iso-8859-1')
+            txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
+            file = codecs.open(fileName, mode = 'r', encoding = txtencode)
             #
             for index, row in enumerate(file):
                 if index == 0: # First row is assumed to be the header row.
@@ -276,7 +279,8 @@ class PwCsv(MonitoringFiles):
             raise UserWarning('File name is missing.')
         file = None
         try:
-            file = codecs.open(fileName, mode = 'r', encoding = 'iso-8859-1')
+            txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
+            file = codecs.open(fileName, mode = 'r', encoding = txtencode)
             separator = ',' # Use ',' as item separator.
             
             # Read data header. Same header used for data and aggregated data.
@@ -338,10 +342,12 @@ class PwCsv(MonitoringFiles):
         finally:
             if file: file.close()
 
-    def exportAsJson(self, file = None, encode = 'utf-8'):
+    def exportAsJson(self, file = None):
         """ """
         if file == None:
             raise UserWarning('File name is missing.')
+        #
+        jsonencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, json-files', 'cp1252')
         outdata = open(file, 'w')
         
         jsonexport = {}
@@ -350,7 +356,7 @@ class PwCsv(MonitoringFiles):
         jsonexport['header'] = self._rows
         jsonexport['rows'] = self._rows
         jsonexport['aggregated_rows'] = self._aggregated_rows
-        outdata.write(json.dumps(jsonexport, encoding = encode, 
+        outdata.write(json.dumps(jsonexport, encoding = jsonencode, 
                                  sort_keys=True, indent=4))
         outdata.close()
 

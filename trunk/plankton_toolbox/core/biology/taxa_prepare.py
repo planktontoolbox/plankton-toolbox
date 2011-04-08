@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding:iso-8859-1 -*-
+# -*- coding:utf-8 -*-
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
@@ -37,6 +37,7 @@ import codecs
 #import json
 import string
 import plankton_toolbox.toolbox.utils as utils
+import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
 
 
@@ -83,8 +84,8 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
         
         # === TAXON file ===
         utils.Logger().log("Reading: " + dir + '/dyntaxa_taxon.txt')
-###     taxonFile = open(dir + '/dyntaxa_taxon.txt', 'r')
-        taxonFile = codecs.open(dir + '/dyntaxa_taxon.txt', mode = 'r', encoding = 'iso-8859-1')
+        txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
+        taxonFile = codecs.open(dir + '/dyntaxa_taxon.txt', mode = 'r', encoding = txtencode)
         separator = '\t' # Tab as separator.
         for line in taxonFile:
             if len(self.__taxonHeader) == 0:
@@ -132,8 +133,8 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
         
         # === HIER file ===
         utils.Logger().log("Reading: " + dir + '/dyntaxa_hier.txt')
-###        hierFile = open(dir + '/dyntaxa_hier.txt', 'r')
-        hierFile = codecs.open(dir + '/dyntaxa_hier.txt', mode = 'r', encoding = 'iso-8859-1')
+        txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
+        hierFile = codecs.open(dir + '/dyntaxa_hier.txt', mode = 'r', encoding = txtencode)
         separator = '\t' # Tab as separator.
         for line in hierFile:
             if len(self.__hierHeader) == 0:
@@ -178,8 +179,8 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
         
         # === NAMES file ===
         utils.Logger().log("Reading: " + dir + '/dyntaxa_names.txt')
-###        namesFile = open(dir + '/dyntaxa_names.txt', 'r')
-        namesFile = codecs.open(dir + '/dyntaxa_names.txt', mode = 'r', encoding = 'iso-8859-1')
+        txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
+        namesFile = codecs.open(dir + '/dyntaxa_names.txt', mode = 'r', encoding = txtencode)
         separator = '\t' # Tab as separator.
         for line in namesFile:
             if len(self.__namesHeader) == 0:
@@ -310,8 +311,8 @@ class PreparePegTextFile(PrepareDataSources):
         self.__taxa = self._taxaObject.getTaxonList()
         
         utils.Logger().log("Reading: " + file)
-###        pegFile = open(file, 'r')
-        pegFile = codecs.open(file, mode = 'r', encoding = 'iso-8859-1')
+        txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
+        pegFile = codecs.open(file, mode = 'r', encoding = txtencode)
         separator = '\t' # Tab as separator.
         for line in pegFile:
             if len(self.__header) == 0:
@@ -431,7 +432,8 @@ class PreparePegTextFile(PrepareDataSources):
         pw_name_dict = {}
         pw_sizeclass_dict = {}
         #
-        translateFile = codecs.open(file, mode = 'r', encoding = 'iso-8859-1')
+        txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
+        translateFile = codecs.open(file, mode = 'r', encoding = txtencode)
         separator = '\t' # Tab as separator.
         for row in translateFile:
             items = map(string.strip, row.split(separator))
@@ -505,7 +507,8 @@ class PreparePegTextFile(PrepareDataSources):
         
         # Load translation file.
         translate_dict = {}
-        translateFile = codecs.open(file, mode = 'r', encoding = 'iso-8859-1')
+        txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
+        translateFile = codecs.open(file, mode = 'r', encoding = txtencode)
         separator = '\t' # Tab as separator.
         for row in translateFile:
             items = map(string.strip, row.split(separator))
@@ -562,7 +565,8 @@ class PrepareHarmfulMicroAlgae(PrepareDataSources):
         dyntaxa = toolbox_resources.ToolboxResources().getResourceDyntaxa()
         #
         utils.Logger().log("Reading: " + file)
-        harmfulFile = codecs.open(file, mode = 'r', encoding = 'iso-8859-1')
+        txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
+        harmfulFile = codecs.open(file, mode = 'r', encoding = txtencode)
         separator = '\t' # Tab as separator.
         for row in harmfulFile:
             if len(self.__header) == 0:
