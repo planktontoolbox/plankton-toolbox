@@ -337,7 +337,14 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
             importer = taxa_prepare.PreparePegTextFile(taxaObject = peg)
             importer.importTaxa(file = unicode(self.__pegfromfile_edit.text()))
             # New:
-            importer.addPwToPeg(file = unicode(self.__pwtopegfile_edit.text()))
+            
+            
+            
+############################            importer.addPwToPeg(file = unicode(self.__pwtopegfile_edit.text()))
+            
+            
+            
+            
             importer.addDyntaxaToPeg(file = unicode(self.__pegtodyntaxafile_edit.text()))
             #
             utils.Logger().log('Number of PEG taxa: ' + str(len(peg.getTaxonList())))                

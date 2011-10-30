@@ -312,6 +312,31 @@ class PreparePegTextFile(PrepareDataSources):
         
         utils.Logger().log("Reading: " + file)
         txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
+
+        
+        
+        
+
+        
+        
+        
+        txtencode = 'utf16'
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         pegFile = codecs.open(file, mode = 'r', encoding = txtencode)
         separator = '\t' # Tab as separator.
         for line in pegFile:
@@ -377,16 +402,16 @@ class PreparePegTextFile(PrepareDataSources):
         if (importFileHeader == 'Size class No'): return 'Size class' # Modified
 #        if (importFileHeader == 'Unit'): return 'Unit'
         if (importFileHeader == 'size range,'): return 'Size range' # Modified
-        if (importFileHeader == 'Length (l1), \xb5m'): return 'Length(l1), um' # Modified
-        if (importFileHeader == 'Length (l2), \xb5m'): return 'Length(l2), um' # Modified
-        if (importFileHeader == 'Width (w), \xb5m'): return 'Width(w), um' # Modified
-        if (importFileHeader == 'Height (h), \xb5m'): return 'Height(h), um' # Modified
-        if (importFileHeader == 'Diameter (d1), \xb5m'): return 'Diameter(d1), um' # Modified
-        if (importFileHeader == 'Diameter (d2), \xb5m'): return 'Diameter(d2), um' # Modified
+#        if (importFileHeader == 'Length (l1), \xb5m'): return 'Length(l1), um' # Modified
+#        if (importFileHeader == 'Length (l2), \xb5m'): return 'Length(l2), um' # Modified
+#        if (importFileHeader == 'Width (w), \xb5m'): return 'Width(w), um' # Modified
+#        if (importFileHeader == 'Height (h), \xb5m'): return 'Height(h), um' # Modified
+#        if (importFileHeader == 'Diameter (d1), \xb5m'): return 'Diameter(d1), um' # Modified
+#        if (importFileHeader == 'Diameter (d2), \xb5m'): return 'Diameter(d2), um' # Modified
         if (importFileHeader == 'No. of cells/ counting unit'): return 'No. of cells/counting unit' # Modified
-        if (importFileHeader == 'Calculated  volume, \xb5m3'): return 'Calculated volume, um3' # Modified
+#        if (importFileHeader == 'Calculated  volume, \xb5m3'): return 'Calculated volume, um3' # Modified
         if (importFileHeader == 'Comment'): return 'Comment'
-        if (importFileHeader == 'Filament: length of cell (\xb5m)'): return 'Filament: length of cell, um' # Modified
+#        if (importFileHeader == 'Filament: length of cell (\xb5m)'): return 'Filament: length of cell, um' # Modified
         if (importFileHeader == 'Calculated Carbon pg/counting unit        (Menden-Deuer & Lessard 2000)'): return 'Calculated Carbon pg/counting unit' # Modified
         if (importFileHeader == 'Comment on Carbon calculation'): return 'Comment on Carbon calculation'
         if (importFileHeader == 'CORRECTION / ADDITION                            2009'): return 'Correction/addition 2009' # Modified
@@ -399,8 +424,12 @@ class PreparePegTextFile(PrepareDataSources):
         if (self.__header[column] == 'Class'): return True
         if (self.__header[column] == 'Order'): return True
         if (self.__header[column] == 'Species'): return True
-        if (self.__header[column] == 'SFLAG'): return True
         if (self.__header[column] == 'Author'): return True
+        if (self.__header[column] == 'SFLAG'): return True
+        if (self.__header[column] == 'Stage'): return True
+        if (self.__header[column] == 'Trophy'): return True
+        if (self.__header[column] == 'Geometric shape'): return True
+        if (self.__header[column] == 'Formula'): return True
         return False # Related to size class.     
         
     def __isColumnNumeric(self, column):
