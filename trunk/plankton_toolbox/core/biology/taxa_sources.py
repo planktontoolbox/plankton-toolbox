@@ -71,6 +71,7 @@ class JsonFile(DataSources):
         jsonimport = json.loads(indata.read(), encoding = jsonencode)
         self._taxaObject.getMetadata().update(jsonimport['metadata'])
         self._taxaObject.getTaxonList().extend(jsonimport['data'])
+        indata.close()
 
     def exportTaxa(self, file = None):
         """ """
