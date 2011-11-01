@@ -233,7 +233,24 @@ class SharkwebDownload(MonitoringFiles):
         if parameters == None:
             raise UserWarning('Parameters are missing.')
         # URL and parameters. Use unicode and utf-8 to handle swedish characters.
-        url = u'http://test.mellifica.org/sharkweb/shark_php.php'
+
+        
+        
+#        url = u'http://test.mellifica.org/sharkweb/shark_php.php'
+        url = u'http://produkter.smhi.se/sharkweb/shark_save.php'
+        
+        parameters = {}
+        parameters['action']=u'download_sample'
+        parameters['year_from']=u'2010'
+        parameters['year_to']=u'2010'
+        parameters['month']=u'01'
+        parameters['datatype']=u'Phytoplankton'
+        parameters['parameter']=u'CONC'
+        parameters['sample_table_view']=u'sample_col_std'
+        parameters['delimiters']=u'point-tab'
+        parameters['lineend']=u'unix'
+        parameters['headerlang']=u'sv'        
+        
         parameters = dict([k, v.encode('utf-8')] for k, v in parameters.items())
         params = urllib.urlencode(parameters)
         #

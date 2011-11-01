@@ -88,6 +88,27 @@ class JsonFile(DataSources):
         outdata.close()
 
 
+class NordicMicroalgaeApi(DataSources):
+    """ Mainly used to load resource files. """
+    def __init__(self, taxaObject = None):
+        """ """
+        # Initialize parent.
+        super(JsonFile, self).__init__(taxaObject)
+
+    def importTaxa(self, file = None):
+        """ """
+#        if file == None:
+#            raise UserWarning('File name is missing.')
+#        jsonencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, json-files', 'cp1252')
+#        indata = codecs.open(file, mode = 'r', encoding = jsonencode)
+#        self._taxaObject.clear()
+#        jsonimport = json.loads(indata.read(), encoding = jsonencode)
+#        self._taxaObject.getMetadata().update(jsonimport['metadata'])
+#        self._taxaObject.getTaxonList().extend(jsonimport['data'])
+#        indata.close()
+
+
+
 class DyntaxaRest(DataSources):
     """ For future use. """
     def __init__(self, taxaObject = None):
@@ -108,42 +129,4 @@ class DyntaxaSoap(DataSources):
 #    def importTaxa(self, url = None):
 #        """ TODO: """
         
-
-class MarineSpeciesSoap(DataSources):
-    """ For future use. """
-    def __init__(self, taxaObject = None):
-        """ """
-        # Initialize parent.
-        super(MarineSpeciesSoap, self).__init__(taxaObject)
-
-#    def importTaxa(self, url = None):
-#        """ TODO: """
-
-
-class CouchDb(DataSources):
-    """ Used for test. """
-    def __init__(self, taxaObject = None):
-        """ """
-        # Initialize parent.
-        super(CouchDb, self).__init__(taxaObject)
-
-#    def importTaxa(self, url = None):
-#        """ TODO: """
-#        
-#    def exportTaxa(self, url = None):
-#        """ TODO: """
-        
-
-class GoogleAppEngine(DataSources):
-    """ Used for test. """
-    def __init__(self, taxaObject = None):
-        """ """
-        # Initialize parent.
-        super(GoogleAppEngine, self).__init__(taxaObject)
-
-#    def importTaxa(self, url = None):
-#        """ TODO: """
-#        
-#    def exportTaxa(self, url = None):
-#        """ TODO: """
 

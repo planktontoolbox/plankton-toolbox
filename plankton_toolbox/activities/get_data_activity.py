@@ -30,6 +30,7 @@ the website test.mellifica.org/sharkweb, which should be replaced
 by www.mellifica.se/sharkweb later. Search options is based on the 
 layout of the corresponding page on the website.
 """
+
 import os
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
@@ -50,7 +51,11 @@ class GetDataActivity(activity_base.ActivityBase):
         content = self._createScrollableContent()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
-        #
+        # Add activity name at top.
+        self.__activityheader = QtGui.QLabel('<b>Activity: ' + self.objectName() + '</b>', self)
+        self.__activityheader.setAlignment(QtCore.Qt.AlignHCenter)
+        contentLayout.addWidget(self.__activityheader)
+        # Add content to the activity.
         contentLayout.addWidget(self.__contentSelectData())
         contentLayout.addWidget(self.__contentResultTable())
         contentLayout.addWidget(self.__contentSaveResult())

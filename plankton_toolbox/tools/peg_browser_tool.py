@@ -70,6 +70,10 @@ class PegBrowserTool(tool_base.ToolBase):
         # Initialize parent. Should be called after other 
         # initialization since the base class calls _createContent().
         super(PegBrowserTool, self).__init__(name, parentwidget)
+        #
+        # Where is the tool allowed to dock in the main window.
+        self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea)
+        self.setBaseSize(600,600)
         
     def _createContent(self):
         """ """

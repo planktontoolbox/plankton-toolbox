@@ -41,6 +41,11 @@ class LogTool(tool_base.ToolBase):
         # Initialize parent. Should be called after other 
         # initialization since the base class calls _createContent().
         super(LogTool, self).__init__(name, parentwidget)
+        #
+        # Where is the tool allowed to dock in the main window.
+        self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea)
+#        self.setAllowedAreas(QtCore.Qt.BottomDockWidgetArea)
+        self.setBaseSize(600,600)
 
     def _createContent(self):
         """ """
@@ -53,7 +58,7 @@ class LogTool(tool_base.ToolBase):
     def __contentButtons(self):
         """ """
         # Active widgets and connections.
-        self.__clearbutton = QtGui.QPushButton("Clear")
+        self.__clearbutton = QtGui.QPushButton("Clear log")
         self.__limitedit = QtGui.QLineEdit("1000")
         self.__limitedit.setMaximumWidth(60)        
         self.connect(self.__clearbutton, QtCore.SIGNAL("clicked()"), self.__clearLog)      

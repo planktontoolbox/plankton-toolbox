@@ -59,7 +59,11 @@ class CreateReportsActivity(activity_base.ActivityBase):
         content = self._createScrollableContent()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
-        # Tab widget. 
+        # Add activity name at top.
+        self.__activityheader = QtGui.QLabel('<b>Activity: ' + self.objectName() + '</b>', self)
+        self.__activityheader.setAlignment(QtCore.Qt.AlignHCenter)
+        contentLayout.addWidget(self.__activityheader)
+        # Add content to the activity.
         tabWidget = QtGui.QTabWidget()
         contentLayout.addWidget(tabWidget)
         tabWidget.addTab(self.__contentPwReport(), "PW")
@@ -106,7 +110,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
         # Active widgets and connections.
         self.__report_list = QtGui.QComboBox()
         self.__report_list.addItems(["<select>",
-                                     "MJ Report 1 (Håvprover inom 24 timmar)",
+                                     "MJ Report 1 (Hï¿½vprover inom 24 timmar)",
                                      "MJ Report 2",
                                      "ATS Report 1"])
 

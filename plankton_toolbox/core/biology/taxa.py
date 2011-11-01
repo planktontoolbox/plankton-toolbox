@@ -35,8 +35,9 @@ class Taxa(object):
     Abstract base class for lists of taxon. 
     """
     def __init__(self):
+        """ """
         self._metadata = {} # Metadata for the dataset.
-        self._data = [] # List of taxon objects.
+        self._data = [] # List of taxon objects in the dataset.
         self._idToTaxonDict = {} # For fast lookup.
         self._nameToTaxonDict = {} # For fast lookup.
         
@@ -90,6 +91,63 @@ class Taxa(object):
         """ Note: Abstract. """
 
         
+class NordicMicroalgae(Taxa):
+    """ 
+    NordicMicroalgae, http://nordicmicroalgae.org
+    """
+    def __init__(self):
+        """ """
+        self.__sortedNameList = None
+        # Initialize parent.
+        super(NordicMicroalgae, self).__init__()
+
+    def clear(self):
+        """ """
+        self.__sortedNameList = None
+        super(NordicMicroalgae, self).clear()
+        
+    def _createIdToTaxonLookup(self):
+        """ Note: Implementation of abstract method. """
+        for taxon in self._data:
+            id = taxon.get('Taxon id', None)
+            if id:
+                self._idToTaxonDict[id] = taxon
+            else:
+                print('DEBUG: Name missing.')
+            
+    def _createNameToTaxonDict(self):
+        """ Note: Implementation of abstract method. """
+        for taxon in self._data:
+            name = taxon.get('Scientific name', None)
+            if name:
+                self._nameToTaxonDict[name] = taxon
+            else:
+                print('DEBUG: Name missing.')
+            
+    def getSortedNameList(self):
+        """ 
+        Used when a sorted list of taxon is needed.
+        Format: [taxon, ...]
+        """
+        if self.__sortedNameList == None:
+            self.__sortedNameList = []
+            for taxon in self._data:
+                self.__sortedNameList.append(taxon)
+            # Sort.
+            self.__sortedNameList.sort(dyntaxaname_sort) # Sort function defined below.
+        return self.__sortedNameList
+            
+# Sort function for scientific name list.
+def nordicmicroalgaename_sort(s1, s2):
+    """ """
+    # Check names first.
+    name1 = s1.get('Scientific name', '')
+    name2 = s2.get('Scientific name', '')
+    if name1 < name2: return -1
+    if name1 > name2: return 1
+    return 0 # Both are equal.
+
+
 class Dyntaxa(Taxa):
     """ 
     Dynamisk Taxa, delivered by ArtDatabanken: 

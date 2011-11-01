@@ -49,11 +49,15 @@ class PrepareResourcesActivity(activity_base.ActivityBase):
     def _createContent(self):
         """ """
         content = self._createScrollableContent()
-        layout = QtGui.QVBoxLayout()
-        content.setLayout(layout)
-        # Tab widget. 
+        contentLayout = QtGui.QVBoxLayout()
+        content.setLayout(contentLayout)
+        # Add activity name at top.
+        self.__activityheader = QtGui.QLabel('<b>Activity: ' + self.objectName() + '</b>', self)
+        self.__activityheader.setAlignment(QtCore.Qt.AlignHCenter)
+        contentLayout.addWidget(self.__activityheader)
+        # Add content to the activity.
         widget = QtGui.QTabWidget()
-        layout.addWidget(widget)
+        contentLayout.addWidget(widget)
         widget.addTab(self._createContentDyntaxa(), "Dyntaxa")
         widget.addTab(self._createContentPeg(), "PEG")
         widget.addTab(self._createContentHarmfulPlankton(), "Harmful plankton")
