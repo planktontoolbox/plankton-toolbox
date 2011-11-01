@@ -46,9 +46,9 @@ class ToolBase(QtGui.QDockWidget):
         #        
         self.setObjectName(name)
         #
-        self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea | 
-                             QtCore.Qt.BottomDockWidgetArea)
-        self.setBaseSize(600,600)
+#        self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea | 
+#                             QtCore.Qt.BottomDockWidgetArea)
+#        self.setBaseSize(600,600)
         # Add specific content. Abstract, implemented by subclasses.
         self._createContent() 
         # Default position to the right. Hide as default.
@@ -77,12 +77,7 @@ class ToolBase(QtGui.QDockWidget):
         self.setWidget(widget)        
         # Add scroll.
         mainscroll = QtGui.QScrollArea()
-        mainscroll.setFrameShape(QtGui.QFrame.NoFrame)
-#        mainscroll.setBackgroundRole(QtGui.QPalette.Light)     
-        mainscroll.setBackgroundRole(QtGui.QPalette.Midlight)     
-#        mainscroll.setBackgroundRole(QtGui.QPalette.Dark)     
-#        mainscroll.setBackgroundRole(QtGui.QPalette.Mid)     
-#        mainscroll.setBackgroundRole(QtGui.QPalette.Shadow)     
+        ### mainscroll.setFrameShape(QtGui.QFrame.NoFrame)
         mainscroll.setWidget(content)
         mainscroll.setWidgetResizable(True)
         mainlayout = QtGui.QVBoxLayout()

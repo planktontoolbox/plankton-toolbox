@@ -27,10 +27,9 @@
 """
 Main window for the Plankton Toolbox.
 
-The layout is an activity area in the middle, activity and tool selector to the
-left and movable tools to the right and at the bottom. Activites are handled as 
-stacked widgets and tools are dockable widgets. The activity and tool selector
-is also dockable.
+The layout is an activity area in the middle, activity-and-tool-selector to the
+left and movable tools to the right. Activites are handled as stacked widgets 
+and tools are dockable widgets. The activity-and-tool-selector is also dockable.
 """
 
 import time
@@ -44,7 +43,7 @@ import plankton_toolbox.tools.log_tool as log_tool
 import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
 
-__version__ = '0.0.1' # Plankton Toolbox version.
+__version__ = '0.0.2' # Plankton Toolbox version.
 
 class MainWindow(QtGui.QMainWindow):
     """ 
@@ -84,17 +83,16 @@ class MainWindow(QtGui.QMainWindow):
         # Loads last used window positions.
         self.setGeometry(self.__ui_settings.value("MainWindow/Geometry").toRect())
         self.restoreState(self.__ui_settings.value("MainWindow/State").toByteArray())        
-        size = self.__ui_settings.value("MainWindow/Size", QtCore.QVariant(QtCore.QSize(900, 400))).toSize()
+        size = self.__ui_settings.value("MainWindow/Size", QtCore.QVariant(QtCore.QSize(900, 600))).toSize()
         position = self.__ui_settings.value("MainWindow/Position", QtCore.QVariant(QtCore.QPoint(100, 50))).toPoint()
         self.resize(size)
         self.move(position)        
         # Load resources when the main event loop has started.
         if toolbox_settings.ToolboxSettings().getValue('Resources:Load at startup'):
             QtCore.QTimer.singleShot(10, toolbox_resources.ToolboxResources().loadAllResources)
-        #
+        # Tell the user user.
         utils.Logger().log('Plankton Toolbox started.')
         utils.Logger().log('Note: Log rows are sent to the "Log tool" and written to "plankton_toolbox_log.txt".\r\n')
-
         
     def closeEvent(self, event):
         """ Called on application shutdown. """
@@ -120,6 +118,19 @@ class MainWindow(QtGui.QMainWindow):
         self.toolsmenu = self.menuBar().addMenu(self.tr("&Tools")) # Note: Public.
         self.__helpmenu = self.menuBar().addMenu(self.tr("&Help"))
         self.__helpmenu.addAction(self.__aboutaction)
+        # Add sub-menu in the tools menu to close all tools.
+        self.__closealltools = QtGui.QAction(self.tr("Close all tools"), self)
+        self.__closealltools.setStatusTip(self.tr("Make all tools invisible."))
+        self.__closealltools.triggered.connect(self.__closeAllTools)
+        self.toolsmenu.addAction(self.__closealltools)
+        #
+        self.toolsmenu.addSeparator()
+        
+    def __closeAllTools(self):
+        """ """
+        tools = self.__toolmanager.getToolList()
+        for tool in tools:
+            tool.close()
 
     def __createStatusBar(self):
         """ 
@@ -133,70 +144,69 @@ class MainWindow(QtGui.QMainWindow):
         """ 
         The user should be able to choose one activity and a number of tools.
         """
+        # Dock widgets can be tabbed with vertical tabs.
+        self.setDockOptions(QtGui.QMainWindow.AnimatedDocks | 
+                            QtGui.QMainWindow.AllowTabbedDocks | 
+                            QtGui.QMainWindow.VerticalTabs)
         # Create left dock widget and dock to main window.
         dock = QtGui.QDockWidget(self.tr("Activities and tools"), self)
         dock.setObjectName("Activities and tools selector")
         dock.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea)
-        dock.setFeatures(QtGui.QDockWidget.DockWidgetFloatable | 
-                             QtGui.QDockWidget.DockWidgetMovable)
+        dock.setFeatures(QtGui.QDockWidget.NoDockWidgetFeatures)
+        # dock.setFeatures(QtGui.QDockWidget.DockWidgetFloatable | 
+        #                  QtGui.QDockWidget.DockWidgetMovable)
         self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
         # Widget to create space and layout for two groupboxes.
-        widget1 = QtGui.QWidget()
-        dock.setWidget(widget1)
+        content = QtGui.QWidget()
+        widget = QtGui.QWidget()
+        dock.setWidget(widget)        
+        # Add scroll.
+        mainscroll = QtGui.QScrollArea()
+        ### mainscroll.setFrameShape(QtGui.QFrame.NoFrame)
+        mainscroll.setWidget(content)
+        mainscroll.setWidgetResizable(True)
+        mainlayout = QtGui.QVBoxLayout()
+        mainlayout.setMargin(0)
+        mainlayout.setSpacing(0)
+        mainlayout.addWidget(mainscroll)
+        widget.setLayout(mainlayout)
         grid1 = QtGui.QVBoxLayout()
-        widget1.setLayout(grid1)        
-#        grid1.setMargin(0)
-#        grid1.setSpacing(0)
+        content.setLayout(grid1)        
         # For activites.        
         activitiesgroup = QtGui.QGroupBox("Activities")
         grid1.addWidget(activitiesgroup)
         activitiesvbox = QtGui.QVBoxLayout()
         activitiesgroup.setLayout(activitiesvbox)
-#        activitiesvbox.setMargin(0)
-#        activitiesvbox.setSpacing(0)
-        
-### TODO:        
-#        activitiestree = QtGui.QTreeWidget()
-#        activitiesvbox.addWidget(activitiestree)
-#        activitiestree.setHeaderHidden(True)
-###
         # For tools.
         toolsgroup = QtGui.QGroupBox("Tools")
         grid1.addWidget(toolsgroup)        
         toolsvbox = QtGui.QVBoxLayout()
         toolsgroup.setLayout(toolsvbox)
         grid1.addStretch(5)
-#        toolsvbox.setMargin(0)
-#        toolsvbox.setSpacing(0)
-
         # Add one button for each activity. Create stacked widgets.
         for activity in self.__activitymanager.getActivityList():
-            button = QtGui.QPushButton(activity.objectName())
+            button = utils.ClickableQLabel(activity.objectName())
             activitiesvbox.addWidget(button) # Adds to stack.                  
-### TODO:
-#            treeitem = QtGui.QTreeWidgetItem(activitiestree, [activity.objectName()])            
-#            treeitem = QtGui.QTreeWidgetItem(treeitem, [activity.objectName()])
-###         
             # The activity is called to select stack item by object, not index.
             self.connect(button, QtCore.SIGNAL("clicked()"), activity.showInMainWindow)
-### TODO:          
-#            self.connect(activitiestree, QtCore.SIGNAL("itemClicked(QTreeWidgetItem *, int)"), activity.showInMainWindow)
-###            
             # Create one layer in the stacked activity widget.
             self.__activitystack.addWidget(activity)
         activitiesvbox.addStretch(5)
-
         # Add one button for each tool.
         for tool in self.__toolmanager.getToolList():
-            button = QtGui.QPushButton(tool.objectName())
+            button = utils.ClickableQLabel(tool.objectName())
             toolsvbox.addWidget(button)
             self.connect(button, QtCore.SIGNAL("clicked()"), tool.show) # Show if hidden.
             self.connect(button, QtCore.SIGNAL("clicked()"), tool.raise_) # Bring to front.
         toolsvbox.addStretch(5)
-           
+        # Activate startup activity. Select the first one in list.
+        activities = self.__activitymanager.getActivityList()
+        if len(activities) > 0:
+            activities[0].showInMainWindow()
+
     def showActivity(self, activity):
         """ """
-        self.__activityheader.setText('<b>' + activity.objectName() + '</b>')
+###        self.__activityheader.setText('<b>' + activity.objectName() + '</b>')
         self.__activitystack.setCurrentWidget(activity)
     
     def __createCentralWidget(self):
@@ -205,19 +215,15 @@ class MainWindow(QtGui.QMainWindow):
         stacked layout, QStackedLayout, where the pages are selected from
         the activities group box. 
         """
-        self.__activityheader = QtGui.QLabel("<b>Activity not selected...</b>", self)
-        self.__activityheader.setAlignment(QtCore.Qt.AlignHCenter)
+###        self.__activityheader = QtGui.QLabel("<b>Activity not selected...</b>", self)
+###        self.__activityheader.setAlignment(QtCore.Qt.AlignHCenter)
         self.__activitystack = QtGui.QStackedLayout()        
-#        self.__activitystack.setMargin(0)
-#        self.__activitystack.setSpacing(0)
         # Layout widgets.
         widget = QtGui.QWidget(self) 
         layout = QtGui.QVBoxLayout()
         widget.setLayout(layout)
-#        layout.setMargin(0)
-#        layout.setSpacing(0)
         self.setCentralWidget(widget)
-        layout.addWidget(self.__activityheader)
+###        layout.addWidget(self.__activityheader)
         layout.addLayout(self.__activitystack)
         # Dummy stack content.
         dummy = QtGui.QWidget(self)

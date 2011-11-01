@@ -56,6 +56,10 @@ class LatLongTool(tool_base.ToolBase):
         # Initialize parent. Should be called after other 
         # initialization since the base class calls _createContent().
         super(LatLongTool, self).__init__(name, parentWidget)
+        #
+        # Where is the tool allowed to dock in the main window.
+        self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea)
+        self.setBaseSize(600,600)
  
     def _createContent(self):
         """ """

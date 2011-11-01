@@ -28,7 +28,7 @@
 """
 
 import PyQt4.QtGui as QtGui
-#import PyQt4.QtCore as QtCore
+import PyQt4.QtCore as QtCore
 import plankton_toolbox.activities.activity_base as activity_base
 
 class CreateDatasetActivity(activity_base.ActivityBase):
@@ -45,7 +45,11 @@ class CreateDatasetActivity(activity_base.ActivityBase):
         content = self._createScrollableContent()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
-        # Tab widget. 
+        # Add activity name at top.
+        self.__activityheader = QtGui.QLabel('<b>Activity: ' + self.objectName() + '</b>', self)
+        self.__activityheader.setAlignment(QtCore.Qt.AlignHCenter)
+        contentLayout.addWidget(self.__activityheader)
+        # Add content to the activity.
         tabWidget = QtGui.QTabWidget()
         contentLayout.addWidget(tabWidget)
         tabWidget.addTab(self.__contentPW(), "(PW)")

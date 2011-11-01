@@ -49,6 +49,11 @@ class TemplateActivity(activity_base.ActivityBase):
         content = self._createScrollableContent()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
+        # Add activity name at top.
+        self.__activityheader = QtGui.QLabel('<b>Activity: ' + self.objectName() + '</b>', self)
+        self.__activityheader.setAlignment(QtCore.Qt.AlignHCenter)
+        contentLayout.addWidget(self.__activityheader)
+        # Add content to the activity.
         contentLayout.addLayout(self.__contentPersonInfo())
         contentLayout.addLayout(self.__contentButtons())
         contentLayout.addStretch(5)

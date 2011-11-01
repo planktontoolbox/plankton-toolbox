@@ -28,6 +28,8 @@
 This module contains utilities for the Plankton Toolbox project.
 """
 
+import PyQt4.QtGui as QtGui
+import PyQt4.QtCore as QtCore
 import time
 
 def singleton(cls):
@@ -153,3 +155,25 @@ class Logger(object):
         """ Log all the content in the accumulated error list. """
         for message in self.__erroracc:
             self.log('- ' + message + ' (' + unicode(self.__erroracc[message]) + ' times)')
+
+
+  
+class ClickableQLabel(QtGui.QLabel):  
+    """ Customized QLabel. Emits signal when clicked, and change color when hovering."""
+    def __init(self, parent):  
+        QtGui.QLabel.__init__(self, parent)  
+  
+    def mouseReleaseEvent(self, ev):  
+        self.emit(QtCore.SIGNAL('clicked()'))  
+  
+    def enterEvent(self, ev):        
+#        self.setBackgroundRole(QtGui.QPalette.Light)
+#        self.setBackgroundRole(QtGui.QPalette.Midlight)   
+        self.setBackgroundRole(QtGui.QPalette.Dark)     
+#        self.setBackgroundRole(QtGui.QPalette.Mid)     
+#        self.setBackgroundRole(QtGui.QPalette.Shadow)     
+  
+    def leaveEvent(self, ev):  
+        self.setBackgroundRole(QtGui.QPalette.Light)
+
+
