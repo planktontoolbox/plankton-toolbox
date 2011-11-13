@@ -31,6 +31,7 @@ This activity is "a welcome page" with some possibilities to set up the environm
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils as utils
+import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.activities.activity_base as activity_base
 
 class StartActivity(activity_base.ActivityBase):
@@ -49,8 +50,12 @@ class StartActivity(activity_base.ActivityBase):
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
         # Add activity name at top.
-        self.__activityheader = QtGui.QLabel('<b>Activity: ' + self.objectName() + '</b>', self)
+        self.__activityheader = QtGui.QLabel('<h2>' + self.objectName() + '</h2>', self)
+        self.__activityheader.setTextFormat(QtCore.Qt.RichText)
         self.__activityheader.setAlignment(QtCore.Qt.AlignHCenter)
+        self.__activityheader.setStyleSheet(""" 
+            * { color: #00677f; background-color: #eaa97e; }
+            """)
         contentLayout.addWidget(self.__activityheader)
         # Add content to the activity.
         contentLayout.addLayout(self.__contentWelcome())
@@ -98,10 +103,10 @@ class StartActivity(activity_base.ActivityBase):
         Currently there are no species data or images loaded.</a> 
         """)
         
-        clearspeciesbutton = utils.ClickableQLabel("- Clear loaded species data.")
-        loadspeciesbutton = utils.ClickableQLabel("- Load species from Nordic Microalgae.")
-        clearimagesbutton = utils.ClickableQLabel("- Clear loaded image data.")
-        loadimagesbutton = utils.ClickableQLabel("- Load species images from Nordic Microalgae.")
+        clearspeciesbutton = utils_qt.ClickableQLabel("- Clear loaded species data.")
+        loadspeciesbutton = utils_qt.ClickableQLabel("- Load species from Nordic Microalgae.")
+        clearimagesbutton = utils_qt.ClickableQLabel("- Clear loaded image data.")
+        loadimagesbutton = utils_qt.ClickableQLabel("- Load species images from Nordic Microalgae.")
         
         # Layout.
         layout = QtGui.QGridLayout()
@@ -134,11 +139,11 @@ class StartActivity(activity_base.ActivityBase):
          
         """)
         
-        createdatasetbutton = utils.ClickableQLabel("- Create dataset.")
-        getdatabutton = utils.ClickableQLabel("- Get data.")
-        analysedatabutton = utils.ClickableQLabel("- Analyse data.")
-        createreportsloadimagesbutton = utils.ClickableQLabel("- Create reports.")
-        prepareresourcesbutton = utils.ClickableQLabel("- Prepare resources.")
+        createdatasetbutton = utils_qt.ClickableQLabel("- Create dataset.")
+        getdatabutton = utils_qt.ClickableQLabel("- Get data.")
+        analysedatabutton = utils_qt.ClickableQLabel("- Analyse data.")
+        createreportsloadimagesbutton = utils_qt.ClickableQLabel("- Create reports.")
+        prepareresourcesbutton = utils_qt.ClickableQLabel("- Prepare resources.")
 
         # Layout.
         layout = QtGui.QGridLayout()

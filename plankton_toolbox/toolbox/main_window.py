@@ -37,6 +37,7 @@ import codecs
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils as utils
+import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.activities.activity_manager as activity_manager
 import plankton_toolbox.tools.log_tool as log_tool
@@ -149,7 +150,7 @@ class MainWindow(QtGui.QMainWindow):
                             QtGui.QMainWindow.AllowTabbedDocks | 
                             QtGui.QMainWindow.VerticalTabs)
         # Create left dock widget and dock to main window.
-        dock = QtGui.QDockWidget(self.tr("Activities and tools"), self)
+        dock = QtGui.QDockWidget(self.tr("Main menu "), self)
         dock.setObjectName("Activities and tools selector")
         dock.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea)
         dock.setFeatures(QtGui.QDockWidget.NoDockWidgetFeatures)
@@ -172,12 +173,12 @@ class MainWindow(QtGui.QMainWindow):
         widget.setLayout(mainlayout)
         grid1 = QtGui.QVBoxLayout()
         content.setLayout(grid1)        
-        # For activites.        
-        activitiesgroup = QtGui.QGroupBox("Activities")
+        # Frame for activites.        
+        activitiesgroup = QtGui.QFrame()
         grid1.addWidget(activitiesgroup)
         activitiesvbox = QtGui.QVBoxLayout()
         activitiesgroup.setLayout(activitiesvbox)
-        # For tools.
+        # Groupbox for tools.
         toolsgroup = QtGui.QGroupBox("Tools")
         grid1.addWidget(toolsgroup)        
         toolsvbox = QtGui.QVBoxLayout()
@@ -185,16 +186,18 @@ class MainWindow(QtGui.QMainWindow):
         grid1.addStretch(5)
         # Add one button for each activity. Create stacked widgets.
         for activity in self.__activitymanager.getActivityList():
-            button = utils.ClickableQLabel(activity.objectName())
+            button = utils_qt.ActivityMenuQLabel(activity.objectName())
+            activity.setMainMenuButton(button)
             activitiesvbox.addWidget(button) # Adds to stack.                  
             # The activity is called to select stack item by object, not index.
+            self.connect(button, QtCore.SIGNAL("clicked()"), button.markAsSelected)
             self.connect(button, QtCore.SIGNAL("clicked()"), activity.showInMainWindow)
             # Create one layer in the stacked activity widget.
             self.__activitystack.addWidget(activity)
         activitiesvbox.addStretch(5)
         # Add one button for each tool.
         for tool in self.__toolmanager.getToolList():
-            button = utils.ClickableQLabel(tool.objectName())
+            button = utils_qt.ClickableQLabel(tool.objectName())
             toolsvbox.addWidget(button)
             self.connect(button, QtCore.SIGNAL("clicked()"), tool.show) # Show if hidden.
             self.connect(button, QtCore.SIGNAL("clicked()"), tool.raise_) # Bring to front.
@@ -208,6 +211,10 @@ class MainWindow(QtGui.QMainWindow):
         """ """
 ###        self.__activityheader.setText('<b>' + activity.objectName() + '</b>')
         self.__activitystack.setCurrentWidget(activity)
+        # Mark left menu item as  active. 
+        if activity.getMainMenuButton():
+            activity.getMainMenuButton().markAsSelected()
+
     
     def __createCentralWidget(self):
         """ 

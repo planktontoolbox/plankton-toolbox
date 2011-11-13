@@ -52,8 +52,12 @@ class GetDataActivity(activity_base.ActivityBase):
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
         # Add activity name at top.
-        self.__activityheader = QtGui.QLabel('<b>Activity: ' + self.objectName() + '</b>', self)
+        self.__activityheader = QtGui.QLabel('<h2>' + self.objectName() + '</h2>', self)
+        self.__activityheader.setTextFormat(QtCore.Qt.RichText)
         self.__activityheader.setAlignment(QtCore.Qt.AlignHCenter)
+        self.__activityheader.setStyleSheet(""" 
+            * { color: #00677f; background-color: #eaa97e; }
+            """)
         contentLayout.addWidget(self.__activityheader)
         # Add content to the activity.
         contentLayout.addWidget(self.__contentSelectData())
