@@ -41,6 +41,7 @@ class ActivityBase(QtGui.QWidget):
         # Initialize parent.
         super(ActivityBase, self).__init__(parentwidget)
         self._parent = parentwidget
+        self._mainmenubutton = None
         #
         self._writeToStatusBar("Loading " + name + "...")
         #
@@ -50,6 +51,14 @@ class ActivityBase(QtGui.QWidget):
         #
         self._writeToStatusBar("")
 
+    def setMainMenuButton(self, button):
+        """ """
+        self._mainmenubutton = button
+    
+    def getMainMenuButton(self):
+        """ """
+        return self._mainmenubutton
+    
     def showInMainWindow(self):
         """ """
         self._parent.showActivity(self)
