@@ -59,8 +59,8 @@ class StartActivity(activity_base.ActivityBase):
         contentLayout.addWidget(self.__activityheader)
         # Add content to the activity.
         contentLayout.addLayout(self.__contentWelcome())
-        contentLayout.addLayout(self.__contentGetDataFromNordicMicroalgae())
         contentLayout.addLayout(self.__contentActivities())
+        contentLayout.addLayout(self.__contentGetDataFromNordicMicroalgae())
         contentLayout.addStretch(5)
 
     def __contentWelcome(self):
@@ -72,17 +72,78 @@ class StartActivity(activity_base.ActivityBase):
         <br/>
         <h3>Welcome to the Plankton Toolbox.</h3>
         Plankton Toolbox contains a set of tool to be used when working with aquatic micro-organism.
+        <br/>
+        The Plankton Toolbox is still under development.
         """)
 
         # Layout.
         layout = QtGui.QGridLayout()
         gridrow = 0
-        layout.addWidget(label, gridrow, 0, 1, 1)
+        layout.addWidget( QtGui.QLabel(''), gridrow, 0, 1, 1) # Add space to the left.
+        layout.addWidget(label, gridrow, 1, 1, 20)
         gridrow += 1
 
         #
         return layout
 
+    def __contentActivities(self):
+        """ """
+        # Active widgets and connections.
+        label1 = QtGui.QLabel()
+        label1.setTextFormat(QtCore.Qt.RichText)
+        label1.setText("""
+        <br/>
+        <h4>Activities</h4>
+        Activities are... 
+         
+        """)
+        
+        createdatasetbutton = utils_qt.ClickableQLabel("- Create dataset.")
+        loaddatasetsbutton = utils_qt.ClickableQLabel("- Load datasets.")
+        analysedatasetsbutton = utils_qt.ClickableQLabel("- Analyse datasets.")
+        createreportsbutton = utils_qt.ClickableQLabel("- Create reports.")
+        managespecieslistsbutton = utils_qt.ClickableQLabel("- Prepare resources.")
+            
+        self.connect(createdatasetbutton, QtCore.SIGNAL("clicked()"), self.__gotoCreateDataset)
+        self.connect(loaddatasetsbutton, QtCore.SIGNAL("clicked()"), self.__gotoLoadDatasets)
+        self.connect(analysedatasetsbutton, QtCore.SIGNAL("clicked()"), self.__gotoAnalyseDatasets)
+        self.connect(createreportsbutton, QtCore.SIGNAL("clicked()"), self.__gotoCreateReports)
+        self.connect(managespecieslistsbutton, QtCore.SIGNAL("clicked()"), self.__gotoManageSpeciesLists)
+
+        # Layout.
+        layout = QtGui.QGridLayout()
+        gridrow = 0
+        layout.addWidget( QtGui.QLabel(''), gridrow, 0, 1, 1) # Add space to the left.
+        layout.addWidget(label1, gridrow, 1, 1, 20)
+        gridrow += 1
+        layout.addWidget(createdatasetbutton, gridrow, 1, 1, 20)
+        gridrow += 1
+        layout.addWidget(loaddatasetsbutton, gridrow, 1, 1, 20)
+        gridrow += 1
+        layout.addWidget(analysedatasetsbutton, gridrow, 1, 1, 20)
+        gridrow += 1
+        layout.addWidget(createreportsbutton, gridrow, 1, 1, 20)
+        gridrow += 1
+        layout.addWidget(managespecieslistsbutton, gridrow, 1, 1, 20)
+        gridrow += 1
+        #
+        return layout
+
+    def __gotoCreateDataset(self):
+        self._parent.showActivityByName('(Create dataset)')
+    
+    def __gotoLoadDatasets(self):
+        self._parent.showActivityByName('Load datasets')
+    
+    def __gotoAnalyseDatasets(self):
+        self._parent.showActivityByName('(Analyse datasets)')
+    
+    def __gotoCreateReports(self):
+        self._parent.showActivityByName('Create reports')
+    
+    def __gotoManageSpeciesLists(self):
+        self._parent.showActivityByName('Manage species lists')
+    
     def __contentGetDataFromNordicMicroalgae(self):
         """ """
         # Active widgets and connections.
@@ -111,87 +172,22 @@ class StartActivity(activity_base.ActivityBase):
         # Layout.
         layout = QtGui.QGridLayout()
         gridrow = 0
-        layout.addWidget(label1, gridrow, 0, 1, 1)
+        layout.addWidget( QtGui.QLabel(''), gridrow, 0, 1, 1) # Add space to the left.
+        layout.addWidget(label1, gridrow, 1, 1, 20)
         gridrow += 1
-        layout.addWidget(label2, gridrow, 0, 1, 1)
+        layout.addWidget(label2, gridrow, 1, 1, 20)
         gridrow += 1
-        layout.addWidget(clearspeciesbutton, gridrow, 0, 1, 1)
+        layout.addWidget(clearspeciesbutton, gridrow, 1, 1, 20)
         gridrow += 1
-        layout.addWidget(loadspeciesbutton, gridrow, 0, 1, 1)
+        layout.addWidget(loadspeciesbutton, gridrow, 1, 1, 20)
         gridrow += 1
-        layout.addWidget(clearimagesbutton, gridrow, 0, 1, 1)
+        layout.addWidget(clearimagesbutton, gridrow, 1, 1, 20)
         gridrow += 1
-        layout.addWidget(loadimagesbutton, gridrow, 0, 1, 1)
+        layout.addWidget(loadimagesbutton, gridrow, 1, 1, 20)
         gridrow += 1
 
         #
         return layout
-
-    def __contentActivities(self):
-        """ """
-        # Active widgets and connections.
-        label1 = QtGui.QLabel()
-        label1.setTextFormat(QtCore.Qt.RichText)
-        label1.setText("""
-        <br/>
-        <h4>Activities</h4>
-        Activities are... 
-         
-        """)
-        
-        createdatasetbutton = utils_qt.ClickableQLabel("- Create dataset.")
-        getdatabutton = utils_qt.ClickableQLabel("- Get data.")
-        analysedatabutton = utils_qt.ClickableQLabel("- Analyse data.")
-        createreportsloadimagesbutton = utils_qt.ClickableQLabel("- Create reports.")
-        prepareresourcesbutton = utils_qt.ClickableQLabel("- Prepare resources.")
-
-        # Layout.
-        layout = QtGui.QGridLayout()
-        gridrow = 0
-        layout.addWidget(label1, gridrow, 0, 1, 1)
-        gridrow += 1
-        layout.addWidget(createdatasetbutton, gridrow, 0, 1, 0)
-        gridrow += 1
-        layout.addWidget(getdatabutton, gridrow, 0, 1, 1)
-        gridrow += 1
-        layout.addWidget(analysedatabutton, gridrow, 0, 1, 1)
-        gridrow += 1
-        layout.addWidget(createreportsloadimagesbutton, gridrow, 0, 1, 1)
-        gridrow += 1
-        layout.addWidget(prepareresourcesbutton, gridrow, 0, 1, 1)
-        gridrow += 1
-        #
-        return layout
-
-#    def __contentPersonInfo(self):
-#        """ """
-#        # Active widgets and connections.
-#        self.__nameedit = QtGui.QLineEdit("<Name>")
-#        self.__emailedit = QtGui.QLineEdit("<Email>")
-#        self.__customerlist = QtGui.QListWidget()
-#        # Layout.
-#        layout = QtGui.QFormLayout()
-#        layout.addRow("&Name:", self.__nameedit)
-#        layout.addRow("&Email:", self.__emailedit)
-#        layout.addRow("&Projects:", self.__customerlist)
-#        # Test data.
-#        self.__customerlist.addItems(QtCore.QStringList()
-#            << "<First project.>"
-#            << "<Second project.>")
-#        #
-#        return layout
-
-#    def __contentButtons(self):
-#        """ """
-#        # Active widgets and connections.
-#        self.__testbutton = QtGui.QPushButton("Write name to log")
-#        self.connect(self.__testbutton, QtCore.SIGNAL("clicked()"), self.__test)                
-#        # Layout.
-#        layout = QtGui.QHBoxLayout()
-#        layout.addStretch(5)
-#        layout.addWidget(self.__testbutton)
-#        #
-#        return layout
 
     def __test(self):
         """ """

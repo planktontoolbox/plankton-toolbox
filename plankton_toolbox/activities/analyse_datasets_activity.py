@@ -31,14 +31,14 @@ import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.activities.activity_base as activity_base
 
-class AnalyseDataActivity(activity_base.ActivityBase):
+class AnalyseDatasetsActivity(activity_base.ActivityBase):
     """
     """
     
     def __init__(self, name, parentwidget):
         """ """
         # Initialize parent.
-        super(AnalyseDataActivity, self).__init__(name, parentwidget)
+        super(AnalyseDatasetsActivity, self).__init__(name, parentwidget)
 
     def _createContent(self):
         """ """

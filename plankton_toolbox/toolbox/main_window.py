@@ -215,6 +215,12 @@ class MainWindow(QtGui.QMainWindow):
         if activity.getMainMenuButton():
             activity.getMainMenuButton().markAsSelected()
 
+    def showActivityByName(self, activity_name):
+        """ """
+        for activity in self.__activitymanager.getActivityList():
+            if activity.objectName() == activity_name:
+                self.showActivity(activity)
+                return
     
     def __createCentralWidget(self):
         """ 
