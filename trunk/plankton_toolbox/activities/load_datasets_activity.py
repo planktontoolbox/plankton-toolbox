@@ -37,14 +37,14 @@ import PyQt4.QtCore as QtCore
 import plankton_toolbox.activities.activity_base as activity_base
 import plankton_toolbox.core.monitoring.monitoring_files as monitoring_files
 
-class GetDataActivity(activity_base.ActivityBase):
+class LoadDatasetsActivity(activity_base.ActivityBase):
     """ """
     def __init__(self, name, parentwidget):
         """ """
         self.__dataset = monitoring_files.MonitoringFiles() # Empty dataset.
         self._pwsamplefiles = {}
         # Initialize parent.
-        super(GetDataActivity, self).__init__(name, parentwidget)
+        super(LoadDatasetsActivity, self).__init__(name, parentwidget)
 
     def _createContent(self):
         """ """

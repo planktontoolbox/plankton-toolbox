@@ -30,10 +30,10 @@ Activity manager.
 
 import plankton_toolbox.activities.start_activity as start_activity
 import plankton_toolbox.activities.create_dataset_activity as create_dataset_activity
-import plankton_toolbox.activities.get_data_activity as get_data_activity
-import plankton_toolbox.activities.analyse_data_activity as analyse_data_activity
+import plankton_toolbox.activities.load_datasets_activity as load_datasets_activity
+import plankton_toolbox.activities.analyse_datasets_activity as analyse_datasets_activity
 import plankton_toolbox.activities.create_reports_activity as create_reports_activity
-import plankton_toolbox.activities.prepare_resources_activity as prepare_resources_activity
+import plankton_toolbox.activities.manage_species_lists_activity as manage_species_lists_activity
 #import plankton_toolbox.activities.template_activity as template_activity
 
 class ActivityManager(object):
@@ -50,10 +50,10 @@ class ActivityManager(object):
         """ Activity activator. """
         self.__activitylist.append(start_activity.StartActivity("Start", self._parent))
         self.__activitylist.append(create_dataset_activity.CreateDatasetActivity("(Create dataset)", self._parent))
-        self.__activitylist.append(get_data_activity.GetDataActivity("Get data", self._parent))
-        self.__activitylist.append(analyse_data_activity.AnalyseDataActivity("(Analyse data)", self._parent))
+        self.__activitylist.append(load_datasets_activity.LoadDatasetsActivity("Load datasets", self._parent))
+        self.__activitylist.append(analyse_datasets_activity.AnalyseDatasetsActivity("(Analyse datasets)", self._parent))
         self.__activitylist.append(create_reports_activity.CreateReportsActivity("Create reports", self._parent))
-        self.__activitylist.append(prepare_resources_activity.PrepareResourcesActivity("Prepare resources", self._parent))
+        self.__activitylist.append(manage_species_lists_activity.ManageSpeciesListsActivity("Manage species lists", self._parent))
 #        self.__activitylist.append(template_activity.TemplateActivity("(Activity template)", self._parent))
         
     def getActivityList(self):

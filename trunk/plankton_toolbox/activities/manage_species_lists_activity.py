@@ -37,14 +37,14 @@ import plankton_toolbox.core.biology.taxa_sources as taxa_sources
 import plankton_toolbox.core.biology.taxa_prepare as taxa_prepare
 import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
 
-class PrepareResourcesActivity(activity_base.ActivityBase):
+class ManageSpeciesListsActivity(activity_base.ActivityBase):
     """
     """
     
     def __init__(self, name, parentwidget):
         """ """
         # Initialize parent.
-        super(PrepareResourcesActivity, self).__init__(name, parentwidget)
+        super(ManageSpeciesListsActivity, self).__init__(name, parentwidget)
 
     def _createContent(self):
         """ """
