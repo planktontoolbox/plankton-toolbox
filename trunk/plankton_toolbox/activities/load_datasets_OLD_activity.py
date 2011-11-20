@@ -36,12 +36,13 @@ import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.activities.activity_base as activity_base
 import plankton_toolbox.core.monitoring.monitoring_files as monitoring_files
-import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 
 class LoadDatasetsActivity(activity_base.ActivityBase):
     """ """
     def __init__(self, name, parentwidget):
         """ """
+        self.__dataset = monitoring_files.MonitoringFiles() # Empty dataset.
+        self._pwsamplefiles = {}
         # Initialize parent.
         super(LoadDatasetsActivity, self).__init__(name, parentwidget)
 
@@ -60,6 +61,8 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         contentLayout.addWidget(self.__activityheader)
         # Add content to the activity.
         contentLayout.addWidget(self.__contentSelectData())
+        contentLayout.addWidget(self.__contentResultTable())
+        contentLayout.addWidget(self.__contentSaveResult())
         
     def __contentSelectData(self):
         """ """
@@ -296,6 +299,74 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         #
         return widget
         
+    def __contentResultTable(self):
+        """ """
+        resultbox = QtGui.QGroupBox("Result table", self)
+        # Active widgets and connections.
+        self.__tableView = QtGui.QTableView()
+        self.__tableView.setAlternatingRowColors(True)
+        self.__tableView.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
+        #self.__tableView.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        self.__tableView.setSelectionMode(QtGui.QAbstractItemView.ContiguousSelection)
+        self.__tableView.verticalHeader().setDefaultSectionSize(18)
+        # Model, data and selection        
+        self.__model = ResultTableModel(self.__dataset)
+        self.__tableView.setModel(self.__model)        
+        selectionModel = QtGui.QItemSelectionModel(self.__model)
+        self.__tableView.setSelectionModel(selectionModel)
+        self.__tableView.resizeColumnsToContents()
+        #
+        self.connect(selectionModel, QtCore.SIGNAL("currentChanged(QModelIndex, QModelIndex)"), self.__test)
+        self.connect(selectionModel, QtCore.SIGNAL("selectionChanged(QModelIndex, QModelIndex)"), self.__test2)
+        # Layout widgets.
+        layout = QtGui.QVBoxLayout()
+        layout.addWidget(self.__tableView)
+        resultbox.setLayout(layout)        
+        #
+        return resultbox
+        
+    def __contentSaveResult(self):
+        """ """
+        saveresultbox = QtGui.QGroupBox("Save data", self)
+        # Active widgets and connections.
+        self.__saveformat_list = QtGui.QComboBox()
+        self.__saveformat_list.addItems(["Tab delimited text file (.txt)",
+                                         "Excel file (.xlsx)"])
+        self.__savetodirectory_edit = QtGui.QLineEdit("") # TODO: Use toolbox settings.
+        self.__savetodirectory_button = QtGui.QPushButton("Browse...")
+        self.__savetofile_edit = QtGui.QLineEdit("data.txt")
+        self.__savedata_button = QtGui.QPushButton("Save")
+####        self.connect(self.__saveformat_list, QtCore.SIGNAL("????()"), self.__????) # TODO: Switch between data.txt & data.xlsx.                
+        self.connect(self.__savetodirectory_button, QtCore.SIGNAL("clicked()"), self.__saveToDirectoryBrowse)                
+        self.connect(self.__savedata_button, QtCore.SIGNAL("clicked()"), self.__saveData)                
+        # Layout widgets.
+        form1 = QtGui.QGridLayout()
+        gridrow = 0
+        label1 = QtGui.QLabel("Format:")
+        form1.addWidget(label1, gridrow, 0, 1, 1)
+        form1.addWidget(self.__saveformat_list, gridrow, 1, 1, 1)
+        gridrow += 1
+        label1 = QtGui.QLabel("To directory:")
+        form1.addWidget(label1, gridrow, 0, 1, 1)
+        form1.addWidget(self.__savetodirectory_edit, gridrow, 1, 1, 9)
+        form1.addWidget(self.__savetodirectory_button, gridrow, 10, 1, 1)
+        gridrow += 1
+        label2 = QtGui.QLabel("To file:")
+        form1.addWidget(label2, gridrow, 0, 1, 1)
+        form1.addWidget(self.__savetofile_edit, gridrow, 1, 1, 9)
+        form1.addWidget(self.__savedata_button, gridrow, 10, 1, 1)
+        #
+#        hbox1 = QtGui.QHBoxLayout()
+#        hbox1.addStretch(5)
+#        hbox1.addWidget(self.__savedata_button)
+        #
+        reportlayout = QtGui.QVBoxLayout()
+        reportlayout.addLayout(form1)
+#        reportlayout.addLayout(hbox1)
+        saveresultbox.setLayout(reportlayout)
+        #
+        return saveresultbox
+        
     def __textFileBrowse(self):
         """ """
         dirdialog = QtGui.QFileDialog(self)
@@ -383,7 +454,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         # Check if user pressed ok or cancel.
         if dirpath:
             self.__pwfromdirectory_edit.setText(dirpath)
-            toolbox_datasets.ToolboxDatasets.clear()
+            self._pwsamplefiles.clear()
             # Add files in selected directory to QTableWidget.
             for row, filename in enumerate(sorted(os.listdir(unicode(self.__pwfromdirectory_edit.text())))):
                 if os.path.splitext(unicode(filename))[1] in ['.csv', '.CSV']:
@@ -411,4 +482,94 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                 self.__dataset.readFile(self.__pwfromdirectory_edit.text() + '/' + filename)
         #        
         self.__refreshResultTable()
+
+    def __saveToDirectoryBrowse(self):
+        """ """
+        # Show directory dialog box.
+        dirdialog = QtGui.QFileDialog(self)
+        dirdialog.setFileMode(QtGui.QFileDialog.Directory)
+        dirdialog.setOptions(QtGui.QFileDialog.ShowDirsOnly)
+        dirdialog.setDirectory(unicode(self.__savetodirectory_edit.text()))
+        dirpath = dirdialog.getExistingDirectory()
+        # Check if user pressed ok or cancel.
+        if dirpath:
+            self.__savetodirectory_edit.setText(dirpath)
+        
+    def __saveData(self):
+        """ """
+
+
+
+
+
+
+#            # Filepath.            
+#            reportfilepath = ''
+#            if len(unicode(self.__todirectory_edit.text())) > 0:
+#                reportfilepath = unicode(self.__todirectory_edit.text()) + '/'
+#            reportfilepath += unicode(self.__tofile_edit.text())
+        
+        
+        
+        
+        
+        
+        
+        
+        filename = self.__savetodirectory_edit.text()  + '/' + \
+                   self.__savetofile_edit.text()
+        if self.__saveformat_list.currentIndex() == 0: # Text file.
+            self.__dataset.SaveAsTextFile(unicode(filename))
+        elif self.__saveformat_list.currentIndex() == 1: # Xlsx file.
+            self.__dataset.SaveExcelXlsxFile(unicode(filename))
+        
+    def __refreshResultTable(self):
+        """ """
+        self.__model.reset() # Model data has changed.
+        self.__tableView.resizeColumnsToContents()
+
+    def __test(self, index):
+        """ """
+        print("TEST..." + "%f" % index.row())
+
+    def __test2(self, index, index2):
+        """ """
+        print("TEST2..." + "%f" % index.row() + " %f" % index.column())
+
+
+class ResultTableModel(QtCore.QAbstractTableModel):
+    """
+    """
+    def __init__(self, dataset):
+        """ """
+        self.__dataset = dataset
+        # Initialize parent.
+        super(ResultTableModel, self).__init__()
+        
+    def setDataset(self, dataset):
+        """ """
+        self.__dataset = dataset
+
+    def rowCount(self, parent=QtCore.QModelIndex()):
+        """ """
+        return self.__dataset.getRowCount()
+
+    def columnCount(self, parent=QtCore.QModelIndex()):
+        """ """
+        return self.__dataset.getColumnCount()
+
+    def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
+        """ """
+        if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
+            return QtCore.QVariant(self.__dataset.getHeaderItem(section))
+        if orientation == QtCore.Qt.Vertical and role == QtCore.Qt.DisplayRole:
+            return QtCore.QVariant(section + 1)
+        return QtCore.QVariant()
+
+    def data(self, index=QtCore.QModelIndex(), role=QtCore.Qt.DisplayRole):
+        """ """
+        if role == QtCore.Qt.DisplayRole:
+            if index.isValid():
+                return QtCore.QVariant(self.__dataset.getDataItem(index.row(), index.column()))
+        return QtCore.QVariant()
 
