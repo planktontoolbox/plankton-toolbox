@@ -34,6 +34,9 @@ import plankton_toolbox.activities.load_datasets_activity as load_datasets_activ
 import plankton_toolbox.activities.analyse_datasets_activity as analyse_datasets_activity
 import plankton_toolbox.activities.create_reports_activity as create_reports_activity
 import plankton_toolbox.activities.manage_species_lists_activity as manage_species_lists_activity
+
+import plankton_toolbox.activities.load_datasets_OLD_activity as load_datasets_OLD_activity
+import plankton_toolbox.activities.create_reports_OLD_activity as create_reports_OLD_activity
 #import plankton_toolbox.activities.template_activity as template_activity
 
 class ActivityManager(object):
@@ -54,6 +57,9 @@ class ActivityManager(object):
         self.__activitylist.append(analyse_datasets_activity.AnalyseDatasetsActivity("(Analyse datasets)", self._parent))
         self.__activitylist.append(create_reports_activity.CreateReportsActivity("Create reports", self._parent))
         self.__activitylist.append(manage_species_lists_activity.ManageSpeciesListsActivity("Manage species lists", self._parent))
+
+        self.__activitylist.append(load_datasets_OLD_activity.LoadDatasetsActivity("Load datasets (OLD)", self._parent))
+        self.__activitylist.append(create_reports_OLD_activity.CreateReportsActivity("Create reports (OLD)", self._parent))
 #        self.__activitylist.append(template_activity.TemplateActivity("(Activity template)", self._parent))
         
     def getActivityList(self):

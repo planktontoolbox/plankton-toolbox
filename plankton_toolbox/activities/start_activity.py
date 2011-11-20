@@ -60,6 +60,7 @@ class StartActivity(activity_base.ActivityBase):
         # Add content to the activity.
         contentLayout.addLayout(self.__contentWelcome())
         contentLayout.addLayout(self.__contentActivities())
+        contentLayout.addLayout(self.__contentTools())
         contentLayout.addLayout(self.__contentGetDataFromNordicMicroalgae())
         contentLayout.addStretch(5)
 
@@ -68,13 +69,29 @@ class StartActivity(activity_base.ActivityBase):
         # Active widgets and connections.
         label = QtGui.QLabel()
         label.setTextFormat(QtCore.Qt.RichText)
+        label.setWordWrap(True)
         label.setText("""
         <br/>
         <h3>Welcome to the Plankton Toolbox.</h3>
-        Plankton Toolbox contains a set of tool to be used when working with aquatic micro-organism.
-        <br/>
-        The Plankton Toolbox is still under development.
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
+        tempor incididunt ut labore et dolore magna aliqua. 
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut 
+        aliquip ex ea commodo consequat. 
+        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia 
+        deserunt mollit anim id est laborum.
+        <br/> 
         """)
+#        label.setText("""
+#        <br/>
+#        <h3>Welcome to the Plankton Toolbox.</h3>
+#        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod <br/>
+#        tempor incididunt ut labore et dolore magna aliqua. <br/>
+#        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut <br/>
+#        aliquip ex ea commodo consequat. <br/>
+#        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia  <br/>
+#        deserunt mollit anim id est laborum.
+#        <br/> 
+#        """)
 
         # Layout.
         layout = QtGui.QGridLayout()
@@ -91,11 +108,10 @@ class StartActivity(activity_base.ActivityBase):
         # Active widgets and connections.
         label1 = QtGui.QLabel()
         label1.setTextFormat(QtCore.Qt.RichText)
+        label1.setWordWrap(True)
         label1.setText("""
-        <br/>
         <h4>Activities</h4>
         Activities are... 
-         
         """)
         
         createdatasetbutton = utils_qt.ClickableQLabel("- Create dataset.")
@@ -113,7 +129,7 @@ class StartActivity(activity_base.ActivityBase):
         # Layout.
         layout = QtGui.QGridLayout()
         gridrow = 0
-        layout.addWidget( QtGui.QLabel(''), gridrow, 0, 1, 1) # Add space to the left.
+        layout.addWidget(QtGui.QLabel(''), gridrow, 0, 1, 1) # Add space to the left.
         layout.addWidget(label1, gridrow, 1, 1, 20)
         gridrow += 1
         layout.addWidget(createdatasetbutton, gridrow, 1, 1, 20)
@@ -125,6 +141,8 @@ class StartActivity(activity_base.ActivityBase):
         layout.addWidget(createreportsbutton, gridrow, 1, 1, 20)
         gridrow += 1
         layout.addWidget(managespecieslistsbutton, gridrow, 1, 1, 20)
+        gridrow += 1
+        layout.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 20)
         gridrow += 1
         #
         return layout
@@ -144,29 +162,41 @@ class StartActivity(activity_base.ActivityBase):
     def __gotoManageSpeciesLists(self):
         self._parent.showActivityByName('Manage species lists')
     
+    def __contentTools(self):
+        """ """
+        # Active widgets and connections.
+        label1 = QtGui.QLabel()
+        label1.setTextFormat(QtCore.Qt.RichText)
+        label1.setText("""
+        <h4>Tools</h4>
+        Tools are... 
+        <br/> 
+        """)        
+        # Layout.
+        layout = QtGui.QGridLayout()
+        gridrow = 0
+        layout.addWidget( QtGui.QLabel(''), gridrow, 0, 1, 1) # Add space to the left.
+        layout.addWidget(label1, gridrow, 1, 1, 20)
+        #
+        return layout
+
     def __contentGetDataFromNordicMicroalgae(self):
         """ """
         # Active widgets and connections.
         label1 = QtGui.QLabel()
         label1.setTextFormat(QtCore.Qt.RichText)
         label1.setOpenExternalLinks(True) 
+        label1.setWordWrap(True)
         label1.setText("""
-        <br/>
-        <h4>Nordic Microalgae.</h4>
-        Species lists and other data can automatically be imported from the web application <br/>
-        Nordic Microalgae, 
+        <h4>Nordic Microalgae</h4>
+        Species lists and images can automatically be loaded from the 
+        web application Nordic Microalgae, 
         <a href="http://nordicmicroalgae.org">http://nordicmicroalgae.org</a> 
         """)
-        label2 = QtGui.QLabel()
-        label2.setTextFormat(QtCore.Qt.RichText)
-        label2.setOpenExternalLinks(True) 
-        label2.setText("""
-        Currently there are no species data or images loaded.</a> 
-        """)
         
-        clearspeciesbutton = utils_qt.ClickableQLabel("- Clear loaded species data.")
-        loadspeciesbutton = utils_qt.ClickableQLabel("- Load species from Nordic Microalgae.")
-        clearimagesbutton = utils_qt.ClickableQLabel("- Clear loaded image data.")
+        clearspeciesbutton = utils_qt.ClickableQLabel("- Clear species lists.")
+        loadspeciesbutton = utils_qt.ClickableQLabel("- Load species lists from Nordic Microalgae.")
+        clearimagesbutton = utils_qt.ClickableQLabel("- Clear species images.")
         loadimagesbutton = utils_qt.ClickableQLabel("- Load species images from Nordic Microalgae.")
         
         # Layout.
@@ -174,8 +204,6 @@ class StartActivity(activity_base.ActivityBase):
         gridrow = 0
         layout.addWidget( QtGui.QLabel(''), gridrow, 0, 1, 1) # Add space to the left.
         layout.addWidget(label1, gridrow, 1, 1, 20)
-        gridrow += 1
-        layout.addWidget(label2, gridrow, 1, 1, 20)
         gridrow += 1
         layout.addWidget(clearspeciesbutton, gridrow, 1, 1, 20)
         gridrow += 1
@@ -185,11 +213,12 @@ class StartActivity(activity_base.ActivityBase):
         gridrow += 1
         layout.addWidget(loadimagesbutton, gridrow, 1, 1, 20)
         gridrow += 1
-
+        layout.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 20)
+        gridrow += 1
         #
         return layout
 
     def __test(self):
         """ """
         utils.Logger().log("Name: " + unicode(self.__emailedit.text()))
-        
+

@@ -30,6 +30,7 @@ Tool manager.
 
 import plankton_toolbox.tools.toolbox_settings_tool as toolbox_settings_tool
 import plankton_toolbox.tools.log_tool as log_tool
+import plankton_toolbox.tools.dataset_viewer_tool as dataset_viewer_tool
 import plankton_toolbox.tools.metadata_editor_tool as metadata_editor_tool
 import plankton_toolbox.tools.dyntaxa_browser_tool as dyntaxa_browser_tool
 import plankton_toolbox.tools.peg_browser_tool as peg_browser_tool
@@ -55,6 +56,7 @@ class ToolManager(object):
         # The log tool should be loaded before other tools.
         self.__toollist.append(log_tool.LogTool("Log tool", self._parent))
         self.__toollist.append(toolbox_settings_tool.ToolboxSettingsTool("Toolbox settings", self._parent))
+        self.__toollist.append(dataset_viewer_tool.DatasetViewerTool("Dataset viewer", self._parent))
         self.__toollist.append(metadata_editor_tool.MetadataEditorTool("(Metadata editor)", self._parent))
         self.__toollist.append(dyntaxa_browser_tool.DyntaxaBrowserTool("Dyntaxa browser", self._parent))
         self.__toollist.append(peg_browser_tool.PegBrowserTool("PEG browser", self._parent))

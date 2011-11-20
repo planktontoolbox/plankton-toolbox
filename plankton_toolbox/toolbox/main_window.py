@@ -91,7 +91,7 @@ class MainWindow(QtGui.QMainWindow):
         # Load resources when the main event loop has started.
         if toolbox_settings.ToolboxSettings().getValue('Resources:Load at startup'):
             QtCore.QTimer.singleShot(10, toolbox_resources.ToolboxResources().loadAllResources)
-        # Tell the user user.
+        # Tell the user.
         utils.Logger().log('Plankton Toolbox started.')
         utils.Logger().log('Note: Log rows are sent to the "Log tool" and written to "plankton_toolbox_log.txt".\r\n')
         
@@ -170,6 +170,9 @@ class MainWindow(QtGui.QMainWindow):
         mainlayout.setMargin(0)
         mainlayout.setSpacing(0)
         mainlayout.addWidget(mainscroll)
+        
+        self.test_mainscroll = mainscroll
+        
         widget.setLayout(mainlayout)
         grid1 = QtGui.QVBoxLayout()
         content.setLayout(grid1)        

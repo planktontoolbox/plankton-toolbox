@@ -36,3 +36,25 @@ class ToolboxDatasets(object):
     """
     def __init__(self):
         """ """
+        self.__list = [] 
+
+    def clear(self):
+        """ """
+        self.__list = [] 
+        
+    def getDatasets(self):
+        """ """
+        return self.__list 
+        
+    def getDatasetByIndex(self, index):
+        """ """
+        return self.__list[index] 
+        
+    def addDataset(self, dataset):
+        """ """
+        self.__list.append(dataset)
+        
+    def removeDatasetByIndex(self, index):
+        """ """
+        del self.__list[index]
+
