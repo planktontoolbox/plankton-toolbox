@@ -43,19 +43,25 @@ class ClickableQLabel(QtGui.QLabel):
   
     def enterEvent(self, ev):        
         self.setStyleSheet(""" 
-            * [ActivityStatus="Selected"] { color: #d1581c; background-color: #eaa97e; }
+/*            * [ActivityStatus="Selected"] { color: #d1581c; background-color: #eaa97e; }
+*/
+            * [ActivityStatus="Selected"] { color: #d1581c; background-color: #6da8bd; }
             * [ActivityStatus="Unselected"] { color: #d1581c; background-color: #dddddd; }
             """)
   
     def leaveEvent(self, ev):  
         self.setStyleSheet(""" 
-            * [ActivityStatus="Selected"] { color: #00677f; background-color: #eaa97e; }
+/*            * [ActivityStatus="Selected"] { color: #00677f; background-color: #eaa97e; }
+*/
+            * [ActivityStatus="Selected"] { color: white; background-color: #6da8bd; }
             * [ActivityStatus="Unselected"] { color: #00677f; background-color: #dddddd; }
             """)
 
     def updateStyleSheet(self):  
         self.setStyleSheet(""" 
-            * [ActivityStatus="Selected"] { color:  #00677f; background-color: #eaa97e; }
+/*            * [ActivityStatus="Selected"] { color:  #00677f; background-color: #eaa97e; }
+*/
+            * [ActivityStatus="Selected"] { color:  white; background-color: #6da8bd; }
             * [ActivityStatus="Unselected"] { color:  #00677f; background-color: #dddddd; }
             """)
 
@@ -103,17 +109,19 @@ def setAppStyleSheet(app):
     app.setStyleSheet("""
         /* Default for all dock widgets.*/
         QDockWidget, QDockWidget *  { color: black; background-color: #dddddd; }
-        QDockWidget QPushButton:hover { color: #eaa97e; }
+        QDockWidget QPushButton:hover { color: #d1581c; }
 
         /* Default for all widgets used in tools. */        
         ToolBase, ToolBase * { color: black; background-color: #dddddd; } 
-        ToolBase QPushButton:hover { color: #eaa97e; } 
+        ToolBase QPushButton:hover { color: #d1581c; } 
 
         /* Default for all widgets used in activities. */        
         ActivityBase, ActivityBase * { color: black; background-color: #dddddd; } 
-        ActivityBase QPushButton:hover { color: #eaa97e; } 
+        ActivityBase QPushButton:hover { color: #d1581c; } 
         
         QStatusBar { background-color: #dddddd; }
+        
+        QLineEdit { background-color: #f8f8f8; }
         
         """)
 

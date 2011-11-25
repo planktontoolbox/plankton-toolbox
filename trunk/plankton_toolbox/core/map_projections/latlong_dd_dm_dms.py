@@ -209,13 +209,13 @@ def convert_lat_to_dd(value):
     """ Converts latitude to the DD (Decimal degree) display format. """  
     if (value == None):
         return ''
-    return "%.6f" % value # Round.
+    return "%09.6f" % value # Round.
 
 def convert_long_to_dd(value):
     """ Converts longitude to the DD (Decimal degree) display format. """  
     if (value == None):
         return ''
-    return "%.6f" % value # Round.
+    return "%09.6f" % value # Round.
 
 def convert_lat_to_dm(value):
     """ Converts latitude to the DM (Degree/minute) display format. """  
@@ -225,9 +225,9 @@ def convert_lat_to_dm(value):
     degrees = math.floor(abs(value))
     minutes = (abs(value) - degrees) * 60
     if (value >= 0):
-        return "N %d %.4f'" % (degrees, (math.floor(minutes*10000)/10000))
+        return "N %02d %07.4f'" % (degrees, (math.floor(minutes*10000)/10000))
     else:
-        return "S %d %.4f'" % (degrees, (math.floor(minutes*10000)/10000)) 
+        return "S %02d %07.4f'" % (degrees, (math.floor(minutes*10000)/10000)) 
 
 def convert_long_to_dm(value):
     """ Converts longitude to the DM (Degree/minute) display format. """  
@@ -237,9 +237,9 @@ def convert_long_to_dm(value):
     degrees = math.floor(abs(value))
     minutes = (abs(value) - degrees) * 60
     if (value >= 0):
-        return "E %d %.4f'" % (degrees, (math.floor(minutes*10000)/10000))
+        return "E %02d %07.4f'" % (degrees, (math.floor(minutes*10000)/10000))
     else:
-        return "W %d %.4f'" % (degrees, (math.floor(minutes*10000)/10000)) 
+        return "W %02d %07.4f'" % (degrees, (math.floor(minutes*10000)/10000)) 
 
 def convert_lat_to_dms(value):
     """ Converts latitude to the DMS (Degree/minute/second) display format. """  
@@ -250,9 +250,9 @@ def convert_lat_to_dms(value):
     minutes = math.floor((abs(value) - degrees) * 60)
     seconds = (abs(value) - degrees - minutes / 60) * 3600
     if (value >= 0):
-        return "N %d %d' %.2f\"" % (degrees, minutes, (math.floor(seconds*100)/100)) 
+        return "N %02d %02d' %05.2f\"" % (degrees, minutes, (math.floor(seconds*100)/100)) 
     else:
-        return "S %d %d' %.2f\"" % (degrees, minutes, (math.floor(seconds*100)/100)) 
+        return "S %02d %02d' %05.2f\"" % (degrees, minutes, (math.floor(seconds*100)/100)) 
 
 def convert_long_to_dms(value):
     """ Converts longitude to the DMS (Degree/minute/second) display format. """  
@@ -263,6 +263,6 @@ def convert_long_to_dms(value):
     minutes = math.floor((abs(value) - degrees) * 60)
     seconds = (abs(value) - degrees - minutes / 60) * 3600
     if (value >= 0):
-        return "E %d %d' %.2f\"" % (degrees, minutes, (math.floor(seconds*100)/100)) 
+        return "E %02d %02d' %05.2f\"" % (degrees, minutes, (math.floor(seconds*100)/100)) 
     else:
-        return "W %d %d' %.2f\"" % (degrees, minutes, (math.floor(seconds*100)/100)) 
+        return "W %02d %02d' %05.2f\"" % (degrees, minutes, (math.floor(seconds*100)/100)) 

@@ -27,7 +27,7 @@
 """
 Test version of the 'get dataset activity'. Data is fetched from
 the website test.mellifica.org/sharkweb, which should be replaced
-by www.mellifica.se/sharkweb later. Search options is based on the 
+by sharkweb.smhi.se later. Search options is based on the 
 layout of the corresponding page on the website.
 """
 
@@ -55,12 +55,84 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         self.__activityheader.setTextFormat(QtCore.Qt.RichText)
         self.__activityheader.setAlignment(QtCore.Qt.AlignHCenter)
         self.__activityheader.setStyleSheet(""" 
-            * { color: #00677f; background-color: #eaa97e; }
+            * { color: white; background-color: #6da8bd; }
             """)
         contentLayout.addWidget(self.__activityheader)
         # Add content to the activity.
         contentLayout.addWidget(self.__contentSelectData())
+        contentLayout.addWidget(self.__contentLoadedDatasets())
         
+    def __contentLoadedDatasets(self):
+        """ """
+        # Active widgets and connections.
+        selectdatabox = QtGui.QGroupBox("Loaded datasets", self)
+        self.__files_table = QtGui.QTableWidget()
+        self.__files_table.setAlternatingRowColors(True)
+        self.__files_table.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
+        self.__files_table.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        self.__files_table.verticalHeader().setDefaultSectionSize(18)
+        self.__files_table.setColumnCount(1)
+        self.__files_table.horizontalHeader().setStretchLastSection(True)
+        self.__files_table.setHorizontalHeaderLabels(["Dataset filename"])
+        #
+        self.connect(toolbox_datasets.ToolboxDatasets(), 
+             QtCore.SIGNAL("datasetListChanged"), 
+             self.__updateDatasetList)
+        #
+        self.__unloadalldatasets_button = QtGui.QPushButton("Unload all datasets")
+        self.__unloadselecteddatasets_button = QtGui.QPushButton("Unload selected datasets")
+        #
+        self.connect(self.__unloadalldatasets_button, QtCore.SIGNAL("clicked()"), self.__unloadAllDatasets)                
+        self.connect(self.__unloadselecteddatasets_button, QtCore.SIGNAL("clicked()"), self.__unloadSelectedDatasets)                
+        # Layout widgets.
+#        form1 = QtGui.QGridLayout()
+#        gridrow = 0
+#        label2 = QtGui.QLabel("Files (CSV):")
+#        form1.addWidget(label2, gridrow, 0, 1, 1)
+#        form1.addWidget(self.__files_table, gridrow, 1, 10, 10)
+#        gridrow += 1
+        #
+        hbox1 = QtGui.QHBoxLayout()
+        hbox1.addWidget(self.__unloadalldatasets_button)
+        hbox1.addWidget(self.__unloadselecteddatasets_button)
+        hbox1.addStretch(5)
+#        hbox1.addWidget(self.__getpwdata_button)
+        #
+        widget = QtGui.QWidget()        
+        layout = QtGui.QVBoxLayout()
+        widget.setLayout(layout)
+        layout.addWidget(self.__files_table)
+        layout.addLayout(hbox1)
+        #
+        layout = QtGui.QVBoxLayout()
+        layout.addWidget(widget)
+        selectdatabox.setLayout(layout)        
+        selectdatabox.setLayout(layout)        
+        return selectdatabox
+
+    def __unloadAllDatasets(self):
+        """ """
+        toolbox_datasets.ToolboxDatasets().clear()
+
+    def __unloadSelectedDatasets(self):
+        """ """
+        toolbox_datasets.ToolboxDatasets().removeDatasetByIndex(0) #TODO: TEST.
+
+    def __updateDatasetList(self):
+        """ """
+        self.__files_table.clear()
+        self.__files_table.setHorizontalHeaderLabels(["Dataset filename"])
+        self.__files_table.setRowCount(0)
+        # Add files in selected directory to QTableWidget.
+        for row, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
+                self.__files_table.setRowCount(row + 1)
+#                item = QtGui.QTableWidgetItem(unicode(filename))
+                item = QtGui.QTableWidgetItem(u'Dataset - ' + unicode(row))
+                item.setCheckState(QtCore.Qt.Unchecked)
+                self.__files_table.setItem(row, 0, item)            
+    
+    
+    
     def __contentSelectData(self):
         """ """
         # Active widgets and connections.
