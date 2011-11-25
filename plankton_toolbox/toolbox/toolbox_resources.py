@@ -53,8 +53,7 @@ class ToolboxResources(QtCore.QObject):
         self.__pegloaded = False
         self.__harmfulplanktonloaded = False
         # 
-        ###super(ToolboxResources, self).__init__(None)
-        QtCore.QObject.__init__(self) # TODO: Check why super not works.
+        QtCore.QObject.__init__(self)
         
     def loadAllResources(self):
         """ """

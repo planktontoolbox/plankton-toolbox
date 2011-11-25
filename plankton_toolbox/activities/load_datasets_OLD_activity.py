@@ -37,6 +37,11 @@ import PyQt4.QtCore as QtCore
 import plankton_toolbox.activities.activity_base as activity_base
 import plankton_toolbox.core.monitoring.monitoring_files as monitoring_files
 
+# TODO: TEST
+import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
+
+
+
 class LoadDatasetsActivity(activity_base.ActivityBase):
     """ """
     def __init__(self, name, parentwidget):
@@ -377,7 +382,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
 
     def __getTextFile(self):
         """ """
-        self.__dataset.clear()
+###        self.__dataset.clear()
         self.__refreshResultTable()
         QtGui.QApplication.processEvents()
         #
@@ -549,6 +554,11 @@ class ResultTableModel(QtCore.QAbstractTableModel):
     def setDataset(self, dataset):
         """ """
         self.__dataset = dataset
+        
+        ############ Test
+        toolbox_datasets.ToolboxDatasets().addDataset(dataset)        
+        
+        
 
     def rowCount(self, parent=QtCore.QModelIndex()):
         """ """

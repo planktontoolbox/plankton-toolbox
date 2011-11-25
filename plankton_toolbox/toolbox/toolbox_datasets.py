@@ -25,22 +25,25 @@
 # THE SOFTWARE.
 
 """
-
 """
 
+import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils as utils
 
 @utils.singleton
-class ToolboxDatasets(object):
+class ToolboxDatasets(QtCore.QObject):
     """
     """
     def __init__(self):
         """ """
         self.__list = [] 
+        # 
+        QtCore.QObject.__init__(self)
 
     def clear(self):
         """ """
-        self.__list = [] 
+        self.__list = []
+        self.emit(QtCore.SIGNAL('datasetListChanged'))
         
     def getDatasets(self):
         """ """
@@ -48,13 +51,18 @@ class ToolboxDatasets(object):
         
     def getDatasetByIndex(self, index):
         """ """
-        return self.__list[index] 
+        if len(self.__list) > index:
+            return self.__list[index]
+        else:
+            return None 
         
     def addDataset(self, dataset):
         """ """
         self.__list.append(dataset)
+        self.emit(QtCore.SIGNAL('datasetListChanged'))
         
     def removeDatasetByIndex(self, index):
         """ """
         del self.__list[index]
+        self.emit(QtCore.SIGNAL('datasetListChanged'))
 
