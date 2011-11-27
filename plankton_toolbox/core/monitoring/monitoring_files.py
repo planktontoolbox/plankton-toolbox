@@ -234,10 +234,29 @@ class SharkwebDownload(MonitoringFiles):
             raise UserWarning('Parameters are missing.')
         # URL and parameters. Use unicode and utf-8 to handle swedish characters.
 
+
+
+#    http://produkter.smhi.se/sharkweb/shark_save.php?
+#    action=download_sample
+#    bounds=
+#    year_from=2010
+#    year_to=2010
+#    month=06
+#    datatype=Phytoplankton
+#    parameter=
+#    project_code=
+#    orderer=
+#    station_name=
+#    taxon_name=
+#    sample_table_view=sample_col_std
+#    delimiters=point-tab
+#    lineend=unix
+#    headerlang=sv
         
         
 #        url = u'http://test.mellifica.org/sharkweb/shark_php.php'
         url = u'http://produkter.smhi.se/sharkweb/shark_save.php'
+#        url = u'http://sharkweb.smhi.se/shark_save.php'
         
         parameters = {}
         parameters['action']=u'download_sample'
@@ -249,7 +268,12 @@ class SharkwebDownload(MonitoringFiles):
         parameters['sample_table_view']=u'sample_col_std'
         parameters['delimiters']=u'point-tab'
         parameters['lineend']=u'unix'
-        parameters['headerlang']=u'sv'        
+        parameters['headerlang']=u'sv'     
+        
+        
+        
+        
+           
         
         parameters = dict([k, v.encode('utf-8')] for k, v in parameters.items())
         params = urllib.urlencode(parameters)

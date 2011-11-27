@@ -25,10 +25,6 @@
 # THE SOFTWARE.
 
 """
-Test version of the 'get dataset activity'. Data is fetched from
-the website test.mellifica.org/sharkweb, which should be replaced
-by sharkweb.smhi.se later. Search options is based on the 
-layout of the corresponding page on the website.
 """
 
 import os
@@ -44,6 +40,8 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         """ """
         # Initialize parent.
         super(LoadDatasetsActivity, self).__init__(name, parentwidget)
+        #
+        self.__lastusedphytowinfilename = u''
 
     def _createContent(self):
         """ """
@@ -54,94 +52,28 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         self.__activityheader = QtGui.QLabel('<h2>' + self.objectName() + '</h2>', self)
         self.__activityheader.setTextFormat(QtCore.Qt.RichText)
         self.__activityheader.setAlignment(QtCore.Qt.AlignHCenter)
+        contentLayout.addWidget(self.__activityheader)
+        # Add content to the activity.
+        contentLayout.addWidget(self.__contentLoadDataset())
+        contentLayout.addWidget(self.__contentLoadedDatasets())
+        contentLayout.addStretch(5)
+        # Style.
         self.__activityheader.setStyleSheet(""" 
             * { color: white; background-color: #00677f; }
             """)
-        contentLayout.addWidget(self.__activityheader)
-        # Add content to the activity.
-        contentLayout.addWidget(self.__contentSelectData())
-        contentLayout.addWidget(self.__contentLoadedDatasets())
-        
-    def __contentLoadedDatasets(self):
+#        self.setStyleSheet(""" 
+#            QLabel#self.__activityheader { color: white; background-color: #00677f; }
+#            """)
+    
+    def __contentLoadDataset(self):
         """ """
         # Active widgets and connections.
-        selectdatabox = QtGui.QGroupBox("Loaded datasets", self)
-        self.__files_table = QtGui.QTableWidget()
-        self.__files_table.setAlternatingRowColors(True)
-        self.__files_table.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
-        self.__files_table.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
-        self.__files_table.verticalHeader().setDefaultSectionSize(18)
-        self.__files_table.setColumnCount(1)
-        self.__files_table.horizontalHeader().setStretchLastSection(True)
-        self.__files_table.setHorizontalHeaderLabels(["Dataset filename"])
-        #
-        self.connect(toolbox_datasets.ToolboxDatasets(), 
-             QtCore.SIGNAL("datasetListChanged"), 
-             self.__updateDatasetList)
-        #
-        self.__unloadalldatasets_button = QtGui.QPushButton("Unload all datasets")
-        self.__unloadselecteddatasets_button = QtGui.QPushButton("Unload selected datasets")
-        #
-        self.connect(self.__unloadalldatasets_button, QtCore.SIGNAL("clicked()"), self.__unloadAllDatasets)                
-        self.connect(self.__unloadselecteddatasets_button, QtCore.SIGNAL("clicked()"), self.__unloadSelectedDatasets)                
-        # Layout widgets.
-#        form1 = QtGui.QGridLayout()
-#        gridrow = 0
-#        label2 = QtGui.QLabel("Files (CSV):")
-#        form1.addWidget(label2, gridrow, 0, 1, 1)
-#        form1.addWidget(self.__files_table, gridrow, 1, 10, 10)
-#        gridrow += 1
-        #
-        hbox1 = QtGui.QHBoxLayout()
-        hbox1.addWidget(self.__unloadalldatasets_button)
-        hbox1.addWidget(self.__unloadselecteddatasets_button)
-        hbox1.addStretch(5)
-#        hbox1.addWidget(self.__getpwdata_button)
-        #
-        widget = QtGui.QWidget()        
-        layout = QtGui.QVBoxLayout()
-        widget.setLayout(layout)
-        layout.addWidget(self.__files_table)
-        layout.addLayout(hbox1)
-        #
-        layout = QtGui.QVBoxLayout()
-        layout.addWidget(widget)
-        selectdatabox.setLayout(layout)        
-        selectdatabox.setLayout(layout)        
-        return selectdatabox
-
-    def __unloadAllDatasets(self):
-        """ """
-        toolbox_datasets.ToolboxDatasets().clear()
-
-    def __unloadSelectedDatasets(self):
-        """ """
-        toolbox_datasets.ToolboxDatasets().removeDatasetByIndex(0) #TODO: TEST.
-
-    def __updateDatasetList(self):
-        """ """
-        self.__files_table.clear()
-        self.__files_table.setHorizontalHeaderLabels(["Dataset filename"])
-        self.__files_table.setRowCount(0)
-        # Add files in selected directory to QTableWidget.
-        for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
-                self.__files_table.setRowCount(rowindex + 1)
-#                item = QtGui.QTableWidgetItem(unicode(filename))
-                item = QtGui.QTableWidgetItem(u'Dataset - ' + unicode(rowindex))
-                item.setCheckState(QtCore.Qt.Unchecked)
-                self.__files_table.setItem(rowindex, 0, item)            
-    
-    
-    
-    def __contentSelectData(self):
-        """ """
-        # Active widgets and connections.
-        selectdatabox = QtGui.QGroupBox("Select data", self)
+        selectdatabox = QtGui.QGroupBox("Load dataset", self)
         tabWidget = QtGui.QTabWidget()
-        tabWidget.addTab(self.__contentTextfile(), "Text file (tab delimited)")
-        tabWidget.addTab(self.__contentXlsx(), "Excel file (.xlsx)")
-        tabWidget.addTab(self.__contentSharkweb(), "Sharkweb")
-        tabWidget.addTab(self.__contentPW(), "PW")
+        tabWidget.addTab(self.__contentTextfile(), "Text files")
+        tabWidget.addTab(self.__contentXlsx(), "Excel files (*.xlsx)")
+        tabWidget.addTab(self.__contentPhytowin(), "Phytowin files (*.csv)")
+        tabWidget.addTab(self.__contentSharkweb(), "Sharkweb (http://sharkweb.smhi.se)")
         # Layout widgets.
         layout = QtGui.QVBoxLayout()
         layout.addWidget(tabWidget)
@@ -149,16 +81,17 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         #
         return selectdatabox
 
+    # ===== TEXT FILES ======
     def __contentTextfile(self):
         """ """
         widget = QtGui.QWidget()
         # Active widgets and connections.
         self.__textfile_edit = QtGui.QLineEdit("")
         self.__textfilebrowse_button = QtGui.QPushButton("Browse...")
-        self.__textfilegetdata_button = QtGui.QPushButton("Get data")
+        self.__textfileload_button = QtGui.QPushButton("Get data")
         #
         self.connect(self.__textfilebrowse_button, QtCore.SIGNAL("clicked()"), self.__textFileBrowse)              
-        self.connect(self.__textfilegetdata_button, QtCore.SIGNAL("clicked()"), self.__getTextFile)                
+        self.connect(self.__textfileload_button, QtCore.SIGNAL("clicked()"), self.__loadTextFile)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         gridrow = 0
@@ -169,7 +102,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         #
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(5)
-        hbox1.addWidget(self.__textfilegetdata_button)
+        hbox1.addWidget(self.__textfileload_button)
         #
         layout = QtGui.QVBoxLayout()
         layout.addStretch(1)
@@ -180,6 +113,21 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         #
         return widget
         
+    def __textFileBrowse(self):
+        """ """
+        dirdialog = QtGui.QFileDialog(self)
+        dirdialog.setDirectory(unicode(self.__textfile_edit.text()))
+        filepath = dirdialog.getOpenFileName()
+        if filepath:
+            self.__textfile_edit.setText(filepath)
+
+    def __loadTextFile(self):
+        """ """
+        dataset = monitoring_files.TextFile()
+        dataset.readFile(unicode(self.__textfile_edit.text()))
+        toolbox_datasets.ToolboxDatasets().addDataset(dataset)        
+
+    # ===== EXCEL FILES ======
     def __contentXlsx(self):
         """ """
         widget = QtGui.QWidget()
@@ -211,6 +159,146 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         #
         return widget
         
+    def __xlsxFileBrowse(self):
+        """ """
+        dirdialog = QtGui.QFileDialog(self)
+        dirdialog.setDirectory(unicode(self.__xlsxfile_edit.text()))
+        filepath = dirdialog.getOpenFileName()
+        if filepath:
+            self.__xlsxfile_edit.setText(filepath)
+
+    def __getXlsxFile(self):
+        """ """
+        dataset = monitoring_files.ExcelXlsxFile()
+        dataset.readFile(unicode(self.__xlsxfile_edit.text()))
+        toolbox_datasets.ToolboxDatasets().addDataset(dataset)        
+    
+    # =====PHYTOWIN FILES ======
+    def __contentPhytowin(self):
+        """ """
+        # Active widgets and connections.
+#        self.__pwfromdirectory_edit = QtGui.QLineEdit("") # TODO: Use toolbox settings.
+##        self.__pwfromdirectory_edit = QtGui.QLineEdit("../../../../data/planktondata/phytowin_files") # TODO: Use toolbox settings.
+#        self.__pwfromdirectory_button = QtGui.QPushButton("Browse...")
+#        #
+#        self.__datasets_table = QtGui.QTableWidget()
+#        self.__datasets_table.setAlternatingRowColors(True)
+#        self.__datasets_table.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
+#        self.__datasets_table.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+#        self.__datasets_table.verticalHeader().setDefaultSectionSize(18)
+#        self.__datasets_table.setColumnCount(1)
+#        self.__datasets_table.horizontalHeader().setStretchLastSection(True)
+#        self.__datasets_table.setHorizontalHeaderLabels(["File"])
+#        self.__getpwdata_button = QtGui.QPushButton("Get data")
+        self.__loadphytowindata_button = QtGui.QPushButton("Load dataset(s)")
+        #
+#        self.connect(self.__pwfromdirectory_button, QtCore.SIGNAL("clicked()"), self.__pwFromDirectoryBrowse)                
+#        self.connect(self.__getpwdata_button, QtCore.SIGNAL("clicked()"), self.__getPwData)                
+
+        
+        self.connect(self.__loadphytowindata_button, QtCore.SIGNAL("clicked()"), self.__loadPhytowinDatasets)                
+        
+        
+        
+        # Layout widgets.
+#        form1 = QtGui.QGridLayout()
+#        gridrow = 0
+#        label1 = QtGui.QLabel("From directory:")
+#        form1.addWidget(label1, gridrow, 0, 1, 1)
+#        form1.addWidget(self.__pwfromdirectory_edit, gridrow, 1, 1, 9)
+#        form1.addWidget(self.__pwfromdirectory_button, gridrow, 10, 1, 1)
+#        gridrow += 1
+#        label2 = QtGui.QLabel("Files (CSV):")
+#        form1.addWidget(label2, gridrow, 0, 1, 1)
+#        form1.addWidget(self.__datasets_table, gridrow, 1, 10, 10)
+        #
+        hbox1 = QtGui.QHBoxLayout()
+        hbox1.addStretch(5)
+#        hbox1.addWidget(self.__getpwdata_button)
+        hbox1.addWidget(self.__loadphytowindata_button)
+        #
+        widget = QtGui.QWidget()        
+        layout = QtGui.QVBoxLayout()
+        widget.setLayout(layout)
+#        layout.addLayout(form1)
+        layout.addLayout(hbox1)
+        #
+        return widget
+        
+    def __pwFromDirectoryBrowse(self):
+        """ """
+        # Show directory dialog box.
+        dirdialog = QtGui.QFileDialog(self)
+        dirdialog.setFileMode(QtGui.QFileDialog.Directory)
+        dirdialog.setOptions(QtGui.QFileDialog.ShowDirsOnly)
+        dirdialog.setDirectory(unicode(self.__pwfromdirectory_edit.text()))
+        dirpath = dirdialog.getExistingDirectory()
+        # Check if user pressed ok or cancel.
+        if dirpath:
+            self.__pwfromdirectory_edit.setText(dirpath)
+            toolbox_datasets.ToolboxDatasets.clear()
+            # Add files in selected directory to QTableWidget.
+            for row, filename in enumerate(sorted(os.listdir(unicode(self.__pwfromdirectory_edit.text())))):
+                if os.path.splitext(unicode(filename))[1] in ['.csv', '.CSV']:
+                    self.__datasets_table.setRowCount(row + 1)
+                    item = QtGui.QTableWidgetItem(unicode(filename))
+                    item.setCheckState(QtCore.Qt.Unchecked)
+                    self.__datasets_table.setItem(row, 0, item)            
+        
+    def __getPwData(self):
+        """ """
+        self.__dataset.clear()
+        self.__refreshResultTable()
+        QtGui.QApplication.processEvents()
+        #
+        self.__dataset = monitoring_files.PwCsvTable()
+        self.__model.setDataset(self.__dataset)
+        #
+        for index in range(self.__datasets_table.rowCount()):
+            item = self.__datasets_table.item(index, 0)
+            if item.checkState(): # Check if selected by user.
+                # When reading from a table the display rule must be used.
+                filename = unicode(item.data(QtCore.Qt.DisplayRole).toString())
+                print(self.__pwfromdirectory_edit.text())
+                print(filename)
+                self.__dataset.readFile(self.__pwfromdirectory_edit.text() + '/' + filename)
+        #        
+        self.__refreshResultTable()
+
+    def __loadPhytowinDatasets(self):
+        """ """
+
+        # Show select file dialog box. Multiple files can be selected.
+        namefilter = 'Phytowin files (*.csv);;All files (*.*)'
+        filenames = QtGui.QFileDialog.getOpenFileNames(
+                            self,
+                            'Load Phytowin dataset(s)',
+                            self.__lastusedphytowinfilename,
+                            namefilter)
+        # Check if user pressed ok or cancel.
+        if filenames:
+            for filename in filenames:
+                self.__lastusedphytowinfilename = filename
+                dataset = monitoring_files.PwCsvTable()
+                dataset.readFile(unicode(filename))
+                toolbox_datasets.ToolboxDatasets().addDataset(dataset)        
+        
+        
+        
+#        self.__dataset = monitoring_files.PwCsvTable()
+#        self.__model.setDataset(self.__dataset)
+#        #
+#        for index in range(self.__datasets_table.rowCount()):
+#            item = self.__datasets_table.item(index, 0)
+#            if item.checkState(): # Check if selected by user.
+#                # When reading from a table the display rule must be used.
+#                filename = unicode(item.data(QtCore.Qt.DisplayRole).toString())
+#                print(self.__pwfromdirectory_edit.text())
+#                print(filename)
+#                self.__dataset.readFile(self.__pwfromdirectory_edit.text() + '/' + filename)
+        #        
+
+    # ===== SHARKWEB ======
     def __contentSharkweb(self):
         """ 
         Code sample from Javascript:
@@ -325,99 +413,9 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         #
         return widget
 
-    def __contentPW(self):
-        """ """
-        # Active widgets and connections.
-        self.__pwfromdirectory_edit = QtGui.QLineEdit("") # TODO: Use toolbox settings.
-#        self.__pwfromdirectory_edit = QtGui.QLineEdit("../../../../data/planktondata/phytowin_files") # TODO: Use toolbox settings.
-        self.__pwfromdirectory_button = QtGui.QPushButton("Browse...")
-        #
-        self.__files_table = QtGui.QTableWidget()
-        self.__files_table.setAlternatingRowColors(True)
-        self.__files_table.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
-        self.__files_table.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
-        self.__files_table.verticalHeader().setDefaultSectionSize(18)
-        self.__files_table.setColumnCount(1)
-        self.__files_table.horizontalHeader().setStretchLastSection(True)
-        self.__files_table.setHorizontalHeaderLabels(["File"])
-        self.__getpwdata_button = QtGui.QPushButton("Get data")
-        #
-        self.connect(self.__pwfromdirectory_button, QtCore.SIGNAL("clicked()"), self.__pwFromDirectoryBrowse)                
-        self.connect(self.__getpwdata_button, QtCore.SIGNAL("clicked()"), self.__getPwData)                
-        # Layout widgets.
-        form1 = QtGui.QGridLayout()
-        gridrow = 0
-        label1 = QtGui.QLabel("From directory:")
-        form1.addWidget(label1, gridrow, 0, 1, 1)
-        form1.addWidget(self.__pwfromdirectory_edit, gridrow, 1, 1, 9)
-        form1.addWidget(self.__pwfromdirectory_button, gridrow, 10, 1, 1)
-        gridrow += 1
-        label2 = QtGui.QLabel("Files (CSV):")
-        form1.addWidget(label2, gridrow, 0, 1, 1)
-        form1.addWidget(self.__files_table, gridrow, 1, 10, 10)
-        #
-        hbox1 = QtGui.QHBoxLayout()
-        hbox1.addStretch(5)
-        hbox1.addWidget(self.__getpwdata_button)
-        #
-        widget = QtGui.QWidget()        
-        layout = QtGui.QVBoxLayout()
-        widget.setLayout(layout)
-        layout.addLayout(form1)
-        layout.addLayout(hbox1)
-        #
-        return widget
-        
-    def __textFileBrowse(self):
-        """ """
-        dirdialog = QtGui.QFileDialog(self)
-        dirdialog.setDirectory(unicode(self.__textfile_edit.text()))
-        filepath = dirdialog.getOpenFileName()
-        if filepath:
-            self.__textfile_edit.setText(filepath)
-
-    def __getTextFile(self):
-        """ """
-        self.__dataset.clear()
-        self.__refreshResultTable()
-        QtGui.QApplication.processEvents()
-        #
-        self.__dataset = monitoring_files.TextFile()
-        self.__model.setDataset(self.__dataset)
-        #
-        self.__dataset.readFile(unicode(self.__textfile_edit.text()))
-        #        
-        self.__refreshResultTable()
-
-    def __xlsxFileBrowse(self):
-        """ """
-        dirdialog = QtGui.QFileDialog(self)
-        dirdialog.setDirectory(unicode(self.__xlsxfile_edit.text()))
-        filepath = dirdialog.getOpenFileName()
-        if filepath:
-            self.__xlsxfile_edit.setText(filepath)
-
-    def __getXlsxFile(self):
-        """ """
-        self.__dataset.clear()
-        self.__refreshResultTable()
-        QtGui.QApplication.processEvents()
-        #
-        self.__dataset = monitoring_files.ExcelXlsxFile()
-        self.__model.setDataset(self.__dataset)
-        #
-        self.__dataset.readFile(unicode(self.__xlsxfile_edit.text()))
-        #        
-        self.__refreshResultTable()
-    
     def __getSharkwebData(self):
         """ """
-        self.__dataset.clear()
-        self.__refreshResultTable()
-        QtGui.QApplication.processEvents()
-        #
-        self.__dataset = monitoring_files.SharkwebDownload()
-        self.__model.setDataset(self.__dataset)
+        dataset = monitoring_files.SharkwebDownload()
         #
         parameters = {}
         parameters['action'] = unicode('download_sample') # Not json
@@ -441,46 +439,106 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         parameters['limit'] = unicode(self.__limit_edit.text())
         parameters['headerlang'] = unicode(self.__headerlang_edit.text())
         # Get data.
-        self.__dataset.getData(parameters)
-        self.__refreshResultTable()
+        dataset.getData(parameters)
 
-    def __pwFromDirectoryBrowse(self):
-        """ """
-        # Show directory dialog box.
-        dirdialog = QtGui.QFileDialog(self)
-        dirdialog.setFileMode(QtGui.QFileDialog.Directory)
-        dirdialog.setOptions(QtGui.QFileDialog.ShowDirsOnly)
-        dirdialog.setDirectory(unicode(self.__pwfromdirectory_edit.text()))
-        dirpath = dirdialog.getExistingDirectory()
-        # Check if user pressed ok or cancel.
-        if dirpath:
-            self.__pwfromdirectory_edit.setText(dirpath)
-            toolbox_datasets.ToolboxDatasets.clear()
-            # Add files in selected directory to QTableWidget.
-            for row, filename in enumerate(sorted(os.listdir(unicode(self.__pwfromdirectory_edit.text())))):
-                if os.path.splitext(unicode(filename))[1] in ['.csv', '.CSV']:
-                    self.__files_table.setRowCount(row + 1)
-                    item = QtGui.QTableWidgetItem(unicode(filename))
-                    item.setCheckState(QtCore.Qt.Unchecked)
-                    self.__files_table.setItem(row, 0, item)            
+        toolbox_datasets.ToolboxDatasets().addDataset(dataset)   
         
-    def __getPwData(self):
-        """ """
-        self.__dataset.clear()
-        self.__refreshResultTable()
-        QtGui.QApplication.processEvents()
-        #
-        self.__dataset = monitoring_files.PwCsvTable()
-        self.__model.setDataset(self.__dataset)
-        #
-        for index in range(self.__files_table.rowCount()):
-            item = self.__files_table.item(index, 0)
-            if item.checkState(): # Check if selected by user.
-                # When reading from a table the display rule must be used.
-                filename = unicode(item.data(QtCore.Qt.DisplayRole).toString())
-                print(self.__pwfromdirectory_edit.text())
-                print(filename)
-                self.__dataset.readFile(self.__pwfromdirectory_edit.text() + '/' + filename)
-        #        
-        self.__refreshResultTable()
+             
+#        self.__dataset.clear()
+#        self.__refreshResultTable()
+#        QtGui.QApplication.processEvents()
+#        #
+#        self.__dataset = monitoring_files.SharkwebDownload()
+#        self.__model.setDataset(self.__dataset)
+#        #
+#        parameters = {}
+#        parameters['action'] = unicode('download_sample') # Not json
+##        parameters['action'] = unicode('get_sample_table') # Json
+#        parameters['bounds'] = unicode('')
+#        parameters['year_from'] = unicode(self.__year_from_edit.text())
+#        parameters['year_to'] = unicode(self.__year_to_edit.text())
+#        parameters['month'] = unicode(self.__month_edit.text())
+#        parameters['datatype'] = unicode(self.__datatype_edit.text())
+#        parameters['parameter'] = unicode(self.__parameter_edit.text())
+#        parameters['project_code'] = unicode(self.__project_code_edit.text())
+#        parameters['orderer'] = unicode(self.__orderer_edit.text())
+##        parameters['deliverer'] = unicode(self.__deliverer_edit.text()
+#        parameters['station_name'] = unicode(self.__station_name_edit.text())
+#        parameters['station_name_option'] = unicode(self.__station_name_option_edit.text())
+#        parameters['taxon_name'] = unicode(self.__taxon_name_edit.text())
+#        parameters['taxon_name_option'] = unicode(self.__taxon_name_option_edit.text())
+#        parameters['sample_table_view'] = unicode(self.__sample_table_view_edit.text())
+#        parameters['delimiters'] = unicode(self.__delimiters_edit.text())
+#        parameters['lineend'] = unicode(self.__lineend_edit.text())
+#        parameters['limit'] = unicode(self.__limit_edit.text())
+#        parameters['headerlang'] = unicode(self.__headerlang_edit.text())
+#        # Get data.
+#        self.__dataset.getData(parameters)
+#        self.__refreshResultTable()
 
+
+    # ===== LOADED DATASETS =====    
+    def __contentLoadedDatasets(self):
+        """ """
+        # Active widgets and connections.
+        selectdatabox = QtGui.QGroupBox("Loaded datasets", self)
+        #
+        self.__datasets_table = QtGui.QTableWidget()
+        self.__datasets_table.setAlternatingRowColors(True)
+        self.__datasets_table.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
+        self.__datasets_table.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        self.__datasets_table.verticalHeader().setDefaultSectionSize(18)
+        self.__datasets_table.setColumnCount(1)
+        self.__datasets_table.horizontalHeader().setStretchLastSection(True)
+        self.__datasets_table.setHorizontalHeaderLabels(["Dataset filename"])
+        # Listen for changes in the toolbox dataset list.
+        self.connect(toolbox_datasets.ToolboxDatasets(), 
+             QtCore.SIGNAL("datasetListChanged"), 
+             self.__updateDatasetList)
+        # Buttons.
+        self.__unloadalldatasets_button = QtGui.QPushButton("Unload all datasets")
+        self.__unloadmarkeddatasets_button = QtGui.QPushButton("Unload marked datasets")
+        # Button connections.
+        self.connect(self.__unloadalldatasets_button, QtCore.SIGNAL("clicked()"), self.__unloadAllDatasets)                
+        self.connect(self.__unloadmarkeddatasets_button, QtCore.SIGNAL("clicked()"), self.__unloadMarkedDatasets)                
+        # Layout widgets.
+        buttonlayout = QtGui.QHBoxLayout()
+        buttonlayout.addWidget(self.__unloadalldatasets_button)
+        buttonlayout.addWidget(self.__unloadmarkeddatasets_button)
+        buttonlayout.addStretch(5)
+        #
+        widget = QtGui.QWidget()        
+        layout = QtGui.QVBoxLayout()
+        widget.setLayout(layout)
+        layout.addWidget(self.__datasets_table)
+        layout.addLayout(buttonlayout)
+        selectdatabox.setLayout(layout) 
+        #       
+        return selectdatabox
+
+    def __unloadAllDatasets(self):
+        """ """
+        toolbox_datasets.ToolboxDatasets().clear()
+
+    def __unloadMarkedDatasets(self):
+        """ """
+        # Remove datasets, start with the last one. 
+        rowcount = self.__datasets_table.rowCount()
+        for rowindex in range(rowcount):
+            item = self.__datasets_table.item(rowcount - rowindex - 1, 0)
+            if item.checkState(): # Check if selected by user.
+                toolbox_datasets.ToolboxDatasets().removeDatasetByIndex(rowcount - rowindex - 1)
+
+    def __updateDatasetList(self):
+        """ """
+        self.__datasets_table.clear()
+        self.__datasets_table.setHorizontalHeaderLabels(["Dataset filename"])
+        self.__datasets_table.setRowCount(0)
+        # Add files in selected directory to QTableWidget.
+        for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
+                self.__datasets_table.setRowCount(rowindex + 1)
+#                item = QtGui.QTableWidgetItem(unicode(filename))
+                item = QtGui.QTableWidgetItem(u'Dataset - ' + unicode(rowindex))
+                item.setCheckState(QtCore.Qt.Unchecked)
+                self.__datasets_table.setItem(rowindex, 0, item)            
+    
