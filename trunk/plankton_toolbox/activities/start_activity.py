@@ -118,7 +118,7 @@ class StartActivity(activity_base.ActivityBase):
         loaddatasetsbutton = utils_qt.ClickableQLabel("- Load datasets.")
         analysedatasetsbutton = utils_qt.ClickableQLabel("- Analyse datasets.")
         createreportsbutton = utils_qt.ClickableQLabel("- Create reports.")
-        managespecieslistsbutton = utils_qt.ClickableQLabel("- Prepare resources.")
+        managespecieslistsbutton = utils_qt.ClickableQLabel("- Manage species lists.")
             
         self.connect(createdatasetbutton, QtCore.SIGNAL("clicked()"), self.__gotoCreateDataset)
         self.connect(loaddatasetsbutton, QtCore.SIGNAL("clicked()"), self.__gotoLoadDatasets)
