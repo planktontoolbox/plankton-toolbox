@@ -43,7 +43,8 @@ class ToolboxDatasets(QtCore.QObject):
     def clear(self):
         """ """
         self.__list = []
-        self.emit(QtCore.SIGNAL('datasetListChanged'))
+        # Emit signal after short delay.
+        QtCore.QTimer.singleShot(100, self.__emitChangeNotification)
         
     def getDatasets(self):
         """ """
@@ -59,10 +60,18 @@ class ToolboxDatasets(QtCore.QObject):
     def addDataset(self, dataset):
         """ """
         self.__list.append(dataset)
-        self.emit(QtCore.SIGNAL('datasetListChanged'))
+        # Emit signal after short delay.
+        QtCore.QTimer.singleShot(100, self.__emitChangeNotification)
         
     def removeDatasetByIndex(self, index):
         """ """
-        del self.__list[index]
-        self.emit(QtCore.SIGNAL('datasetListChanged'))
+        if index < 0:
+            return # Invalid index.
+        if len(self.__list) > index:
+            del self.__list[index]
+            # Emit signal after short delay.
+            QtCore.QTimer.singleShot(100, self.__emitChangeNotification)
 
+    def __emitChangeNotification(self):
+        """ """
+        self.emit(QtCore.SIGNAL('datasetListChanged'))

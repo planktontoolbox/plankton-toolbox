@@ -139,20 +139,19 @@ class DatasetViewerTool(tool_base.ToolBase):
     
     def __saveData(self):
         """ """
-        # Show select file dialog box.
-        namefilter = 'All files (*.*)'
-        if self.__saveformat_list.currentIndex() == 1: # Xlsx file.
-            namefilter = 'Excel files (*.xlsx);;All files (*.*)'
-        else:
-            namefilter = 'Text files (*.txt);;All files (*.*)'
-#        filename = QtGui.QFileDialog.getOpenFileNames(
-        filename = QtGui.QFileDialog.getSaveFileName(
+        if self.__model.getDataset():
+            # Show select file dialog box.
+            namefilter = 'All files (*.*)'
+            if self.__saveformat_list.currentIndex() == 1: # Xlsx file.
+                namefilter = 'Excel files (*.xlsx);;All files (*.*)'
+            else:
+                namefilter = 'Text files (*.txt);;All files (*.*)'
+            filename = QtGui.QFileDialog.getSaveFileName(
                             self,
                             'Save dataset',
                             self.__lastusedfilename,
                             namefilter)
-        # Check if user pressed ok or cancel.
-        if self.__model.getDataset():
+            # Check if user pressed ok or cancel.
             if filename:
                 self.__lastusedfilename = filename
                 if self.__saveformat_list.currentIndex() == 0: # Text file.
