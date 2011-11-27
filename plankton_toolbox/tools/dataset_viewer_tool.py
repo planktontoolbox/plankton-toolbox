@@ -29,7 +29,6 @@
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-import plankton_toolbox.toolbox.utils as utils
 import plankton_toolbox.tools.tool_base as tool_base
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 
@@ -54,26 +53,33 @@ class DatasetViewerTool(tool_base.ToolBase):
         content = self._createScrollableContent()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
+        contentLayout.addLayout(self.__contentSelectDataset())
         contentLayout.addLayout(self.__contentResultTable())
         contentLayout.addWidget(self.__contentSaveResult())
-#        contentLayout.addStretch(5)
-
+        # Listen for changes in the toolbox dataset list.
         self.connect(toolbox_datasets.ToolboxDatasets(), 
                      QtCore.SIGNAL("datasetListChanged"), 
                      self.__updateDatasetList)
 #
 #        self.__updateDatasetList()
 
-
-
-    def __contentResultTable(self):
+    def __contentSelectDataset(self):
         """ """
-#        resultbox = QtGui.QGroupBox("Result table", self)
         # Active widgets and connections.
         self.__selectdataset_list = QtGui.QComboBox()
         self.__selectdataset_list.addItems(["<select dataset>"])
         self.connect(self.__selectdataset_list, QtCore.SIGNAL("currentIndexChanged(int)"), self.__viewDataset)                
+        # Layout widgets.
+        layout = QtGui.QHBoxLayout()
+        layout.addWidget(QtGui.QLabel("Loaded datasets:"))
+        layout.addWidget(self.__selectdataset_list)
+        layout.addStretch(5)
+        #
+        return layout
         
+    def __contentResultTable(self):
+        """ """
+        # Active widgets and connections.
         self.__tableview = QtGui.QTableView()
         self.__tableview.setAlternatingRowColors(True)
         self.__tableview.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
@@ -86,16 +92,10 @@ class DatasetViewerTool(tool_base.ToolBase):
         selectionModel = QtGui.QItemSelectionModel(self.__model)
         self.__tableview.setSelectionModel(selectionModel)
         self.__tableview.resizeColumnsToContents()
-        #
-####################        self.connect(selectionModel, QtCore.SIGNAL("currentChanged(QModelIndex, QModelIndex)"), self.__test)
-####################        self.connect(selectionModel, QtCore.SIGNAL("selectionChanged(QModelIndex, QModelIndex)"), self.__test2)
         # Layout widgets.
         layout = QtGui.QVBoxLayout()
-        layout.addWidget(self.__selectdataset_list)
         layout.addWidget(self.__tableview)
-#        resultbox.setLayout(layout)        
         #
-#        return resultbox
         return layout
         
     def __contentSaveResult(self):
@@ -124,15 +124,15 @@ class DatasetViewerTool(tool_base.ToolBase):
         self.__selectdataset_list.clear()
         self.__selectdataset_list.addItems(["<select dataset>"])
         
-        for dataset in toolbox_datasets.ToolboxDatasets().getDatasets():
-            self.__selectdataset_list.addItems(["Aaaa"])
-#        self.__selectdataset_list.addItems(["Bbbb"])
+        for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
+            self.__selectdataset_list.addItems([u'Dataset - ' + unicode(rowindex)])
 
     def __viewDataset(self, index):
         """ """
         if index <= 0:
             # Clear table.
             self.__model.setDataset(None)
+            self.__refreshResultTable()
         else:
             self.__model.setDataset(toolbox_datasets.ToolboxDatasets().getDatasetByIndex(index - 1))
             self.__refreshResultTable()
@@ -165,14 +165,6 @@ class DatasetViewerTool(tool_base.ToolBase):
         """ """
         self.__model.reset() # Model data has changed.
         self.__tableview.resizeColumnsToContents()
-
-    def __test(self, index):
-        """ """
-        print("TEST..." + "%f" % index.row())
-
-    def __test2(self, index, index2):
-        """ """
-        print("TEST2..." + "%f" % index.row() + " %f" % index.column())
 
 
 class ResultTableModel(QtCore.QAbstractTableModel):

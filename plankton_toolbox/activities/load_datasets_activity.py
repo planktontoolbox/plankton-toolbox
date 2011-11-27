@@ -55,7 +55,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         self.__activityheader.setTextFormat(QtCore.Qt.RichText)
         self.__activityheader.setAlignment(QtCore.Qt.AlignHCenter)
         self.__activityheader.setStyleSheet(""" 
-            * { color: white; background-color: #6da8bd; }
+            * { color: white; background-color: #00677f; }
             """)
         contentLayout.addWidget(self.__activityheader)
         # Add content to the activity.
@@ -124,12 +124,12 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         self.__files_table.setHorizontalHeaderLabels(["Dataset filename"])
         self.__files_table.setRowCount(0)
         # Add files in selected directory to QTableWidget.
-        for row, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
-                self.__files_table.setRowCount(row + 1)
+        for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
+                self.__files_table.setRowCount(rowindex + 1)
 #                item = QtGui.QTableWidgetItem(unicode(filename))
-                item = QtGui.QTableWidgetItem(u'Dataset - ' + unicode(row))
+                item = QtGui.QTableWidgetItem(u'Dataset - ' + unicode(rowindex))
                 item.setCheckState(QtCore.Qt.Unchecked)
-                self.__files_table.setItem(row, 0, item)            
+                self.__files_table.setItem(rowindex, 0, item)            
     
     
     
