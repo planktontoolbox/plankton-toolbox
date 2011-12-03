@@ -29,6 +29,7 @@
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
+import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.tools.tool_base as tool_base
 import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
 
@@ -62,22 +63,14 @@ class DyntaxaBrowserTool(tool_base.ToolBase):
     def __contentTaxonList(self):
         """ """
         layout = QtGui.QVBoxLayout()
-        self.__tableView = QtGui.QTableView()
+        self.__tableView = utils_qt.ToolboxQTableView()
         layout.addWidget(self.__tableView)
-        #
-        self.__tableView.setAlternatingRowColors(True)
-        self.__tableView.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
-        self.__tableView.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
-        self.__tableView.verticalHeader().setDefaultSectionSize(18)
-        # Model, data and selection        
+        # Data model.        
         self.__model = DyntaxaTableModel(self.__dyntaxa_object)
-        self.__tableView.setModel(self.__model)
-        selectionModel = QtGui.QItemSelectionModel(self.__model)
-        self.__tableView.setSelectionModel(selectionModel)
-        self.__tableView.resizeColumnsToContents()
+        self.__tableView.setTablemodel(self.__model)
         #
-        self.connect(selectionModel, QtCore.SIGNAL("currentChanged(QModelIndex, QModelIndex)"), self.__showItemInfo)
-        self.connect(selectionModel, QtCore.SIGNAL("selectionChanged(QModelIndex, QModelIndex)"), self.__showItemInfo)
+        self.connect(self.__tableView.selectionModel, QtCore.SIGNAL("currentChanged(QModelIndex, QModelIndex)"), self.__showItemInfo)
+        self.connect(self.__tableView.selectionModel, QtCore.SIGNAL("selectionChanged(QModelIndex, QModelIndex)"), self.__showItemInfo)
         #
         return layout
     

@@ -153,6 +153,7 @@ class TextFile(MonitoringFiles):
         if fileName == None:
             raise UserWarning('File name is missing.')
         #
+        file = None
         try:
             #
             txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
@@ -255,22 +256,26 @@ class SharkwebDownload(MonitoringFiles):
         
         
 #        url = u'http://test.mellifica.org/sharkweb/shark_php.php'
-        url = u'http://produkter.smhi.se/sharkweb/shark_save.php'
-#        url = u'http://sharkweb.smhi.se/shark_save.php'
+#        url = u'http://produkter.smhi.se/sharkweb/shark_save.php'
+        url = u'http://sharkweb.smhi.se/shark_save.php'
         
-        parameters = {}
+##        parameters = {}
         parameters['action']=u'download_sample'
-        parameters['year_from']=u'2010'
-        parameters['year_to']=u'2010'
-        parameters['month']=u'01'
-        parameters['datatype']=u'Phytoplankton'
-        parameters['parameter']=u'CONC'
-        parameters['sample_table_view']=u'sample_col_std'
+##        parameters['year_from']=u'2010'
+##        parameters['year_to']=u'2010'
+##        parameters['month']=u'06'
+##        parameters['datatype']=u'Phytoplankton'
+##        parameters['parameter']=u'CONC'
+        parameters['sample_table_view']=u'sample_col_bio'
         parameters['delimiters']=u'point-tab'
         parameters['lineend']=u'unix'
-        parameters['headerlang']=u'sv'     
+        parameters['headerlang']=u'en'     
         
         
+#        parameters['year_from']= u'1900'
+#        parameters['year_to']= u'2010'
+#        parameters['month']= ''
+#        parameters['parameter']= ''
         
         
            
@@ -285,17 +290,16 @@ class SharkwebDownload(MonitoringFiles):
         for row, line in enumerate(f.readlines()):
             # Use this if data is delivered in rows with tab separated fields.
             if row == 0:
-                self._header = map(string.strip, line.split('\t'))
+                self._header = map(string.strip, unicode(line).split('\t'))
             else:
-                self._rows.append(map(string.strip, line.split('\t')))
+                self._rows.append(map(string.strip, unicode(line).split('\t')))
 #            # Use this if data is delivered in the Json format.
 #            self._dataset = json.loads(line, encoding = encode)
         utils.Logger().log('Received rows: ' + str(len(self._rows)))
 
 
 class PwCsv(MonitoringFiles):
-    """ 
-    """
+    """ """
     def __init__(self):
         """ """
         self._sample_info = {} # Information related to sample.
@@ -414,7 +418,7 @@ class PwCsvTable(MonitoringFiles):
 
     def readFile(self, fileName = None):
         """
-            # Keywords in the PW sample dictionary: 
+            # Keywords in the PW sample dictionary used for sample info: 
             #    'Sample Id', 'Counted on', 'Chamber diam.', 
             #    'Sampler', 'Latitude', 'StatName', 'Sample by', 'Date', 
             #    'Sedim. time (hr)', 'No. Depths', 'Counted by', 
@@ -423,55 +427,54 @@ class PwCsvTable(MonitoringFiles):
             #    'Comment', 'Sample size', 'Amt. preservative', 
             #    'Sedim. volume', 'Ship', 'Preservative'
         """
-        sample = PwCsv()
-        sample.readFile(fileName)
-        
-        moreheaders = ['Sample Id', 'Counted on', 'Chamber diam.', 
-            'Sampler', 'Latitude', 'StatName', 'Sample by', 'Date', 
-            'Sedim. time (hr)', 'No. Depths', 'Counted by', 
-            'Max. Depth', 'Longitude', 'Project', 'Depth', 
-            'Min. Depth', 'Time', 'Mixed volume', 'StatNo', 
-            'Comment', 'Sample size', 'Amt. preservative', 
-            'Sedim. volume', 'Ship', 'Preservative']
-
-        
-        self._header = moreheaders + sample.getHeader() # Overwrite if multiple files are read.
-        sampleinfo = sample.getSampleInfo()
-        for row in sample.getRows():
+        # Read the PW file into dictionaries and rows.
+        pwsample = PwCsv()
+        pwsample.readFile(fileName)
+        # Define column order and translations.
+        sampleinfoheaders = [
+            ['Sample Id', 'Sample id'], 
+            ['Project', 'Project'], 
+            ['Ship', 'Ship'],            
+            ['StatNo', 'Stat no'], 
+            ['StatName', 'Stat name'],              
+            ['Latitude', 'Latitude'], 
+            ['Longitude', 'Longitude'], 
+            ['Date', 'Date'], 
+            ['Time', 'Time'], 
+            ['Depth', 'Depth'], 
+            ['Min. Depth', 'Min. depth'], 
+            ['Max. Depth', 'Max. depth'], 
+            ['No. Depths', 'No. depths'],             
+            ['Sampler', 'Sampler'], 
+            ['Sample size', 'Sample size'], 
+            ['Sample by', 'Sample by'], 
+            ['Mixed volume', 'Mixed volume'], 
+            ['Amt. preservative', 'Amt. preservative'], 
+            ['Sedim. volume', 'Sedim. volume'], 
+            ['Preservative', 'Preservative'],
+            ['Sedim. time (hr)', 'Sedim. time (hr)'], 
+            ['Chamber diam.', 'Chamber diameter'],             
+            ['Counted on', 'Counted on'],
+            ['Counted by', 'Counted by'], 
+            ['Comment', 'Comment']
+        ]
+        # Header.
+        self._header = [] # Rewrite if multiple files are read.
+        for headerpair in sampleinfoheaders:
+                self._header.append(headerpair[1]) # Second part for header.
+        self._header = self._header + pwsample.getHeader()
+        # Data.
+        sampleinfo = pwsample.getSampleInfo()
+        for row in pwsample.getRows():
             newrow = []
             index = 0
-            #
-            newrow.append(sampleinfo['Sample Id']) 
-            newrow.append(sampleinfo['Counted on']) 
-            newrow.append(sampleinfo['Chamber diam.']) 
-            newrow.append(sampleinfo['Sampler']) 
-            newrow.append(sampleinfo['Latitude']) 
-            newrow.append(sampleinfo['StatName']) 
-            newrow.append(sampleinfo['Sample by']) 
-            newrow.append(sampleinfo['Date']) 
-            newrow.append(sampleinfo['Sedim. time (hr)']) 
-            newrow.append(sampleinfo['No. Depths']) 
-            newrow.append(sampleinfo['Counted by']) 
-            newrow.append(sampleinfo['Max. Depth']) 
-            newrow.append(sampleinfo['Longitude']) 
-            newrow.append(sampleinfo['Project']) 
-            newrow.append(sampleinfo['Depth']) 
-            newrow.append(sampleinfo['Min. Depth']) 
-            newrow.append(sampleinfo['Time']) 
-            newrow.append(sampleinfo['Mixed volume']) 
-            newrow.append(sampleinfo['StatNo']) 
-            newrow.append(sampleinfo['Comment']) 
-            newrow.append(sampleinfo['Sample size']) 
-            newrow.append(sampleinfo['Amt. preservative']) 
-            newrow.append(sampleinfo['Sedim. volume']) 
-            newrow.append(sampleinfo['Ship']) 
-            newrow.append(sampleinfo['Preservative'])
-            #
+            # Get data for the sample info part.
+            for headerpair in sampleinfoheaders:
+                newrow.append(sampleinfo[headerpair[0]]) # First part as key.          
+            # Get table data. Use the same header order as in the PW file.
             for item in row:
                 newrow.append(item)
                 index += 1
             #
             self._rows.append(newrow)
-
-
 
