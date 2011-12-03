@@ -67,9 +67,7 @@ class StartActivity(activity_base.ActivityBase):
     def __contentWelcome(self):
         """ """
         # Active widgets and connections.
-        label = QtGui.QLabel()
-        label.setTextFormat(QtCore.Qt.RichText)
-        label.setWordWrap(True)
+        label = utils_qt.RichTextQLabel()
         label.setText("""
         <br/>
         <h3>Welcome to the Plankton Toolbox.</h3>
@@ -165,8 +163,7 @@ class StartActivity(activity_base.ActivityBase):
     def __contentTools(self):
         """ """
         # Active widgets and connections.
-        label1 = QtGui.QLabel()
-        label1.setTextFormat(QtCore.Qt.RichText)
+        label1 = utils_qt.RichTextQLabel()
         label1.setText("""
         <h4>Tools</h4>
         Tools are... 
@@ -183,10 +180,7 @@ class StartActivity(activity_base.ActivityBase):
     def __contentGetDataFromNordicMicroalgae(self):
         """ """
         # Active widgets and connections.
-        label1 = QtGui.QLabel()
-        label1.setTextFormat(QtCore.Qt.RichText)
-        label1.setOpenExternalLinks(True) 
-        label1.setWordWrap(True)
+        label1 = utils_qt.RichTextQLabel()
         label1.setText("""
         <h4>Nordic Microalgae</h4>
         Species lists and images can automatically be loaded from the 

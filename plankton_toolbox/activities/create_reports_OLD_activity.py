@@ -42,7 +42,7 @@ import plankton_toolbox.activities.activity_base as activity_base
 #import plankton_toolbox.core.biology.taxa as taxa
 #import plankton_toolbox.core.biology.taxa_sources as taxa_sources
 import plankton_toolbox.core.monitoring.monitoring_files as monitoring_files
-import plankton_toolbox.core.monitoring.pw_reports as pw_reports
+import plankton_toolbox.core.monitoring.pw_reports_OLD as pw_reports_OLD
 
 class CreateReportsActivity(activity_base.ActivityBase):
     """
@@ -251,17 +251,17 @@ class CreateReportsActivity(activity_base.ActivityBase):
             if self.__report_list.currentIndex() == 1: # Report: MJ1
                 # === Report: MJ1 ===
                 utils.Logger().log("Selected report: MJ1")
-                report = pw_reports.PwReportMJ1()
+                report = pw_reports_OLD.PwReportMJ1()
                 report.createReport(self._samplefiles, reportfilepath)
             elif self.__report_list.currentIndex() == 2: # Report: MJ2
                 # === Report: MJ1 ===
                 utils.Logger().log("Selected report: MJ2")
-                report = pw_reports.PwReportMJ2()
+                report = pw_reports_OLD.PwReportMJ2()
                 report.createReport(self._samplefiles, reportfilepath)
             elif self.__report_list.currentIndex() == 3: # Report: ATS1
                 # === Report: MJ1 ===
                 utils.Logger().log("Selected report: ATS1")
-                report = pw_reports.PwReportATS1()
+                report = pw_reports_OLD.PwReportATS1()
                 report.createReport(self._samplefiles, reportfilepath)
             else:
                 raise UserWarning('The selected report type is not implemented.')

@@ -30,6 +30,7 @@
 import os
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
+import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.activities.activity_base as activity_base
 import plankton_toolbox.core.monitoring.monitoring_files as monitoring_files
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
@@ -55,8 +56,8 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         contentLayout.addWidget(self.__activityheader)
         # Add content to the activity.
         contentLayout.addWidget(self.__contentLoadDataset())
-        contentLayout.addWidget(self.__contentLoadedDatasets())
-        contentLayout.addStretch(5)
+        contentLayout.addWidget(self.__contentLoadedDatasets(), 10)
+#        contentLayout.addStretch(5)
         # Style.
         self.__activityheader.setStyleSheet(""" 
             * { color: white; background-color: #00677f; }
@@ -70,7 +71,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         # Active widgets and connections.
         selectdatabox = QtGui.QGroupBox("Load dataset", self)
         tabWidget = QtGui.QTabWidget()
-        tabWidget.addTab(self.__contentTextfile(), "Text files")
+        tabWidget.addTab(self.__contentTextfile(), "Text files (*.txt)")
         tabWidget.addTab(self.__contentXlsx(), "Excel files (*.xlsx)")
         tabWidget.addTab(self.__contentPhytowin(), "Phytowin files (*.csv)")
         tabWidget.addTab(self.__contentSharkweb(), "Sharkweb (http://sharkweb.smhi.se)")
@@ -86,9 +87,14 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         """ """
         widget = QtGui.QWidget()
         # Active widgets and connections.
+        introlabel = utils_qt.RichTextQLabel()
+        introlabel.setText("""
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
+        tempor incididunt ut labore et dolore magna aliqua.
+        """)
         self.__textfile_edit = QtGui.QLineEdit("")
         self.__textfilebrowse_button = QtGui.QPushButton("Browse...")
-        self.__textfileload_button = QtGui.QPushButton("Get data")
+        self.__textfileload_button = QtGui.QPushButton("Load dataset")
         #
         self.connect(self.__textfilebrowse_button, QtCore.SIGNAL("clicked()"), self.__textFileBrowse)              
         self.connect(self.__textfileload_button, QtCore.SIGNAL("clicked()"), self.__loadTextFile)                
@@ -105,7 +111,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         hbox1.addWidget(self.__textfileload_button)
         #
         layout = QtGui.QVBoxLayout()
-        layout.addStretch(1)
+        layout.addWidget(introlabel)
         layout.addLayout(form1)
         layout.addStretch(7)
         layout.addLayout(hbox1)
@@ -132,9 +138,14 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         """ """
         widget = QtGui.QWidget()
         # Active widgets and connections.
+        introlabel = utils_qt.RichTextQLabel()
+        introlabel.setText("""
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
+        tempor incididunt ut labore et dolore magna aliqua.
+        """)
         self.__xlsxfile_edit = QtGui.QLineEdit("")
         self.__xlsxfilebrowse_button = QtGui.QPushButton("Browse...")
-        self.__xlsxfilegetdata_button = QtGui.QPushButton("Get data")
+        self.__xlsxfilegetdata_button = QtGui.QPushButton("Load dataset")
         #
         self.connect(self.__xlsxfilebrowse_button, QtCore.SIGNAL("clicked()"), self.__xlsxFileBrowse)              
         self.connect(self.__xlsxfilegetdata_button, QtCore.SIGNAL("clicked()"), self.__getXlsxFile)                
@@ -151,7 +162,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         hbox1.addWidget(self.__xlsxfilegetdata_button)
         #
         layout = QtGui.QVBoxLayout()
-        layout.addStretch(1)
+        layout.addWidget(introlabel)
         layout.addLayout(form1)
         layout.addStretch(7)
         layout.addLayout(hbox1)
@@ -176,6 +187,11 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
     # =====PHYTOWIN FILES ======
     def __contentPhytowin(self):
         """ """
+        introlabel = utils_qt.RichTextQLabel()
+        introlabel.setText("""
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
+        tempor incididunt ut labore et dolore magna aliqua.
+        """)
         # Active widgets and connections.
 #        self.__pwfromdirectory_edit = QtGui.QLineEdit("") # TODO: Use toolbox settings.
 ##        self.__pwfromdirectory_edit = QtGui.QLineEdit("../../../../data/planktondata/phytowin_files") # TODO: Use toolbox settings.
@@ -221,6 +237,8 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         layout = QtGui.QVBoxLayout()
         widget.setLayout(layout)
 #        layout.addLayout(form1)
+        layout.addWidget(introlabel)
+        layout.addStretch(5)
         layout.addLayout(hbox1)
         #
         return widget
@@ -327,27 +345,32 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                 // "sample_bio_agg",
         """
         # Active widgets and connections.
+        introlabel = utils_qt.RichTextQLabel()
+        introlabel.setText("""
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
+        tempor incididunt ut labore et dolore magna aliqua.
+        """)
         self.__bounds_edit = QtGui.QLineEdit("")
         self.__year_from_edit = QtGui.QLineEdit("2008")
         self.__year_to_edit = QtGui.QLineEdit("2008")
         self.__month_edit = QtGui.QLineEdit("06")
         self.__datatype_edit = QtGui.QLineEdit("Phytoplankton")
-        self.__parameter_edit = QtGui.QLineEdit("COUNTNR")
-        self.__project_code_edit = QtGui.QLineEdit("")
-        self.__orderer_edit = QtGui.QLineEdit("")
-        self.__deliverer_edit = QtGui.QLineEdit("")
-        self.__station_name_edit = QtGui.QLineEdit(u'släggö, by15')
-        self.__station_name_option_edit = QtGui.QLineEdit("station_list")
-        self.__taxon_name_edit = QtGui.QLineEdit("Dinophyceae")
-        self.__taxon_name_option_edit = QtGui.QLineEdit("class")
-#        self.__sample_table_view_edit = QtGui.QLineEdit("sample_std")
-        self.__sample_table_view_edit = QtGui.QLineEdit("sample_col_bio")
-        self.__delimiters_edit = QtGui.QLineEdit("point-tab")
-        self.__lineend_edit = QtGui.QLineEdit("unix")
-        self.__limit_edit = QtGui.QLineEdit("2000")
-        self.__headerlang_edit = QtGui.QLineEdit("sv")
+        self.__parameter_edit = QtGui.QLineEdit("CONC")
+#        self.__project_code_edit = QtGui.QLineEdit("")
+#        self.__orderer_edit = QtGui.QLineEdit("")
+#        self.__deliverer_edit = QtGui.QLineEdit("")
+#        self.__station_name_edit = QtGui.QLineEdit(u'släggö, by15')
+#        self.__station_name_option_edit = QtGui.QLineEdit("station_list")
+#        self.__taxon_name_edit = QtGui.QLineEdit("Dinophyceae")
+#        self.__taxon_name_option_edit = QtGui.QLineEdit("class")
+##        self.__sample_table_view_edit = QtGui.QLineEdit("sample_std")
+#        self.__sample_table_view_edit = QtGui.QLineEdit("sample_col_bio")
+#        self.__delimiters_edit = QtGui.QLineEdit("point-tab")
+#        self.__lineend_edit = QtGui.QLineEdit("unix")
+#        self.__limit_edit = QtGui.QLineEdit("2000")
+#        self.__headerlang_edit = QtGui.QLineEdit("sv")
         #
-        self.__get_data_button = QtGui.QPushButton("Get data")
+        self.__get_data_button = QtGui.QPushButton("Load dataset")
         self.connect(self.__get_data_button, QtCore.SIGNAL("clicked()"), self.__getSharkwebData)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
@@ -355,49 +378,49 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         label00 = QtGui.QLabel("Year")
         label01 = QtGui.QLabel("-")
         label02 = QtGui.QLabel("Datatype")
-        label03 = QtGui.QLabel("Project")
+#        label03 = QtGui.QLabel("Project")
         label04 = QtGui.QLabel("Month")
         label05 = QtGui.QLabel("Parameter")
-        label06 = QtGui.QLabel("Orderer")
-        label07 = QtGui.QLabel("Deliverer")
-        label08 = QtGui.QLabel("Station")
-        label09 = QtGui.QLabel("Species/taxon")
-        label10 = QtGui.QLabel("Header language")
-        label11 = QtGui.QLabel("Column set")
+#        label06 = QtGui.QLabel("Orderer")
+#        label07 = QtGui.QLabel("Deliverer")
+#        label08 = QtGui.QLabel("Station")
+#        label09 = QtGui.QLabel("Species/taxon")
+#        label10 = QtGui.QLabel("Header language")
+#        label11 = QtGui.QLabel("Column set")
         gridrow += 1
         form1.addWidget(label00, gridrow, 0, 1, 3)
         form1.addWidget(label02, gridrow, 3, 1, 1)
-        form1.addWidget(label03, gridrow, 4, 1, 2)
+#        form1.addWidget(label03, gridrow, 4, 1, 2)
         gridrow += 1
         form1.addWidget(self.__year_from_edit, gridrow, 0, 1, 1)
         form1.addWidget(label01, gridrow, 1, 1, 1)
         form1.addWidget(self.__year_to_edit, gridrow, 2, 1, 1)        
         form1.addWidget(self.__datatype_edit, gridrow, 3, 1, 1)        
-        form1.addWidget(self.__project_code_edit, gridrow, 4, 1, 2)
+#        form1.addWidget(self.__project_code_edit, gridrow, 4, 1, 2)
         gridrow += 1
         form1.addWidget(label04, gridrow, 0, 1, 1)
         form1.addWidget(label05, gridrow, 3, 1, 1)
-        form1.addWidget(label06, gridrow, 4, 1, 1)
-        form1.addWidget(label07, gridrow, 5, 1, 1)
+#        form1.addWidget(label06, gridrow, 4, 1, 1)
+#        form1.addWidget(label07, gridrow, 5, 1, 1)
         gridrow += 1
         form1.addWidget(self.__month_edit, gridrow, 0, 1, 3)
         form1.addWidget(self.__parameter_edit, gridrow, 3, 1, 1)
-        form1.addWidget(self.__orderer_edit, gridrow, 4, 1, 1)
-        form1.addWidget(self.__deliverer_edit, gridrow, 5, 1, 1)
-        gridrow += 1
-        form1.addWidget(label08, gridrow, 3, 1, 1)
-        gridrow += 1
-        form1.addWidget(self.__station_name_edit, gridrow, 3, 1, 2)
-        form1.addWidget(self.__station_name_option_edit, gridrow, 5, 1, 1)
-        gridrow += 1
-        form1.addWidget(label10, gridrow, 0, 1, 1)
-        form1.addWidget(label11, gridrow, 2, 1, 1)
-        form1.addWidget(label09, gridrow, 3, 1, 1)
-        gridrow += 1
-        form1.addWidget(self.__headerlang_edit, gridrow, 0, 1, 1)
-        form1.addWidget(self.__sample_table_view_edit, gridrow, 2, 1, 1)
-        form1.addWidget(self.__taxon_name_edit, gridrow, 3, 1, 2)
-        form1.addWidget(self.__taxon_name_option_edit, gridrow, 5, 1, 1)
+#        form1.addWidget(self.__orderer_edit, gridrow, 4, 1, 1)
+#        form1.addWidget(self.__deliverer_edit, gridrow, 5, 1, 1)
+#        gridrow += 1
+#        form1.addWidget(label08, gridrow, 3, 1, 1)
+#        gridrow += 1
+#        form1.addWidget(self.__station_name_edit, gridrow, 3, 1, 2)
+#        form1.addWidget(self.__station_name_option_edit, gridrow, 5, 1, 1)
+#        gridrow += 1
+#        form1.addWidget(label10, gridrow, 0, 1, 1)
+#        form1.addWidget(label11, gridrow, 2, 1, 1)
+#        form1.addWidget(label09, gridrow, 3, 1, 1)
+#        gridrow += 1
+#        form1.addWidget(self.__headerlang_edit, gridrow, 0, 1, 1)
+#        form1.addWidget(self.__sample_table_view_edit, gridrow, 2, 1, 1)
+#        form1.addWidget(self.__taxon_name_edit, gridrow, 3, 1, 2)
+#        form1.addWidget(self.__taxon_name_option_edit, gridrow, 5, 1, 1)
         gridrow += 1
         form1.addWidget(self.__get_data_button, gridrow, 5, 1, 1)
         #
@@ -407,6 +430,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         # Layout widgets.
         widget = QtGui.QWidget()        
         layout = QtGui.QVBoxLayout()
+        layout.addWidget(introlabel)
         widget.setLayout(layout)
         layout.addLayout(form1)
 #        layout.addLayout(hbox1)
@@ -418,26 +442,26 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         dataset = monitoring_files.SharkwebDownload()
         #
         parameters = {}
-        parameters['action'] = unicode('download_sample') # Not json
-#        parameters['action'] = unicode('get_sample_table') # Json
-        parameters['bounds'] = unicode('')
+#        parameters['action'] = unicode('download_sample') # Not json
+##        parameters['action'] = unicode('get_sample_table') # Json
+#        parameters['bounds'] = unicode('')
         parameters['year_from'] = unicode(self.__year_from_edit.text())
         parameters['year_to'] = unicode(self.__year_to_edit.text())
         parameters['month'] = unicode(self.__month_edit.text())
         parameters['datatype'] = unicode(self.__datatype_edit.text())
         parameters['parameter'] = unicode(self.__parameter_edit.text())
-        parameters['project_code'] = unicode(self.__project_code_edit.text())
-        parameters['orderer'] = unicode(self.__orderer_edit.text())
-#        parameters['deliverer'] = unicode(self.__deliverer_edit.text()
-        parameters['station_name'] = unicode(self.__station_name_edit.text())
-        parameters['station_name_option'] = unicode(self.__station_name_option_edit.text())
-        parameters['taxon_name'] = unicode(self.__taxon_name_edit.text())
-        parameters['taxon_name_option'] = unicode(self.__taxon_name_option_edit.text())
-        parameters['sample_table_view'] = unicode(self.__sample_table_view_edit.text())
-        parameters['delimiters'] = unicode(self.__delimiters_edit.text())
-        parameters['lineend'] = unicode(self.__lineend_edit.text())
-        parameters['limit'] = unicode(self.__limit_edit.text())
-        parameters['headerlang'] = unicode(self.__headerlang_edit.text())
+#        parameters['project_code'] = unicode(self.__project_code_edit.text())
+#        parameters['orderer'] = unicode(self.__orderer_edit.text())
+##        parameters['deliverer'] = unicode(self.__deliverer_edit.text()
+#        parameters['station_name'] = unicode(self.__station_name_edit.text())
+#        parameters['station_name_option'] = unicode(self.__station_name_option_edit.text())
+#        parameters['taxon_name'] = unicode(self.__taxon_name_edit.text())
+#        parameters['taxon_name_option'] = unicode(self.__taxon_name_option_edit.text())
+#        parameters['sample_table_view'] = unicode(self.__sample_table_view_edit.text())
+#        parameters['delimiters'] = unicode(self.__delimiters_edit.text())
+#        parameters['lineend'] = unicode(self.__lineend_edit.text())
+#        parameters['limit'] = unicode(self.__limit_edit.text())
+#        parameters['headerlang'] = unicode(self.__headerlang_edit.text())
         # Get data.
         dataset.getData(parameters)
 
