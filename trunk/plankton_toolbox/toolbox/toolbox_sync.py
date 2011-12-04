@@ -28,13 +28,34 @@
 
 """
 
+import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils as utils
 
 @utils.singleton
-class ToolboxSync(object):
-    """
-    
-    """
+class ToolboxSync(QtCore.QObject):
+    """ """
     def __init__(self):
         """ """
+        self.__test = None 
+        # 
+        QtCore.QObject.__init__(self)
+
+    def clear(self):
+        """ """
+        self.__test = None 
+        # Emit signal after short delay.
+        QtCore.QTimer.singleShot(100, self.__emitChangeNotification)
         
+    def setRowTest(self, rowIndex):
+        """ """
+        self.__test = rowIndex 
+        # Emit signal after short delay.
+        QtCore.QTimer.singleShot(100, self.__emitSelectedRowChangedTEST)
+        
+    def getRowTest(self):
+        """ """
+        return self.__test 
+        
+    def __emitSelectedRowChangedTEST(self):
+        """ """
+        self.emit(QtCore.SIGNAL('syncSelectedRowTEST'))

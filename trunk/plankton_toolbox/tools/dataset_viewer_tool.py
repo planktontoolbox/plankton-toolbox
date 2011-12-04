@@ -32,6 +32,7 @@ import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.tools.tool_base as tool_base
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
+import plankton_toolbox.toolbox.toolbox_sync as toolbox_sync
 
 class DatasetViewerTool(tool_base.ToolBase):
     """
@@ -61,6 +62,10 @@ class DatasetViewerTool(tool_base.ToolBase):
         self.connect(toolbox_datasets.ToolboxDatasets(), 
                      QtCore.SIGNAL("datasetListChanged"), 
                      self.__updateDatasetList)
+        # Listen for changes in the toolbox sync.
+        self.connect(toolbox_sync.ToolboxSync(), 
+                     QtCore.SIGNAL("syncSelectedRowTEST"), 
+                     self.__setSelectedDataset)
 #
 #        self.__updateDatasetList()
 
@@ -148,10 +153,15 @@ class DatasetViewerTool(tool_base.ToolBase):
                     self.__tableview.tablemodel.getModeldata().SaveAsTextFile(unicode(filename))
                 elif self.__saveformat_list.currentIndex() == 1: # Xlsx file.
                     self.__tableview.tablemodel.getModeldata().SaveExcelXlsxFile(unicode(filename))
-
         
     def __refreshResultTable(self):
         """ """
         self.__tableview.tablemodel.reset() # Model data has changed.
         self.__tableview.resizeColumnsToContents()
 
+    def __setSelectedDataset(self):
+        """ """
+        index = toolbox_sync.ToolboxSync().getRowTest()
+        self.__selectdataset_list.setCurrentIndex(index + 1)
+        self.__viewDataset(index + 1)
+        

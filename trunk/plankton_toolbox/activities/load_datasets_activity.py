@@ -34,15 +34,16 @@ import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.activities.activity_base as activity_base
 import plankton_toolbox.core.monitoring.monitoring_files as monitoring_files
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
+import plankton_toolbox.toolbox.toolbox_sync as toolbox_sync
 
 class LoadDatasetsActivity(activity_base.ActivityBase):
     """ """
     def __init__(self, name, parentwidget):
         """ """
+        self.__datasettabledata = DatasetTableData()
+        self.__lastusedphytowinfilename = u''
         # Initialize parent.
         super(LoadDatasetsActivity, self).__init__(name, parentwidget)
-        #
-        self.__lastusedphytowinfilename = u''
 
     def _createContent(self):
         """ """
@@ -507,21 +508,37 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         # Active widgets and connections.
         selectdatabox = QtGui.QGroupBox("Loaded datasets", self)
         #
-        self.__datasets_table = QtGui.QTableWidget()
-        self.__datasets_table.setAlternatingRowColors(True)
-        self.__datasets_table.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
-        self.__datasets_table.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
-        self.__datasets_table.verticalHeader().setDefaultSectionSize(18)
-        self.__datasets_table.setColumnCount(1)
-        self.__datasets_table.horizontalHeader().setStretchLastSection(True)
-        self.__datasets_table.setHorizontalHeaderLabels(["Dataset filename"])
+        self.__datasets_table = utils_qt.ToolboxQTableView()
+        
+        self.__datasettabledata.clear()
+#        self.__datasettabledata.setHeader([u'Dataset', u'Source', u'Name'])
+        self.__datasettabledata.setHeader([u'Dataset'])
+        self.__datasets_table.tablemodel.setModeldata(self.__datasettabledata)
+        self.__datasets_table.resizeColumnsToContents()
+        
+        self.__datasets_table.selectionModel.Rows
+        
+        
+        
+#        self.__datasets_table = QtGui.QTableWidget()
+#        self.__datasets_table.setAlternatingRowColors(True)
+#        self.__datasets_table.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
+#        self.__datasets_table.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+#        self.__datasets_table.verticalHeader().setDefaultSectionSize(18)
+#        self.__datasets_table.setColumnCount(1)
+#        self.__datasets_table.horizontalHeader().setStretchLastSection(True)
+#        self.__datasets_table.setHorizontalHeaderLabels(["Dataset filename"])
         # Listen for changes in the toolbox dataset list.
         self.connect(toolbox_datasets.ToolboxDatasets(), 
              QtCore.SIGNAL("datasetListChanged"), 
              self.__updateDatasetList)
+        # Connection for selected row.
+        self.connect(self.__datasets_table.selectionModel, 
+                     QtCore.SIGNAL("currentRowChanged(QModelIndex, QModelIndex)"), 
+                     self.__selectionChanged)                
         # Buttons.
         self.__unloadalldatasets_button = QtGui.QPushButton("Unload all datasets")
-        self.__unloadmarkeddatasets_button = QtGui.QPushButton("Unload marked datasets")
+        self.__unloadmarkeddatasets_button = QtGui.QPushButton("Unload marked dataset(s)")
         # Button connections.
         self.connect(self.__unloadalldatasets_button, QtCore.SIGNAL("clicked()"), self.__unloadAllDatasets)                
         self.connect(self.__unloadmarkeddatasets_button, QtCore.SIGNAL("clicked()"), self.__unloadMarkedDatasets)                
@@ -546,23 +563,82 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
 
     def __unloadMarkedDatasets(self):
         """ """
+        
+        ###self.columnView.selectionModel().selection().indexes()
+        ###tableView->currentIndex()
+        ###tableView->selectionModel()->currentIndex()
+
         # Remove datasets, start with the last one. 
-        rowcount = self.__datasets_table.rowCount()
+        rowcount = self.__datasets_table.tablemodel.rowCount()
         for rowindex in range(rowcount):
-            item = self.__datasets_table.item(rowcount - rowindex - 1, 0)
-            if item.checkState(): # Check if selected by user.
+#            item = self.__datasets_table.item(rowcount - rowindex - 1, 0)
+#            if item.checkState(): # Check if selected by user.
+            if self.__datasets_table.selectionModel.isSelected(self.__datasets_table.tablemodel.createIndex(rowindex, 0)): # Check if selected by user.
                 toolbox_datasets.ToolboxDatasets().removeDatasetByIndex(rowcount - rowindex - 1)
 
     def __updateDatasetList(self):
         """ """
-        self.__datasets_table.clear()
-        self.__datasets_table.setHorizontalHeaderLabels(["Dataset filename"])
-        self.__datasets_table.setRowCount(0)
-        # Add files in selected directory to QTableWidget.
+        self.__datasettabledata.clearRows()
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
-                self.__datasets_table.setRowCount(rowindex + 1)
-#                item = QtGui.QTableWidgetItem(unicode(filename))
-                item = QtGui.QTableWidgetItem(u'Dataset - ' + unicode(rowindex))
-                item.setCheckState(QtCore.Qt.Unchecked)
-                self.__datasets_table.setItem(rowindex, 0, item)            
+            self.__datasettabledata.addRow([u'Dataset - ' + unicode(rowindex)])
+        self.__datasets_table.tablemodel.reset()
+        self.__datasets_table.resizeColumnsToContents()
     
+    def __selectionChanged(self, modelIndex):
+        """ """
+        if modelIndex.isValid():
+            print('TEST Selected row: ' + unicode(modelIndex.row()))
+            toolbox_sync.ToolboxSync().setRowTest(modelIndex.row())
+
+    
+class DatasetTableData(object):
+    """ """
+    def __init__(self):
+        """ """
+        self._header = []
+        self._rows = []
+        
+    def clear(self):
+        """ """
+        self._header = []
+        self._rows = []
+
+    def clearRows(self):
+        """ """
+        self._rows = []
+
+    def setHeader(self, header):
+        """ """
+        self._header = header
+
+    def addRow(self, row):
+        """ """
+        self._rows.append(row)
+
+    def getHeaderItem(self, column):
+        """ Used for calls from QAbstractTableModel. """
+        try:
+            return self._header[column]
+        except Exception:
+            return ''
+
+    def getDataItem(self, row, column):
+        """ Used for calls from QAbstractTableModel. """
+        try:
+            return self._rows[row][column]
+        except Exception:
+            return ''
+
+    def getColumnCount(self):
+        """ Used for calls from QAbstractTableModel. """
+        try:
+            return len(self._header)
+        except Exception:
+            return ''
+
+    def getRowCount(self):
+        """ Used for calls from QAbstractTableModel. """
+        try:
+            return len(self._rows)
+        except Exception:
+            return ''
