@@ -134,7 +134,7 @@ class ToolboxQTableView( QtGui.QTableView):
         #self.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         self.setSelectionMode(QtGui.QAbstractItemView.ContiguousSelection)
         self.verticalHeader().setDefaultSectionSize(18)
-        # DEfault model, data and selection        
+        # Default model, data and selection        
         self.tablemodel = ToolboxTableModel()
         self.setModel(self.tablemodel)
         self.selectionModel = QtGui.QItemSelectionModel(self.tablemodel)
@@ -142,7 +142,7 @@ class ToolboxQTableView( QtGui.QTableView):
         self.resizeColumnsToContents()
           
     def setTablemodel(self, model):
-        """ """
+        """ Use this method if the default model should be replaced. """
         self.tablemodel = model
         self.setModel(self.tablemodel)
         self.selectionModel = QtGui.QItemSelectionModel(self.tablemodel)
@@ -160,6 +160,7 @@ class ToolboxTableModel(QtCore.QAbstractTableModel):
     def setModeldata(self, modeldata):
         """ """
         self.__modeldata = modeldata
+        self.reset() 
 
     def getModeldata(self):
         """ """

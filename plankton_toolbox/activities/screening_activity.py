@@ -29,16 +29,19 @@
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
+import plankton_toolbox.toolbox.utils as utils
 import plankton_toolbox.activities.activity_base as activity_base
 
-class AnalyseDatasetsActivity(activity_base.ActivityBase):
+class ScreeningActivity(activity_base.ActivityBase):
     """
+    Used for screening of datasets content.
     """
     
     def __init__(self, name, parentwidget):
         """ """
-        # Initialize parent.
-        super(AnalyseDatasetsActivity, self).__init__(name, parentwidget)
+        # Initialize parent. Should be called after other 
+        # initialization since the base class calls _createContent().
+        super(ScreeningActivity, self).__init__(name, parentwidget)
 
     def _createContent(self):
         """ """
@@ -54,64 +57,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
             """)
         contentLayout.addWidget(self.__activityheader)
         # Add content to the activity.
-        tabWidget = QtGui.QTabWidget()
-        contentLayout.addWidget(tabWidget)
-        tabWidget.addTab(self.__contentSelectDataset(), "(Select dataset)")
-        tabWidget.addTab(self.__contentFilterData(), "(Filter data)")
-        tabWidget.addTab(self.__contentAggregateData(), "(Aggregate data)")
-        tabWidget.addTab(self.__contentAggregateData(), "(Visualize)")
-        tabWidget.addTab(self.__contentExportResult(), "(Save result)")
-
-    def __contentSelectDataset(self):
-        """ """
-        # Active widgets and connections.
-
-        # Layout.
-        widget = QtGui.QWidget()        
-        layout = QtGui.QVBoxLayout()
-        widget.setLayout(layout)
-#        layout.addWidget(selectionbox)
-#        layout.addWidget(resultbox)
-        #
-        return widget
-
-    def __contentFilterData(self):
-        """ """
-        # Active widgets and connections.
-
-        # Layout.
-        widget = QtGui.QWidget()        
-        layout = QtGui.QVBoxLayout()
-        widget.setLayout(layout)
-#        layout.addWidget(selectionbox)
-#        layout.addWidget(resultbox)
-        #
-        return widget
-
-    def __contentAggregateData(self):
-        """ """
-        # Active widgets and connections.
-
-        # Layout.
-        widget = QtGui.QWidget()        
-        layout = QtGui.QVBoxLayout()
-        widget.setLayout(layout)
-#        layout.addWidget(selectionbox)
-#        layout.addWidget(resultbox)
-        #
-        return widget
-
-    def __contentExportResult(self):
-        """ """
-        # Active widgets and connections.
-
-        # Layout.
-        widget = QtGui.QWidget()        
-        layout = QtGui.QVBoxLayout()
-        widget.setLayout(layout)
-#        layout.addWidget(selectionbox)
-#        layout.addWidget(resultbox)
-        #
-        return widget
-
-
+#        contentLayout.addLayout(self.__contentPersonInfo())
+#        contentLayout.addLayout(self.__contentButtons())
+        contentLayout.addStretch(5)
+        
