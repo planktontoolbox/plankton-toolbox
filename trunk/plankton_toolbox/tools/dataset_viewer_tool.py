@@ -75,10 +75,13 @@ class DatasetViewerTool(tool_base.ToolBase):
         self.__selectdataset_list = QtGui.QComboBox()
         self.__selectdataset_list.addItems(["<select dataset>"])
         self.connect(self.__selectdataset_list, QtCore.SIGNAL("currentIndexChanged(int)"), self.__viewDataset)                
+        self.__allowsync_checkbox = QtGui.QCheckBox("Allow synch" )
+        self.__allowsync_checkbox.setChecked(True) 
         # Layout widgets.
         layout = QtGui.QHBoxLayout()
         layout.addWidget(QtGui.QLabel("Loaded datasets:"))
         layout.addWidget(self.__selectdataset_list)
+        layout.addWidget(self.__allowsync_checkbox)
         layout.addStretch(5)
         #
         return layout
@@ -161,7 +164,8 @@ class DatasetViewerTool(tool_base.ToolBase):
 
     def __setSelectedDataset(self):
         """ """
-        index = toolbox_sync.ToolboxSync().getRowTest()
-        self.__selectdataset_list.setCurrentIndex(index + 1)
-        self.__viewDataset(index + 1)
+        if self.__allowsync_checkbox.isChecked():
+            index = toolbox_sync.ToolboxSync().getRowTest()
+            self.__selectdataset_list.setCurrentIndex(index + 1)
+            self.__viewDataset(index + 1)
         
