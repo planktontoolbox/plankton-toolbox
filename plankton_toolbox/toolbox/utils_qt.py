@@ -219,7 +219,7 @@ def setAppStyleSheet(app):
         /* Default for all dock widgets.*/
         QDockWidget, QDockWidget *  { color: black; background-color: #dddddd; }
         QDockWidget QPushButton:hover { color: #d1581c; }
-
+        
         /* Default for all widgets used in tools. */        
         ToolBase, ToolBase * { color: black; background-color: #dddddd; } 
         ToolBase QPushButton:hover { color: #d1581c; } 

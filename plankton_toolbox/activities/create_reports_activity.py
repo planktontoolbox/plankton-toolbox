@@ -81,7 +81,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
         """)
         self.__report_list = QtGui.QComboBox()
         self.__report_list.addItems([u'<select>',
-                                     u'Aggregate datasets',
+                                     u'Combine datasets',
                                      u'Prepare for data delivery',
                                      u'MJ Report 1 (Håvprover inom 24 timmar)',
                                      u'MJ Report 2',
