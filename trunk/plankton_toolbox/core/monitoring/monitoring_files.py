@@ -33,8 +33,8 @@ import codecs
 import json
 import urllib
 import string
-import toolbox.utils as utils
-import toolbox.toolbox_settings as toolbox_settings
+import plankton_toolbox.toolbox.utils as utils
+import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 # Openpyxl is not included in python(xy).
 try: 
     import openpyxl.workbook as excelworkbook

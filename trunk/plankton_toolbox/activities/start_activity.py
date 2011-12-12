@@ -30,9 +30,9 @@ This activity is "a welcome page" with some possibilities to set up the environm
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-import toolbox.utils as utils
-import toolbox.utils_qt as utils_qt
-import activities.activity_base as activity_base
+import plankton_toolbox.toolbox.utils as utils
+import plankton_toolbox.toolbox.utils_qt as utils_qt
+import plankton_toolbox.activities.activity_base as activity_base
 
 class StartActivity(activity_base.ActivityBase):
     """

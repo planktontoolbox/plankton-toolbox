@@ -28,16 +28,16 @@
 Tool manager.
 """
 
-import tools.toolbox_settings_tool as toolbox_settings_tool
-import tools.log_tool as log_tool
-import tools.dataset_viewer_tool as dataset_viewer_tool
-import tools.metadata_editor_tool as metadata_editor_tool
-import tools.dyntaxa_browser_tool as dyntaxa_browser_tool
-import tools.peg_browser_tool as peg_browser_tool
-import tools.harmful_plankton_browser_tool as harmful_plankton_browser_tool
-import tools.taxon_facts_tool as taxon_facts_tool
-import tools.taxon_images_tool as taxon_images_tool
-import tools.latlong_tool as latlong_tool
+import plankton_toolbox.tools.toolbox_settings_tool as toolbox_settings_tool
+import plankton_toolbox.tools.log_tool as log_tool
+import plankton_toolbox.tools.dataset_viewer_tool as dataset_viewer_tool
+import plankton_toolbox.tools.metadata_editor_tool as metadata_editor_tool
+import plankton_toolbox.tools.dyntaxa_browser_tool as dyntaxa_browser_tool
+import plankton_toolbox.tools.peg_browser_tool as peg_browser_tool
+import plankton_toolbox.tools.harmful_plankton_browser_tool as harmful_plankton_browser_tool
+import plankton_toolbox.tools.taxon_facts_tool as taxon_facts_tool
+import plankton_toolbox.tools.taxon_images_tool as taxon_images_tool
+import plankton_toolbox.tools.latlong_tool as latlong_tool
 #import tools.template_tool as template_tool
 
 class ToolManager(object):

@@ -31,7 +31,7 @@ Contains settings for the Plankton Toolbox application.
 import pickle
 import copy
 import PyQt4.QtCore as QtCore
-import toolbox.utils as utils
+import plankton_toolbox.toolbox.utils as utils
 
 @utils.singleton
 class ToolboxSettings(QtCore.QObject):

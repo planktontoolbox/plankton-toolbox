@@ -29,7 +29,7 @@
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-import tools.tool_base as tool_base
+import plankton_toolbox.tools.tool_base as tool_base
 
 class MetadataEditorTool(tool_base.ToolBase):
     """
