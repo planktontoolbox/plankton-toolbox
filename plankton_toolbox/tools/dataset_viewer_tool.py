@@ -29,10 +29,10 @@
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-import toolbox.utils_qt as utils_qt
-import tools.tool_base as tool_base
-import toolbox.toolbox_datasets as toolbox_datasets
-import toolbox.toolbox_sync as toolbox_sync
+import plankton_toolbox.toolbox.utils_qt as utils_qt
+import plankton_toolbox.tools.tool_base as tool_base
+import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
+import plankton_toolbox.toolbox.toolbox_sync as toolbox_sync
 
 class DatasetViewerTool(tool_base.ToolBase):
     """

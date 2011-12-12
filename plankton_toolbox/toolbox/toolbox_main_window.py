@@ -36,13 +36,13 @@ import time
 import codecs
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-import toolbox.utils as utils
-import toolbox.utils_qt as utils_qt
-import tools.tool_manager as tool_manager
-import activities.activity_manager as activity_manager
-import tools.log_tool as log_tool
-import toolbox.toolbox_settings as toolbox_settings
-import toolbox.toolbox_resources as toolbox_resources
+import plankton_toolbox.toolbox.utils as utils
+import plankton_toolbox.toolbox.utils_qt as utils_qt
+import plankton_toolbox.tools.tool_manager as tool_manager
+import plankton_toolbox.activities.activity_manager as activity_manager
+import plankton_toolbox.tools.log_tool as log_tool
+import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
+import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
 
 __version__ = '0.0.2' # Plankton Toolbox version.
 

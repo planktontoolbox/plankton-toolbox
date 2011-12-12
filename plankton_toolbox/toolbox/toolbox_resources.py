@@ -32,12 +32,12 @@ Datasets managed as resources are:
 - Harmful plankton. From IOC.
 """
 
-#import PyQt4.QtGui as QtGui
+#import plankton_toolbox.PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-import toolbox.utils as utils
-import toolbox.toolbox_settings as toolbox_settings
-import core.biology.taxa as taxa
-import core.biology.taxa_sources as taxa_sources
+import plankton_toolbox.toolbox.utils as utils
+import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
+import plankton_toolbox.core.biology.taxa as taxa
+import plankton_toolbox.core.biology.taxa_sources as taxa_sources
 
 @utils.singleton
 class ToolboxResources(QtCore.QObject):

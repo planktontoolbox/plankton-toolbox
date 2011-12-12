@@ -35,10 +35,11 @@ on Mac OS X.
 
 import sys
 import PyQt4.QtGui as QtGui
-import toolbox.main_window as main_window
-import toolbox.utils_qt as utils_qt
+import plankton_toolbox.toolbox.toolbox_main_window as toolbox_main_window
+import plankton_toolbox.toolbox.utils_qt as utils_qt
 
-if __name__ == '__main__':
+###if __name__ == '__main__':
+def plankton_toolbox_application():
     """
     Main application for the Plankton Toolbox.
     """
@@ -50,6 +51,6 @@ if __name__ == '__main__':
 
     utils_qt.setAppStyleSheet(app)
     
-    window = main_window.MainWindow()
+    window = toolbox_main_window.MainWindow()
     window.show()
     sys.exit(app.exec_())

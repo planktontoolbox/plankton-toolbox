@@ -28,17 +28,17 @@
 Activity manager.
 """
 
-import activities.start_activity as start_activity
-import activities.create_dataset_activity as create_dataset_activity
-import activities.load_datasets_activity as load_datasets_activity
-import activities.screening_activity as screening_activity
-import activities.analyse_datasets_activity as analyse_datasets_activity
-import activities.create_reports_activity as create_reports_activity
-import activities.manage_species_lists_activity as manage_species_lists_activity
+import plankton_toolbox.activities.start_activity as start_activity
+import plankton_toolbox.activities.create_dataset_activity as create_dataset_activity
+import plankton_toolbox.activities.load_datasets_activity as load_datasets_activity
+import plankton_toolbox.activities.screening_activity as screening_activity
+import plankton_toolbox.activities.analyse_datasets_activity as analyse_datasets_activity
+import plankton_toolbox.activities.create_reports_activity as create_reports_activity
+import plankton_toolbox.activities.manage_species_lists_activity as manage_species_lists_activity
 
-import activities.load_datasets_OLD_activity as load_datasets_OLD_activity
-import activities.create_reports_OLD_activity as create_reports_OLD_activity
-#import activities.template_activity as template_activity
+import plankton_toolbox.activities.load_datasets_OLD_activity as load_datasets_OLD_activity
+import plankton_toolbox.activities.create_reports_OLD_activity as create_reports_OLD_activity
+#import plankton_toolbox.activities.template_activity as template_activity
 
 class ActivityManager(object):
     """ 
