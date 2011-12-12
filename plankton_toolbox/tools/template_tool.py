@@ -30,8 +30,8 @@ Template for new tools.
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-import plankton_toolbox.toolbox.utils as utils
-import plankton_toolbox.tools.tool_base as tool_base
+import toolbox.utils as utils
+import tools.tool_base as tool_base
 
 class TemplateTool(tool_base.ToolBase):
     """

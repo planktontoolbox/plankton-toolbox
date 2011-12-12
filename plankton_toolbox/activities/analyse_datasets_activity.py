@@ -29,7 +29,7 @@
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-import plankton_toolbox.activities.activity_base as activity_base
+import activities.activity_base as activity_base
 
 class AnalyseDatasetsActivity(activity_base.ActivityBase):
     """

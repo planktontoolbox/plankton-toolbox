@@ -29,9 +29,9 @@
 """
 
 import codecs
-import plankton_toolbox.toolbox.utils as utils
-import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
-import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
+import toolbox.utils as utils
+import toolbox.toolbox_settings as toolbox_settings
+import toolbox.toolbox_resources as toolbox_resources
 
 
 class PwReports(object):

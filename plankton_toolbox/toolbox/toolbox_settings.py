@@ -31,7 +31,7 @@ Contains settings for the Plankton Toolbox application.
 import pickle
 import copy
 import PyQt4.QtCore as QtCore
-import plankton_toolbox.toolbox.utils as utils
+import toolbox.utils as utils
 
 @utils.singleton
 class ToolboxSettings(QtCore.QObject):
@@ -48,15 +48,15 @@ class ToolboxSettings(QtCore.QObject):
             },
             "Resources": {
                 "Dyntaxa": {
-                    "Filepath": "planktondata/resources/smhi_dv_dyntaxa.json",
+                    "Filepath": "../planktondata/resources/smhi_dv_dyntaxa.json",
                 },
                 "PEG": {
-                    "Filepath": "planktondata/resources/smhi_extended_peg.json",
-                    "PW to PEG filepath": "planktondata/resources/translate_pw_to_smhi_extended_peg.txt",
-                    "PEG to Dyntaxa filepath": "planktondata/resources/smhi_peg_to_dyntaxa.txt"
+                    "Filepath": "../planktondata/resources/smhi_extended_peg.json",
+                    "PW to PEG filepath": "../planktondata/resources/translate_pw_to_smhi_extended_peg.txt",
+                    "PEG to Dyntaxa filepath": "../planktondata/resources/smhi_peg_to_dyntaxa.txt"
                 },
                 "Harmful plankton": {
-                    "Filepath": "planktondata/resources/smhi_harmful_plankton.json"
+                    "Filepath": "../planktondata/resources/smhi_harmful_plankton.json"
                 },
                 "Load at startup": True 
             },

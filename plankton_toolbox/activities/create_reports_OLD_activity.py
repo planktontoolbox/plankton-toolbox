@@ -37,12 +37,12 @@ reports based on datasets content. Implemented datsets/reports are:
 import os
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-import plankton_toolbox.toolbox.utils as utils
-import plankton_toolbox.activities.activity_base as activity_base
-#import plankton_toolbox.core.biology.taxa as taxa
-#import plankton_toolbox.core.biology.taxa_sources as taxa_sources
-import plankton_toolbox.core.monitoring.monitoring_files as monitoring_files
-import plankton_toolbox.core.monitoring.pw_reports_OLD as pw_reports_OLD
+import toolbox.utils as utils
+import activities.activity_base as activity_base
+#import core.biology.taxa as taxa
+#import core.biology.taxa_sources as taxa_sources
+import core.monitoring.monitoring_files as monitoring_files
+import core.monitoring.pw_reports_OLD as pw_reports_OLD
 
 class CreateReportsActivity(activity_base.ActivityBase):
     """

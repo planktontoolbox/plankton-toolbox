@@ -25,37 +25,31 @@
 # THE SOFTWARE.
 
 """
+Main module of the application Plankton Toolbox.
 
+Organization name, domain and application name are used by QSettings. Settings
+are stored in the register on Windows (path: "HKEY_CURRENT_USER/Software/SMHI/
+Plankton Toolbox"), in $HOME/.config on Linux and in $HOME/Library/Preferences 
+on Mac OS X.
 """
 
-import PyQt4.QtCore as QtCore
-import toolbox.utils as utils
+import sys
+import PyQt4.QtGui as QtGui
+import toolbox.main_window as main_window
+import toolbox.utils_qt as utils_qt
 
-@utils.singleton
-class ToolboxSync(QtCore.QObject):
-    """ """
-    def __init__(self):
-        """ """
-        self.__test = None 
-        # 
-        QtCore.QObject.__init__(self)
+if __name__ == '__main__':
+    """
+    Main application for the Plankton Toolbox.
+    """
+    app = QtGui.QApplication(sys.argv)
+    app.setOrganizationName("SMHI")
+    app.setOrganizationDomain("smhi.se")
+    app.setApplicationName("Plankton Toolbox")
+#    app.setWindowIcon(":/plankton_toolbox_icon.png") # TODO:.
 
-    def clear(self):
-        """ """
-        self.__test = None 
-        # Emit signal after short delay.
-        QtCore.QTimer.singleShot(100, self.__emitChangeNotification)
-        
-    def setRowTest(self, rowIndex):
-        """ """
-        self.__test = rowIndex 
-        # Emit signal after short delay.
-        QtCore.QTimer.singleShot(100, self.__emitSelectedRowChangedTEST)
-        
-    def getRowTest(self):
-        """ """
-        return self.__test 
-        
-    def __emitSelectedRowChangedTEST(self):
-        """ """
-        self.emit(QtCore.SIGNAL('syncSelectedRowTEST'))
+    utils_qt.setAppStyleSheet(app)
+    
+    window = main_window.MainWindow()
+    window.show()
+    sys.exit(app.exec_())
