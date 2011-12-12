@@ -1,33 +1,19 @@
 #!/usr/bin/env python
 """
+Plankton Toolbox
+
 Command to make a source distribution: 
 python setup.py sdist
 """
 
 from setuptools import setup, find_packages
 setup(
-	name='Plankton Toolbox',
+	name='PlanktonToolbox',
 	version='0.0.2',
 	packages=find_packages(),
-	scripts=['plankton_toolbox.py', 'plankton_toolbox.pyw'],
-	install_requires=['Openpyxl']
+	scripts=['plankton_toolbox_start.py', 
+			 'plankton_toolbox_start.pyw'],
+	install_requires=['Openpyxl', 
+					  'PyQt(>=4.4.0)'
+					  ]
 )
-
-#from distutils.core import setup
-#setup(name='Plankton Toolbox',
-#      version='0.0.2',
-#      description='',
-#      author='',
-#      author_email='',
-#      url='',
-#      packages=['plankton_toolbox', 
-#				'plankton_toolbox.toolbox', 
-#				'plankton_toolbox.activities', 
-#				'plankton_toolbox.tools', 
-#				'plankton_toolbox.core', 
-#				'plankton_toolbox.core.biology', 
-#				'plankton_toolbox.core.map_projections', 
-#				'plankton_toolbox.core.monitoring' 
-#				],
-#      install_requires=['Openpyxl']
-#      )
