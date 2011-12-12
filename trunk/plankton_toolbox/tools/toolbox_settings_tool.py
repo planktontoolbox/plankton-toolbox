@@ -29,8 +29,8 @@
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-import plankton_toolbox.tools.tool_base as tool_base
-import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
+import tools.tool_base as tool_base
+import toolbox.toolbox_settings as toolbox_settings
 
 class ToolboxSettingsTool(tool_base.ToolBase):
     """

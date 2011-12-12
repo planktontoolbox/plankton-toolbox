@@ -30,8 +30,8 @@ Template for new activities.
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-import plankton_toolbox.toolbox.utils as utils
-import plankton_toolbox.activities.activity_base as activity_base
+import toolbox.utils as utils
+import activities.activity_base as activity_base
 
 class TemplateActivity(activity_base.ActivityBase):
     """

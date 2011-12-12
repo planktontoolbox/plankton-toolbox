@@ -29,13 +29,13 @@
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-import plankton_toolbox.toolbox.utils as utils
-import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
-import plankton_toolbox.activities.activity_base as activity_base
-import plankton_toolbox.core.biology.taxa as taxa
-import plankton_toolbox.core.biology.taxa_sources as taxa_sources
-import plankton_toolbox.core.biology.taxa_prepare as taxa_prepare
-import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
+import toolbox.utils as utils
+import toolbox.toolbox_settings as toolbox_settings
+import activities.activity_base as activity_base
+import core.biology.taxa as taxa
+import core.biology.taxa_sources as taxa_sources
+import core.biology.taxa_prepare as taxa_prepare
+import toolbox.toolbox_resources as toolbox_resources
 
 class ManageSpeciesListsActivity(activity_base.ActivityBase):
     """

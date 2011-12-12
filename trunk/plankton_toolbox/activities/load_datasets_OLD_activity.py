@@ -34,11 +34,11 @@ layout of the corresponding page on the website.
 import os
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-import plankton_toolbox.activities.activity_base as activity_base
-import plankton_toolbox.core.monitoring.monitoring_files as monitoring_files
+import activities.activity_base as activity_base
+import core.monitoring.monitoring_files as monitoring_files
 
 # TODO: TEST
-import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
+import toolbox.toolbox_datasets as toolbox_datasets
 
 
 

@@ -35,8 +35,8 @@ on Mac OS X.
 
 import sys
 import PyQt4.QtGui as QtGui
-import plankton_toolbox.toolbox.main_window as main_window
-import plankton_toolbox.toolbox.utils_qt as utils_qt
+import toolbox.main_window as main_window
+import toolbox.utils_qt as utils_qt
 
 if __name__ == '__main__':
     """

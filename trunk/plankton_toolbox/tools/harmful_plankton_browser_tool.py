@@ -31,10 +31,10 @@
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import webbrowser
-import plankton_toolbox.toolbox.utils as utils
-import plankton_toolbox.toolbox.utils_qt as utils_qt
-import plankton_toolbox.tools.tool_base as tool_base
-import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
+import toolbox.utils as utils
+import toolbox.utils_qt as utils_qt
+import tools.tool_base as tool_base
+import toolbox.toolbox_resources as toolbox_resources
 
 class HarmfulPlanktonBrowserTool(tool_base.ToolBase):
     """

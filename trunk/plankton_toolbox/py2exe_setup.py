@@ -8,6 +8,7 @@ Command to execute this setup file:
 python py2exe_setup.py py2exe
 
 """
+
 from distutils.core import setup
 import py2exe
 setup(

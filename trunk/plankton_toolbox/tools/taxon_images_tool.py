@@ -29,7 +29,7 @@
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-import plankton_toolbox.tools.tool_base as tool_base
+import tools.tool_base as tool_base
 
 class TaxonImagesTool(tool_base.ToolBase):
     """
@@ -60,7 +60,7 @@ class TaxonImagesTool(tool_base.ToolBase):
         label.setAlignment(QtCore.Qt.AlignHCenter)
         imagelabel = QtGui.QLabel()
         imagelabel.setAlignment(QtCore.Qt.AlignHCenter)
-        image = QtGui.QImage('planktondata/cache/images/Incertae_sedis.jpg')
+        image = QtGui.QImage('../planktondata/cache/images/Incertae_sedis.jpg')
         imagelabel.setPixmap(QtGui.QPixmap.fromImage(image))
         layout.addWidget(label)
         layout.addWidget(imagelabel)
