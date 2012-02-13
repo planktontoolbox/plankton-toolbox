@@ -59,7 +59,8 @@ class FormatBase(object):
     def asText(self, column_name):
         """ """
         if column_name in self._headerdict:
-            return self._row[self._headerdict[column_name]]
+            index = self._headerdict[column_name]
+            return self._row[index] if len(self._row) > index else u''
         else:
             return u''
 
