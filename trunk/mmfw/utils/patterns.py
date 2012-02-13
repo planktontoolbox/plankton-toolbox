@@ -24,38 +24,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""
-
-"""
-
-import PyQt4.QtCore as QtCore
-import mmfw
-
-@mmfw.singleton
-class ToolboxSync(QtCore.QObject):
-    """ """
-    def __init__(self):
-        """ """
-        self.__test = None 
-        # 
-        QtCore.QObject.__init__(self)
-
-    def clear(self):
-        """ """
-        self.__test = None 
-        # Emit signal after short delay.
-        QtCore.QTimer.singleShot(100, self.__emitChangeNotification)
-        
-    def setRowTest(self, rowIndex):
-        """ """
-        self.__test = rowIndex 
-        # Emit signal after short delay.
-        QtCore.QTimer.singleShot(100, self.__emitSelectedRowChangedTEST)
-        
-    def getRowTest(self):
-        """ """
-        return self.__test 
-        
-    def __emitSelectedRowChangedTEST(self):
-        """ """
-        self.emit(QtCore.SIGNAL('syncSelectedRowTEST'))
+def singleton(cls):
+    """
+    This is an implementation of the Singleton pattern by using decorators.
+    Usage example:
+        @singleton
+        class MyClass:
+           ...               
+    """
+    instances = {}
+    def getinstance():
+        if cls not in instances:
+            instances[cls] = cls()
+        return instances[cls]
+    return getinstance

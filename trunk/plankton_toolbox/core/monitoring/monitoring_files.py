@@ -33,7 +33,7 @@ import codecs
 import json
 import urllib
 import string
-import plankton_toolbox.toolbox.utils as utils
+import mmfw
 import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 # Openpyxl is not included in python(xy).
 try: 
@@ -113,7 +113,7 @@ class MonitoringFiles(object):
                 # Use tab as column separator and CR/LF as row delimiter.
                 out.write(separator.join(map(unicode, row)) + '\r\n')
         except (IOError, OSError):
-            utils.Logger().log("Failed to write to file: " + fileName)
+            mmfw.Logging().log("Failed to write to file: " + fileName)
             raise
         finally:
             if out: out.close()
@@ -132,12 +132,12 @@ class MonitoringFiles(object):
             # Rows.
             for rowindex, row in enumerate(self._rows):
                 for columnindex, item in enumerate(row):
-                    cell = worksheet.cell(row=rowindex, column=columnindex)
+                    cell = worksheet.cell(row=rowindex + 1, column=columnindex)
                     cell.value = unicode(item)
             #    
             excelwriter.save_workbook(workbook, fileName)
         except (IOError, OSError):
-            utils.Logger().log("Failed to write to file: " + fileName)
+            mmfw.Logging().log("Failed to write to file: " + fileName)
             raise
 
 class TextFile(MonitoringFiles):
@@ -170,7 +170,7 @@ class TextFile(MonitoringFiles):
                     self._rows.append(newrow)
         #  
         except (IOError, OSError):
-            utils.Logger().log("Can't read text file.")
+            mmfw.Logging().log("Can't read text file.")
             raise
         finally:
             if file: file.close() 
@@ -216,7 +216,7 @@ class ExcelXlsxFile(MonitoringFiles):
                     self._rows.append(newrow)        
         #  
         except Exception:
-            utils.Logger().log("Can't read Excel (.xlsx) file. The python package openpyxl is needed to import Excel files.")
+            mmfw.Logging().log("Can't read Excel (.xlsx) file. The python package openpyxl is needed to import Excel files.")
             raise
 
 
@@ -283,8 +283,8 @@ class SharkwebDownload(MonitoringFiles):
         parameters = dict([k, v.encode('utf-8')] for k, v in parameters.items())
         params = urllib.urlencode(parameters)
         #
-        utils.Logger().log('DEBUG: URL: ' + url)
-        utils.Logger().log('DEBUG: Parameters: ' + params)
+        mmfw.Logging().log('DEBUG: URL: ' + url)
+        mmfw.Logging().log('DEBUG: Parameters: ' + params)
         #   
         f = urllib.urlopen(url, params)
         for row, line in enumerate(f.readlines()):
@@ -295,7 +295,7 @@ class SharkwebDownload(MonitoringFiles):
                 self._rows.append(map(string.strip, unicode(line).split('\t')))
 #            # Use this if data is delivered in the Json format.
 #            self._dataset = json.loads(line, encoding = encode)
-        utils.Logger().log('Received rows: ' + str(len(self._rows)))
+        mmfw.Logging().log('Received rows: ' + str(len(self._rows)))
 
 
 class PwCsv(MonitoringFiles):

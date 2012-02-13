@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 #
-# Project: Plankton Toolbox. http://plankton-toolbox.org
+# Project: Moray
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010-2011 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2011 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,38 +24,37 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""
-
-"""
-
-import PyQt4.QtCore as QtCore
 import mmfw
 
 @mmfw.singleton
-class ToolboxSync(QtCore.QObject):
-    """ """
+class TextFileReader():
+    """
+    This class ...  
+    """
     def __init__(self):
         """ """
-        self.__test = None 
-        # 
-        QtCore.QObject.__init__(self)
+        
+    def readFile(self, 
+                 file_name = None,
+                 sheet_name = None, 
+                 header_row = 1, 
+                 data_rows_from = 2, 
+                 data_rows_to = None, # None = read all.
+                 used_columns_from = 1, 
+                 used_columns_to = None): # None = read all.
+        """ """
+        
+@mmfw.singleton
+class TextFileWriter():
+    """
+    This class ...  
+    """
+    def __init__(self):
+        """ """
+        
+    def SaveTableDataset(self, fileName):
+        """ """
+        
+    def SaveTreeDataset(self, fileName):
+        """ """
 
-    def clear(self):
-        """ """
-        self.__test = None 
-        # Emit signal after short delay.
-        QtCore.QTimer.singleShot(100, self.__emitChangeNotification)
-        
-    def setRowTest(self, rowIndex):
-        """ """
-        self.__test = rowIndex 
-        # Emit signal after short delay.
-        QtCore.QTimer.singleShot(100, self.__emitSelectedRowChangedTEST)
-        
-    def getRowTest(self):
-        """ """
-        return self.__test 
-        
-    def __emitSelectedRowChangedTEST(self):
-        """ """
-        self.emit(QtCore.SIGNAL('syncSelectedRowTEST'))

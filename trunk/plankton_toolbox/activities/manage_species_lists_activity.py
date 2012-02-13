@@ -29,7 +29,7 @@
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-import plankton_toolbox.toolbox.utils as utils
+import mmfw
 import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 import plankton_toolbox.activities.activity_base as activity_base
 import plankton_toolbox.core.biology.taxa as taxa
@@ -300,33 +300,33 @@ class ManageSpeciesListsActivity(activity_base.ActivityBase):
 
     def __prepareDyntaxa(self):
         """ """
-        utils.Logger().log("Prepare dyntaxa. Started.")
-        utils.Logger().clear()
+        mmfw.Logging().log("Prepare dyntaxa. Started.")
+        mmfw.Logging().clear()
         self._writeToStatusBar("Prepare dyntaxa.")
         try:
             if self.__dyntaxasource_list.currentIndex() == 3:
                 dt = taxa.Dyntaxa()
                 importer = taxa_prepare.PrepareDyntaxaDbTablesAsTextFiles(taxaObject = dt)
                 importer.importTaxa(unicode(self.__dyntaxafromdirectory_edit.text()))
-                utils.Logger().log('Number of dyntaxa taxa: ' + str(len(dt.getTaxonList())))
+                mmfw.Logging().log('Number of dyntaxa taxa: ' + str(len(dt.getTaxonList())))
                 exporter = taxa_sources.JsonFile(taxaObject = dt)                
                 exporter.exportTaxa(file = unicode(self.__dyntaxatofile_edit.text()))
             else:
                 raise UserWarning('The selected data source type is not implemented.')
         except UserWarning, e:
-            utils.Logger().error("UserWarning: " + unicode(e))
+            mmfw.Logging().error("UserWarning: " + unicode(e))
             QtGui.QMessageBox.warning(self, "Warning", unicode(e))
         except (IOError, OSError), e:
-            utils.Logger().error("Error: " + unicode(e))
+            mmfw.Logging().error("Error: " + unicode(e))
             QtGui.QMessageBox.warning(self, "Error", unicode(e))
         except Exception, e:
-            utils.Logger().error("Failed on exception: " + unicode(e))
+            mmfw.Logging().error("Failed on exception: " + unicode(e))
             QtGui.QMessageBox.warning(self, "Exception", unicode(e))
             raise
         finally:
-            utils.Logger().logAllWarnings()    
-            utils.Logger().logAllErrors()    
-            utils.Logger().info("Prepare dyntaxa. Ended.")
+            mmfw.Logging().logAllWarnings()    
+            mmfw.Logging().logAllErrors()    
+            mmfw.Logging().info("Prepare dyntaxa. Ended.")
             self._writeToStatusBar("")
         # Reload resources.
         toolbox_resources.ToolboxResources().loadResourceDyntaxa()
@@ -337,8 +337,8 @@ class ManageSpeciesListsActivity(activity_base.ActivityBase):
 
     def __preparePeg(self):
         """ """
-        utils.Logger().log("Prepare PEG. Started.")
-        utils.Logger().clear()
+        mmfw.Logging().log("Prepare PEG. Started.")
+        mmfw.Logging().clear()
         self._writeToStatusBar("Prepare PEG.")
         try:
             peg = taxa.Peg()
@@ -355,23 +355,23 @@ class ManageSpeciesListsActivity(activity_base.ActivityBase):
             
             importer.addDyntaxaToPeg(file = unicode(self.__pegtodyntaxafile_edit.text()))
             #
-            utils.Logger().log('Number of PEG taxa: ' + str(len(peg.getTaxonList())))                
+            mmfw.Logging().log('Number of PEG taxa: ' + str(len(peg.getTaxonList())))                
             exporter = taxa_sources.JsonFile(taxaObject = peg)
             exporter.exportTaxa(file = unicode(self.__pegtofile_edit.text()))
         except UserWarning, e:
-            utils.Logger().error("UserWarning: " + unicode(e))
+            mmfw.Logging().error("UserWarning: " + unicode(e))
             QtGui.QMessageBox.warning(self, "Warning", unicode(e))
         except (IOError, OSError), e:
-            utils.Logger().error("Error: " + unicode(e))
+            mmfw.Logging().error("Error: " + unicode(e))
             QtGui.QMessageBox.warning(self, "Error", unicode(e))
         except Exception, e:
-            utils.Logger().error("Failed on exception: " + unicode(e))
+            mmfw.Logging().error("Failed on exception: " + unicode(e))
             QtGui.QMessageBox.warning(self, "Exception", unicode(e))
             raise
         finally:
-            utils.Logger().logAllWarnings()    
-            utils.Logger().logAllErrors()    
-            utils.Logger().log("Prepare PEG. Ended.")
+            mmfw.Logging().logAllWarnings()    
+            mmfw.Logging().logAllErrors()    
+            mmfw.Logging().log("Prepare PEG. Ended.")
             self._writeToStatusBar("")
         # Reload resources.
         toolbox_resources.ToolboxResources().loadResourcePeg()
@@ -398,31 +398,31 @@ class ManageSpeciesListsActivity(activity_base.ActivityBase):
 
     def __prepareHarmful(self):
         """ """
-        utils.Logger().log("Prepare Harmful plankton. Started.")
-        utils.Logger().clear()
+        mmfw.Logging().log("Prepare Harmful plankton. Started.")
+        mmfw.Logging().clear()
         self._writeToStatusBar("Prepare Harmful plankton.")
         try:
             harmful = taxa.HarmfulPlankton()
             importer = taxa_prepare.PrepareHarmfulMicroAlgae(taxaObject = harmful)
             importer.importTaxa(file = unicode(self.__harmfulfromfile_edit.text()))
             #
-            utils.Logger().log('Number of Harmful plankton taxa: ' + str(len(harmful.getTaxonList())))                
+            mmfw.Logging().log('Number of Harmful plankton taxa: ' + str(len(harmful.getTaxonList())))                
             exporter = taxa_sources.JsonFile(taxaObject = harmful)
             exporter.exportTaxa(file = unicode(self.__harmfultofile_edit.text()))
         except UserWarning, e:
-            utils.Logger().error("UserWarning: " + unicode(e))
+            mmfw.Logging().error("UserWarning: " + unicode(e))
             QtGui.QMessageBox.warning(self, "Warning", unicode(e))
         except (IOError, OSError), e:
-            utils.Logger().error("Error: " + unicode(e))
+            mmfw.Logging().error("Error: " + unicode(e))
             QtGui.QMessageBox.warning(self, "Error", unicode(e))
         except Exception, e:
-            utils.Logger().error("Failed on exception: " + unicode(e))
+            mmfw.Logging().error("Failed on exception: " + unicode(e))
             QtGui.QMessageBox.warning(self, "Exception", unicode(e))
             raise
         finally:
-            utils.Logger().logAllWarnings()    
-            utils.Logger().logAllErrors()    
-            utils.Logger().log("Prepare Harmful plankton. Ended.")
+            mmfw.Logging().logAllWarnings()    
+            mmfw.Logging().logAllErrors()    
+            mmfw.Logging().log("Prepare Harmful plankton. Ended.")
             self._writeToStatusBar("")
         # Reload resources.
         toolbox_resources.ToolboxResources().loadResourceHarmfulPlankton()

@@ -36,6 +36,8 @@ import plankton_toolbox.core.monitoring.monitoring_files as monitoring_files
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 import plankton_toolbox.toolbox.toolbox_sync as toolbox_sync
 
+import mmfw
+
 class LoadDatasetsActivity(activity_base.ActivityBase):
     """ """
     def __init__(self, name, parentwidget):
@@ -93,7 +95,17 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
         tempor incididunt ut labore et dolore magna aliqua.
         """)
-        self.__textfile_edit = QtGui.QLineEdit("")
+        
+        
+        
+        
+        
+        self.__textfile_edit = QtGui.QLineEdit("C:/Users/arnold/Desktop/python/w_plankton_toolbox/p_plankton_toolbox/src/2009_SMHI_PP_version-2010-11-16_data.txt")
+        
+        
+        
+        
+        
         self.__textfilebrowse_button = QtGui.QPushButton("Browse...")
         self.__textfileload_button = QtGui.QPushButton("Load dataset")
         #
@@ -130,9 +142,27 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
 
     def __loadTextFile(self):
         """ """
-        dataset = monitoring_files.TextFile()
-        dataset.readFile(unicode(self.__textfile_edit.text()))
+        
+        # TODO: MMFW:
+        dataset = mmfw.DatasetNode()
+        impMgr = mmfw.ImportManager()
+        impMgr.setImportMatrix(u'TODO:...')
+        impMgr.importFileToDataset(dataset, unicode(self.__textfile_edit.text()))
+        # Note: Not mmfw datasets.
         toolbox_datasets.ToolboxDatasets().addDataset(dataset)        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+#        dataset = monitoring_files.TextFile()
+#        dataset.readFile(unicode(self.__textfile_edit.text()))
+#        toolbox_datasets.ToolboxDatasets().addDataset(dataset)        
 
     # ===== EXCEL FILES ======
     def __contentXlsx(self):
@@ -278,7 +308,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             if item.checkState(): # Check if selected by user.
                 # When reading from a table the display rule must be used.
                 filename = unicode(item.data(QtCore.Qt.DisplayRole).toString())
-                print(self.__pwfromdirectory_edit.text())
+                print(unicode(self.__pwfromdirectory_edit.text()))
                 print(filename)
                 self.__dataset.readFile(self.__pwfromdirectory_edit.text() + '/' + filename)
         #        
@@ -559,6 +589,10 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
 
     def __unloadAllDatasets(self):
         """ """
+#        # TODO: MMFW:
+#        mmfw.Datasets().clear()
+
+        
         toolbox_datasets.ToolboxDatasets().clear()
 
     def __unloadMarkedDatasets(self):
@@ -574,15 +608,32 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
 #            item = self.__datasets_table.item(rowcount - rowindex - 1, 0)
 #            if item.checkState(): # Check if selected by user.
             if self.__datasets_table.selectionModel.isSelected(self.__datasets_table.tablemodel.createIndex(rowindex, 0)): # Check if selected by user.
+                # TODO: MMFW:
                 toolbox_datasets.ToolboxDatasets().removeDatasetByIndex(rowcount - rowindex - 1)
+
+                
+#                toolbox_datasets.ToolboxDatasets().removeDatasetByIndex(rowcount - rowindex - 1)
 
     def __updateDatasetList(self):
         """ """
+        
+        
+        # TODO: MMFW:
         self.__datasettabledata.clearRows()
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
             self.__datasettabledata.addRow([u'Dataset - ' + unicode(rowindex) + '                                       '])
         self.__datasets_table.tablemodel.reset()
         self.__datasets_table.resizeColumnsToContents()
+
+
+
+
+
+#        self.__datasettabledata.clearRows()
+#        for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
+#            self.__datasettabledata.addRow([u'Dataset - ' + unicode(rowindex) + '                                       '])
+#        self.__datasets_table.tablemodel.reset()
+#        self.__datasets_table.resizeColumnsToContents()
     
     def __selectionChanged(self, modelIndex):
         """ """

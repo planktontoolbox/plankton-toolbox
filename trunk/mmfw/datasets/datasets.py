@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 #
-# Project: Plankton Toolbox. http://plankton-toolbox.org
+# Project: Moray
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010-2011 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2011 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,38 +24,36 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""
-
-"""
-
-import PyQt4.QtCore as QtCore
 import mmfw
 
 @mmfw.singleton
-class ToolboxSync(QtCore.QObject):
-    """ """
+class Datasets(object):
+    """ Singleton object used to hold a list of datasets. """
+    
     def __init__(self):
         """ """
-        self.__test = None 
-        # 
-        QtCore.QObject.__init__(self)
+        self.__datasets = [] 
 
     def clear(self):
         """ """
-        self.__test = None 
-        # Emit signal after short delay.
-        QtCore.QTimer.singleShot(100, self.__emitChangeNotification)
+        self.__datasets = []
         
-    def setRowTest(self, rowIndex):
+    def getDatasets(self):
         """ """
-        self.__test = rowIndex 
-        # Emit signal after short delay.
-        QtCore.QTimer.singleShot(100, self.__emitSelectedRowChangedTEST)
+        return self.__datasets 
         
-    def getRowTest(self):
+    def getDatasetByIndex(self, index):
         """ """
-        return self.__test 
+        if len(self.__datasets) > index:
+            return self.__datasets[index]
+        return None 
         
-    def __emitSelectedRowChangedTEST(self):
+    def addDataset(self, dataset_node):
         """ """
-        self.emit(QtCore.SIGNAL('syncSelectedRowTEST'))
+        self.__datasets.append(dataset_node)
+        
+    def removeDatasetByIndex(self, index):
+        """ """
+        if (index >= 0) or (len(self.__datasets) > index):
+            del self.__datasets[index]
+

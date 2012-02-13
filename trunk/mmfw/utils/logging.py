@@ -24,29 +24,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""
-This module contains utilities for the Plankton Toolbox project.
-"""
-
 import time
+from mmfw.utils import patterns
 
-def singleton(cls):
-    """
-    This is an implementation of the Singleton pattern by using decorators.
-    Usage example:
-        @singleton
-        class MyClass:
-           ...               
-    """
-    instances = {}
-    def getinstance():
-        if cls not in instances:
-            instances[cls] = cls()
-        return instances[cls]
-    return getinstance
-
-@singleton
-class Logger(object):
+@patterns.singleton
+class Logging(object):
     """
     Utility class for logging.
     Normal logging is done by calling log('message').
@@ -60,6 +42,8 @@ class Logger(object):
         self.__infoacc = {} # Contains accumulated info rows and counter.
         self.__warningacc = {} # Contains accumulated warnings and counter.
         self.__erroracc = {} # Contains accumulated errors and counter.
+        #
+        self.setLogTarget(DefaultLogTarget())
         
     def setLogTarget(self, target):
         """ Target must be an object containing a method named writeToLog(message). """
@@ -84,7 +68,7 @@ class Logger(object):
         message = unicode(message)
         message = 'INFO: ' + message
         if self.__accumulatedloggingactive:
-            if message in self.__info:
+            if message in self.__infoacc:
                 self.__infoacc[message] += 1
             else:
                 self.__infoacc[message] = 1
@@ -154,4 +138,13 @@ class Logger(object):
         for message in self.__erroracc:
             self.log('- ' + message + ' (' + unicode(self.__erroracc[message]) + ' times)')
 
+
+class DefaultLogTarget(object):
+    """ """
+    def __init__(self):
+        """ """
+        
+    def writeToLog(self, message):
+        """ """
+        print(message)
 
