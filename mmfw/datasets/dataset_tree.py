@@ -26,76 +26,18 @@
 
 """
 Functions and classes in this module should be used for datasets organized as trees.
-Valid nodes in the trees are dataset - visit - sample - variable.
+Valid node order in the tree is dataset - visit - sample - variable.
 """
 
 import mmfw
-
-#def get_visit_by_idstring(dataset_node, idstring):
-#    """ Used during import when searching for existing nodes. """
-#    if not dataset_node:
-#        return None
-#    if not isinstance(dataset_node, DatasetNode):
-#        return None # Must be of the right type.
-#    #
-#    object = dataset_node.getVisitLookup(idstring)
-#    if object:
-#        return object
-#    else:    
-#        for visitnode in dataset_node.getChildren():
-#            if visitnode.getIdString() == idstring:
-#                dataset_node.setVisitLookup(idstring, visitnode)
-#                return visitnode
-#    return None
-#
-#def get_sample_by_idstring(dataset_node, idstring):
-#    """ Used during import when searching for existing nodes. """
-#    if not dataset_node:
-#        return None
-#    if not isinstance(dataset_node, SampleNode):
-#        return None # Must be of the right type.
-#    #
-#    object = dataset_node.getSampleLookup(idstring)
-#    #
-#    object = dataset_node.getSampleLookup(idstring)
-#    if object:
-#        return object
-#    else:            
-#        for visitnode in dataset_node.getChildren():
-#            for samplenode in visitnode.getChildren():
-#                if samplenode.GetIdString() == idstring:
-#                    dataset_node.setSampleLookup(idstring, visitnode)
-#                    return samplenode
-#    return None
-#
-#def get_variable_by_idstring(dataset_node, idstring):
-#    """ Used during import when searching for existing nodes. """
-#    if not dataset_node:
-#        return None
-#    if not isinstance(dataset_node, VariableNode):
-#        return None # Must be of the right type.
-#    #
-#    object = dataset_node.getVariableLookup(idstring)
-#    # 
-#    object = dataset_node.getVariableLookup(idstring)
-#    if object:
-#        return object
-#    else:    
-#        for visitnode in dataset_node.getChildren():
-#            for samplenode in visitnode.getChildren():
-#                for variablenode in samplenode.getChildren():
-#                    if variablenode.GetIdString() == idstring:
-#                        dataset_node.setVariableLookup(idstring, visitnode)
-#                        return variablenode
-#    return None
-
+#from mmfw import DatasetBase
 
 class DataNode(object):
     """
     Abstract base class for nodes. 
     """
-    def __init__(self, parent = None):
-        self._parent = parent # Parent node.
+    def __init__(self):
+        self._parent = None # Parent node.
         self._children = [] # List of child nodes.
         self._datadict = {} # Dictionary for node data.
         self._idstring = None # Used during import when searching for existing nodes.
@@ -145,32 +87,29 @@ class DataNode(object):
         return self._idstring
         
         
-class DatasetNode(DataNode):
-    """ """
+class DatasetNode(mmfw.DatasetBase, DataNode):
+    """ This it the top node for tree datasets. 
+    Note: Multiple inheritance. DataNode for data and tree structure. DatasetBase for metadata. 
+    """
     def __init__(self):
         """ """
 #        self._lookuplist = None        
-        self._metadata = {}
+        super(DatasetNode, self).__init__()
+        #
         self._visit_count = 0
         self._sample_count = 0
         self._variable_count = 0
         self._visit_lookup = {}
         self._sample_lookup = {}
         self._variable_lookup = {}
-        super(DatasetNode, self).__init__()
+        #
+        self._importmatrixrows = []
+        self._exporttablecolumns = []
 
     def clear(self):
         """ """
 #        self._lookuplist = None
         super(DatasetNode, self).clear()
-
-    def getMetadata(self):
-        """ """
-        return self._metadata
-
-    def addMetadata(self, key, value):
-        """ """
-        self._metadata[key] = value
 
     def getCounters(self):
         """ """
@@ -178,6 +117,9 @@ class DatasetNode(DataNode):
 
     def addChild(self, child):
         """ """
+        if not isinstance(child, mmfw.VisitNode):
+            raise UserWarning("AddChild failed. Dataset children must be of visit type")
+        #
         self._visit_count += 1
         super(DatasetNode, self).addChild(child)
 
@@ -192,50 +134,85 @@ class DatasetNode(DataNode):
     def getVariableLookup(self, idString):
         """ """
         return self._variable_lookup.get(idString, None)
-        
+
+    def setImportsMatrixRows(self):
+        """ """
+
+    def loadImportMatrix(self, matrix_file, import_column, export_column):
+        """ """
+        # Add metadata
+        self.addMetadata(u'Matrix', matrix_file)
+        self.addMetadata(u'Import column', import_column)
+        self.addMetadata(u'Export column', export_column)
+        # Read matrix.
+        excelreader = mmfw.ExcelFileReader()
+        excelreader.readFile(file_name = matrix_file)
+        # Create import info.
+        importrows = []
+        for rowindex in xrange(0, excelreader.getRowCount()):
+            importcolumndata = excelreader.getDataCellByName(rowindex, import_column)
+            if importcolumndata:
+                nodelevel = excelreader.getDataCell(rowindex, 0)
+                key = excelreader.getDataCell(rowindex, 1)
+                importrows.append({u'Node': nodelevel, u'Key': key, u'Import': importcolumndata}) 
+        self.setImportMatrixRows(importrows)
+        # Create export info.
+        columnsinfo = []
+        for rowindex in xrange(0, excelreader.getRowCount()):
+            exportcolumndata = excelreader.getDataCellByName(rowindex, export_column)
+            if exportcolumndata:
+                nodelevel = excelreader.getDataCell(rowindex, 0)
+                key = excelreader.getDataCell(rowindex, 1)
+                columnsinfo.append({u'Header': exportcolumndata, u'Node': nodelevel, u'Key': key}) 
+        self.setExportTableColumns(columnsinfo)
+
+    def setImportMatrixRows(self, import_matrix_rows ):
+        """ """
+        self._importmatrixrows = import_matrix_rows
+
+    def setExportTableColumns(self, columns_info_dict ):
+        """ """
+        self._exporttablecolumns = columns_info_dict
+
     def convertToTableDataset(self, target_dataset):
-        """ Converts the dataset to a corresponding table based dataset.
-        The parameter columns_info should be on the form [{"Header": "", "Node": "", "Key": ""}, ...]
+        """ Converts the tree dataset to a corresponding table based dataset.
+        The parameter self._exporttablecolumns should be on the form [{"Header": "", "Node": "", "Key": ""}, ...]
         Example: [{"Header": "SDATE", "Node": "Visit", "Key": "Date"},
                   {"Header": "MNDEP", "Node": "Sample", "Key": "Min. depth"}]
         """
-
-
-
-        columns_info = \
-            [{"Header": "YEAR", "Node": "Visit", "Key": "Visit year"},
-             {"Header": "SDATE", "Node": "Visit", "Key": "Visit date"},
-             {"Header": "MXDEP", "Node": "Sample", "Key": "Sample max depth"}]
-
-
-
+        # TODO: For test.
+#        self._exporttablecolumns = \
+#            [{"Header": "YEAR", "Node": "Visit", "Key": "Visit year"},
+#             {"Header": "SDATE", "Node": "Visit", "Key": "Visit date"},
+#             {"Header": "MXDEP", "Node": "Sample", "Key": "Sample max depth"}]
+        #
         if not target_dataset:
             raise UserWarning('Target dataset is missing.')
         if not isinstance(target_dataset, mmfw.DatasetTable):
             raise UserWarning('Target dataset is not of a valid type.')
-        if not columns_info:
-            raise UserWarning('Columns info is missing.')
+        if not self._exporttablecolumns:
+            raise UserWarning('Info for converting from tree to table dataset is missing.')
         # Header.
         header = []
-        for item in columns_info:
-            header.append(item['Header'])
+        for item in self._exporttablecolumns:
+            header.append(item.get('Header', u'---'))
         # To target.
         target_dataset.setHeader(header)
         # Rows.
         for visitnode in self.getChildren():
             for samplenode in visitnode.getChildren():
                 for variablenode in samplenode.getChildren():
-                    #  Create row based on column_info.
+                    #  Create row based on column_info from self._exporttablecolumns.
                     row = []
-                    for column_info in columns_info:
-                        if column_info['Node'] == 'Dataset':
-                            row.append(self.getData(column_info['Key']))
-                        elif column_info['Node'] == 'Visit':
-                            row.append(visitnode.getData(column_info['Key']))
-                        elif column_info['Node'] == 'Sample':
-                            row.append(samplenode.getData(column_info['Key']))
-                        elif column_info['Node'] == 'Variable':
-                            row.append(variablenode.getData(column_info['Key']))
+                    for column_info in self._exporttablecolumns:
+                        if column_info.get('Node', u'') == 'Dataset':
+                            row.append(self.getData(column_info.get('Key', u'---')))
+                        elif column_info.get('Node', u'') == 'Visit':
+                            row.append(visitnode.getData(column_info.get('Key', u'---')))
+                        elif column_info.get('Node', u'') == 'Sample':
+                            row.append(samplenode.getData(column_info.get('Key', u'---')))
+                        elif column_info.get('Node', u'') == 'Variable':
+                            row.append(variablenode.getData(column_info.get('Key', u'---')))
                         else:
                             row.append(u'')
                     # To target.
@@ -254,6 +231,9 @@ class VisitNode(DataNode):
 
     def addChild(self, child):
         """ """
+        if not isinstance(child, mmfw.SampleNode):
+            raise UserWarning("AddChild failed. Visit children must be of sample type")
+        #
         self.getParent()._sample_count += 1
         super(VisitNode, self).addChild(child)
 
@@ -261,7 +241,10 @@ class VisitNode(DataNode):
         """ """
         self._idstring = idstring
         # Register in dataset for fast lookup.
-        self.getParent()._visit_lookup[idstring] = self
+        try:
+            self.getParent()._visit_lookup[idstring] = self
+        except:
+            raise UserWarning("SetIdString failed. Check if parent is assigned.")
         
         
 class SampleNode(DataNode):
@@ -276,6 +259,9 @@ class SampleNode(DataNode):
         
     def addChild(self, child):
         """ """
+        if not isinstance(child, mmfw.VariableNode):
+            raise UserWarning("AddChild failed. Sample children must be of variable type")
+        #
         self.getParent().getParent()._variable_count += 1
         super(SampleNode, self).addChild(child)
 
@@ -283,7 +269,10 @@ class SampleNode(DataNode):
         """ """
         self._idstring = idstring
         # Register in dataset for fast lookup.
-        self.getParent().getParent()._sample_lookup[idstring] = self
+        try:
+            self.getParent().getParent()._sample_lookup[idstring] = self
+        except:
+            raise UserWarning("SetIdString failed. Check if parent is assigned.")
         
 
 class VariableNode(DataNode):
@@ -296,9 +285,16 @@ class VariableNode(DataNode):
         """ """
         super(VariableNode, self).clear()
         
+    def addChild(self, child):
+        """ """
+        raise UserWarning("AddChild failed. Variables can't add children.")
+
     def setIdString(self, idstring):
         """ """
         self._idstring = idstring
         # Register in dataset for fast lookup.
-        self.getParent().getParent().getParent()._variable_lookup[idstring] = self
+        try:
+            self.getParent().getParent().getParent()._variable_lookup[idstring] = self
+        except:
+            raise UserWarning("SetIdString failed. Check if parent is assigned.")
 

@@ -58,9 +58,9 @@ class MonitoringFiles(object):
         self._header = []
         self._rows = []
 
-    def getMetadata(self):
+    def getMetadata(self, key):
         """ """
-        return self._metadata
+        return self._metadata.get(key, u'')
 
     def getHeader(self):
         """ """

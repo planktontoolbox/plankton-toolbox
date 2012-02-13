@@ -24,28 +24,23 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-class DatasetTable(object):
+import mmfw
+#from mmfw import DatasetBase
+
+class DatasetTable(mmfw.DatasetBase):
     def __init__(self):
-        """ This class should be used for datasets organazed as a table with header and rows. 
-        It is prepared to be displayed via QAbstractTableModel in Qt.
+        """ This class should be used for datasets organized as a table with header and rows. 
+        It is prepared to be displayed via QAbstractTableModel in Qt, but Qt is not required here.
         """
-        self._metadata = {}
+        super(DatasetTable, self).__init__()
+        #
         self._header = []
         self._rows = []
         
     def clear(self):
         """ """
-        self._metadata = {}
         self._header = []
         self._rows = []
-
-    def getMetadata(self):
-        """ """
-        return self._metadata
-
-    def addMetadata(self, key, value):
-        """ """
-        self._metadata[key] = value
 
     def setHeader(self, header):
         """ """

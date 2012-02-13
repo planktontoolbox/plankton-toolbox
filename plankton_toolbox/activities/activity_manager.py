@@ -52,8 +52,8 @@ class ActivityManager(object):
 
     def initActivities(self):
         """ Activity activator. """
-        self.__activitylist.append(start_activity.StartActivity("Start", self._parent))
-        self.__activitylist.append(create_dataset_activity.CreateDatasetActivity("(Create dataset)", self._parent))
+#        self.__activitylist.append(start_activity.StartActivity("Start", self._parent))
+#        self.__activitylist.append(create_dataset_activity.CreateDatasetActivity("(Create dataset)", self._parent))
         self.__activitylist.append(load_datasets_activity.LoadDatasetsActivity("Load datasets", self._parent))
         self.__activitylist.append(screening_activity.ScreeningActivity("(Screening)", self._parent))
         self.__activitylist.append(analyse_datasets_activity.AnalyseDatasetsActivity("(Analyse datasets)", self._parent))
