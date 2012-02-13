@@ -34,6 +34,8 @@ import plankton_toolbox.tools.tool_base as tool_base
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 import plankton_toolbox.toolbox.toolbox_sync as toolbox_sync
 
+import mmfw
+
 class DatasetViewerTool(tool_base.ToolBase):
     """
     """
@@ -47,7 +49,7 @@ class DatasetViewerTool(tool_base.ToolBase):
         # Where is the tool allowed to dock in the main window.
         self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea)
         self.setBaseSize(600,600)
-        #
+        # Filename used when saving data to file.
         self.__lastusedfilename = '.'
 
     def _createContent(self):
@@ -132,8 +134,23 @@ class DatasetViewerTool(tool_base.ToolBase):
             self.__tableview.tablemodel.setModeldata(None)
             self.__refreshResultTable()
         else:
-            self.__tableview.tablemodel.setModeldata(toolbox_datasets.ToolboxDatasets().getDatasetByIndex(index - 1))
-            self.__refreshResultTable()
+            # MMFW:
+            dataset = toolbox_datasets.ToolboxDatasets().getDatasetByIndex(index - 1)
+            if isinstance(dataset, mmfw.DatasetTable):
+                self.__tableview.tablemodel.setModeldata(dataset)
+                self.__refreshResultTable()
+            elif isinstance(dataset, mmfw.DatasetNode):
+                # Tree dataset must be converted to table dataset before viewing.
+                targetdataset = mmfw.DatasetTable()
+                dataset.convertToTableDataset(targetdataset)
+                #
+                self.__tableview.tablemodel.setModeldata(targetdataset)
+                self.__refreshResultTable()
+            #
+            # TODO: Remove later. Default alternative used for non MMFW.
+            else:
+                self.__tableview.tablemodel.setModeldata(dataset)
+                self.__refreshResultTable()
     
     def __saveData(self):
         """ """

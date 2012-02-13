@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 #
-# Project: Plankton Toolbox. http://plankton-toolbox.org
+# Project: 
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010-2011 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2011 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,38 +24,50 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""
-
-"""
-
-import PyQt4.QtCore as QtCore
 import mmfw
 
-@mmfw.singleton
-class ToolboxSync(QtCore.QObject):
+class FormatBase(object):
     """ """
     def __init__(self):
-        """ """
-        self.__test = None 
-        # 
-        QtCore.QObject.__init__(self)
+        """ Abstract class for import formats. """
+        super(FormatBase, self).__init__()
+        #
+        self._dataset = None
+        self._header = []
+        self._headerdict = {} # Name to index.
+        self._row = None
 
-    def clear(self):
-        """ """
-        self.__test = None 
-        # Emit signal after short delay.
-        QtCore.QTimer.singleShot(100, self.__emitChangeNotification)
+    def importDataset(self, dataset, zipfile_name):
+        """ Abstract method. """
         
-    def setRowTest(self, rowIndex):
+    def reorganizeDataset(self):
         """ """
-        self.__test = rowIndex 
-        # Emit signal after short delay.
-        QtCore.QTimer.singleShot(100, self.__emitSelectedRowChangedTEST)
         
-    def getRowTest(self):
+    def reformatDataset(self):
         """ """
-        return self.__test 
         
-    def __emitSelectedRowChangedTEST(self):
+    def basicScreening(self):
         """ """
-        self.emit(QtCore.SIGNAL('syncSelectedRowTEST'))
+
+    def setHeader(self, header):
+        """ """
+        self._header = header
+        self._headerdict = {} # Name to index.
+        for index, name in enumerate(header):
+            self._headerdict[name] = index
+        
+    def asText(self, column_name):
+        """ """
+        if column_name in self._headerdict:
+            return self._row[self._headerdict[column_name]]
+        else:
+            return u''
+
+    def getSeparator(self, row):
+        """ """
+        if u'\t' in row: 
+            return u'\t'
+        elif u';' in row: 
+            return u';' 
+
+

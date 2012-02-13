@@ -28,49 +28,42 @@
 """
 
 import PyQt4.QtCore as QtCore
-import plankton_toolbox.toolbox.utils as utils
+import mmfw
 
-@utils.singleton
+@mmfw.singleton
 class ToolboxDatasets(QtCore.QObject):
-    """
-    """
+    """ Wrapper for mmfw.Datasets. Emitted signals for change notifications are added. """
     def __init__(self):
         """ """
-        self.__list = [] 
+        mmfw.Datasets()
         # 
         QtCore.QObject.__init__(self)
 
     def clear(self):
         """ """
-        self.__list = []
+        mmfw.Datasets().clear()
         # Emit signal after short delay.
         QtCore.QTimer.singleShot(100, self.__emitChangeNotification)
         
     def getDatasets(self):
         """ """
-        return self.__list 
+        return mmfw.Datasets().getDatasets()
         
     def getDatasetByIndex(self, index):
         """ """
-        if len(self.__list) > index:
-            return self.__list[index]
-        else:
-            return None 
+        return mmfw.Datasets().getDatasetByIndex(index)
         
     def addDataset(self, dataset):
         """ """
-        self.__list.append(dataset)
+        mmfw.Datasets().addDataset(dataset)
         # Emit signal after short delay.
         QtCore.QTimer.singleShot(100, self.__emitChangeNotification)
         
     def removeDatasetByIndex(self, index):
         """ """
-        if index < 0:
-            return # Invalid index.
-        if len(self.__list) > index:
-            del self.__list[index]
-            # Emit signal after short delay.
-            QtCore.QTimer.singleShot(100, self.__emitChangeNotification)
+        mmfw.Datasets().removeDatasetByIndex(index)
+        # Emit signal after short delay.
+        QtCore.QTimer.singleShot(100, self.__emitChangeNotification)
 
     def __emitChangeNotification(self):
         """ """

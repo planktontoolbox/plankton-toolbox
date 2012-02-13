@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 #
-# Project: Plankton Toolbox. http://plankton-toolbox.org
+# Project: 
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010-2011 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2011 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,38 +24,28 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""
-
-"""
-
-import PyQt4.QtCore as QtCore
 import mmfw
 
-@mmfw.singleton
-class ToolboxSync(QtCore.QObject):
+class ImportMatrix(object):
     """ """
     def __init__(self):
         """ """
-        self.__test = None 
-        # 
-        QtCore.QObject.__init__(self)
+        # Initialize parent.
+        super(ImportMatrix, self).__init__()
+        # TESTDATA:
+        self._importmatrixfilepath = u''
+        self._importmatrixcolumn = u''
+        self._datafilepath = u''
+        
+        
+    def importDataset(self):
+        """ """
+        
+        # Phase 1: Import to memory model.
 
-    def clear(self):
-        """ """
-        self.__test = None 
-        # Emit signal after short delay.
-        QtCore.QTimer.singleShot(100, self.__emitChangeNotification)
-        
-    def setRowTest(self, rowIndex):
-        """ """
-        self.__test = rowIndex 
-        # Emit signal after short delay.
-        QtCore.QTimer.singleShot(100, self.__emitSelectedRowChangedTEST)
-        
-    def getRowTest(self):
-        """ """
-        return self.__test 
-        
-    def __emitSelectedRowChangedTEST(self):
-        """ """
-        self.emit(QtCore.SIGNAL('syncSelectedRowTEST'))
+        # Phase 2: Reorganize between nodes in memory model.
+
+        # Phase 3: Reformat fields in memory model.
+
+        # Phase 4: Basic screening.
+

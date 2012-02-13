@@ -36,7 +36,7 @@ import datetime
 import codecs
 #import json
 import string
-import plankton_toolbox.toolbox.utils as utils
+import mmfw
 import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
 
@@ -83,7 +83,7 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
         self.__createNameTypeDict() # Maps from name type id to name type.
         
         # === TAXON file ===
-        utils.Logger().log("Reading: " + dir + '/dyntaxa_taxon.txt')
+        mmfw.Logging().log("Reading: " + dir + '/dyntaxa_taxon.txt')
         txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
         taxonFile = codecs.open(dir + '/dyntaxa_taxon.txt', mode = 'r', encoding = txtencode)
         separator = '\t' # Tab as separator.
@@ -128,11 +128,11 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
                 if not(taxonid in self.__idToTaxon):
                     self.__idToTaxon[taxonid] = taxonDict # Updates Taxa object.
                 else:
-                    utils.Logger().log("Duplicate taxon id: " + str(taxonid) )
+                    mmfw.Logging().log("Duplicate taxon id: " + str(taxonid) )
         taxonFile.close()
         
         # === HIER file ===
-        utils.Logger().log("Reading: " + dir + '/dyntaxa_hier.txt')
+        mmfw.Logging().log("Reading: " + dir + '/dyntaxa_hier.txt')
         txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
         hierFile = codecs.open(dir + '/dyntaxa_hier.txt', mode = 'r', encoding = txtencode)
         separator = '\t' # Tab as separator.
@@ -174,11 +174,11 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
                         elif relationid == 2:
                             taxon['Parent id'] = agarid
                     else:
-                        utils.Logger().info('Can not find Taxon id(hier): ' + underid)
+                        mmfw.Logging().info('Can not find Taxon id(hier): ' + underid)
         hierFile.close()
         
         # === NAMES file ===
-        utils.Logger().log("Reading: " + dir + '/dyntaxa_names.txt')
+        mmfw.Logging().log("Reading: " + dir + '/dyntaxa_names.txt')
         txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
         namesFile = codecs.open(dir + '/dyntaxa_names.txt', mode = 'r', encoding = txtencode)
         separator = '\t' # Tab as separator.
@@ -232,7 +232,7 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
                             taxon['Scientific name'] = namn
                             taxon['Scientific name author'] = auktor
                     else:
-                        utils.Logger().info('Can not find Taxon id(name): ' + str(underid))                
+                        mmfw.Logging().info('Can not find Taxon id(name): ' + str(underid))                
         namesFile.close()
         
     def __cleanUpString(self,value):
@@ -310,7 +310,7 @@ class PreparePegTextFile(PrepareDataSources):
         self.__header = []
         self.__taxa = self._taxaObject.getTaxonList()
         
-        utils.Logger().log("Reading: " + file)
+        mmfw.Logging().log("Reading: " + file)
         txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
 
         
@@ -366,7 +366,7 @@ class PreparePegTextFile(PrepareDataSources):
                                     # Use string format if not valid numeric. 
                                     sizeClassDict[self.__header[column]] = value.strip()
                                     
-#                                    utils.Logger().info('ERROR float:' + value + '     ' + value.strip().replace(',', '.').replace(' ', ''))
+#                                    mmfw.Logging().info('ERROR float:' + value + '     ' + value.strip().replace(',', '.').replace(' ', ''))
                                     
                             else:
                                 sizeClassDict[self.__header[column]] = value.strip()
@@ -571,7 +571,7 @@ class PreparePegTextFile(PrepareDataSources):
             taxon = dyntaxa.getTaxonByName(translate_dict.get(pegname, ''))
             if taxon:
                 pegtaxon['Dyntaxa id'] = taxon['Taxon id']
-                utils.Logger().log('PEG to Dyntaxa translation file used. PEG name: ' + pegname)                           
+                mmfw.Logging().log('PEG to Dyntaxa translation file used. PEG name: ' + pegname)                           
             
         print('DEBUG: Dyntaxa added to PEG.')
        
@@ -593,7 +593,7 @@ class PrepareHarmfulMicroAlgae(PrepareDataSources):
         toolbox_resources.ToolboxResources().loadUnloadedResourceDyntaxa()
         dyntaxa = toolbox_resources.ToolboxResources().getResourceDyntaxa()
         #
-        utils.Logger().log("Reading: " + file)
+        mmfw.Logging().log("Reading: " + file)
         txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
         harmfulFile = codecs.open(file, mode = 'r', encoding = txtencode)
         separator = '\t' # Tab as separator.
