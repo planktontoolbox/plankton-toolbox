@@ -38,7 +38,26 @@ class FormatSingleFile(mmfw.FormatBase):
         self._dataset = dataset        
         self._filename = filename        
         self.field_encoding = u'cp1252'
-        #
+        #        
+        importmatrixrows = dataset.getImportMatrixRows()
+        
+        matrixcommands = []
+        
+        for matrixrow in importmatrixrows:
+            matrixnode = matrixrow.get(u'Node', u'') 
+            matrixkey = matrixrow.get(u'Key', u'') 
+            matrixcommand = matrixrow.get(u'Command', u'')
+            
+            matrixcommand = matrixcommand.replace(u'$Text(', u'self.asText(')
+            
+            if matrixnode == u'Visit':
+                matrixcommands.append(compile(u"currentvisit.addData('" + matrixkey + u"', " + matrixcommand + u")", '', 'exec'))
+            if matrixnode == u'Sample':
+                matrixcommands.append(compile(u"currentsample.addData('" + matrixkey + u"', " + matrixcommand + u")", '', 'exec'))
+            if matrixnode == u'Variable':
+                matrixcommands.append(compile(u"currentvariable.addData('" + matrixkey + u"', " + matrixcommand + u")", '', 'exec'))
+            
+        
 
         ### Replace:
         
@@ -53,29 +72,29 @@ class FormatSingleFile(mmfw.FormatBase):
         # $Station(   --> self.asStation(
         # $Param(   --> self.asParam(
 
-        matrixrows = [ # Level, field, command.
-            (u"Visit", u"Visit year", u"self.asText('MYEAR')"),
-            (u"Visit", u"Visit date", u"self.asText('SDATE')"),
-#                        (u"Visit", u"Station name", u"getStation(asText('STATN'))"),
-            (u"Visit", u"Reported station name", u"self.asText('STATN')"),
-            
-            (u"Sample", u"Sample min depth", u"self.asText('MNDEP')"),
-            (u"Sample", u"Sample max depth", u"self.asText('MXDEP')"),
-            (u"Sample", u"Sampling laboratory code", u"self.asText('SLABO')"),
-
-            
-            (u"Sample", u"Test dict", u"{'a': 1, 'b':2}")
-            ]
-        
-        matrixcommands = []
-        
-        for matrixlevel, matrixfield, matrixcommand in matrixrows:
-            if matrixlevel == u'Visit':
-                matrixcommands.append(compile(u"currentvisit.addData('" + matrixfield + u"', " + matrixcommand + u")", '', 'exec'))
-            if matrixlevel == u'Sample':
-                matrixcommands.append(compile(u"currentsample.addData('" + matrixfield + u"', " + matrixcommand + u")", '', 'exec'))
-            if matrixlevel == u'Variable':
-                matrixcommands.append(compile(u"currentvariable.addData('" + matrixfield + u"', " + matrixcommand + u")", '', 'exec'))
+#        matrixrows = [ # Level, field, command.
+#            (u"Visit", u"Visit year", u"self.asText('MYEAR')"),
+#            (u"Visit", u"Visit date", u"self.asText('SDATE')"),
+##                        (u"Visit", u"Station name", u"getStation(asText('STATN'))"),
+#            (u"Visit", u"Reported station name", u"self.asText('STATN')"),
+#            
+#            (u"Sample", u"Sample min depth", u"self.asText('MNDEP')"),
+#            (u"Sample", u"Sample max depth", u"self.asText('MXDEP')"),
+#            (u"Sample", u"Sampling laboratory code", u"self.asText('SLABO')"),
+#
+#            
+#            (u"Sample", u"Test dict", u"{'a': 1, 'b':2}")
+#            ]
+#        
+#        matrixcommands = []
+#        
+#        for matrixlevel, matrixfield, matrixcommand in matrixrows:
+#            if matrixlevel == u'Visit':
+#                matrixcommands.append(compile(u"currentvisit.addData('" + matrixfield + u"', " + matrixcommand + u")", '', 'exec'))
+#            if matrixlevel == u'Sample':
+#                matrixcommands.append(compile(u"currentsample.addData('" + matrixfield + u"', " + matrixcommand + u")", '', 'exec'))
+#            if matrixlevel == u'Variable':
+#                matrixcommands.append(compile(u"currentvariable.addData('" + matrixfield + u"', " + matrixcommand + u")", '', 'exec'))
 
         try:
             print(u'DEBUG: Start.')

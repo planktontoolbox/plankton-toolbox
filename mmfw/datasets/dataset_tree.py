@@ -154,7 +154,7 @@ class DatasetNode(mmfw.DatasetBase, DataNode):
             if importcolumndata:
                 nodelevel = excelreader.getDataCell(rowindex, 0)
                 key = excelreader.getDataCell(rowindex, 1)
-                importrows.append({u'Node': nodelevel, u'Key': key, u'Import': importcolumndata}) 
+                importrows.append({u'Node': nodelevel, u'Key': key, u'Command': importcolumndata}) 
         self.setImportMatrixRows(importrows)
         # Create export info.
         columnsinfo = []
@@ -166,13 +166,21 @@ class DatasetNode(mmfw.DatasetBase, DataNode):
                 columnsinfo.append({u'Header': exportcolumndata, u'Node': nodelevel, u'Key': key}) 
         self.setExportTableColumns(columnsinfo)
 
-    def setImportMatrixRows(self, import_matrix_rows ):
+    def setImportMatrixRows(self, import_matrix_rows):
         """ """
         self._importmatrixrows = import_matrix_rows
 
-    def setExportTableColumns(self, columns_info_dict ):
+    def getImportMatrixRows(self):
+        """ """
+        return self._importmatrixrows
+
+    def setExportTableColumns(self, columns_info_dict):
         """ """
         self._exporttablecolumns = columns_info_dict
+
+    def getExportTableColumns(self):
+        """ """
+        return self._exporttablecolumns
 
     def convertToTableDataset(self, target_dataset):
         """ Converts the tree dataset to a corresponding table based dataset.
