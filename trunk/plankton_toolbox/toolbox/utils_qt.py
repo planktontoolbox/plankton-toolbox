@@ -213,6 +213,31 @@ class ToolboxTableModel(QtCore.QAbstractTableModel):
     #    Red 25%: #f5d5bd
     #    Blue 25%: #b7d3de
     #    Green 30%: #e0e3cd
+         
+#def setAppStyleSheet(app):
+#    app.setStyleSheet("""
+#        /* Default for all dock widgets.*/
+#
+#
+#        /* QWidget, QWidget *  { color: black; background-color: #ffffff; }
+#        */
+#
+#        QDockWidget, QDockWidget *  { color: black; background-color: #eeeeee; }
+#        QDockWidget QPushButton:hover { color: #d1581c; }
+#        
+#        /* Default for all widgets used in tools. */        
+#        ToolBase, ToolBase * { color: black; background-color: #eeeeee; } 
+#        ToolBase QPushButton:hover { color: #d1581c; } 
+#
+#        /* Default for all widgets used in activities. */        
+#        ActivityBase, ActivityBase * { color: black; background-color: #ffffff; } 
+#        ActivityBase QPushButton:hover { color: #d1581c; } 
+#        
+#        QStatusBar { background-color: #eeeeee; }
+#        
+#        QLineEdit { background-color: #f8f8f8; }
+#        
+#        """)
 
 def setAppStyleSheet(app):
     app.setStyleSheet("""
@@ -233,4 +258,3 @@ def setAppStyleSheet(app):
         QLineEdit { background-color: #f8f8f8; }
         
         """)
-

@@ -28,6 +28,7 @@
 """
 
 import os
+import os.path
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
@@ -100,7 +101,8 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         
         
         
-        self.__textfile_edit = QtGui.QLineEdit("C:/Users/arnold/Desktop/python/w_plankton_toolbox/p_plankton_toolbox/src/2009_SMHI_PP_version-2010-11-16_data.txt")
+#        self.__textfile_edit = QtGui.QLineEdit("C:/Users/arnold/Desktop/python/w_plankton_toolbox/p_plankton_toolbox/src/2009_SMHI_PP_version-2010-11-16_data.txt")
+        self.__textfile_edit = QtGui.QLineEdit("2009_SMHI_PP_version-2010-11-16_data.txt")
         
         
         
@@ -145,6 +147,30 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         
         # TODO: MMFW:
         dataset = mmfw.DatasetNode()
+        # TODO: Should be replaced by call to "export_matrix.xlsx".
+#        exporttablecolumns = \
+#            [{"Header": "YEAR", "Node": "Visit", "Key": "Visit year"},
+#             {"Header": "SDATE", "Node": "Visit", "Key": "Visit date"},
+#             {"Header": "MXDEP", "Node": "Sample", "Key": "Sample max depth"}]
+#        dataset.setExportTableColumns(exporttablecolumns)
+        
+        
+#        dataset.loadExportTableInfo(u'C:/Users/arnold/Desktop/python/w_plankton_toolbox/p_plankton_toolbox/src/mmfw/data/templates/pp_export_matrix.xlsx',
+#                                    u'PP export')
+        dataset.loadImportMatrix(u'mmfw/data/templates/pp_import_matrix.xlsx',
+                                 u'PP import',
+                                 u'PP export')
+        
+        
+        
+        
+        
+        
+        
+        #
+        dataset.addMetadata(u'File name', os.path.basename(unicode(self.__textfile_edit.text())))
+        dataset.addMetadata(u'File path', unicode(self.__textfile_edit.text()))
+        #
         impMgr = mmfw.ImportManager()
         impMgr.setImportMatrix(u'TODO:...')
         impMgr.importFileToDataset(dataset, unicode(self.__textfile_edit.text()))
@@ -539,10 +565,18 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         selectdatabox = QtGui.QGroupBox("Loaded datasets", self)
         #
         self.__datasets_table = utils_qt.ToolboxQTableView()
+        self.__datasets_table.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+
+        
         
         self.__datasettabledata.clear()
-#        self.__datasettabledata.setHeader([u'Dataset', u'Source', u'Name'])
-        self.__datasettabledata.setHeader([u'Dataset'])
+        self.__datasettabledata.setHeader([u'Dataset      ', 
+                                           u'Content      ', 
+                                           u'File         ', 
+                                           u'File path    ',
+                                           u'Matrix       ',
+                                           u'Import column',
+                                           u'Export column'])
         self.__datasets_table.tablemodel.setModeldata(self.__datasettabledata)
         self.__datasets_table.resizeColumnsToContents()
         
@@ -621,7 +655,25 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         # TODO: MMFW:
         self.__datasettabledata.clearRows()
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
-            self.__datasettabledata.addRow([u'Dataset - ' + unicode(rowindex) + '                                       '])
+            # Get content info depending on dataset type.
+            contentinfo = u''
+            if isinstance(dataset, mmfw.DatasetTable):
+                contentinfo = u'Rows: ' + unicode(len(dataset.getRows())) + u'. '
+            elif isinstance(dataset, mmfw.DatasetNode):
+                visitcount, samplecound, variablecount = dataset.getCounters()
+                contentinfo = u'Visits: ' + unicode(visitcount) + u', ' + \
+                              u'samples: ' + unicode(samplecound) + u', ' + \
+                              u'variables: ' + unicode(variablecount) + u'. '
+            # Add row 
+            self.__datasettabledata.addRow(
+                [u'Dataset - ' + unicode(rowindex),
+                 contentinfo,
+                 dataset.getMetadata(u'File name'),
+                 dataset.getMetadata(u'File path'),
+                 dataset.getMetadata(u'Matrix'),
+                 dataset.getMetadata(u'Import column'),
+                 dataset.getMetadata(u'Export column')])
+            #
         self.__datasets_table.tablemodel.reset()
         self.__datasets_table.resizeColumnsToContents()
 

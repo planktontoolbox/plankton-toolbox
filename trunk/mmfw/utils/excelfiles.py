@@ -30,8 +30,8 @@ try:
     import openpyxl.reader.excel as excelreader
     import openpyxl.writer.excel as excelwriter
 except ImportError: 
-    print('Python package openpyxl missing. Download from http://pypi.python.org/pypi/openpyxl')
-
+    print("Python package openpyxl missing. Download from http://pypi.python.org/pypi/openpyxl.")
+    raise UserWarning("Python package openpyxl missing. Download from http://pypi.python.org/pypi/openpyxl.")
 
 class ExcelFileReader():
     """
@@ -46,26 +46,15 @@ class ExcelFileReader():
     def readFile(self, 
                  file_name = None,
                  sheet_name = None, 
-                 header_row = 1, 
-                 data_rows_from = 2, 
+                 header_row = 0, 
+                 data_rows_from = 1, 
                  data_rows_to = None, # None = read all.
-                 used_columns_from = 1, 
+                 used_columns_from = 0, 
                  used_columns_to = None): # None = read all.
         """ """
         if file_name == None:
             raise UserWarning('File name is missing.')
-        # Convert to index instead of row/column numbers.
-        headerrow = header_row - 1 if header_row else None 
-        datarowsfrom = data_rows_from - 1 if data_rows_from else None  
-        datarowsto = header_row - 1 if header_row else None 
-        usedcolumnsfrom = data_rows_from - 1 if data_rows_from else None 
-        usedcolumnsto = used_columns_to - 1 if used_columns_to else None 
-
-        
-        
-        
-        
-        
+        #
         try:
             workbook = excelreader.load_workbook(file_name)
             if workbook == None:
@@ -79,20 +68,20 @@ class ExcelFileReader():
                     raise UserWarning("Excel sheet " + sheet_name + " not available.")      
             else:
                 # Use the first sheet if not specified.
-                worksheet = workbook.get_sheet_names()[0]
+                worksheet = workbook.get_sheet_by_name(workbook.get_sheet_names()[0])
             
             # Prepare boundary. 
             if used_columns_to:
                 used_columns_to = min(used_columns_to,  worksheet.get_highest_column())
             else:
-                used_columns_to =worksheet.get_highest_column()
+                used_columns_to = worksheet.get_highest_column()
             if data_rows_to:
                 data_rows_to = min(data_rows_to,  worksheet.get_highest_row())
             else:
-                data_rows_to =worksheet.get_highest_row()
+                data_rows_to = worksheet.get_highest_row()
                 
             # Read header row.
-            for col in xrange(0, worksheet.get_highest_column()):
+            for col in xrange(used_columns_from, worksheet.get_highest_column()):
                 value = worksheet.cell(row=header_row, column=col).value
                 if value:
                     self._header.append(unicode(value).strip())
@@ -102,13 +91,15 @@ class ExcelFileReader():
             # Read data rows.
             for row in xrange(data_rows_from, data_rows_to): 
                 newrow = []
-                for col in xrange(0, worksheet.get_highest_column()):
+                for col in xrange(used_columns_from, worksheet.get_highest_column()):
                     value = worksheet.cell(row=row, column=col).value
                     if value:
                         newrow.append(unicode(value).strip())
                     else:
                         newrow.append(u'')
-                self._rows.append(newrow)        
+                self._rows.append(newrow)
+            # Close.
+            # TODO: Not needed?        
         #  
         except Exception:
             print("Can't read Excel (.xlsx) file. File name: " + file_name )
@@ -153,7 +144,6 @@ class ExcelFileReader():
         except Exception:
             return 0
 
-
     def getDataCell(self, row, column):
         """ """
         try:
@@ -194,6 +184,8 @@ class ExcelFileWriter():
                     cell.value = unicode(item)
             #    
             excelwriter.save_workbook(workbook, fileName)
+            # Close.
+            # TODO: Not needed?        
         except (IOError, OSError):
             mmfw.Logging().log("Failed to write to file: " + fileName)
             raise

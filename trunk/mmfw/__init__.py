@@ -28,6 +28,7 @@ from utils.excelfiles import ExcelFileReader
 from utils.excelfiles import ExcelFileWriter
 
 # Module datasets:
+from datasets.dataset_base import DatasetBase
 from datasets.dataset_table import DatasetTable
 from datasets.dataset_tree import (
                                    DataNode,
