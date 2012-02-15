@@ -22,10 +22,10 @@ Data:
 # Module utils:
 from utils.patterns import singleton
 from utils.logging import Logging
+from utils.excelfiles import ExcelFiles
+from utils.textfiles import TextFiles
 from utils.zipfiles import ZipFileReader
 from utils.zipfiles import ZipFileWriter
-from utils.excelfiles import ExcelFileReader
-from utils.excelfiles import ExcelFileWriter
 
 # Module datasets:
 from datasets.dataset_base import DatasetBase

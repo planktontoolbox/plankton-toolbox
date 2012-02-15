@@ -34,12 +34,19 @@ class ZipFileReader(object):
         else:
             return {}
 
-    def openZipEntry(self, entry_name):
+    def readEntryToTableDataset(self, 
+                                target_dataset, 
+                                zip_entry,
+                                encoding = None):
         """ """
-        if self._zip:
-            return self._zip.open(entry_name, 'r')
-        else:
-            return None
+    
+    
+#    def openZipEntry(self, entry_name):
+#        """ """
+#        if self._zip:
+#            return self._zip.open(entry_name, 'r')
+#        else:
+#            return None
 
     def getMetadataAsDict(self):
         """ """

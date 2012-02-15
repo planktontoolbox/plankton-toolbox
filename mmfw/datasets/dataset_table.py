@@ -72,6 +72,14 @@ class DatasetTable(mmfw.DatasetBase):
         except Exception:
             return ''
 
+    def getDataItemByColumnName(self, row, column_name):
+        """  """
+        try:
+            column = self._header.index(column_name)
+            return self._rows[row][column]
+        except Exception:
+            return ''
+
     def getColumnCount(self):
         """ Used for calls from QAbstractTableModel. """
         try:
@@ -86,46 +94,3 @@ class DatasetTable(mmfw.DatasetBase):
         except Exception:
             return 0
 
-#    def SaveAsTextFile(self, fileName):
-#        """ """
-#        if fileName == None:
-#            raise UserWarning('File name is missing.')
-#        try:
-##            txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
-##            txtencode = 'UTF8'
-#            txtencode = u'cp1252'
-#            out = codecs.open(fileName, mode = 'w', encoding = txtencode)
-#            separator = '\t' # Use tab as item separator.
-#            # Header.
-#            out.write(separator.join(map(unicode, self._header)) + '\r\n')
-#            # Rows.
-#            for row in self._rows:
-#                # Use tab as column separator and CR/LF as row delimiter.
-#                out.write(separator.join(map(unicode, row)) + '\r\n')
-#        except (IOError, OSError):
-#            mmfw.Logging().log("Failed to write to file: " + fileName)
-#            raise
-#        finally:
-#            if out: out.close()
-
-#    def SaveExcelXlsxFile(self, fileName):
-#        """ """
-#        if fileName == None:
-#            raise UserWarning('File name is missing.')
-#        try:
-#            workbook = excelworkbook.Workbook() # Create workbook.
-#            worksheet = workbook.get_active_sheet() # Workbooks contains at least one worksheet.
-#            # Header.
-#            for columnindex, item in enumerate(self._header):
-#                cell = worksheet.cell(row=0, column=columnindex)
-#                cell.value = unicode(item)
-#            # Rows.
-#            for rowindex, row in enumerate(self._rows):
-#                for columnindex, item in enumerate(row):
-#                    cell = worksheet.cell(row=rowindex + 1, column=columnindex)
-#                    cell.value = unicode(item)
-#            #    
-#            excelwriter.save_workbook(workbook, fileName)
-#        except (IOError, OSError):
-#            mmfw.Logging().log("Failed to write to file: " + fileName)
-#            raise

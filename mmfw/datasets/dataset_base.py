@@ -24,6 +24,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+import mmfw
+
 class DatasetBase(object):
     def __init__(self):
         """ Base class for datasets, mainly used for metadata. """
@@ -41,4 +43,12 @@ class DatasetBase(object):
     def addMetadata(self, key, value):
         """ """
         self._metadata[key] = value
+
+    def saveAsTextFile(self, file_name):
+        """ """
+        mmfw.TextFiles().writeTableDataset(self, file_name)
+
+    def saveAsExcelFile(self, file_name):
+        """ """
+        mmfw.ExcelFiles().writeTableDataset(self, file_name)
 

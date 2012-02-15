@@ -51,7 +51,9 @@ class ImportManager(object):
 #        matrixcolumn = self.metadata.getField(u'Dataset format')
         
         # Phase 1: Parse file and import to memory model.
-        formatparser.importDataset(dataset, filename)
+        tabledataset = mmfw.DatasetTable()
+        mmfw.TextFiles().readToTableDataset(tabledataset, filename)
+        formatparser.parseTableDataset(dataset, tabledataset)
 
         # Phase 2: Reorganize between nodes in memory model.
 
@@ -68,7 +70,7 @@ class ImportManager(object):
         #
         try:
     #        zipfile = mmfw.ZipPackageReader(zipfilename)
-            zipfile = mmfw.ZipPackageReader(self._zipfilepath) # TODO:
+            zipfile = mmfw.ZipFileReader(self._zipfilepath) # TODO:
             print(zipfile.listContent())
             
             

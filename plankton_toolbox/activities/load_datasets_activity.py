@@ -571,6 +571,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         
         self.__datasettabledata.clear()
         self.__datasettabledata.setHeader([u'Dataset      ', 
+                                           u'Type         ', 
                                            u'Content      ', 
                                            u'File         ', 
                                            u'File path    ',
@@ -656,17 +657,24 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         self.__datasettabledata.clearRows()
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
             # Get content info depending on dataset type.
+            datasettype = u'',
             contentinfo = u''
             if isinstance(dataset, mmfw.DatasetTable):
+                datasettype = u'Table dataset'
                 contentinfo = u'Rows: ' + unicode(len(dataset.getRows())) + u'. '
             elif isinstance(dataset, mmfw.DatasetNode):
+                datasettype = u'Tree dataset'
                 visitcount, samplecound, variablecount = dataset.getCounters()
                 contentinfo = u'Visits: ' + unicode(visitcount) + u', ' + \
                               u'samples: ' + unicode(samplecound) + u', ' + \
                               u'variables: ' + unicode(variablecount) + u'. '
+            else:
+                datasettype = u'Unspecified'
+
             # Add row 
             self.__datasettabledata.addRow(
                 [u'Dataset - ' + unicode(rowindex),
+                 datasettype,
                  contentinfo,
                  dataset.getMetadata(u'File name'),
                  dataset.getMetadata(u'File path'),

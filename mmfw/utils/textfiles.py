@@ -24,37 +24,88 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+import locale
+import codecs
 import mmfw
 
-@mmfw.singleton
-class TextFileReader():
+class TextFiles():
     """
     This class ...  
     """
     def __init__(self):
         """ """
         
-    def readFile(self, 
-                 file_name = None,
-                 sheet_name = None, 
-                 header_row = 1, 
-                 data_rows_from = 2, 
-                 data_rows_to = None, # None = read all.
-                 used_columns_from = 1, 
-                 used_columns_to = None): # None = read all.
+    def readToTableDataset(self, 
+                           target_dataset, 
+                           file_name,
+                           encoding = None):
         """ """
-        
-@mmfw.singleton
-class TextFileWriter():
-    """
-    This class ...  
-    """
-    def __init__(self):
+        if file_name == None:
+            raise UserWarning("File name is missing.")
+        if not isinstance(target_dataset, mmfw.DatasetTable):
+            raise UserWarning("Target dataset is not of valid type.")
+        # Get encoding.
+        if not encoding:
+            # language, encoding = locale.getdefaultlocale()
+            encoding = locale.getpreferredencoding()
+        # Read file.
+        infile = open(file_name, u'r')
+        try:
+            fieldseparator = None
+            # Iterate over rows in file.            
+            for rowindex, row in enumerate(infile):
+                # Convert to unicode.
+                row = unicode(row, encoding, 'strict')
+                if rowindex == 0:
+                    # Header.
+                    fieldseparator = self.getSeparator(row)
+                    row = [item.strip() for item in row.split(fieldseparator)]
+                    target_dataset.setHeader(row)
+                else:
+                    # Row.
+                    row = [item.strip() for item in row.split(fieldseparator)]
+                    target_dataset.appendRow(row)             
+        #
+        finally:
+            if infile: infile.close()
+
+
+    def writeTableDataset(self, 
+                          table_dataset, 
+                          file_name,
+                          encoding = None,
+                          field_separator = u'\t',
+                          row_separator = u'\r\n'):
         """ """
-        
-    def SaveTableDataset(self, fileName):
+        if file_name == None:
+            raise UserWarning("File name is missing.")
+        if not isinstance(table_dataset, mmfw.DatasetTable):
+            raise UserWarning("Dataset is not of a valid type.")
+        #
+        if not encoding:
+            # language, encoding = locale.getdefaultlocale()
+            encoding = locale.getpreferredencoding()
+        #
+        try:
+            out = codecs.open(file_name, mode = 'w', encoding = encoding)
+            # Header.
+            out.write(field_separator.join(map(unicode, table_dataset.getHeader())) + '\r\n')
+            # Rows.
+            for row in table_dataset.getRows():
+                out.write(field_separator.join(map(unicode, row)) + '\r\n')
+        except (IOError, OSError):
+            mmfw.Logging().log("Failed to write to text file: " + file_name)
+            raise UserWarning("Failed to write to text file: " + file_name)
+        finally:
+            if out: out.close()
+
+    def getSeparator(self, row):
         """ """
-        
-    def SaveTreeDataset(self, fileName):
-        """ """
+        if u'\t' in row: # First alternative.
+            return u'\t'
+        elif u';' in row: # Second alternative. 
+            return u';'
+        else:
+            return u'\t' # Default alternative.
+             
 
