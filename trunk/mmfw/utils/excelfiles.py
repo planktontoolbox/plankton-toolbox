@@ -33,7 +33,7 @@ except ImportError:
     print("Python package openpyxl missing. Download from http://pypi.python.org/pypi/openpyxl.")
     raise UserWarning("Python package openpyxl missing. Download from http://pypi.python.org/pypi/openpyxl.")
 
-class ExcelFileReader():
+class ExcelFiles():
     """
     This class ...  
     """
@@ -43,18 +43,20 @@ class ExcelFileReader():
         self._header = [] # 
         self._rows = []
         
-    def readFile(self, 
-                 file_name = None,
-                 sheet_name = None, 
-                 header_row = 0, 
-                 data_rows_from = 1, 
-                 data_rows_to = None, # None = read all.
-                 used_columns_from = 0, 
-                 used_columns_to = None): # None = read all.
+    def readToTableDataset(self, 
+                           target_dataset, 
+                           file_name,
+                           sheet_name = None, 
+                           header_row = 0, 
+                           data_rows_from = 1, 
+                           data_rows_to = None, # None = read all.
+                           used_columns_from = 0, 
+                           used_columns_to = None): # None = read all.
         """ """
         if file_name == None:
-            raise UserWarning('File name is missing.')
-        #
+            raise UserWarning("File name is missing.")
+        if not isinstance(target_dataset, mmfw.DatasetTable):
+            raise UserWarning("Target dataset is not of valid type.")
         try:
             workbook = excelreader.load_workbook(file_name)
             if workbook == None:
@@ -81,12 +83,14 @@ class ExcelFileReader():
                 data_rows_to = worksheet.get_highest_row()
                 
             # Read header row.
+            header = []
             for col in xrange(used_columns_from, worksheet.get_highest_column()):
                 value = worksheet.cell(row=header_row, column=col).value
                 if value:
-                    self._header.append(unicode(value).strip())
+                    header.append(unicode(value).strip())
                 else:
-                    self._header.append(u'')
+                    header.append(u'')
+            target_dataset.setHeader(header)
                     
             # Read data rows.
             for row in xrange(data_rows_from, data_rows_to): 
@@ -97,96 +101,34 @@ class ExcelFileReader():
                         newrow.append(unicode(value).strip())
                     else:
                         newrow.append(u'')
-                self._rows.append(newrow)
-            # Close.
-            # TODO: Not needed?        
+                target_dataset.appendRow(newrow)
         #  
         except Exception:
-            print("Can't read Excel (.xlsx) file. File name: " + file_name )
+            print("Can't read Excel file. File name: " + file_name )
+            raise UserWarning("Can't read Excel file. File name: " + file_name)
 
-
-    def clear(self):
+    def writeTableDataset(self, table_dataset, file_name):
         """ """
-        self._metadata = {}
-        self._header = []
-        self._rows = []
-
-    def getMetadata(self):
-        """ """
-        return self._metadata
-
-    def getHeader(self):
-        """ """
-        return self._header
-
-    def getRows(self):
-        """ """
-        return self._rows
-
-    def getHeaderCell(self, column):
-        """ """
-        try:
-            return self._header[column]
-        except Exception:
-            return ''
-
-    def getColumnCount(self):
-        """ """
-        try:
-            return len(self._header)
-        except Exception:
-            return 0
-
-    def getRowCount(self):
-        """"""
-        try:
-            return len(self._rows)
-        except Exception:
-            return 0
-
-    def getDataCell(self, row, column):
-        """ """
-        try:
-            return self._rows[row][column]
-        except Exception:
-            return ''
-
-    def getDataCellByName(self, row, column_name):
-        """ """
-        try:
-            column = self._header.index(column_name)
-            return self._rows[row][column]
-        except Exception:
-            return ''
-        
-class ExcelFileWriter():
-    """
-    This class ...  
-    """
-    def __init__(self):
-        """ """
-        
-    def SaveExcelXlsxFile(self, fileName):
-        """ """
-        if fileName == None:
-            raise UserWarning('File name is missing.')
+        if file_name == None:
+            raise UserWarning("File name is missing.")
+        if not isinstance(table_dataset, mmfw.DatasetTable):
+            raise UserWarning("Dataset is not of a valid type.")
         try:
             workbook = excelworkbook.Workbook() # Create workbook.
             worksheet = workbook.get_active_sheet() # Workbooks contains at least one worksheet.
             # Header.
-            for columnindex, item in enumerate(self._header):
+            for columnindex, item in enumerate(table_dataset.getHeader()):
                 cell = worksheet.cell(row=0, column=columnindex)
                 cell.value = unicode(item)
             # Rows.
-            for rowindex, row in enumerate(self._rows):
+            for rowindex, row in enumerate(table_dataset.getRows()):
                 for columnindex, item in enumerate(row):
                     cell = worksheet.cell(row=rowindex + 1, column=columnindex)
                     cell.value = unicode(item)
             #    
-            excelwriter.save_workbook(workbook, fileName)
+            excelwriter.save_workbook(workbook, file_name)
             # Close.
             # TODO: Not needed?        
         except (IOError, OSError):
-            mmfw.Logging().log("Failed to write to file: " + fileName)
-            raise
-
+            mmfw.Logging().log("Failed to write to file: " + file_name)
+            raise UserWarning("Failed to write to file: " + file_name)

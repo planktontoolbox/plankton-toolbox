@@ -145,24 +145,24 @@ class DatasetNode(mmfw.DatasetBase, DataNode):
         self.addMetadata(u'Import column', import_column)
         self.addMetadata(u'Export column', export_column)
         # Read matrix.
-        excelreader = mmfw.ExcelFileReader()
-        excelreader.readFile(file_name = matrix_file)
+        tabledata = mmfw.DatasetTable()
+        mmfw.ExcelFiles().readToTableDataset(tabledata, file_name = matrix_file)
         # Create import info.
         importrows = []
-        for rowindex in xrange(0, excelreader.getRowCount()):
-            importcolumndata = excelreader.getDataCellByName(rowindex, import_column)
+        for rowindex in xrange(0, tabledata.getRowCount()):
+            importcolumndata = tabledata.getDataItemByColumnName(rowindex, import_column)
             if importcolumndata:
-                nodelevel = excelreader.getDataCell(rowindex, 0)
-                key = excelreader.getDataCell(rowindex, 1)
+                nodelevel = tabledata.getDataItem(rowindex, 0)
+                key = tabledata.getDataItem(rowindex, 1)
                 importrows.append({u'Node': nodelevel, u'Key': key, u'Command': importcolumndata}) 
         self.setImportMatrixRows(importrows)
         # Create export info.
         columnsinfo = []
-        for rowindex in xrange(0, excelreader.getRowCount()):
-            exportcolumndata = excelreader.getDataCellByName(rowindex, export_column)
+        for rowindex in xrange(0, tabledata.getRowCount()):
+            exportcolumndata = tabledata.getDataItemByColumnName(rowindex, export_column)
             if exportcolumndata:
-                nodelevel = excelreader.getDataCell(rowindex, 0)
-                key = excelreader.getDataCell(rowindex, 1)
+                nodelevel = tabledata.getDataItem(rowindex, 0)
+                key = tabledata.getDataItem(rowindex, 1)
                 columnsinfo.append({u'Header': exportcolumndata, u'Node': nodelevel, u'Key': key}) 
         self.setExportTableColumns(columnsinfo)
 
@@ -182,29 +182,34 @@ class DatasetNode(mmfw.DatasetBase, DataNode):
         """ """
         return self._exporttablecolumns
 
+    def saveAsTextFile(self, file_name):
+        """ """
+        targetdataset = mmfw.DatasetTable()
+        self.convertToTableDataset(targetdataset)
+        mmfw.TextFiles().writeTableDataset(targetdataset, file_name)
+
+    def saveAsExcelFile(self, file_name):
+        """ """
+        targetdataset = mmfw.DatasetTable()
+        self.convertToTableDataset(targetdataset)
+        mmfw.ExcelFiles().writeTableDataset(targetdataset, file_name)       
+        
     def convertToTableDataset(self, target_dataset):
         """ Converts the tree dataset to a corresponding table based dataset.
         The parameter self._exporttablecolumns should be on the form [{"Header": "", "Node": "", "Key": ""}, ...]
         Example: [{"Header": "SDATE", "Node": "Visit", "Key": "Date"},
-                  {"Header": "MNDEP", "Node": "Sample", "Key": "Min. depth"}]
+                  {"Header": "MNDEP", "Node": "Sample", "Key": "Min depth"}]
         """
-        # TODO: For test.
-#        self._exporttablecolumns = \
-#            [{"Header": "YEAR", "Node": "Visit", "Key": "Visit year"},
-#             {"Header": "SDATE", "Node": "Visit", "Key": "Visit date"},
-#             {"Header": "MXDEP", "Node": "Sample", "Key": "Sample max depth"}]
-        #
         if not target_dataset:
             raise UserWarning('Target dataset is missing.')
         if not isinstance(target_dataset, mmfw.DatasetTable):
-            raise UserWarning('Target dataset is not of a valid type.')
+            raise UserWarning('Target dataset is not of valid type.')
         if not self._exporttablecolumns:
             raise UserWarning('Info for converting from tree to table dataset is missing.')
         # Header.
         header = []
         for item in self._exporttablecolumns:
             header.append(item.get('Header', u'---'))
-        # To target.
         target_dataset.setHeader(header)
         # Rows.
         for visitnode in self.getChildren():

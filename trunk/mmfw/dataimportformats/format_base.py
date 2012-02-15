@@ -66,9 +66,10 @@ class FormatBase(object):
 
     def getSeparator(self, row):
         """ """
-        if u'\t' in row: 
+        if u'\t' in row: # First alternative.
             return u'\t'
-        elif u';' in row: 
-            return u';' 
-
+        elif u';' in row: # Second alternative. 
+            return u';'
+        else:
+            return u'\t' # Default alternative.
 

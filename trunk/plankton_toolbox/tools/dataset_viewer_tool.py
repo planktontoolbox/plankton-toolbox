@@ -170,9 +170,9 @@ class DatasetViewerTool(tool_base.ToolBase):
             if filename:
                 self.__lastusedfilename = filename
                 if self.__saveformat_list.currentIndex() == 0: # Text file.
-                    self.__tableview.tablemodel.getModeldata().SaveAsTextFile(unicode(filename))
-                elif self.__saveformat_list.currentIndex() == 1: # Xlsx file.
-                    self.__tableview.tablemodel.getModeldata().SaveExcelXlsxFile(unicode(filename))
+                    self.__tableview.tablemodel.getModeldata().saveAsTextFile(unicode(filename))
+                elif self.__saveformat_list.currentIndex() == 1: # Excel file.
+                    self.__tableview.tablemodel.getModeldata().saveAsExcelFile(unicode(filename))
         
     def __refreshResultTable(self):
         """ """
