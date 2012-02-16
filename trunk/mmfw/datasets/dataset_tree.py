@@ -29,8 +29,8 @@ Functions and classes in this module should be used for datasets organized as tr
 Valid node order in the tree is dataset - visit - sample - variable.
 """
 
+import copy
 import mmfw
-#from mmfw import DatasetBase
 
 class DataNode(object):
     """
@@ -47,6 +47,7 @@ class DataNode(object):
         self._parent = None
         self._children = []
         self._datadict = {}
+        self._idstring = None
         
     def setParent(self, parent):
         """ """
@@ -299,6 +300,15 @@ class VariableNode(DataNode):
     def clear(self):
         """ """
         super(VariableNode, self).clear()
+        
+    def clone(self):
+        """ """
+        newvariable = VariableNode()
+        self.getParent().addChild(newvariable) # Connect to the same parent.
+        newvariable._children = [] # Not used for variables.
+        newvariable._datadict = copy.deepcopy(self._datadict)
+        newvariable._idstring = None # Not used for variables.
+        return newvariable
         
     def addChild(self, child):
         """ """
