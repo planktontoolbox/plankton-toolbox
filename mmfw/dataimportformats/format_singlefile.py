@@ -65,23 +65,47 @@ class FormatSingleFile(mmfw.FormatBase):
                     matrixcommand = matrixcommand.replace(u'$Float(', u'self._asFloat(')
                     #
                     if matrixnode == u'Dataset':
-                        matrixcommands.append(compile(u"dataset.addData('" + matrixkey + u"', " + matrixcommand + u")", '', 'exec'))
+                        commandstring = u"dataset.addData('" + matrixkey + u"', " + matrixcommand + u")"
+                        matrixcommands.append(compile(commandstring, '', 'exec'))
                     if matrixnode == u'Visit':
-                        matrixcommands.append(compile(u"currentvisit.addData('" + matrixkey + u"', " + matrixcommand + u")", '', 'exec'))
+                        commandstring = u"currentvisit.addData('" + matrixkey + u"', " + matrixcommand + u")"
+                        matrixcommands.append(compile(commandstring, '', 'exec'))
                     elif matrixnode == u'Sample':
-                        matrixcommands.append(compile(u"currentsample.addData('" + matrixkey + u"', " + matrixcommand + u")", '', 'exec'))
+                        commandstring = u"currentsample.addData('" + matrixkey + u"', " + matrixcommand + u")"
+                        matrixcommands.append(compile(commandstring, '', 'exec'))
                     elif matrixnode == u'Variable':
-                        matrixcommands.append(compile(u"currentvariable.addData('" + matrixkey + u"', " + matrixcommand + u")", '', 'exec'))
+                        commandstring = u"currentvariable.addData('" + matrixkey + u"', " + matrixcommand + u")"
+                        matrixcommands.append(compile(commandstring, '', 'exec'))
                     #
                     elif (matrixnode == u'INFO') and (matrixkey == u'Visit key'):
-                        visitkeycommand = compile(u"keystring = " + matrixcommand, '', 'exec')
+                        commandstring = u"keystring = " + matrixcommand
+                        visitkeycommand = compile(commandstring, '', 'exec')
                     elif (matrixnode == u'INFO') and (matrixkey == u'Sample key'):
-                        samplekeycommand = compile(u"keystring = " + matrixcommand, '', 'exec')
+                        commandstring = u"keystring = " + matrixcommand
+                        samplekeycommand = compile(commandstring, '', 'exec')
                     elif (matrixnode == u'INFO') and (matrixkey == u'Variable key'):
-                        variablekeycommand = compile(u"keystring = " + matrixcommand, '', 'exec')
+                        commandstring = u"keystring = " + matrixcommand
+                        variablekeycommand = compile(commandstring, '', 'exec')
+                    #
+                    elif matrixnode == u'FUNCTION Dataset':
+                        matrixkey = matrixkey.replace(u'()', u'') # Remove () from function name and add later.
+                        commandstring = u"self._" + matrixkey + u"(dataset, "  + matrixcommand + u")"
+                        matrixcommands.append(compile(commandstring, '', 'exec'))
+                    elif matrixnode == u'FUNCTION Visit':
+                        matrixkey = matrixkey.replace(u'()', u'') # Remove () from function name and add later.
+                        commandstring = u"self._" + matrixkey + u"(currentvisit, "  + matrixcommand + u")"
+                        matrixcommands.append(compile(commandstring, '', 'exec'))
+                    elif matrixnode == u'FUNCTION Sample':
+                        matrixkey = matrixkey.replace(u'()', u'') # Remove () from function name and add later.
+                        commandstring = u"self._" + matrixkey + u"(currentsample, "  + matrixcommand + u")"
+                        matrixcommands.append(compile(commandstring, '', 'exec'))
+                    elif matrixnode == u'FUNCTION Variable':
+                        matrixkey = matrixkey.replace(u'()', u'') # Remove () from function name and add later.
+                        commandstring = u"self._" + matrixkey + u"(currentvariable, "  + matrixcommand + u")"
+                        matrixcommands.append(compile(commandstring, '', 'exec'))
        
         except:
-            print(u"Failed to parse import matrix.")
+            print(u"Failed to parse import matrix: " + commandstring)
         #
         try:
             # Base class must know header for _asText(), etc.
@@ -116,10 +140,6 @@ class FormatSingleFile(mmfw.FormatBase):
                     # === Parse row and add fields on nodes. ===
                     for cmd in matrixcommands:
                         exec(cmd)
-                    # TODO: For test...
-                    currentvariable.addData(u'PARAMETER', u'COUNTNR')
-                    currentvariable.addData(u'VALUE', self._asText(u'COUNTNR'))
-                    currentvariable.addData(u'UNIT', u'ind')           
         #
         except Exception as e:
             print("ERROR: Failed to parse imported data: %s" % (e.args[0]))

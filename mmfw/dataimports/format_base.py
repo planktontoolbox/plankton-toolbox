@@ -77,3 +77,54 @@ class FormatBase(object):
                     return None
         return None
 
+    def _toStation(self, current_node, station_name, **more):
+        """ """
+        # TODO: For test:
+        current_node.addData(u'Station.name', station_name)
+
+    def _toPosition(self, current_node, latitude, longitude, **more):
+        """ """
+#        print(u'DEBUG: _toPosition: ' + latitude + u' ' + longitude)
+
+    def _createVariable(self, current_node, **more):
+        """ """
+        if isinstance(current_node, mmfw.SampleNode):
+            variable = mmfw.VariableNode()
+            current_node.addChild(variable)
+            variable.addData(u'Parameter', more[u'p'])    
+            variable.addData(u'Value', unicode(more[u'v']))    
+            variable.addData(u'Value float', more[u'v'])    
+            variable.addData(u'Unit', more[u'u'])    
+
+    def _copyVariable(self, current_node, **more):
+        """ """
+        if isinstance(current_node, mmfw.VariableNode):
+            variable = current_node.clone()
+            variable.addData(u'Parameter', more[u'p'])    
+            variable.addData(u'Value', unicode(more[u'v']))    
+            variable.addData(u'Value float', more[u'v'])    
+            variable.addData(u'Unit', more[u'u'])    
+
+    def _modifyVariable(self, current_node, **more):
+        """ """
+        if isinstance(current_node, mmfw.VariableNode):
+            current_node.addData(u'Parameter', more[u'p'])    
+            current_node.addData(u'Value', unicode(more[u'v']))    
+            current_node.addData(u'Value float', more[u'v'])    
+            current_node.addData(u'Unit', more[u'u'])    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
