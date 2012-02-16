@@ -32,15 +32,6 @@ class ImportManager(object):
         """ """
         # Initialize parent.
         super(ImportManager, self).__init__()
-        # TESTDATA:
-        self._importmatrixfilepath = u'mmfw/data/templates/pp_import_matrix.txt'
-#        self._zipfilepath = u'mmfw/data/testdata/data.txt'
-        self._zipfilepath = u'mmfw/data/testdata/2009_SMHI_PP_version-2010-11-16.zip'
-        self._importmatrixcolumn = u'Plankton-excel-format'
-        
-    def setImportMatrix(self, importmatrixfilepath):
-        """ """
-#        self._importmatrixfilepath = importmatrixfilepath
         
     def importFileToDataset(self, dataset, filename):
         """ """

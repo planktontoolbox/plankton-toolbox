@@ -26,26 +26,54 @@
 
 import mmfw
 
-class ImportMatrix(object):
+class FormatBase(object):
     """ """
     def __init__(self):
+        """ Abstract class for import formats. """
+        super(FormatBase, self).__init__()
+        #
+        self._dataset = None
+        self._header = []
+        self._row = None
+
+
+    
+    def parseTableDataset(self, dataset, imported_table):
+        """ Abstract method. """
+        
+    def reorganizeDataset(self):
         """ """
-        # Initialize parent.
-        super(ImportMatrix, self).__init__()
-        # TESTDATA:
-        self._importmatrixfilepath = u''
-        self._importmatrixcolumn = u''
-        self._datafilepath = u''
         
-        
-    def importDataset(self):
+    def reformatDataset(self):
         """ """
         
-        # Phase 1: Import to memory model.
+    def _setHeader(self, header):
+        """ """
+        self._header = header
+        
+    def _setRow(self, row):
+        """ """
+        self._row = row
+        
+    def _asText(self, column_name):
+        """ """
+        if column_name in self._header:
+            index = self._header.index(column_name)
+            return self._row[index] if len(self._row) > index else u''
+        else:
+            return u''
 
-        # Phase 2: Reorganize between nodes in memory model.
-
-        # Phase 3: Reformat fields in memory model.
-
-        # Phase 4: Basic screening.
+    def _asFloat(self, column_name):
+        """ """
+        if column_name in self._header:
+            index = self._header.index(column_name)
+            if len(self._row) > index:
+                try:
+                    str = self._row[index]
+                    str = str.replace(u' ', u'').replace(u',', u'.')
+                    return float(str)
+                except:
+                    print(u"Failed to convert to float: " + self._row[index])
+                    return None
+        return None
 

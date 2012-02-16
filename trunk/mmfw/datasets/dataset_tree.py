@@ -138,33 +138,35 @@ class DatasetNode(mmfw.DatasetBase, DataNode):
     def setImportsMatrixRows(self):
         """ """
 
-    def loadImportMatrix(self, matrix_file, import_column, export_column):
+    def loadImportExportMatrix(self, matrix_file, import_column = None, export_column = None):
         """ """
         # Add metadata
         self.addMetadata(u'Matrix', matrix_file)
-        self.addMetadata(u'Import column', import_column)
-        self.addMetadata(u'Export column', export_column)
         # Read matrix.
         tabledata = mmfw.DatasetTable()
         mmfw.ExcelFiles().readToTableDataset(tabledata, file_name = matrix_file)
         # Create import info.
-        importrows = []
-        for rowindex in xrange(0, tabledata.getRowCount()):
-            importcolumndata = tabledata.getDataItemByColumnName(rowindex, import_column)
-            if importcolumndata:
-                nodelevel = tabledata.getDataItem(rowindex, 0)
-                key = tabledata.getDataItem(rowindex, 1)
-                importrows.append({u'Node': nodelevel, u'Key': key, u'Command': importcolumndata}) 
-        self.setImportMatrixRows(importrows)
+        if import_column:
+            self.addMetadata(u'Import column', import_column)
+            importrows = []
+            for rowindex in xrange(0, tabledata.getRowCount()):
+                importcolumndata = tabledata.getDataItemByColumnName(rowindex, import_column)
+                if importcolumndata:
+                    nodelevel = tabledata.getDataItem(rowindex, 0)
+                    key = tabledata.getDataItem(rowindex, 1)
+                    importrows.append({u'Node': nodelevel, u'Key': key, u'Command': importcolumndata}) 
+            self.setImportMatrixRows(importrows)
         # Create export info.
-        columnsinfo = []
-        for rowindex in xrange(0, tabledata.getRowCount()):
-            exportcolumndata = tabledata.getDataItemByColumnName(rowindex, export_column)
-            if exportcolumndata:
-                nodelevel = tabledata.getDataItem(rowindex, 0)
-                key = tabledata.getDataItem(rowindex, 1)
-                columnsinfo.append({u'Header': exportcolumndata, u'Node': nodelevel, u'Key': key}) 
-        self.setExportTableColumns(columnsinfo)
+        if export_column:
+            self.addMetadata(u'Export column', export_column)
+            columnsinfo = []
+            for rowindex in xrange(0, tabledata.getRowCount()):
+                exportcolumndata = tabledata.getDataItemByColumnName(rowindex, export_column)
+                if exportcolumndata:
+                    nodelevel = tabledata.getDataItem(rowindex, 0)
+                    key = tabledata.getDataItem(rowindex, 1)
+                    columnsinfo.append({u'Header': exportcolumndata, u'Node': nodelevel, u'Key': key}) 
+            self.setExportTableColumns(columnsinfo)
 
     def setImportMatrixRows(self, import_matrix_rows):
         """ """
