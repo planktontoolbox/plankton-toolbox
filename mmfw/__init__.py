@@ -39,11 +39,10 @@ from datasets.dataset_tree import (
 from datasets.datasets import Datasets
 
 # Module dataimports:
+from dataimports.format_base import FormatBase
 from dataimports.importmanager import ImportManager
-from dataimports.importmatrix import ImportMatrix 
 
 # Module dataimportformats:
-from dataimportformats.format_base import FormatBase
 from dataimportformats.format_singlefile import FormatSingleFile
  
 # Module dataexports:

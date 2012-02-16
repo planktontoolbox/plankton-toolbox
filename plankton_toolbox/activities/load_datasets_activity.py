@@ -157,9 +157,9 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         
 #        dataset.loadExportTableInfo(u'C:/Users/arnold/Desktop/python/w_plankton_toolbox/p_plankton_toolbox/src/mmfw/data/templates/pp_export_matrix.xlsx',
 #                                    u'PP export')
-        dataset.loadImportMatrix(u'mmfw/data/templates/pp_import_matrix.xlsx',
-                                 u'PP import',
-                                 u'PP export')
+        dataset.loadImportExportMatrix(u'mmfw/data/templates/pp_import_matrix.xlsx',
+                                       u'PP import',
+                                       u'PP export')
         
         
         
@@ -172,7 +172,6 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         dataset.addMetadata(u'File path', unicode(self.__textfile_edit.text()))
         #
         impMgr = mmfw.ImportManager()
-        impMgr.setImportMatrix(u'TODO:...')
         impMgr.importFileToDataset(dataset, unicode(self.__textfile_edit.text()))
         # Note: Not mmfw datasets.
         toolbox_datasets.ToolboxDatasets().addDataset(dataset)        
