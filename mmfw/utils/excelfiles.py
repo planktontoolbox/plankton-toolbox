@@ -71,7 +71,6 @@ class ExcelFiles():
             else:
                 # Use the first sheet if not specified.
                 worksheet = workbook.get_sheet_by_name(workbook.get_sheet_names()[0])
-            
             # Prepare boundary. 
             if used_columns_to:
                 used_columns_to = min(used_columns_to,  worksheet.get_highest_column())
@@ -81,7 +80,6 @@ class ExcelFiles():
                 data_rows_to = min(data_rows_to,  worksheet.get_highest_row())
             else:
                 data_rows_to = worksheet.get_highest_row()
-                
             # Read header row.
             header = []
             for col in xrange(used_columns_from, worksheet.get_highest_column()):
@@ -91,7 +89,6 @@ class ExcelFiles():
                 else:
                     header.append(u'')
             target_dataset.setHeader(header)
-                    
             # Read data rows.
             for row in xrange(data_rows_from, data_rows_to): 
                 newrow = []
@@ -132,3 +129,4 @@ class ExcelFiles():
         except (IOError, OSError):
             mmfw.Logging().log("Failed to write to file: " + file_name)
             raise UserWarning("Failed to write to file: " + file_name)
+

@@ -27,7 +27,6 @@
 """
 """
 
-import os
 import os.path
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
@@ -349,12 +348,13 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                             'Load Phytowin dataset(s)',
                             self.__lastusedphytowinfilename,
                             namefilter)
+        filenames = unicode(filenames) # QString to unicode.
         # Check if user pressed ok or cancel.
         if filenames:
             for filename in filenames:
                 self.__lastusedphytowinfilename = filename
                 dataset = monitoring_files.PwCsvTable()
-                dataset.readFile(unicode(filename))
+                dataset.readFile(filename)
                 toolbox_datasets.ToolboxDatasets().addDataset(dataset)        
         
         
