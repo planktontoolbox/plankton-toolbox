@@ -40,7 +40,7 @@ from datasets.datasets import Datasets
 
 # Module dataimports:
 from dataimports.format_base import FormatBase
-from dataimports.importmanager import ImportManager
+from dataimports.import_manager import ImportManager
 
 # Module dataimportformats:
 from dataimportformats.format_singlefile import FormatSingleFile

@@ -27,6 +27,7 @@
 """
 """
 
+import os.path
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
@@ -50,7 +51,7 @@ class DatasetViewerTool(tool_base.ToolBase):
         self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea)
         self.setBaseSize(600,600)
         # Filename used when saving data to file.
-        self.__lastusedfilename = '.'
+        self.__lastuseddirectory = '.'
 
     def _createContent(self):
         """ """
@@ -164,15 +165,16 @@ class DatasetViewerTool(tool_base.ToolBase):
             filename = QtGui.QFileDialog.getSaveFileName(
                             self,
                             'Save dataset',
-                            self.__lastusedfilename,
+                            self.__lastuseddirectory,
                             namefilter)
+            filename = unicode(filename) # QString to unicode.
             # Check if user pressed ok or cancel.
             if filename:
-                self.__lastusedfilename = filename
+                self.__lastuseddirectory = os.path.dirname(filename)
                 if self.__saveformat_list.currentIndex() == 0: # Text file.
-                    self.__tableview.tablemodel.getModeldata().saveAsTextFile(unicode(filename))
+                    self.__tableview.tablemodel.getModeldata().saveAsTextFile(filename)
                 elif self.__saveformat_list.currentIndex() == 1: # Excel file.
-                    self.__tableview.tablemodel.getModeldata().saveAsExcelFile(unicode(filename))
+                    self.__tableview.tablemodel.getModeldata().saveAsExcelFile(filename)
         
     def __refreshResultTable(self):
         """ """

@@ -10,7 +10,7 @@ python py2exe_setup.py py2exe
 """
 
 from distutils.core import setup
-import py2exe
+#import py2exe
 setup(
   windows=[{"script":"plankton_toolbox.pyw"}],
   zipfile=None,
