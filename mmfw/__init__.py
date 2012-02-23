@@ -27,6 +27,9 @@ from utils.textfiles import TextFiles
 from utils.zipfiles import ZipFileReader
 from utils.zipfiles import ZipFileWriter
 
+# Module species:
+from species.taxa import Taxa
+
 # Module datasets:
 from datasets.dataset_base import DatasetBase
 from datasets.dataset_table import DatasetTable

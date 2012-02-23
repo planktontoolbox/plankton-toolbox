@@ -52,9 +52,9 @@ class ScreeningActivity(activity_base.ActivityBase):
         self.__activityheader = QtGui.QLabel('<h2>' + self.objectName() + '</h2>', self)
         self.__activityheader.setTextFormat(QtCore.Qt.RichText)
         self.__activityheader.setAlignment(QtCore.Qt.AlignHCenter)
-        self.__activityheader.setStyleSheet(""" 
-            * { color: white; background-color: #00677f; }
-            """)
+#        self.__activityheader.setStyleSheet(""" 
+#            * { color: white; background-color: #00677f; }
+#            """)
         contentLayout.addWidget(self.__activityheader)
         # Add content to the activity.
 #        contentLayout.addLayout(self.__contentPersonInfo())

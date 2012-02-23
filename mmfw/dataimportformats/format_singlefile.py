@@ -38,7 +38,6 @@ class FormatSingleFile(mmfw.FormatBase):
         #        
         importmatrixrows = dataset.getImportMatrixRows()
         #
-        matrixcommands = []
         visitkeycommand = None
         samplekeycommand = None
         variablekeycommand = None
@@ -63,19 +62,21 @@ class FormatSingleFile(mmfw.FormatBase):
                     # $Param(   --> self._asParam(
                     matrixcommand = matrixcommand.replace(u'$Text(', u'self._asText(')
                     matrixcommand = matrixcommand.replace(u'$Float(', u'self._asFloat(')
+                    matrixcommand = matrixcommand.replace(u'$Species(', u'self._speciesByKey(')
+                    matrixcommand = matrixcommand.replace(u'$Sizeclass(', u'self._sizeclassByKey(')
                     #
                     if matrixnode == u'Dataset':
                         commandstring = u"dataset.addData('" + matrixkey + u"', " + matrixcommand + u")"
-                        matrixcommands.append(compile(commandstring, '', 'exec'))
+                        self.appendMatrixCommand(commandstring)
                     if matrixnode == u'Visit':
                         commandstring = u"currentvisit.addData('" + matrixkey + u"', " + matrixcommand + u")"
-                        matrixcommands.append(compile(commandstring, '', 'exec'))
+                        self.appendMatrixCommand(commandstring)
                     elif matrixnode == u'Sample':
                         commandstring = u"currentsample.addData('" + matrixkey + u"', " + matrixcommand + u")"
-                        matrixcommands.append(compile(commandstring, '', 'exec'))
+                        self.appendMatrixCommand(commandstring)
                     elif matrixnode == u'Variable':
                         commandstring = u"currentvariable.addData('" + matrixkey + u"', " + matrixcommand + u")"
-                        matrixcommands.append(compile(commandstring, '', 'exec'))
+                        self.appendMatrixCommand(commandstring)
                     #
                     elif (matrixnode == u'INFO') and (matrixkey == u'Visit key'):
                         commandstring = u"keystring = " + matrixcommand
@@ -90,19 +91,19 @@ class FormatSingleFile(mmfw.FormatBase):
                     elif matrixnode == u'FUNCTION Dataset':
                         matrixkey = matrixkey.replace(u'()', u'') # Remove () from function name and add later.
                         commandstring = u"self._" + matrixkey + u"(dataset, "  + matrixcommand + u")"
-                        matrixcommands.append(compile(commandstring, '', 'exec'))
+                        self.appendMatrixCommand(commandstring)
                     elif matrixnode == u'FUNCTION Visit':
                         matrixkey = matrixkey.replace(u'()', u'') # Remove () from function name and add later.
                         commandstring = u"self._" + matrixkey + u"(currentvisit, "  + matrixcommand + u")"
-                        matrixcommands.append(compile(commandstring, '', 'exec'))
+                        self.appendMatrixCommand(commandstring)
                     elif matrixnode == u'FUNCTION Sample':
                         matrixkey = matrixkey.replace(u'()', u'') # Remove () from function name and add later.
                         commandstring = u"self._" + matrixkey + u"(currentsample, "  + matrixcommand + u")"
-                        matrixcommands.append(compile(commandstring, '', 'exec'))
+                        self.appendMatrixCommand(commandstring)
                     elif matrixnode == u'FUNCTION Variable':
                         matrixkey = matrixkey.replace(u'()', u'') # Remove () from function name and add later.
                         commandstring = u"self._" + matrixkey + u"(currentvariable, "  + matrixcommand + u")"
-                        matrixcommands.append(compile(commandstring, '', 'exec'))
+                        self.appendMatrixCommand(commandstring)
        
         except:
             print(u"Failed to parse import matrix: " + commandstring)
@@ -138,8 +139,12 @@ class FormatSingleFile(mmfw.FormatBase):
                     currentvariable = mmfw.VariableNode()
                     currentsample.addChild(currentvariable)    
                     # === Parse row and add fields on nodes. ===
-                    for cmd in matrixcommands:
-                        exec(cmd)
+                    for cmd in self._matrixcommands:
+                        try:
+                            exec(cmd[u'Command'])
+                        except Exception as e:
+                            print("ERROR: Failed to parse command: %s" % (e.args[0]))
+                            print("- Command string: %s" % (cmd[u'Command string']))
         #
         except Exception as e:
             print("ERROR: Failed to parse imported data: %s" % (e.args[0]))
