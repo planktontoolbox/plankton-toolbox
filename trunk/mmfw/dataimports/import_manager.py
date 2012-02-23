@@ -56,6 +56,33 @@ class ImportManager(object):
 #            zipfile.close() # Close zip file.
 #            del zipfile
 
+    def importExcelFileToDataset(self, dataset, filename):
+        """ """
+        #
+#        try:            
+        formatparser = mmfw.FormatSingleFile()
+               
+#        matrixcolumn = self.metadata.getField(u'Dataset format')
+        
+        # Phase 1: Parse file and import to memory model.
+        tabledataset = mmfw.DatasetTable()
+        mmfw.ExcelFiles().readToTableDataset(tabledataset, filename,
+                                             sheet_name=u'Kolumner',
+                                             header_row=3-1,
+                                             data_rows_from=4-1,
+                                             used_columns_from=2-1)
+        formatparser.parseTableDataset(dataset, tabledataset)
+
+        # Phase 2: Reorganize between nodes in memory model.
+
+        # Phase 3: Reformat fields in memory model.
+
+        # Phase 4: Basic screening.
+            
+#        finally:
+#            zipfile.close() # Close zip file.
+#            del zipfile
+
     def importZipToDataset(self, dataset, zipfilename):
         """ """
         #

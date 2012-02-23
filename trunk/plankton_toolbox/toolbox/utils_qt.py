@@ -67,12 +67,12 @@ class ClickableQLabel(QtGui.QLabel):
     def mouseReleaseEvent(self, ev):  
         self.emit(QtCore.SIGNAL('clicked()'))  
   
-    def enterEvent(self, ev):        
+    def enterEvent(self, ev):
         self.setStyleSheet(""" 
 /*            * [ActivityStatus="Selected"] { color: #d1581c; background-color: #eaa97e; }
 */
             * [ActivityStatus="Selected"] { color: #d1581c; background-color: #6da8bd; }
-            * [ActivityStatus="Unselected"] { color: #d1581c; background-color: #dddddd; }
+            * [ActivityStatus="Unselected"] { color: #d1581c; background-color: whitesmoke; }
             """)
   
     def leaveEvent(self, ev):  
@@ -80,7 +80,7 @@ class ClickableQLabel(QtGui.QLabel):
 /*            * [ActivityStatus="Selected"] { color: #00677f; background-color: #eaa97e; }
 */
             * [ActivityStatus="Selected"] { color: white; background-color: #6da8bd; }
-            * [ActivityStatus="Unselected"] { color: #00677f; background-color: #dddddd; }
+            * [ActivityStatus="Unselected"] { color: #00677f; background-color: whitesmoke; }
             """)
 
     def updateStyleSheet(self):  
@@ -88,7 +88,7 @@ class ClickableQLabel(QtGui.QLabel):
 /*            * [ActivityStatus="Selected"] { color:  #00677f; background-color: #eaa97e; }
 */
             * [ActivityStatus="Selected"] { color:  white; background-color: #6da8bd; }
-            * [ActivityStatus="Unselected"] { color:  #00677f; background-color: #dddddd; }
+            * [ActivityStatus="Unselected"] { color:  #00677f; background-color: whitesmoke; }
             """)
 
 
@@ -239,22 +239,52 @@ class ToolboxTableModel(QtCore.QAbstractTableModel):
 #        
 #        """)
 
+#        QAbstractButton, 
+#        QAbstractSlider, 
+#        QAbstractSpinBox, 
+#        QAxWidget, 
+#        QCalendarWidget, 
+#        QComboBox, 
+#        QDesignerActionEditorInterface, 
+#        QDesignerFormWindowInterface, 
+#        QDesignerObjectInspectorInterface, 
+#        QDesignerPropertyEditorInterface, 
+#        QDesignerWidgetBoxInterface, 
+#        QDesktopWidget, 
+#        QDialog, 
+#        QDialogButtonBox, 
+#        QDockWidget, 
+#        QFocusFrame, 
+#        QFrame, 
+#        QGLWidget, 
+#        QGroupBox, 
+#        QHelpSearchQueryWidget, 
+#        QHelpSearchResultWidget, 
+#        QLineEdit, 
+#        QMainWindow, 
+#        QMdiSubWindow, 
+#        QMenu, 
+#        QMenuBar, 
+#        QPrintPreviewWidget, 
+#        QProgressBar, 
+#        QRubberBand, 
+#        QSizeGrip, 
+#        QSplashScreen, 
+#        QSplitterHandle, 
+#        QStatusBar, 
+#        QSvgWidget, 
+#        QTabBar, 
+#        QTabWidget, 
+#        QToolBar, 
+#        QWebView, 
+#        QWizardPage, 
+#        QWorkspace 
+
 def setAppStyleSheet(app):
     app.setStyleSheet("""
-        /* Default for all dock widgets.*/
-        QDockWidget, QDockWidget *  { color: black; background-color: #dddddd; }
-        QDockWidget QPushButton:hover { color: #d1581c; }
         
-        /* Default for all widgets used in tools. */        
-        ToolBase, ToolBase * { color: black; background-color: #dddddd; } 
-        ToolBase QPushButton:hover { color: #d1581c; } 
+        .QWidget { background-color: whitesmoke; }
 
-        /* Default for all widgets used in activities. */        
-        ActivityBase, ActivityBase * { color: black; background-color: #dddddd; } 
-        ActivityBase QPushButton:hover { color: #d1581c; } 
-        
-        QStatusBar { background-color: #dddddd; }
-        
-        QLineEdit { background-color: #f8f8f8; }
+        QAbstractButton:hover { color: #d1581c; }
         
         """)

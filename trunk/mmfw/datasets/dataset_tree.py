@@ -165,8 +165,9 @@ class DatasetNode(mmfw.DatasetBase, DataNode):
                 exportcolumndata = tabledata.getDataItemByColumnName(rowindex, export_column)
                 if exportcolumndata:
                     nodelevel = tabledata.getDataItem(rowindex, 0)
-                    key = tabledata.getDataItem(rowindex, 1)
-                    columnsinfo.append({u'Header': exportcolumndata, u'Node': nodelevel, u'Key': key}) 
+                    if nodelevel != u'INFO':
+                        key = tabledata.getDataItem(rowindex, 1)
+                        columnsinfo.append({u'Header': exportcolumndata, u'Node': nodelevel, u'Key': key}) 
             self.setExportTableColumns(columnsinfo)
 
     def setImportMatrixRows(self, import_matrix_rows):

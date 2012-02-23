@@ -35,8 +35,7 @@ class FormatBase(object):
         self._dataset = None
         self._header = []
         self._row = None
-
-
+        self._matrixcommands = []
     
     def parseTableDataset(self, dataset, imported_table):
         """ Abstract method. """
@@ -55,6 +54,13 @@ class FormatBase(object):
         """ """
         self._row = row
         
+    def appendMatrixCommand(self, command_string):
+        """ """
+        commanddict = {}
+        commanddict[u'Command string'] = command_string
+        commanddict[u'Command'] = compile(command_string, '', 'exec')
+        self._matrixcommands.append(commanddict)
+    
     def _asText(self, column_name):
         """ """
         if column_name in self._header:
@@ -77,6 +83,16 @@ class FormatBase(object):
                     return None
         return None
 
+    def _speciesByKey(self, taxon_name, key):
+        """ """
+        return mmfw.Taxa().getTaxonValue(key, taxon_name)
+
+    def _sizeclassByKey(self, taxon_name, size_class, key):
+        """ """
+        # TODO: For test:
+        print("DEBUG: " + taxon_name)
+        return mmfw.Taxa().getSizeclassValue(key, taxon_name, size_class)
+
     def _toStation(self, current_node, station_name, **more):
         """ """
         # TODO: For test:
@@ -88,12 +104,21 @@ class FormatBase(object):
 
     def _createVariable(self, current_node, **more):
         """ """
+        if isinstance(current_node, mmfw.VisitNode):
+            newsample = mmfw.SampleNode()
+            current_node.addChild(newsample)
+            variable = mmfw.VariableNode()
+            newsample.addChild(variable)
+            variable.addData(u'Parameter', more[u'p'])    
+            variable.addData(u'Value', unicode(more[u'v']))    
+            #variable.addData(u'Value float', more[u'v'])    
+            variable.addData(u'Unit', more[u'u'])    
         if isinstance(current_node, mmfw.SampleNode):
             variable = mmfw.VariableNode()
             current_node.addChild(variable)
             variable.addData(u'Parameter', more[u'p'])    
             variable.addData(u'Value', unicode(more[u'v']))    
-            variable.addData(u'Value float', more[u'v'])    
+            #variable.addData(u'Value float', more[u'v'])    
             variable.addData(u'Unit', more[u'u'])    
 
     def _copyVariable(self, current_node, **more):
@@ -102,7 +127,7 @@ class FormatBase(object):
             variable = current_node.clone()
             variable.addData(u'Parameter', more[u'p'])    
             variable.addData(u'Value', unicode(more[u'v']))    
-            variable.addData(u'Value float', more[u'v'])    
+            #variable.addData(u'Value float', more[u'v'])    
             variable.addData(u'Unit', more[u'u'])    
 
     def _modifyVariable(self, current_node, **more):
@@ -110,21 +135,7 @@ class FormatBase(object):
         if isinstance(current_node, mmfw.VariableNode):
             current_node.addData(u'Parameter', more[u'p'])    
             current_node.addData(u'Value', unicode(more[u'v']))    
-            current_node.addData(u'Value float', more[u'v'])    
+            #current_node.addData(u'Value float', more[u'v'])    
             current_node.addData(u'Unit', more[u'u'])    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
