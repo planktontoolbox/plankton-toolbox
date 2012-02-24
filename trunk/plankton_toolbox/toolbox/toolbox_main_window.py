@@ -161,6 +161,9 @@ class MainWindow(QtGui.QMainWindow):
         # Widget to create space and layout for two groupboxes.
         content = QtGui.QWidget()
         widget = QtGui.QWidget()
+        widget.setStyleSheet("""        
+            QDockWidget .QWidget { background-color: white; }
+            """)
         dock.setWidget(widget)        
         # Add scroll.
         mainscroll = QtGui.QScrollArea()

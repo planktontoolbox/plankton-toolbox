@@ -72,7 +72,7 @@ class ClickableQLabel(QtGui.QLabel):
 /*            * [ActivityStatus="Selected"] { color: #d1581c; background-color: #eaa97e; }
 */
             * [ActivityStatus="Selected"] { color: #d1581c; background-color: #6da8bd; }
-            * [ActivityStatus="Unselected"] { color: #d1581c; background-color: whitesmoke; }
+            * [ActivityStatus="Unselected"] { color: #d1581c; background-color: white; }
             """)
   
     def leaveEvent(self, ev):  
@@ -80,7 +80,7 @@ class ClickableQLabel(QtGui.QLabel):
 /*            * [ActivityStatus="Selected"] { color: #00677f; background-color: #eaa97e; }
 */
             * [ActivityStatus="Selected"] { color: white; background-color: #6da8bd; }
-            * [ActivityStatus="Unselected"] { color: #00677f; background-color: whitesmoke; }
+            * [ActivityStatus="Unselected"] { color: #00677f; background-color: white; }
             """)
 
     def updateStyleSheet(self):  
@@ -88,7 +88,7 @@ class ClickableQLabel(QtGui.QLabel):
 /*            * [ActivityStatus="Selected"] { color:  #00677f; background-color: #eaa97e; }
 */
             * [ActivityStatus="Selected"] { color:  white; background-color: #6da8bd; }
-            * [ActivityStatus="Unselected"] { color:  #00677f; background-color: whitesmoke; }
+            * [ActivityStatus="Unselected"] { color:  #00677f; background-color: white; }
             """)
 
 
@@ -283,8 +283,8 @@ class ToolboxTableModel(QtCore.QAbstractTableModel):
 def setAppStyleSheet(app):
     app.setStyleSheet("""
         
-        .QWidget { background-color: whitesmoke; }
-
+/*        QDockWidget .QWidget { background-color: whitesmoke; }
+*/
         QAbstractButton:hover { color: #d1581c; }
         
         """)

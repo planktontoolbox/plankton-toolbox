@@ -32,7 +32,7 @@ import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.activities.activity_base as activity_base
-import plankton_toolbox.core.monitoring.monitoring_files as monitoring_files
+#import plankton_toolbox.core.monitoring.monitoring_files as monitoring_files
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 import plankton_toolbox.toolbox.toolbox_sync as toolbox_sync
 
