@@ -43,7 +43,7 @@ class LogTool(tool_base.ToolBase):
         super(LogTool, self).__init__(name, parentwidget)
         #
         # Where is the tool allowed to dock in the main window.
-        self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea)
+        self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea | QtCore.Qt.BottomDockWidgetArea)
 #        self.setAllowedAreas(QtCore.Qt.BottomDockWidgetArea)
         self.setBaseSize(600,600)
 

@@ -57,9 +57,9 @@ class ToolboxResources(QtCore.QObject):
         
     def loadAllResources(self):
         """ """
-        self.loadResourceDyntaxa()
-        self.loadResourcePeg()
-        self.loadResourceHarmfulPlankton()
+#        self.loadResourceDyntaxa()
+#        self.loadResourcePeg()
+#        self.loadResourceHarmfulPlankton()
 
     def loadUnloadedResources(self):
         """ """
