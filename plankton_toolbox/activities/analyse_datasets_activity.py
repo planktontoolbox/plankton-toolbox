@@ -49,31 +49,28 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         self.__activityheader = QtGui.QLabel('<h2>' + self.objectName() + '</h2>', self)
         self.__activityheader.setTextFormat(QtCore.Qt.RichText)
         self.__activityheader.setAlignment(QtCore.Qt.AlignHCenter)
-#        self.__activityheader.setStyleSheet(""" 
-#            * { color: white; background-color: #00677f; }
-#            """)
+        self.__activityheader.setStyleSheet(""" 
+            * { color: white; background-color: #00677f; }
+            """)
         contentLayout.addWidget(self.__activityheader)
         # Add content to the activity.
-        tabWidget = QtGui.QTabWidget()
-        contentLayout.addWidget(tabWidget)
-        tabWidget.addTab(self.__contentSelectDataset(), "(Select dataset)")
-        tabWidget.addTab(self.__contentFilterData(), "(Filter data)")
-        tabWidget.addTab(self.__contentAggregateData(), "(Aggregate data)")
-        tabWidget.addTab(self.__contentAggregateData(), "(Visualize)")
-        tabWidget.addTab(self.__contentExportResult(), "(Save result)")
-
-    def __contentSelectDataset(self):
+        contentLayout.addWidget(self.__contentAnalyseTabs())
+        contentLayout.addWidget(self.__contentLoadedDatasets(), 10)
+    
+    def __contentAnalyseTabs(self):
         """ """
         # Active widgets and connections.
-
-        # Layout.
-        widget = QtGui.QWidget()        
+        selectdatabox = QtGui.QGroupBox("", self)
+        tabWidget = QtGui.QTabWidget()
+        tabWidget.addTab(self.__contentFilterData(), "Filter data")
+        tabWidget.addTab(self.__contentAggregateData(), "Aggregate data")
+        tabWidget.addTab(self.__contentDrawGraph(), "Draw graph")
+        # Layout widgets.
         layout = QtGui.QVBoxLayout()
-        widget.setLayout(layout)
-#        layout.addWidget(selectionbox)
-#        layout.addWidget(resultbox)
+        layout.addWidget(tabWidget)
+        selectdatabox.setLayout(layout)        
         #
-        return widget
+        return selectdatabox
 
     def __contentFilterData(self):
         """ """
@@ -101,7 +98,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         #
         return widget
 
-    def __contentExportResult(self):
+    def __contentDrawGraph(self):
         """ """
         # Active widgets and connections.
 
@@ -113,5 +110,57 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
 #        layout.addWidget(resultbox)
         #
         return widget
+
+    # ===== LOADED DATASETS =====    
+    def __contentLoadedDatasets(self):
+        """ """
+        # Active widgets and connections.
+        selectdatabox = QtGui.QGroupBox("Current data", self)
+        #
+#        self.__datasets_table = utils_qt.ToolboxQTableView()
+#        self.__datasets_table.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+#        
+#        self.__datasettabledata.clear()
+#        self.__datasettabledata.setHeader([u'Dataset      ', 
+#                                           u'Type         ', 
+#                                           u'Content      ', 
+#                                           u'File         ', 
+#                                           u'File path    ',
+#                                           u'Matrix       ',
+#                                           u'Import column',
+#                                           u'Export column'])
+#        self.__datasets_table.tablemodel.setModeldata(self.__datasettabledata)
+#        self.__datasets_table.resizeColumnsToContents()
+#        
+#        self.__datasets_table.selectionModel.Rows
+#        
+#        # Listen for changes in the toolbox dataset list.
+#        self.connect(toolbox_datasets.ToolboxDatasets(), 
+#             QtCore.SIGNAL("datasetListChanged"), 
+#             self.__updateDatasetList)
+#        # Connection for selected row.
+#        self.connect(self.__datasets_table.selectionModel, 
+#                     QtCore.SIGNAL("currentRowChanged(QModelIndex, QModelIndex)"), 
+#                     self.__selectionChanged)                
+#        # Buttons.
+#        self.__unloadalldatasets_button = QtGui.QPushButton("Unload all datasets")
+#        self.__unloadmarkeddatasets_button = QtGui.QPushButton("Unload marked dataset(s)")
+#        # Button connections.
+#        self.connect(self.__unloadalldatasets_button, QtCore.SIGNAL("clicked()"), self.__unloadAllDatasets)                
+#        self.connect(self.__unloadmarkeddatasets_button, QtCore.SIGNAL("clicked()"), self.__unloadMarkedDatasets)                
+#        # Layout widgets.
+#        buttonlayout = QtGui.QHBoxLayout()
+#        buttonlayout.addWidget(self.__unloadalldatasets_button)
+#        buttonlayout.addWidget(self.__unloadmarkeddatasets_button)
+#        buttonlayout.addStretch(5)
+#        #
+#        widget = QtGui.QWidget()        
+#        layout = QtGui.QVBoxLayout()
+#        widget.setLayout(layout)
+#        layout.addWidget(self.__datasets_table)
+#        layout.addLayout(buttonlayout)
+#        selectdatabox.setLayout(layout) 
+        #       
+        return selectdatabox
 
 

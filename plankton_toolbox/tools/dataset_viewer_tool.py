@@ -48,7 +48,7 @@ class DatasetViewerTool(tool_base.ToolBase):
         super(DatasetViewerTool, self).__init__(name, parentwidget)
         #
         # Where is the tool allowed to dock in the main window.
-        self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea)
+        self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea | QtCore.Qt.BottomDockWidgetArea)
         self.setBaseSize(600,600)
         # Filename used when saving data to file.
         self.__lastuseddirectory = '.'
