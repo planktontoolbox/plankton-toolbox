@@ -38,18 +38,34 @@ import plankton_toolbox.tools.harmful_plankton_browser_tool as harmful_plankton_
 import plankton_toolbox.tools.taxon_facts_tool as taxon_facts_tool
 import plankton_toolbox.tools.taxon_images_tool as taxon_images_tool
 import plankton_toolbox.tools.latlong_tool as latlong_tool
+
+import plankton_toolbox.tools.graphplot_tool as graphplot_tool
+
+import mmfw
+
 #import tools.template_tool as template_tool
 
+@mmfw.singleton
 class ToolManager(object):
     """
     The tool manager is used to set up available tools. 
     """
     
-    def __init__(self, parentwidget):
+#    def __init__(self, parentwidget):
+#        """ """
+#        # Initialize parent.
+#        self._parent = parentwidget
+#        self.__toollist = [] # List of tools derived from ToolsBase.        
+
+    def __init__(self):
         """ """
         # Initialize parent.
-        self._parent = parentwidget
+        self._parent = None
         self.__toollist = [] # List of tools derived from ToolsBase.        
+
+    def setParent(self, parentwidget):
+        """ """
+        self._parent = parentwidget
 
     def initTools(self):
         """ Tool activator. """
@@ -65,11 +81,27 @@ class ToolManager(object):
 #        self.__toollist.append(taxon_facts_tool.TaxonFactsTool("(Taxon facts)", self._parent))
 #        self.__toollist.append(taxon_images_tool.TaxonImagesTool("(Taxon images)", self._parent))
 #        self.__toollist.append(template_tool.TemplateTool("(Tool template)", self._parent))
+
+        self.__toollist.append(graphplot_tool.GraphPlotTool("Graph plot", self._parent))
         
-    def showTool(self, index):
+    def getToolByName(self, object_name):
+        """ Makes a tool visible. """
+        for tool in self.__toollist:
+            if tool.objectName() == object_name: 
+                return tool
+        
+    def showToolByIndex(self, index):
         """ Makes a tool visible. """
         self.__toollist[index].show()
         self.__toollist[index].raise_() # Bring to front.
+        
+    def showToolByName(self, object_name):
+        """ Makes a tool visible. """
+        for index, tool in enumerate(self.__toollist):
+            if tool.objectName() == object_name: 
+                self.__toollist[index].show()
+                self.__toollist[index].raise_() # Bring to front.
+                return
         
     def getToolList(self):
         """ """

@@ -76,7 +76,8 @@ class MainWindow(QtGui.QMainWindow):
         self.__activity = None
         self.__createCentralWidget()
         # Set up activities and tools.
-        self.__toolmanager = tool_manager.ToolManager(self)
+        self.__toolmanager = tool_manager.ToolManager()
+        self.__toolmanager.setParent(self)
         self.__toolmanager.initTools()
         self.__activitymanager = activity_manager.ActivityManager(self)
         self.__activitymanager.initActivities()
