@@ -107,7 +107,7 @@ class DatasetViewerTool(tool_base.ToolBase):
         #
         self.__saveformat_list.addItems(["Tab delimited text file (*.txt)",
                                          "Excel file (*.xlsx)"])
-        self.__savedataset_button = QtGui.QPushButton("Save as...")
+        self.__savedataset_button = QtGui.QPushButton("Save...")
         self.connect(self.__savedataset_button, QtCore.SIGNAL("clicked()"), self.__saveData)                
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
