@@ -178,9 +178,9 @@ class DatasetNode(mmfw.DatasetBase, DataNode):
         """ """
         return self._importmatrixrows
 
-    def setExportTableColumns(self, columns_info_dict):
+    def setExportTableColumns(self, columns_info_list):
         """ """
-        self._exporttablecolumns = columns_info_dict
+        self._exporttablecolumns = columns_info_list
 
     def getExportTableColumns(self):
         """ """
