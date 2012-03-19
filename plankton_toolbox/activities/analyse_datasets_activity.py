@@ -24,26 +24,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""
-"""
-
-import datetime
-
-
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
+#import datetime
 import copy
 import plankton_toolbox.activities.activity_base as activity_base
 import plankton_toolbox.tools.tool_manager as tool_manager
-
 import mmfw
 import plankton_toolbox.toolbox.utils_qt as utils_qt
-
 
 class AnalyseDatasetsActivity(activity_base.ActivityBase):
     """
     """
-    
     def __init__(self, name, parentwidget):
         """ """
         # Lists of datasets selected for analysis.
@@ -85,6 +77,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         #
         return selectdatabox
 
+    # ===== TAB: Select dataset(s) ===== 
     def __contentSelectDatasets(self):
         """ """
         widget = QtGui.QWidget()
@@ -115,6 +108,17 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
     def __TEST_SelectDatasets(self):
         """ """
         print('TEST Select dataset.')
+        
+        # Clear rows in comboboxes.
+        self.__x_axis_column_list.clear()
+        self.__x_axis_parameter_list.clear()
+        self.__y_axis_column_list.clear()
+        self.__y_axis_parameter_list.clear()
+        self.__x_axis_column_list.addItems([u"Parameter:"])
+        self.__y_axis_column_list.addItems([u"Parameter:"])
+
+        
+        
         if len(mmfw.Datasets().getDatasets()) > 0:
             currentdataset = mmfw.Datasets().getDatasets()[0]
             self.__selected_datsets = [currentdataset] # Only one for test.
@@ -135,16 +139,20 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
             parameterlist.sort()
             self.__x_axis_parameter_list.addItems(parameterlist)
             self.__y_axis_parameter_list.addItems(parameterlist)
-        else:
-            # Clear rows in comboboxes.
-            self.__x_axis_column_list.clear()
-            self.__x_axis_parameter_list.clear()
-            self.__y_axis_column_list.clear()
-            self.__y_axis_parameter_list.clear()
-            self.__x_axis_column_list.addItems([u"Parameter:"])
-            self.__y_axis_column_list.addItems([u"Parameter:"])
+            
+#        else:
+#            # Clear rows in comboboxes.
+#            self.__x_axis_column_list.clear()
+#            self.__x_axis_parameter_list.clear()
+#            self.__y_axis_column_list.clear()
+#            self.__y_axis_parameter_list.clear()
+#            self.__x_axis_column_list.addItems([u"Parameter:"])
+#            self.__y_axis_column_list.addItems([u"Parameter:"])
+        #    
+        self.__updateCurrentData()
             
 
+    # ===== TAB: Filter data ===== 
     def __contentFilterData(self):
         """ """
         # Active widgets and connections.
@@ -158,6 +166,8 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         #
         return widget
 
+
+    # ===== TAB: Aggregate data ===== 
     def __contentAggregateData(self):
         """ """
         # Active widgets and connections.
@@ -171,6 +181,8 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         #
         return widget
 
+
+    # ===== TAB: Draw graph ===== 
     def __contentDrawGraph(self):
         """ """
         widget = QtGui.QWidget()
@@ -194,19 +206,18 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
 #        self.__x_axis_column_list.addItems(self._matrix_list)                
 
         # Draw graph.
-        self.__cleargraphs_button = QtGui.QPushButton("Clear graphs")
-        self.connect(self.__cleargraphs_button, QtCore.SIGNAL("clicked()"), self.__clearGraphs)                
         self.__plotindex_list = QtGui.QComboBox()
-        self.__plotindex_list.addItems(["1", "2", "3", "4"])
-        self.__addtimeseries_button = QtGui.QPushButton("Add time series plot")
-        self.connect(self.__addtimeseries_button, QtCore.SIGNAL("clicked()"), self.__addTimeseriesPlot)                
-        self.__addxyplot_button = QtGui.QPushButton("Add X/Y plot")
-        self.connect(self.__addxyplot_button, QtCore.SIGNAL("clicked()"), self.__addXYPlot)                
+        self.__plotindex_list.addItems(["Time series 1", "Time series 2", "Time series 3", "Time series 4", 
+                                       "X/Y plot 1", "X/Y plot 2", "X/Y plot 3", "X/Y plot 4"])
+        self.__addplot_button = QtGui.QPushButton("Add plot")
+        self.connect(self.__addplot_button, QtCore.SIGNAL("clicked()"), self.__addPlot)                
+#        self.__addxyplot_button = QtGui.QPushButton("Add X/Y plot")
+#        self.connect(self.__addxyplot_button, QtCore.SIGNAL("clicked()"), self.__addXYPlot)                
 
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         gridrow = 0
-        label1 = QtGui.QLabel("Select column for x-axis (time series):")
+        label1 = QtGui.QLabel("Select x-axis:")
         stretchlabel = QtGui.QLabel("")
         form1.addWidget(label1, gridrow, 0, 1, 1)
         form1.addWidget(self.__x_axis_column_list, gridrow, 1, 1, 1)
@@ -216,18 +227,17 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
 #        label1 = QtGui.QLabel("Select column for y-axis:")
 #        form1.addWidget(label1, gridrow, 0, 1, 1)
 #        form1.addWidget(self.__y_axis_column_list, gridrow, 1, 1, 1)
-        label1 = QtGui.QLabel("Select parameter:")
+        label1 = QtGui.QLabel("Select y-axis:")
         form1.addWidget(label1, gridrow, 0, 1, 1)
         form1.addWidget(self.__y_axis_column_list, gridrow, 1, 1, 1)
         form1.addWidget(self.__y_axis_parameter_list, gridrow, 2, 1, 1)
         #
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(10)
-        hbox1.addWidget(self.__cleargraphs_button)
-        hbox1.addWidget(QtGui.QLabel("Index:"))
+        hbox1.addWidget(QtGui.QLabel("Select plot:"))
         hbox1.addWidget(self.__plotindex_list)
-        hbox1.addWidget(self.__addtimeseries_button)
-        hbox1.addWidget(self.__addxyplot_button)
+        hbox1.addWidget(self.__addplot_button)
+#        hbox1.addWidget(self.__addxyplot_button)
         #
         layout = QtGui.QVBoxLayout()
         layout.addWidget(introlabel)
@@ -238,158 +248,200 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         #
         return widget
         
-    def __clearGraphs(self):
-        """ """
-        tool_manager.ToolManager().showToolByName(u'Graph plot')
-        graphtool = tool_manager.ToolManager().getToolByName(u'Graph plot')
-        graphtool.clearAll()
-
-    def __addTimeseriesPlot(self):
-        """ """
-        tool_manager.ToolManager().showToolByName(u'Graph plot')
-        graphtool = tool_manager.ToolManager().getToolByName(u'Graph plot')       
-        #
-        x_data = []
-        y_data = []
-        date = None
-        #
-        selectedparameter = self.__y_axis_column_list.currentText()
-        ""
-        for visitnode in self.__copy_of_datsets[0].getChildren():
-            try:
-                date = visitnode.getData(u'Date')
-                time = visitnode.getData(u'Time')
-                time = time if time else u'00:00:00' # Add if zero.
-                #
-                date = datetime.datetime.strptime((date), '%Y-%m-%d')
-    #            date = datetime.datetime.strptime((date + ' ' + time), '%Y-%m-%d %H:%M:%S')
-            except:
-                print(u'Wrong date...')
-                continue
-            #
-            for samplenode in visitnode.getChildren():
-                for variablenode in samplenode.getChildren():
-                    parameter = variablenode.getData(u'Parameter')
-                    #
-#                    if parameter == u'TEMP':
-                    if parameter == selectedparameter:
-                        value = variablenode.getData(u'Value')
-                        x_data.append(date)
-                        y_data.append(value)
-        #
-        graphtool.addTimeseriesPlot(0, x_data, y_data)
-            
-                        
-    def __addXYPlot(self):
-        """ """
-        
-#        tool_manager.ToolManager().showToolByName(u'Graph plot')
-#        graphtool = tool_manager.ToolManager().getToolByName(u'Graph plot')        
+#    def __addPlot(self):
+#        """ """
+#        selectedplotindex = self.__plotindex_list.currentIndex() 
+#        if selectedplotindex in [0, 1, 2, 3]:
+#            self.__addTimeseriesPlot(selectedplotindex)
+#        else:
+#            self.__addXYPlot(selectedplotindex - 4)
 #        
-#        graphtool.addXYPlot(self.__plotindex_list.currentIndex(), [1,3,2,4], [6,4,1,3])
-       
-        
-        
-        
-        
-        
-        
-        tool_manager.ToolManager().showToolByName(u'Graph plot')
+#    def __addTimeseriesPlot(self, plot_index):
+#        """ """
+#        tool_manager.ToolManager().showToolByName(u'Graph plot')
+#        graphtool = tool_manager.ToolManager().getToolByName(u'Graph plot')       
+#        #
+#        x_data = []
+#        y_data = []
+#        date = None
+#        #
+#        selectedparameter = unicode(self.__y_axis_parameter_list.currentText())
+#        ""
+#        for visitnode in self.__copy_of_datsets[0].getChildren():
+#            try:
+#                date = visitnode.getData(u'Date')
+#            except:
+#                print(u'Wrong date...')
+#                continue
+#            #
+#            for samplenode in visitnode.getChildren():
+#                for variablenode in samplenode.getChildren():
+#                    parameter = variablenode.getData(u'Parameter')
+#                    #
+##                    if parameter == u'TEMP':
+#                    if parameter == selectedparameter:
+#                        value = variablenode.getData(u'Value')
+#                        x_data.append(date)
+#                        y_data.append(value)
+#        #
+#        graphtool.addTimeseriesPlot(plot_index, x_data, y_data)
+#            
+#                        
+#    def __addXYPlot(self, plot_index):
+    def __addPlot(self):
+        """ """
+        tool_manager.ToolManager().showToolByName(u'Graph plot') # Show tool if hidden.
         graphtool = tool_manager.ToolManager().getToolByName(u'Graph plot')
-        #
+        # Selected columns.
+        x_column = unicode(self.__x_axis_column_list.currentText())
+        y_column = unicode(self.__y_axis_column_list.currentText())
+        # Selected parameters.
         x_param = None
         y_param = None
-        x_column = self.__x_axis_column_list.currentText()
         if x_column == u"Parameter:":
-            x_param = self.__x_axis_parameter_list.currentText()
-        y_column = self.__y_axis_column_list.currentText()
+            x_param = unicode(self.__x_axis_parameter_list.currentText())
         if y_column == u"Parameter:":
-            y_param = self.__y_axis_parameter_list.currentText()
-        #
+            y_param = unicode(self.__y_axis_parameter_list.currentText())
+        # Check exports columns backwards.
+        x_visit_key = None
+        x_sample_key = None                      
+        x_variable_key = None
+        y_visit_key = None
+        y_sample_key = None                      
+        y_variable_key = None
+        if x_column != u"Parameter:":
+            for export_info in self.__copy_of_datsets[0].getExportTableColumns():
+                if export_info.get('Header', u'') == x_column:
+                    if export_info.get('Node', u'') == 'Visit':
+                        x_visit_key =  export_info.get('Key', None)
+                    elif export_info.get('Node', u'') == 'Sample':
+                        x_sample_key =  export_info.get('Key', None)                        
+                    elif export_info.get('Node', u'') == 'Variable':
+                        x_variable_key =  export_info.get('Key', None)
+        if y_column != u"Parameter:":
+            for export_info in self.__copy_of_datsets[0].getExportTableColumns():
+                if export_info.get('Header', u'') == y_column:
+                    if export_info.get('Node', u'') == 'Visit':
+                        y_visit_key =  export_info.get('Key', None)
+                    elif export_info.get('Node', u'') == 'Sample':
+                        y_sample_key =  export_info.get('Key', None)                        
+                    elif export_info.get('Node', u'') == 'Variable':
+                        y_variable_key =  export_info.get('Key', None)
+        
+        # Extract data.
         x_data = []
         y_data = []
+        x_value = None
+        y_value = None
         #
-        for visitnode in self.__copy_of_datsets[0].getChildren():            
+        for visitnode in self.__copy_of_datsets[0].getChildren(): 
+            if x_visit_key: x_value = visitnode.getData(x_visit_key) # if x_visit_key else None
+            if y_visit_key: y_value = visitnode.getData(y_visit_key) # if y_visit_key else None
             for samplenode in visitnode.getChildren():
-                variable_x = None
-                variable_y = None
+                if x_sample_key: x_value = samplenode.getData(x_sample_key) # if x_sample_key else None
+                if y_sample_key: y_value = samplenode.getData(y_sample_key) # if y_sample_key else None
                 for variablenode in samplenode.getChildren():
-                    parameter = variablenode.getData(u'Parameter')
                     #
-                    if parameter == x_param:
-                        variable_x = variablenode.getData(u'Value')
+                    if x_variable_key: x_value = variablenode.getData(x_variable_key) # if x_variable_key else None
+                    if y_variable_key: y_value = variablenode.getData(y_variable_key) # if y_variable_key else None
                     #
-                    if parameter == y_param:
-                        variable_y = variablenode.getData(u'Value')
-                #
-                if (variable_x and variable_y):
-                    x_data.append(variable_x)
-                    y_data.append(variable_y)
+                    if x_param or y_param:
+                        parameter = variablenode.getData(u'Parameter')
+                        if x_param:
+                            if parameter == x_param:
+                                x_value = variablenode.getData(u'Value')
+                        if y_param:
+                            if parameter == y_param:
+                                y_value = variablenode.getData(u'Value')
+                    # If NOT both are parameters, add data on variable level.
+                    if not (x_param and y_param):
+                        # Add values to lists if both values are available.
+                        if (x_value and y_value):
+                            x_data.append(x_value)
+                            y_data.append(y_value)
+                        # Clear used values.
+                        if x_param: x_value = None    
+                        if y_param: y_value = None    
+                    # Clear used values.
+                    if x_variable_key: x_value = None    
+                    if x_variable_key: y_value = None
+                # If both are parameters, add data on sample level.     
+                if (x_param and y_param):
+                    # Add values to lists if both values are available.
+                    if (x_value and y_value):
+                        x_data.append(x_value)
+                        y_data.append(y_value)
+                        # Clear used values.
+                        if x_param: x_value = None    
+                        if y_param: y_value = None    
+                # Clear used values.
+                if x_sample_key: x_value = None    
+                if y_sample_key: y_value = None    
+            # Clear used values.
+            if x_visit_key: x_value = None    
+            if y_visit_key: y_value = None    
         #
-        graphtool.addXYPlot(self.__plotindex_list.currentIndex(), x_data, y_data)
+
+        
+#        graphtool.addXYPlot(plot_index, x_data, y_data)
+        selectedplotindex = self.__plotindex_list.currentIndex() 
+        if selectedplotindex in [0, 1, 2, 3]:
+            graphtool.addTimeseriesPlot(selectedplotindex, x_data, y_data)
+        else:
+            graphtool.addXYPlot(selectedplotindex - 4, x_data, y_data)
+
+
 
     # ===== CURRENT DATA =====    
     def __contentCurrentDataTable(self):
         """ """
-        selectdatabox = QtGui.QGroupBox("Current data", self)
         # Active widgets and connections.
-        self.__currentdatatableview = utils_qt.ToolboxQTableView()
+        currentdatagroupbox = QtGui.QGroupBox("Current data", self)
+        #
+        # Active widgets and connections.
+        self.__tableview = utils_qt.ToolboxQTableView()
         # Layout widgets.
         layout = QtGui.QVBoxLayout()
-        layout.addWidget(self.__currentdatatableview)
-        selectdatabox.setLayout(layout) 
-        #       
-        return selectdatabox
-
-    def __contentLoadedDatasets(self):
-        """ """
-        # Active widgets and connections.
-        selectdatabox = QtGui.QGroupBox("Current data", self)
+        layout.addWidget(self.__tableview)
         #
-#        self.__datasets_table = utils_qt.ToolboxQTableView()
-#        self.__datasets_table.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
-#        
-#        self.__datasettabledata.clear()
-#        self.__datasettabledata.setHeader([u'Dataset      ', 
-#                                           u'Type         ', 
-#                                           u'Content      ', 
-#                                           u'File         ', 
-#                                           u'File path    ',
-#                                           u'Matrix       ',
-#                                           u'Import column',
-#                                           u'Export column'])
-#        self.__datasets_table.tablemodel.setModeldata(self.__datasettabledata)
-#        self.__datasets_table.resizeColumnsToContents()
-#        
-#        self.__datasets_table.selectionModel.Rows
-#        
-#        # Listen for changes in the toolbox dataset list.
-#        self.connect(toolbox_datasets.ToolboxDatasets(), 
-#             QtCore.SIGNAL("datasetListChanged"), 
-#             self.__updateDatasetList)
-#        # Connection for selected row.
-#        self.connect(self.__datasets_table.selectionModel, 
-#                     QtCore.SIGNAL("currentRowChanged(QModelIndex, QModelIndex)"), 
-#                     self.__selectionChanged)                
-#        # Buttons.
-#        self.__unloadalldatasets_button = QtGui.QPushButton("Unload all datasets")
-#        self.__unloadmarkeddatasets_button = QtGui.QPushButton("Unload marked dataset(s)")
-#        # Button connections.
-#        self.connect(self.__unloadalldatasets_button, QtCore.SIGNAL("clicked()"), self.__unloadAllDatasets)                
-#        self.connect(self.__unloadmarkeddatasets_button, QtCore.SIGNAL("clicked()"), self.__unloadMarkedDatasets)                
-#        # Layout widgets.
-#        buttonlayout = QtGui.QHBoxLayout()
-#        buttonlayout.addWidget(self.__unloadalldatasets_button)
-#        buttonlayout.addWidget(self.__unloadmarkeddatasets_button)
-#        buttonlayout.addStretch(5)
-#        #
-#        widget = QtGui.QWidget()        
-#        layout = QtGui.QVBoxLayout()
-#        widget.setLayout(layout)
-#        layout.addWidget(self.__datasets_table)
-#        layout.addLayout(buttonlayout)
-#        selectdatabox.setLayout(layout) 
-        #       
-        return selectdatabox
+        currentdatagroupbox.setLayout(layout)
+        #
+        return currentdatagroupbox
+
+    def __updateCurrentData(self):
+        """ """
+
+
+
+        # Note: Only one for test.
+        if len(self.__copy_of_datsets[0].getChildren()) <= 0:
+            # Clear table.
+            self.__tableview.tablemodel.setModeldata(None)
+            self.__refreshResultTable()
+        else:
+            # MMFW:
+            
+###            dataset = self.__copy_of_datsets
+
+            
+###            dataset = toolbox_datasets.ToolboxDatasets().getDatasetByIndex(index - 1)
+            if isinstance(self.__copy_of_datsets[0], mmfw.DatasetTable):
+                """ """
+#                TODO: Not allowed.
+
+#                self.__tableview.tablemodel.setModeldata(dataset)
+#                self.__refreshResultTable()
+            elif isinstance(self.__copy_of_datsets[0], mmfw.DatasetNode):
+                # Tree dataset must be converted to table dataset before viewing.
+                targetdataset = mmfw.DatasetTable()
+                self.__copy_of_datsets[0].convertToTableDataset(targetdataset)
+                #
+                self.__tableview.tablemodel.setModeldata(targetdataset)
+                self.__refreshResultTable()
+    
+    def __refreshResultTable(self):
+        """ """
+        self.__tableview.tablemodel.reset() # Model data has changed.
+        self.__tableview.resizeColumnsToContents()
 
 
