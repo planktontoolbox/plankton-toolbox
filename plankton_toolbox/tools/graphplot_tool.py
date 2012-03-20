@@ -296,8 +296,6 @@ class GraphPlotTool(tool_base.ToolBase):
                 #
                 ax.set_xlim( self._ax_timeseries[plotindex]['time'][0], self._ax_timeseries[plotindex]['time'][-1] )
                 
-                
-                
 #                ax.xaxis.set_major_formatter( DateFormatter('%b') )        
 #                ax.xaxis.set_major_formatter( DateFormatter('%Y-%m-%d') )        
 #                ax.fmt_xdata = DateFormatter('%Y-%m-%d %H:%M:%S')
@@ -330,7 +328,7 @@ class GraphPlotTool(tool_base.ToolBase):
             
     def __drawXYPlot(self, plotindex):
         """ """
-        plotformatlist = unicode(self.__timeseriesforat_edit.text()).split(',')
+        plotformatlist = unicode(self.__xyplotformat_edit.text()).split(',')
         plotformat = plotformatlist[plotindex]
 
         if 'x' in self._ax_xyplot[plotindex]: 

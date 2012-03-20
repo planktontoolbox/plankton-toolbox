@@ -32,6 +32,7 @@ import plankton_toolbox.activities.activity_base as activity_base
 import plankton_toolbox.tools.tool_manager as tool_manager
 import mmfw
 import plankton_toolbox.toolbox.utils_qt as utils_qt
+import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 
 class AnalyseDatasetsActivity(activity_base.ActivityBase):
     """
@@ -86,25 +87,72 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         introlabel.setText("""
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
         tempor incididunt ut labore et dolore magna aliqua.
-        """)        
+        """)
+        
+        view = QtGui.QListView()
+        view.setMaximumHeight(100)
+        view.setMinimumWidth(500)
+        self.__loaded_datasets_model = QtGui.QStandardItemModel()
+        view.setModel(self.__loaded_datasets_model)
+        
+        # Listen for changes in the toolbox dataset list.
+        self.connect(toolbox_datasets.ToolboxDatasets(), 
+                     QtCore.SIGNAL("datasetListChanged"), 
+                     self.__updateLoadedDatasetList)
+
+#        for n in range(10):                   
+#            item = QtGui.QStandardItem('Item %s' % unicode(n))
+#            check = QtCore.Qt.Checked ### if randint(0, 1) == 1 else QtCore.Qt.Unchecked
+#            item.setCheckState(check)
+#            item.setCheckable(True)
+#            model.appendRow(item)
+        
+        
+        
+        
+        
+        
+                
         # TEST.
-        self.__TEST_select_button = QtGui.QPushButton("TEST: Select first dataset")
-        self.connect(self.__TEST_select_button, QtCore.SIGNAL("clicked()"), self.__TEST_SelectDatasets)                
+        self.__cleardatasets_button = QtGui.QPushButton("Clear all")
+        self.connect(self.__cleardatasets_button, QtCore.SIGNAL("clicked()"), self.__TEST_SelectDatasets)                
+        self.__selectmarkeddatasets_button = QtGui.QPushButton("Select marked dataset(s)")
+        self.connect(self.__selectmarkeddatasets_button, QtCore.SIGNAL("clicked()"), self.__TEST_SelectDatasets)                
 
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(10)
-        hbox1.addWidget(self.__TEST_select_button)
+        hbox1.addWidget(self.__cleardatasets_button)
+        hbox1.addWidget(self.__selectmarkeddatasets_button)
         #
         layout = QtGui.QVBoxLayout()
         layout.addWidget(introlabel)
-        layout.addStretch(1)
+        layout.addWidget(view)
+#        layout.addStretch(1)
         layout.addLayout(hbox1)
         widget.setLayout(layout)                
         #
         return widget
         
 
+    def __updateLoadedDatasetList(self):
+        """ """
+#        for n in range(10):                   
+#            item = QtGui.QStandardItem('Item %s' % unicode(n))
+#            check = QtCore.Qt.Checked ### if randint(0, 1) == 1 else QtCore.Qt.Unchecked
+#            item.setCheckState(check)
+#            item.setCheckable(True)
+#            self.__loaded_datasets_model.appendRow(item)
+
+        self.__loaded_datasets_model.clear()        
+        for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
+            item = QtGui.QStandardItem(u'Dataset - ' + unicode(rowindex))
+            item.setCheckState(QtCore.Qt.Unchecked)
+            item.setCheckable(True)
+            self.__loaded_datasets_model.appendRow(item)
+
+
+    
     def __TEST_SelectDatasets(self):
         """ """
         print('TEST Select dataset.')
@@ -149,6 +197,12 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
 #            self.__x_axis_column_list.addItems([u"Parameter:"])
 #            self.__y_axis_column_list.addItems([u"Parameter:"])
         #    
+        #  Make comboboxes visible.
+        self.__x_axis_column_list.setEnabled(True)
+        self.__y_axis_column_list.setEnabled(True)
+        self.__x_axis_parameter_list.setEnabled(True)
+        self.__y_axis_parameter_list.setEnabled(True)
+        #
         self.__updateCurrentData()
             
 
@@ -194,14 +248,26 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         """)        
         # - Select column for x-axis:
         self.__x_axis_column_list = QtGui.QComboBox()
+        self.__x_axis_column_list.setMinimumContentsLength(20)
         self.__x_axis_column_list.addItems([u"Parameter:"])
-        self.__x_axis_parameter_list = QtGui.QComboBox()
+        self.__x_axis_column_list.setEnabled(False) # Disabled until rows are added.
+        self.__x_axis_parameter_list = QtGui.QComboBox()        
+        self.__x_axis_parameter_list.setMinimumContentsLength(20)
+        self.__x_axis_parameter_list.setEnabled(False) # Disabled until rows are added.
+        #
+        self.connect(self.__x_axis_column_list, QtCore.SIGNAL("currentIndexChanged(int)"), self.__updateEnabledDisabled)                
         # - Add available column names.
 #        self.__x_axis_column_list.addItems(self._matrix_list)                
         # - Select column for y-axis:
         self.__y_axis_column_list = QtGui.QComboBox()
+        self.__y_axis_column_list.setMinimumContentsLength(20)
         self.__y_axis_column_list.addItems([u"Parameter:"])        
+        self.__y_axis_column_list.setEnabled(False) # Disabled until rows are added.
         self.__y_axis_parameter_list = QtGui.QComboBox()
+        self.__y_axis_parameter_list.setMinimumContentsLength(20)
+        self.__y_axis_parameter_list.setEnabled(False) # Disabled until rows are added.
+        #
+        self.connect(self.__y_axis_column_list, QtCore.SIGNAL("currentIndexChanged(int)"), self.__updateEnabledDisabled)                
         # - Add available column names.
 #        self.__x_axis_column_list.addItems(self._matrix_list)                
 
@@ -218,19 +284,23 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         form1 = QtGui.QGridLayout()
         gridrow = 0
         label1 = QtGui.QLabel("Select x-axis:")
+        label2 = QtGui.QLabel("Parameter:")
         stretchlabel = QtGui.QLabel("")
         form1.addWidget(label1, gridrow, 0, 1, 1)
         form1.addWidget(self.__x_axis_column_list, gridrow, 1, 1, 1)
-        form1.addWidget(self.__x_axis_parameter_list, gridrow, 2, 1, 1)
-        form1.addWidget(stretchlabel, gridrow,3, 1, 9)
+        form1.addWidget(label2, gridrow, 2, 1, 1)
+        form1.addWidget(self.__x_axis_parameter_list, gridrow, 3, 1, 1)
+        form1.addWidget(stretchlabel, gridrow,4, 1, 20)
         gridrow += 1
 #        label1 = QtGui.QLabel("Select column for y-axis:")
 #        form1.addWidget(label1, gridrow, 0, 1, 1)
 #        form1.addWidget(self.__y_axis_column_list, gridrow, 1, 1, 1)
         label1 = QtGui.QLabel("Select y-axis:")
+        label2 = QtGui.QLabel("Parameter:")
         form1.addWidget(label1, gridrow, 0, 1, 1)
         form1.addWidget(self.__y_axis_column_list, gridrow, 1, 1, 1)
-        form1.addWidget(self.__y_axis_parameter_list, gridrow, 2, 1, 1)
+        form1.addWidget(label2, gridrow, 2, 1, 1)
+        form1.addWidget(self.__y_axis_parameter_list, gridrow, 3, 1, 1)
         #
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(10)
@@ -248,46 +318,19 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         #
         return widget
         
-#    def __addPlot(self):
-#        """ """
-#        selectedplotindex = self.__plotindex_list.currentIndex() 
-#        if selectedplotindex in [0, 1, 2, 3]:
-#            self.__addTimeseriesPlot(selectedplotindex)
-#        else:
-#            self.__addXYPlot(selectedplotindex - 4)
-#        
-#    def __addTimeseriesPlot(self, plot_index):
-#        """ """
-#        tool_manager.ToolManager().showToolByName(u'Graph plot')
-#        graphtool = tool_manager.ToolManager().getToolByName(u'Graph plot')       
-#        #
-#        x_data = []
-#        y_data = []
-#        date = None
-#        #
-#        selectedparameter = unicode(self.__y_axis_parameter_list.currentText())
-#        ""
-#        for visitnode in self.__copy_of_datsets[0].getChildren():
-#            try:
-#                date = visitnode.getData(u'Date')
-#            except:
-#                print(u'Wrong date...')
-#                continue
-#            #
-#            for samplenode in visitnode.getChildren():
-#                for variablenode in samplenode.getChildren():
-#                    parameter = variablenode.getData(u'Parameter')
-#                    #
-##                    if parameter == u'TEMP':
-#                    if parameter == selectedparameter:
-#                        value = variablenode.getData(u'Value')
-#                        x_data.append(date)
-#                        y_data.append(value)
-#        #
-#        graphtool.addTimeseriesPlot(plot_index, x_data, y_data)
-#            
-#                        
-#    def __addXYPlot(self, plot_index):
+    def __updateEnabledDisabled(self, index):
+        """ """
+        #
+        if self.__x_axis_column_list.currentIndex() == 0:
+            self.__x_axis_parameter_list.setEnabled(True)
+        else:
+            self.__x_axis_parameter_list.setEnabled(False)
+        #
+        if self.__y_axis_column_list.currentIndex() == 0:
+            self.__y_axis_parameter_list.setEnabled(True)
+        else:
+            self.__y_axis_parameter_list.setEnabled(False)
+            
     def __addPlot(self):
         """ """
         tool_manager.ToolManager().showToolByName(u'Graph plot') # Show tool if hidden.
@@ -382,8 +425,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
             if y_visit_key: y_value = None    
         #
 
-        
-#        graphtool.addXYPlot(plot_index, x_data, y_data)
+        # Check if this is a time series or not.
         selectedplotindex = self.__plotindex_list.currentIndex() 
         if selectedplotindex in [0, 1, 2, 3]:
             graphtool.addTimeseriesPlot(selectedplotindex, x_data, y_data)
@@ -410,15 +452,12 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
 
     def __updateCurrentData(self):
         """ """
-
-
+        # Clear table.
+        self.__tableview.tablemodel.setModeldata(None)
+        self.__refreshResultTable()
 
         # Note: Only one for test.
-        if len(self.__copy_of_datsets[0].getChildren()) <= 0:
-            # Clear table.
-            self.__tableview.tablemodel.setModeldata(None)
-            self.__refreshResultTable()
-        else:
+        if len(self.__copy_of_datsets[0].getChildren()) > 0:
             # MMFW:
             
 ###            dataset = self.__copy_of_datsets
