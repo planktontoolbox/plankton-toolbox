@@ -69,8 +69,6 @@ class DatasetViewerTool(tool_base.ToolBase):
         self.connect(toolbox_sync.ToolboxSync(), 
                      QtCore.SIGNAL("syncSelectedRowTEST"), 
                      self.__setSelectedDataset)
-#
-#        self.__updateDatasetList()
 
     def __contentSelectDataset(self):
         """ """

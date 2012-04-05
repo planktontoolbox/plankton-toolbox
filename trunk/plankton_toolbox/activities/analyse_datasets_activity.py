@@ -30,9 +30,9 @@ import PyQt4.QtCore as QtCore
 import copy
 import plankton_toolbox.activities.activity_base as activity_base
 import plankton_toolbox.tools.tool_manager as tool_manager
-import mmfw
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
+import mmfw
 
 class AnalyseDatasetsActivity(activity_base.ActivityBase):
     """
@@ -40,8 +40,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
     def __init__(self, name, parentwidget):
         """ """
         # Lists of datasets selected for analysis.
-        self.__selected_datsets = []
-        self.__copy_of_datsets = []
+        self.__analysisdata = None
         # Initialize parent.
         super(AnalyseDatasetsActivity, self).__init__(name, parentwidget)
 
@@ -70,7 +69,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         tabWidget.addTab(self.__contentSelectDatasets(), "Select dataset(s)")
         tabWidget.addTab(self.__contentFilterData(), "Filter data")
         tabWidget.addTab(self.__contentAggregateData(), "Aggregate data")
-        tabWidget.addTab(self.__contentDrawGraph(), "Draw graph")
+        tabWidget.addTab(self.__contentDrawGraphs(), "Draw graphs")
         # Layout widgets.
         layout = QtGui.QVBoxLayout()
         layout.addWidget(tabWidget)
@@ -99,25 +98,11 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         self.connect(toolbox_datasets.ToolboxDatasets(), 
                      QtCore.SIGNAL("datasetListChanged"), 
                      self.__updateLoadedDatasetList)
-
-#        for n in range(10):                   
-#            item = QtGui.QStandardItem('Item %s' % unicode(n))
-#            check = QtCore.Qt.Checked ### if randint(0, 1) == 1 else QtCore.Qt.Unchecked
-#            item.setCheckState(check)
-#            item.setCheckable(True)
-#            model.appendRow(item)
-        
-        
-        
-        
-        
-        
-                
-        # TEST.
+        #
         self.__cleardatasets_button = QtGui.QPushButton("Clear all")
-        self.connect(self.__cleardatasets_button, QtCore.SIGNAL("clicked()"), self.__TEST_SelectDatasets)                
+        self.connect(self.__cleardatasets_button, QtCore.SIGNAL("clicked()"), self._ClearCurrentData)                
         self.__selectmarkeddatasets_button = QtGui.QPushButton("Select marked dataset(s)")
-        self.connect(self.__selectmarkeddatasets_button, QtCore.SIGNAL("clicked()"), self.__TEST_SelectDatasets)                
+        self.connect(self.__selectmarkeddatasets_button, QtCore.SIGNAL("clicked()"), self.__CopyToCurrentData)                
 
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
@@ -133,17 +118,9 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         widget.setLayout(layout)                
         #
         return widget
-        
 
     def __updateLoadedDatasetList(self):
         """ """
-#        for n in range(10):                   
-#            item = QtGui.QStandardItem('Item %s' % unicode(n))
-#            check = QtCore.Qt.Checked ### if randint(0, 1) == 1 else QtCore.Qt.Unchecked
-#            item.setCheckState(check)
-#            item.setCheckable(True)
-#            self.__loaded_datasets_model.appendRow(item)
-
         self.__loaded_datasets_model.clear()        
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
             item = QtGui.QStandardItem(u'Dataset - ' + unicode(rowindex))
@@ -151,12 +128,19 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
             item.setCheckable(True)
             self.__loaded_datasets_model.appendRow(item)
 
-
-    
-    def __TEST_SelectDatasets(self):
+    def _ClearCurrentData(self):
         """ """
-        print('TEST Select dataset.')
-        
+        # Clear table.
+        self.__tableview.tablemodel.setModeldata(None)
+        self.__refreshResultTable()
+        # Clear graph lists.
+        self.__x_axis_column_list.clear()
+        self.__x_axis_parameter_list.clear()
+        self.__y_axis_column_list.clear()
+        self.__y_axis_parameter_list.clear()
+
+    def __CopyToCurrentData(self):
+        """ """
         # Clear rows in comboboxes.
         self.__x_axis_column_list.clear()
         self.__x_axis_parameter_list.clear()
@@ -165,20 +149,26 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         self.__x_axis_column_list.addItems([u"Parameter:"])
         self.__y_axis_column_list.addItems([u"Parameter:"])
 
+
+###        for itemindex in self.__loaded_datasets_model.rowCount():
+            #
+        itemindex = 0
+        item = self.__loaded_datasets_model.takeRow(itemindex)
+        print(unicode(item[0].checkState()))
+        
         
         
         if len(mmfw.Datasets().getDatasets()) > 0:
             currentdataset = mmfw.Datasets().getDatasets()[0]
-            self.__selected_datsets = [currentdataset] # Only one for test.
             # Make deep copy of datasets for analysis.
-            self.__copy_of_datsets = [copy.deepcopy(currentdataset)] # Only one for test.
+            self.__analysisdata = copy.deepcopy(currentdataset) # Only one for test.
             # Add rows in comboboxes.
-            self.__x_axis_column_list.addItems([item[u'Header'] for item in self.__copy_of_datsets[0].getExportTableColumns()])
-            self.__y_axis_column_list.addItems([item[u'Header'] for item in self.__copy_of_datsets[0].getExportTableColumns()])
+            self.__x_axis_column_list.addItems([item[u'Header'] for item in self.__analysisdata.getExportTableColumns()])
+            self.__y_axis_column_list.addItems([item[u'Header'] for item in self.__analysisdata.getExportTableColumns()])
 
             # Search for all parameters.
             parameterlist = []
-            for visitnode in self.__copy_of_datsets[0].getChildren():
+            for visitnode in self.__analysisdata.getChildren():
                 for samplenode in visitnode.getChildren():
                     for variablenode in samplenode.getChildren():
                         parameter = variablenode.getData(u"Parameter")
@@ -204,7 +194,6 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         self.__y_axis_parameter_list.setEnabled(True)
         #
         self.__updateCurrentData()
-            
 
     # ===== TAB: Filter data ===== 
     def __contentFilterData(self):
@@ -220,7 +209,6 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         #
         return widget
 
-
     # ===== TAB: Aggregate data ===== 
     def __contentAggregateData(self):
         """ """
@@ -235,9 +223,8 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         #
         return widget
 
-
     # ===== TAB: Draw graph ===== 
-    def __contentDrawGraph(self):
+    def __contentDrawGraphs(self):
         """ """
         widget = QtGui.QWidget()
         # Active widgets and connections.
@@ -353,7 +340,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         y_sample_key = None                      
         y_variable_key = None
         if x_column != u"Parameter:":
-            for export_info in self.__copy_of_datsets[0].getExportTableColumns():
+            for export_info in self.__analysisdata.getExportTableColumns():
                 if export_info.get('Header', u'') == x_column:
                     if export_info.get('Node', u'') == 'Visit':
                         x_visit_key =  export_info.get('Key', None)
@@ -362,7 +349,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
                     elif export_info.get('Node', u'') == 'Variable':
                         x_variable_key =  export_info.get('Key', None)
         if y_column != u"Parameter:":
-            for export_info in self.__copy_of_datsets[0].getExportTableColumns():
+            for export_info in self.__analysisdata.getExportTableColumns():
                 if export_info.get('Header', u'') == y_column:
                     if export_info.get('Node', u'') == 'Visit':
                         y_visit_key =  export_info.get('Key', None)
@@ -377,7 +364,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         x_value = None
         y_value = None
         #
-        for visitnode in self.__copy_of_datsets[0].getChildren(): 
+        for visitnode in self.__analysisdata.getChildren(): 
             if x_visit_key: x_value = visitnode.getData(x_visit_key) # if x_visit_key else None
             if y_visit_key: y_value = visitnode.getData(y_visit_key) # if y_visit_key else None
             for samplenode in visitnode.getChildren():
@@ -432,14 +419,11 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         else:
             graphtool.addXYPlot(selectedplotindex - 4, x_data, y_data)
 
-
-
     # ===== CURRENT DATA =====    
     def __contentCurrentDataTable(self):
         """ """
         # Active widgets and connections.
         currentdatagroupbox = QtGui.QGroupBox("Current data", self)
-        #
         # Active widgets and connections.
         self.__tableview = utils_qt.ToolboxQTableView()
         # Layout widgets.
@@ -455,32 +439,14 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         # Clear table.
         self.__tableview.tablemodel.setModeldata(None)
         self.__refreshResultTable()
-
-        # Note: Only one for test.
-        if len(self.__copy_of_datsets[0].getChildren()) > 0:
-            # MMFW:
-            
-###            dataset = self.__copy_of_datsets
-
-            
-###            dataset = toolbox_datasets.ToolboxDatasets().getDatasetByIndex(index - 1)
-            if isinstance(self.__copy_of_datsets[0], mmfw.DatasetTable):
-                """ """
-#                TODO: Not allowed.
-
-#                self.__tableview.tablemodel.setModeldata(dataset)
-#                self.__refreshResultTable()
-            elif isinstance(self.__copy_of_datsets[0], mmfw.DatasetNode):
-                # Tree dataset must be converted to table dataset before viewing.
-                targetdataset = mmfw.DatasetTable()
-                self.__copy_of_datsets[0].convertToTableDataset(targetdataset)
-                #
-                self.__tableview.tablemodel.setModeldata(targetdataset)
-                self.__refreshResultTable()
+        # Convert from tree model to table model.
+        targetdataset = mmfw.DatasetTable()
+        self.__analysisdata.convertToTableDataset(targetdataset)
+        # View model.
+        self.__tableview.tablemodel.setModeldata(targetdataset)
+        self.__refreshResultTable()
     
     def __refreshResultTable(self):
         """ """
         self.__tableview.tablemodel.reset() # Model data has changed.
         self.__tableview.resizeColumnsToContents()
-
-
