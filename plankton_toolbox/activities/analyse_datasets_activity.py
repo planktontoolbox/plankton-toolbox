@@ -24,6 +24,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+import os.path
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 #import datetime
@@ -39,10 +40,12 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
     """
     def __init__(self, name, parentwidget):
         """ """
-        # Lists of datasets selected for analysis.
+        # Tree dataset used for analysis. 
         self.__analysisdata = None
         # Initialize parent.
         super(AnalyseDatasetsActivity, self).__init__(name, parentwidget)
+        # Filename used when saving data to file.
+        self.__lastuseddirectory = '.'
 
     def _createContent(self):
         """ """
@@ -60,6 +63,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         # Add content to the activity.
         contentLayout.addWidget(self.__contentAnalyseTabs())
         contentLayout.addWidget(self.__contentCurrentDataTable(), 10)
+        contentLayout.addWidget(self.__contentSaveCurrentData())
     
     def __contentAnalyseTabs(self):
         """ """
@@ -69,6 +73,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         tabWidget.addTab(self.__contentSelectDatasets(), "Select dataset(s)")
         tabWidget.addTab(self.__contentFilterData(), "Filter data")
         tabWidget.addTab(self.__contentAggregateData(), "Aggregate data")
+        tabWidget.addTab(self.__contentSelectData(), "Select data")
         tabWidget.addTab(self.__contentDrawGraphs(), "Draw graphs")
         # Layout widgets.
         layout = QtGui.QVBoxLayout()
@@ -211,6 +216,20 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
 
     # ===== TAB: Aggregate data ===== 
     def __contentAggregateData(self):
+        """ """
+        # Active widgets and connections.
+
+        # Layout.
+        widget = QtGui.QWidget()        
+        layout = QtGui.QVBoxLayout()
+        widget.setLayout(layout)
+#        layout.addWidget(selectionbox)
+#        layout.addWidget(resultbox)
+        #
+        return widget
+
+    # ===== TAB: Select data ===== 
+    def __contentSelectData(self):
         """ """
         # Active widgets and connections.
 
@@ -434,6 +453,27 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         #
         return currentdatagroupbox
 
+    def __contentSaveCurrentData(self):
+        """ """
+        saveresultbox = QtGui.QGroupBox("Save current data", self)
+        # Active widgets and connections.
+        self.__saveformat_list = QtGui.QComboBox()
+        #
+        self.__saveformat_list.addItems(["Tab delimited text file (*.txt)",
+                                         "Excel file (*.xlsx)"])
+        self.__savedataset_button = QtGui.QPushButton("Save...")
+        self.connect(self.__savedataset_button, QtCore.SIGNAL("clicked()"), self.__saveCurrentData)                
+        # Layout widgets.
+        hbox1 = QtGui.QHBoxLayout()
+        hbox1.addStretch(5)
+        hbox1.addWidget(QtGui.QLabel("File format:"))
+        hbox1.addWidget(self.__saveformat_list)
+        hbox1.addWidget(self.__savedataset_button)
+        #
+        saveresultbox.setLayout(hbox1)
+        #
+        return saveresultbox
+        
     def __updateCurrentData(self):
         """ """
         # Clear table.
@@ -450,3 +490,27 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         """ """
         self.__tableview.tablemodel.reset() # Model data has changed.
         self.__tableview.resizeColumnsToContents()
+
+    def __saveCurrentData(self):
+        """ """
+        if self.__tableview.tablemodel.getModeldata():
+            # Show select file dialog box.
+            namefilter = 'All files (*.*)'
+            if self.__saveformat_list.currentIndex() == 1: # Xlsx file.
+                namefilter = 'Excel files (*.xlsx);;All files (*.*)'
+            else:
+                namefilter = 'Text files (*.txt);;All files (*.*)'
+            filename = QtGui.QFileDialog.getSaveFileName(
+                            self,
+                            'Save dataset',
+                            self.__lastuseddirectory,
+                            namefilter)
+            filename = unicode(filename) # QString to unicode.
+            # Check if user pressed ok or cancel.
+            if filename:
+                self.__lastuseddirectory = os.path.dirname(filename)
+                if self.__saveformat_list.currentIndex() == 0: # Text file.
+                    self.__tableview.tablemodel.getModeldata().saveAsTextFile(filename)
+                elif self.__saveformat_list.currentIndex() == 1: # Excel file.
+                    self.__tableview.tablemodel.getModeldata().saveAsExcelFile(filename)
+        

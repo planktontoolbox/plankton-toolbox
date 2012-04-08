@@ -166,6 +166,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                                                  file_name = self._matrix_path + self._matrix_list[selected_row - 1])
             self.__textfile_importcolumn_list.clear()
             self.__textfile_exportcolumn_list.clear()
+            self.__semantics_column = None
             header = tabledata.getHeader()
             for row in tabledata.getRows():
                 if (row[0] == u"INFO") and (row[1] == u"Column type"):
@@ -174,6 +175,8 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                             self.__textfile_importcolumn_list.addItems([header[index]])
                         if item == u"Export":
                             self.__textfile_exportcolumn_list.addItems([header[index]])
+                        if item == u"Semantics":
+                            self.__semantics_column = header[index]
         else:
             self.__textfile_importcolumn_list.clear()
             self.__textfile_importcolumn_list.addItems(["no matrix selected"])
@@ -204,7 +207,8 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                 # Add info to dataset about how to import and export data to/from dataset.
                 dataset.loadImportExportMatrix(self._matrix_path + unicode(self.__textfile_matrix_list.currentText()),
                                                unicode(self.__textfile_importcolumn_list.currentText()),
-                                               unicode(self.__textfile_exportcolumn_list.currentText()))
+                                               unicode(self.__textfile_exportcolumn_list.currentText()),
+                                               self.__semantics_column)
                 # Add metadata related to imported file.
                 dataset.addMetadata(u'File name', os.path.basename(filename))
                 dataset.addMetadata(u'File path', filename)
