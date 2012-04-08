@@ -40,7 +40,7 @@ class FormatSingleFile(mmfw.FormatBase):
         #
         visitkeycommand = None
         samplekeycommand = None
-        variablekeycommand = None
+#        variablekeycommand = None
         #
         try:
             for matrixrow in importmatrixrows:
@@ -84,9 +84,9 @@ class FormatSingleFile(mmfw.FormatBase):
                     elif (matrixnode == u'INFO') and (matrixkey == u'Sample key'):
                         commandstring = u"keystring = " + matrixcommand
                         samplekeycommand = compile(commandstring, '', 'exec')
-                    elif (matrixnode == u'INFO') and (matrixkey == u'Variable key'):
-                        commandstring = u"keystring = " + matrixcommand
-                        variablekeycommand = compile(commandstring, '', 'exec')
+#                    elif (matrixnode == u'INFO') and (matrixkey == u'Variable key'):
+#                        commandstring = u"keystring = " + matrixcommand
+#                        variablekeycommand = compile(commandstring, '', 'exec')
                     #
                     elif matrixnode == u'FUNCTION Dataset':
                         matrixkey = matrixkey.replace(u'()', u'') # Remove () from function name and add later.

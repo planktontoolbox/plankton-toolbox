@@ -106,6 +106,7 @@ class DatasetNode(mmfw.DatasetBase, DataNode):
         #
         self._importmatrixrows = []
         self._exporttablecolumns = []
+        self._semantics = []
 
     def clear(self):
         """ """
@@ -139,7 +140,7 @@ class DatasetNode(mmfw.DatasetBase, DataNode):
     def setImportsMatrixRows(self):
         """ """
 
-    def loadImportExportMatrix(self, matrix_file, import_column = None, export_column = None):
+    def loadImportExportMatrix(self, matrix_file, import_column = None, export_column = None, semantics_column = None):
         """ """
         # Add metadata
         self.addMetadata(u'Matrix', matrix_file)
@@ -169,6 +170,18 @@ class DatasetNode(mmfw.DatasetBase, DataNode):
                         key = tabledata.getDataItem(rowindex, 1)
                         columnsinfo.append({u'Header': exportcolumndata, u'Node': nodelevel, u'Key': key}) 
             self.setExportTableColumns(columnsinfo)
+        # Create semantics info.
+        if semantics_column:
+            self.addMetadata(u'Semantics column', semantics_column)
+            semanticsinfo = []
+            for rowindex in xrange(0, tabledata.getRowCount()):
+                exportcolumndata = tabledata.getDataItemByColumnName(rowindex, semantics_column)
+                if exportcolumndata:
+                    nodelevel = tabledata.getDataItem(rowindex, 0)
+                    if nodelevel != u'INFO':
+                        key = tabledata.getDataItem(rowindex, 1)
+                        semanticsinfo.append({u'Header': exportcolumndata, u'Node': nodelevel, u'Key': key}) 
+            self.setSemantics(semanticsinfo)
 
     def setImportMatrixRows(self, import_matrix_rows):
         """ """
@@ -183,6 +196,14 @@ class DatasetNode(mmfw.DatasetBase, DataNode):
         self._exporttablecolumns = columns_info_list
 
     def getExportTableColumns(self):
+        """ """
+        return self._exporttablecolumns
+
+    def setSemantics(self, semantics_info_list):
+        """ """
+        self._semantics = semantics_info_list
+
+    def getSemantics(self):
         """ """
         return self._exporttablecolumns
 
