@@ -104,16 +104,16 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
                      QtCore.SIGNAL("datasetListChanged"), 
                      self.__updateLoadedDatasetList)
         #
-        self.__cleardatasets_button = QtGui.QPushButton("Clear all")
-        self.connect(self.__cleardatasets_button, QtCore.SIGNAL("clicked()"), self._ClearCurrentData)                
-        self.__selectmarkeddatasets_button = QtGui.QPushButton("Select marked dataset(s)")
-        self.connect(self.__selectmarkeddatasets_button, QtCore.SIGNAL("clicked()"), self.__CopyToCurrentData)                
+        self.__clearcurrentdata_button = QtGui.QPushButton("Clear current data")
+        self.connect(self.__clearcurrentdata_button, QtCore.SIGNAL("clicked()"), self._clearCurrentData)                
+        self.__useselecteddatasets_button = QtGui.QPushButton("Use selected dataset(s)")
+        self.connect(self.__useselecteddatasets_button, QtCore.SIGNAL("clicked()"), self.__useSelectedDatasets)                
 
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(10)
-        hbox1.addWidget(self.__cleardatasets_button)
-        hbox1.addWidget(self.__selectmarkeddatasets_button)
+        hbox1.addWidget(self.__clearcurrentdata_button)
+        hbox1.addWidget(self.__useselecteddatasets_button)
         #
         layout = QtGui.QVBoxLayout()
         layout.addWidget(introlabel)
@@ -128,12 +128,13 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         """ """
         self.__loaded_datasets_model.clear()        
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
-            item = QtGui.QStandardItem(u'Dataset - ' + unicode(rowindex))
+            item = QtGui.QStandardItem(u"Dataset-" + unicode(rowindex) + 
+                                       u".   Source: " + dataset.getMetadata(u'File name'))
             item.setCheckState(QtCore.Qt.Unchecked)
             item.setCheckable(True)
             self.__loaded_datasets_model.appendRow(item)
 
-    def _ClearCurrentData(self):
+    def _clearCurrentData(self):
         """ """
         # Clear table.
         self.__tableview.tablemodel.setModeldata(None)
@@ -144,34 +145,62 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         self.__y_axis_column_list.clear()
         self.__y_axis_parameter_list.clear()
 
-    def __CopyToCurrentData(self):
+    def __useSelectedDatasets(self):
         """ """
-        # Clear rows in comboboxes.
-        self.__x_axis_column_list.clear()
-        self.__x_axis_parameter_list.clear()
-        self.__y_axis_column_list.clear()
-        self.__y_axis_parameter_list.clear()
-        self.__x_axis_column_list.addItems([u"Parameter:"])
-        self.__y_axis_column_list.addItems([u"Parameter:"])
-
-
-###        for itemindex in self.__loaded_datasets_model.rowCount():
+        try:
+            # Clear rows in comboboxes.
+            self.__x_axis_column_list.clear()
+            self.__x_axis_parameter_list.clear()
+            self.__y_axis_column_list.clear()
+            self.__y_axis_parameter_list.clear()
+            self.__x_axis_column_list.addItems([u"Parameter:"])
+            self.__y_axis_column_list.addItems([u"Parameter:"])
+    
+            # Check if all selected datasets contains the same columns.
+            compareheaders = None
+            for rowindex in range(self.__loaded_datasets_model.rowCount()):
+                item = self.__loaded_datasets_model.item(rowindex, 0)
+                if item.checkState() == QtCore.Qt.Checked:
+                    dataset = mmfw.Datasets().getDatasets()[rowindex]
+                    if compareheaders == None:
+                        compareheaders = dataset.getExportTableColumns()
+                    else:
+                        newheader = dataset.getExportTableColumns()
+                        if len(compareheaders)==len(newheader) and \
+                           all(compareheaders[i] == newheader[i] for i in range(len(compareheaders))):
+                            print('MATCH')
+                        else:
+                            print('MISMATCH')
+                            mmfw.Logging().log("Can't use datasets with different columns. Please try again.")
+                            raise UserWarning("Can't use datasets with different columns. Please try again.")
+            #        
+            dataset = None
+            for rowindex in range(self.__loaded_datasets_model.rowCount()):
+                item = self.__loaded_datasets_model.item(rowindex, 0)
+                if item.checkState() == QtCore.Qt.Checked:        
+                #             
+                    if dataset == None:
+                        # Deep copy of the first dataset.
+                        dataset = copy.deepcopy(mmfw.Datasets().getDatasets()[rowindex])
+                    else:
+                        # Append top node data and children. Start with a deep copy.
+                        tmp_dataset = copy.deepcopy(mmfw.Datasets().getDatasets()[rowindex])
+                        for key, value in dataset.getDataDict():
+                            dataset.addData(key, value)
+                        for child in tmp_dataset.getChildren():
+                            dataset.addChild(child)
             #
-        itemindex = 0
-        item = self.__loaded_datasets_model.takeRow(itemindex)
-        print(unicode(item[0].checkState()))
-        
-        
-        
-        if len(mmfw.Datasets().getDatasets()) > 0:
-            currentdataset = mmfw.Datasets().getDatasets()[0]
-            # Make deep copy of datasets for analysis.
-            self.__analysisdata = copy.deepcopy(currentdataset) # Only one for test.
+            if (dataset == None) or (len(dataset.getChildren()) == 0):
+                mmfw.Logging().log("Selected datasets are empty. Please try again.")
+                raise UserWarning("Selected datasets are empty. Please try again.")
+            #
+            self.__analysisdata = dataset
+    
             # Add rows in comboboxes.
             self.__x_axis_column_list.addItems([item[u'Header'] for item in self.__analysisdata.getExportTableColumns()])
             self.__y_axis_column_list.addItems([item[u'Header'] for item in self.__analysisdata.getExportTableColumns()])
-
-            # Search for all parameters.
+    
+            # Search for all parameters in current data.
             parameterlist = []
             for visitnode in self.__analysisdata.getChildren():
                 for samplenode in visitnode.getChildren():
@@ -182,23 +211,17 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
             parameterlist.sort()
             self.__x_axis_parameter_list.addItems(parameterlist)
             self.__y_axis_parameter_list.addItems(parameterlist)
-            
-#        else:
-#            # Clear rows in comboboxes.
-#            self.__x_axis_column_list.clear()
-#            self.__x_axis_parameter_list.clear()
-#            self.__y_axis_column_list.clear()
-#            self.__y_axis_parameter_list.clear()
-#            self.__x_axis_column_list.addItems([u"Parameter:"])
-#            self.__y_axis_column_list.addItems([u"Parameter:"])
-        #    
-        #  Make comboboxes visible.
-        self.__x_axis_column_list.setEnabled(True)
-        self.__y_axis_column_list.setEnabled(True)
-        self.__x_axis_parameter_list.setEnabled(True)
-        self.__y_axis_parameter_list.setEnabled(True)
-        #
-        self.__updateCurrentData()
+                
+            #    
+            #  Make comboboxes visible.
+            self.__x_axis_column_list.setEnabled(True)
+            self.__y_axis_column_list.setEnabled(True)
+            self.__x_axis_parameter_list.setEnabled(True)
+            self.__y_axis_parameter_list.setEnabled(True)
+            #
+            self.__updateCurrentData()
+        except UserWarning, e:
+            QtGui.QMessageBox.warning(self, "Warning", unicode(e))
 
     # ===== TAB: Filter data ===== 
     def __contentFilterData(self):
