@@ -74,7 +74,8 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         tabWidget.addTab(self.__contentFilterData(), "Filter data")
         tabWidget.addTab(self.__contentAggregateData(), "Aggregate data")
         tabWidget.addTab(self.__contentSelectData(), "Select data")
-        tabWidget.addTab(self.__contentDrawGraphs(), "Draw graphs")
+        tabWidget.addTab(self.__contentPreparedGraphs(), "Prepared graphs")
+        tabWidget.addTab(self.__contentGenericGraphs(), "Generic graphs")
         # Layout widgets.
         layout = QtGui.QVBoxLayout()
         layout.addWidget(tabWidget)
@@ -92,13 +93,12 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
         tempor incididunt ut labore et dolore magna aliqua.
         """)
-        
+        #
         view = QtGui.QListView()
         view.setMaximumHeight(100)
         view.setMinimumWidth(500)
         self.__loaded_datasets_model = QtGui.QStandardItemModel()
         view.setModel(self.__loaded_datasets_model)
-        
         # Listen for changes in the toolbox dataset list.
         self.connect(toolbox_datasets.ToolboxDatasets(), 
                      QtCore.SIGNAL("datasetListChanged"), 
@@ -108,7 +108,6 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         self.connect(self.__clearcurrentdata_button, QtCore.SIGNAL("clicked()"), self._clearCurrentData)                
         self.__useselecteddatasets_button = QtGui.QPushButton("Use selected dataset(s)")
         self.connect(self.__useselecteddatasets_button, QtCore.SIGNAL("clicked()"), self.__useSelectedDatasets)                
-
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(10)
@@ -148,14 +147,11 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
     def __useSelectedDatasets(self):
         """ """
         try:
+            # Clear current dataset.
+            self.__analysisdata = None
+            self.__updateCurrentData()    
             # Clear rows in comboboxes.
-            self.__x_axis_column_list.clear()
-            self.__x_axis_parameter_list.clear()
-            self.__y_axis_column_list.clear()
-            self.__y_axis_parameter_list.clear()
-            self.__x_axis_column_list.addItems([u"Parameter:"])
-            self.__y_axis_column_list.addItems([u"Parameter:"])
-    
+            self.__clearComboboxes()    
             # Check if all selected datasets contains the same columns.
             compareheaders = None
             for rowindex in range(self.__loaded_datasets_model.rowCount()):
@@ -173,7 +169,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
                             print('MISMATCH')
                             mmfw.Logging().log("Can't use datasets with different columns. Please try again.")
                             raise UserWarning("Can't use datasets with different columns. Please try again.")
-            #        
+            # Concatenate selected datasets.        
             dataset = None
             for rowindex in range(self.__loaded_datasets_model.rowCount()):
                 item = self.__loaded_datasets_model.item(rowindex, 0)
@@ -189,37 +185,15 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
                             dataset.addData(key, value)
                         for child in tmp_dataset.getChildren():
                             dataset.addChild(child)
-            #
+            # Check.
             if (dataset == None) or (len(dataset.getChildren()) == 0):
                 mmfw.Logging().log("Selected datasets are empty. Please try again.")
                 raise UserWarning("Selected datasets are empty. Please try again.")
-            #
+            # Use the concatenated datasets as current data.
             self.__analysisdata = dataset
-    
+            self.__updateCurrentData()    
             # Add rows in comboboxes.
-            self.__x_axis_column_list.addItems([item[u'Header'] for item in self.__analysisdata.getExportTableColumns()])
-            self.__y_axis_column_list.addItems([item[u'Header'] for item in self.__analysisdata.getExportTableColumns()])
-    
-            # Search for all parameters in current data.
-            parameterlist = []
-            for visitnode in self.__analysisdata.getChildren():
-                for samplenode in visitnode.getChildren():
-                    for variablenode in samplenode.getChildren():
-                        parameter = variablenode.getData(u"Parameter")
-                        if parameter not in parameterlist:
-                            parameterlist.append(parameter)
-            parameterlist.sort()
-            self.__x_axis_parameter_list.addItems(parameterlist)
-            self.__y_axis_parameter_list.addItems(parameterlist)
-                
-            #    
-            #  Make comboboxes visible.
-            self.__x_axis_column_list.setEnabled(True)
-            self.__y_axis_column_list.setEnabled(True)
-            self.__x_axis_parameter_list.setEnabled(True)
-            self.__y_axis_parameter_list.setEnabled(True)
-            #
-            self.__updateCurrentData()
+            self.__reloadComboboxes()    
         except UserWarning, e:
             QtGui.QMessageBox.warning(self, "Warning", unicode(e))
 
@@ -265,8 +239,22 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         #
         return widget
 
+    # ===== TAB: Select data ===== 
+    def __contentPreparedGraphs(self):
+        """ """
+        # Active widgets and connections.
+
+        # Layout.
+        widget = QtGui.QWidget()        
+        layout = QtGui.QVBoxLayout()
+        widget.setLayout(layout)
+#        layout.addWidget(selectionbox)
+#        layout.addWidget(resultbox)
+        #
+        return widget
+
     # ===== TAB: Draw graph ===== 
-    def __contentDrawGraphs(self):
+    def __contentGenericGraphs(self):
         """ """
         widget = QtGui.QWidget()
         # Active widgets and connections.
@@ -502,12 +490,14 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         # Clear table.
         self.__tableview.tablemodel.setModeldata(None)
         self.__refreshResultTable()
-        # Convert from tree model to table model.
-        targetdataset = mmfw.DatasetTable()
-        self.__analysisdata.convertToTableDataset(targetdataset)
-        # View model.
-        self.__tableview.tablemodel.setModeldata(targetdataset)
-        self.__refreshResultTable()
+        #
+        if self.__analysisdata:
+            # Convert from tree model to table model.
+            targetdataset = mmfw.DatasetTable()
+            self.__analysisdata.convertToTableDataset(targetdataset)
+            # View model.
+            self.__tableview.tablemodel.setModeldata(targetdataset)
+            self.__refreshResultTable()
     
     def __refreshResultTable(self):
         """ """
@@ -537,3 +527,36 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
                 elif self.__saveformat_list.currentIndex() == 1: # Excel file.
                     self.__tableview.tablemodel.getModeldata().saveAsExcelFile(filename)
         
+    # ===== COMMON METHODS ===== 
+    def __clearComboboxes(self):
+        """ """
+        # Clear rows in comboboxes.
+        self.__x_axis_column_list.clear()
+        self.__x_axis_parameter_list.clear()
+        self.__y_axis_column_list.clear()
+        self.__y_axis_parameter_list.clear()
+        self.__x_axis_column_list.addItems([u"Parameter:"])
+        self.__y_axis_column_list.addItems([u"Parameter:"])
+
+    def __reloadComboboxes(self):
+        """ """
+        # Reload the content of the rows in comboboxes.
+        self.__x_axis_column_list.addItems([item[u'Header'] for item in self.__analysisdata.getExportTableColumns()])
+        self.__y_axis_column_list.addItems([item[u'Header'] for item in self.__analysisdata.getExportTableColumns()])
+        # Search for all parameters in current data.
+        parameterlist = []
+        for visitnode in self.__analysisdata.getChildren():
+            for samplenode in visitnode.getChildren():
+                for variablenode in samplenode.getChildren():
+                    parameter = variablenode.getData(u"Parameter")
+                    if parameter not in parameterlist:
+                        parameterlist.append(parameter)
+        parameterlist.sort()
+        self.__x_axis_parameter_list.addItems(parameterlist)
+        self.__y_axis_parameter_list.addItems(parameterlist)
+        #  Make comboboxes visible.
+        self.__x_axis_column_list.setEnabled(True)
+        self.__y_axis_column_list.setEnabled(True)
+        self.__x_axis_parameter_list.setEnabled(True)
+        self.__y_axis_parameter_list.setEnabled(True)
+
