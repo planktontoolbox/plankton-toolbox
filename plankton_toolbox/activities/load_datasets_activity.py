@@ -441,7 +441,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
 
             # Add row 
             self.__datasettabledata.addRow(
-                [u'Dataset - ' + unicode(rowindex),
+                [u'Dataset-' + unicode(rowindex),
                  datasettype,
                  contentinfo,
                  dataset.getMetadata(u'File name'),
@@ -459,7 +459,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
 
 #        self.__datasettabledata.clearRows()
 #        for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
-#            self.__datasettabledata.addRow([u'Dataset - ' + unicode(rowindex) + '                                       '])
+#            self.__datasettabledata.addRow([u'Dataset-' + unicode(rowindex) + '                                       '])
 #        self.__datasets_table.tablemodel.reset()
 #        self.__datasets_table.resizeColumnsToContents()
     

@@ -124,7 +124,7 @@ class DatasetViewerTool(tool_base.ToolBase):
         self.__selectdataset_list.addItems(["<select dataset>"])
         
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
-            self.__selectdataset_list.addItems([u'Dataset - ' + unicode(rowindex)])
+            self.__selectdataset_list.addItems([u'Dataset-' + unicode(rowindex)])
 
     def __viewDataset(self, index):
         """ """
