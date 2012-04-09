@@ -94,11 +94,11 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         tempor incididunt ut labore et dolore magna aliqua.
         """)
         #
-        view = QtGui.QListView()
-        view.setMaximumHeight(100)
-        view.setMinimumWidth(500)
+        loaded_datasets_listview = QtGui.QListView()
+        loaded_datasets_listview.setMaximumHeight(80)
+#        view.setMinimumWidth(500)
         self.__loaded_datasets_model = QtGui.QStandardItemModel()
-        view.setModel(self.__loaded_datasets_model)
+        loaded_datasets_listview.setModel(self.__loaded_datasets_model)
         # Listen for changes in the toolbox dataset list.
         self.connect(toolbox_datasets.ToolboxDatasets(), 
                      QtCore.SIGNAL("datasetListChanged"), 
@@ -116,7 +116,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         #
         layout = QtGui.QVBoxLayout()
         layout.addWidget(introlabel)
-        layout.addWidget(view)
+        layout.addWidget(loaded_datasets_listview)
 #        layout.addStretch(1)
         layout.addLayout(hbox1)
         widget.setLayout(layout)                
@@ -136,22 +136,16 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
     def _clearCurrentData(self):
         """ """
         # Clear table.
-        self.__tableview.tablemodel.setModeldata(None)
-        self.__refreshResultTable()
-        # Clear graph lists.
-        self.__x_axis_column_list.clear()
-        self.__x_axis_parameter_list.clear()
-        self.__y_axis_column_list.clear()
-        self.__y_axis_parameter_list.clear()
+        self.__analysisdata = None
+        self.__updateCurrentData()    
+        # Clear rows in comboboxes.
+        self.__clearComboboxes()    
 
     def __useSelectedDatasets(self):
         """ """
         try:
-            # Clear current dataset.
-            self.__analysisdata = None
-            self.__updateCurrentData()    
-            # Clear rows in comboboxes.
-            self.__clearComboboxes()    
+            # Clear current data.
+            self._clearCurrentData()    
             # Check if all selected datasets contains the same columns.
             compareheaders = None
             for rowindex in range(self.__loaded_datasets_model.rowCount()):
@@ -164,11 +158,10 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
                         newheader = dataset.getExportTableColumns()
                         if len(compareheaders)==len(newheader) and \
                            all(compareheaders[i] == newheader[i] for i in range(len(compareheaders))):
-                            print('MATCH')
+                            pass # OK since export columns are equal.
                         else:
-                            print('MISMATCH')
-                            mmfw.Logging().log("Can't use datasets with different columns. Please try again.")
-                            raise UserWarning("Can't use datasets with different columns. Please try again.")
+                            mmfw.Logging().log("Can't use datasets with different export columns. Please try again.")
+                            raise UserWarning("Can't use datasets with different export columns. Please try again.")
             # Concatenate selected datasets.        
             dataset = None
             for rowindex in range(self.__loaded_datasets_model.rowCount()):
@@ -228,18 +221,105 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
     # ===== TAB: Select data ===== 
     def __contentSelectData(self):
         """ """
+        widget = QtGui.QWidget()
         # Active widgets and connections.
-
-        # Layout.
-        widget = QtGui.QWidget()        
+        introlabel = utils_qt.RichTextQLabel()
+        introlabel.setText("""
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
+        tempor incididunt ut labore et dolore magna aliqua.
+        """)
+        # Start date and end date.
+        self.__startdate_edit = QtGui.QLineEdit("")
+        self.__enddate_edit = QtGui.QLineEdit("")
+        # Stations
+        stations_listview = QtGui.QListView()
+        stations_listview.setMaximumHeight(100)
+        self.__select_stations_model = QtGui.QStandardItemModel()
+        stations_listview.setModel(self.__select_stations_model)
+        # Min-max depth.
+        minmaxdepth_listview = QtGui.QListView()
+        minmaxdepth_listview.setMaximumHeight(100)
+        self.__selected_minmaxdepth_model = QtGui.QStandardItemModel()
+        minmaxdepth_listview.setModel(self.__selected_minmaxdepth_model)
+        # Trophy.
+        trophy_listview = QtGui.QListView()
+        trophy_listview.setMaximumHeight(100)
+        self.__selected_trophy_model = QtGui.QStandardItemModel()
+        trophy_listview.setModel(self.__selected_trophy_model)
+        # Layout widgets.
+        form1 = QtGui.QGridLayout()
+        gridrow = 0
+        label1 = QtGui.QLabel("Date from:")
+        label2 = QtGui.QLabel("Stations:")
+        label3 = QtGui.QLabel("Min-max depth:")
+        label4 = QtGui.QLabel("Trophy:")
+        form1.addWidget(label1, gridrow, 0, 1, 1)
+        form1.addWidget(label2, gridrow, 1, 1, 1)
+        form1.addWidget(label3, gridrow, 2, 1, 1)
+        form1.addWidget(label4, gridrow, 3, 1, 1)
+        gridrow += 1
+        form1.addWidget(self.__startdate_edit, gridrow, 0, 1, 1)
+        form1.addWidget(stations_listview, gridrow, 1, 4, 1)
+        form1.addWidget(minmaxdepth_listview, gridrow, 2, 4, 1)
+        form1.addWidget(trophy_listview, gridrow, 3, 4, 1)
+        gridrow += 1
+        label1 = QtGui.QLabel("Date to:")
+        form1.addWidget(label1, gridrow, 0, 1, 1)
+        gridrow += 1
+        form1.addWidget(self.__enddate_edit, gridrow, 0, 1, 1)
+        #
         layout = QtGui.QVBoxLayout()
-        widget.setLayout(layout)
-#        layout.addWidget(selectionbox)
-#        layout.addWidget(resultbox)
+        layout.addWidget(introlabel)
+        layout.addLayout(form1)
+        layout.addStretch(5)
+        widget.setLayout(layout)                
         #
         return widget
 
-    # ===== TAB: Select data ===== 
+
+    def __updateSelectDataAlternatives(self):
+        """ """
+        #
+        startdate = '9999-99-99'
+        enddate = '0000-00-00'
+        stationset = set()
+        minmaxdepthset = set()
+        trophyset = set()
+        #
+        for visitnode in self.__analysisdata.getChildren():
+            stationset.add(visitnode.getData(u'Station.reported name'))
+            startdate = min(startdate, visitnode.getData(u'Date'))
+            enddate = max(enddate, visitnode.getData(u'Date'))
+            for samplenode in visitnode.getChildren():
+                depthstring = samplenode.getData(u'Sample min depth') + '-' + samplenode.getData(u'Sample max depth')
+                minmaxdepthset.add(depthstring)
+                for variablenode in samplenode.getChildren():
+                    trophyset.add(variablenode.getData(u'Trophy'))
+        #
+        stationlist = sorted(stationset)
+        minmaxdepthlist = sorted(minmaxdepthset)
+        trophylist = sorted(trophyset)
+
+
+#        self.__startdate_edit
+#        self.__enddate_edit
+#        self.__select_stations_model
+#        self.__selected_minmaxdepth_model
+#        self.__selected_trophy_model
+     
+        #
+        self.__select_stations_model.clear()        
+        for station in stationlist:
+            item = QtGui.QStandardItem(station)
+            item.setCheckState(QtCore.Qt.Checked)
+            item.setCheckable(True)
+            self.__select_stations_model.appendRow(item)
+    
+    
+    
+    
+    
+    # ===== TAB: Prepared graphs ===== 
     def __contentPreparedGraphs(self):
         """ """
         # Active widgets and connections.
@@ -253,7 +333,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         #
         return widget
 
-    # ===== TAB: Draw graph ===== 
+    # ===== TAB: Generic graphs ===== 
     def __contentGenericGraphs(self):
         """ """
         widget = QtGui.QWidget()
@@ -544,14 +624,12 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         self.__x_axis_column_list.addItems([item[u'Header'] for item in self.__analysisdata.getExportTableColumns()])
         self.__y_axis_column_list.addItems([item[u'Header'] for item in self.__analysisdata.getExportTableColumns()])
         # Search for all parameters in current data.
-        parameterlist = []
+        parameterset = set()
         for visitnode in self.__analysisdata.getChildren():
             for samplenode in visitnode.getChildren():
                 for variablenode in samplenode.getChildren():
-                    parameter = variablenode.getData(u"Parameter")
-                    if parameter not in parameterlist:
-                        parameterlist.append(parameter)
-        parameterlist.sort()
+                    parameterset.add(variablenode.getData(u"Parameter"))
+        parameterlist = sorted(parameterset)
         self.__x_axis_parameter_list.addItems(parameterlist)
         self.__y_axis_parameter_list.addItems(parameterlist)
         #  Make comboboxes visible.
@@ -559,4 +637,8 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         self.__y_axis_column_list.setEnabled(True)
         self.__x_axis_parameter_list.setEnabled(True)
         self.__y_axis_parameter_list.setEnabled(True)
+        #
+        #
+        #
+        self.__updateSelectDataAlternatives()
 
