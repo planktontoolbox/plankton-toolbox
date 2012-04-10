@@ -64,12 +64,12 @@ class Taxa(object):
 #        self.__loadHarmfulData()
         self.__updateLookupDictionaries()
         self.__precalculateData()
-        # Used for DEBUG:
-        fileencoding = self.__file_encoding
-        out = codecs.open(u'DEBUG_species_list.txt', mode = 'w', 
-                          encoding = fileencoding)
-        out.write(json.dumps(self.__taxa, encoding = 'utf8', sort_keys=True, indent=4))
-        out.close()
+#        # Used for DEBUG:
+#        fileencoding = self.__file_encoding
+#        out = codecs.open(u'DEBUG_species_list.txt', mode = 'w', 
+#                          encoding = fileencoding)
+#        out.write(json.dumps(self.__taxa, encoding = 'utf8', sort_keys=True, indent=4))
+#        out.close()
 
     def getTaxaDict(self):
         """ """

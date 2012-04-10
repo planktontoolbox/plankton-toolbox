@@ -24,15 +24,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import os.path
+#import os.path
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 #import datetime
-import copy
-import plankton_toolbox.activities.activity_base as activity_base
+#import copy
+#import plankton_toolbox.activities.activity_base as activity_base
 import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.toolbox.utils_qt as utils_qt
-import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
+#import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 import mmfw
 
 @mmfw.singleton
@@ -226,13 +226,49 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         x_value = None
         y_value = None
         #
-        for visitnode in currentdata.getChildren(): 
+        
+        
+        selected_dict = self.__analysedatasetactivity.getSelectDataDict()
+        selected_startdate = selected_dict[u'Start date']
+        selected_enddate = selected_dict[u'End date']
+        selected_stations = selected_dict[u'Stations']
+        selected_minmaxdepth =  selected_dict[u'Min max depth']
+        selected_taxon = selected_dict[u'Taxon']
+        selected_trophy = selected_dict[u'Trophy']
+        
+        
+        
+        for visitnode in currentdata.getChildren():
+            
+            if selected_startdate > visitnode.getData(u'Date'):
+                continue
+            if selected_enddate < visitnode.getData(u'Date'):
+                continue
+            if visitnode.getData(u'Station.reported name') not in selected_stations:
+                continue
+
+            
+             
             if x_visit_key: x_value = visitnode.getData(x_visit_key) # if x_visit_key else None
             if y_visit_key: y_value = visitnode.getData(y_visit_key) # if y_visit_key else None
             for samplenode in visitnode.getChildren():
+            
+                minmax = samplenode.getData(u'Sample min depth') + u'-' + samplenode.getData(u'Sample max depth')
+                if minmax not in selected_minmaxdepth:
+                    continue
+                
+                
                 if x_sample_key: x_value = samplenode.getData(x_sample_key) # if x_sample_key else None
                 if y_sample_key: y_value = samplenode.getData(y_sample_key) # if y_sample_key else None
                 for variablenode in samplenode.getChildren():
+                
+                    if variablenode.getData(u'Reported taxon name') not in selected_taxon:
+                        continue
+                    if variablenode.getData(u'PEG trophy') not in selected_trophy:
+                        continue
+                    
+                    
+                    
                     #
                     if x_variable_key: x_value = variablenode.getData(x_variable_key) # if x_variable_key else None
                     if y_variable_key: y_value = variablenode.getData(y_variable_key) # if y_variable_key else None

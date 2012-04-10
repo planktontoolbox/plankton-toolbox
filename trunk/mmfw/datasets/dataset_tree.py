@@ -73,11 +73,12 @@ class DataNode(object):
         
     def addData(self, key, value):
         """ """
-        self._datadict[key] = value
+        if value:
+            self._datadict[key] = value
         
     def getData(self, key):
         """ """
-        return self._datadict.get(key, '')
+        return self._datadict.get(key, u'')
         
     def getDataDict(self):
         """ """
