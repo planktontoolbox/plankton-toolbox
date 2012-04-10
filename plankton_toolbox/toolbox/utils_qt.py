@@ -118,10 +118,65 @@ class ActivityMenuQLabel(ClickableQLabel):
         self.updateStyleSheet()
 
 
+class SelectableQListView(QtGui.QListView):  
+    """ Customized QListView. Contains a single column and corresponding checkboxes. """
+    def __init__(self, parent = None):
+        """ """
+        QtGui.QListView.__init__(self, parent)
+        self.tablemodel = QtGui.QStandardItemModel()
+        self.setModel(self.tablemodel)
+
+    def clear(self):
+        """ """
+        self.tablemodel.clear()        
+         
+    def setList(self, data_list = None, default_check_state = True):
+        """ """
+        self.tablemodel.clear()        
+        for tableitem in data_list:
+            standarditem = QtGui.QStandardItem(tableitem)
+            standarditem.setCheckState(QtCore.Qt.Checked)
+            standarditem.setCheckable(default_check_state)
+            self.tablemodel.appendRow(standarditem)
+         
+    def checkAll(self):
+        """ """
+        for rowindex in range(self.tablemodel.rowCount()):
+            item = self.tablemodel.item(rowindex, 0)
+            item.setCheckState(QtCore.Qt.Checked)
+            
+    def uncheckAll(self):
+        """ """
+        for rowindex in range(self.tablemodel.rowCount()):
+            item = self.tablemodel.item(rowindex, 0)
+            item.setCheckState(QtCore.Qt.Unchecked)
+
+    def getSelectedDataList(self):
+        """ """
+        selecteddata = []
+        self._selected_data_list = []
+        for rowindex in range(self.tablemodel.rowCount()):
+            item = self.tablemodel.item(rowindex, 0)
+            if item.checkState() == QtCore.Qt.Checked:
+                selecteddata.append(unicode(item.text()))
+        #
+        return selecteddata
+
+    def getSelectedIndexList(self):
+        """ """
+        selectedindexes = []
+        self._selected_data_list = []
+        for rowindex in range(self.tablemodel.rowCount()):
+            item = self.tablemodel.item(rowindex, 0)
+            if item.checkState() == QtCore.Qt.Checked:
+                selectedindexes.append(rowindex)
+        #
+        return selectedindexes
+
+
 class ToolboxQTableView( QtGui.QTableView):  
     """ Customized QTableView. The table is automatically connected to an 
         instance of ToolboxTableModel.  """
-
     def __init__(self, parent = None):
         """ """
         QtGui.QTableView.__init__(self, parent)

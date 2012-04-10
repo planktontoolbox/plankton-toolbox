@@ -89,8 +89,8 @@ class FormatBase(object):
 
     def _sizeclassByKey(self, taxon_name, size_class, key):
         """ """
-        # TODO: For test:
-        print("DEBUG: " + taxon_name)
+#        # TODO: For test:
+#        print("DEBUG: " + taxon_name)
         return mmfw.Taxa().getSizeclassValue(key, taxon_name, size_class)
 
     def _toStation(self, current_node, station_name, **more):

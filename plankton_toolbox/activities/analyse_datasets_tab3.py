@@ -28,11 +28,11 @@ import os.path
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 #import datetime
-import copy
-import plankton_toolbox.activities.activity_base as activity_base
-import plankton_toolbox.tools.tool_manager as tool_manager
+#import copy
+#import plankton_toolbox.activities.activity_base as activity_base
+#import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.toolbox.utils_qt as utils_qt
-import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
+#import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 import mmfw
 
 @mmfw.singleton
@@ -47,9 +47,12 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
 
     def clear(self):
         """ """
+        self._trophy_listview.clear()
         
     def update(self):
         """ """
+        self.clear()        
+        self.__updateSelectDataAlternatives()
         
     # ===== TAB: Aggregate data ===== 
     def contentAggregateData(self):
@@ -61,35 +64,48 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
         tempor incididunt ut labore et dolore magna aliqua.
         """)
-
-
-
         # Active widgets and connections.
-        self.__aggregate_taxon_list = QtGui.QComboBox()
-        #
-        self.__aggregate_taxon_list.addItems([
+        # Aggregate over taxonomic rank.
+        self.__aggregate_rank_list = QtGui.QComboBox()
+        self.__aggregate_rank_list.addItems([
             "<none>",
-            "Class",
+            "Kingdom",
+            "Phylum",
+#            "Class",
+            "Dyntaxa class",
             "Order",
             "Family",
-            "Species"
-            ])
+            "Genus",
+            "Species" ])
+        #  Aggregate over trophy.
+        self._trophy_listview = utils_qt.SelectableQListView()
+        self._trophy_listview.setMaximumHeight(100)
+        # Button.
         self.__aggregatecurrentdata_button = QtGui.QPushButton("Aggregate current data")
         self.connect(self.__aggregatecurrentdata_button, QtCore.SIGNAL("clicked()"), self.__aggregateCurrentData)                
         # Layout widgets.
+        form1 = QtGui.QGridLayout()
+        gridrow = 0
+        label1 = QtGui.QLabel("Aggregate over:")
+        form1.addWidget(label1, gridrow, 0, 1, 4)
+        gridrow += 1
+        label1 = QtGui.QLabel("Taxon level:")
+        label2 = QtGui.QLabel("Trophy:")
+        form1.addWidget(label1, gridrow, 0, 1, 1)
+        form1.addWidget(label2, gridrow, 1, 1, 3)
+        form1.addWidget(QtGui.QLabel(""), gridrow, 2, 1, 10) # Stretch.
+        gridrow += 1
+        form1.addWidget(self.__aggregate_rank_list, gridrow, 0, 1, 1)
+        form1.addWidget(self._trophy_listview, gridrow, 1, 4, 3)
+        #
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(5)
-        hbox1.addWidget(QtGui.QLabel("Aggregate over taxon level:"))
-        hbox1.addWidget(self.__aggregate_taxon_list)
         hbox1.addWidget(self.__aggregatecurrentdata_button)
-        
-        
-        
-        
         #
         layout = QtGui.QVBoxLayout()
         layout.addWidget(introlabel)
-        layout.addStretch(5)
+        layout.addLayout(form1)
+#        layout.addStretch(5)
         layout.addLayout(hbox1)
         widget.setLayout(layout)                
         #
@@ -97,6 +113,9 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
 
     def __aggregateCurrentData(self):
         """ """
+        #
+        selected_trophy_list = self._trophy_listview.getSelectedDataList()
+        selected_taxon_rank = self.__aggregate_rank_list.currentText()
         #
         for visitnode in self.__analysedatasetactivity.getCurrentData().getChildren(): 
             for samplenode in visitnode.getChildren():
@@ -106,28 +125,33 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                     # Use values containing valid float data.
                     try:
                         value = float(value) 
-                        taxonclass = variablenode.getData(u'Dyntaxa class')
+                        #
+                        newtaxon = variablenode.getData(u'Dyntaxa class')
+                        #
                         taxontrophy = variablenode.getData(u'PEG trophy')
+                        if taxontrophy in selected_trophy_list:
+                            taxontrophy = u'-aggregated-'
+                        #
                         parameter = variablenode.getData(u'Parameter')
                         unit = variablenode.getData(u'Unit')
                         
-                        agg_tuple = (taxonclass, taxontrophy, parameter, unit)
+                        agg_tuple = (newtaxon, taxontrophy, parameter, unit)
                         if agg_tuple in aggregatedvariables:
                             aggregatedvariables[agg_tuple] = value + aggregatedvariables[agg_tuple]
                         else:
                             aggregatedvariables[agg_tuple] = value
                     except:
-                        print('DEBUG: Value not valid float.')
+                        print('DEBUG: Value not valid float: ' + unicode(variablenode.getData(u'Value')))
                 #Remove all variables for this sample.
                 samplenode.removeAllChildren()
                 # Add the new aggregated variables instead.  
                 for variablekeytuple in aggregatedvariables:
-                    taxonclass, taxontrophy, parameter, unit = variablekeytuple
+                    newtaxon, taxontrophy, parameter, unit = variablekeytuple
                     #
                     newvariable = mmfw.VariableNode()
                     samplenode.addChild(newvariable)    
                     #
-                    newvariable.addData(u'Reported taxon name', taxonclass)
+                    newvariable.addData(u'Reported taxon name', newtaxon)
                     newvariable.addData(u'PEG trophy', taxontrophy)
                     newvariable.addData(u'Parameter', parameter)
                     newvariable.addData(u'Unit', unit)
@@ -135,3 +159,18 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         #
         self.__analysedatasetactivity.updateCurrentData()    
 
+    def __updateSelectDataAlternatives(self):
+        """ """
+        currentdata = self.__analysedatasetactivity.getCurrentData()
+        if not currentdata:
+            return # Empty data.
+        #
+        trophyset = set()
+        #
+        for visitnode in currentdata.getChildren():
+            for samplenode in visitnode.getChildren():
+                for variablenode in samplenode.getChildren():
+                    trophyset.add(variablenode.getData(u'PEG trophy'))
+        # Selection lists.
+        self._trophy_listview.setList(sorted(trophyset))
+            

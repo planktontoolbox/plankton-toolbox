@@ -28,11 +28,11 @@ import os.path
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 #import datetime
-import copy
+#import copy
 import plankton_toolbox.activities.activity_base as activity_base
-import plankton_toolbox.tools.tool_manager as tool_manager
+#import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.toolbox.utils_qt as utils_qt
-import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
+#import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 import plankton_toolbox.activities.analyse_datasets_tab1 as tab1
 import plankton_toolbox.activities.analyse_datasets_tab2 as tab2
 import plankton_toolbox.activities.analyse_datasets_tab3 as tab3
@@ -202,6 +202,11 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         tab4.AnalyseDatasetsTab4().update()
         tab5.AnalyseDatasetsTab5().update()
         tab6.AnalyseDatasetsTab6().update()
+
+    def getSelectDataDict(self):
+        """ """
+        return tab4.AnalyseDatasetsTab4().getSelectDataDict()
+
 
 #    # ===== TAB: Select dataset(s) ===== 
 #    def __contentSelectDatasets(self):

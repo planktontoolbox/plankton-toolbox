@@ -24,15 +24,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import os.path
+#import os.path
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 #import datetime
-import copy
-import plankton_toolbox.activities.activity_base as activity_base
-import plankton_toolbox.tools.tool_manager as tool_manager
+#import copy
+#import plankton_toolbox.activities.activity_base as activity_base
+#import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.toolbox.utils_qt as utils_qt
-import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
+#import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 import mmfw
 
 @mmfw.singleton
@@ -49,15 +49,34 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         """ """
         self.__startdate_edit.clear()
         self.__enddate_edit.clear()
-        self.__select_stations_model.clear()
-        self.__selected_minmaxdepth_model.clear()
-#        self.__selected_taxon_model.clear()
-        self.__selected_trophy_model.clear()
+        self._stations_listview.clear()
+        self._minmaxdepth_listview.clear()
+        self._taxon_listview.clear()
+        self._trophy_listview.clear()
         
     def update(self):
         """ """
         self.clear()        
         self.__updateSelectDataAlternatives()
+
+    def getSelectDataDict(self):
+        """ """
+        selected_dict = {}        
+        # Start date and end date.
+        selected_dict[u'Start date'] = unicode(self.__startdate_edit.text())
+        selected_dict[u'End date'] = unicode(self.__enddate_edit.text())
+        # Selection lists.
+        selected_dict[u'Stations'] = self._stations_listview.getSelectedDataList()
+        selected_dict[u'Min max depth'] = self._minmaxdepth_listview.getSelectedDataList()
+        selected_dict[u'Taxon'] = self._taxon_listview.getSelectedDataList()
+        selected_dict[u'Trophy'] = self._trophy_listview.getSelectedDataList()
+        # TEST
+        print('DEBUG: Selected stations: ' + ', '.join(selected_dict[u'Stations']))
+        print('DEBUG: Selected_min max depth: ' + ', '.join(selected_dict[u'Min max depth']))
+        print('DEBUG: Selected taxon: ' + ', '.join(selected_dict[u'Taxon']))
+        print('DEBUG: Selected trophy: ' + ', '.join(selected_dict[u'Trophy']))
+        #
+        return selected_dict
         
     # ===== TAB: Select data ===== 
     def contentSelectData(self):
@@ -73,37 +92,53 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         self.__startdate_edit = QtGui.QLineEdit("")
         self.__enddate_edit = QtGui.QLineEdit("")
         # Stations
-        stations_listview = QtGui.QListView()
-        stations_listview.setMaximumHeight(100)
-        self.__select_stations_model = QtGui.QStandardItemModel()
-        stations_listview.setModel(self.__select_stations_model)
-#        stations_listview.setSelectionMode(QtGui.QAbstractItemView.ContiguousSelection)
+        self._stations_listview = utils_qt.SelectableQListView()
+        self._stations_listview.setMaximumHeight(100)
         # Min-max depth.
-        minmaxdepth_listview = QtGui.QListView()
-        minmaxdepth_listview.setMaximumHeight(100)
-        self.__selected_minmaxdepth_model = QtGui.QStandardItemModel()
-        minmaxdepth_listview.setModel(self.__selected_minmaxdepth_model)
+        self._minmaxdepth_listview = utils_qt.SelectableQListView()
+        self._minmaxdepth_listview.setMaximumHeight(100)
+        # Taxon.
+        self._taxon_listview = utils_qt.SelectableQListView()
+        self._taxon_listview.setMaximumHeight(100)
         # Trophy.
-        trophy_listview = QtGui.QListView()
-        trophy_listview.setMaximumHeight(100)
-        self.__selected_trophy_model = QtGui.QStandardItemModel()
-        trophy_listview.setModel(self.__selected_trophy_model)
+        self._trophy_listview = utils_qt.SelectableQListView()
+        self._trophy_listview.setMaximumHeight(100)
+        #
+        clicklabel1 = utils_qt.ClickableQLabel("Clear all") # TODO:
+        clicklabel2 = utils_qt.ClickableQLabel("Mark all") # TODO:
+        clicklabel3 = utils_qt.ClickableQLabel("Clear all") # TODO:
+        clicklabel4 = utils_qt.ClickableQLabel("Mark all") # TODO:
+        clicklabel5 = utils_qt.ClickableQLabel("Clear all") # TODO:
+        clicklabel6 = utils_qt.ClickableQLabel("Mark all") # TODO:
+        clicklabel7 = utils_qt.ClickableQLabel("Clear all") # TODO:
+        clicklabel8 = utils_qt.ClickableQLabel("Mark all") # TODO:
+        self.connect(clicklabel1, QtCore.SIGNAL("clicked()"), self._stations_listview.uncheckAll)                
+        self.connect(clicklabel2, QtCore.SIGNAL("clicked()"), self._stations_listview.checkAll)                
+        self.connect(clicklabel3, QtCore.SIGNAL("clicked()"), self._minmaxdepth_listview.uncheckAll)                
+        self.connect(clicklabel4, QtCore.SIGNAL("clicked()"), self._minmaxdepth_listview.checkAll)                
+        self.connect(clicklabel5, QtCore.SIGNAL("clicked()"), self._taxon_listview.uncheckAll)                
+        self.connect(clicklabel6, QtCore.SIGNAL("clicked()"), self._taxon_listview.checkAll)                
+        self.connect(clicklabel7, QtCore.SIGNAL("clicked()"), self._trophy_listview.uncheckAll)                
+        self.connect(clicklabel8, QtCore.SIGNAL("clicked()"), self._trophy_listview.checkAll)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         gridrow = 0
         label1 = QtGui.QLabel("Date from:")
         label2 = QtGui.QLabel("Stations:")
         label3 = QtGui.QLabel("Min-max depth:")
-        label4 = QtGui.QLabel("Trophy:")
+        label4 = QtGui.QLabel("Taxon:")
+        label5 = QtGui.QLabel("Trophy:")
         form1.addWidget(label1, gridrow, 0, 1, 1)
         form1.addWidget(label2, gridrow, 1, 1, 3)
         form1.addWidget(label3, gridrow, 4, 1, 3)
         form1.addWidget(label4, gridrow, 7, 1, 3)
+        form1.addWidget(label5, gridrow, 10, 1, 3)
         gridrow += 1
         form1.addWidget(self.__startdate_edit, gridrow, 0, 1, 1)
-        form1.addWidget(stations_listview, gridrow, 1, 4, 3)
-        form1.addWidget(minmaxdepth_listview, gridrow, 4, 4, 3)
-        form1.addWidget(trophy_listview, gridrow, 7, 4, 3)
+        form1.addWidget(self._stations_listview, gridrow, 1, 4, 3)
+        form1.addWidget(self._minmaxdepth_listview, gridrow, 4, 4, 3)
+        form1.addWidget(self._taxon_listview, gridrow, 7, 4, 3)
+        form1.addWidget(self._trophy_listview, gridrow, 10, 4, 3)
         gridrow += 1
         label1 = QtGui.QLabel("Date to:")
         form1.addWidget(label1, gridrow, 0, 1, 1)
@@ -111,18 +146,14 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         form1.addWidget(self.__enddate_edit, gridrow, 0, 1, 1)
         gridrow += 1
         gridrow += 1
-        label1 = utils_qt.ClickableQLabel("Clear all") # TODO:
-        label2 = utils_qt.ClickableQLabel("Mark all") # TODO:
-        label3 = utils_qt.ClickableQLabel("Clear all") # TODO:
-        label4 = utils_qt.ClickableQLabel("Mark all") # TODO:
-        label5 = utils_qt.ClickableQLabel("Clear all") # TODO:
-        label6 = utils_qt.ClickableQLabel("Mark all") # TODO:
-        form1.addWidget(label1, gridrow, 1, 1, 1)
-        form1.addWidget(label2, gridrow, 2, 1, 1)
-        form1.addWidget(label3, gridrow, 4, 1, 1)
-        form1.addWidget(label4, gridrow, 5, 1, 1)
-        form1.addWidget(label5, gridrow, 7, 1, 1)
-        form1.addWidget(label6, gridrow, 8, 1, 1)
+        form1.addWidget(clicklabel1, gridrow, 1, 1, 1)
+        form1.addWidget(clicklabel2, gridrow, 2, 1, 1)
+        form1.addWidget(clicklabel3, gridrow, 4, 1, 1)
+        form1.addWidget(clicklabel4, gridrow, 5, 1, 1)
+        form1.addWidget(clicklabel5, gridrow, 7, 1, 1)
+        form1.addWidget(clicklabel6, gridrow, 8, 1, 1)
+        form1.addWidget(clicklabel7, gridrow, 10, 1, 1)
+        form1.addWidget(clicklabel8, gridrow, 11, 1, 1)
         #
         layout = QtGui.QVBoxLayout()
         layout.addWidget(introlabel)
@@ -143,6 +174,7 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         enddate = '0000-00-00'
         stationset = set()
         minmaxdepthset = set()
+        taxonset = set()
         trophyset = set()
         #
         for visitnode in currentdata.getChildren():
@@ -153,72 +185,17 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
                 depthstring = samplenode.getData(u'Sample min depth') + '-' + samplenode.getData(u'Sample max depth')
                 minmaxdepthset.add(depthstring)
                 for variablenode in samplenode.getChildren():
-                    trophyset.add(variablenode.getData(u'Trophy'))
-        #
-        stationlist = sorted(stationset)
-        minmaxdepthlist = sorted(minmaxdepthset)
-        trophylist = sorted(trophyset)
-        #
+                    taxonset.add(variablenode.getData(u'Reported taxon name'))
+                    trophyset.add(variablenode.getData(u'PEG trophy'))
         # Start date and end date.
         self.__startdate_edit.setText(startdate)
         self.__enddate_edit.setText(enddate)
-        # Stations.
-        self.__select_stations_model.clear()        
-        for station in stationlist:
-            item = QtGui.QStandardItem(station)
-            item.setCheckState(QtCore.Qt.Checked)
-            item.setCheckable(True)
-            self.__select_stations_model.appendRow(item)
-        # Min-max depth.
-        self.__selected_minmaxdepth_model.clear()
-        for minmaxdepth in minmaxdepthlist:
-            item = QtGui.QStandardItem(minmaxdepth)
-            item.setCheckState(QtCore.Qt.Checked)
-            item.setCheckable(True)
-            self.__selected_minmaxdepth_model.appendRow(item)
-        # Trophy.
-        self.__selected_trophy_model.clear()
-        for trophy in trophylist:
-            item = QtGui.QStandardItem(trophy)
-            item.setCheckState(QtCore.Qt.Checked)
-            item.setCheckable(True)
-            self.__selected_trophy_model.appendRow(item)
-            
+        # Selection lists.
+        self._stations_listview.setList(sorted(stationset))
+        self._minmaxdepth_listview.setList(sorted(minmaxdepthset))
+        self._taxon_listview.setList(sorted(taxonset))
+        self._trophy_listview.setList(sorted(trophyset))
             
         # TEST
-        self. __checkSelectDataAlternatives()    
-
-
-    def __checkSelectDataAlternatives(self):
-        """ """        
-        self._selected_start_date = None
-        self._selected_end_date =None
-        self._selected_stations = []
-        self._selected_minmaxdepth = []
-        self._selected_trophy = []
-
-        # Start date and end date.
-        self._selected_start_date = unicode(self.__startdate_edit.text())
-        self._selected_end_date = unicode(self.__enddate_edit.text())
-        # Stations.
-        for rowindex in range(self.__select_stations_model.rowCount()):
-            item = self.__select_stations_model.item(rowindex, 0)
-            if item.checkState() == QtCore.Qt.Checked:
-                self._selected_stations.append(unicode(item.text()))
-        # Min-max depth.
-        for rowindex in range(self.__selected_minmaxdepth_model.rowCount()):
-            item = self.__selected_minmaxdepth_model.item(rowindex, 0)
-            if item.checkState() == QtCore.Qt.Checked:
-                self._selected_minmaxdepth.append(unicode(item.text()))
-        # Trophy.
-        for rowindex in range(self.__selected_trophy_model.rowCount()):
-            item = self.__selected_trophy_model.item(rowindex, 0)
-            if item.checkState() == QtCore.Qt.Checked:
-                self._selected_trophy.append(unicode(item.text()))
-
-        # TEST
-        print('DEBUG: _selected_stations: ' + ', '.join(self._selected_stations))
-        print('DEBUG: _selected_minmaxdepth: ' + ', '.join(self._selected_minmaxdepth))
-        print('DEBUG: _selected_trophy: ' + ', '.join(self._selected_trophy))
-
+        self.getSelectDataDict()    
 
