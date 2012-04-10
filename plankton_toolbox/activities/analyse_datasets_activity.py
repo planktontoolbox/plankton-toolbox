@@ -207,17 +207,93 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
     # ===== TAB: Aggregate data ===== 
     def __contentAggregateData(self):
         """ """
+        widget = QtGui.QWidget()
         # Active widgets and connections.
+        introlabel = utils_qt.RichTextQLabel()
+        introlabel.setText("""
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
+        tempor incididunt ut labore et dolore magna aliqua.
+        """)
 
-        # Layout.
-        widget = QtGui.QWidget()        
+
+
+        # Active widgets and connections.
+        self.__aggregate_taxon_list = QtGui.QComboBox()
+        #
+        self.__aggregate_taxon_list.addItems([
+            "<none>",
+            "Class",
+            "Order",
+            "Family",
+            "Species"
+            ])
+        self.__aggregatecurrentdata_button = QtGui.QPushButton("Aggregate current data")
+        self.connect(self.__aggregatecurrentdata_button, QtCore.SIGNAL("clicked()"), self.__aggregateCurrentData)                
+        # Layout widgets.
+        hbox1 = QtGui.QHBoxLayout()
+        hbox1.addStretch(5)
+        hbox1.addWidget(QtGui.QLabel("Aggregate over taxon level:"))
+        hbox1.addWidget(self.__aggregate_taxon_list)
+        hbox1.addWidget(self.__aggregatecurrentdata_button)
+        
+        
+        
+        
+        #
         layout = QtGui.QVBoxLayout()
-        widget.setLayout(layout)
-#        layout.addWidget(selectionbox)
-#        layout.addWidget(resultbox)
+        layout.addWidget(introlabel)
+        layout.addStretch(5)
+        layout.addLayout(hbox1)
+        widget.setLayout(layout)                
         #
         return widget
 
+    def __aggregateCurrentData(self):
+        """ """
+        #
+        for visitnode in self.__analysisdata.getChildren(): 
+            for samplenode in visitnode.getChildren():
+                aggregatedvariables = {}
+                for variablenode in samplenode.getChildren():
+                    value = variablenode.getData(u'Value')
+                    # Use values containing valid float data.
+                    try:
+                        value = float(value) 
+                        taxonclass = variablenode.getData(u'Dyntaxa class')
+                        taxontrophy = variablenode.getData(u'PEG trophy')
+                        parameter = variablenode.getData(u'Parameter')
+                        unit = variablenode.getData(u'Unit')
+                        
+                        agg_tuple = (taxonclass, taxontrophy, parameter, unit)
+                        if agg_tuple in aggregatedvariables:
+                            aggregatedvariables[agg_tuple] = value + aggregatedvariables[agg_tuple]
+                        else:
+                            aggregatedvariables[agg_tuple] = value
+                    except:
+                        print('DEBUG: Value not valid float.')
+                #Remove all variables for this sample.
+                samplenode.removeAllChildren()
+                # Add the new aggregated variables instead.  
+                for variablekeytuple in aggregatedvariables:
+                    taxonclass, taxontrophy, parameter, unit = variablekeytuple
+                    #
+                    newvariable = mmfw.VariableNode()
+                    samplenode.addChild(newvariable)    
+                    #
+                    newvariable.addData(u'Reported taxon name', taxonclass)
+                    newvariable.addData(u'PEG trophy', taxontrophy)
+                    newvariable.addData(u'Parameter', parameter)
+                    newvariable.addData(u'Unit', unit)
+                    newvariable.addData(u'Value', aggregatedvariables[variablekeytuple])
+
+        
+        self.__updateCurrentData()    
+        # Add rows in comboboxes.
+        self.__reloadComboboxes()    
+        
+        
+        
+        
     # ===== TAB: Select data ===== 
     def __contentSelectData(self):
         """ """
@@ -236,6 +312,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         stations_listview.setMaximumHeight(100)
         self.__select_stations_model = QtGui.QStandardItemModel()
         stations_listview.setModel(self.__select_stations_model)
+#        stations_listview.setSelectionMode(QtGui.QAbstractItemView.ContiguousSelection)
         # Min-max depth.
         minmaxdepth_listview = QtGui.QListView()
         minmaxdepth_listview.setMaximumHeight(100)
@@ -254,19 +331,33 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         label3 = QtGui.QLabel("Min-max depth:")
         label4 = QtGui.QLabel("Trophy:")
         form1.addWidget(label1, gridrow, 0, 1, 1)
-        form1.addWidget(label2, gridrow, 1, 1, 1)
-        form1.addWidget(label3, gridrow, 2, 1, 1)
-        form1.addWidget(label4, gridrow, 3, 1, 1)
+        form1.addWidget(label2, gridrow, 1, 1, 3)
+        form1.addWidget(label3, gridrow, 4, 1, 3)
+        form1.addWidget(label4, gridrow, 7, 1, 3)
         gridrow += 1
         form1.addWidget(self.__startdate_edit, gridrow, 0, 1, 1)
-        form1.addWidget(stations_listview, gridrow, 1, 4, 1)
-        form1.addWidget(minmaxdepth_listview, gridrow, 2, 4, 1)
-        form1.addWidget(trophy_listview, gridrow, 3, 4, 1)
+        form1.addWidget(stations_listview, gridrow, 1, 4, 3)
+        form1.addWidget(minmaxdepth_listview, gridrow, 4, 4, 3)
+        form1.addWidget(trophy_listview, gridrow, 7, 4, 3)
         gridrow += 1
         label1 = QtGui.QLabel("Date to:")
         form1.addWidget(label1, gridrow, 0, 1, 1)
         gridrow += 1
         form1.addWidget(self.__enddate_edit, gridrow, 0, 1, 1)
+        gridrow += 1
+        gridrow += 1
+        label1 = utils_qt.ClickableQLabel("Clear all") # TODO:
+        label2 = utils_qt.ClickableQLabel("Mark all") # TODO:
+        label3 = utils_qt.ClickableQLabel("Clear all") # TODO:
+        label4 = utils_qt.ClickableQLabel("Mark all") # TODO:
+        label5 = utils_qt.ClickableQLabel("Clear all") # TODO:
+        label6 = utils_qt.ClickableQLabel("Mark all") # TODO:
+        form1.addWidget(label1, gridrow, 1, 1, 1)
+        form1.addWidget(label2, gridrow, 2, 1, 1)
+        form1.addWidget(label3, gridrow, 4, 1, 1)
+        form1.addWidget(label4, gridrow, 5, 1, 1)
+        form1.addWidget(label5, gridrow, 7, 1, 1)
+        form1.addWidget(label6, gridrow, 8, 1, 1)
         #
         layout = QtGui.QVBoxLayout()
         layout.addWidget(introlabel)
@@ -299,26 +390,70 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         stationlist = sorted(stationset)
         minmaxdepthlist = sorted(minmaxdepthset)
         trophylist = sorted(trophyset)
-
-
-#        self.__startdate_edit
-#        self.__enddate_edit
-#        self.__select_stations_model
-#        self.__selected_minmaxdepth_model
-#        self.__selected_trophy_model
-     
         #
+        # Start date and end date.
+        self.__startdate_edit.setText(startdate)
+        self.__enddate_edit.setText(enddate)
+        # Stations.
         self.__select_stations_model.clear()        
         for station in stationlist:
             item = QtGui.QStandardItem(station)
             item.setCheckState(QtCore.Qt.Checked)
             item.setCheckable(True)
             self.__select_stations_model.appendRow(item)
-    
-    
-    
-    
-    
+        # Min-max depth.
+        self.__selected_minmaxdepth_model.clear()
+        for minmaxdepth in minmaxdepthlist:
+            item = QtGui.QStandardItem(minmaxdepth)
+            item.setCheckState(QtCore.Qt.Checked)
+            item.setCheckable(True)
+            self.__selected_minmaxdepth_model.appendRow(item)
+        # Trophy.
+        self.__selected_trophy_model.clear()
+        for trophy in trophylist:
+            item = QtGui.QStandardItem(trophy)
+            item.setCheckState(QtCore.Qt.Checked)
+            item.setCheckable(True)
+            self.__selected_trophy_model.appendRow(item)
+            
+            
+        # TEST
+        self. __checkSelectDataAlternatives()    
+
+
+    def __checkSelectDataAlternatives(self):
+        """ """        
+        self._selected_start_date = None
+        self._selected_end_date =None
+        self._selected_stations = []
+        self._selected_minmaxdepth = []
+        self._selected_trophy = []
+
+        # Start date and end date.
+        self._selected_start_date = unicode(self.__startdate_edit.text())
+        self._selected_end_date = unicode(self.__enddate_edit.text())
+        # Stations.
+        for rowindex in range(self.__select_stations_model.rowCount()):
+            item = self.__select_stations_model.item(rowindex, 0)
+            if item.checkState() == QtCore.Qt.Checked:
+                self._selected_stations.append(unicode(item.text()))
+        # Min-max depth.
+        for rowindex in range(self.__selected_minmaxdepth_model.rowCount()):
+            item = self.__selected_minmaxdepth_model.item(rowindex, 0)
+            if item.checkState() == QtCore.Qt.Checked:
+                self._selected_minmaxdepth.append(unicode(item.text()))
+        # Trophy.
+        for rowindex in range(self.__selected_trophy_model.rowCount()):
+            item = self.__selected_trophy_model.item(rowindex, 0)
+            if item.checkState() == QtCore.Qt.Checked:
+                self._selected_trophy.append(unicode(item.text()))
+
+        # TEST
+        print('DEBUG: _selected_stations: ' + ', '.join(self._selected_stations))
+        print('DEBUG: _selected_minmaxdepth: ' + ', '.join(self._selected_minmaxdepth))
+        print('DEBUG: _selected_trophy: ' + ', '.join(self._selected_trophy))
+
+
     # ===== TAB: Prepared graphs ===== 
     def __contentPreparedGraphs(self):
         """ """
@@ -611,16 +746,19 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
     def __clearComboboxes(self):
         """ """
         # Clear rows in comboboxes.
+        # For tab "Generic graphs".        
         self.__x_axis_column_list.clear()
         self.__x_axis_parameter_list.clear()
         self.__y_axis_column_list.clear()
         self.__y_axis_parameter_list.clear()
         self.__x_axis_column_list.addItems([u"Parameter:"])
         self.__y_axis_column_list.addItems([u"Parameter:"])
+        # For tab "Select data".
 
     def __reloadComboboxes(self):
         """ """
         # Reload the content of the rows in comboboxes.
+        # For tab "Generic graphs".        
         self.__x_axis_column_list.addItems([item[u'Header'] for item in self.__analysisdata.getExportTableColumns()])
         self.__y_axis_column_list.addItems([item[u'Header'] for item in self.__analysisdata.getExportTableColumns()])
         # Search for all parameters in current data.
@@ -638,7 +776,6 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         self.__x_axis_parameter_list.setEnabled(True)
         self.__y_axis_parameter_list.setEnabled(True)
         #
-        #
-        #
+        # For tab "Select data".
         self.__updateSelectDataAlternatives()
 

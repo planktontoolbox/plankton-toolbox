@@ -67,6 +67,10 @@ class DataNode(object):
         """ """
         return self._children
         
+    def removeAllChildren(self):
+        """ """
+        self._children = []
+        
     def addData(self, key, value):
         """ """
         self._datadict[key] = value
@@ -125,6 +129,11 @@ class DatasetNode(mmfw.DatasetBase, DataNode):
         self._visit_count += 1
         super(DatasetNode, self).addChild(child)
 
+    def removeAllChildren(self):
+        """ """
+        self._visit_count -= len(self._children)
+        self._children = []
+        
     def getVisitLookup(self, idString):
         """ """
         return self._visit_lookup.get(idString, None)
@@ -275,6 +284,11 @@ class VisitNode(DataNode):
         self.getParent()._sample_count += 1
         super(VisitNode, self).addChild(child)
 
+    def removeAllChildren(self):
+        """ """
+        self.getParent()._sample_count -= len(self._children)
+        self._children = []
+        
     def setIdString(self, idstring):
         """ """
         self._idstring = idstring
@@ -303,6 +317,11 @@ class SampleNode(DataNode):
         self.getParent().getParent()._variable_count += 1
         super(SampleNode, self).addChild(child)
 
+    def removeAllChildren(self):
+        """ """
+        self.getParent().getParent()._variable_count -= len(self._children)
+        self._children = []
+        
     def setIdString(self, idstring):
         """ """
         self._idstring = idstring
@@ -334,8 +353,12 @@ class VariableNode(DataNode):
         
     def addChild(self, child):
         """ """
-        raise UserWarning("AddChild failed. Variables can't add children.")
+        raise UserWarning("VariableNode.addChild() failed. Variables can't contain children.")
 
+    def removeAllChildren(self):
+        """ """
+        raise UserWarning("VariableNode.removeAllChildren() failed. Variables can't contain children.")
+        
     def setIdString(self, idstring):
         """ """
         self._idstring = idstring
