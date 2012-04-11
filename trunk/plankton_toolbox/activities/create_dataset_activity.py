@@ -46,20 +46,20 @@ class CreateDatasetActivity(activity_base.ActivityBase):
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
         # Add activity name at top.
-        self.__activityheader = QtGui.QLabel('<h2>' + self.objectName() + '</h2>', self)
-        self.__activityheader.setTextFormat(QtCore.Qt.RichText)
-        self.__activityheader.setAlignment(QtCore.Qt.AlignHCenter)
-#        self.__activityheader.setStyleSheet(""" 
+        self._activityheader = QtGui.QLabel('<h2>' + self.objectName() + '</h2>', self)
+        self._activityheader.setTextFormat(QtCore.Qt.RichText)
+        self._activityheader.setAlignment(QtCore.Qt.AlignHCenter)
+#        self._activityheader.setStyleSheet(""" 
 #            * { color: white; background-color: #00677f; }
 #            """)
-        contentLayout.addWidget(self.__activityheader)
+        contentLayout.addWidget(self._activityheader)
         # Add content to the activity.
         tabWidget = QtGui.QTabWidget()
         contentLayout.addWidget(tabWidget)
-        tabWidget.addTab(self.__contentPW(), "(PW)")
-        tabWidget.addTab(self.__contentNewFormat(), "(New format...)")
+        tabWidget.addTab(self._contentPW(), "(PW)")
+        tabWidget.addTab(self._contentNewFormat(), "(New format...)")
 
-    def __contentPW(self):
+    def _contentPW(self):
         """ """
         # Active widgets and connections.
 
@@ -72,7 +72,7 @@ class CreateDatasetActivity(activity_base.ActivityBase):
         #
         return widget
 
-    def __contentNewFormat(self):
+    def _contentNewFormat(self):
         """ """
         # Active widgets and connections.
 

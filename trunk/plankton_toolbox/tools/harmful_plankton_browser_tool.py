@@ -43,8 +43,8 @@ class HarmfulPlanktonBrowserTool(tool_base.ToolBase):
     def __init__(self, name, parentwidget):
         """ """
         # Create model.
-        self.__harmfulplankton_object = toolbox_resources.ToolboxResources().getResourceHarmfulPlankton()
-        self.__marinespecies_url = None
+        self._harmfulplankton_object = toolbox_resources.ToolboxResources().getResourceHarmfulPlankton()
+        self._marinespecies_url = None
         # Initialize parent. Should be called after other 
         # initialization since the base class calls _createContent().
         super(HarmfulPlanktonBrowserTool, self).__init__(name, parentwidget)
@@ -58,35 +58,35 @@ class HarmfulPlanktonBrowserTool(tool_base.ToolBase):
         content = self._createScrollableContent()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
-        contentLayout.addLayout(self.__contentTaxonList())
-        contentLayout.addLayout(self.__contentItem())
-        contentLayout.addLayout(self.__contentControl())
+        contentLayout.addLayout(self._contentTaxonList())
+        contentLayout.addLayout(self._contentItem())
+        contentLayout.addLayout(self._contentControl())
         # Used when toolbox resource has changed.        
-        self.connect(toolbox_resources.ToolboxResources(), QtCore.SIGNAL("harmfulPlanktonResourceLoaded"), self.__harmfulPlanktonRefresh)
+        self.connect(toolbox_resources.ToolboxResources(), QtCore.SIGNAL("harmfulPlanktonResourceLoaded"), self._harmfulPlanktonRefresh)
 
-    def __contentTaxonList(self):
+    def _contentTaxonList(self):
         """ """
         layout = QtGui.QVBoxLayout()
-        self.__tableView = utils_qt.ToolboxQTableView()
-        layout.addWidget(self.__tableView)
+        self._tableView = utils_qt.ToolboxQTableView()
+        layout.addWidget(self._tableView)
         # Data model.        
-        self.__model = HarmfulPlanktonTableModel(self.__harmfulplankton_object)
-        self.__tableView.setTablemodel(self.__model)
+        self._model = HarmfulPlanktonTableModel(self._harmfulplankton_object)
+        self._tableView.setTablemodel(self._model)
         #
-        self.connect(self.__tableView.selectionModel, QtCore.SIGNAL("currentChanged(QModelIndex, QModelIndex)"), self.__showItemInfo)
-        self.connect(self.__tableView.selectionModel, QtCore.SIGNAL("selectionChanged(QModelIndex, QModelIndex)"), self.__showItemInfo)
+        self.connect(self._tableView.selectionModel, QtCore.SIGNAL("currentChanged(QModelIndex, QModelIndex)"), self._showItemInfo)
+        self.connect(self._tableView.selectionModel, QtCore.SIGNAL("selectionChanged(QModelIndex, QModelIndex)"), self._showItemInfo)
         #
         return layout
     
-    def __contentItem(self):
+    def _contentItem(self):
         """ """
         # Active widgets and connections.
-        self.__scientificname_label = QtGui.QLabel('-')
+        self._scientificname_label = QtGui.QLabel('-')
         # Layout widgets.
         form = QtGui.QFormLayout()
-        form.addRow("Scientific name:", self.__scientificname_label)
+        form.addRow("Scientific name:", self._scientificname_label)
 #        hbox = QtGui.QHBoxLayout()
-#        hbox.addWidget(self.__openmarinespecies)
+#        hbox.addWidget(self._openmarinespecies)
 #        hbox.addStretch(5)
         layout = QtGui.QVBoxLayout()
         layout.addLayout(form)
@@ -94,54 +94,54 @@ class HarmfulPlanktonBrowserTool(tool_base.ToolBase):
         #
         return layout
 
-    def __contentControl(self):
+    def _contentControl(self):
         """ """
         # Active widgets and connections.
-        self.__loadresource_button = QtGui.QPushButton("Load harmful plankton resource")
-        self.connect(self.__loadresource_button, QtCore.SIGNAL("clicked()"), self.__loadResource)                
-        self.__openmarinespecies = QtGui.QPushButton("Open marinespecies.org")
-        self.connect(self.__openmarinespecies, QtCore.SIGNAL("clicked()"), self.__openMarineSpecies)                
+        self._loadresource_button = QtGui.QPushButton("Load harmful plankton resource")
+        self.connect(self._loadresource_button, QtCore.SIGNAL("clicked()"), self._loadResource)                
+        self._openmarinespecies = QtGui.QPushButton("Open marinespecies.org")
+        self.connect(self._openmarinespecies, QtCore.SIGNAL("clicked()"), self._openMarineSpecies)                
         # Layout widgets.
         layout = QtGui.QHBoxLayout()
-        layout.addWidget(self.__openmarinespecies)
+        layout.addWidget(self._openmarinespecies)
         layout.addStretch(5)
-        layout.addWidget(self.__loadresource_button)
+        layout.addWidget(self._loadresource_button)
         #
         return layout
 
-    def __showItemInfo(self, index):
+    def _showItemInfo(self, index):
         """ """
         #
-        taxon = self.__harmfulplankton_object.getSortedNameList()[index.row()]
-        self.__scientificname_label.setText(
+        taxon = self._harmfulplankton_object.getSortedNameList()[index.row()]
+        self._scientificname_label.setText(
             '<b>' + 
             '<i>' + taxon.get('Scientific name', '') + '</i>' + 
             '&nbsp;&nbsp;&nbsp;' + taxon.get('Author', '') + 
             '</b>')
-        self.__marinespecies_url = \
+        self._marinespecies_url = \
                 u'http://www.marinespecies.org/' + \
                 u'hab/aphia.php?p=taxdetails&id=' + \
                 unicode(taxon['Aphia id'])
 
 
-    def __openMarineSpecies(self):
+    def _openMarineSpecies(self):
         """ Launch web browser and use show marked species at marinespecies.org. """
-        if not self.__marinespecies_url:
+        if not self._marinespecies_url:
             mmfw.Logging().log("Failed to open www.marinespecies.org. No row selected.")
             return
-        webbrowser.open(self.__marinespecies_url)
+        webbrowser.open(self._marinespecies_url)
 
-    def __loadResource(self):
+    def _loadResource(self):
         """ """
         # All resources are needed.
         toolbox_resources.ToolboxResources().loadUnloadedResourceDyntaxa()
         toolbox_resources.ToolboxResources().loadResourceHarmfulPlankton()
 
-    def __harmfulPlanktonRefresh(self):
+    def _harmfulPlanktonRefresh(self):
         """ """
-        self.__marinespecies_url = None
-        self.__model.reset()
-        self.__tableView.resizeColumnsToContents() # Only visible columns.
+        self._marinespecies_url = None
+        self._model.reset()
+        self._tableView.resizeColumnsToContents() # Only visible columns.
         
 class HarmfulPlanktonTableModel(QtCore.QAbstractTableModel):
     """
@@ -154,19 +154,19 @@ class HarmfulPlanktonTableModel(QtCore.QAbstractTableModel):
  
     """
     def __init__(self, dataset):
-        self.__dataset = dataset
-#        self.__nameandsizelist = self.__dataset.getNameAndSizeList()
+        self._dataset = dataset
+#        self._nameandsizelist = self._dataset.getNameAndSizeList()
         # Initialize parent.
         super(HarmfulPlanktonTableModel, self).__init__()
         
     def setDataset(self, dataset):
         """ """
-        self.__dataset = dataset
+        self._dataset = dataset
         
     def rowCount(self, parent=QtCore.QModelIndex()):
         """ """
-        if self.__dataset:
-            return len(self.__dataset.getSortedNameList())
+        if self._dataset:
+            return len(self._dataset.getSortedNameList())
         else:
             return 0
 
@@ -194,16 +194,16 @@ class HarmfulPlanktonTableModel(QtCore.QAbstractTableModel):
         if role == QtCore.Qt.DisplayRole:
             if index.isValid():
                 if index.column() == 0:
-                    harmfulplankton = self.__dataset.getSortedNameList()[index.row()]
+                    harmfulplankton = self._dataset.getSortedNameList()[index.row()]
                     return QtCore.QVariant(harmfulplankton.get('Scientific name', ''))
                 if index.column() == 1:
-                    sizeclass = self.__dataset.getSortedNameList()[index.row()]
+                    sizeclass = self._dataset.getSortedNameList()[index.row()]
                     return QtCore.QVariant(sizeclass.get('Aphia id', ''))
                 if index.column() == 2:
-                    harmfulplankton = self.__dataset.getSortedNameList()[index.row()]
+                    harmfulplankton = self._dataset.getSortedNameList()[index.row()]
                     return QtCore.QVariant(harmfulplankton.get('Dyntaxa id', ''))
                 if index.column() == 3:
-                    harmfulplankton = self.__dataset.getSortedNameList()[index.row()]
+                    harmfulplankton = self._dataset.getSortedNameList()[index.row()]
                     dyntaxaresource = toolbox_resources.ToolboxResources().getResourceDyntaxa()
                     dyntaxa = dyntaxaresource.getTaxonById(harmfulplankton.get('Dyntaxa id', ''))
                     if dyntaxa:

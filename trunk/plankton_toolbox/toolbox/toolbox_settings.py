@@ -40,7 +40,7 @@ class ToolboxSettings(QtCore.QObject):
     """
     def __init__(self):
         """ """
-        self.__default_settings = {
+        self._default_settings = {
             "General": {
                 "Character encoding, txt-files": "cp1252",
                 "Character encoding, json-files": "cp1252",
@@ -73,7 +73,7 @@ class ToolboxSettings(QtCore.QObject):
                 }
             }
         }
-        self.__settings = self.__default_settings
+        self._settings = self._default_settings
         #
         QtCore.QObject.__init__(self) # TODO: Check...
         
@@ -81,27 +81,27 @@ class ToolboxSettings(QtCore.QObject):
         """ Load settings from QtCore.QSettings object. """
         serialized_settings = ui_settings.value('Toolbox settings', QtCore.QVariant('')).toByteArray()
         if len(serialized_settings) == 0:
-            self.__settings = self.__default_settings # Use default if not stored earlier.
+            self._settings = self._default_settings # Use default if not stored earlier.
         else:
-            self.__settings = pickle.loads(serialized_settings)
+            self._settings = pickle.loads(serialized_settings)
         # Emit signal.
         self.emit(QtCore.SIGNAL('settingsChanged'))
 
     def saveSettings(self, ui_settings):
         """ Store settings to QtCore.QSettings object."""
-        serialized_settings = pickle.dumps(self.__settings)
+        serialized_settings = pickle.dumps(self._settings)
         ui_settings.setValue('Toolbox settings', QtCore.QVariant(serialized_settings))
 
     def restoreDefault(self):
         """ """
         # Deep copy needed.
-        self.__settings = copy.deepcopy(self.__default_settings)
+        self._settings = copy.deepcopy(self._default_settings)
         # Emit signal.
         self.emit(QtCore.SIGNAL('settingsChanged'))
 
     def getValue(self, compoundkey, default = ''):
         """ Use compound key with field delimiter ':'. """
-        current_level_item = self.__settings
+        current_level_item = self._settings
         # Split the key and walk down in dictionary hierarchy..
         # Current_level_item will became value at last level.
         for keypart in compoundkey.split(':'):
@@ -114,7 +114,7 @@ class ToolboxSettings(QtCore.QObject):
 
     def setValue(self, compoundkey, value):
         """ Use compound key with field delimiter ':'. """
-        current_level_item = self.__settings
+        current_level_item = self._settings
         last_used_dict = current_level_item
         # Split the key and walk down in dictionary hierarchy.
         # Current_level_item will became value at final level.

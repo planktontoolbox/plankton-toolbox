@@ -32,85 +32,85 @@ import mmfw
 class Taxa(object):
     """ """
     def __init__(self,
-                 taxa_filename = u'mmfw_data/species/taxa_utf16.txt', 
-                 sizeclasses_filename = u'mmfw_data/species/sizeclasses_utf16.txt', 
-                 sizeclasses_to_taxa_filename = u'mmfw_data/species/translate_sizeclasses_to_taxa_utf16.txt', 
+                 taxa_filename = u'toolbox_data/species/taxa_utf16.txt', 
+                 sizeclasses_filename = u'toolbox_data/species/sizeclasses_utf16.txt', 
+                 sizeclasses_to_taxa_filename = u'toolbox_data/species/translate_sizeclasses_to_taxa_utf16.txt', 
 #                 harmful_filename = u'plankton_reports/data/species/harmful_utf16.txt', 
 #                 harmful_to_taxa_filename = u'plankton_reports/data/species/translate_harmful_to_taxa_utf16.txt', 
                  file_encoding = u'utf16', # utf16 utf8 cp1252
                  field_separator = u'\t', 
                  row_delimiter = u'\r\n'):
         # Parameters.
-        self.__taxa_filename = taxa_filename 
-        self.__sizeclasses_filename = sizeclasses_filename
-        self.__sizeclasses_to_taxa_filename = sizeclasses_to_taxa_filename
-#        self.__harmful_filename = harmful_filename
-#        self.__harmful_to_taxa_filename = harmful_to_taxa_filename
-        self.__file_encoding = file_encoding
-        self.__field_separator = field_separator
-        self.__row_delimiter = row_delimiter
+        self._taxa_filename = taxa_filename 
+        self._sizeclasses_filename = sizeclasses_filename
+        self._sizeclasses_to_taxa_filename = sizeclasses_to_taxa_filename
+#        self._harmful_filename = harmful_filename
+#        self._harmful_to_taxa_filename = harmful_to_taxa_filename
+        self._file_encoding = file_encoding
+        self._field_separator = field_separator
+        self._row_delimiter = row_delimiter
         # Local storage.
-        self.__taxa = {} # Main dictionary for taxa.
-        self.__sizeclasses_name_lookup = {}
-#        self.__harmful_name_lookup = {}
+        self._taxa = {} # Main dictionary for taxa.
+        self._sizeclasses_name_lookup = {}
+#        self._harmful_name_lookup = {}
         # Run.
         self.loadAllData()
 
     def loadAllData(self):
         """ """
-        self.__clear()
-        self.__loadTaxa()
-        self.__loadPegData()
-#        self.__loadHarmfulData()
-        self.__updateLookupDictionaries()
-        self.__precalculateData()
+        self._clear()
+        self._loadTaxa()
+        self._loadPegData()
+#        self._loadHarmfulData()
+        self._updateLookupDictionaries()
+        self._precalculateData()
 #        # Used for DEBUG:
-#        fileencoding = self.__file_encoding
+#        fileencoding = self._file_encoding
 #        out = codecs.open(u'DEBUG_species_list.txt', mode = 'w', 
 #                          encoding = fileencoding)
-#        out.write(json.dumps(self.__taxa, encoding = 'utf8', sort_keys=True, indent=4))
+#        out.write(json.dumps(self._taxa, encoding = 'utf8', sort_keys=True, indent=4))
 #        out.close()
 
     def getTaxaDict(self):
         """ """
-        return self.__taxa 
+        return self._taxa 
     
     def getTaxonValue(self, key, taxon_name):
         """ """
-        if taxon_name in self.__taxa:
-            return self.__taxa[taxon_name].get(key, u'')
+        if taxon_name in self._taxa:
+            return self._taxa[taxon_name].get(key, u'')
         return u''
     
     def getSizeclassValue(self, key, taxon_name, size_class):
         """ """
-        if taxon_name in self.__sizeclasses_name_lookup:
-            speciesobject = self.__sizeclasses_name_lookup[taxon_name]
+        if taxon_name in self._sizeclasses_name_lookup:
+            speciesobject = self._sizeclasses_name_lookup[taxon_name]
             if u'Size classes' in speciesobject:
                 for sizeclassobject in speciesobject[u'Size classes']:
                     if sizeclassobject.get(u'Size class', u'') == size_class:
                         return sizeclassobject.get(key, u'')
         return None 
     
-    def __clear(self):
+    def _clear(self):
         """ """
-        self.__taxa = {}
-        self.__sizeclasses_name_lookup = {}
-#        self.__harmful_name_lookup = {}
+        self._taxa = {}
+        self._sizeclasses_name_lookup = {}
+#        self._harmful_name_lookup = {}
 
-    def __updateLookupDictionaries(self):
+    def _updateLookupDictionaries(self):
         """ """
-        self.__sizeclasses_name_lookup = {}
-#        self.__harmful_name_lookup = {}
+        self._sizeclasses_name_lookup = {}
+#        self._harmful_name_lookup = {}
         #
-        for speciesobject in self.__taxa.values():
+        for speciesobject in self._taxa.values():
             if u'Size classes name' in speciesobject:
-                self.__sizeclasses_name_lookup[speciesobject[u'Size classes name']] = speciesobject
+                self._sizeclasses_name_lookup[speciesobject[u'Size classes name']] = speciesobject
 #            if u'Harmful name' in speciesobject:
-#                self.__harmful_name_lookup[speciesobject[u'Harmful name']] = speciesobject
+#                self._harmful_name_lookup[speciesobject[u'Harmful name']] = speciesobject
 
-    def __precalculateData(self):
+    def _precalculateData(self):
         """ Calculates data from loaded datasets. I.e. class and order info. """
-        for speciesobject in self.__taxa.values():
+        for speciesobject in self._taxa.values():
             counter = 0
             parentobject = speciesobject
             while parentobject:
@@ -127,15 +127,15 @@ class Taxa(object):
                         continue
                 # One step up in hierarchy.
                 if u'Parent name' in parentobject:
-                    parentobject = self.__taxa[parentobject[u'Parent name']] if parentobject[u'Parent name'] else None
+                    parentobject = self._taxa[parentobject[u'Parent name']] if parentobject[u'Parent name'] else None
                 else:
                     parentobject = None
 
-    def __loadTaxa(self):
+    def _loadTaxa(self):
         """ Creates one data object for each taxon. """
         # Open file for reading.
-        fileencoding = self.__file_encoding
-        infile = codecs.open(self.__taxa_filename, mode = 'r', 
+        fileencoding = self._file_encoding
+        infile = codecs.open(self._taxa_filename, mode = 'r', 
                              encoding = fileencoding)    
         # Iterate over rows in file.
         for rowindex, row in enumerate(infile):
@@ -143,7 +143,7 @@ class Taxa(object):
                 # Header: Scientific name    Author    Rank    Parent name
                 pass
             else:
-                row = [unicode(item.strip()) for item in row.split(self.__field_separator)] 
+                row = [unicode(item.strip()) for item in row.split(self._field_separator)] 
                 #
                 scientificname = row[0] # ScientificName
                 author = row[1] if row[1] != 'NULL' else '' # Author
@@ -151,75 +151,75 @@ class Taxa(object):
                 parentname = row[3]
                 #
                 if scientificname:
-                    if scientificname not in self.__taxa:
-                        self.__taxa[scientificname] = {}
-                    speciesobject = self.__taxa[scientificname] 
+                    if scientificname not in self._taxa:
+                        self._taxa[scientificname] = {}
+                    speciesobject = self._taxa[scientificname] 
                     speciesobject[u'Scientific name'] = scientificname
                     speciesobject[u'Author'] = author
                     speciesobject[u'Rank'] = rank
                     speciesobject[u'Parent name'] = parentname
         infile.close()
                     
-#    def __loadHarmfulData(self):
+#    def _loadHarmfulData(self):
 #        """ Adds info about harmfulness to the species objects. """
 #        #
 #        #
-#        # TODO: Use self.__harmful_to_taxa_filename if available.
+#        # TODO: Use self._harmful_to_taxa_filename if available.
 #        #
 #        #
-#        fileencoding = self.__file_encoding
-#        infile = codecs.open(self.__harmful_filename, mode = 'r', 
+#        fileencoding = self._file_encoding
+#        infile = codecs.open(self._harmful_filename, mode = 'r', 
 #                             encoding = fileencoding)    
 #        # Iterate over rows in file.
 #        for rowindex, row in enumerate(infile):
 #            if rowindex == 0:
 #                pass # Header: Scientific name    Aphia id
 #            else:
-#                row = [unicode(item.strip()) for item in row.split(self.__field_separator)] 
+#                row = [unicode(item.strip()) for item in row.split(self._field_separator)] 
 #                #
 #                scientificname = row[0] # Scientific name
 #                aphiaid = row[1] if row[1] != 'NULL' else '' # Aphia id
 #                #
 #                if scientificname:
-#                    if scientificname not in self.__taxa:
-#                        self.__taxa[scientificname] = {}
-#                        self.__taxa[scientificname][u'Scientific name'] = scientificname
-#                    speciesobject = self.__taxa[scientificname] 
+#                    if scientificname not in self._taxa:
+#                        self._taxa[scientificname] = {}
+#                        self._taxa[scientificname][u'Scientific name'] = scientificname
+#                    speciesobject = self._taxa[scientificname] 
 #                    speciesobject[u'Harmful name'] = scientificname
 #                    speciesobject[u'Harmful'] = True
 #                    speciesobject[u'Aphia id'] = aphiaid
 #        infile.close()
 
-    def __loadPegData(self):
+    def _loadPegData(self):
         """ Adds PEG data to species objects. Creates additional species objects if missing 
             (i.e. for Unicell, Flagellates). """
         # Create mapping between PEG and Dyntaxa names.
         pegtodyntaxa = {}
-        fileencoding = self.__file_encoding
-        infile = codecs.open(self.__sizeclasses_to_taxa_filename, mode = 'r', 
+        fileencoding = self._file_encoding
+        infile = codecs.open(self._sizeclasses_to_taxa_filename, mode = 'r', 
                              encoding = fileencoding) 
         for rowindex, row in enumerate(infile):
             if rowindex == 0:
                 pass # Header: PEG taxon name    DynTaxa taxon name
             else:
-                row = [unicode(item.strip()) for item in row.split(self.__field_separator)] 
+                row = [unicode(item.strip()) for item in row.split(self._field_separator)] 
                 pegtodyntaxa[row[0]] = row[1]
         infile.close()
         #
         # Import size class data.
         pegtodyntaxa = {}
         header = []
-        fileencoding = self.__file_encoding
-        infile = codecs.open(self.__sizeclasses_filename, mode = 'r', 
+        fileencoding = self._file_encoding
+        infile = codecs.open(self._sizeclasses_filename, mode = 'r', 
                              encoding = fileencoding)    
         for rowindex, row in enumerate(infile):
             if rowindex == 0: # First row is assumed to be the header row.
-                headers = [unicode(item.strip()) for item in row.split(self.__field_separator)] 
+                headers = [unicode(item.strip()) for item in row.split(self._field_separator)] 
                 # Translate headers.
                 for columnname in headers: 
-                    header.append(self.__translatePegHeader(columnname.strip()))
+                    header.append(self._translatePegHeader(columnname.strip()))
             else:
-                row = [unicode(item.strip()) for item in row.split(self.__field_separator)] 
+                row = [unicode(item.strip()) for item in row.split(self._field_separator)] 
                 taxondict = {}
                 sizeclassdict = {}
                 column = 0
@@ -227,24 +227,24 @@ class Taxa(object):
                     if len(value.strip()) > 0:
                         # Separate columns containing taxon and 
                         # size-class related info.                
-                        if self.__isPegTaxonRelated(header, column):
+                        if self._isPegTaxonRelated(header, column):
                             taxondict[header[column]] = value.strip()
                         else:
-                            if self.__isPegColumnNumeric(header, column):
+                            if self._isPegColumnNumeric(header, column):
                                 sizeclassdict[header[column]] = value.strip().replace(',', '.')
                             else:
                                 sizeclassdict[header[column]] = value.strip()
                     column += 1
 
-                # Check if exists in self.__taxa
+                # Check if exists in self._taxa
                 scientificname = taxondict[u'Species']
                 if scientificname in pegtodyntaxa:
                     scientificname = pegtodyntaxa[scientificname]
-                if scientificname in self.__taxa:
-                    speciesobject = self.__taxa[scientificname]
+                if scientificname in self._taxa:
+                    speciesobject = self._taxa[scientificname]
                 else:
-                    self.__taxa[taxondict[u'Species']] = {}
-                    speciesobject = self.__taxa[scientificname] 
+                    self._taxa[taxondict[u'Species']] = {}
+                    speciesobject = self._taxa[scientificname] 
                     speciesobject[u'Scientific name'] = scientificname
                     if u'Author' in taxondict:
                         speciesobject[u'Author'] = taxondict[u'Author']
@@ -260,7 +260,7 @@ class Taxa(object):
         #
         # Trophy is set on sizeclass level. Should also be set on species level  
         # if all sizeclasses have the same trophy.
-        for taxon in self.__taxa.values():
+        for taxon in self._taxa.values():
             trophyset = set() 
             if u'Size classes' in taxon:
                 for sizeclass in taxon[u'Size classes']:
@@ -269,7 +269,7 @@ class Taxa(object):
                 taxon[u'Trophy'] = list(trophyset)[0]
 
         
-    def __translatePegHeader(self, importFileHeader):
+    def _translatePegHeader(self, importFileHeader):
         """ Used when importing PEG data.         
             Converts import file column names to key names used in dictionary. """        
     #        if (importFileHeader == u'Division'): return u'Division'
@@ -302,7 +302,7 @@ class Taxa(object):
         if (importFileHeader == u'CORRECTION / ADDITION                            2011'): return u'Correction/addition 2011' # Modified
         return importFileHeader     
             
-    def __isPegTaxonRelated(self, header, column):
+    def _isPegTaxonRelated(self, header, column):
         """ Used when importing PEG data. """        
         if (header[column] == u'Division'): return True
         if (header[column] == u'Class'): return True
@@ -316,7 +316,7 @@ class Taxa(object):
         if (header[column] == u'Formula'): return True
         return False # Related to size class.     
         
-    def __isPegColumnNumeric(self, header, column):
+    def _isPegColumnNumeric(self, header, column):
         """ Used when importing PEG data. """        
         if (header[column] == u'Size class'): return True
         if (header[column] == u'Length(l1), µm'): return True

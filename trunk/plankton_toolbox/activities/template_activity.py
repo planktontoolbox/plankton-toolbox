@@ -50,49 +50,49 @@ class TemplateActivity(activity_base.ActivityBase):
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
         # Add activity name at top.
-        self.__activityheader = QtGui.QLabel('<h2>' + self.objectName() + '</h2>', self)
-        self.__activityheader.setTextFormat(QtCore.Qt.RichText)
-        self.__activityheader.setAlignment(QtCore.Qt.AlignHCenter)
-#        self.__activityheader.setStyleSheet(""" 
+        self._activityheader = QtGui.QLabel('<h2>' + self.objectName() + '</h2>', self)
+        self._activityheader.setTextFormat(QtCore.Qt.RichText)
+        self._activityheader.setAlignment(QtCore.Qt.AlignHCenter)
+#        self._activityheader.setStyleSheet(""" 
 #            * { color: white; background-color: #00677f; }
 #            """)
-        contentLayout.addWidget(self.__activityheader)
+        contentLayout.addWidget(self._activityheader)
         # Add content to the activity.
-        contentLayout.addLayout(self.__contentPersonInfo())
-        contentLayout.addLayout(self.__contentButtons())
+        contentLayout.addLayout(self._contentPersonInfo())
+        contentLayout.addLayout(self._contentButtons())
         contentLayout.addStretch(5)
 
-    def __contentPersonInfo(self):
+    def _contentPersonInfo(self):
         """ """
         # Active widgets and connections.
-        self.__nameedit = QtGui.QLineEdit("<Name>")
-        self.__emailedit = QtGui.QLineEdit("<Email>")
-        self.__customerlist = QtGui.QListWidget()
+        self._nameedit = QtGui.QLineEdit("<Name>")
+        self._emailedit = QtGui.QLineEdit("<Email>")
+        self._customerlist = QtGui.QListWidget()
         # Layout.
         layout = QtGui.QFormLayout()
-        layout.addRow("&Name:", self.__nameedit)
-        layout.addRow("&Email:", self.__emailedit)
-        layout.addRow("&Projects:", self.__customerlist)
+        layout.addRow("&Name:", self._nameedit)
+        layout.addRow("&Email:", self._emailedit)
+        layout.addRow("&Projects:", self._customerlist)
         # Test data.
-        self.__customerlist.addItems(QtCore.QStringList()
+        self._customerlist.addItems(QtCore.QStringList()
             << "<First project.>"
             << "<Second project.>")
         #
         return layout
 
-    def __contentButtons(self):
+    def _contentButtons(self):
         """ """
         # Active widgets and connections.
-        self.__testbutton = QtGui.QPushButton("Write name to log")
-        self.connect(self.__testbutton, QtCore.SIGNAL("clicked()"), self.__test)                
+        self._testbutton = QtGui.QPushButton("Write name to log")
+        self.connect(self._testbutton, QtCore.SIGNAL("clicked()"), self._test)                
         # Layout.
         layout = QtGui.QHBoxLayout()
         layout.addStretch(5)
-        layout.addWidget(self.__testbutton)
+        layout.addWidget(self._testbutton)
         #
         return layout
 
-    def __test(self):
+    def _test(self):
         """ """
-        mmfw.Logging().log("Name: " + unicode(self.__emailedit.text()))
+        mmfw.Logging().log("Name: " + unicode(self._emailedit.text()))
         

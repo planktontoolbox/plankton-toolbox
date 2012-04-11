@@ -43,7 +43,7 @@ class ToolboxDatasets(QtCore.QObject):
         """ """
         mmfw.Datasets().clear()
         # Emit signal after short delay.
-        QtCore.QTimer.singleShot(100, self.__emitChangeNotification)
+        QtCore.QTimer.singleShot(100, self._emitChangeNotification)
         
     def getDatasets(self):
         """ """
@@ -57,14 +57,14 @@ class ToolboxDatasets(QtCore.QObject):
         """ """
         mmfw.Datasets().addDataset(dataset)
         # Emit signal after short delay.
-        QtCore.QTimer.singleShot(100, self.__emitChangeNotification)
+        QtCore.QTimer.singleShot(100, self._emitChangeNotification)
         
     def removeDatasetByIndex(self, index):
         """ """
         mmfw.Datasets().removeDatasetByIndex(index)
         # Emit signal after short delay.
-        QtCore.QTimer.singleShot(100, self.__emitChangeNotification)
+        QtCore.QTimer.singleShot(100, self._emitChangeNotification)
 
-    def __emitChangeNotification(self):
+    def _emitChangeNotification(self):
         """ """
         self.emit(QtCore.SIGNAL('datasetListChanged'))

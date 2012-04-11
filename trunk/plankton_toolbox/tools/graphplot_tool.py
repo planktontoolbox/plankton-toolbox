@@ -48,7 +48,7 @@ class GraphPlotTool(tool_base.ToolBase):
     def __init__(self, name, parentwidget):
         """ """
         # Filename used when saving data to file.
-        self.__lastuseddirectory = '.'
+        self._lastuseddirectory = '.'
         # Local storage of 4 timeseries and 4 X/Y-plots.
         self._ax_timeseries = [{'time':[], 'y':[]}, {'time':[], 'y':[]}, {'time':[], 'y':[]}, {'time':[], 'y':[]}]
         self._ax_xyplot = [{'x':[], 'y':[]}, {'x':[], 'y':[]}, {'x':[], 'y':[]}, {'x':[], 'y':[]}]        
@@ -69,14 +69,14 @@ class GraphPlotTool(tool_base.ToolBase):
         contentLayout.addWidget(tabWidget)
         tabWidget.addTab(self._createContentGraph(), "Graph")
         tabWidget.addTab(self._createContentSettings(), "Settings")        
-#        contentLayout.addWidget(self.__contentSaveResult())
+#        contentLayout.addWidget(self._contentSaveResult())
 
     def _createContentGraph(self):
         """ """
         widget = QtGui.QWidget()
         contentLayout = QtGui.QVBoxLayout()
-        contentLayout.addLayout(self.__contentSelectDataset())
-        contentLayout.addLayout(self.__contentGraphArea(), 10)
+        contentLayout.addLayout(self._contentSelectDataset())
+        contentLayout.addLayout(self._contentGraphArea(), 10)
         #
         widget.setLayout(contentLayout)
         #
@@ -86,44 +86,44 @@ class GraphPlotTool(tool_base.ToolBase):
         """ """
         widget = QtGui.QWidget()
         # Active widgets and connections.
-        self.__timeseriesforat_edit = QtGui.QLineEdit(""" bo, ro, g^, ys""")
-        self.__xyplotformat_edit = QtGui.QLineEdit(""" bo, ro, g^, ys""")
+        self._timeseriesforat_edit = QtGui.QLineEdit(""" bo, ro, g^, ys""")
+        self._xyplotformat_edit = QtGui.QLineEdit(""" bo, ro, g^, ys""")
         # Layout.
         layout = QtGui.QFormLayout()
-        layout.addRow("Time series, format:", self.__timeseriesforat_edit)
-        layout.addRow("X/Y plot, format", self.__xyplotformat_edit)
+        layout.addRow("Time series, format:", self._timeseriesforat_edit)
+        layout.addRow("X/Y plot, format", self._xyplotformat_edit)
         #
         widget.setLayout(layout)
         #
         return widget
 
-    def __contentSelectDataset(self):
+    def _contentSelectDataset(self):
         """ """
         # Active widgets and connections.
-        self.__viewplot_list = QtGui.QComboBox()
-        self.__viewplot_list.addItems(["Time series 1-4", 
+        self._viewplot_list = QtGui.QComboBox()
+        self._viewplot_list.addItems(["Time series 1-4", 
                                        "Time series 1", "Time series 2", "Time series 3", "Time series 4", 
                                        "X/Y plots 1-4", 
                                        "X/Y plot 1", "X/Y plot 2", "X/Y plot 3", "X/Y plot 4"])
-        self.connect(self.__viewplot_list, QtCore.SIGNAL("currentIndexChanged(int)"), self.__drawPlots)                
-        self.__clearselectedplot_button = QtGui.QPushButton("Clear")
-        self.connect(self.__clearselectedplot_button, QtCore.SIGNAL("clicked()"), self.__clearSelectedPlot)                
-        self.__clearallplots_button = QtGui.QPushButton("Clear all")
-        self.connect(self.__clearallplots_button, QtCore.SIGNAL("clicked()"), self.clearAll)                
+        self.connect(self._viewplot_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._drawPlots)                
+        self._clearselectedplot_button = QtGui.QPushButton("Clear")
+        self.connect(self._clearselectedplot_button, QtCore.SIGNAL("clicked()"), self._clearSelectedPlot)                
+        self._clearallplots_button = QtGui.QPushButton("Clear all")
+        self.connect(self._clearallplots_button, QtCore.SIGNAL("clicked()"), self.clearAll)                
         # Layout widgets.
         layout = QtGui.QHBoxLayout()
         layout.addWidget(QtGui.QLabel("View:"))
-        layout.addWidget(self.__viewplot_list)
-        layout.addWidget(self.__clearselectedplot_button)
-        layout.addWidget(self.__clearallplots_button)
+        layout.addWidget(self._viewplot_list)
+        layout.addWidget(self._clearselectedplot_button)
+        layout.addWidget(self._clearallplots_button)
         layout.addStretch(5)
         #
         return layout
         
-    def __contentGraphArea(self):
+    def _contentGraphArea(self):
         """ """
         # Active widgets and connections.
-        self.__tableview = utils_qt.ToolboxQTableView()
+        self._tableview = utils_qt.ToolboxQTableView()
         # Matplotlib.
 #        self._figure = Figure(figsize=(5,4), dpi=100)
         self._figure = Figure()
@@ -141,31 +141,31 @@ class GraphPlotTool(tool_base.ToolBase):
         #
         return layout
         
-    def __contentSaveResult(self):
+    def _contentSaveResult(self):
         """ """
         saveresultbox = QtGui.QGroupBox("Save graph", self)
         # Active widgets and connections.
-        self.__saveformat_list = QtGui.QComboBox()
+        self._saveformat_list = QtGui.QComboBox()
         #
-        self.__saveformat_list.addItems(["Time series, combined",
+        self._saveformat_list.addItems(["Time series, combined",
                                          "Time series, 1-2",
                                          "Time series, 1-4",
                                          "X/Y plot, combined",
                                          "X/Y plot, 1-2",
                                          "X/Y plot, 3-4"])
-        self.__savegraph_button = QtGui.QPushButton("Save...")
-        self.connect(self.__savegraph_button, QtCore.SIGNAL("clicked()"), self.__saveGraph)                
+        self._savegraph_button = QtGui.QPushButton("Save...")
+        self.connect(self._savegraph_button, QtCore.SIGNAL("clicked()"), self._saveGraph)                
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(5)
         hbox1.addWidget(QtGui.QLabel("Format:"))
-        hbox1.addWidget(self.__saveformat_list)
-        hbox1.addWidget(self.__savegraph_button)
+        hbox1.addWidget(self._saveformat_list)
+        hbox1.addWidget(self._savegraph_button)
         saveresultbox.setLayout(hbox1)
         #
         return saveresultbox
 
-    def __saveGraph(self):
+    def _saveGraph(self):
         """ """
         print('TEST: Save graph.')
 
@@ -180,7 +180,7 @@ class GraphPlotTool(tool_base.ToolBase):
         self._ax_timeseries = [{'time':[], 'y':[]}, {'time':[], 'y':[]}, {'time':[], 'y':[]}, {'time':[], 'y':[]}]
         self._ax_xyplot = [{'x':[], 'y':[]}, {'x':[], 'y':[]}, {'x':[], 'y':[]}, {'x':[], 'y':[]}]
         #
-        self.__drawPlots()
+        self._drawPlots()
         
     def addTimeseriesPlot(self, plotindex, time_table, y_table):
         """ """
@@ -188,7 +188,7 @@ class GraphPlotTool(tool_base.ToolBase):
         if plotindex not in [0,1,2,3]:
             raise UserWarning('Plot index not valid for timeseries. Should be 0-3.')            
         #
-        self.__viewplot_list.setCurrentIndex(1 + plotindex) # "Time series, show latest added."
+        self._viewplot_list.setCurrentIndex(1 + plotindex) # "Time series, show latest added."
         #
         self._ax_timeseries[plotindex] = {'time':[], 'y':[]}
         for rowindex, timestring in enumerate(time_table):
@@ -209,7 +209,7 @@ class GraphPlotTool(tool_base.ToolBase):
             except:
                 print(u'ERROR. Convert error. Time:' + unicode(timestring) + ' Y:' + unicode(y_table[rowindex]))
         #
-        self.__drawPlots()
+        self._drawPlots()
 
     def addXYPlot(self, plotindex, x_table, y_table):
         """ """
@@ -217,7 +217,7 @@ class GraphPlotTool(tool_base.ToolBase):
         if plotindex not in [0,1,2,3]:
             raise UserWarning('Plot index not valid for X/Y-plot. Should be 0-3.')            
         #
-        self.__viewplot_list.setCurrentIndex(6 + plotindex) # "X/Y plots, show latest added."
+        self._viewplot_list.setCurrentIndex(6 + plotindex) # "X/Y plots, show latest added."
         #
         self._ax_xyplot[plotindex] = {'x':[], 'y':[]}
         for rowindex, x in enumerate(x_table):
@@ -229,13 +229,13 @@ class GraphPlotTool(tool_base.ToolBase):
             except:
                 print(u'ERROR. Convert error. Time:' + unicode(x) + ' Y:' + unicode(y_table[rowindex]))
         #
-        self.__drawPlots()
+        self._drawPlots()
 
     # === Private methods. ===    
-    def __clearSelectedPlot(self):
+    def _clearSelectedPlot(self):
         """ """
         #
-        index = self.__viewplot_list.currentIndex()
+        index = self._viewplot_list.currentIndex()
         # Time series.
         if index in [0]:
             for ix in [0, 1, 2, 3]:
@@ -249,44 +249,44 @@ class GraphPlotTool(tool_base.ToolBase):
         elif index in [6, 7, 8, 9]:
             self._ax_xyplot[index - 6] = {'x':[], 'y':[]}
         #
-        self.__drawPlots()
+        self._drawPlots()
 
-    def __drawPlots(self):
+    def _drawPlots(self):
         """ """
         # Clear all plots before redrawing.
         self._figure.clear()
         self._canvas.draw()
         #
-        if self.__viewplot_list:
-            if unicode(self.__viewplot_list.currentText()) == "Time series 1-4":
-                self.__drawTimeseriesPlots()
-            elif  unicode(self.__viewplot_list.currentText()) == "Time series 1":
-                self.__drawTimeseriesPlot(0)
-            elif  unicode(self.__viewplot_list.currentText()) == "Time series 2":
-                self.__drawTimeseriesPlot(1)
-            elif  unicode(self.__viewplot_list.currentText()) == "Time series 3":
-                self.__drawTimeseriesPlot(2)
-            elif  unicode(self.__viewplot_list.currentText()) == "Time series 4":
-                self.__drawTimeseriesPlot(3)
-            elif  unicode(self.__viewplot_list.currentText()) == "X/Y plots 1-4":
-                self.__drawXYPlots()
-            elif  unicode(self.__viewplot_list.currentText()) == "X/Y plot 1":
-                self.__drawXYPlot(0)
-            elif  unicode(self.__viewplot_list.currentText()) == "X/Y plot 2":
-                self.__drawXYPlot(1)
-            elif  unicode(self.__viewplot_list.currentText()) == "X/Y plot 3":
-                self.__drawXYPlot(2)
-            elif  unicode(self.__viewplot_list.currentText()) == "X/Y plot 4":
-                self.__drawXYPlot(3)
+        if self._viewplot_list:
+            if unicode(self._viewplot_list.currentText()) == "Time series 1-4":
+                self._drawTimeseriesPlots()
+            elif  unicode(self._viewplot_list.currentText()) == "Time series 1":
+                self._drawTimeseriesPlot(0)
+            elif  unicode(self._viewplot_list.currentText()) == "Time series 2":
+                self._drawTimeseriesPlot(1)
+            elif  unicode(self._viewplot_list.currentText()) == "Time series 3":
+                self._drawTimeseriesPlot(2)
+            elif  unicode(self._viewplot_list.currentText()) == "Time series 4":
+                self._drawTimeseriesPlot(3)
+            elif  unicode(self._viewplot_list.currentText()) == "X/Y plots 1-4":
+                self._drawXYPlots()
+            elif  unicode(self._viewplot_list.currentText()) == "X/Y plot 1":
+                self._drawXYPlot(0)
+            elif  unicode(self._viewplot_list.currentText()) == "X/Y plot 2":
+                self._drawXYPlot(1)
+            elif  unicode(self._viewplot_list.currentText()) == "X/Y plot 3":
+                self._drawXYPlot(2)
+            elif  unicode(self._viewplot_list.currentText()) == "X/Y plot 4":
+                self._drawXYPlot(3)
             
-    def __drawTimeseriesPlots(self):
+    def _drawTimeseriesPlots(self):
         """ """
         for index in [0, 1, 2, 3]:
-            self.__drawTimeseriesPlot(index)
+            self._drawTimeseriesPlot(index)
             
-    def __drawTimeseriesPlot(self, plotindex):
+    def _drawTimeseriesPlot(self, plotindex):
         """ """
-        plotformatlist = unicode(self.__timeseriesforat_edit.text()).split(',')
+        plotformatlist = unicode(self._timeseriesforat_edit.text()).split(',')
         plotformat = plotformatlist[plotindex]
         #
         if 'time' in self._ax_timeseries[plotindex]: 
@@ -319,16 +319,16 @@ class GraphPlotTool(tool_base.ToolBase):
                 #
                 self._canvas.draw()
             
-    def __drawXYPlots(self):
+    def _drawXYPlots(self):
         """ """
 #        for index in [0]:
-#            self.__drawXYPlot(index)
+#            self._drawXYPlot(index)
         for index in [0, 1, 2, 3]:
-            self.__drawXYPlot(index)
+            self._drawXYPlot(index)
             
-    def __drawXYPlot(self, plotindex):
+    def _drawXYPlot(self, plotindex):
         """ """
-        plotformatlist = unicode(self.__xyplotformat_edit.text()).split(',')
+        plotformatlist = unicode(self._xyplotformat_edit.text()).split(',')
         plotformat = plotformatlist[plotindex]
 
         if 'x' in self._ax_xyplot[plotindex]: 

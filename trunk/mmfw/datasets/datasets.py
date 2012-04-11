@@ -32,28 +32,28 @@ class Datasets(object):
     
     def __init__(self):
         """ """
-        self.__datasets = [] 
+        self._datasets = [] 
 
     def clear(self):
         """ """
-        self.__datasets = []
+        self._datasets = []
         
     def getDatasets(self):
         """ """
-        return self.__datasets 
+        return self._datasets 
         
     def getDatasetByIndex(self, index):
         """ """
-        if len(self.__datasets) > index:
-            return self.__datasets[index]
+        if len(self._datasets) > index:
+            return self._datasets[index]
         return None 
         
     def addDataset(self, dataset_node):
         """ """
-        self.__datasets.append(dataset_node)
+        self._datasets.append(dataset_node)
         
     def removeDatasetByIndex(self, index):
         """ """
-        if (index >= 0) or (len(self.__datasets) > index):
-            del self.__datasets[index]
+        if (index >= 0) or (len(self._datasets) > index):
+            del self._datasets[index]
 

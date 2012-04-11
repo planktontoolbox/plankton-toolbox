@@ -70,17 +70,17 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
 
     def importTaxa(self, dir = None):
         """ """
-        self.__taxonHeader = []
-        self.__hierHeader = []
-        self.__namesHeader = []
-        self.__taxonTypeDict = None
-        self.__nameTypeDict = None
+        self._taxonHeader = []
+        self._hierHeader = []
+        self._namesHeader = []
+        self._taxonTypeDict = None
+        self._nameTypeDict = None
         # These parts of the Taxa object will be modified during import.
-        self.__taxa = self._taxaObject.getTaxonList()
-        self.__idToTaxon = self._taxaObject.getIdToTaxonDict()
+        self._taxa = self._taxaObject.getTaxonList()
+        self._idToTaxon = self._taxaObject.getIdToTaxonDict()
         
-        self.__createTaxonTypeDict() # Maps from taxon type id to taxon type.
-        self.__createNameTypeDict() # Maps from name type id to name type.
+        self._createTaxonTypeDict() # Maps from taxon type id to taxon type.
+        self._createNameTypeDict() # Maps from name type id to name type.
         
         # === TAXON file ===
         mmfw.Logging().log("Reading: " + dir + '/dyntaxa_taxon.txt')
@@ -88,12 +88,12 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
         taxonFile = codecs.open(dir + '/dyntaxa_taxon.txt', mode = 'r', encoding = txtencode)
         separator = '\t' # Tab as separator.
         for line in taxonFile:
-            if len(self.__taxonHeader) == 0:
+            if len(self._taxonHeader) == 0:
                 # Store header columns.
-                self.__taxonHeader = line.split(separator)
+                self._taxonHeader = line.split(separator)
             else:
                 # Split row and trim each item.
-                columns = map(self.__cleanUpString, line.split(separator))
+                columns = map(self._cleanUpString, line.split(separator))
                 if len(columns) < 2:
                     continue # Don't handle short rows.
                 # Extract used column values:
@@ -121,12 +121,12 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
                     taxonDict = {}
                     taxonDict['Taxon id'] = taxonid
                     taxonDict['Taxon type id'] = taxontypid
-                    taxonDict['Taxon type'] = self.__taxonTypeDict[str(taxontypid)]
+                    taxonDict['Taxon type'] = self._taxonTypeDict[str(taxontypid)]
                     taxonDict['Valid from'] = datum0
                     taxonDict['Valid to'] = datum1
-                self.__taxa.append(taxonDict) # Updates Taxa object.
-                if not(taxonid in self.__idToTaxon):
-                    self.__idToTaxon[taxonid] = taxonDict # Updates Taxa object.
+                self._taxa.append(taxonDict) # Updates Taxa object.
+                if not(taxonid in self._idToTaxon):
+                    self._idToTaxon[taxonid] = taxonDict # Updates Taxa object.
                 else:
                     mmfw.Logging().log("Duplicate taxon id: " + str(taxonid) )
         taxonFile.close()
@@ -137,12 +137,12 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
         hierFile = codecs.open(dir + '/dyntaxa_hier.txt', mode = 'r', encoding = txtencode)
         separator = '\t' # Tab as separator.
         for line in hierFile:
-            if len(self.__hierHeader) == 0:
+            if len(self._hierHeader) == 0:
                 # Store header columns.
-                self.__hierHeader = line.split(separator)
+                self._hierHeader = line.split(separator)
             else:
                 # Split row and trim each item.
-                columns = map(self.__cleanUpString, line.split(separator))
+                columns = map(self._cleanUpString, line.split(separator))
                 if len(columns) < 2:
                     continue # Don't handle short rows.
                 # Extract used column values:
@@ -166,8 +166,8 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
                 nowDate = datetime.date.today() # Note: includes day and time.           
                 now = datetime.datetime(nowDate.year, nowDate.month, nowDate.day)                
                 if (dateFrom <= now) and (now <= dateTo):
-                    if underid in self.__idToTaxon:
-                        taxon = self.__idToTaxon[underid]
+                    if underid in self._idToTaxon:
+                        taxon = self._idToTaxon[underid]
                         if relationid == 0:
                             pass
 #                            taxon['Parent id'] = ''
@@ -183,12 +183,12 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
         namesFile = codecs.open(dir + '/dyntaxa_names.txt', mode = 'r', encoding = txtencode)
         separator = '\t' # Tab as separator.
         for line in namesFile:
-            if len(self.__namesHeader) == 0:
+            if len(self._namesHeader) == 0:
                 # Store header columns.
-                self.__namesHeader = line.split(separator)
+                self._namesHeader = line.split(separator)
             else:
                 # Split row and trim each item.
-                columns = map(self.__cleanUpString, line.split(separator))
+                columns = map(self._cleanUpString, line.split(separator))
                 if len(columns) < 2:
                     continue # Don't handle short rows.
                 # Extract used column values:
@@ -215,11 +215,11 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
                 nowDate = datetime.date.today() # Note: includes day and time.           
                 now = datetime.datetime(nowDate.year, nowDate.month, nowDate.day)                
                 if (exportkat == 0) and (dateFrom <= now) and (now <= dateTo):
-                    if taxonid in self.__idToTaxon:
-                        taxon = self.__idToTaxon[taxonid]    
+                    if taxonid in self._idToTaxon:
+                        taxon = self._idToTaxon[taxonid]    
                         nameDict = {}
                         nameDict['Name type id'] = namntypid
-                        nameDict['Name type'] = self.__nameTypeDict[str(namntypid)]
+                        nameDict['Name type'] = self._nameTypeDict[str(namntypid)]
                         nameDict['Name'] = namn
                         nameDict['Author'] = auktor
                         nameDict['Valid from'] = datum0
@@ -235,13 +235,13 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
                         mmfw.Logging().info('Can not find Taxon id(name): ' + str(underid))                
         namesFile.close()
         
-    def __cleanUpString(self,value):
+    def _cleanUpString(self,value):
         """ """
         return value.strip()
 
-    def __createTaxonTypeDict(self):
+    def _createTaxonTypeDict(self):
         """ """
-        self.__taxonTypeDict = {        
+        self._taxonTypeDict = {        
             "1": "Kingdom",
             "2": "Phylum",
             "3": "Subphylum",
@@ -276,9 +276,9 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
             "30": "Avdelning",
             "31": "Underavdelning"}
         
-    def __createNameTypeDict(self):
+    def _createNameTypeDict(self):
         """ """
-        self.__nameTypeDict = {
+        self._nameTypeDict = {
             "0": "Scientific",
             "1": "Swedish",
             "2": "English",
@@ -307,8 +307,8 @@ class PreparePegTextFile(PrepareDataSources):
 
     def importTaxa(self, file = None):
         """ """
-        self.__header = []
-        self.__taxa = self._taxaObject.getTaxonList()
+        self._header = []
+        self._taxa = self._taxaObject.getTaxonList()
         
         mmfw.Logging().log("Reading: " + file)
         txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
@@ -340,11 +340,11 @@ class PreparePegTextFile(PrepareDataSources):
         pegFile = codecs.open(file, mode = 'r', encoding = txtencode)
         separator = '\t' # Tab as separator.
         for line in pegFile:
-            if len(self.__header) == 0:
+            if len(self._header) == 0:
                 # Store header columns. They will be used as keys i the taxon dictionary.
                 importFileHeader = line.split(separator)
                 for columnName in importFileHeader: 
-                    self.__header.append(self.__translateHeader(columnName.strip()))
+                    self._header.append(self._translateHeader(columnName.strip()))
             else:
                 taxonDict = {}
                 sizeClassDict = {}
@@ -353,27 +353,27 @@ class PreparePegTextFile(PrepareDataSources):
                     if len(value.strip()) > 0:
                         # Separate columns containing taxon and 
                         # size-class related info.                
-                        if self.__isTaxonRelated(column):
-                            taxonDict[self.__header[column]] = value.strip()
+                        if self._isTaxonRelated(column):
+                            taxonDict[self._header[column]] = value.strip()
                         else:
-                            if self.__isColumnNumeric(column):
+                            if self._isColumnNumeric(column):
                                 try:
                                     float_value = float(value.strip().replace(',', '.').replace(' ', ''))
-                                    sizeClassDict[self.__header[column]] = float_value
-                                    if self.__header[column] == 'Size class':  # Covert SIZECLASS to integer.
-                                        sizeClassDict[self.__header[column]] = int(float_value)
+                                    sizeClassDict[self._header[column]] = float_value
+                                    if self._header[column] == 'Size class':  # Covert SIZECLASS to integer.
+                                        sizeClassDict[self._header[column]] = int(float_value)
                                 except:
                                     # Use string format if not valid numeric. 
-                                    sizeClassDict[self.__header[column]] = value.strip()
+                                    sizeClassDict[self._header[column]] = value.strip()
                                     
 #                                    mmfw.Logging().info('ERROR float:' + value + '     ' + value.strip().replace(',', '.').replace(' ', ''))
                                     
                             else:
-                                sizeClassDict[self.__header[column]] = value.strip()
+                                sizeClassDict[self._header[column]] = value.strip()
                     column += 1
                 # Check if the taxon-related data already exists.
                 taxonExists = False
-                for taxon in self.__taxa:
+                for taxon in self._taxa:
                     if taxon['Species'] == taxonDict['Species']:
                         taxonExists = True
                         taxon['Size classes'].append(sizeClassDict)
@@ -381,13 +381,13 @@ class PreparePegTextFile(PrepareDataSources):
                 # First time. Create the list and add dictionary for 
                 # size classes. 
                 if taxonExists == False:
-                    self.__taxa.append(taxonDict)
+                    self._taxa.append(taxonDict)
                     taxonDict['Size classes'] = []
                     taxonDict['Size classes'].append(sizeClassDict)
                 
         pegFile.close()
         
-    def __translateHeader(self, importFileHeader):
+    def _translateHeader(self, importFileHeader):
         """ Convert import file column names to key names used in dictionary. """        
 #        if (importFileHeader == 'Division'): return 'Division'
 #        if (importFileHeader == 'Class'): return 'Class'
@@ -418,39 +418,39 @@ class PreparePegTextFile(PrepareDataSources):
         if (importFileHeader == 'CORRECTION / ADDITION                            2010'): return 'Correction/addition 2010' # Modified
         return importFileHeader     
         
-    def __isTaxonRelated(self, column):
+    def _isTaxonRelated(self, column):
         """ """        
-        if (self.__header[column] == 'Division'): return True
-        if (self.__header[column] == 'Class'): return True
-        if (self.__header[column] == 'Order'): return True
-        if (self.__header[column] == 'Species'): return True
-        if (self.__header[column] == 'Author'): return True
-        if (self.__header[column] == 'SFLAG'): return True
-        if (self.__header[column] == 'Stage'): return True
-        if (self.__header[column] == 'Trophy'): return True
-        if (self.__header[column] == 'Geometric shape'): return True
-        if (self.__header[column] == 'Formula'): return True
+        if (self._header[column] == 'Division'): return True
+        if (self._header[column] == 'Class'): return True
+        if (self._header[column] == 'Order'): return True
+        if (self._header[column] == 'Species'): return True
+        if (self._header[column] == 'Author'): return True
+        if (self._header[column] == 'SFLAG'): return True
+        if (self._header[column] == 'Stage'): return True
+        if (self._header[column] == 'Trophy'): return True
+        if (self._header[column] == 'Geometric shape'): return True
+        if (self._header[column] == 'Formula'): return True
         return False # Related to size class.     
         
-    def __isColumnNumeric(self, column):
+    def _isColumnNumeric(self, column):
         """ """        
-        if (self.__header[column] == 'Size class'): return True
-        if (self.__header[column] == 'Length(l1), um'): return True
-        if (self.__header[column] == 'Length(l2), um'): return True
-        if (self.__header[column] == 'Width(w), um'): return True
-        if (self.__header[column] == 'Height(h), um'): return True
-        if (self.__header[column] == 'Diameter(d1), um'): return True
-        if (self.__header[column] == 'Diameter(d2), um'): return True
-        if (self.__header[column] == 'No. of cells/counting unit'): return True
-        if (self.__header[column] == 'Calculated volume, um3'): return True
-        if (self.__header[column] == 'Filament: length of cell, um'): return True
-        if (self.__header[column] == 'Calculated Carbon pg/counting unit'): return True
+        if (self._header[column] == 'Size class'): return True
+        if (self._header[column] == 'Length(l1), um'): return True
+        if (self._header[column] == 'Length(l2), um'): return True
+        if (self._header[column] == 'Width(w), um'): return True
+        if (self._header[column] == 'Height(h), um'): return True
+        if (self._header[column] == 'Diameter(d1), um'): return True
+        if (self._header[column] == 'Diameter(d2), um'): return True
+        if (self._header[column] == 'No. of cells/counting unit'): return True
+        if (self._header[column] == 'Calculated volume, um3'): return True
+        if (self._header[column] == 'Filament: length of cell, um'): return True
+        if (self._header[column] == 'Calculated Carbon pg/counting unit'): return True
         return False     
 
 
     def addPwToPeg(self, file = None):
         """ """
-        if (not self.__taxa) or (len(self.__taxa) == 0):
+        if (not self._taxa) or (len(self._taxa) == 0):
             print('DEBUG: __taxa is empty.')
             return
         if (not file) or (len(file) == 0):
@@ -500,7 +500,7 @@ class PreparePegTextFile(PrepareDataSources):
         #
         print('DEBUG: PW add to PEG.')
         
-        for pegtaxon in self.__taxa:
+        for pegtaxon in self._taxa:
             # Add PW name at taxon level.
             pwnameandsflag = pw_name_dict.get(pegtaxon['Species'], '')
             if pwnameandsflag:
@@ -523,7 +523,7 @@ class PreparePegTextFile(PrepareDataSources):
 
     def addDyntaxaToPeg(self, file = None):
         """ """
-        if (not self.__taxa) or (len(self.__taxa) == 0):
+        if (not self._taxa) or (len(self._taxa) == 0):
             print('DEBUG: __taxa is empty.')
             return
         if (not file) or (len(file) == 0):
@@ -549,7 +549,7 @@ class PreparePegTextFile(PrepareDataSources):
         
         
         print('DEBUG: Dyntaxa add to PEG.')
-        for pegtaxon in self.__taxa:
+        for pegtaxon in self._taxa:
             # Add PW name at taxon level.
             pegname = pegtaxon['Species']
             pwname = pegtaxon.get('Species PW','')
@@ -586,8 +586,8 @@ class PrepareHarmfulMicroAlgae(PrepareDataSources):
 
     def importTaxa(self, file = None):
         """ """
-        self.__header = []
-        self.__taxa = self._taxaObject.getTaxonList()
+        self._header = []
+        self._taxa = self._taxaObject.getTaxonList()
         
         # Load needed resources, if not loaded before.
         toolbox_resources.ToolboxResources().loadUnloadedResourceDyntaxa()
@@ -598,21 +598,21 @@ class PrepareHarmfulMicroAlgae(PrepareDataSources):
         harmfulFile = codecs.open(file, mode = 'r', encoding = txtencode)
         separator = '\t' # Tab as separator.
         for row in harmfulFile:
-            if len(self.__header) == 0:
+            if len(self._header) == 0:
                 # Store header columns. They will be used as keys i the taxon dictionary.
                 importFileHeader = map(string.strip, row.split(separator))
                 for columnName in importFileHeader: 
-                    self.__header.append(columnName.strip())
+                    self._header.append(columnName.strip())
             else:
                 # Add each row as a taxon.
                 taxonDict = {}
                 for column, value in enumerate(map(string.strip, row.split(separator))):
                     if len(value) > 0:
-                        if self.__header[column] == 'Aphia id':
-                            taxonDict[self.__header[column]] = int(value) # Integer value.
+                        if self._header[column] == 'Aphia id':
+                            taxonDict[self._header[column]] = int(value) # Integer value.
                         else:
-                            taxonDict[self.__header[column]] = value # String value.
-                self.__taxa.append(taxonDict)
+                            taxonDict[self._header[column]] = value # String value.
+                self._taxa.append(taxonDict)
                 # Check if the scientific name exists in Dyntaxa. Add Taxon-id if it does.
                 dyntaxataxon = dyntaxa.getTaxonByName(taxonDict.get('Scientific name', ''))
                 if dyntaxataxon:

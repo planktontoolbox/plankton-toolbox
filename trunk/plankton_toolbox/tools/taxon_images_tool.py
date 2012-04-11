@@ -50,10 +50,10 @@ class TaxonImagesTool(tool_base.ToolBase):
         content = self._createScrollableContent()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
-        contentLayout.addLayout(self.__contentImage())
+        contentLayout.addLayout(self._contentImage())
         contentLayout.addStretch(5)
 
-    def __contentImage(self):
+    def _contentImage(self):
         """ """
         layout = QtGui.QVBoxLayout()
         label = QtGui.QLabel('<b><i>Incertae sedis</i></b>')
@@ -67,6 +67,6 @@ class TaxonImagesTool(tool_base.ToolBase):
         #
         return layout
     
-    def __test(self):
+    def _test(self):
         """ """
-        self._writeToLog("Name: " + unicode(self.__nameedit.text()))
+        self._writeToLog("Name: " + unicode(self._nameedit.text()))

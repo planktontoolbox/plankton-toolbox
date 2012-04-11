@@ -40,7 +40,7 @@ class DyntaxaBrowserTool(tool_base.ToolBase):
     def __init__(self, name, parentwidget):
         """ """
         # Create model.
-        self.__dyntaxa_object = toolbox_resources.ToolboxResources().getResourceDyntaxa()
+        self._dyntaxa_object = toolbox_resources.ToolboxResources().getResourceDyntaxa()
         # Initialize parent. Should be called after other 
         # initialization since the base class calls _createContent().
         super(DyntaxaBrowserTool, self).__init__(name, parentwidget)
@@ -54,87 +54,87 @@ class DyntaxaBrowserTool(tool_base.ToolBase):
         content = self._createScrollableContent()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
-        contentLayout.addLayout(self.__contentTaxonList())
-        contentLayout.addLayout(self.__contentDyntaxaItem())
-        contentLayout.addLayout(self.__contentDyntaxaControl())
+        contentLayout.addLayout(self._contentTaxonList())
+        contentLayout.addLayout(self._contentDyntaxaItem())
+        contentLayout.addLayout(self._contentDyntaxaControl())
         # Used when toolbox resource has changed.        
-        self.connect(toolbox_resources.ToolboxResources(), QtCore.SIGNAL("dyntaxaResourceLoaded"), self.__dyntaxaRefresh)
+        self.connect(toolbox_resources.ToolboxResources(), QtCore.SIGNAL("dyntaxaResourceLoaded"), self._dyntaxaRefresh)
 
-    def __contentTaxonList(self):
+    def _contentTaxonList(self):
         """ """
         layout = QtGui.QVBoxLayout()
-        self.__tableView = utils_qt.ToolboxQTableView()
-        layout.addWidget(self.__tableView)
+        self._tableView = utils_qt.ToolboxQTableView()
+        layout.addWidget(self._tableView)
         # Data model.        
-        self.__model = DyntaxaTableModel(self.__dyntaxa_object)
-        self.__tableView.setTablemodel(self.__model)
+        self._model = DyntaxaTableModel(self._dyntaxa_object)
+        self._tableView.setTablemodel(self._model)
         #
-        self.connect(self.__tableView.selectionModel, QtCore.SIGNAL("currentChanged(QModelIndex, QModelIndex)"), self.__showItemInfo)
-        self.connect(self.__tableView.selectionModel, QtCore.SIGNAL("selectionChanged(QModelIndex, QModelIndex)"), self.__showItemInfo)
+        self.connect(self._tableView.selectionModel, QtCore.SIGNAL("currentChanged(QModelIndex, QModelIndex)"), self._showItemInfo)
+        self.connect(self._tableView.selectionModel, QtCore.SIGNAL("selectionChanged(QModelIndex, QModelIndex)"), self._showItemInfo)
         #
         return layout
     
-    def __contentDyntaxaItem(self):
+    def _contentDyntaxaItem(self):
         """ """
         # Active widgets and connections.
         # Species level.
-        self.__scientificname_label = QtGui.QLabel('-')
-#        self.__author_label = QtGui.QLabel('-')
-        self.__classification_label = QtGui.QLabel('-')
-#        self.__author_label = QtGui.QLabel('-')
-#        self.__class_label = QtGui.QLabel('-')
-#        self.__division_label = QtGui.QLabel('-')
-#        self.__order_label = QtGui.QLabel('-')
+        self._scientificname_label = QtGui.QLabel('-')
+#        self._author_label = QtGui.QLabel('-')
+        self._classification_label = QtGui.QLabel('-')
+#        self._author_label = QtGui.QLabel('-')
+#        self._class_label = QtGui.QLabel('-')
+#        self._division_label = QtGui.QLabel('-')
+#        self._order_label = QtGui.QLabel('-')
 #        # Sizeclass level.
-#        self.__size_class_label = QtGui.QLabel('-')
-#        self.__thropy_label = QtGui.QLabel('-')
-#        self.__shape_label = QtGui.QLabel('-')
-#        self.__formula_label = QtGui.QLabel('-')
-#        self.__volume_label = QtGui.QLabel('-')
-#        self.__carbon_label = QtGui.QLabel('-')
+#        self._size_class_label = QtGui.QLabel('-')
+#        self._thropy_label = QtGui.QLabel('-')
+#        self._shape_label = QtGui.QLabel('-')
+#        self._formula_label = QtGui.QLabel('-')
+#        self._volume_label = QtGui.QLabel('-')
+#        self._carbon_label = QtGui.QLabel('-')
         # Layout widgets.
         layout = QtGui.QFormLayout()
 #        layout.addRow("<b><u>Species:</u></b>", None)
-        layout.addRow("Scientific name:", self.__scientificname_label)
-#        layout.addRow("Author:", self.__author_label)
-        layout.addRow("Classification:", self.__classification_label)
-#        layout.addRow("Author:", self.__author_label)
-#        layout.addRow("Class:", self.__class_label)
-#        layout.addRow("Division:", self.__division_label)
-#        layout.addRow("Order:", self.__order_label)
+        layout.addRow("Scientific name:", self._scientificname_label)
+#        layout.addRow("Author:", self._author_label)
+        layout.addRow("Classification:", self._classification_label)
+#        layout.addRow("Author:", self._author_label)
+#        layout.addRow("Class:", self._class_label)
+#        layout.addRow("Division:", self._division_label)
+#        layout.addRow("Order:", self._order_label)
 #        layout.addRow("<b><u>Size class:</u></b>", None)
-#        layout.addRow("Size class:", self.__size_class_label)
-#        layout.addRow("Trophy:", self.__thropy_label)
-#        layout.addRow("Geometric shape:", self.__shape_label)
-#        layout.addRow("Formula:", self.__formula_label)
-#        layout.addRow("Calculated volume:", self.__volume_label)
-#        layout.addRow("Calculated carbon:", self.__carbon_label)
+#        layout.addRow("Size class:", self._size_class_label)
+#        layout.addRow("Trophy:", self._thropy_label)
+#        layout.addRow("Geometric shape:", self._shape_label)
+#        layout.addRow("Formula:", self._formula_label)
+#        layout.addRow("Calculated volume:", self._volume_label)
+#        layout.addRow("Calculated carbon:", self._carbon_label)
         #
         return layout
 
-    def __contentDyntaxaControl(self):
+    def _contentDyntaxaControl(self):
         """ """
         # Active widgets and connections.
-        self.__loadresource_button = QtGui.QPushButton("Load Dyntaxa resource")
-        self.connect(self.__loadresource_button, QtCore.SIGNAL("clicked()"), self.__loadResource)                
+        self._loadresource_button = QtGui.QPushButton("Load Dyntaxa resource")
+        self.connect(self._loadresource_button, QtCore.SIGNAL("clicked()"), self._loadResource)                
         # Layout widgets.
         layout = QtGui.QHBoxLayout()
         layout.addStretch(5)
-        layout.addWidget(self.__loadresource_button)
+        layout.addWidget(self._loadresource_button)
         #
         return layout
 
-    def __showItemInfo(self, index):
+    def _showItemInfo(self, index):
         """ """
-#        name_index = self.__model.createIndex(index.row(), 0)
-#        size_index = self.__model.createIndex(index.row(), 1)
-#        taxonName = self.__model.data(name_index).toString()
-#        size = self.__model.data(size_index).toString() 
-###        taxonName = self.__dyntaxa_object.getData(index.row(), 0)
-###        size = self.__dyntaxa_object.getData(index.row(), 1)
+#        name_index = self._model.createIndex(index.row(), 0)
+#        size_index = self._model.createIndex(index.row(), 1)
+#        taxonName = self._model.data(name_index).toString()
+#        size = self._model.data(size_index).toString() 
+###        taxonName = self._dyntaxa_object.getData(index.row(), 0)
+###        size = self._dyntaxa_object.getData(index.row(), 1)
         #
-        taxon = self.__dyntaxa_object.getSortedNameList()[index.row()]
-        self.__scientificname_label.setText(
+        taxon = self._dyntaxa_object.getSortedNameList()[index.row()]
+        self._scientificname_label.setText(
             '<b>' + 
             '<i>' + taxon.get('Scientific name', '') + '</i>' + 
             '&nbsp;&nbsp;&nbsp;' + taxon.get('Scientific name author', '') + 
@@ -148,54 +148,54 @@ class DyntaxaBrowserTool(tool_base.ToolBase):
             delimiter = ' - '
             name = None
             parentid = taxon.get('Parent id', None)
-            taxon = self.__dyntaxa_object.getTaxonById(parentid)
+            taxon = self._dyntaxa_object.getTaxonById(parentid)
             if taxon:
                 name = taxon.get('Scientific name', None)
             if len(hier) > 1000: # If infinite loops related to error in parent id. 
-                self.__classification_label.setText('ERROR: Hierachy too long: ' + hier)
+                self._classification_label.setText('ERROR: Hierachy too long: ' + hier)
                 print('ERROR: Hierachy too long: ' + hier)
                 return
-        self.__classification_label.setText(hier)
-#        self.__author_label.setText(taxon.get('Author', '-'))
-#        self.__class_label.setText(taxon.get('Class', '-'))
-#        self.__division_label.setText(taxon.get('Division', '-'))
-#        self.__order_label.setText(taxon.get('Order', '-'))
+        self._classification_label.setText(hier)
+#        self._author_label.setText(taxon.get('Author', '-'))
+#        self._class_label.setText(taxon.get('Class', '-'))
+#        self._division_label.setText(taxon.get('Division', '-'))
+#        self._order_label.setText(taxon.get('Order', '-'))
 #        #
-#        sizeclass = self.__dyntaxa_object.getNameAndSizeList()[index.row()][1]
-#        self.__size_class_label.setText('<b>' + unicode(sizeclass.get('Size class', '-')) + '</b>')
-#        self.__thropy_label.setText(sizeclass.get('Trophy', '-'))
-#        self.__shape_label.setText(sizeclass.get('Geometric shape', '-'))
-#        self.__formula_label.setText(sizeclass.get('Formula', '-'))
-#        self.__volume_label.setText(unicode(sizeclass.get('Calculated volume, um3', '-')))
-#        self.__carbon_label.setText(unicode(sizeclass.get('Calculated Carbon pg/counting unit', '-')))
+#        sizeclass = self._dyntaxa_object.getNameAndSizeList()[index.row()][1]
+#        self._size_class_label.setText('<b>' + unicode(sizeclass.get('Size class', '-')) + '</b>')
+#        self._thropy_label.setText(sizeclass.get('Trophy', '-'))
+#        self._shape_label.setText(sizeclass.get('Geometric shape', '-'))
+#        self._formula_label.setText(sizeclass.get('Formula', '-'))
+#        self._volume_label.setText(unicode(sizeclass.get('Calculated volume, um3', '-')))
+#        self._carbon_label.setText(unicode(sizeclass.get('Calculated Carbon pg/counting unit', '-')))
 
-    def __loadResource(self):
+    def _loadResource(self):
         """ """
         toolbox_resources.ToolboxResources().loadResourceDyntaxa()
 
-    def __dyntaxaRefresh(self):
+    def _dyntaxaRefresh(self):
         """ """
-        self.__model.reset()
-        self.__tableView.resizeColumnsToContents() # TODO: Check if time-consuming...
+        self._model.reset()
+        self._tableView.resizeColumnsToContents() # TODO: Check if time-consuming...
         
 ##############################################################
 class DyntaxaTableModel(QtCore.QAbstractTableModel):
     """ 
     """
     def __init__(self, dataset):
-        self.__dataset = dataset
-#        self.__nameandsizelist = self.__dataset.getNameAndSizeList()
+        self._dataset = dataset
+#        self._nameandsizelist = self._dataset.getNameAndSizeList()
         # Initialize parent.
         super(DyntaxaTableModel, self).__init__()
         
     def setDataset(self, dataset):
         """ """
-        self.__dataset = dataset
+        self._dataset = dataset
         
     def rowCount(self, parent=QtCore.QModelIndex()):
         """ """
-        if self.__dataset:
-            return len(self.__dataset.getSortedNameList())
+        if self._dataset:
+            return len(self._dataset.getSortedNameList())
         else:
             return 0
 
@@ -227,26 +227,26 @@ class DyntaxaTableModel(QtCore.QAbstractTableModel):
         if role == QtCore.Qt.DisplayRole:
             if index.isValid():
                 if index.column() == 0:
-                    sizeclass = self.__dataset.getSortedNameList()[index.row()]
+                    sizeclass = self._dataset.getSortedNameList()[index.row()]
                     return QtCore.QVariant(sizeclass.get('Taxon id', ''))
                 if index.column() == 1:
-                    taxon = self.__dataset.getSortedNameList()[index.row()]
+                    taxon = self._dataset.getSortedNameList()[index.row()]
                     return QtCore.QVariant(taxon.get('Scientific name', ''))
                 if index.column() == 2:
-                    taxon = self.__dataset.getSortedNameList()[index.row()]
+                    taxon = self._dataset.getSortedNameList()[index.row()]
                     return QtCore.QVariant(taxon.get('Taxon type', ''))
                 if index.column() == 3:
-                    taxon = self.__dataset.getSortedNameList()[index.row()]
+                    taxon = self._dataset.getSortedNameList()[index.row()]
                     for nameitem in taxon.get('Names', []):
                         if nameitem['Name type'] == 'Swedish':
                             return QtCore.QVariant(nameitem.get('Name', ''))
                 if index.column() == 4:
-                    taxon = self.__dataset.getSortedNameList()[index.row()]
+                    taxon = self._dataset.getSortedNameList()[index.row()]
                     for nameitem in taxon.get('Names', []):
                         if nameitem['Name type'] == 'ITIS-number':
                             return QtCore.QVariant(nameitem.get('Name', ''))
                 if index.column() == 5:
-                    taxon = self.__dataset.getSortedNameList()[index.row()]
+                    taxon = self._dataset.getSortedNameList()[index.row()]
                     for nameitem in taxon.get('Names', []):
                         if nameitem['Name type'] == 'ERMS-name':
                             return QtCore.QVariant(nameitem.get('Name', ''))

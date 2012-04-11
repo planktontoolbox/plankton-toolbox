@@ -47,8 +47,8 @@ class PwReportMJ1(PwReports):
     """
     def __init__(self):
         """ """
-#        self.__peg = None
-#        self.__translationFileName = None
+#        self._peg = None
+#        self._translationFileName = None
         # Initialize parent.
         super(PwReportMJ1, self).__init__()
         
@@ -211,8 +211,8 @@ class PwReportMJ2(PwReports):
     """
     def __init__(self):
         """ """
-#        self.__peg = None
-#        self.__translationFileName = None
+#        self._peg = None
+#        self._translationFileName = None
         # Initialize parent.
         super(PwReportMJ2, self).__init__()
         
@@ -380,8 +380,8 @@ class PwReportATS1(PwReports):
     """
     def __init__(self):
         """ """
-#        self.__peg = None
-#        self.__translationFileName = None
+#        self._peg = None
+#        self._translationFileName = None
         # Initialize parent.
         super(PwReportATS1, self).__init__()
         

@@ -52,54 +52,54 @@ class LogTool(tool_base.ToolBase):
         content = self._createScrollableContent()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
-        contentLayout.addLayout(self.__contentButtons())
-        contentLayout.addLayout(self.__contentLogArea())
+        contentLayout.addLayout(self._contentButtons())
+        contentLayout.addLayout(self._contentLogArea())
 
-    def __contentButtons(self):
+    def _contentButtons(self):
         """ """
         # Active widgets and connections.
-        self.__clearbutton = QtGui.QPushButton("Clear log")
-        self.__limitedit = QtGui.QLineEdit("1000")
-        self.__limitedit.setMaximumWidth(60)        
-        self.connect(self.__clearbutton, QtCore.SIGNAL("clicked()"), self.__clearLog)      
+        self._clearbutton = QtGui.QPushButton("Clear log")
+        self._limitedit = QtGui.QLineEdit("1000")
+        self._limitedit.setMaximumWidth(60)        
+        self.connect(self._clearbutton, QtCore.SIGNAL("clicked()"), self._clearLog)      
         # Layout.
         layout = QtGui.QHBoxLayout()
         limitlabel = QtGui.QLabel("Row limit: ")
         layout.addStretch(5)
         layout.addWidget(limitlabel)
-        layout.addWidget(self.__limitedit)
-        layout.addWidget(self.__clearbutton)
+        layout.addWidget(self._limitedit)
+        layout.addWidget(self._clearbutton)
         #
         return layout
 
-    def __contentLogArea(self):
+    def _contentLogArea(self):
         """ """
         # Active widgets and connections.
-        self.__logarea = QtGui.QListWidget(self)
-        self.__logarea.setMinimumHeight(20)
-        self.__logarea.setMinimumWidth(100)
-        self.connect(self.__clearbutton, QtCore.SIGNAL("clicked()"), self.__clearLog)      
+        self._logarea = QtGui.QListWidget(self)
+        self._logarea.setMinimumHeight(20)
+        self._logarea.setMinimumWidth(100)
+        self.connect(self._clearbutton, QtCore.SIGNAL("clicked()"), self._clearLog)      
         # Layout.
         layout = QtGui.QHBoxLayout()
-        layout.addWidget(self.__logarea)
+        layout.addWidget(self._logarea)
         #
         return layout
 
     def writeToLog(self, message):
         """ """
-        self.__logarea.addItem(message)
-        self.__logarea.scrollToBottom()
+        self._logarea.addItem(message)
+        self._logarea.scrollToBottom()
         # Remove oldest lines if max exceeded.
         try:
-            max = int(unicode(self.__limitedit.text())) 
+            max = int(unicode(self._limitedit.text())) 
             if max > 1:
-                while self.__logarea.count() > max:
-                    self.__logarea.takeItem(0)
+                while self._logarea.count() > max:
+                    self._logarea.takeItem(0)
         except:
             pass # Don't remove rows if max is not a valid integer.    
         
 
-    def __clearLog(self):
+    def _clearLog(self):
         """ """
-        self.__logarea.clear()
+        self._logarea.clear()
 

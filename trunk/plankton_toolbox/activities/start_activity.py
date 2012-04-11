@@ -49,21 +49,21 @@ class StartActivity(activity_base.ActivityBase):
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
         # Add activity name at top.
-        self.__activityheader = QtGui.QLabel('<h2>' + self.objectName() + '</h2>', self)
-        self.__activityheader.setTextFormat(QtCore.Qt.RichText)
-        self.__activityheader.setAlignment(QtCore.Qt.AlignHCenter)
-#        self.__activityheader.setStyleSheet(""" 
+        self._activityheader = QtGui.QLabel('<h2>' + self.objectName() + '</h2>', self)
+        self._activityheader.setTextFormat(QtCore.Qt.RichText)
+        self._activityheader.setAlignment(QtCore.Qt.AlignHCenter)
+#        self._activityheader.setStyleSheet(""" 
 #            * { color: white; background-color: #00677f; }
 #            """)
-        contentLayout.addWidget(self.__activityheader)
+        contentLayout.addWidget(self._activityheader)
         # Add content to the activity.
-        contentLayout.addLayout(self.__contentWelcome())
-        contentLayout.addLayout(self.__contentActivities())
-        contentLayout.addLayout(self.__contentTools())
-        contentLayout.addLayout(self.__contentGetDataFromNordicMicroalgae())
+        contentLayout.addLayout(self._contentWelcome())
+        contentLayout.addLayout(self._contentActivities())
+        contentLayout.addLayout(self._contentTools())
+        contentLayout.addLayout(self._contentGetDataFromNordicMicroalgae())
         contentLayout.addStretch(5)
 
-    def __contentWelcome(self):
+    def _contentWelcome(self):
         """ """
         # Active widgets and connections.
         label = utils_qt.RichTextQLabel()
@@ -87,7 +87,7 @@ class StartActivity(activity_base.ActivityBase):
         #
         return layout
 
-    def __contentActivities(self):
+    def _contentActivities(self):
         """ """
         # Active widgets and connections.
         label1 = QtGui.QLabel()
@@ -103,11 +103,11 @@ class StartActivity(activity_base.ActivityBase):
         createreportsbutton = utils_qt.ClickableQLabel("- Create reports.")
         managespecieslistsbutton = utils_qt.ClickableQLabel("- Manage species lists.")
         #    
-        self.connect(createdatasetbutton, QtCore.SIGNAL("clicked()"), self.__gotoCreateDataset)
-        self.connect(loaddatasetsbutton, QtCore.SIGNAL("clicked()"), self.__gotoLoadDatasets)
-        self.connect(analysedatasetsbutton, QtCore.SIGNAL("clicked()"), self.__gotoAnalyseDatasets)
-        self.connect(createreportsbutton, QtCore.SIGNAL("clicked()"), self.__gotoCreateReports)
-        self.connect(managespecieslistsbutton, QtCore.SIGNAL("clicked()"), self.__gotoManageSpeciesLists)
+        self.connect(createdatasetbutton, QtCore.SIGNAL("clicked()"), self._gotoCreateDataset)
+        self.connect(loaddatasetsbutton, QtCore.SIGNAL("clicked()"), self._gotoLoadDatasets)
+        self.connect(analysedatasetsbutton, QtCore.SIGNAL("clicked()"), self._gotoAnalyseDatasets)
+        self.connect(createreportsbutton, QtCore.SIGNAL("clicked()"), self._gotoCreateReports)
+        self.connect(managespecieslistsbutton, QtCore.SIGNAL("clicked()"), self._gotoManageSpeciesLists)
         # Layout.
         layout = QtGui.QGridLayout()
         gridrow = 0
@@ -129,22 +129,22 @@ class StartActivity(activity_base.ActivityBase):
         #
         return layout
 
-    def __gotoCreateDataset(self):
+    def _gotoCreateDataset(self):
         self._parent.showActivityByName('(Create dataset)')
     
-    def __gotoLoadDatasets(self):
+    def _gotoLoadDatasets(self):
         self._parent.showActivityByName('Load datasets')
     
-    def __gotoAnalyseDatasets(self):
+    def _gotoAnalyseDatasets(self):
         self._parent.showActivityByName('(Analyse datasets)')
     
-    def __gotoCreateReports(self):
+    def _gotoCreateReports(self):
         self._parent.showActivityByName('Create reports')
     
-    def __gotoManageSpeciesLists(self):
+    def _gotoManageSpeciesLists(self):
         self._parent.showActivityByName('Manage species lists')
     
-    def __contentTools(self):
+    def _contentTools(self):
         """ """
         # Active widgets and connections.
         label1 = utils_qt.RichTextQLabel()
@@ -161,7 +161,7 @@ class StartActivity(activity_base.ActivityBase):
         #
         return layout
 
-    def __contentGetDataFromNordicMicroalgae(self):
+    def _contentGetDataFromNordicMicroalgae(self):
         """ """
         # Active widgets and connections.
         label1 = utils_qt.RichTextQLabel()
@@ -177,10 +177,10 @@ class StartActivity(activity_base.ActivityBase):
         clearimagesbutton = utils_qt.ClickableQLabel("- Clear species images.")
         loadimagesbutton = utils_qt.ClickableQLabel("- Load species images from Nordic Microalgae.")
         #
-        self.connect(clearspeciesbutton, QtCore.SIGNAL("clicked()"), self.__clearSpecies)
-        self.connect(loadspeciesbutton, QtCore.SIGNAL("clicked()"), self.__loadSpecies)
-        self.connect(clearimagesbutton, QtCore.SIGNAL("clicked()"), self.__clearImages)
-        self.connect(loadimagesbutton, QtCore.SIGNAL("clicked()"), self.__loadImages)
+        self.connect(clearspeciesbutton, QtCore.SIGNAL("clicked()"), self._clearSpecies)
+        self.connect(loadspeciesbutton, QtCore.SIGNAL("clicked()"), self._loadSpecies)
+        self.connect(clearimagesbutton, QtCore.SIGNAL("clicked()"), self._clearImages)
+        self.connect(loadimagesbutton, QtCore.SIGNAL("clicked()"), self._loadImages)
         # Layout.
         layout = QtGui.QGridLayout()
         gridrow = 0
@@ -200,16 +200,16 @@ class StartActivity(activity_base.ActivityBase):
         #
         return layout
 
-    def __clearSpecies(self):
+    def _clearSpecies(self):
         QtGui.QMessageBox.information(self, "Information", 'Sorry, not yet implemented.')
     
-    def __loadSpecies(self):
+    def _loadSpecies(self):
         QtGui.QMessageBox.information(self, "Information", 'Sorry, not yet implemented.')
     
-    def __clearImages(self):
+    def _clearImages(self):
         QtGui.QMessageBox.information(self, "Information", 'Sorry, not yet implemented.')
     
-    def __loadImages(self):
+    def _loadImages(self):
         QtGui.QMessageBox.information(self, "Information", 'Sorry, not yet implemented.')
     
 

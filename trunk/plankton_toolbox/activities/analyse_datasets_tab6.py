@@ -43,29 +43,29 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
 
     def setMainActivity(self, analyse_dataset_activity):
         """ """
-        self.__analysedatasetactivity = analyse_dataset_activity
+        self._analysedatasetactivity = analyse_dataset_activity
                 
     def clear(self):
         """ """
-        self.__x_axis_column_list.clear()
-        self.__x_axis_parameter_list.clear()
-        self.__y_axis_column_list.clear()
-        self.__y_axis_parameter_list.clear()
-        self.__x_axis_column_list.addItems([u"Parameter:"])
-        self.__y_axis_column_list.addItems([u"Parameter:"])
-        self.__x_axis_column_list.setEnabled(False)
-        self.__y_axis_column_list.setEnabled(False)
-        self.__x_axis_parameter_list.setEnabled(False)
-        self.__y_axis_parameter_list.setEnabled(False)
+        self._x_axis_column_list.clear()
+        self._x_axis_parameter_list.clear()
+        self._y_axis_column_list.clear()
+        self._y_axis_parameter_list.clear()
+        self._x_axis_column_list.addItems([u"Parameter:"])
+        self._y_axis_column_list.addItems([u"Parameter:"])
+        self._x_axis_column_list.setEnabled(False)
+        self._y_axis_column_list.setEnabled(False)
+        self._x_axis_parameter_list.setEnabled(False)
+        self._y_axis_parameter_list.setEnabled(False)
         
     def update(self):
         """ """
         self.clear()
-        currentdata = self.__analysedatasetactivity.getCurrentData()
+        currentdata = self._analysedatasetactivity.getCurrentData()
         if currentdata:        
             # For tab "Generic graphs".        
-            self.__x_axis_column_list.addItems([item[u'Header'] for item in currentdata.getExportTableColumns()])
-            self.__y_axis_column_list.addItems([item[u'Header'] for item in currentdata.getExportTableColumns()])
+            self._x_axis_column_list.addItems([item[u'Header'] for item in currentdata.getExportTableColumns()])
+            self._y_axis_column_list.addItems([item[u'Header'] for item in currentdata.getExportTableColumns()])
             # Search for all parameters in current data.
             parameterset = set()
             for visitnode in currentdata.getChildren():
@@ -73,13 +73,13 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                     for variablenode in samplenode.getChildren():
                         parameterset.add(variablenode.getData(u"Parameter"))
             parameterlist = sorted(parameterset)
-            self.__x_axis_parameter_list.addItems(parameterlist)
-            self.__y_axis_parameter_list.addItems(parameterlist)
+            self._x_axis_parameter_list.addItems(parameterlist)
+            self._y_axis_parameter_list.addItems(parameterlist)
             #  Make combo-boxes visible.
-            self.__x_axis_column_list.setEnabled(True)
-            self.__y_axis_column_list.setEnabled(True)
-            self.__x_axis_parameter_list.setEnabled(True)
-            self.__y_axis_parameter_list.setEnabled(True)
+            self._x_axis_column_list.setEnabled(True)
+            self._y_axis_column_list.setEnabled(True)
+            self._x_axis_parameter_list.setEnabled(True)
+            self._y_axis_parameter_list.setEnabled(True)
 
     # ===== TAB: Generic graphs ===== 
     def contentGenericGraphs(self):
@@ -92,38 +92,38 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         tempor incididunt ut labore et dolore magna aliqua.
         """)        
         # - Select column for x-axis:
-        self.__x_axis_column_list = QtGui.QComboBox()
-        self.__x_axis_column_list.setMinimumContentsLength(20)
-        self.__x_axis_column_list.addItems([u"Parameter:"])
-        self.__x_axis_column_list.setEnabled(False) # Disabled until rows are added.
-        self.__x_axis_parameter_list = QtGui.QComboBox()        
-        self.__x_axis_parameter_list.setMinimumContentsLength(20)
-        self.__x_axis_parameter_list.setEnabled(False) # Disabled until rows are added.
+        self._x_axis_column_list = QtGui.QComboBox()
+        self._x_axis_column_list.setMinimumContentsLength(20)
+        self._x_axis_column_list.addItems([u"Parameter:"])
+        self._x_axis_column_list.setEnabled(False) # Disabled until rows are added.
+        self._x_axis_parameter_list = QtGui.QComboBox()        
+        self._x_axis_parameter_list.setMinimumContentsLength(20)
+        self._x_axis_parameter_list.setEnabled(False) # Disabled until rows are added.
         #
-        self.connect(self.__x_axis_column_list, QtCore.SIGNAL("currentIndexChanged(int)"), self.__updateEnabledDisabled)                
+        self.connect(self._x_axis_column_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._updateEnabledDisabled)                
         # - Add available column names.
-#        self.__x_axis_column_list.addItems(self._matrix_list)                
+#        self._x_axis_column_list.addItems(self._matrix_list)                
         # - Select column for y-axis:
-        self.__y_axis_column_list = QtGui.QComboBox()
-        self.__y_axis_column_list.setMinimumContentsLength(20)
-        self.__y_axis_column_list.addItems([u"Parameter:"])        
-        self.__y_axis_column_list.setEnabled(False) # Disabled until rows are added.
-        self.__y_axis_parameter_list = QtGui.QComboBox()
-        self.__y_axis_parameter_list.setMinimumContentsLength(20)
-        self.__y_axis_parameter_list.setEnabled(False) # Disabled until rows are added.
+        self._y_axis_column_list = QtGui.QComboBox()
+        self._y_axis_column_list.setMinimumContentsLength(20)
+        self._y_axis_column_list.addItems([u"Parameter:"])        
+        self._y_axis_column_list.setEnabled(False) # Disabled until rows are added.
+        self._y_axis_parameter_list = QtGui.QComboBox()
+        self._y_axis_parameter_list.setMinimumContentsLength(20)
+        self._y_axis_parameter_list.setEnabled(False) # Disabled until rows are added.
         #
-        self.connect(self.__y_axis_column_list, QtCore.SIGNAL("currentIndexChanged(int)"), self.__updateEnabledDisabled)                
+        self.connect(self._y_axis_column_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._updateEnabledDisabled)                
         # - Add available column names.
-#        self.__x_axis_column_list.addItems(self._matrix_list)                
+#        self._x_axis_column_list.addItems(self._matrix_list)                
 
         # Draw graph.
-        self.__plotindex_list = QtGui.QComboBox()
-        self.__plotindex_list.addItems(["Time series 1", "Time series 2", "Time series 3", "Time series 4", 
+        self._plotindex_list = QtGui.QComboBox()
+        self._plotindex_list.addItems(["Time series 1", "Time series 2", "Time series 3", "Time series 4", 
                                        "X/Y plot 1", "X/Y plot 2", "X/Y plot 3", "X/Y plot 4"])
-        self.__addplot_button = QtGui.QPushButton("Add plot")
-        self.connect(self.__addplot_button, QtCore.SIGNAL("clicked()"), self.__addPlot)                
-#        self.__addxyplot_button = QtGui.QPushButton("Add X/Y plot")
-#        self.connect(self.__addxyplot_button, QtCore.SIGNAL("clicked()"), self.__addXYPlot)                
+        self._addplot_button = QtGui.QPushButton("Add plot")
+        self.connect(self._addplot_button, QtCore.SIGNAL("clicked()"), self._addPlot)                
+#        self._addxyplot_button = QtGui.QPushButton("Add X/Y plot")
+#        self.connect(self._addxyplot_button, QtCore.SIGNAL("clicked()"), self._addXYPlot)                
 
         # Layout widgets.
         form1 = QtGui.QGridLayout()
@@ -132,27 +132,27 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         label2 = QtGui.QLabel("Parameter:")
         stretchlabel = QtGui.QLabel("")
         form1.addWidget(label1, gridrow, 0, 1, 1)
-        form1.addWidget(self.__x_axis_column_list, gridrow, 1, 1, 1)
+        form1.addWidget(self._x_axis_column_list, gridrow, 1, 1, 1)
         form1.addWidget(label2, gridrow, 2, 1, 1)
-        form1.addWidget(self.__x_axis_parameter_list, gridrow, 3, 1, 1)
+        form1.addWidget(self._x_axis_parameter_list, gridrow, 3, 1, 1)
         form1.addWidget(stretchlabel, gridrow,4, 1, 20)
         gridrow += 1
 #        label1 = QtGui.QLabel("Select column for y-axis:")
 #        form1.addWidget(label1, gridrow, 0, 1, 1)
-#        form1.addWidget(self.__y_axis_column_list, gridrow, 1, 1, 1)
+#        form1.addWidget(self._y_axis_column_list, gridrow, 1, 1, 1)
         label1 = QtGui.QLabel("Select y-axis:")
         label2 = QtGui.QLabel("Parameter:")
         form1.addWidget(label1, gridrow, 0, 1, 1)
-        form1.addWidget(self.__y_axis_column_list, gridrow, 1, 1, 1)
+        form1.addWidget(self._y_axis_column_list, gridrow, 1, 1, 1)
         form1.addWidget(label2, gridrow, 2, 1, 1)
-        form1.addWidget(self.__y_axis_parameter_list, gridrow, 3, 1, 1)
+        form1.addWidget(self._y_axis_parameter_list, gridrow, 3, 1, 1)
         #
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(10)
         hbox1.addWidget(QtGui.QLabel("Select plot:"))
-        hbox1.addWidget(self.__plotindex_list)
-        hbox1.addWidget(self.__addplot_button)
-#        hbox1.addWidget(self.__addxyplot_button)
+        hbox1.addWidget(self._plotindex_list)
+        hbox1.addWidget(self._addplot_button)
+#        hbox1.addWidget(self._addxyplot_button)
         #
         layout = QtGui.QVBoxLayout()
         layout.addWidget(introlabel)
@@ -163,37 +163,37 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         #
         return widget
         
-    def __updateEnabledDisabled(self, index):
+    def _updateEnabledDisabled(self, index):
         """ """
         #
-        if self.__x_axis_column_list.currentIndex() == 0:
-            self.__x_axis_parameter_list.setEnabled(True)
+        if self._x_axis_column_list.currentIndex() == 0:
+            self._x_axis_parameter_list.setEnabled(True)
         else:
-            self.__x_axis_parameter_list.setEnabled(False)
+            self._x_axis_parameter_list.setEnabled(False)
         #
-        if self.__y_axis_column_list.currentIndex() == 0:
-            self.__y_axis_parameter_list.setEnabled(True)
+        if self._y_axis_column_list.currentIndex() == 0:
+            self._y_axis_parameter_list.setEnabled(True)
         else:
-            self.__y_axis_parameter_list.setEnabled(False)
+            self._y_axis_parameter_list.setEnabled(False)
             
-    def __addPlot(self):
+    def _addPlot(self):
         """ """
-        currentdata = self.__analysedatasetactivity.getCurrentData()
+        currentdata = self._analysedatasetactivity.getCurrentData()
         if not currentdata:
             return # Can't plot from empty dataset
         #
         tool_manager.ToolManager().showToolByName(u'Graph plot') # Show tool if hidden.
         graphtool = tool_manager.ToolManager().getToolByName(u'Graph plot')
         # Selected columns.
-        x_column = unicode(self.__x_axis_column_list.currentText())
-        y_column = unicode(self.__y_axis_column_list.currentText())
+        x_column = unicode(self._x_axis_column_list.currentText())
+        y_column = unicode(self._y_axis_column_list.currentText())
         # Selected parameters.
         x_param = None
         y_param = None
         if x_column == u"Parameter:":
-            x_param = unicode(self.__x_axis_parameter_list.currentText())
+            x_param = unicode(self._x_axis_parameter_list.currentText())
         if y_column == u"Parameter:":
-            y_param = unicode(self.__y_axis_parameter_list.currentText())
+            y_param = unicode(self._y_axis_parameter_list.currentText())
         # Check exports columns backwards.
         x_visit_key = None
         x_sample_key = None                      
@@ -228,7 +228,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         #
         
         
-        selected_dict = self.__analysedatasetactivity.getSelectDataDict()
+        selected_dict = self._analysedatasetactivity.getSelectDataDict()
         selected_startdate = selected_dict[u'Start date']
         selected_enddate = selected_dict[u'End date']
         selected_stations = selected_dict[u'Stations']
@@ -311,7 +311,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         #
 
         # Check if this is a time series or not.
-        selectedplotindex = self.__plotindex_list.currentIndex() 
+        selectedplotindex = self._plotindex_list.currentIndex() 
         if selectedplotindex in [0, 1, 2, 3]:
             graphtool.addTimeseriesPlot(selectedplotindex, x_data, y_data)
         else:

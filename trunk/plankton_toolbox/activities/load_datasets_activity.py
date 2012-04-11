@@ -44,11 +44,11 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
     """ """
     def __init__(self, name, parentwidget):
         """ """
-        self.__datasettabledata = DatasetTableData()
-        self.__last_used_textfile_name = ''
-        self.__last_used_excelfile_name = ''
+        self._datasettabledata = DatasetTableData()
+        self._last_used_textfile_name = ''
+        self._last_used_excelfile_name = ''
         # Load available import/export matrices.
-        self._matrix_path = u'mmfw_data/matrices/'
+        self._matrix_path = u'toolbox_data/matrices/'
         self._matrix_list = []
         for matrixpath in glob.glob(self._matrix_path + u'*.xlsx'):
             print("Available matrix: " + os.path.basename(matrixpath))
@@ -62,26 +62,26 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
         # Add activity name at top.
-        self.__activityheader = QtGui.QLabel('<h2>' + self.objectName() + '</h2>', self)
-        self.__activityheader.setTextFormat(QtCore.Qt.RichText)
-        self.__activityheader.setAlignment(QtCore.Qt.AlignHCenter)
-        contentLayout.addWidget(self.__activityheader)
+        self._activityheader = QtGui.QLabel('<h2>' + self.objectName() + '</h2>', self)
+        self._activityheader.setTextFormat(QtCore.Qt.RichText)
+        self._activityheader.setAlignment(QtCore.Qt.AlignHCenter)
+        contentLayout.addWidget(self._activityheader)
         # Add content to the activity.
-        contentLayout.addWidget(self.__contentLoadDataset())
-        contentLayout.addWidget(self.__contentLoadedDatasets(), 10)
+        contentLayout.addWidget(self._contentLoadDataset())
+        contentLayout.addWidget(self._contentLoadedDatasets(), 10)
 #        contentLayout.addStretch(5)
         # Style.
-        self.__activityheader.setStyleSheet(""" 
+        self._activityheader.setStyleSheet(""" 
             * { color: white; background-color: #00677f; }
             """)
     
-    def __contentLoadDataset(self):
+    def _contentLoadDataset(self):
         """ """
         # Active widgets and connections.
         selectdatabox = QtGui.QGroupBox("Load dataset", self)
         tabWidget = QtGui.QTabWidget()
-        tabWidget.addTab(self.__contentTextfile(), "Text files (*.txt)")
-        tabWidget.addTab(self.__contentXlsx(), "Excel files (*.xlsx)")
+        tabWidget.addTab(self._contentTextfile(), "Text files (*.txt)")
+        tabWidget.addTab(self._contentXlsx(), "Excel files (*.xlsx)")
         # Layout widgets.
         layout = QtGui.QVBoxLayout()
         layout.addWidget(tabWidget)
@@ -90,7 +90,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         return selectdatabox
 
     # ===== TEXT FILES ======
-    def __contentTextfile(self):
+    def _contentTextfile(self):
         """ """
         widget = QtGui.QWidget()
         # Active widgets and connections.
@@ -100,52 +100,52 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         tempor incididunt ut labore et dolore magna aliqua.
         """)        
         # - Select import/export matrix:
-        self.__textfile_matrix_list = QtGui.QComboBox()
-        self.__textfile_matrix_list.addItems(["<select>"])
-        self.connect(self.__textfile_matrix_list, QtCore.SIGNAL("currentIndexChanged(int)"), self.__textfileMatrixSelected)                
+        self._textfile_matrix_list = QtGui.QComboBox()
+        self._textfile_matrix_list.addItems(["<select>"])
+        self.connect(self._textfile_matrix_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._textfileMatrixSelected)                
         # - Add available matrices.
-        self.__textfile_matrix_list.addItems(self._matrix_list)                
+        self._textfile_matrix_list.addItems(self._matrix_list)                
         # - Select import column:
-        self.__textfile_importcolumn_list = QtGui.QComboBox()
-        self.__textfile_importcolumn_list.addItems(["<no matrix selected>"])        
+        self._textfile_importcolumn_list = QtGui.QComboBox()
+        self._textfile_importcolumn_list.addItems(["<no matrix selected>"])        
         # - Select export column:
-        self.__textfile_exportcolumn_list = QtGui.QComboBox()
-        self.__textfile_exportcolumn_list.addItems(["<no matrix selected>"])        
+        self._textfile_exportcolumn_list = QtGui.QComboBox()
+        self._textfile_exportcolumn_list.addItems(["<no matrix selected>"])        
         # - Select text coding.
-        self.__textfile_encoding_list = QtGui.QComboBox()
-        self.__encodings_dict = {u"Windows-1252/CP-1252": u'CP-1252', 
+        self._textfile_encoding_list = QtGui.QComboBox()
+        self._encodings_dict = {u"Windows-1252/CP-1252": u'CP-1252', 
                                  u"UTF-8": u'UTF-8',
                                  u"UTF-16/UCS-2)": u'UTF-16',
                                  u"UTF-16BE": u'UTF-16BE',
                                  u"UTF-16LE": u'UTF-16LE',
                                  u"ANSI": u'ANSI'}
-        self.__textfile_encoding_list.addItems(self.__encodings_dict.keys())
+        self._textfile_encoding_list.addItems(self._encodings_dict.keys())
         # Load dataset.
-        self.__textfile_getdataset_button = QtGui.QPushButton("Load dataset(s)...")
-        self.connect(self.__textfile_getdataset_button, QtCore.SIGNAL("clicked()"), self.__loadTextFiles)                
+        self._textfile_getdataset_button = QtGui.QPushButton("Load dataset(s)...")
+        self.connect(self._textfile_getdataset_button, QtCore.SIGNAL("clicked()"), self._loadTextFiles)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         gridrow = 0
         label1 = QtGui.QLabel("Select matrix:")
         stretchlabel = QtGui.QLabel("")
         form1.addWidget(label1, gridrow, 0, 1, 1)
-        form1.addWidget(self.__textfile_matrix_list, gridrow, 1, 1, 1)
+        form1.addWidget(self._textfile_matrix_list, gridrow, 1, 1, 1)
         form1.addWidget(stretchlabel, gridrow,2, 1, 9)
         gridrow += 1
         label1 = QtGui.QLabel("Select import column:")
         form1.addWidget(label1, gridrow, 0, 1, 1)
-        form1.addWidget(self.__textfile_importcolumn_list, gridrow, 1, 1, 1)
+        form1.addWidget(self._textfile_importcolumn_list, gridrow, 1, 1, 1)
         gridrow += 1
         label1 = QtGui.QLabel("Select export column:")
         form1.addWidget(label1, gridrow, 0, 1, 1)
-        form1.addWidget(self.__textfile_exportcolumn_list, gridrow, 1, 1, 1)
+        form1.addWidget(self._textfile_exportcolumn_list, gridrow, 1, 1, 1)
         #
         hbox1 = QtGui.QHBoxLayout()
         label1 = QtGui.QLabel("Dataset character encoding:")
         hbox1.addWidget(label1)
-        hbox1.addWidget(self.__textfile_encoding_list)
+        hbox1.addWidget(self._textfile_encoding_list)
         hbox1.addStretch(10)
-        hbox1.addWidget(self.__textfile_getdataset_button)
+        hbox1.addWidget(self._textfile_getdataset_button)
         #
         layout = QtGui.QVBoxLayout()
         layout.addWidget(introlabel)
@@ -156,7 +156,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         #
         return widget
         
-    def __textfileMatrixSelected(self, selected_row):
+    def _textfileMatrixSelected(self, selected_row):
         """ """
         if (selected_row > 0) and (selected_row <= len(self._matrix_list)):
             print('TEST:' + unicode(self._matrix_list[selected_row - 1]) )
@@ -164,26 +164,26 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             tabledata = mmfw.DatasetTable()
             mmfw.ExcelFiles().readToTableDataset(tabledata, 
                                                  file_name = self._matrix_path + self._matrix_list[selected_row - 1])
-            self.__textfile_importcolumn_list.clear()
-            self.__textfile_exportcolumn_list.clear()
-            self.__semantics_column = None
+            self._textfile_importcolumn_list.clear()
+            self._textfile_exportcolumn_list.clear()
+            self._semantics_column = None
             header = tabledata.getHeader()
             for row in tabledata.getRows():
                 if (row[0] == u"INFO") and (row[1] == u"Column type"):
                     for index, item in enumerate(row):
                         if item == u"Import":
-                            self.__textfile_importcolumn_list.addItems([header[index]])
+                            self._textfile_importcolumn_list.addItems([header[index]])
                         if item == u"Export":
-                            self.__textfile_exportcolumn_list.addItems([header[index]])
+                            self._textfile_exportcolumn_list.addItems([header[index]])
                         if item == u"Semantics":
-                            self.__semantics_column = header[index]
+                            self._semantics_column = header[index]
         else:
-            self.__textfile_importcolumn_list.clear()
-            self.__textfile_importcolumn_list.addItems(["no matrix selected"])
-            self.__textfile_exportcolumn_list.clear()
-            self.__textfile_exportcolumn_list.addItems(["no matrix selected"])
+            self._textfile_importcolumn_list.clear()
+            self._textfile_importcolumn_list.addItems(["no matrix selected"])
+            self._textfile_exportcolumn_list.clear()
+            self._textfile_exportcolumn_list.addItems(["no matrix selected"])
 
-    def __loadTextFiles(self):
+    def _loadTextFiles(self):
         """ """
         self._parent.statusBar().showMessage(u'Loading datasets...')
         # Show select file dialog box. Multiple files can be selected.
@@ -191,24 +191,24 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         filenames = QtGui.QFileDialog.getOpenFileNames(
                             self,
                             'Load dataset(s)',
-                            self.__last_used_textfile_name,
+                            self._last_used_textfile_name,
                             namefilter)
         # From QString to unicode.
         filenames = map(unicode, filenames)
         # Check if user pressed ok or cancel.
-        self.__tabledataset = mmfw.DatasetTable()
+        self._tabledataset = mmfw.DatasetTable()
         if filenames:
             for filename in filenames:
-                self.__last_used_textfile_name = filename
+                self._last_used_textfile_name = filename
                 
                 
                 # Create a new dataset.
                 dataset = mmfw.DatasetNode()
                 # Add info to dataset about how to import and export data to/from dataset.
-                dataset.loadImportExportMatrix(self._matrix_path + unicode(self.__textfile_matrix_list.currentText()),
-                                               unicode(self.__textfile_importcolumn_list.currentText()),
-                                               unicode(self.__textfile_exportcolumn_list.currentText()),
-                                               self.__semantics_column)
+                dataset.loadImportExportMatrix(self._matrix_path + unicode(self._textfile_matrix_list.currentText()),
+                                               unicode(self._textfile_importcolumn_list.currentText()),
+                                               unicode(self._textfile_exportcolumn_list.currentText()),
+                                               self._semantics_column)
                 # Add metadata related to imported file.
                 dataset.addMetadata(u'File name', os.path.basename(filename))
                 dataset.addMetadata(u'File path', filename)
@@ -223,7 +223,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                     u'Loaded datasets: ' + unicode(datasetcount))
 
     # ===== EXCEL FILES ======
-    def __contentXlsx(self):
+    def _contentXlsx(self):
         """ """
         widget = QtGui.QWidget()
         # Active widgets and connections.
@@ -234,40 +234,40 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         tempor incididunt ut labore et dolore magna aliqua.
         """)
         # - Select import/export matrix:
-        self.__excel_matrix_list = QtGui.QComboBox()
-        self.__excel_matrix_list.addItems(["<select>"])
-        self.connect(self.__excel_matrix_list, QtCore.SIGNAL("currentIndexChanged(int)"), self.__excelMatrixSelected)                
+        self._excel_matrix_list = QtGui.QComboBox()
+        self._excel_matrix_list.addItems(["<select>"])
+        self.connect(self._excel_matrix_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._excelMatrixSelected)                
         # - Add available matrices.
-        self.__excel_matrix_list.addItems(self._matrix_list)                
+        self._excel_matrix_list.addItems(self._matrix_list)                
         # - Select import column:
-        self.__excel_importcolumn_list = QtGui.QComboBox()
-        self.__excel_importcolumn_list.addItems(["<no matrix selected>"])        
+        self._excel_importcolumn_list = QtGui.QComboBox()
+        self._excel_importcolumn_list.addItems(["<no matrix selected>"])        
         # - Select export column:
-        self.__excel_exportcolumn_list = QtGui.QComboBox()
-        self.__excel_exportcolumn_list.addItems(["<no matrix selected>"])        
+        self._excel_exportcolumn_list = QtGui.QComboBox()
+        self._excel_exportcolumn_list.addItems(["<no matrix selected>"])        
         # Load dataset.
-        self.__excel_getdataset_button = QtGui.QPushButton("Load dataset(s)...")
-        self.connect(self.__excel_getdataset_button, QtCore.SIGNAL("clicked()"), self.__loadExcelFile)                
+        self._excel_getdataset_button = QtGui.QPushButton("Load dataset(s)...")
+        self.connect(self._excel_getdataset_button, QtCore.SIGNAL("clicked()"), self._loadExcelFile)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         gridrow = 0
         label1 = QtGui.QLabel("Select matrix:")
         stretchlabel = QtGui.QLabel("")
         form1.addWidget(label1, gridrow, 0, 1, 1)
-        form1.addWidget(self.__excel_matrix_list, gridrow, 1, 1, 1)
+        form1.addWidget(self._excel_matrix_list, gridrow, 1, 1, 1)
         form1.addWidget(stretchlabel, gridrow,2, 1, 9)
         gridrow += 1
         label1 = QtGui.QLabel("Select import column:")
         form1.addWidget(label1, gridrow, 0, 1, 1)
-        form1.addWidget(self.__excel_importcolumn_list, gridrow, 1, 1, 1)
+        form1.addWidget(self._excel_importcolumn_list, gridrow, 1, 1, 1)
         gridrow += 1
         label1 = QtGui.QLabel("Select export column:")
         form1.addWidget(label1, gridrow, 0, 1, 1)
-        form1.addWidget(self.__excel_exportcolumn_list, gridrow, 1, 1, 1)
+        form1.addWidget(self._excel_exportcolumn_list, gridrow, 1, 1, 1)
         #
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(10)
-        hbox1.addWidget(self.__excel_getdataset_button)
+        hbox1.addWidget(self._excel_getdataset_button)
         #
         layout = QtGui.QVBoxLayout()
         layout.addWidget(introlabel)
@@ -278,7 +278,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         #
         return widget
 
-    def __excelMatrixSelected(self, selected_row):
+    def _excelMatrixSelected(self, selected_row):
         """ """
         if (selected_row > 0) and (selected_row <= len(self._matrix_list)):
             print('TEST:' + unicode(self._matrix_list[selected_row - 1]) )
@@ -286,23 +286,23 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             tabledata = mmfw.DatasetTable()
             mmfw.ExcelFiles().readToTableDataset(tabledata, 
                                                  file_name = self._matrix_path + self._matrix_list[selected_row - 1])
-            self.__excel_importcolumn_list.clear()
-            self.__excel_exportcolumn_list.clear()
+            self._excel_importcolumn_list.clear()
+            self._excel_exportcolumn_list.clear()
             header = tabledata.getHeader()
             for row in tabledata.getRows():
                 if (row[0] == u"INFO") and (row[1] == u"Column type"):
                     for index, item in enumerate(row):
                         if item == u"Import":
-                            self.__excel_importcolumn_list.addItems([header[index]])
+                            self._excel_importcolumn_list.addItems([header[index]])
                         if item == u"Export":
-                            self.__excel_exportcolumn_list.addItems([header[index]])
+                            self._excel_exportcolumn_list.addItems([header[index]])
         else:
-            self.__excel_importcolumn_list.clear()
-            self.__excel_importcolumn_list.addItems(["no matrix selected"])
-            self.__excel_exportcolumn_list.clear()
-            self.__excel_exportcolumn_list.addItems(["no matrix selected"])
+            self._excel_importcolumn_list.clear()
+            self._excel_importcolumn_list.addItems(["no matrix selected"])
+            self._excel_exportcolumn_list.clear()
+            self._excel_exportcolumn_list.addItems(["no matrix selected"])
 
-    def __loadExcelFile(self):
+    def _loadExcelFile(self):
         """ """
         self._parent.statusBar().showMessage(u'Loading datasets...')
         # Show select file dialog box. Multiple files can be selected.
@@ -310,21 +310,21 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         filenames = QtGui.QFileDialog.getOpenFileNames(
                             self,
                             'Load dataset(s)',
-                            self.__last_used_excelfile_name,
+                            self._last_used_excelfile_name,
                             namefilter)
         # From QString to unicode.
         filenames = map(unicode, filenames)
         # Check if user pressed ok or cancel.
-        self.__tabledataset = mmfw.DatasetTable()
+        self._tabledataset = mmfw.DatasetTable()
         if filenames:
             for filename in filenames:
-                self.__last_used_excelfile_name = filename
+                self._last_used_excelfile_name = filename
                 # Create a new dataset.
                 dataset = mmfw.DatasetNode()
                 # Add info to dataset about how to import and export data to/from dataset.
-                dataset.loadImportExportMatrix(self._matrix_path + unicode(self.__excel_matrix_list.currentText()),
-                                               unicode(self.__excel_importcolumn_list.currentText()),
-                                               unicode(self.__excel_exportcolumn_list.currentText()))
+                dataset.loadImportExportMatrix(self._matrix_path + unicode(self._excel_matrix_list.currentText()),
+                                               unicode(self._excel_importcolumn_list.currentText()),
+                                               unicode(self._excel_exportcolumn_list.currentText()))
                 # Add metadata related to imported file.
                 dataset.addMetadata(u'File name', os.path.basename(filename))
                 dataset.addMetadata(u'File path', filename)
@@ -339,16 +339,16 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                     u'Loaded datasets: ' + unicode(datasetcount))
 
     # ===== LOADED DATASETS =====    
-    def __contentLoadedDatasets(self):
+    def _contentLoadedDatasets(self):
         """ """
         # Active widgets and connections.
         selectdatabox = QtGui.QGroupBox("Loaded datasets", self)
         #
-        self.__datasets_table = utils_qt.ToolboxQTableView()
-        self.__datasets_table.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        self._datasets_table = utils_qt.ToolboxQTableView()
+        self._datasets_table.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         
-        self.__datasettabledata.clear()
-        self.__datasettabledata.setHeader([u'Dataset      ', 
+        self._datasettabledata.clear()
+        self._datasettabledata.setHeader([u'Dataset      ', 
                                            u'Type         ', 
                                            u'Content      ', 
                                            u'File         ', 
@@ -356,41 +356,41 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                                            u'Matrix       ',
                                            u'Import column',
                                            u'Export column'])
-        self.__datasets_table.tablemodel.setModeldata(self.__datasettabledata)
-        self.__datasets_table.resizeColumnsToContents()
+        self._datasets_table.tablemodel.setModeldata(self._datasettabledata)
+        self._datasets_table.resizeColumnsToContents()
         
-        self.__datasets_table.selectionModel.Rows
+        self._datasets_table.selectionModel.Rows
         
         # Listen for changes in the toolbox dataset list.
         self.connect(toolbox_datasets.ToolboxDatasets(), 
              QtCore.SIGNAL("datasetListChanged"), 
-             self.__updateDatasetList)
+             self._updateDatasetList)
         # Connection for selected row.
-        self.connect(self.__datasets_table.selectionModel, 
+        self.connect(self._datasets_table.selectionModel, 
                      QtCore.SIGNAL("currentRowChanged(QModelIndex, QModelIndex)"), 
-                     self.__selectionChanged)                
+                     self._selectionChanged)                
         # Buttons.
-        self.__unloadalldatasets_button = QtGui.QPushButton("Unload all datasets")
-        self.__unloadmarkeddatasets_button = QtGui.QPushButton("Unload marked dataset(s)")
+        self._unloadalldatasets_button = QtGui.QPushButton("Unload all datasets")
+        self._unloadmarkeddatasets_button = QtGui.QPushButton("Unload marked dataset(s)")
         # Button connections.
-        self.connect(self.__unloadalldatasets_button, QtCore.SIGNAL("clicked()"), self.__unloadAllDatasets)                
-        self.connect(self.__unloadmarkeddatasets_button, QtCore.SIGNAL("clicked()"), self.__unloadMarkedDatasets)                
+        self.connect(self._unloadalldatasets_button, QtCore.SIGNAL("clicked()"), self._unloadAllDatasets)                
+        self.connect(self._unloadmarkeddatasets_button, QtCore.SIGNAL("clicked()"), self._unloadMarkedDatasets)                
         # Layout widgets.
         buttonlayout = QtGui.QHBoxLayout()
-        buttonlayout.addWidget(self.__unloadalldatasets_button)
-        buttonlayout.addWidget(self.__unloadmarkeddatasets_button)
+        buttonlayout.addWidget(self._unloadalldatasets_button)
+        buttonlayout.addWidget(self._unloadmarkeddatasets_button)
         buttonlayout.addStretch(5)
         #
         widget = QtGui.QWidget()        
         layout = QtGui.QVBoxLayout()
         widget.setLayout(layout)
-        layout.addWidget(self.__datasets_table)
+        layout.addWidget(self._datasets_table)
         layout.addLayout(buttonlayout)
         selectdatabox.setLayout(layout) 
         #       
         return selectdatabox
 
-    def __unloadAllDatasets(self):
+    def _unloadAllDatasets(self):
         """ """
 #        # TODO: MMFW:
 #        mmfw.Datasets().clear()
@@ -398,7 +398,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         
         toolbox_datasets.ToolboxDatasets().clear()
 
-    def __unloadMarkedDatasets(self):
+    def _unloadMarkedDatasets(self):
         """ """
         
         ###self.columnView.selectionModel().selection().indexes()
@@ -406,23 +406,23 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         ###tableView->selectionModel()->currentIndex()
 
         # Remove datasets, start with the last one. 
-        rowcount = self.__datasets_table.tablemodel.rowCount()
+        rowcount = self._datasets_table.tablemodel.rowCount()
         for rowindex in range(rowcount):
-#            item = self.__datasets_table.item(rowcount - rowindex - 1, 0)
+#            item = self._datasets_table.item(rowcount - rowindex - 1, 0)
 #            if item.checkState(): # Check if selected by user.
-            if self.__datasets_table.selectionModel.isSelected(self.__datasets_table.tablemodel.createIndex(rowindex, 0)): # Check if selected by user.
+            if self._datasets_table.selectionModel.isSelected(self._datasets_table.tablemodel.createIndex(rowindex, 0)): # Check if selected by user.
                 # TODO: MMFW:
                 toolbox_datasets.ToolboxDatasets().removeDatasetByIndex(rowcount - rowindex - 1)
 
                 
 #                toolbox_datasets.ToolboxDatasets().removeDatasetByIndex(rowcount - rowindex - 1)
 
-    def __updateDatasetList(self):
+    def _updateDatasetList(self):
         """ """
         
         
         # TODO: MMFW:
-        self.__datasettabledata.clearRows()
+        self._datasettabledata.clearRows()
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
             # Get content info depending on dataset type.
             datasettype = u'',
@@ -440,7 +440,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                 datasettype = u'Unspecified'
 
             # Add row 
-            self.__datasettabledata.addRow(
+            self._datasettabledata.addRow(
                 [u'Dataset-' + unicode(rowindex),
                  datasettype,
                  contentinfo,
@@ -450,20 +450,20 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                  dataset.getMetadata(u'Import column'),
                  dataset.getMetadata(u'Export column')])
             #
-        self.__datasets_table.tablemodel.reset()
-        self.__datasets_table.resizeColumnsToContents()
+        self._datasets_table.tablemodel.reset()
+        self._datasets_table.resizeColumnsToContents()
 
 
 
 
 
-#        self.__datasettabledata.clearRows()
+#        self._datasettabledata.clearRows()
 #        for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
-#            self.__datasettabledata.addRow([u'Dataset-' + unicode(rowindex) + '                                       '])
-#        self.__datasets_table.tablemodel.reset()
-#        self.__datasets_table.resizeColumnsToContents()
+#            self._datasettabledata.addRow([u'Dataset-' + unicode(rowindex) + '                                       '])
+#        self._datasets_table.tablemodel.reset()
+#        self._datasets_table.resizeColumnsToContents()
     
-    def __selectionChanged(self, modelIndex):
+    def _selectionChanged(self, modelIndex):
         """ """
         if modelIndex.isValid():
             print('TEST Selected row: ' + unicode(modelIndex.row()))

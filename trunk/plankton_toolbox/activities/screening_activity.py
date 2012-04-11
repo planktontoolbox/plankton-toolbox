@@ -49,15 +49,15 @@ class ScreeningActivity(activity_base.ActivityBase):
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
         # Add activity name at top.
-        self.__activityheader = QtGui.QLabel('<h2>' + self.objectName() + '</h2>', self)
-        self.__activityheader.setTextFormat(QtCore.Qt.RichText)
-        self.__activityheader.setAlignment(QtCore.Qt.AlignHCenter)
-        self.__activityheader.setStyleSheet(""" 
+        self._activityheader = QtGui.QLabel('<h2>' + self.objectName() + '</h2>', self)
+        self._activityheader.setTextFormat(QtCore.Qt.RichText)
+        self._activityheader.setAlignment(QtCore.Qt.AlignHCenter)
+        self._activityheader.setStyleSheet(""" 
             * { color: white; background-color: #00677f; }
             """)
-        contentLayout.addWidget(self.__activityheader)
+        contentLayout.addWidget(self._activityheader)
         # Add content to the activity.
-#        contentLayout.addLayout(self.__contentPersonInfo())
-#        contentLayout.addLayout(self.__contentButtons())
+#        contentLayout.addLayout(self._contentPersonInfo())
+#        contentLayout.addLayout(self._contentButtons())
         contentLayout.addStretch(5)
         

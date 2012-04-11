@@ -43,7 +43,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
 
     def setMainActivity(self, analyse_dataset_activity):
         """ """
-        self.__analysedatasetactivity = analyse_dataset_activity
+        self._analysedatasetactivity = analyse_dataset_activity
 
     def clear(self):
         """ """
@@ -52,7 +52,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
     def update(self):
         """ """
         self.clear()        
-        self.__updateSelectDataAlternatives()
+        self._updateSelectDataAlternatives()
         
     # ===== TAB: Aggregate data ===== 
     def contentAggregateData(self):
@@ -66,8 +66,8 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         """)
         # Active widgets and connections.
         # Aggregate over taxonomic rank.
-        self.__aggregate_rank_list = QtGui.QComboBox()
-        self.__aggregate_rank_list.addItems([
+        self._aggregate_rank_list = QtGui.QComboBox()
+        self._aggregate_rank_list.addItems([
             "<none>",
             "Kingdom",
             "Phylum",
@@ -81,8 +81,8 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         self._trophy_listview = utils_qt.SelectableQListView()
         self._trophy_listview.setMaximumHeight(100)
         # Button.
-        self.__aggregatecurrentdata_button = QtGui.QPushButton("Aggregate current data")
-        self.connect(self.__aggregatecurrentdata_button, QtCore.SIGNAL("clicked()"), self.__aggregateCurrentData)                
+        self._aggregatecurrentdata_button = QtGui.QPushButton("Aggregate current data")
+        self.connect(self._aggregatecurrentdata_button, QtCore.SIGNAL("clicked()"), self._aggregateCurrentData)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         gridrow = 0
@@ -95,12 +95,12 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         form1.addWidget(label2, gridrow, 1, 1, 3)
         form1.addWidget(QtGui.QLabel(""), gridrow, 2, 1, 10) # Stretch.
         gridrow += 1
-        form1.addWidget(self.__aggregate_rank_list, gridrow, 0, 1, 1)
+        form1.addWidget(self._aggregate_rank_list, gridrow, 0, 1, 1)
         form1.addWidget(self._trophy_listview, gridrow, 1, 4, 3)
         #
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(5)
-        hbox1.addWidget(self.__aggregatecurrentdata_button)
+        hbox1.addWidget(self._aggregatecurrentdata_button)
         #
         layout = QtGui.QVBoxLayout()
         layout.addWidget(introlabel)
@@ -111,13 +111,13 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         #
         return widget
 
-    def __aggregateCurrentData(self):
+    def _aggregateCurrentData(self):
         """ """
         #
         selected_trophy_list = self._trophy_listview.getSelectedDataList()
-        selected_taxon_rank = self.__aggregate_rank_list.currentText()
+        selected_taxon_rank = self._aggregate_rank_list.currentText()
         #
-        for visitnode in self.__analysedatasetactivity.getCurrentData().getChildren(): 
+        for visitnode in self._analysedatasetactivity.getCurrentData().getChildren(): 
             for samplenode in visitnode.getChildren():
                 aggregatedvariables = {}
                 for variablenode in samplenode.getChildren():
@@ -157,11 +157,11 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                     newvariable.addData(u'Unit', unit)
                     newvariable.addData(u'Value', aggregatedvariables[variablekeytuple])
         #
-        self.__analysedatasetactivity.updateCurrentData()    
+        self._analysedatasetactivity.updateCurrentData()    
 
-    def __updateSelectDataAlternatives(self):
+    def _updateSelectDataAlternatives(self):
         """ """
-        currentdata = self.__analysedatasetactivity.getCurrentData()
+        currentdata = self._analysedatasetactivity.getCurrentData()
         if not currentdata:
             return # Empty data.
         #

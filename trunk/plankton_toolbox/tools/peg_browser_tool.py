@@ -67,7 +67,7 @@ class PegBrowserTool(tool_base.ToolBase):
     def __init__(self, name, parentwidget):
         """ """
         # Create model.
-        self.__peg_object = toolbox_resources.ToolboxResources().getResourcePeg()
+        self._peg_object = toolbox_resources.ToolboxResources().getResourcePeg()
         # Initialize parent. Should be called after other 
         # initialization since the base class calls _createContent().
         super(PegBrowserTool, self).__init__(name, parentwidget)
@@ -81,92 +81,92 @@ class PegBrowserTool(tool_base.ToolBase):
         content = self._createScrollableContent()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
-        contentLayout.addLayout(self.__contentTaxonList())
-        contentLayout.addLayout(self.__contentPegItem())
-        contentLayout.addLayout(self.__contentDyntaxaControl())
+        contentLayout.addLayout(self._contentTaxonList())
+        contentLayout.addLayout(self._contentPegItem())
+        contentLayout.addLayout(self._contentDyntaxaControl())
         # Used when toolbox resource has changed.        
-        self.connect(toolbox_resources.ToolboxResources(), QtCore.SIGNAL("pegResourceLoaded"), self.__pegRefresh)
+        self.connect(toolbox_resources.ToolboxResources(), QtCore.SIGNAL("pegResourceLoaded"), self._pegRefresh)
 
-    def __contentTaxonList(self):
+    def _contentTaxonList(self):
         """ """
         layout = QtGui.QVBoxLayout()
-        self.__tableView = utils_qt.ToolboxQTableView()
-        layout.addWidget(self.__tableView)
+        self._tableView = utils_qt.ToolboxQTableView()
+        layout.addWidget(self._tableView)
         # Data model.        
-        self.__model = PegTableModel(self.__peg_object)
-        self.__tableView.setTablemodel(self.__model)
+        self._model = PegTableModel(self._peg_object)
+        self._tableView.setTablemodel(self._model)
         #
-        self.connect(self.__tableView.selectionModel, QtCore.SIGNAL("currentChanged(QModelIndex, QModelIndex)"), self.__showItemInfo)
-        self.connect(self.__tableView.selectionModel, QtCore.SIGNAL("selectionChanged(QModelIndex, QModelIndex)"), self.__showItemInfo)
+        self.connect(self._tableView.selectionModel, QtCore.SIGNAL("currentChanged(QModelIndex, QModelIndex)"), self._showItemInfo)
+        self.connect(self._tableView.selectionModel, QtCore.SIGNAL("selectionChanged(QModelIndex, QModelIndex)"), self._showItemInfo)
         #
         return layout
     
-    def __contentPegItem(self):
+    def _contentPegItem(self):
         """ """
         # Active widgets and connections.
         # Species level.
-        self.__scientificname_label = QtGui.QLabel('-')
-        self.__class_label = QtGui.QLabel('-')
-        self.__division_label = QtGui.QLabel('-')
-        self.__order_label = QtGui.QLabel('-')
+        self._scientificname_label = QtGui.QLabel('-')
+        self._class_label = QtGui.QLabel('-')
+        self._division_label = QtGui.QLabel('-')
+        self._order_label = QtGui.QLabel('-')
         # Sizeclass level.
-        self.__size_class_label = QtGui.QLabel('-')
-        self.__thropy_label = QtGui.QLabel('-')
-        self.__shape_label = QtGui.QLabel('-')
-        self.__formula_label = QtGui.QLabel('-')
-        self.__volume_label = QtGui.QLabel('-')
-        self.__carbon_label = QtGui.QLabel('-')
+        self._size_class_label = QtGui.QLabel('-')
+        self._thropy_label = QtGui.QLabel('-')
+        self._shape_label = QtGui.QLabel('-')
+        self._formula_label = QtGui.QLabel('-')
+        self._volume_label = QtGui.QLabel('-')
+        self._carbon_label = QtGui.QLabel('-')
         # Layout widgets.
         layout = QtGui.QFormLayout()
         layout.addRow("<b><u>Species:</u></b>", None)
-        layout.addRow("Scientific name:", self.__scientificname_label)
-        layout.addRow("Class:", self.__class_label)
-        layout.addRow("Division:", self.__division_label)
-        layout.addRow("Order:", self.__order_label)
+        layout.addRow("Scientific name:", self._scientificname_label)
+        layout.addRow("Class:", self._class_label)
+        layout.addRow("Division:", self._division_label)
+        layout.addRow("Order:", self._order_label)
         layout.addRow("<b><u>Size class:</u></b>", None)
-        layout.addRow("Size class:", self.__size_class_label)
-        layout.addRow("Trophy:", self.__thropy_label)
-        layout.addRow("Geometric shape:", self.__shape_label)
-        layout.addRow("Formula:", self.__formula_label)
-        layout.addRow("Calculated volume:", self.__volume_label)
-        layout.addRow("Calculated carbon:", self.__carbon_label)
+        layout.addRow("Size class:", self._size_class_label)
+        layout.addRow("Trophy:", self._thropy_label)
+        layout.addRow("Geometric shape:", self._shape_label)
+        layout.addRow("Formula:", self._formula_label)
+        layout.addRow("Calculated volume:", self._volume_label)
+        layout.addRow("Calculated carbon:", self._carbon_label)
         #
         return layout
 
-    def __contentDyntaxaControl(self):
+    def _contentDyntaxaControl(self):
         """ """
         # Active widgets and connections.
-        self.__loadresource_button = QtGui.QPushButton("Load PEG resource")
-        self.connect(self.__loadresource_button, QtCore.SIGNAL("clicked()"), self.__loadResource)                
+        self._loadresource_button = QtGui.QPushButton("Load PEG resource")
+        self.connect(self._loadresource_button, QtCore.SIGNAL("clicked()"), self._loadResource)                
         # Layout widgets.
         layout = QtGui.QHBoxLayout()
         layout.addStretch(5)
-        layout.addWidget(self.__loadresource_button)
+        layout.addWidget(self._loadresource_button)
         #
         return layout
 
-    def __showItemInfo(self, index):
+    def _showItemInfo(self, index):
         """ """
         #
-        taxon = self.__peg_object.getNameAndSizeList()[index.row()][0]
-        self.__scientificname_label.setText(
+        taxon = self._peg_object.getNameAndSizeList()[index.row()][0]
+        self._scientificname_label.setText(
             '<b>' + 
             '<i>' + taxon.get('Species', '') + '</i>' + 
             '&nbsp;&nbsp;&nbsp;' + taxon.get('Author', '') + 
             '</b>')
-        self.__class_label.setText(taxon.get('Class', '-'))
-        self.__division_label.setText(taxon.get('Division', '-'))
-        self.__order_label.setText(taxon.get('Order', '-'))
+        self._class_label.setText(taxon.get('Class', '-'))
+        self._division_label.setText(taxon.get('Division', '-'))
+        self._order_label.setText(taxon.get('Order', '-'))
         #
-        sizeclass = self.__peg_object.getNameAndSizeList()[index.row()][1]
-        self.__size_class_label.setText('<b>' + unicode(sizeclass.get('Size class', '-')) + '</b>')
-        self.__thropy_label.setText(sizeclass.get('Trophy', '-'))
-        self.__shape_label.setText(sizeclass.get('Geometric shape', '-'))
-        self.__formula_label.setText(sizeclass.get('Formula', '-'))
-        self.__volume_label.setText(unicode(sizeclass.get('Calculated volume, um3', '-')))
-        self.__carbon_label.setText(unicode(sizeclass.get('Calculated Carbon pg/counting unit', '-')))
+        sizeclass = self._peg_object.getNameAndSizeList()[index.row()][1]
+        self._size_class_label.setText('<b>' + unicode(sizeclass.get('Size class', '-')) + '</b>')
+        self._thropy_label.setText(sizeclass.get('Trophy', '-'))
+        self._shape_label.setText(sizeclass.get('Geometric shape', '-'))
+        self._formula_label.setText(sizeclass.get('Formula', '-'))
+        self._volume_label.setText(unicode(sizeclass.get('Calculated volume, um3', '-')))
+        self._carbon_label.setText(unicode(sizeclass.get('Calculated Carbon pg/counting unit', '-')))
 
-    def __loadResource(self):
+    def _loadResource(self):
         """ """
         # Dyntaxa is needed to load PEG.
         self._writeToStatusBar("Loading PEG resource...")
@@ -176,28 +176,28 @@ class PegBrowserTool(tool_base.ToolBase):
         finally:
             self._writeToStatusBar("")
 
-    def __pegRefresh(self):
+    def _pegRefresh(self):
         """ """
-        self.__model.reset()
-        self.__tableView.resizeColumnsToContents() # TODO: Check if time-consuming...
+        self._model.reset()
+        self._tableView.resizeColumnsToContents() # TODO: Check if time-consuming...
         
 class PegTableModel(QtCore.QAbstractTableModel):
     """ 
     """
     def __init__(self, dataset):
-        self.__dataset = dataset
-#        self.__nameandsizelist = self.__dataset.getNameAndSizeList()
+        self._dataset = dataset
+#        self._nameandsizelist = self._dataset.getNameAndSizeList()
         # Initialize parent.
         super(PegTableModel, self).__init__()
         
     def setDataset(self, dataset):
         """ """
-        self.__dataset = dataset
+        self._dataset = dataset
         
     def rowCount(self, parent=QtCore.QModelIndex()):
         """ """
-        if self.__dataset:
-            return len(self.__dataset.getNameAndSizeList())
+        if self._dataset:
+            return len(self._dataset.getNameAndSizeList())
         else:
             return 0
 
@@ -225,16 +225,16 @@ class PegTableModel(QtCore.QAbstractTableModel):
         if role == QtCore.Qt.DisplayRole:
             if index.isValid():
                 if index.column() == 0:
-                    peg = self.__dataset.getNameAndSizeList()[index.row()][0]
+                    peg = self._dataset.getNameAndSizeList()[index.row()][0]
                     return QtCore.QVariant(peg.get('Species', ''))
                 if index.column() == 1:
-                    sizeclass = self.__dataset.getNameAndSizeList()[index.row()][1]
+                    sizeclass = self._dataset.getNameAndSizeList()[index.row()][1]
                     return QtCore.QVariant(sizeclass.get('Size class', ''))
                 if index.column() == 2:
-                    peg = self.__dataset.getNameAndSizeList()[index.row()][0]
+                    peg = self._dataset.getNameAndSizeList()[index.row()][0]
                     return QtCore.QVariant(peg.get('Dyntaxa id', ''))
                 if index.column() == 3:
-                    peg = self.__dataset.getNameAndSizeList()[index.row()][0]
+                    peg = self._dataset.getNameAndSizeList()[index.row()][0]
                     dyntaxaresource = toolbox_resources.ToolboxResources().getResourceDyntaxa()
                     dyntaxa = dyntaxaresource.getTaxonById(peg.get('Dyntaxa id', ''))
                     if dyntaxa:

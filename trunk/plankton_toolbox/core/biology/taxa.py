@@ -97,13 +97,13 @@ class NordicMicroalgae(Taxa):
     """
     def __init__(self):
         """ """
-        self.__sortedNameList = None
+        self._sortedNameList = None
         # Initialize parent.
         super(NordicMicroalgae, self).__init__()
 
     def clear(self):
         """ """
-        self.__sortedNameList = None
+        self._sortedNameList = None
         super(NordicMicroalgae, self).clear()
         
     def _createIdToTaxonLookup(self):
@@ -129,13 +129,13 @@ class NordicMicroalgae(Taxa):
         Used when a sorted list of taxon is needed.
         Format: [taxon, ...]
         """
-        if self.__sortedNameList == None:
-            self.__sortedNameList = []
+        if self._sortedNameList == None:
+            self._sortedNameList = []
             for taxon in self._data:
-                self.__sortedNameList.append(taxon)
+                self._sortedNameList.append(taxon)
             # Sort.
-            self.__sortedNameList.sort(dyntaxaname_sort) # Sort function defined below.
-        return self.__sortedNameList
+            self._sortedNameList.sort(dyntaxaname_sort) # Sort function defined below.
+        return self._sortedNameList
             
 # Sort function for scientific name list.
 def nordicmicroalgaename_sort(s1, s2):
@@ -155,13 +155,13 @@ class Dyntaxa(Taxa):
     """
     def __init__(self):
         """ """
-        self.__sortedNameList = None
+        self._sortedNameList = None
         # Initialize parent.
         super(Dyntaxa, self).__init__()
 
     def clear(self):
         """ """
-        self.__sortedNameList = None
+        self._sortedNameList = None
         super(Dyntaxa, self).clear()
         
     def _createIdToTaxonLookup(self):
@@ -187,13 +187,13 @@ class Dyntaxa(Taxa):
         Used when a sorted list of taxon is needed.
         Format: [taxon, ...]
         """
-        if self.__sortedNameList == None:
-            self.__sortedNameList = []
+        if self._sortedNameList == None:
+            self._sortedNameList = []
             for taxon in self._data:
-                self.__sortedNameList.append(taxon)
+                self._sortedNameList.append(taxon)
             # Sort.
-            self.__sortedNameList.sort(dyntaxaname_sort) # Sort function defined below.
-        return self.__sortedNameList
+            self._sortedNameList.sort(dyntaxaname_sort) # Sort function defined below.
+        return self._sortedNameList
             
 # Sort function for scientific name list.
 def dyntaxaname_sort(s1, s2):
@@ -214,13 +214,13 @@ class Peg(Taxa):
     """
     def __init__(self):
         """ """  
-        self.__nameAndSizeList = None
+        self._nameAndSizeList = None
         # Initialize parent.
         super(Peg, self).__init__()
 
     def clear(self):
         """ """
-        self.__nameAndSizeList = None
+        self._nameAndSizeList = None
         super(Peg, self).clear()
         
     def _createNameToTaxonDict(self):
@@ -240,14 +240,14 @@ class Peg(Taxa):
         Used when a sorted list of taxon/size is needed.
         Format: [[taxon], [sizeclass], ...]
         """
-        if self.__nameAndSizeList == None:
-            self.__nameAndSizeList = []
+        if self._nameAndSizeList == None:
+            self._nameAndSizeList = []
             for taxon in self._data:
                 for sizeclass in taxon['Size classes']:
-                    self.__nameAndSizeList.append([taxon, sizeclass])
+                    self._nameAndSizeList.append([taxon, sizeclass])
             # Sort.
-            self.__nameAndSizeList.sort(pegnameandsize_sort) # Sort function defined below.
-        return self.__nameAndSizeList
+            self._nameAndSizeList.sort(pegnameandsize_sort) # Sort function defined below.
+        return self._nameAndSizeList
             
 # Sort function for name and size list.
 def pegnameandsize_sort(s1, s2):
@@ -279,13 +279,13 @@ class HarmfulPlankton(Taxa):
     """
     def __init__(self):
         """ """
-        self.__sortedNameList = None
+        self._sortedNameList = None
         # Initialize parent.
         super(HarmfulPlankton, self).__init__()
 
     def clear(self):
         """ """
-        self.__sortedNameList = None
+        self._sortedNameList = None
         super(HarmfulPlankton, self).clear()
         
     def _createIdToTaxonLookup(self):
@@ -311,13 +311,13 @@ class HarmfulPlankton(Taxa):
         Used when a sorted list of taxon is needed.
         Format: [taxon, ...]
         """
-        if self.__sortedNameList == None:
-            self.__sortedNameList = []
+        if self._sortedNameList == None:
+            self._sortedNameList = []
             for taxon in self._data:
-                self.__sortedNameList.append(taxon)
+                self._sortedNameList.append(taxon)
             # Sort.
-            self.__sortedNameList.sort(harmfulplankton_sort) # Sort function defined below.
-        return self.__sortedNameList
+            self._sortedNameList.sort(harmfulplankton_sort) # Sort function defined below.
+        return self._sortedNameList
 
 # Sort function for scientific name list.
 def harmfulplankton_sort(s1, s2):
