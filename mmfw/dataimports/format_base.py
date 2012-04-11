@@ -96,7 +96,7 @@ class FormatBase(object):
     def _toStation(self, current_node, station_name, **more):
         """ """
         # TODO: For test:
-        current_node.addData(u'Station.name', station_name)
+        current_node.addData(u'Station name', station_name)
 
     def _toPosition(self, current_node, latitude, longitude, **more):
         """ """

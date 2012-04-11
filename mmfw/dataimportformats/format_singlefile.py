@@ -143,8 +143,9 @@ class FormatSingleFile(mmfw.FormatBase):
                         try:
                             exec(cmd[u'Command'])
                         except Exception as e:
-                            print("ERROR: Failed to parse command: %s" % (e.args[0]))
-                            print("- Command string: %s" % (cmd[u'Command string']))
+                            pass
+#                            print("ERROR: Failed to parse command: %s" % (e.args[0]))
+#                            print("- Command string: %s" % (cmd[u'Command string']))
         #
         except Exception as e:
             print("ERROR: Failed to parse imported data: %s" % (e.args[0]))

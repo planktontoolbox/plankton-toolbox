@@ -24,15 +24,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-#import os.path
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-#import datetime
-#import copy
-#import plankton_toolbox.activities.activity_base as activity_base
 import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.toolbox.utils_qt as utils_qt
-#import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 import mmfw
 
 @mmfw.singleton
@@ -244,7 +239,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                 continue
             if selected_enddate < visitnode.getData(u'Date'):
                 continue
-            if visitnode.getData(u'Station.reported name') not in selected_stations:
+            if visitnode.getData(u'Station name') not in selected_stations:
                 continue
 
             
@@ -262,9 +257,9 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                 if y_sample_key: y_value = samplenode.getData(y_sample_key) # if y_sample_key else None
                 for variablenode in samplenode.getChildren():
                 
-                    if variablenode.getData(u'Reported taxon name') not in selected_taxon:
+                    if variablenode.getData(u'Taxon name') not in selected_taxon:
                         continue
-                    if variablenode.getData(u'PEG trophy') not in selected_trophy:
+                    if variablenode.getData(u'Trophy') not in selected_trophy:
                         continue
                     
                     

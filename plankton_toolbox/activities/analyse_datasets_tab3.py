@@ -24,15 +24,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import os.path
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-#import datetime
-#import copy
-#import plankton_toolbox.activities.activity_base as activity_base
-#import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.toolbox.utils_qt as utils_qt
-#import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 import mmfw
 
 @mmfw.singleton
@@ -71,15 +65,14 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             "<none>",
             "Kingdom",
             "Phylum",
-#            "Class",
-            "Dyntaxa class",
+            "Class",
             "Order",
             "Family",
             "Genus",
             "Species" ])
         #  Aggregate over trophy.
         self._trophy_listview = utils_qt.SelectableQListView()
-        self._trophy_listview.setMaximumHeight(100)
+        self._trophy_listview.setMaximumHeight(80)
         # Button.
         self._aggregatecurrentdata_button = QtGui.QPushButton("Aggregate current data")
         self.connect(self._aggregatecurrentdata_button, QtCore.SIGNAL("clicked()"), self._aggregateCurrentData)                
@@ -89,7 +82,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         label1 = QtGui.QLabel("Aggregate over:")
         form1.addWidget(label1, gridrow, 0, 1, 4)
         gridrow += 1
-        label1 = QtGui.QLabel("Taxon level:")
+        label1 = QtGui.QLabel("Taxon level (rank):               ")
         label2 = QtGui.QLabel("Trophy:")
         form1.addWidget(label1, gridrow, 0, 1, 1)
         form1.addWidget(label2, gridrow, 1, 1, 3)
@@ -113,51 +106,62 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
 
     def _aggregateCurrentData(self):
         """ """
-        #
-        selected_trophy_list = self._trophy_listview.getSelectedDataList()
-        selected_taxon_rank = self._aggregate_rank_list.currentText()
-        #
-        for visitnode in self._analysedatasetactivity.getCurrentData().getChildren(): 
-            for samplenode in visitnode.getChildren():
-                aggregatedvariables = {}
-                for variablenode in samplenode.getChildren():
-                    value = variablenode.getData(u'Value')
-                    # Use values containing valid float data.
-                    try:
-                        value = float(value) 
+        try:
+            if self._aggregate_rank_list.currentIndex() == 0:
+                mmfw.Logging().log("Taxon level is not selected. Please try again.")
+                raise UserWarning("Taxon level is not selected. Please try again.")
+            if not self._analysedatasetactivity.getCurrentData():
+                mmfw.Logging().log("No data is selected for analysis. Please try again.")
+                raise UserWarning("No data is selected for analysis. Please try again.")                
+            #
+            selected_taxon_rank = unicode(self._aggregate_rank_list.currentText())
+            selected_trophy_list = self._trophy_listview.getSelectedDataList()
+            selected_trophy_text = u'-'.join(selected_trophy_list) 
+            #
+            for visitnode in self._analysedatasetactivity.getCurrentData().getChildren(): 
+                for samplenode in visitnode.getChildren():
+                    aggregatedvariables = {}
+                    for variablenode in samplenode.getChildren():
+                        value = variablenode.getData(u'Value')
+                        # Use values containing valid float data.
+                        try:
+                            value = value.replace(u',', u'.').replace(u' ', u'', 100)
+                            value = float(value) 
+                            #
+                            newtaxon = variablenode.getData(selected_taxon_rank)
+                            #
+                            taxontrophy = variablenode.getData(u'Trophy')
+                            if taxontrophy in selected_trophy_list:
+                                taxontrophy = selected_trophy_text # Concatenated string of ranks. 
+                            #
+                            parameter = variablenode.getData(u'Parameter')
+                            unit = variablenode.getData(u'Unit')
+                            
+                            agg_tuple = (newtaxon, taxontrophy, parameter, unit)
+                            if agg_tuple in aggregatedvariables:
+                                aggregatedvariables[agg_tuple] = value + aggregatedvariables[agg_tuple]
+                            else:
+                                aggregatedvariables[agg_tuple] = value
+                        except:
+                            print('DEBUG: Value not valid float: ' + unicode(variablenode.getData(u'Value')))
+                    #Remove all variables for this sample.
+                    samplenode.removeAllChildren()
+                    # Add the new aggregated variables instead.  
+                    for variablekeytuple in aggregatedvariables:
+                        newtaxon, taxontrophy, parameter, unit = variablekeytuple
                         #
-                        newtaxon = variablenode.getData(u'Dyntaxa class')
+                        newvariable = mmfw.VariableNode()
+                        samplenode.addChild(newvariable)    
                         #
-                        taxontrophy = variablenode.getData(u'PEG trophy')
-                        if taxontrophy in selected_trophy_list:
-                            taxontrophy = u'-aggregated-'
-                        #
-                        parameter = variablenode.getData(u'Parameter')
-                        unit = variablenode.getData(u'Unit')
-                        
-                        agg_tuple = (newtaxon, taxontrophy, parameter, unit)
-                        if agg_tuple in aggregatedvariables:
-                            aggregatedvariables[agg_tuple] = value + aggregatedvariables[agg_tuple]
-                        else:
-                            aggregatedvariables[agg_tuple] = value
-                    except:
-                        print('DEBUG: Value not valid float: ' + unicode(variablenode.getData(u'Value')))
-                #Remove all variables for this sample.
-                samplenode.removeAllChildren()
-                # Add the new aggregated variables instead.  
-                for variablekeytuple in aggregatedvariables:
-                    newtaxon, taxontrophy, parameter, unit = variablekeytuple
-                    #
-                    newvariable = mmfw.VariableNode()
-                    samplenode.addChild(newvariable)    
-                    #
-                    newvariable.addData(u'Reported taxon name', newtaxon)
-                    newvariable.addData(u'PEG trophy', taxontrophy)
-                    newvariable.addData(u'Parameter', parameter)
-                    newvariable.addData(u'Unit', unit)
-                    newvariable.addData(u'Value', aggregatedvariables[variablekeytuple])
-        #
-        self._analysedatasetactivity.updateCurrentData()    
+                        newvariable.addData(u'Taxon name', newtaxon)
+                        newvariable.addData(u'Trophy', taxontrophy)
+                        newvariable.addData(u'Parameter', parameter)
+                        newvariable.addData(u'Unit', unit)
+                        newvariable.addData(u'Value', aggregatedvariables[variablekeytuple])
+            #
+            self._analysedatasetactivity.updateCurrentData()    
+        except UserWarning, e:
+            QtGui.QMessageBox.warning(self._analysedatasetactivity, "Warning", unicode(e))
 
     def _updateSelectDataAlternatives(self):
         """ """
@@ -170,7 +174,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         for visitnode in currentdata.getChildren():
             for samplenode in visitnode.getChildren():
                 for variablenode in samplenode.getChildren():
-                    trophyset.add(variablenode.getData(u'PEG trophy'))
+                    trophyset.add(variablenode.getData(u'Trophy'))
         # Selection lists.
         self._trophy_listview.setList(sorted(trophyset))
             
