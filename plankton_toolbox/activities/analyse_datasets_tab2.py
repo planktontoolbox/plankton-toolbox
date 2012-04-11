@@ -43,7 +43,7 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
 
     def setMainActivity(self, analyse_dataset_activity):
         """ """
-        self.__analysedatasetactivity = analyse_dataset_activity
+        self._analysedatasetactivity = analyse_dataset_activity
                 
     def clear(self):
         """ """

@@ -60,51 +60,51 @@ class CreateReportsActivity(activity_base.ActivityBase):
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
         # Add activity name at top.
-        self.__activityheader = QtGui.QLabel('<h2>' + self.objectName() + '</h2>', self)
-        self.__activityheader.setTextFormat(QtCore.Qt.RichText)
-        self.__activityheader.setAlignment(QtCore.Qt.AlignHCenter)
-#        self.__activityheader.setStyleSheet(""" 
+        self._activityheader = QtGui.QLabel('<h2>' + self.objectName() + '</h2>', self)
+        self._activityheader.setTextFormat(QtCore.Qt.RichText)
+        self._activityheader.setAlignment(QtCore.Qt.AlignHCenter)
+#        self._activityheader.setStyleSheet(""" 
 #            * { color: #00677f; background-color: #eaa97e; }
 #            """)
-        contentLayout.addWidget(self.__activityheader)
+        contentLayout.addWidget(self._activityheader)
         # Add content to the activity.
         tabWidget = QtGui.QTabWidget()
         contentLayout.addWidget(tabWidget)
-        tabWidget.addTab(self.__contentPwReport(), "PW")
+        tabWidget.addTab(self._contentPwReport(), "PW")
         tabWidget.setTabToolTip(0, "Creates report from PW (*.csv) files.")
-#        tabWidget.addTab(self.__content???(), "???")
+#        tabWidget.addTab(self._content???(), "???")
 
-    def __contentPwReport(self):
+    def _contentPwReport(self):
         """ """
         # === GroupBox: databox === 
         databox = QtGui.QGroupBox("Select data files", self)
         # Active widgets and connections.
-        self.__fromdirectory_edit = QtGui.QLineEdit("")
+        self._fromdirectory_edit = QtGui.QLineEdit("")
         #
-        self.__fromdirectory_button = QtGui.QPushButton("Browse...")
-        self.__files_table = QtGui.QTableWidget()
+        self._fromdirectory_button = QtGui.QPushButton("Browse...")
+        self._files_table = QtGui.QTableWidget()
         #
-        self.__files_table.setAlternatingRowColors(True)
-        self.__files_table.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
-        self.__files_table.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
-        self.__files_table.verticalHeader().setDefaultSectionSize(18)
-        self.__files_table.setColumnCount(1)
-        self.__files_table.horizontalHeader().setStretchLastSection(True)
-        self.__files_table.setHorizontalHeaderLabels(["File"])
+        self._files_table.setAlternatingRowColors(True)
+        self._files_table.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
+        self._files_table.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        self._files_table.verticalHeader().setDefaultSectionSize(18)
+        self._files_table.setColumnCount(1)
+        self._files_table.horizontalHeader().setStretchLastSection(True)
+        self._files_table.setHorizontalHeaderLabels(["File"])
         #
-        self.connect(self.__fromdirectory_edit, QtCore.SIGNAL("editingFinished()"), self.__fromDirectoryChanged)                
-        self.connect(self.__fromdirectory_button, QtCore.SIGNAL("clicked()"), self.__fromDirectoryBrowse)                
+        self.connect(self._fromdirectory_edit, QtCore.SIGNAL("editingFinished()"), self._fromDirectoryChanged)                
+        self.connect(self._fromdirectory_button, QtCore.SIGNAL("clicked()"), self._fromDirectoryBrowse)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         gridrow = 0
         label1 = QtGui.QLabel("From directory:")
         form1.addWidget(label1, gridrow, 0, 1, 1)
-        form1.addWidget(self.__fromdirectory_edit, gridrow, 1, 1, 9)
-        form1.addWidget(self.__fromdirectory_button, gridrow, 10, 1, 1)
+        form1.addWidget(self._fromdirectory_edit, gridrow, 1, 1, 9)
+        form1.addWidget(self._fromdirectory_button, gridrow, 10, 1, 1)
         gridrow += 1
         label2 = QtGui.QLabel("Files (CSV):")
         form1.addWidget(label2, gridrow, 0, 1, 1)
-        form1.addWidget(self.__files_table, gridrow, 1, 10, 10)       
+        form1.addWidget(self._files_table, gridrow, 1, 10, 10)       
         datalayout = QtGui.QVBoxLayout()
         datalayout.addLayout(form1)
         databox.setLayout(datalayout)
@@ -112,38 +112,38 @@ class CreateReportsActivity(activity_base.ActivityBase):
         # === GroupBox: reportbox === 
         reportbox = QtGui.QGroupBox("Create report", self)
         # Active widgets and connections.
-        self.__report_list = QtGui.QComboBox()
-        self.__report_list.addItems(["<select>",
+        self._report_list = QtGui.QComboBox()
+        self._report_list.addItems(["<select>",
                                      "MJ Report 1 (H�vprover inom 24 timmar)",
                                      "MJ Report 2",
                                      "ATS Report 1"])
 
-        self.__todirectory_edit = QtGui.QLineEdit("")
-        self.__todirectory_button = QtGui.QPushButton("Browse...")
-        self.__tofile_edit = QtGui.QLineEdit("report.txt")
-        self.__createreport_button = QtGui.QPushButton("Create report")
-        self.connect(self.__todirectory_button, QtCore.SIGNAL("clicked()"), self.__toDirectoryBrowse)                
-        self.connect(self.__createreport_button, QtCore.SIGNAL("clicked()"), self.__createPwReport)   
+        self._todirectory_edit = QtGui.QLineEdit("")
+        self._todirectory_button = QtGui.QPushButton("Browse...")
+        self._tofile_edit = QtGui.QLineEdit("report.txt")
+        self._createreport_button = QtGui.QPushButton("Create report")
+        self.connect(self._todirectory_button, QtCore.SIGNAL("clicked()"), self._toDirectoryBrowse)                
+        self.connect(self._createreport_button, QtCore.SIGNAL("clicked()"), self._createPwReport)   
         
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         gridrow = 0
         label1 = QtGui.QLabel("Report type:")
         form1.addWidget(label1, gridrow, 0, 1, 1)
-        form1.addWidget(self.__report_list, gridrow, 1, 1, 1)
+        form1.addWidget(self._report_list, gridrow, 1, 1, 1)
         gridrow += 1
         label2 = QtGui.QLabel("To directory:")
         form1.addWidget(label2, gridrow, 0, 1, 1)
-        form1.addWidget(self.__todirectory_edit, gridrow, 1, 1, 9)
-        form1.addWidget(self.__todirectory_button, gridrow, 10, 1, 1)
+        form1.addWidget(self._todirectory_edit, gridrow, 1, 1, 9)
+        form1.addWidget(self._todirectory_button, gridrow, 10, 1, 1)
         gridrow += 1
         label3 = QtGui.QLabel("To file:")
         form1.addWidget(label3, gridrow, 0, 1, 1)
-        form1.addWidget(self.__tofile_edit, gridrow, 1, 1, 9)
+        form1.addWidget(self._tofile_edit, gridrow, 1, 1, 9)
         #
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(5)
-        hbox1.addWidget(self.__createreport_button)
+        hbox1.addWidget(self._createreport_button)
         #
         reportlayout = QtGui.QVBoxLayout()
         reportlayout.addLayout(form1)
@@ -159,69 +159,69 @@ class CreateReportsActivity(activity_base.ActivityBase):
         #
         return widget
                 
-    def __fromDirectoryBrowse(self):
+    def _fromDirectoryBrowse(self):
         """ """
         # Show directory dialog box.
         dirdialog = QtGui.QFileDialog(self)
         dirdialog.setFileMode(QtGui.QFileDialog.Directory)
         dirdialog.setOptions(QtGui.QFileDialog.ShowDirsOnly)
-        dirdialog.setDirectory(unicode(self.__fromdirectory_edit.text()))
+        dirdialog.setDirectory(unicode(self._fromdirectory_edit.text()))
         dirpath = dirdialog.getExistingDirectory()
         # Check if user pressed ok or cancel.
         if dirpath:
-            self.__fromdirectory_edit.setText(dirpath)
-            self.__fromDirectoryChanged()
+            self._fromdirectory_edit.setText(dirpath)
+            self._fromDirectoryChanged()
                 
-    def __fromDirectoryChanged(self):
+    def _fromDirectoryChanged(self):
         """ """
         #
-        self.__files_table.clear()
-        self.__files_table.setHorizontalHeaderLabels(["File"])
-        self.__files_table.setRowCount(0)
+        self._files_table.clear()
+        self._files_table.setHorizontalHeaderLabels(["File"])
+        self._files_table.setRowCount(0)
         #
-        dirpath = unicode(self.__fromdirectory_edit.text())
+        dirpath = unicode(self._fromdirectory_edit.text())
         # Check if user pressed ok or cancel.
         if dirpath:
-            self.__fromdirectory_edit.setText(dirpath)
+            self._fromdirectory_edit.setText(dirpath)
             # Add files in selected directory to QTableWidget.
-            for row, filename in enumerate(os.listdir(unicode(self.__fromdirectory_edit.text()))):
+            for row, filename in enumerate(os.listdir(unicode(self._fromdirectory_edit.text()))):
                 if os.path.splitext(unicode(filename))[1] in ['.csv', '.CSV']:
-                    self.__files_table.setRowCount(row + 1)
+                    self._files_table.setRowCount(row + 1)
                     item = QtGui.QTableWidgetItem(unicode(filename))
                     item.setCheckState(QtCore.Qt.Unchecked)
-                    self.__files_table.setItem(row, 0, item)            
+                    self._files_table.setItem(row, 0, item)            
                 
-    def __toDirectoryBrowse(self):
+    def _toDirectoryBrowse(self):
         """ """
         # Show directory dialog box.
         dirdialog = QtGui.QFileDialog(self)
         dirdialog.setFileMode(QtGui.QFileDialog.Directory)
         dirdialog.setOptions(QtGui.QFileDialog.ShowDirsOnly)
-        dirdialog.setDirectory(unicode(self.__todirectory_edit.text()))
+        dirdialog.setDirectory(unicode(self._todirectory_edit.text()))
         dirpath = dirdialog.getExistingDirectory()
         # Check if user pressed ok or cancel.
         if dirpath:
-            self.__todirectory_edit.setText(dirpath)
+            self._todirectory_edit.setText(dirpath)
     
-#    def __pegFileBrowse(self):
+#    def _pegFileBrowse(self):
 #        """ """
 #        dirdialog = QtGui.QFileDialog(self)
-#        dirdialog.setDirectory(unicode(self.__pegfile_edit.text()))
+#        dirdialog.setDirectory(unicode(self._pegfile_edit.text()))
 #        filepath = dirdialog.getOpenFileName()
 #        if filepath:
-#            self.__pegfile_edit.setText(filepath)
+#            self._pegfile_edit.setText(filepath)
 #
-#    def __translateFileBrowse(self):
+#    def _translateFileBrowse(self):
 #        """ """
 #        dirdialog = QtGui.QFileDialog(self)
-#        dirdialog.setDirectory(unicode(self.__translatefile_edit.text()))
+#        dirdialog.setDirectory(unicode(self._translatefile_edit.text()))
 #        filepath = dirdialog.getOpenFileName()
 #        if filepath:
-#            self.__translatefile_edit.setText(filepath)
+#            self._translatefile_edit.setText(filepath)
                 
-    def __createPwReport(self):
+    def _createPwReport(self):
         """ """
-        if self.__report_list.currentIndex() == 0:
+        if self._report_list.currentIndex() == 0:
             QtGui.QMessageBox.information(self, "Info", 'Report type must be selected.')
             return        
         mmfw.Logging().log("PW reports started...")
@@ -230,8 +230,8 @@ class CreateReportsActivity(activity_base.ActivityBase):
         try:
             # Add selected files to filelist.
             self._samplefiles.clear()                
-            for index in range(self.__files_table.rowCount()):
-                item = self.__files_table.item(index, 0)
+            for index in range(self._files_table.rowCount()):
+                item = self._files_table.item(index, 0)
                 if item.checkState(): # Check if selected by user.
                     # When reading from a table the display rule must be used.
                     key = unicode(item.data(QtCore.Qt.DisplayRole).toString())
@@ -240,25 +240,25 @@ class CreateReportsActivity(activity_base.ActivityBase):
             for samplefile in self._samplefiles:                
                 mmfw.Logging().log('Reading ' + samplefile + '...')        
                 sampledata = monitoring_files.PwCsv()
-                sampledata.readFile(unicode(self.__fromdirectory_edit.text()) + '/' + samplefile)
+                sampledata.readFile(unicode(self._fromdirectory_edit.text()) + '/' + samplefile)
                 self._samplefiles[samplefile] = sampledata  # With data.
             # Filepath.            
             reportfilepath = ''
-            if len(unicode(self.__todirectory_edit.text())) > 0:
-                reportfilepath = unicode(self.__todirectory_edit.text()) + '/'
-            reportfilepath += unicode(self.__tofile_edit.text())
+            if len(unicode(self._todirectory_edit.text())) > 0:
+                reportfilepath = unicode(self._todirectory_edit.text()) + '/'
+            reportfilepath += unicode(self._tofile_edit.text())
             # Check which report to generate.
-            if self.__report_list.currentIndex() == 1: # Report: MJ1
+            if self._report_list.currentIndex() == 1: # Report: MJ1
                 # === Report: MJ1 ===
                 mmfw.Logging().log("Selected report: MJ1")
                 report = pw_reports_OLD.PwReportMJ1()
                 report.createReport(self._samplefiles, reportfilepath)
-            elif self.__report_list.currentIndex() == 2: # Report: MJ2
+            elif self._report_list.currentIndex() == 2: # Report: MJ2
                 # === Report: MJ1 ===
                 mmfw.Logging().log("Selected report: MJ2")
                 report = pw_reports_OLD.PwReportMJ2()
                 report.createReport(self._samplefiles, reportfilepath)
-            elif self.__report_list.currentIndex() == 3: # Report: ATS1
+            elif self._report_list.currentIndex() == 3: # Report: ATS1
                 # === Report: MJ1 ===
                 mmfw.Logging().log("Selected report: ATS1")
                 report = pw_reports_OLD.PwReportATS1()

@@ -36,26 +36,26 @@ class ToolboxSync(QtCore.QObject):
     """ """
     def __init__(self):
         """ """
-        self.__test = None 
+        self._test = None 
         # 
         QtCore.QObject.__init__(self)
 
     def clear(self):
         """ """
-        self.__test = None 
+        self._test = None 
         # Emit signal after short delay.
-        QtCore.QTimer.singleShot(100, self.__emitChangeNotification)
+        QtCore.QTimer.singleShot(100, self._emitChangeNotification)
         
     def setRowTest(self, rowIndex):
         """ """
-        self.__test = rowIndex 
+        self._test = rowIndex 
         # Emit signal after short delay.
-        QtCore.QTimer.singleShot(100, self.__emitSelectedRowChangedTEST)
+        QtCore.QTimer.singleShot(100, self._emitSelectedRowChangedTEST)
         
     def getRowTest(self):
         """ """
-        return self.__test 
+        return self._test 
         
-    def __emitSelectedRowChangedTEST(self):
+    def _emitSelectedRowChangedTEST(self):
         """ """
         self.emit(QtCore.SIGNAL('syncSelectedRowTEST'))

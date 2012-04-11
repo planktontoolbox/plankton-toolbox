@@ -208,48 +208,48 @@ class ToolboxTableModel(QtCore.QAbstractTableModel):
     """ """
     def __init__(self, modeldata = None):
         """ """
-        self.__modeldata = modeldata
+        self._modeldata = modeldata
         # Initialize parent.
         QtCore.QAbstractTableModel.__init__(self)
         
     def setModeldata(self, modeldata):
         """ """
-        self.__modeldata = modeldata
+        self._modeldata = modeldata
         self.reset() 
 
     def getModeldata(self):
         """ """
-        return self.__modeldata
+        return self._modeldata
 
     def rowCount(self, parent=QtCore.QModelIndex()):
         """ """
-        if self.__modeldata == None:
+        if self._modeldata == None:
             return 0
-        return self.__modeldata.getRowCount()
+        return self._modeldata.getRowCount()
 
     def columnCount(self, parent=QtCore.QModelIndex()):
         """ """
-        if self.__modeldata == None:
+        if self._modeldata == None:
             return 0
-        return self.__modeldata.getColumnCount()
+        return self._modeldata.getColumnCount()
 
     def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
         """ """
-        if self.__modeldata == None:
+        if self._modeldata == None:
             return QtCore.QVariant()
         if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
-            return QtCore.QVariant(self.__modeldata.getHeaderItem(section))
+            return QtCore.QVariant(self._modeldata.getHeaderItem(section))
         if orientation == QtCore.Qt.Vertical and role == QtCore.Qt.DisplayRole:
             return QtCore.QVariant(section + 1)
         return QtCore.QVariant()
 
     def data(self, index=QtCore.QModelIndex(), role=QtCore.Qt.DisplayRole):
         """ """
-        if self.__modeldata == None:
+        if self._modeldata == None:
             return QtCore.QVariant()
         if role == QtCore.Qt.DisplayRole:
             if index.isValid():
-                return QtCore.QVariant(self.__modeldata.getDataItem(index.row(), index.column()))
+                return QtCore.QVariant(self._modeldata.getDataItem(index.row(), index.column()))
         return QtCore.QVariant()
 
 

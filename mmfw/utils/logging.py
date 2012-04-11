@@ -37,29 +37,29 @@ class Logging(object):
     of times they occurred. 
     """
     def __init__(self):
-        self.__logtarget = None
-        self.__accumulatedloggingactive = False
-        self.__infoacc = {} # Contains accumulated info rows and counter.
-        self.__warningacc = {} # Contains accumulated warnings and counter.
-        self.__erroracc = {} # Contains accumulated errors and counter.
+        self._logtarget = None
+        self._accumulatedloggingactive = False
+        self._infoacc = {} # Contains accumulated info rows and counter.
+        self._warningacc = {} # Contains accumulated warnings and counter.
+        self._erroracc = {} # Contains accumulated errors and counter.
         #
         self.setLogTarget(DefaultLogTarget())
         
     def setLogTarget(self, target):
         """ Target must be an object containing a method named writeToLog(message). """
-        self.__logtarget = target
+        self._logtarget = target
 
     def clear(self):
         """ Clears all accumulated log rows. """
-        self.__infoacc.clear()
-        self.__warningacc.clear()
-        self.__erroracc.clear()
+        self._infoacc.clear()
+        self._warningacc.clear()
+        self._erroracc.clear()
         
     def log(self, message):
         """ Used for direct logging. """
         message = unicode(message)
-        if self.__logtarget:
-            self.__logtarget.writeToLog(time.strftime("%Y-%m-%d %H:%M:%S") + ': ' + message)
+        if self._logtarget:
+            self._logtarget.writeToLog(time.strftime("%Y-%m-%d %H:%M:%S") + ': ' + message)
         else:
             print(time.strftime("%Y-%m-%d %H:%M:%S") + ': ' + message)
         
@@ -67,11 +67,11 @@ class Logging(object):
         """ Accumulates info rows. Increment counter if it already exists. """
         message = unicode(message)
         message = 'INFO: ' + message
-        if self.__accumulatedloggingactive:
-            if message in self.__infoacc:
-                self.__infoacc[message] += 1
+        if self._accumulatedloggingactive:
+            if message in self._infoacc:
+                self._infoacc[message] += 1
             else:
-                self.__infoacc[message] = 1
+                self._infoacc[message] = 1
         else:
             self.log(message)
 
@@ -79,11 +79,11 @@ class Logging(object):
         """ Accumulates warnings. Increment counter if it already exists. """
         message = unicode(message)
         message = 'WARNING: ' + message
-        if self.__accumulatedloggingactive:
-            if message in self.__warningacc:
-                self.__warningacc[message] += 1
+        if self._accumulatedloggingactive:
+            if message in self._warningacc:
+                self._warningacc[message] += 1
             else:
-                self.__warningacc[message] = 1
+                self._warningacc[message] = 1
         else:
             self.log(message)
         
@@ -91,28 +91,28 @@ class Logging(object):
         """ Accumulates errors. Increment counter if it already exists. """
         message = unicode(message)
         message = 'ERROR: ' + message
-        if self.__accumulatedloggingactive:
-            if message in self.__erroracc:
-                self.__erroracc[message] += 1
+        if self._accumulatedloggingactive:
+            if message in self._erroracc:
+                self._erroracc[message] += 1
             else:
-                self.__erroracc[message] = 1
+                self._erroracc[message] = 1
         else:
             self.log(message)
             
     def startAccumulatedLogging(self):
         """ """
         self.clear()
-        self.__accumulatedloggingactive = True
+        self._accumulatedloggingactive = True
         
     def logAllAccumulatedRows(self):
         """ """
-        self.__accumulatedloggingactive = False
+        self._accumulatedloggingactive = False
         self.log('Accumulated log summary:')
         self.logAllInfoRows()
         self.logAllWarnings()
         self.logAllErrors()        
-        errorcount = sum(self.__erroracc.values())
-        warningcount = sum(self.__warningacc.values())
+        errorcount = sum(self._erroracc.values())
+        warningcount = sum(self._warningacc.values())
         if errorcount == 0:
             self.log('- Errors: 0.')
         else:
@@ -125,18 +125,18 @@ class Logging(object):
         
     def logAllInfoRows(self):
         """ Log all the content in the accumulated info row list. """
-        for message in self.__infoacc:
-            self.log('- ' + message + ' (' + unicode(self.__infoacc[message]) + ' times)')
+        for message in self._infoacc:
+            self.log('- ' + message + ' (' + unicode(self._infoacc[message]) + ' times)')
         
     def logAllWarnings(self):
         """ Log all the content in the accumulated warning list. """
-        for message in self.__warningacc:
-            self.log('- ' + message + ' (' + unicode(self.__warningacc[message]) + ' times)')
+        for message in self._warningacc:
+            self.log('- ' + message + ' (' + unicode(self._warningacc[message]) + ' times)')
         
     def logAllErrors(self):
         """ Log all the content in the accumulated error list. """
-        for message in self.__erroracc:
-            self.log('- ' + message + ' (' + unicode(self.__erroracc[message]) + ' times)')
+        for message in self._erroracc:
+            self.log('- ' + message + ' (' + unicode(self._erroracc[message]) + ' times)')
 
 
 class DefaultLogTarget(object):

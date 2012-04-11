@@ -50,36 +50,36 @@ class MetadataEditorTool(tool_base.ToolBase):
         content = self._createScrollableContent()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
-        contentLayout.addLayout(self.__contentTest1())
-        contentLayout.addLayout(self.__contentTest2())
+        contentLayout.addLayout(self._contentTest1())
+        contentLayout.addLayout(self._contentTest2())
         contentLayout.addStretch(5)
 
-    def __contentTest1(self):
+    def _contentTest1(self):
         """ """
         # Active widgets and connections.
-        self.__nameedit = QtGui.QLineEdit("<Name>")
-        self.__emailedit = QtGui.QLineEdit("<Email>")
-        self.__customerlist = QtGui.QListWidget()        
+        self._nameedit = QtGui.QLineEdit("<Name>")
+        self._emailedit = QtGui.QLineEdit("<Email>")
+        self._customerlist = QtGui.QListWidget()        
         # Layout widgets.
         layout = QtGui.QFormLayout()
-        layout.addRow("&Name:", self.__nameedit)
-        layout.addRow("&Email:", self.__emailedit)
-        layout.addRow("&Projects:", self.__customerlist)
+        layout.addRow("&Name:", self._nameedit)
+        layout.addRow("&Email:", self._emailedit)
+        layout.addRow("&Projects:", self._customerlist)
         #
         return layout
 
-    def __contentTest2(self):
+    def _contentTest2(self):
         """ """
         # Active widgets and connections.
-        self.__testbutton = QtGui.QPushButton("Write name to log")
-        self.connect(self.__testbutton, QtCore.SIGNAL("clicked()"), self.__test)   
+        self._testbutton = QtGui.QPushButton("Write name to log")
+        self.connect(self._testbutton, QtCore.SIGNAL("clicked()"), self._test)   
         # Active widgets and connections.
         layout = QtGui.QHBoxLayout()
         layout.addStretch(5)
-        layout.addWidget(self.__testbutton)
+        layout.addWidget(self._testbutton)
         #
         return layout
 
-    def __test(self):
+    def _test(self):
         """ """
-        self._writeToLog("Name: " + unicode(self.__nameedit.text()))
+        self._writeToLog("Name: " + unicode(self._nameedit.text()))

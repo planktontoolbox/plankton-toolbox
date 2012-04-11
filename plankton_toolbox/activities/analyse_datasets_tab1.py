@@ -43,7 +43,7 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
 
     def setMainActivity(self, analyse_dataset_activity):
         """ """
-        self.__analysedatasetactivity = analyse_dataset_activity
+        self._analysedatasetactivity = analyse_dataset_activity
                 
     def clear(self):
         """ """
@@ -65,22 +65,22 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
         loaded_datasets_listview = QtGui.QListView()
         loaded_datasets_listview.setMaximumHeight(80)
 #        view.setMinimumWidth(500)
-        self.__loaded_datasets_model = QtGui.QStandardItemModel()
-        loaded_datasets_listview.setModel(self.__loaded_datasets_model)
+        self._loaded_datasets_model = QtGui.QStandardItemModel()
+        loaded_datasets_listview.setModel(self._loaded_datasets_model)
         # Listen for changes in the toolbox dataset list.
         self.connect(toolbox_datasets.ToolboxDatasets(), 
                      QtCore.SIGNAL("datasetListChanged"), 
-                     self.__updateLoadedDatasetList)
+                     self._updateLoadedDatasetList)
         #
-        self.__clearcurrentdata_button = QtGui.QPushButton("Clear current data")
-        self.connect(self.__clearcurrentdata_button, QtCore.SIGNAL("clicked()"), self._clearCurrentData)                
-        self.__useselecteddatasets_button = QtGui.QPushButton("Use selected dataset(s)")
-        self.connect(self.__useselecteddatasets_button, QtCore.SIGNAL("clicked()"), self.__useSelectedDatasets)                
+        self._clearcurrentdata_button = QtGui.QPushButton("Clear current data")
+        self.connect(self._clearcurrentdata_button, QtCore.SIGNAL("clicked()"), self._clearCurrentData)                
+        self._useselecteddatasets_button = QtGui.QPushButton("Use selected dataset(s)")
+        self.connect(self._useselecteddatasets_button, QtCore.SIGNAL("clicked()"), self._useSelectedDatasets)                
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(10)
-        hbox1.addWidget(self.__clearcurrentdata_button)
-        hbox1.addWidget(self.__useselecteddatasets_button)
+        hbox1.addWidget(self._clearcurrentdata_button)
+        hbox1.addWidget(self._useselecteddatasets_button)
         #
         layout = QtGui.QVBoxLayout()
         layout.addWidget(introlabel)
@@ -91,29 +91,29 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
         #
         return widget
 
-    def __updateLoadedDatasetList(self):
+    def _updateLoadedDatasetList(self):
         """ """
-        self.__loaded_datasets_model.clear()        
+        self._loaded_datasets_model.clear()        
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
             item = QtGui.QStandardItem(u"Dataset-" + unicode(rowindex) + 
                                        u".   Source: " + dataset.getMetadata(u'File name'))
             item.setCheckState(QtCore.Qt.Unchecked)
             item.setCheckable(True)
-            self.__loaded_datasets_model.appendRow(item)
+            self._loaded_datasets_model.appendRow(item)
 
     def _clearCurrentData(self):
         """ """
-        self.__analysedatasetactivity.setCurrentData(None)    
+        self._analysedatasetactivity.setCurrentData(None)    
 
-    def __useSelectedDatasets(self):
+    def _useSelectedDatasets(self):
         """ """
         try:
             # Clear current data.
             self._clearCurrentData()    
             # Check if all selected datasets contains the same columns.
             compareheaders = None
-            for rowindex in range(self.__loaded_datasets_model.rowCount()):
-                item = self.__loaded_datasets_model.item(rowindex, 0)
+            for rowindex in range(self._loaded_datasets_model.rowCount()):
+                item = self._loaded_datasets_model.item(rowindex, 0)
                 if item.checkState() == QtCore.Qt.Checked:
                     dataset = mmfw.Datasets().getDatasets()[rowindex]
                     if compareheaders == None:
@@ -128,8 +128,8 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
                             raise UserWarning("Can't use datasets with different export columns. Please try again.")
             # Concatenate selected datasets.        
             dataset = None
-            for rowindex in range(self.__loaded_datasets_model.rowCount()):
-                item = self.__loaded_datasets_model.item(rowindex, 0)
+            for rowindex in range(self._loaded_datasets_model.rowCount()):
+                item = self._loaded_datasets_model.item(rowindex, 0)
                 if item.checkState() == QtCore.Qt.Checked:        
                 #             
                     if dataset == None:
@@ -147,7 +147,7 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
                 mmfw.Logging().log("Selected datasets are empty. Please try again.")
                 raise UserWarning("Selected datasets are empty. Please try again.")
             # Use the concatenated datasets as current data.
-            self.__analysedatasetactivity.setCurrentData(dataset)    
+            self._analysedatasetactivity.setCurrentData(dataset)    
         except UserWarning, e:
             QtGui.QMessageBox.warning(self, "Warning", unicode(e))
 

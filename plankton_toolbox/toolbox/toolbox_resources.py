@@ -46,12 +46,12 @@ class ToolboxResources(QtCore.QObject):
     """
     def __init__(self):
         """ """
-        self.__dyntaxa = taxa.Dyntaxa() 
-        self.__peg = taxa.Peg()
-        self.__harmfulplankton = taxa.HarmfulPlankton()
-        self.__dyntaxaloaded = False 
-        self.__pegloaded = False
-        self.__harmfulplanktonloaded = False
+        self._dyntaxa = taxa.Dyntaxa() 
+        self._peg = taxa.Peg()
+        self._harmfulplankton = taxa.HarmfulPlankton()
+        self._dyntaxaloaded = False 
+        self._pegloaded = False
+        self._harmfulplanktonloaded = False
         # 
         QtCore.QObject.__init__(self)
         
@@ -63,76 +63,76 @@ class ToolboxResources(QtCore.QObject):
 
     def loadUnloadedResources(self):
         """ """
-        if not self.__dyntaxaloaded:
+        if not self._dyntaxaloaded:
             self.loadResourceDyntaxa()
-        if not self.__pegloaded:
+        if not self._pegloaded:
             self.loadResourcePeg()
-        if not self.__harmfulplanktonloaded:
+        if not self._harmfulplanktonloaded:
             self.loadResourceHarmfulPlankton()
 
     def loadUnloadedResourceDyntaxa(self):
         """ """
-        if not self.__dyntaxaloaded:
+        if not self._dyntaxaloaded:
             self.loadResourceDyntaxa()
 
     def loadResourceDyntaxa(self):
         """ """
-        self.__dyntaxa.clear()
-        self.__dyntaxaloaded = False 
-        importer = taxa_sources.JsonFile(taxaObject = self.__dyntaxa)
+        self._dyntaxa.clear()
+        self._dyntaxaloaded = False 
+        importer = taxa_sources.JsonFile(taxaObject = self._dyntaxa)
         filepath = toolbox_settings.ToolboxSettings().getValue('Resources:Dyntaxa:Filepath')
         importer.importTaxa(file = filepath)
         # Emit signal.
-        self.__dyntaxaloaded = True 
+        self._dyntaxaloaded = True 
         self.emit(QtCore.SIGNAL('dyntaxaResourceLoaded'))
         mmfw.Logging().log('Toolbox resources: Dyntaxa loaded (' +  
-                            unicode(len(self.__dyntaxa.getTaxonList())) + ' taxon).')
+                            unicode(len(self._dyntaxa.getTaxonList())) + ' taxon).')
         
     def loadUnloadedResourcePeg(self):
         """ """
-        if not self.__pegloaded:
+        if not self._pegloaded:
             self.loadResourcePeg()
         
     def loadResourcePeg(self):
         """ """
-        self.__peg.clear()
-        self.__pegloaded = False
-        importer = taxa_sources.JsonFile(taxaObject = self.__peg)
+        self._peg.clear()
+        self._pegloaded = False
+        importer = taxa_sources.JsonFile(taxaObject = self._peg)
         filepath = toolbox_settings.ToolboxSettings().getValue('Resources:PEG:Filepath')
         importer.importTaxa(file = filepath)
         # Emit signal.
-        self.__pegloaded = True
+        self._pegloaded = True
         self.emit(QtCore.SIGNAL('pegResourceLoaded'))
         mmfw.Logging().log('Toolbox resources: PEG loaded (' +  
-                            unicode(len(self.__peg.getNameAndSizeList())) + ' sizeclasses).')
+                            unicode(len(self._peg.getNameAndSizeList())) + ' sizeclasses).')
 
     def loadUnloadedResourceHarmfulPlankton(self):
         """ """
-        if not self.__harmfulplanktonloaded:
+        if not self._harmfulplanktonloaded:
             self.loadResourceHarmfulPlankton()
 
     def loadResourceHarmfulPlankton(self):
         """ """
-        self.__harmfulplankton.clear()
-        self.__harmfulplanktonloaded = False
-        importer = taxa_sources.JsonFile(taxaObject = self.__harmfulplankton)
+        self._harmfulplankton.clear()
+        self._harmfulplanktonloaded = False
+        importer = taxa_sources.JsonFile(taxaObject = self._harmfulplankton)
         filepath = toolbox_settings.ToolboxSettings().getValue('Resources:Harmful plankton:Filepath')
         importer.importTaxa(file = filepath)
         # Emit signal.
-        self.__harmfulplanktonloaded = True
+        self._harmfulplanktonloaded = True
         self.emit(QtCore.SIGNAL('harmfulPlanktonResourceLoaded'))
         mmfw.Logging().log('Toolbox resources: Harmful plankton loaded (' +  
-                            unicode(len(self.__harmfulplankton.getTaxonList())) + ' taxon).')
+                            unicode(len(self._harmfulplankton.getTaxonList())) + ' taxon).')
         
     def getResourceDyntaxa(self):
         """ """
-        return self.__dyntaxa
+        return self._dyntaxa
         
     def getResourcePeg(self):
         """ """
-        return self.__peg
+        return self._peg
         
     def getResourceHarmfulPlankton(self):
         """ """
-        return self.__harmfulplankton
+        return self._harmfulplankton
 

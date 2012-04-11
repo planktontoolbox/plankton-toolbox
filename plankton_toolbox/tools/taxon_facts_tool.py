@@ -50,10 +50,10 @@ class TaxonFactsTool(tool_base.ToolBase):
         content = self._createScrollableContent()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
-        contentLayout.addLayout(self.__contentFacts())
+        contentLayout.addLayout(self._contentFacts())
 #        contentLayout.addStretch(5)
 
-    def __contentFacts(self):
+    def _contentFacts(self):
         """ """
         layout = QtGui.QVBoxLayout()
 
@@ -146,6 +146,6 @@ class TaxonFactsTool(tool_base.ToolBase):
         #
         return layout
     
-    def __test(self):
+    def _test(self):
         """ """
-        self._writeToLog("Name: " + unicode(self.__nameedit.text()))
+        self._writeToLog("Name: " + unicode(self._nameedit.text()))

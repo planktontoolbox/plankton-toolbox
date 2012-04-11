@@ -43,12 +43,12 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
 
     def setMainActivity(self, analyse_dataset_activity):
         """ """
-        self.__analysedatasetactivity = analyse_dataset_activity
+        self._analysedatasetactivity = analyse_dataset_activity
                 
     def clear(self):
         """ """
-        self.__startdate_edit.clear()
-        self.__enddate_edit.clear()
+        self._startdate_edit.clear()
+        self._enddate_edit.clear()
         self._stations_listview.clear()
         self._minmaxdepth_listview.clear()
         self._taxon_listview.clear()
@@ -57,14 +57,14 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
     def update(self):
         """ """
         self.clear()        
-        self.__updateSelectDataAlternatives()
+        self._updateSelectDataAlternatives()
 
     def getSelectDataDict(self):
         """ """
         selected_dict = {}        
         # Start date and end date.
-        selected_dict[u'Start date'] = unicode(self.__startdate_edit.text())
-        selected_dict[u'End date'] = unicode(self.__enddate_edit.text())
+        selected_dict[u'Start date'] = unicode(self._startdate_edit.text())
+        selected_dict[u'End date'] = unicode(self._enddate_edit.text())
         # Selection lists.
         selected_dict[u'Stations'] = self._stations_listview.getSelectedDataList()
         selected_dict[u'Min max depth'] = self._minmaxdepth_listview.getSelectedDataList()
@@ -89,8 +89,8 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         tempor incididunt ut labore et dolore magna aliqua.
         """)
         # Start date and end date.
-        self.__startdate_edit = QtGui.QLineEdit("")
-        self.__enddate_edit = QtGui.QLineEdit("")
+        self._startdate_edit = QtGui.QLineEdit("")
+        self._enddate_edit = QtGui.QLineEdit("")
         # Stations
         self._stations_listview = utils_qt.SelectableQListView()
         self._stations_listview.setMaximumHeight(100)
@@ -134,7 +134,7 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         form1.addWidget(label4, gridrow, 7, 1, 3)
         form1.addWidget(label5, gridrow, 10, 1, 3)
         gridrow += 1
-        form1.addWidget(self.__startdate_edit, gridrow, 0, 1, 1)
+        form1.addWidget(self._startdate_edit, gridrow, 0, 1, 1)
         form1.addWidget(self._stations_listview, gridrow, 1, 4, 3)
         form1.addWidget(self._minmaxdepth_listview, gridrow, 4, 4, 3)
         form1.addWidget(self._taxon_listview, gridrow, 7, 4, 3)
@@ -143,7 +143,7 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         label1 = QtGui.QLabel("Date to:")
         form1.addWidget(label1, gridrow, 0, 1, 1)
         gridrow += 1
-        form1.addWidget(self.__enddate_edit, gridrow, 0, 1, 1)
+        form1.addWidget(self._enddate_edit, gridrow, 0, 1, 1)
         gridrow += 1
         gridrow += 1
         form1.addWidget(clicklabel1, gridrow, 1, 1, 1)
@@ -164,9 +164,9 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         return widget
 
 
-    def __updateSelectDataAlternatives(self):
+    def _updateSelectDataAlternatives(self):
         """ """
-        currentdata = self.__analysedatasetactivity.getCurrentData()
+        currentdata = self._analysedatasetactivity.getCurrentData()
         if not currentdata:
             return # Empty data.
         #
@@ -188,8 +188,8 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
                     taxonset.add(variablenode.getData(u'Reported taxon name'))
                     trophyset.add(variablenode.getData(u'PEG trophy'))
         # Start date and end date.
-        self.__startdate_edit.setText(startdate)
-        self.__enddate_edit.setText(enddate)
+        self._startdate_edit.setText(startdate)
+        self._enddate_edit.setText(enddate)
         # Selection lists.
         self._stations_listview.setList(sorted(stationset))
         self._minmaxdepth_listview.setList(sorted(minmaxdepthset))
