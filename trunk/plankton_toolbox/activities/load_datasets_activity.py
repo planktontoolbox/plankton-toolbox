@@ -185,42 +185,44 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
 
     def _loadTextFiles(self):
         """ """
-        self._parent.statusBar().showMessage(u'Loading datasets...')
-        # Show select file dialog box. Multiple files can be selected.
-        namefilter = 'Text files (*.txt);;All files (*.*)'
-        filenames = QtGui.QFileDialog.getOpenFileNames(
-                            self,
-                            'Load dataset(s)',
-                            self._last_used_textfile_name,
-                            namefilter)
-        # From QString to unicode.
-        filenames = map(unicode, filenames)
-        # Check if user pressed ok or cancel.
-        self._tabledataset = mmfw.DatasetTable()
-        if filenames:
-            for filename in filenames:
-                self._last_used_textfile_name = filename
-                
-                
-                # Create a new dataset.
-                dataset = mmfw.DatasetNode()
-                # Add info to dataset about how to import and export data to/from dataset.
-                dataset.loadImportExportMatrix(self._matrix_path + unicode(self._textfile_matrix_list.currentText()),
-                                               unicode(self._textfile_importcolumn_list.currentText()),
-                                               unicode(self._textfile_exportcolumn_list.currentText()),
-                                               self._semantics_column)
-                # Add metadata related to imported file.
-                dataset.addMetadata(u'File name', os.path.basename(filename))
-                dataset.addMetadata(u'File path', filename)
-                # Perform import.
-                impMgr = mmfw.ImportManager()
-                impMgr.importFileToDataset(dataset, filename)
-                # Note: Not the mmfw datasets class. This is a wrapper containing Qt-code.
-                toolbox_datasets.ToolboxDatasets().addDataset(dataset)        
-        #
-        datasetcount = len(mmfw.Datasets().getDatasets())
-        self._parent.statusBar().showMessage(
-                    u'Loaded datasets: ' + unicode(datasetcount))
+        try:
+            self._parent.statusBar().showMessage(u'Loading datasets...')
+            # Show select file dialog box. Multiple files can be selected.
+            namefilter = 'Text files (*.txt);;All files (*.*)'
+            filenames = QtGui.QFileDialog.getOpenFileNames(
+                                self,
+                                'Load dataset(s)',
+                                self._last_used_textfile_name,
+                                namefilter)
+            # From QString to unicode.
+            filenames = map(unicode, filenames)
+            # Check if user pressed ok or cancel.
+            self._tabledataset = mmfw.DatasetTable()
+            if filenames:
+                for filename in filenames:
+                    self._last_used_textfile_name = filename
+                    
+                    
+                    # Create a new dataset.
+                    dataset = mmfw.DatasetNode()
+                    # Add info to dataset about how to import and export data to/from dataset.
+                    dataset.loadImportExportMatrix(self._matrix_path + unicode(self._textfile_matrix_list.currentText()),
+                                                   unicode(self._textfile_importcolumn_list.currentText()),
+                                                   unicode(self._textfile_exportcolumn_list.currentText()),
+                                                   self._semantics_column)
+                    # Add metadata related to imported file.
+                    dataset.addMetadata(u'File name', os.path.basename(filename))
+                    dataset.addMetadata(u'File path', filename)
+                    # Perform import.
+                    impMgr = mmfw.ImportManager()
+                    impMgr.importFileToDataset(dataset, filename)
+                    # Note: Not the mmfw datasets class. This is a wrapper containing Qt-code.
+                    toolbox_datasets.ToolboxDatasets().addDataset(dataset)        
+            #
+        finally:
+            datasetcount = len(mmfw.Datasets().getDatasets())
+            self._parent.statusBar().showMessage(
+                        u'Loaded datasets: ' + unicode(datasetcount))
 
     # ===== EXCEL FILES ======
     def _contentXlsx(self):
@@ -304,39 +306,41 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
 
     def _loadExcelFile(self):
         """ """
-        self._parent.statusBar().showMessage(u'Loading datasets...')
-        # Show select file dialog box. Multiple files can be selected.
-        namefilter = 'Excel files (*.xlsx);;All files (*.*)'
-        filenames = QtGui.QFileDialog.getOpenFileNames(
-                            self,
-                            'Load dataset(s)',
-                            self._last_used_excelfile_name,
-                            namefilter)
-        # From QString to unicode.
-        filenames = map(unicode, filenames)
-        # Check if user pressed ok or cancel.
-        self._tabledataset = mmfw.DatasetTable()
-        if filenames:
-            for filename in filenames:
-                self._last_used_excelfile_name = filename
-                # Create a new dataset.
-                dataset = mmfw.DatasetNode()
-                # Add info to dataset about how to import and export data to/from dataset.
-                dataset.loadImportExportMatrix(self._matrix_path + unicode(self._excel_matrix_list.currentText()),
-                                               unicode(self._excel_importcolumn_list.currentText()),
-                                               unicode(self._excel_exportcolumn_list.currentText()))
-                # Add metadata related to imported file.
-                dataset.addMetadata(u'File name', os.path.basename(filename))
-                dataset.addMetadata(u'File path', filename)
-                # Perform import.
-                impMgr = mmfw.ImportManager()
-                impMgr.importExcelFileToDataset(dataset, filename)
-                # Note: Not the mmfw datasets class. This is a wrapper containing Qt-code.
-                toolbox_datasets.ToolboxDatasets().addDataset(dataset)        
+        try:
+            self._parent.statusBar().showMessage(u'Loading datasets...')
+            # Show select file dialog box. Multiple files can be selected.
+            namefilter = 'Excel files (*.xlsx);;All files (*.*)'
+            filenames = QtGui.QFileDialog.getOpenFileNames(
+                                self,
+                                'Load dataset(s)',
+                                self._last_used_excelfile_name,
+                                namefilter)
+            # From QString to unicode.
+            filenames = map(unicode, filenames)
+            # Check if user pressed ok or cancel.
+            self._tabledataset = mmfw.DatasetTable()
+            if filenames:
+                for filename in filenames:
+                    self._last_used_excelfile_name = filename
+                    # Create a new dataset.
+                    dataset = mmfw.DatasetNode()
+                    # Add info to dataset about how to import and export data to/from dataset.
+                    dataset.loadImportExportMatrix(self._matrix_path + unicode(self._excel_matrix_list.currentText()),
+                                                   unicode(self._excel_importcolumn_list.currentText()),
+                                                   unicode(self._excel_exportcolumn_list.currentText()))
+                    # Add metadata related to imported file.
+                    dataset.addMetadata(u'File name', os.path.basename(filename))
+                    dataset.addMetadata(u'File path', filename)
+                    # Perform import.
+                    impMgr = mmfw.ImportManager()
+                    impMgr.importExcelFileToDataset(dataset, filename)
+                    # Note: Not the mmfw datasets class. This is a wrapper containing Qt-code.
+                    toolbox_datasets.ToolboxDatasets().addDataset(dataset)        
         #
-        datasetcount = len(mmfw.Datasets().getDatasets())
-        self._parent.statusBar().showMessage(
-                    u'Loaded datasets: ' + unicode(datasetcount))
+        finally:
+            datasetcount = len(mmfw.Datasets().getDatasets())
+            self._parent.statusBar().showMessage(
+                        u'Loaded datasets: ' + unicode(datasetcount))
 
     # ===== LOADED DATASETS =====    
     def _contentLoadedDatasets(self):

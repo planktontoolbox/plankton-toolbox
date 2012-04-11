@@ -24,13 +24,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import os.path
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 #import datetime
 import copy
-import plankton_toolbox.activities.activity_base as activity_base
-import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 import mmfw
@@ -149,5 +146,5 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
             # Use the concatenated datasets as current data.
             self._analysedatasetactivity.setCurrentData(dataset)    
         except UserWarning, e:
-            QtGui.QMessageBox.warning(self, "Warning", unicode(e))
+            QtGui.QMessageBox.warning(self._analysedatasetactivity, "Warning", unicode(e))
 

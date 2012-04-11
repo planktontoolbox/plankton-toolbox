@@ -24,15 +24,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-#import os.path
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-#import datetime
-#import copy
-#import plankton_toolbox.activities.activity_base as activity_base
-#import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.toolbox.utils_qt as utils_qt
-#import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 import mmfw
 
 @mmfw.singleton
@@ -70,11 +64,11 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         selected_dict[u'Min max depth'] = self._minmaxdepth_listview.getSelectedDataList()
         selected_dict[u'Taxon'] = self._taxon_listview.getSelectedDataList()
         selected_dict[u'Trophy'] = self._trophy_listview.getSelectedDataList()
-        # TEST
-        print('DEBUG: Selected stations: ' + ', '.join(selected_dict[u'Stations']))
-        print('DEBUG: Selected_min max depth: ' + ', '.join(selected_dict[u'Min max depth']))
-        print('DEBUG: Selected taxon: ' + ', '.join(selected_dict[u'Taxon']))
-        print('DEBUG: Selected trophy: ' + ', '.join(selected_dict[u'Trophy']))
+#        # TEST
+#        print('DEBUG: Selected stations: ' + ', '.join(selected_dict[u'Stations']))
+#        print('DEBUG: Selected_min max depth: ' + ', '.join(selected_dict[u'Min max depth']))
+#        print('DEBUG: Selected taxon: ' + ', '.join(selected_dict[u'Taxon']))
+#        print('DEBUG: Selected trophy: ' + ', '.join(selected_dict[u'Trophy']))
         #
         return selected_dict
         
@@ -178,15 +172,15 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         trophyset = set()
         #
         for visitnode in currentdata.getChildren():
-            stationset.add(visitnode.getData(u'Station.reported name'))
+            stationset.add(visitnode.getData(u'Station name'))
             startdate = min(startdate, visitnode.getData(u'Date'))
             enddate = max(enddate, visitnode.getData(u'Date'))
             for samplenode in visitnode.getChildren():
                 depthstring = samplenode.getData(u'Sample min depth') + '-' + samplenode.getData(u'Sample max depth')
                 minmaxdepthset.add(depthstring)
                 for variablenode in samplenode.getChildren():
-                    taxonset.add(variablenode.getData(u'Reported taxon name'))
-                    trophyset.add(variablenode.getData(u'PEG trophy'))
+                    taxonset.add(variablenode.getData(u'Taxon name'))
+                    trophyset.add(variablenode.getData(u'Trophy'))
         # Start date and end date.
         self._startdate_edit.setText(startdate)
         self._enddate_edit.setText(enddate)

@@ -24,19 +24,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import os.path
 import PyQt4.QtGui as QtGui
-import PyQt4.QtCore as QtCore
 #import datetime
-import copy
-import plankton_toolbox.activities.activity_base as activity_base
-import plankton_toolbox.tools.tool_manager as tool_manager
-import plankton_toolbox.toolbox.utils_qt as utils_qt
-import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 import mmfw
 
 @mmfw.singleton
-#class AnalyseDatasetsTab5(activity_base.ActivityBase):
 class AnalyseDatasetsTab5(QtGui.QWidget):
     """ """
     def __init__(self):

@@ -119,12 +119,22 @@ class Taxa(object):
                     parentobject = None # Too many levels, or infinite loop.
                     continue
                 if u'Rank' in parentobject:
-                    if parentobject[u'Rank'] == u'Order':
-                        speciesobject[u'Order'] = parentobject[u'Scientific name']
-                    if parentobject[u'Rank'] == u'Class':
-                        speciesobject[u'Class'] = parentobject[u'Scientific name']
+                    if parentobject[u'Rank'] == u'Kingdom':
+                        speciesobject[u'Kingdom'] = parentobject[u'Scientific name']
                         parentobject = None # Done. Continue with next.
                         continue
+                    elif parentobject[u'Rank'] == u'Phylum':
+                        speciesobject[u'Phylum'] = parentobject[u'Scientific name']
+                    elif parentobject[u'Rank'] == u'Class':
+                        speciesobject[u'Class'] = parentobject[u'Scientific name']
+                    elif parentobject[u'Rank'] == u'Order':
+                        speciesobject[u'Order'] = parentobject[u'Scientific name']
+                    elif parentobject[u'Rank'] == u'Family':
+                        speciesobject[u'Family'] = parentobject[u'Scientific name']
+                    elif parentobject[u'Rank'] == u'Genus':
+                        speciesobject[u'Genus'] = parentobject[u'Scientific name']
+                    elif parentobject[u'Rank'] == u'Species':
+                        speciesobject[u'Species'] = parentobject[u'Scientific name']
                 # One step up in hierarchy.
                 if u'Parent name' in parentobject:
                     parentobject = self._taxa[parentobject[u'Parent name']] if parentobject[u'Parent name'] else None
