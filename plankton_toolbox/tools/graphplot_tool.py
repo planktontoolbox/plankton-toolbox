@@ -234,22 +234,72 @@ class GraphPlotTool(tool_base.ToolBase):
     # === Private methods. ===    
     def _clearSelectedPlot(self):
         """ """
-        #
-        index = self._viewplot_list.currentIndex()
-        # Time series.
-        if index in [0]:
-            for ix in [0, 1, 2, 3]:
-                self._ax_timeseries[ix] = {'time':[], 'y':[]}
-        elif index in [1, 2, 3, 4]:
-            self._ax_timeseries[index - 1] = {'time':[], 'y':[]}
-        # X/Y plots.
-        elif index in [5]:
-            for ix in [0, 1, 2, 3]:
-                self._ax_xyplot[ix] = {'x':[], 'y':[]}
-        elif index in [6, 7, 8, 9]:
-            self._ax_xyplot[index - 6] = {'x':[], 'y':[]}
-        #
-        self._drawPlots()
+#        #
+#        index = self._viewplot_list.currentIndex()
+#        # Time series.
+#        if index in [0]:
+#            for ix in [0, 1, 2, 3]:
+#                self._ax_timeseries[ix] = {'time':[], 'y':[]}
+#        elif index in [1, 2, 3, 4]:
+#            self._ax_timeseries[index - 1] = {'time':[], 'y':[]}
+#        # X/Y plots.
+#        elif index in [5]:
+#            for ix in [0, 1, 2, 3]:
+#                self._ax_xyplot[ix] = {'x':[], 'y':[]}
+#        elif index in [6, 7, 8, 9]:
+#            self._ax_xyplot[index - 6] = {'x':[], 'y':[]}
+#        #
+#        self._drawPlots()
+
+
+        import numpy as np
+        import matplotlib.pyplot as plt
+        
+        N = 5
+        menMeans = (20, 35, 30, 35, 27)
+        menStd =   (2, 3, 4, 1, 2)
+        
+        ind = np.arange(N)  # the x locations for the groups
+        width = 0.35       # the width of the bars
+        
+#        fig = plt.figure()
+#        ax = fig.add_subplot(111)        
+#        self._figure = Figure()
+#        self._canvas = FigureCanvas(self._figure)        
+
+        ax = self._figure.add_subplot(111)        
+        
+        
+        rects1 = ax.bar(ind, menMeans, width, color='r', yerr=menStd)
+        
+        womenMeans = (25, 32, 34, 20, 25)
+        womenStd =   (3, 5, 2, 3, 3)
+        rects2 = ax.bar(ind+width, womenMeans, width, color='y', yerr=womenStd)
+        
+        # add some
+        ax.set_ylabel('Scores')
+        ax.set_title('Scores by group and gender')
+        ax.set_xticks(ind+width)
+        ax.set_xticklabels( ('G1', 'G2', 'G3', 'G4', 'G5') )
+        
+        ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
+        
+        def autolabel(rects):
+            # attach some text labels
+            for rect in rects:
+                height = rect.get_height()
+                ax.text(rect.get_x()+rect.get_width()/2., 1.05*height, '%d'%int(height),
+                        ha='center', va='bottom')
+        
+        autolabel(rects1)
+        autolabel(rects2)
+        
+        self._canvas.draw()
+
+
+
+
+
 
     def _drawPlots(self):
         """ """
@@ -337,4 +387,64 @@ class GraphPlotTool(tool_base.ToolBase):
                 ax.plot(self._ax_xyplot[plotindex]['x'], self._ax_xyplot[plotindex]['y'], plotformat)
                 #
                 self._canvas.draw()
+
+
+
+
+    def addTestPlot(self, parameter, station_list, taxon_list, taxon_station_value_list):
+        """ """
+        import numpy as np
+#        import matplotlib.pyplot as plt
+        
+        # Clear all plots before redrawing.
+        self._figure.clear()
+        self._canvas.draw()
+
+        
+        N = len(station_list)
+        ind = np.arange(N)  # the x locations for the groups
+        width = (1.0 / (len(taxon_list))) * 0.7       # the width of the bars
+        
+        ax = self._figure.add_subplot(111)
+
+        rects_list = []                        
+        for taxonindex, taxon in enumerate(taxon_list):
+#            rects = ax.bar(ind + (taxonindex * width), taxon_station_value_list[taxonindex], width, color='r')
+            rects = ax.bar(ind + (taxonindex * width), taxon_station_value_list[taxonindex], width)
+            rects_list.append(rects[0])
+        
+        
+        # add some
+        ax.set_ylabel(parameter)
+        ax.set_title(parameter)
+        ax.set_xticks(ind + (width * len(taxon_list) * 0.5))
+        ax.set_xticklabels(station_list)
+        
+#        ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
+        ax.legend(rects_list, taxon_list)
+        
+#        def autolabel(rects):
+#            # attach some text labels
+#            for rect in rects:
+#                height = rect.get_height()
+#                ax.text(rect.get_x()+rect.get_width()/2., 1.05*height, '%d'%int(height),
+#                        ha='center', va='bottom')
+#        
+#        autolabel(rects1)
+#        autolabel(rects2)
+        
+        self._canvas.draw()
+        
+    
+
+
+
+
+
+
+
+
+
+
+
 

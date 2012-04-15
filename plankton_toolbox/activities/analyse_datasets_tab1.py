@@ -38,9 +38,9 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
     def __init__(self):
         """ """
 
-    def setMainActivity(self, analyse_dataset_activity):
+    def setMainActivity(self, main_activity):
         """ """
-        self._analysedatasetactivity = analyse_dataset_activity
+        self._main_activity = main_activity
                 
     def clear(self):
         """ """
@@ -100,7 +100,7 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
 
     def _clearCurrentData(self):
         """ """
-        self._analysedatasetactivity.setCurrentData(None)    
+        self._main_activity.setCurrentData(None)    
 
     def _useSelectedDatasets(self):
         """ """
@@ -144,7 +144,7 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
                 mmfw.Logging().log("Selected datasets are empty. Please try again.")
                 raise UserWarning("Selected datasets are empty. Please try again.")
             # Use the concatenated datasets as current data.
-            self._analysedatasetactivity.setCurrentData(dataset)    
+            self._main_activity.setCurrentData(dataset)    
         except UserWarning, e:
-            QtGui.QMessageBox.warning(self._analysedatasetactivity, "Warning", unicode(e))
+            QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
 

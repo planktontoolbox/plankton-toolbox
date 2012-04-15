@@ -235,6 +235,17 @@ class DatasetNode(mmfw.DatasetBase, DataNode):
         Example: [{"Header": "SDATE", "Node": "Visit", "Key": "Date"},
                   {"Header": "MNDEP", "Node": "Sample", "Key": "Min depth"}]
         """
+        
+        
+        
+# TODO: For DEBUG:        
+#        return
+        
+        
+        
+        
+        
+        
         if not target_dataset:
             raise UserWarning('Target dataset is missing.')
         if not isinstance(target_dataset, mmfw.DatasetTable):

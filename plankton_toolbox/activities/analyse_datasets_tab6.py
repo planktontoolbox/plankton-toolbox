@@ -36,9 +36,9 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
     def __init__(self):
         """ """
 
-    def setMainActivity(self, analyse_dataset_activity):
+    def setMainActivity(self, main_activity):
         """ """
-        self._analysedatasetactivity = analyse_dataset_activity
+        self._main_activity = main_activity
                 
     def clear(self):
         """ """
@@ -56,7 +56,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
     def update(self):
         """ """
         self.clear()
-        currentdata = self._analysedatasetactivity.getCurrentData()
+        currentdata = self._main_activity.getCurrentData()
         if currentdata:        
             # For tab "Generic graphs".        
             self._x_axis_column_list.addItems([item[u'Header'] for item in currentdata.getExportTableColumns()])
@@ -173,7 +173,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
             
     def _addPlot(self):
         """ """
-        currentdata = self._analysedatasetactivity.getCurrentData()
+        currentdata = self._main_activity.getCurrentData()
         if not currentdata:
             return # Can't plot from empty dataset
         #
@@ -223,7 +223,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         #
         
         
-        selected_dict = self._analysedatasetactivity.getSelectDataDict()
+        selected_dict = self._main_activity.getSelectDataDict()
         selected_startdate = selected_dict[u'Start date']
         selected_enddate = selected_dict[u'End date']
         selected_stations = selected_dict[u'Stations']

@@ -35,9 +35,9 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
     def __init__(self):
         """ """
 
-    def setMainActivity(self, analyse_dataset_activity):
+    def setMainActivity(self, main_activity):
         """ """
-        self._analysedatasetactivity = analyse_dataset_activity
+        self._main_activity = main_activity
                 
     def clear(self):
         """ """
@@ -160,7 +160,7 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
 
     def _updateSelectDataAlternatives(self):
         """ """
-        currentdata = self._analysedatasetactivity.getCurrentData()
+        currentdata = self._main_activity.getCurrentData()
         if not currentdata:
             return # Empty data.
         #
