@@ -35,9 +35,9 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
     def __init__(self):
         """ """
 
-    def setMainActivity(self, analyse_dataset_activity):
+    def setMainActivity(self, main_activity):
         """ """
-        self._analysedatasetactivity = analyse_dataset_activity
+        self._main_activity = main_activity
 
     def clear(self):
         """ """
@@ -110,7 +110,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             if self._aggregate_rank_list.currentIndex() == 0:
                 mmfw.Logging().log("Taxon level is not selected. Please try again.")
                 raise UserWarning("Taxon level is not selected. Please try again.")
-            if not self._analysedatasetactivity.getCurrentData():
+            if not self._main_activity.getCurrentData():
                 mmfw.Logging().log("No data is selected for analysis. Please try again.")
                 raise UserWarning("No data is selected for analysis. Please try again.")                
             #
@@ -118,7 +118,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             selected_trophy_list = self._trophy_listview.getSelectedDataList()
             selected_trophy_text = u'-'.join(selected_trophy_list) 
             #
-            for visitnode in self._analysedatasetactivity.getCurrentData().getChildren(): 
+            for visitnode in self._main_activity.getCurrentData().getChildren(): 
                 for samplenode in visitnode.getChildren():
                     aggregatedvariables = {}
                     for variablenode in samplenode.getChildren():
@@ -159,13 +159,13 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                         newvariable.addData(u'Unit', unit)
                         newvariable.addData(u'Value', aggregatedvariables[variablekeytuple])
             #
-            self._analysedatasetactivity.updateCurrentData()    
+            self._main_activity.updateCurrentData()    
         except UserWarning, e:
-            QtGui.QMessageBox.warning(self._analysedatasetactivity, "Warning", unicode(e))
+            QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
 
     def _updateSelectDataAlternatives(self):
         """ """
-        currentdata = self._analysedatasetactivity.getCurrentData()
+        currentdata = self._main_activity.getCurrentData()
         if not currentdata:
             return # Empty data.
         #
