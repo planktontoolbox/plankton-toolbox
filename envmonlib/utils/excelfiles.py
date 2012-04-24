@@ -24,7 +24,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import mmfw
+import envmonlib
 try: 
     from openpyxl import load_workbook
     from openpyxl import Workbook
@@ -54,7 +54,7 @@ class ExcelFiles():
         """ """
         if file_name == None:
             raise UserWarning("File name is missing.")
-        if not isinstance(target_dataset, mmfw.DatasetTable):
+        if not isinstance(target_dataset, envmonlib.DatasetTable):
             raise UserWarning("Target dataset is not of valid type.")
         try:
             workbook = load_workbook(file_name, use_iterators = True) ### BIG.
@@ -116,7 +116,7 @@ class ExcelFiles():
 #        """ """
 #        if file_name == None:
 #            raise UserWarning("File name is missing.")
-#        if not isinstance(target_dataset, mmfw.DatasetTable):
+#        if not isinstance(target_dataset, envmonlib.DatasetTable):
 #            raise UserWarning("Target dataset is not of valid type.")
 #        try:
 #            workbook = excelreader.load_workbook(file_name)
@@ -169,7 +169,7 @@ class ExcelFiles():
         """ """
         if file_name == None:
             raise UserWarning("File name is missing.")
-        if not isinstance(table_dataset, mmfw.DatasetTable):
+        if not isinstance(table_dataset, envmonlib.DatasetTable):
             raise UserWarning("Dataset is not of a valid type.")
         try:
             workbook =  Workbook(optimized_write = True) # Create workbook.
@@ -183,14 +183,14 @@ class ExcelFiles():
             workbook.save(file_name)
         #
         except (IOError, OSError):
-            mmfw.Logging().log("Failed to write to file: " + file_name)
+            envmonlib.Logging().log("Failed to write to file: " + file_name)
             raise UserWarning("Failed to write to file: " + file_name)
 
 #    def writeTableDataset(self, table_dataset, file_name):
 #        """ """
 #        if file_name == None:
 #            raise UserWarning("File name is missing.")
-#        if not isinstance(table_dataset, mmfw.DatasetTable):
+#        if not isinstance(table_dataset, envmonlib.DatasetTable):
 #            raise UserWarning("Dataset is not of a valid type.")
 #        try:
 #            workbook = excelworkbook.Workbook() # Create workbook.
@@ -209,6 +209,6 @@ class ExcelFiles():
 #            # Close.
 #            # TODO: Not needed?        
 #        except (IOError, OSError):
-#            mmfw.Logging().log("Failed to write to file: " + file_name)
+#            envmonlib.Logging().log("Failed to write to file: " + file_name)
 #            raise UserWarning("Failed to write to file: " + file_name)
 

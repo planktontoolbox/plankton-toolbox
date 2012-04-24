@@ -34,7 +34,7 @@ reports based on datasets content. Implemented datsets/reports are:
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-import mmfw
+import envmonlib
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.activities.activity_base as activity_base
 #import plankton_toolbox.core.biology.taxa as taxa
@@ -146,15 +146,15 @@ class CreateReportsActivity(activity_base.ActivityBase):
         if self._report_list.currentIndex() == 0:
             QtGui.QMessageBox.information(self, "Info", 'Report type must be selected.')
             return        
-        mmfw.Logging().log("PW reports started...")
-        mmfw.Logging().startAccumulatedLogging()
+        envmonlib.Logging().log("PW reports started...")
+        envmonlib.Logging().startAccumulatedLogging()
         self._writeToStatusBar("Generating PW report...")
         try:
             self._reportdata.clear()
             # Check which report to generate.
             if self._report_list.currentIndex() == 3: # Report: MJ1
                 # === Report: MJ1 ===
-                mmfw.Logging().log("Selected report: MJ1")
+                envmonlib.Logging().log("Selected report: MJ1")
                 report = pw_reports.PwReportMJ1()
                 report.createReport(self._reportdata)
                 # Preview result.
@@ -162,7 +162,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
                 self._refreshResultTable()
             elif self._report_list.currentIndex() == 4: # Report: MJ2
                 # === Report: MJ1 ===
-                mmfw.Logging().log("Selected report: MJ2")
+                envmonlib.Logging().log("Selected report: MJ2")
                 report = pw_reports.PwReportMJ2()
                 report.createReport(self._reportdata)
                 # Preview result.
@@ -170,7 +170,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
                 self._refreshResultTable()
             elif self._report_list.currentIndex() == 5: # Report: ATS1
                 # === Report: MJ1 ===
-                mmfw.Logging().log("Selected report: ATS1")
+                envmonlib.Logging().log("Selected report: ATS1")
                 report = pw_reports.PwReportATS1()
                 report.createReport(self._reportdata)
                 # Preview result.
@@ -179,18 +179,18 @@ class CreateReportsActivity(activity_base.ActivityBase):
             else:
                 raise UserWarning('The selected report type is not implemented.')
         except UserWarning, e:
-            mmfw.Logging().error("UserWarning: " + unicode(e))
+            envmonlib.Logging().error("UserWarning: " + unicode(e))
             QtGui.QMessageBox.warning(self, "Warning", unicode(e))
         except (IOError, OSError), e:
-            mmfw.Logging().error("Error: " + unicode(e))
+            envmonlib.Logging().error("Error: " + unicode(e))
             QtGui.QMessageBox.warning(self, "Error", unicode(e))
         except Exception, e:
-            mmfw.Logging().error("Failed on exception: " + unicode(e))
+            envmonlib.Logging().error("Failed on exception: " + unicode(e))
             QtGui.QMessageBox.warning(self, "Exception", unicode(e))
             raise
         finally:
-            mmfw.Logging().logAllAccumulatedRows()    
-            mmfw.Logging().log("PW reports finished.\r\n")
+            envmonlib.Logging().logAllAccumulatedRows()    
+            envmonlib.Logging().log("PW reports finished.\r\n")
             self._writeToStatusBar("")
 
 
@@ -365,8 +365,8 @@ class CreateReportsActivity(activity_base.ActivityBase):
 #        if self._report_list.currentIndex() == 0:
 #            QtGui.QMessageBox.information(self, "Info", 'Report type must be selected.')
 #            return        
-#        mmfw.Logging().log("PW reports started...")
-#        mmfw.Logging().startAccumulatedLogging()
+#        envmonlib.Logging().log("PW reports started...")
+#        envmonlib.Logging().startAccumulatedLogging()
 #        self._writeToStatusBar("Generating PW report...")
 #        try:
 #            # Add selected files to filelist.
@@ -379,7 +379,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
 #                    self._samplefiles[key] = None # With no data.
 #            # Read files and add data as values in the sample file list.        
 #            for samplefile in self._samplefiles:                
-#                mmfw.Logging().log('Reading ' + samplefile + '...')        
+#                envmonlib.Logging().log('Reading ' + samplefile + '...')        
 #                sampledata = monitoring_files.PwCsv()
 #                sampledata.readFile(unicode(self._fromdirectory_edit.text()) + '/' + samplefile)
 #                self._samplefiles[samplefile] = sampledata  # With data.
@@ -391,33 +391,33 @@ class CreateReportsActivity(activity_base.ActivityBase):
 #            # Check which report to generate.
 #            if self._report_list.currentIndex() == 1: # Report: MJ1
 #                # === Report: MJ1 ===
-#                mmfw.Logging().log("Selected report: MJ1")
+#                envmonlib.Logging().log("Selected report: MJ1")
 #                report = pw_reports.PwReportMJ1()
 #                report.createReport(self._samplefiles, reportfilepath)
 #            elif self._report_list.currentIndex() == 2: # Report: MJ2
 #                # === Report: MJ1 ===
-#                mmfw.Logging().log("Selected report: MJ2")
+#                envmonlib.Logging().log("Selected report: MJ2")
 #                report = pw_reports.PwReportMJ2()
 #                report.createReport(self._samplefiles, reportfilepath)
 #            elif self._report_list.currentIndex() == 3: # Report: ATS1
 #                # === Report: MJ1 ===
-#                mmfw.Logging().log("Selected report: ATS1")
+#                envmonlib.Logging().log("Selected report: ATS1")
 #                report = pw_reports.PwReportATS1()
 #                report.createReport(self._samplefiles, reportfilepath)
 #            else:
 #                raise UserWarning('The selected report type is not implemented.')
 #        except UserWarning, e:
-#            mmfw.Logging().error("UserWarning: " + unicode(e))
+#            envmonlib.Logging().error("UserWarning: " + unicode(e))
 #            QtGui.QMessageBox.warning(self, "Warning", unicode(e))
 #        except (IOError, OSError), e:
-#            mmfw.Logging().error("Error: " + unicode(e))
+#            envmonlib.Logging().error("Error: " + unicode(e))
 #            QtGui.QMessageBox.warning(self, "Error", unicode(e))
 #        except Exception, e:
-#            mmfw.Logging().error("Failed on exception: " + unicode(e))
+#            envmonlib.Logging().error("Failed on exception: " + unicode(e))
 #            QtGui.QMessageBox.warning(self, "Exception", unicode(e))
 #            raise
 #        finally:
-#            mmfw.Logging().logAllAccumulatedRows()    
-#            mmfw.Logging().log("PW reports finished.\r\n")
+#            envmonlib.Logging().logAllAccumulatedRows()    
+#            envmonlib.Logging().log("PW reports finished.\r\n")
 #            self._writeToStatusBar("")
 #

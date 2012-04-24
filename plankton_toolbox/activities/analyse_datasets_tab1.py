@@ -30,9 +30,9 @@ import PyQt4.QtCore as QtCore
 import copy
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
-import mmfw
+import envmonlib
 
-@mmfw.singleton
+@envmonlib.singleton
 class AnalyseDatasetsTab1(QtGui.QWidget):
     """ """
     def __init__(self):
@@ -112,7 +112,7 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
             for rowindex in range(self._loaded_datasets_model.rowCount()):
                 item = self._loaded_datasets_model.item(rowindex, 0)
                 if item.checkState() == QtCore.Qt.Checked:
-                    dataset = mmfw.Datasets().getDatasets()[rowindex]
+                    dataset = envmonlib.Datasets().getDatasets()[rowindex]
                     if compareheaders == None:
                         compareheaders = dataset.getExportTableColumns()
                     else:
@@ -121,7 +121,7 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
                            all(compareheaders[i] == newheader[i] for i in range(len(compareheaders))):
                             pass # OK since export columns are equal.
                         else:
-                            mmfw.Logging().log("Can't use datasets with different export columns. Please try again.")
+                            envmonlib.Logging().log("Can't use datasets with different export columns. Please try again.")
                             raise UserWarning("Can't use datasets with different export columns. Please try again.")
             # Concatenate selected datasets.        
             dataset = None
@@ -131,17 +131,17 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
                 #             
                     if dataset == None:
                         # Deep copy of the first dataset.
-                        dataset = copy.deepcopy(mmfw.Datasets().getDatasets()[rowindex])
+                        dataset = copy.deepcopy(envmonlib.Datasets().getDatasets()[rowindex])
                     else:
                         # Append top node data and children. Start with a deep copy.
-                        tmp_dataset = copy.deepcopy(mmfw.Datasets().getDatasets()[rowindex])
+                        tmp_dataset = copy.deepcopy(envmonlib.Datasets().getDatasets()[rowindex])
                         for key, value in dataset.getDataDict():
                             dataset.addData(key, value)
                         for child in tmp_dataset.getChildren():
                             dataset.addChild(child)
             # Check.
             if (dataset == None) or (len(dataset.getChildren()) == 0):
-                mmfw.Logging().log("Selected datasets are empty. Please try again.")
+                envmonlib.Logging().log("Selected datasets are empty. Please try again.")
                 raise UserWarning("Selected datasets are empty. Please try again.")
             # Use the concatenated datasets as current data.
             self._main_activity.setCurrentData(dataset)    

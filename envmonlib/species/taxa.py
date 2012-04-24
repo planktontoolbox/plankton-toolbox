@@ -26,9 +26,9 @@
 
 import codecs
 import json
-import mmfw
+import envmonlib
 
-@mmfw.singleton
+@envmonlib.singleton
 class Taxa(object):
     """ """
     def __init__(self,

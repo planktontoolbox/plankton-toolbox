@@ -41,11 +41,11 @@ import plankton_toolbox.tools.latlong_tool as latlong_tool
 
 import plankton_toolbox.tools.graphplot_tool as graphplot_tool
 
-import mmfw
+import envmonlib
 
 #import tools.template_tool as template_tool
 
-@mmfw.singleton
+@envmonlib.singleton
 class ToolManager(object):
     """
     The tool manager is used to set up available tools. 

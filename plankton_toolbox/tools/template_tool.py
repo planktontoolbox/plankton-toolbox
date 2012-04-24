@@ -31,7 +31,7 @@ Template for new tools.
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.tools.tool_base as tool_base
-import mmfw
+import envmonlib
 
 
 class TemplateTool(tool_base.ToolBase):
@@ -90,4 +90,4 @@ class TemplateTool(tool_base.ToolBase):
 
     def _test(self):
         """ """
-        mmfw.Logging().log("Name: " + unicode(self._emailedit.text()))
+        envmonlib.Logging().log("Name: " + unicode(self._emailedit.text()))

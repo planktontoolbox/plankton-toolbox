@@ -252,6 +252,13 @@ class GraphPlotTool(tool_base.ToolBase):
 #        self._drawPlots()
 
 
+
+        
+        ### TEST TEST TEST
+        ### TEST TEST TEST
+        ### TEST TEST TEST
+        
+        
         import numpy as np
         import matplotlib.pyplot as plt
         
@@ -406,11 +413,33 @@ class GraphPlotTool(tool_base.ToolBase):
         width = (1.0 / (len(taxon_list))) * 0.7       # the width of the bars
         
         ax = self._figure.add_subplot(111)
+        
+        
+        import pylab
+        NUM_COLORS = len(taxon_list)
+        
+#        cm = pylab.get_cmap('gist_rainbow')
+#        cm = pylab.get_cmap('Set1')
+#        cm = pylab.get_cmap('Set2')
+        cm = pylab.get_cmap('Dark2')
+#        for i in range(NUM_COLORS):
+#            color = cm(1.*i/NUM_COLORS)  # color will now be an RGBA tuple
+#        
+#        # or if you really want a generator:
+#        cgen = (cm(1.*i/NUM_COLORS) for i in range(NUM_COLORS))        
+        
+        
+        
+        
+        
+        
 
         rects_list = []                        
         for taxonindex, taxon in enumerate(taxon_list):
 #            rects = ax.bar(ind + (taxonindex * width), taxon_station_value_list[taxonindex], width, color='r')
-            rects = ax.bar(ind + (taxonindex * width), taxon_station_value_list[taxonindex], width)
+            rects = ax.bar(ind + (taxonindex * width), taxon_station_value_list[taxonindex], width, 
+                           color=cm(1.0 * taxonindex / NUM_COLORS))
+#            rects = ax.bar(ind + (taxonindex * width), taxon_station_value_list[taxonindex], width)
             rects_list.append(rects[0])
         
         

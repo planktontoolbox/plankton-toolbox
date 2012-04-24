@@ -33,7 +33,7 @@ import codecs
 import json
 import urllib
 import string
-import mmfw
+import envmonlib
 import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 # Openpyxl is not included in python(xy).
 try: 
@@ -113,7 +113,7 @@ class MonitoringFiles(object):
 #                # Use tab as column separator and CR/LF as row delimiter.
 #                out.write(separator.join(map(unicode, row)) + '\r\n')
 #        except (IOError, OSError):
-#            mmfw.Logging().log("Failed to write to file: " + fileName)
+#            envmonlib.Logging().log("Failed to write to file: " + fileName)
 #            raise
 #        finally:
 #            if out: out.close()
@@ -137,7 +137,7 @@ class MonitoringFiles(object):
 #            #    
 #            excelwriter.save_workbook(workbook, fileName)
 #        except (IOError, OSError):
-#            mmfw.Logging().log("Failed to write to file: " + fileName)
+#            envmonlib.Logging().log("Failed to write to file: " + fileName)
 #            raise
 
 #class TextFile(MonitoringFiles):
@@ -170,7 +170,7 @@ class MonitoringFiles(object):
 #                    self._rows.append(newrow)
 #        #  
 #        except (IOError, OSError):
-#            mmfw.Logging().log("Can't read text file.")
+#            envmonlib.Logging().log("Can't read text file.")
 #            raise
 #        finally:
 #            if file: file.close() 
@@ -216,7 +216,7 @@ class MonitoringFiles(object):
 #                    self._rows.append(newrow)        
 #        #  
 #        except Exception:
-#            mmfw.Logging().log("Can't read Excel (.xlsx) file. The python package openpyxl is needed to import Excel files.")
+#            envmonlib.Logging().log("Can't read Excel (.xlsx) file. The python package openpyxl is needed to import Excel files.")
 #            raise
 
 
@@ -283,8 +283,8 @@ class SharkwebDownload(MonitoringFiles):
         parameters = dict([k, v.encode('utf-8')] for k, v in parameters.items())
         params = urllib.urlencode(parameters)
         #
-        mmfw.Logging().log('DEBUG: URL: ' + url)
-        mmfw.Logging().log('DEBUG: Parameters: ' + params)
+        envmonlib.Logging().log('DEBUG: URL: ' + url)
+        envmonlib.Logging().log('DEBUG: Parameters: ' + params)
         #   
         f = urllib.urlopen(url, params)
         for row, line in enumerate(f.readlines()):
@@ -295,7 +295,7 @@ class SharkwebDownload(MonitoringFiles):
                 self._rows.append(map(string.strip, unicode(line).split('\t')))
 #            # Use this if data is delivered in the Json format.
 #            self._dataset = json.loads(line, encoding = encode)
-        mmfw.Logging().log('Received rows: ' + str(len(self._rows)))
+        envmonlib.Logging().log('Received rows: ' + str(len(self._rows)))
 
 
 class PwCsv(MonitoringFiles):

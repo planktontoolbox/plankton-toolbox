@@ -33,7 +33,7 @@
 from abc import abstractmethod
 import codecs
 import json
-import mmfw
+import envmonlib
 import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 
 class DataSources(object):
@@ -75,7 +75,7 @@ class JsonFile(DataSources):
 
     def exportTaxa(self, file = None):
         """ """
-        mmfw.Logging().log("Writes taxa to: " + file)
+        envmonlib.Logging().log("Writes taxa to: " + file)
         if file == None:
             raise UserWarning('File name is missing.')
         jsonencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, json-files', 'cp1252')

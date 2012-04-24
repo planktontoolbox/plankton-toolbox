@@ -34,12 +34,12 @@ Datasets managed as resources are:
 
 #import plankton_toolbox.PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-import mmfw
+import envmonlib
 import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 import plankton_toolbox.core.biology.taxa as taxa
 import plankton_toolbox.core.biology.taxa_sources as taxa_sources
 
-@mmfw.singleton
+@envmonlib.singleton
 class ToolboxResources(QtCore.QObject):
     """
     Resources are datasets that are commonly used in the Plankton Toolbox.
@@ -85,7 +85,7 @@ class ToolboxResources(QtCore.QObject):
         # Emit signal.
         self._dyntaxaloaded = True 
         self.emit(QtCore.SIGNAL('dyntaxaResourceLoaded'))
-        mmfw.Logging().log('Toolbox resources: Dyntaxa loaded (' +  
+        envmonlib.Logging().log('Toolbox resources: Dyntaxa loaded (' +  
                             unicode(len(self._dyntaxa.getTaxonList())) + ' taxon).')
         
     def loadUnloadedResourcePeg(self):
@@ -103,7 +103,7 @@ class ToolboxResources(QtCore.QObject):
         # Emit signal.
         self._pegloaded = True
         self.emit(QtCore.SIGNAL('pegResourceLoaded'))
-        mmfw.Logging().log('Toolbox resources: PEG loaded (' +  
+        envmonlib.Logging().log('Toolbox resources: PEG loaded (' +  
                             unicode(len(self._peg.getNameAndSizeList())) + ' sizeclasses).')
 
     def loadUnloadedResourceHarmfulPlankton(self):
@@ -121,7 +121,7 @@ class ToolboxResources(QtCore.QObject):
         # Emit signal.
         self._harmfulplanktonloaded = True
         self.emit(QtCore.SIGNAL('harmfulPlanktonResourceLoaded'))
-        mmfw.Logging().log('Toolbox resources: Harmful plankton loaded (' +  
+        envmonlib.Logging().log('Toolbox resources: Harmful plankton loaded (' +  
                             unicode(len(self._harmfulplankton.getTaxonList())) + ' taxon).')
         
     def getResourceDyntaxa(self):

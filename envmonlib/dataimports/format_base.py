@@ -24,7 +24,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import mmfw
+import envmonlib
 
 class FormatBase(object):
     """ """
@@ -85,13 +85,13 @@ class FormatBase(object):
 
     def _speciesByKey(self, taxon_name, key):
         """ """
-        return mmfw.Taxa().getTaxonValue(key, taxon_name)
+        return envmonlib.Taxa().getTaxonValue(key, taxon_name)
 
     def _sizeclassByKey(self, taxon_name, size_class, key):
         """ """
 #        # TODO: For test:
 #        print("DEBUG: " + taxon_name)
-        return mmfw.Taxa().getSizeclassValue(key, taxon_name, size_class)
+        return envmonlib.Taxa().getSizeclassValue(key, taxon_name, size_class)
 
     def _toStation(self, current_node, station_name, **more):
         """ """
@@ -104,17 +104,17 @@ class FormatBase(object):
 
     def _createVariable(self, current_node, **more):
         """ """
-        if isinstance(current_node, mmfw.VisitNode):
-            newsample = mmfw.SampleNode()
+        if isinstance(current_node, envmonlib.VisitNode):
+            newsample = envmonlib.SampleNode()
             current_node.addChild(newsample)
-            variable = mmfw.VariableNode()
+            variable = envmonlib.VariableNode()
             newsample.addChild(variable)
             variable.addData(u'Parameter', more[u'p'])    
             variable.addData(u'Value', unicode(more[u'v']))    
             #variable.addData(u'Value float', more[u'v'])    
             variable.addData(u'Unit', more[u'u'])    
-        if isinstance(current_node, mmfw.SampleNode):
-            variable = mmfw.VariableNode()
+        if isinstance(current_node, envmonlib.SampleNode):
+            variable = envmonlib.VariableNode()
             current_node.addChild(variable)
             variable.addData(u'Parameter', more[u'p'])    
             variable.addData(u'Value', unicode(more[u'v']))    
@@ -123,7 +123,7 @@ class FormatBase(object):
 
     def _copyVariable(self, current_node, **more):
         """ """
-        if isinstance(current_node, mmfw.VariableNode):
+        if isinstance(current_node, envmonlib.VariableNode):
             variable = current_node.clone()
             variable.addData(u'Parameter', more[u'p'])    
             variable.addData(u'Value', unicode(more[u'v']))    
@@ -132,7 +132,7 @@ class FormatBase(object):
 
     def _modifyVariable(self, current_node, **more):
         """ """
-        if isinstance(current_node, mmfw.VariableNode):
+        if isinstance(current_node, envmonlib.VariableNode):
             current_node.addData(u'Parameter', more[u'p'])    
             current_node.addData(u'Value', unicode(more[u'v']))    
             #current_node.addData(u'Value float', more[u'v'])    

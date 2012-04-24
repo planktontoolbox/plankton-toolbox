@@ -37,7 +37,7 @@ import codecs
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 
-import mmfw
+import envmonlib
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.activities.activity_manager as activity_manager
@@ -68,7 +68,7 @@ class MainWindow(QtGui.QMainWindow):
         self._logfile.write('Plankton Toolbox. ' +
                              time.strftime("%Y-%m-%d %H:%M:%S") +'\r\n\r\n')
         self._logtool = None # Should be initiated later.
-        mmfw.Logging().setLogTarget(self)
+        envmonlib.Logging().setLogTarget(self)
         # Setup main window.
         self._createActions()
         self._createMenu()
@@ -94,8 +94,8 @@ class MainWindow(QtGui.QMainWindow):
         if toolbox_settings.ToolboxSettings().getValue('Resources:Load at startup'):
             QtCore.QTimer.singleShot(10, toolbox_resources.ToolboxResources().loadAllResources)
         # Tell the user.
-        mmfw.Logging().log('Plankton Toolbox started.')
-        mmfw.Logging().log('Note: Log rows are sent to the "Log tool" and written to "plankton_toolbox_log.txt".\r\n')
+        envmonlib.Logging().log('Plankton Toolbox started.')
+        envmonlib.Logging().log('Note: Log rows are sent to the "Log tool" and written to "plankton_toolbox_log.txt".\r\n')
         
     def closeEvent(self, event):
         """ Called on application shutdown. """

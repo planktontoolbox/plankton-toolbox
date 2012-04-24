@@ -27,9 +27,9 @@
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
-import mmfw
+import envmonlib
 
-@mmfw.singleton
+@envmonlib.singleton
 class AnalyseDatasetsTab4(QtGui.QWidget):
     """ """
     def __init__(self):

@@ -31,7 +31,7 @@ Template for new activities.
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.activities.activity_base as activity_base
-import mmfw
+import envmonlib
 
 class TemplateActivity(activity_base.ActivityBase):
     """
@@ -94,5 +94,5 @@ class TemplateActivity(activity_base.ActivityBase):
 
     def _test(self):
         """ """
-        mmfw.Logging().log("Name: " + unicode(self._emailedit.text()))
+        envmonlib.Logging().log("Name: " + unicode(self._emailedit.text()))
         

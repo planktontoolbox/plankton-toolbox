@@ -24,7 +24,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import mmfw
+import envmonlib
 
 class ImportManager(object):
     """ """
@@ -33,17 +33,17 @@ class ImportManager(object):
         # Initialize parent.
         super(ImportManager, self).__init__()
         
-    def importFileToDataset(self, dataset, filename):
+    def importTextFileToDataset(self, dataset, filename, textfile_encoding):
         """ """
         #
 #        try:            
-        formatparser = mmfw.FormatSingleFile()
+        formatparser = envmonlib.FormatSingleFile()
                
 #        matrixcolumn = self.metadata.getField(u'Dataset format')
         
         # Phase 1: Parse file and import to memory model.
-        tabledataset = mmfw.DatasetTable()
-        mmfw.TextFiles().readToTableDataset(tabledataset, filename)
+        tabledataset = envmonlib.DatasetTable()
+        envmonlib.TextFiles().readToTableDataset(tabledataset, filename, encoding = textfile_encoding)
         formatparser.parseTableDataset(dataset, tabledataset)
 
         # Phase 2: Reorganize between nodes in memory model.
@@ -60,17 +60,24 @@ class ImportManager(object):
         """ """
         #
 #        try:            
-        formatparser = mmfw.FormatSingleFile()
+        formatparser = envmonlib.FormatSingleFile()
                
 #        matrixcolumn = self.metadata.getField(u'Dataset format')
+
+#Header row
+#First data row
+#First column
+#Excel sheet name
+
+
         
         # Phase 1: Parse file and import to memory model.
-        tabledataset = mmfw.DatasetTable()
-        mmfw.ExcelFiles().readToTableDataset(tabledataset, filename,
-                                             sheet_name=u'Kolumner',
-                                             header_row=3-1,
-                                             data_rows_from=4-1,
-                                             used_columns_from=2-1)
+        tabledataset = envmonlib.DatasetTable()
+        envmonlib.ExcelFiles().readToTableDataset(tabledataset, filename,
+                                             sheet_name = u'Kolumner',
+                                             header_row = 3-1,
+                                             data_rows_from = 4-1,
+                                             data_columns_from = 2-1)
         formatparser.parseTableDataset(dataset, tabledataset)
 
         # Phase 2: Reorganize between nodes in memory model.
@@ -87,12 +94,12 @@ class ImportManager(object):
         """ """
         #
         try:
-    #        zipfile = mmfw.ZipPackageReader(zipfilename)
-            zipfile = mmfw.ZipFileReader(self._zipfilepath) # TODO:
+    #        zipfile = envmonlib.ZipPackageReader(zipfilename)
+            zipfile = envmonlib.ZipFileReader(self._zipfilepath) # TODO:
             print(zipfile.listContent())
             
             
-            formatparser = mmfw.FormatSingleFile()
+            formatparser = envmonlib.FormatSingleFile()
                    
     #        matrixcolumn = self.metadata.getField(u'Dataset format')
             

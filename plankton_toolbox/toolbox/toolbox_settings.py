@@ -31,9 +31,9 @@ Contains settings for the Plankton Toolbox application.
 import pickle
 import copy
 import PyQt4.QtCore as QtCore
-import mmfw
+import envmonlib
 
-@mmfw.singleton
+@envmonlib.singleton
 class ToolboxSettings(QtCore.QObject):
     """
     Contains settings for the Plankton Toolbox application. 

@@ -29,9 +29,9 @@
 """
 
 import PyQt4.QtCore as QtCore
-import mmfw
+import envmonlib
 
-@mmfw.singleton
+@envmonlib.singleton
 class ToolboxSync(QtCore.QObject):
     """ """
     def __init__(self):

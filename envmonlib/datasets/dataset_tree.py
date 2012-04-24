@@ -30,7 +30,7 @@ Valid node order in the tree is dataset - visit - sample - variable.
 """
 
 import copy
-import mmfw
+import envmonlib
 
 class DataNode(object):
     """
@@ -93,7 +93,7 @@ class DataNode(object):
         return self._idstring
         
         
-class DatasetNode(mmfw.DatasetBase, DataNode):
+class DatasetNode(envmonlib.DatasetBase, DataNode):
     """ This it the top node for tree datasets. 
     Note: Multiple inheritance. DataNode for data and tree structure. DatasetBase for metadata. 
     """
@@ -124,7 +124,7 @@ class DatasetNode(mmfw.DatasetBase, DataNode):
 
     def addChild(self, child):
         """ """
-        if not isinstance(child, mmfw.VisitNode):
+        if not isinstance(child, envmonlib.VisitNode):
             raise UserWarning("AddChild failed. Dataset children must be of visit type")
         #
         self._visit_count += 1
@@ -155,8 +155,8 @@ class DatasetNode(mmfw.DatasetBase, DataNode):
         # Add metadata
         self.addMetadata(u'Matrix', matrix_file)
         # Read matrix.
-        tabledata = mmfw.DatasetTable()
-        mmfw.ExcelFiles().readToTableDataset(tabledata, file_name = matrix_file)
+        tabledata = envmonlib.DatasetTable()
+        envmonlib.ExcelFiles().readToTableDataset(tabledata, file_name = matrix_file)
         # Create import info.
         if import_column:
             self.addMetadata(u'Import column', import_column)
@@ -219,15 +219,15 @@ class DatasetNode(mmfw.DatasetBase, DataNode):
 
     def saveAsTextFile(self, file_name):
         """ """
-        targetdataset = mmfw.DatasetTable()
+        targetdataset = envmonlib.DatasetTable()
         self.convertToTableDataset(targetdataset)
-        mmfw.TextFiles().writeTableDataset(targetdataset, file_name)
+        envmonlib.TextFiles().writeTableDataset(targetdataset, file_name)
 
     def saveAsExcelFile(self, file_name):
         """ """
-        targetdataset = mmfw.DatasetTable()
+        targetdataset = envmonlib.DatasetTable()
         self.convertToTableDataset(targetdataset)
-        mmfw.ExcelFiles().writeTableDataset(targetdataset, file_name)       
+        envmonlib.ExcelFiles().writeTableDataset(targetdataset, file_name)       
         
     def convertToTableDataset(self, target_dataset):
         """ Converts the tree dataset to a corresponding table based dataset.
@@ -248,7 +248,7 @@ class DatasetNode(mmfw.DatasetBase, DataNode):
         
         if not target_dataset:
             raise UserWarning('Target dataset is missing.')
-        if not isinstance(target_dataset, mmfw.DatasetTable):
+        if not isinstance(target_dataset, envmonlib.DatasetTable):
             raise UserWarning('Target dataset is not of valid type.')
         if not self._exporttablecolumns:
             raise UserWarning('Info for converting from tree to table dataset is missing.')
@@ -290,7 +290,7 @@ class VisitNode(DataNode):
 
     def addChild(self, child):
         """ """
-        if not isinstance(child, mmfw.SampleNode):
+        if not isinstance(child, envmonlib.SampleNode):
             raise UserWarning("AddChild failed. Visit children must be of sample type")
         #
         self.getParent()._sample_count += 1
@@ -323,7 +323,7 @@ class SampleNode(DataNode):
         
     def addChild(self, child):
         """ """
-        if not isinstance(child, mmfw.VariableNode):
+        if not isinstance(child, envmonlib.VariableNode):
             raise UserWarning("AddChild failed. Sample children must be of variable type")
         #
         self.getParent().getParent()._variable_count += 1
