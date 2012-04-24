@@ -28,40 +28,40 @@
 """
 
 import PyQt4.QtCore as QtCore
-import mmfw
+import envmonlib
 
-@mmfw.singleton
+@envmonlib.singleton
 class ToolboxDatasets(QtCore.QObject):
-    """ Wrapper for mmfw.Datasets. Emitted signals for change notifications are added. """
+    """ Wrapper for envmonlib.Datasets. Emitted signals for change notifications are added. """
     def __init__(self):
         """ """
-        mmfw.Datasets()
+        envmonlib.Datasets()
         # 
         QtCore.QObject.__init__(self)
 
     def clear(self):
         """ """
-        mmfw.Datasets().clear()
+        envmonlib.Datasets().clear()
         # Emit signal after short delay.
         QtCore.QTimer.singleShot(100, self._emitChangeNotification)
         
     def getDatasets(self):
         """ """
-        return mmfw.Datasets().getDatasets()
+        return envmonlib.Datasets().getDatasets()
         
     def getDatasetByIndex(self, index):
         """ """
-        return mmfw.Datasets().getDatasetByIndex(index)
+        return envmonlib.Datasets().getDatasetByIndex(index)
         
     def addDataset(self, dataset):
         """ """
-        mmfw.Datasets().addDataset(dataset)
+        envmonlib.Datasets().addDataset(dataset)
         # Emit signal after short delay.
         QtCore.QTimer.singleShot(100, self._emitChangeNotification)
         
     def removeDatasetByIndex(self, index):
         """ """
-        mmfw.Datasets().removeDatasetByIndex(index)
+        envmonlib.Datasets().removeDatasetByIndex(index)
         # Emit signal after short delay.
         QtCore.QTimer.singleShot(100, self._emitChangeNotification)
 

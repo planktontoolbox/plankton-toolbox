@@ -24,31 +24,36 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import mmfw
+import envmonlib
 
-class DatasetBase(object):
+@envmonlib.singleton
+class Datasets(object):
+    """ Singleton object used to hold a list of datasets. """
+    
     def __init__(self):
-        """ Base class for datasets, mainly used for metadata. """
-        super(DatasetBase, self).__init__()
-        self._metadata = {}
-        
+        """ """
+        self._datasets = [] 
+
     def clear(self):
         """ """
-        self._metadata = {}
-
-    def getMetadata(self, key):
+        self._datasets = []
+        
+    def getDatasets(self):
         """ """
-        return self._metadata.get(key, u'')
-
-    def addMetadata(self, key, value):
+        return self._datasets 
+        
+    def getDatasetByIndex(self, index):
         """ """
-        self._metadata[key] = value
-
-    def saveAsTextFile(self, file_name):
+        if len(self._datasets) > index:
+            return self._datasets[index]
+        return None 
+        
+    def addDataset(self, dataset_node):
         """ """
-        mmfw.TextFiles().writeTableDataset(self, file_name)
-
-    def saveAsExcelFile(self, file_name):
+        self._datasets.append(dataset_node)
+        
+    def removeDatasetByIndex(self, index):
         """ """
-        mmfw.ExcelFiles().writeTableDataset(self, file_name)
+        if (index >= 0) or (len(self._datasets) > index):
+            del self._datasets[index]
 

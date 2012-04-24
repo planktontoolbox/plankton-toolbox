@@ -25,9 +25,9 @@
 # THE SOFTWARE.
 
 import PyQt4.QtGui as QtGui
-import mmfw
+import envmonlib
 
-@mmfw.singleton
+@envmonlib.singleton
 class AnalyseDatasetsTab2(QtGui.QWidget):
     """ """
     def __init__(self):

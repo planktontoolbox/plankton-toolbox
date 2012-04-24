@@ -29,6 +29,7 @@
 
 import os.path
 import glob
+import locale
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
@@ -38,7 +39,7 @@ import plankton_toolbox.activities.activity_base as activity_base
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 import plankton_toolbox.toolbox.toolbox_sync as toolbox_sync
 
-import mmfw
+import envmonlib
 
 class LoadDatasetsActivity(activity_base.ActivityBase):
     """ """
@@ -50,6 +51,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         # Load available import/export matrices.
         self._matrix_path = u'toolbox_data/matrices/'
         self._matrix_list = []
+        self._semantics_column = None # NOT USED.
         for matrixpath in glob.glob(self._matrix_path + u'*.xlsx'):
             print("Available matrix: " + os.path.basename(matrixpath))
             self._matrix_list.append(os.path.basename(matrixpath))
@@ -113,13 +115,13 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         self._textfile_exportcolumn_list.addItems(["<no matrix selected>"])        
         # - Select text coding.
         self._textfile_encoding_list = QtGui.QComboBox()
-        self._encodings_dict = {u"Windows-1252/CP-1252": u'CP-1252', 
-                                 u"UTF-8": u'UTF-8',
-                                 u"UTF-16/UCS-2)": u'UTF-16',
-                                 u"UTF-16BE": u'UTF-16BE',
-                                 u"UTF-16LE": u'UTF-16LE',
-                                 u"ANSI": u'ANSI'}
-        self._textfile_encoding_list.addItems(self._encodings_dict.keys())
+        self._encodings_list = [u"<auto>", 
+                                u"cp1258",
+                                u"windows-1258", 
+                                u"utf8",
+                                u"utf16",
+                                u"ascii"]
+        self._textfile_encoding_list.addItems(self._encodings_list)
         # Load dataset.
         self._textfile_getdataset_button = QtGui.QPushButton("Load dataset(s)...")
         self.connect(self._textfile_getdataset_button, QtCore.SIGNAL("clicked()"), self._loadTextFiles)                
@@ -161,12 +163,12 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         if (selected_row > 0) and (selected_row <= len(self._matrix_list)):
             print('TEST:' + unicode(self._matrix_list[selected_row - 1]) )
             
-            tabledata = mmfw.DatasetTable()
-            mmfw.ExcelFiles().readToTableDataset(tabledata, 
+            tabledata = envmonlib.DatasetTable()
+            envmonlib.ExcelFiles().readToTableDataset(tabledata, 
                                                  file_name = self._matrix_path + self._matrix_list[selected_row - 1])
             self._textfile_importcolumn_list.clear()
             self._textfile_exportcolumn_list.clear()
-            self._semantics_column = None
+            self._semantics_column = None # NOT USED.
             header = tabledata.getHeader()
             for row in tabledata.getRows():
                 if (row[0] == u"INFO") and (row[1] == u"Column type"):
@@ -176,7 +178,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                         if item == u"Export":
                             self._textfile_exportcolumn_list.addItems([header[index]])
                         if item == u"Semantics":
-                            self._semantics_column = header[index]
+                            self._semantics_column = header[index] # NOT USED.
         else:
             self._textfile_importcolumn_list.clear()
             self._textfile_importcolumn_list.addItems(["no matrix selected"])
@@ -197,30 +199,35 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             # From QString to unicode.
             filenames = map(unicode, filenames)
             # Check if user pressed ok or cancel.
-            self._tabledataset = mmfw.DatasetTable()
+            self._tabledataset = envmonlib.DatasetTable()
             if filenames:
                 for filename in filenames:
                     self._last_used_textfile_name = filename
                     
                     
                     # Create a new dataset.
-                    dataset = mmfw.DatasetNode()
+                    dataset = envmonlib.DatasetNode()
                     # Add info to dataset about how to import and export data to/from dataset.
                     dataset.loadImportExportMatrix(self._matrix_path + unicode(self._textfile_matrix_list.currentText()),
                                                    unicode(self._textfile_importcolumn_list.currentText()),
                                                    unicode(self._textfile_exportcolumn_list.currentText()),
-                                                   self._semantics_column)
+                                                   self._semantics_column)  # _semantics_column: NOT USED.
                     # Add metadata related to imported file.
                     dataset.addMetadata(u'File name', os.path.basename(filename))
                     dataset.addMetadata(u'File path', filename)
                     # Perform import.
-                    impMgr = mmfw.ImportManager()
-                    impMgr.importFileToDataset(dataset, filename)
-                    # Note: Not the mmfw datasets class. This is a wrapper containing Qt-code.
-                    toolbox_datasets.ToolboxDatasets().addDataset(dataset)        
+                    impMgr = envmonlib.ImportManager()
+                    if unicode(self._textfile_encoding_list.currentText()) == u'<auto>':
+                        textfileencoding = locale.getpreferredencoding()
+                    else:
+                        textfileencoding = unicode(self._textfile_encoding_list.currentText())                        
+
+                    impMgr.importTextFileToDataset(dataset, filename, textfileencoding)
+                    # Note: Not the envmonlib datasets class. This is a wrapper containing Qt-code.
+                    toolbox_datasets.ToolboxDatasets().addDataset(dataset)
             #
         finally:
-            datasetcount = len(mmfw.Datasets().getDatasets())
+            datasetcount = len(envmonlib.Datasets().getDatasets())
             self._parent.statusBar().showMessage(
                         u'Loaded datasets: ' + unicode(datasetcount))
 
@@ -285,8 +292,8 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         if (selected_row > 0) and (selected_row <= len(self._matrix_list)):
             print('TEST:' + unicode(self._matrix_list[selected_row - 1]) )
             
-            tabledata = mmfw.DatasetTable()
-            mmfw.ExcelFiles().readToTableDataset(tabledata, 
+            tabledata = envmonlib.DatasetTable()
+            envmonlib.ExcelFiles().readToTableDataset(tabledata, 
                                                  file_name = self._matrix_path + self._matrix_list[selected_row - 1])
             self._excel_importcolumn_list.clear()
             self._excel_exportcolumn_list.clear()
@@ -318,12 +325,12 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             # From QString to unicode.
             filenames = map(unicode, filenames)
             # Check if user pressed ok or cancel.
-            self._tabledataset = mmfw.DatasetTable()
+            self._tabledataset = envmonlib.DatasetTable()
             if filenames:
                 for filename in filenames:
                     self._last_used_excelfile_name = filename
                     # Create a new dataset.
-                    dataset = mmfw.DatasetNode()
+                    dataset = envmonlib.DatasetNode()
                     # Add info to dataset about how to import and export data to/from dataset.
                     dataset.loadImportExportMatrix(self._matrix_path + unicode(self._excel_matrix_list.currentText()),
                                                    unicode(self._excel_importcolumn_list.currentText()),
@@ -332,13 +339,13 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                     dataset.addMetadata(u'File name', os.path.basename(filename))
                     dataset.addMetadata(u'File path', filename)
                     # Perform import.
-                    impMgr = mmfw.ImportManager()
+                    impMgr = envmonlib.ImportManager()
                     impMgr.importExcelFileToDataset(dataset, filename)
-                    # Note: Not the mmfw datasets class. This is a wrapper containing Qt-code.
+                    # Note: Not the envmonlib datasets class. This is a wrapper containing Qt-code.
                     toolbox_datasets.ToolboxDatasets().addDataset(dataset)        
         #
         finally:
-            datasetcount = len(mmfw.Datasets().getDatasets())
+            datasetcount = len(envmonlib.Datasets().getDatasets())
             self._parent.statusBar().showMessage(
                         u'Loaded datasets: ' + unicode(datasetcount))
 
@@ -353,13 +360,13 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         
         self._datasettabledata.clear()
         self._datasettabledata.setHeader([u'Dataset      ', 
-                                           u'Type         ', 
-                                           u'Content      ', 
-                                           u'File         ', 
-                                           u'File path    ',
-                                           u'Matrix       ',
-                                           u'Import column',
-                                           u'Export column'])
+                                          u'Type         ', 
+                                          u'Content      ', 
+                                          u'File         ', 
+                                          u'File path    ',
+                                          u'Matrix       ',
+                                          u'Import column',
+                                          u'Export column'])
         self._datasets_table.tablemodel.setModeldata(self._datasettabledata)
         self._datasets_table.resizeColumnsToContents()
         
@@ -396,8 +403,8 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
 
     def _unloadAllDatasets(self):
         """ """
-#        # TODO: MMFW:
-#        mmfw.Datasets().clear()
+#        # TODO: envmonlib:
+#        envmonlib.Datasets().clear()
 
         
         toolbox_datasets.ToolboxDatasets().clear()
@@ -415,7 +422,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
 #            item = self._datasets_table.item(rowcount - rowindex - 1, 0)
 #            if item.checkState(): # Check if selected by user.
             if self._datasets_table.selectionModel.isSelected(self._datasets_table.tablemodel.createIndex(rowindex, 0)): # Check if selected by user.
-                # TODO: MMFW:
+                # TODO: envmonlib:
                 toolbox_datasets.ToolboxDatasets().removeDatasetByIndex(rowcount - rowindex - 1)
 
                 
@@ -425,16 +432,16 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         """ """
         
         
-        # TODO: MMFW:
+        # TODO: envmonlib:
         self._datasettabledata.clearRows()
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
             # Get content info depending on dataset type.
             datasettype = u'',
             contentinfo = u''
-            if isinstance(dataset, mmfw.DatasetTable):
+            if isinstance(dataset, envmonlib.DatasetTable):
                 datasettype = u'Table dataset'
                 contentinfo = u'Rows: ' + unicode(len(dataset.getRows())) + u'. '
-            elif isinstance(dataset, mmfw.DatasetNode):
+            elif isinstance(dataset, envmonlib.DatasetNode):
                 datasettype = u'Tree dataset'
                 visitcount, samplecound, variablecount = dataset.getCounters()
                 contentinfo = u'Visits: ' + unicode(visitcount) + u', ' + \

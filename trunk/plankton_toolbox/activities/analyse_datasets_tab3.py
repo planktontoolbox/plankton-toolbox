@@ -27,9 +27,9 @@
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
-import mmfw
+import envmonlib
 
-@mmfw.singleton
+@envmonlib.singleton
 class AnalyseDatasetsTab3(QtGui.QWidget):
     """ """
     def __init__(self):
@@ -108,10 +108,10 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         """ """
         try:
             if self._aggregate_rank_list.currentIndex() == 0:
-                mmfw.Logging().log("Taxon level is not selected. Please try again.")
+                envmonlib.Logging().log("Taxon level is not selected. Please try again.")
                 raise UserWarning("Taxon level is not selected. Please try again.")
             if not self._main_activity.getCurrentData():
-                mmfw.Logging().log("No data is selected for analysis. Please try again.")
+                envmonlib.Logging().log("No data is selected for analysis. Please try again.")
                 raise UserWarning("No data is selected for analysis. Please try again.")                
             #
             selected_taxon_rank = unicode(self._aggregate_rank_list.currentText())
@@ -150,7 +150,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                     for variablekeytuple in aggregatedvariables:
                         newtaxon, taxontrophy, parameter, unit = variablekeytuple
                         #
-                        newvariable = mmfw.VariableNode()
+                        newvariable = envmonlib.VariableNode()
                         samplenode.addChild(newvariable)    
                         #
                         newvariable.addData(u'Taxon name', newtaxon)

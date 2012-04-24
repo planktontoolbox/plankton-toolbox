@@ -29,7 +29,7 @@
 """
 
 import codecs
-import mmfw
+import envmonlib
 import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
 
@@ -288,7 +288,7 @@ class PwReportMJ2(PwReports):
                     abundance = unicode(float(coeff) * float(units)).replace('.', ',')
                 except Exception, e:
                     abundance = '<error>'
-                    mmfw.Logging().error('Wrong format for coeff or units: ' + 
+                    envmonlib.Logging().error('Wrong format for coeff or units: ' + 
                                          'coeff: ' + unicode(coeff) + 
                                          'units: ' + unicode(units))
                 #         
@@ -489,7 +489,7 @@ class PwReportATS1(PwReports):
                         if pegsizeclass: out_row[14] = str(biovolume * float(coeff) * float(units) / 1000000.0).replace('.', ',') # To column: Biovolume mm3/L        
                     except Exception, e:
                         out_row[14] = '<error>'
-                        mmfw.Logging().error('Biovolume mm3/L: ' + unicode(e))
+                        envmonlib.Logging().error('Biovolume mm3/L: ' + unicode(e))
                 # Add the row the report.
                 out_rows.append(out_row)
         # Sort the outdata list before writing to file. 

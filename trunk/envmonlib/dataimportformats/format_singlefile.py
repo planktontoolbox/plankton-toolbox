@@ -24,9 +24,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import mmfw
+import envmonlib
 
-class FormatSingleFile(mmfw.FormatBase):
+class FormatSingleFile(envmonlib.FormatBase):
     """ Import format for single file. """
     def __init__(self):
         """ Import format for single file. """
@@ -124,7 +124,7 @@ class FormatSingleFile(mmfw.FormatBase):
                     exec(visitkeycommand) # Command assigns keystring.
                     currentvisit = dataset.getVisitLookup(keystring)
                     if not currentvisit:
-                        currentvisit = mmfw.VisitNode()
+                        currentvisit = envmonlib.VisitNode()
                         dataset.addChild(currentvisit)    
                         currentvisit.setIdString(keystring)
                     # Check if sample exists. Create or reuse.
@@ -132,11 +132,11 @@ class FormatSingleFile(mmfw.FormatBase):
                     exec(samplekeycommand) # Command assigns keystring.
                     currentsample = dataset.getSampleLookup(keystring)
                     if not currentsample:
-                        currentsample = mmfw.SampleNode()
+                        currentsample = envmonlib.SampleNode()
                         currentvisit.addChild(currentsample)    
                         currentsample.setIdString(keystring)    
                     # Add all variables in row.
-                    currentvariable = mmfw.VariableNode()
+                    currentvariable = envmonlib.VariableNode()
                     currentsample.addChild(currentvariable)    
                     # === Parse row and add fields on nodes. ===
                     for cmd in self._matrixcommands:

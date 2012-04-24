@@ -35,7 +35,7 @@ import plankton_toolbox.tools.tool_base as tool_base
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 import plankton_toolbox.toolbox.toolbox_sync as toolbox_sync
 
-import mmfw
+import envmonlib
 
 class DatasetViewerTool(tool_base.ToolBase):
     """
@@ -133,20 +133,20 @@ class DatasetViewerTool(tool_base.ToolBase):
             self._tableview.tablemodel.setModeldata(None)
             self._refreshResultTable()
         else:
-            # MMFW:
+            # envmonlib:
             dataset = toolbox_datasets.ToolboxDatasets().getDatasetByIndex(index - 1)
-            if isinstance(dataset, mmfw.DatasetTable):
+            if isinstance(dataset, envmonlib.DatasetTable):
                 self._tableview.tablemodel.setModeldata(dataset)
                 self._refreshResultTable()
-            elif isinstance(dataset, mmfw.DatasetNode):
+            elif isinstance(dataset, envmonlib.DatasetNode):
                 # Tree dataset must be converted to table dataset before viewing.
-                targetdataset = mmfw.DatasetTable()
+                targetdataset = envmonlib.DatasetTable()
                 dataset.convertToTableDataset(targetdataset)
                 #
                 self._tableview.tablemodel.setModeldata(targetdataset)
                 self._refreshResultTable()
             #
-            # TODO: Remove later. Default alternative used for non MMFW.
+            # TODO: Remove later. Default alternative used for non envmonlib.
             else:
                 self._tableview.tablemodel.setModeldata(dataset)
                 self._refreshResultTable()

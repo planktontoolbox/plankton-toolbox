@@ -27,7 +27,7 @@
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import webbrowser
-import mmfw
+import envmonlib
 import plankton_toolbox.tools.tool_base as tool_base
 from plankton_toolbox.core.map_projections.swedish_geoposition_converter import SwedishGeoPositionConverter
 import plankton_toolbox.core.map_projections.latlong_dd_dm_dms as latlong
@@ -545,14 +545,14 @@ class LatLongTool(tool_base.ToolBase):
     def _open_googlemaps(self):
         """ Launch web browser and use maps.google.com to display position. """
         if (len(unicode(self._latDd.text())) == 0) or (len(unicode(self._longDd.text())) == 0):
-            mmfw.Logging().log("Failed to open maps.google.com. No values for lat/long.")
+            envmonlib.Logging().log("Failed to open maps.google.com. No values for lat/long.")
             return
         webbrowser.open("http://maps.google.com/maps/?ll=" + unicode(self._latDd.text()) + "," + unicode(self._longDd.text()))
         
     def _open_latlongmellifica(self):
         """ Launch web browser and use latlong.mellifica.se to display position. """
         if (len(unicode(self._latDd.text())) == 0) or (len(unicode(self._longDd.text())) == 0):
-            mmfw.Logging().log("Failed to open latlong.mellifica.se. No values for lat/long.")
+            envmonlib.Logging().log("Failed to open latlong.mellifica.se. No values for lat/long.")
             return
         webbrowser.open("http://latlong.mellifica.se/?latlong=" + unicode(self._latDd.text()) + "," + unicode(self._longDd.text()))
         

@@ -25,7 +25,7 @@
 # THE SOFTWARE.
 
 import time
-from mmfw.utils import patterns
+from envmonlib.utils import patterns
 
 @patterns.singleton
 class Logging(object):

@@ -35,7 +35,7 @@ import plankton_toolbox.activities.analyse_datasets_tab3 as tab3
 import plankton_toolbox.activities.analyse_datasets_tab4 as tab4
 import plankton_toolbox.activities.analyse_datasets_tab5 as tab5
 import plankton_toolbox.activities.analyse_datasets_tab6 as tab6
-import mmfw
+import envmonlib
 
 class AnalyseDatasetsActivity(activity_base.ActivityBase):
     """
@@ -145,7 +145,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         #
         if self._currentdata:
             # Convert from tree model to table model.
-            targetdataset = mmfw.DatasetTable()
+            targetdataset = envmonlib.DatasetTable()
             self._currentdata.convertToTableDataset(targetdataset)
             # View model.
             self._tableview.tablemodel.setModeldata(targetdataset)

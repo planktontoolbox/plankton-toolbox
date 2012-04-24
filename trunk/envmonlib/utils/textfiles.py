@@ -26,7 +26,7 @@
 
 import locale
 import codecs
-import mmfw
+import envmonlib
 
 class TextFiles():
     """
@@ -42,11 +42,10 @@ class TextFiles():
         """ """
         if file_name == None:
             raise UserWarning("File name is missing.")
-        if not isinstance(target_dataset, mmfw.DatasetTable):
+        if not isinstance(target_dataset, envmonlib.DatasetTable):
             raise UserWarning("Target dataset is not of valid type.")
         # Get encoding.
         if not encoding:
-            # language, encoding = locale.getdefaultlocale()
             encoding = locale.getpreferredencoding()
         # Read file.
         infile = open(file_name, u'r')
@@ -79,11 +78,10 @@ class TextFiles():
         """ """
         if file_name == None:
             raise UserWarning("File name is missing.")
-        if not isinstance(table_dataset, mmfw.DatasetTable):
+        if not isinstance(table_dataset, envmonlib.DatasetTable):
             raise UserWarning("Dataset is not of a valid type.")
         #
         if not encoding:
-            # language, encoding = locale.getdefaultlocale()
             encoding = locale.getpreferredencoding()
         #
         try:
@@ -94,7 +92,7 @@ class TextFiles():
             for row in table_dataset.getRows():
                 out.write(field_separator.join(map(unicode, row)) + '\r\n')
         except (IOError, OSError):
-            mmfw.Logging().log("Failed to write to text file: " + file_name)
+            envmonlib.Logging().log("Failed to write to text file: " + file_name)
             raise UserWarning("Failed to write to text file: " + file_name)
         finally:
             if out: out.close()

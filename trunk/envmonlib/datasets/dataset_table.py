@@ -24,10 +24,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import mmfw
-#from mmfw import DatasetBase
+import envmonlib
+#from envmonlib import DatasetBase
 
-class DatasetTable(mmfw.DatasetBase):
+class DatasetTable(envmonlib.DatasetBase):
     def __init__(self):
         """ This class should be used for datasets organized as a table with header and rows. 
         It is prepared to be displayed via QAbstractTableModel in Qt, but Qt is not required here.
