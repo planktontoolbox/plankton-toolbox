@@ -48,13 +48,13 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         self._datasettabledata = DatasetTableData()
         self._last_used_textfile_name = ''
         self._last_used_excelfile_name = ''
-        # Load available import/export matrices.
-        self._matrix_path = u'toolbox_data/matrices/'
-        self._matrix_list = []
+        # Load available dataset parsers.
+        self._parser_path = u'toolbox_data/parsers/'
+        self._parser_list = []
         self._semantics_column = None # NOT USED.
-        for matrixpath in glob.glob(self._matrix_path + u'*.xlsx'):
-            print("Available matrix: " + os.path.basename(matrixpath))
-            self._matrix_list.append(os.path.basename(matrixpath))
+        for parserpath in glob.glob(self._parser_path + u'*.xlsx'):
+            print("Available parsers: " + os.path.basename(parserpath))
+            self._parser_list.append(os.path.basename(parserpath))
         # Initialize parent (self._createContent will be called).
         super(LoadDatasetsActivity, self).__init__(name, parentwidget)        
 
@@ -101,18 +101,18 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
         tempor incididunt ut labore et dolore magna aliqua.
         """)        
-        # - Select import/export matrix:
-        self._textfile_matrix_list = QtGui.QComboBox()
-        self._textfile_matrix_list.addItems(["<select>"])
-        self.connect(self._textfile_matrix_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._textfileMatrixSelected)                
-        # - Add available matrices.
-        self._textfile_matrix_list.addItems(self._matrix_list)                
+        # - Select dataset parsers:
+        self._textfile_parser_list = QtGui.QComboBox()
+        self._textfile_parser_list.addItems(["<select>"])
+        self.connect(self._textfile_parser_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._textfileParserSelected)                
+        # - Add available dataset parsers.
+        self._textfile_parser_list.addItems(self._parser_list)                
         # - Select import column:
         self._textfile_importcolumn_list = QtGui.QComboBox()
-        self._textfile_importcolumn_list.addItems(["<no matrix selected>"])        
+        self._textfile_importcolumn_list.addItems(["<no parser selected>"])        
         # - Select export column:
         self._textfile_exportcolumn_list = QtGui.QComboBox()
-        self._textfile_exportcolumn_list.addItems(["<no matrix selected>"])        
+        self._textfile_exportcolumn_list.addItems(["<no parser selected>"])        
         # - Select text coding.
         self._textfile_encoding_list = QtGui.QComboBox()
         self._encodings_list = [u"<auto>", 
@@ -128,10 +128,10 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         gridrow = 0
-        label1 = QtGui.QLabel("Select matrix:")
+        label1 = QtGui.QLabel("Select parser:")
         stretchlabel = QtGui.QLabel("")
         form1.addWidget(label1, gridrow, 0, 1, 1)
-        form1.addWidget(self._textfile_matrix_list, gridrow, 1, 1, 1)
+        form1.addWidget(self._textfile_parser_list, gridrow, 1, 1, 1)
         form1.addWidget(stretchlabel, gridrow,2, 1, 9)
         gridrow += 1
         label1 = QtGui.QLabel("Select import column:")
@@ -158,14 +158,14 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         #
         return widget
         
-    def _textfileMatrixSelected(self, selected_row):
+    def _textfileParserSelected(self, selected_row):
         """ """
-        if (selected_row > 0) and (selected_row <= len(self._matrix_list)):
-            print('TEST:' + unicode(self._matrix_list[selected_row - 1]) )
+        if (selected_row > 0) and (selected_row <= len(self._parser_list)):
+            print('TEST:' + unicode(self._parser_list[selected_row - 1]) )
             
             tabledata = envmonlib.DatasetTable()
             envmonlib.ExcelFiles().readToTableDataset(tabledata, 
-                                                 file_name = self._matrix_path + self._matrix_list[selected_row - 1])
+                                                 file_name = self._parser_path + self._parser_list[selected_row - 1])
             self._textfile_importcolumn_list.clear()
             self._textfile_exportcolumn_list.clear()
             self._semantics_column = None # NOT USED.
@@ -181,9 +181,9 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                             self._semantics_column = header[index] # NOT USED.
         else:
             self._textfile_importcolumn_list.clear()
-            self._textfile_importcolumn_list.addItems(["no matrix selected"])
+            self._textfile_importcolumn_list.addItems(["no parser selected"])
             self._textfile_exportcolumn_list.clear()
-            self._textfile_exportcolumn_list.addItems(["no matrix selected"])
+            self._textfile_exportcolumn_list.addItems(["no parser selected"])
 
     def _loadTextFiles(self):
         """ """
@@ -208,10 +208,10 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                     # Create a new dataset.
                     dataset = envmonlib.DatasetNode()
                     # Add info to dataset about how to import and export data to/from dataset.
-                    dataset.loadImportExportMatrix(self._matrix_path + unicode(self._textfile_matrix_list.currentText()),
-                                                   unicode(self._textfile_importcolumn_list.currentText()),
-                                                   unicode(self._textfile_exportcolumn_list.currentText()),
-                                                   self._semantics_column)  # _semantics_column: NOT USED.
+                    dataset.loadDatasetParser(self._parser_path + unicode(self._textfile_parser_list.currentText()),
+                                              unicode(self._textfile_importcolumn_list.currentText()),
+                                              unicode(self._textfile_exportcolumn_list.currentText()),
+                                              self._semantics_column)  # _semantics_column: NOT USED.
                     # Add metadata related to imported file.
                     dataset.addMetadata(u'File name', os.path.basename(filename))
                     dataset.addMetadata(u'File path', filename)
@@ -242,28 +242,28 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
         tempor incididunt ut labore et dolore magna aliqua.
         """)
-        # - Select import/export matrix:
-        self._excel_matrix_list = QtGui.QComboBox()
-        self._excel_matrix_list.addItems(["<select>"])
-        self.connect(self._excel_matrix_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._excelMatrixSelected)                
-        # - Add available matrices.
-        self._excel_matrix_list.addItems(self._matrix_list)                
+        # - Select dataset parser:
+        self._excel_parser_list = QtGui.QComboBox()
+        self._excel_parser_list.addItems(["<select>"])
+        self.connect(self._excel_parser_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._excelParserSelected)                
+        # - Add available dataset parsers.
+        self._excel_parser_list.addItems(self._parser_list)                
         # - Select import column:
         self._excel_importcolumn_list = QtGui.QComboBox()
-        self._excel_importcolumn_list.addItems(["<no matrix selected>"])        
+        self._excel_importcolumn_list.addItems(["<no parser selected>"])        
         # - Select export column:
         self._excel_exportcolumn_list = QtGui.QComboBox()
-        self._excel_exportcolumn_list.addItems(["<no matrix selected>"])        
+        self._excel_exportcolumn_list.addItems(["<no parser selected>"])        
         # Load dataset.
         self._excel_getdataset_button = QtGui.QPushButton("Load dataset(s)...")
         self.connect(self._excel_getdataset_button, QtCore.SIGNAL("clicked()"), self._loadExcelFile)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         gridrow = 0
-        label1 = QtGui.QLabel("Select matrix:")
+        label1 = QtGui.QLabel("Select parser:")
         stretchlabel = QtGui.QLabel("")
         form1.addWidget(label1, gridrow, 0, 1, 1)
-        form1.addWidget(self._excel_matrix_list, gridrow, 1, 1, 1)
+        form1.addWidget(self._excel_parser_list, gridrow, 1, 1, 1)
         form1.addWidget(stretchlabel, gridrow,2, 1, 9)
         gridrow += 1
         label1 = QtGui.QLabel("Select import column:")
@@ -287,14 +287,14 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         #
         return widget
 
-    def _excelMatrixSelected(self, selected_row):
+    def _excelParserSelected(self, selected_row):
         """ """
-        if (selected_row > 0) and (selected_row <= len(self._matrix_list)):
-            print('TEST:' + unicode(self._matrix_list[selected_row - 1]) )
+        if (selected_row > 0) and (selected_row <= len(self._parser_list)):
+            print('TEST:' + unicode(self._parser_list[selected_row - 1]) )
             
             tabledata = envmonlib.DatasetTable()
             envmonlib.ExcelFiles().readToTableDataset(tabledata, 
-                                                 file_name = self._matrix_path + self._matrix_list[selected_row - 1])
+                                                 file_name = self._parser_path + self._parser_list[selected_row - 1])
             self._excel_importcolumn_list.clear()
             self._excel_exportcolumn_list.clear()
             header = tabledata.getHeader()
@@ -307,9 +307,9 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                             self._excel_exportcolumn_list.addItems([header[index]])
         else:
             self._excel_importcolumn_list.clear()
-            self._excel_importcolumn_list.addItems(["no matrix selected"])
+            self._excel_importcolumn_list.addItems(["no parser selected"])
             self._excel_exportcolumn_list.clear()
-            self._excel_exportcolumn_list.addItems(["no matrix selected"])
+            self._excel_exportcolumn_list.addItems(["no parser selected"])
 
     def _loadExcelFile(self):
         """ """
@@ -332,7 +332,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                     # Create a new dataset.
                     dataset = envmonlib.DatasetNode()
                     # Add info to dataset about how to import and export data to/from dataset.
-                    dataset.loadImportExportMatrix(self._matrix_path + unicode(self._excel_matrix_list.currentText()),
+                    dataset.loadDatasetParser(self._parser_path + unicode(self._excel_parser_list.currentText()),
                                                    unicode(self._excel_importcolumn_list.currentText()),
                                                    unicode(self._excel_exportcolumn_list.currentText()))
                     # Add metadata related to imported file.
@@ -364,7 +364,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                                           u'Content      ', 
                                           u'File         ', 
                                           u'File path    ',
-                                          u'Matrix       ',
+                                          u'parser       ',
                                           u'Import column',
                                           u'Export column'])
         self._datasets_table.tablemodel.setModeldata(self._datasettabledata)
@@ -457,7 +457,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                  contentinfo,
                  dataset.getMetadata(u'File name'),
                  dataset.getMetadata(u'File path'),
-                 dataset.getMetadata(u'Matrix'),
+                 dataset.getMetadata(u'parser'),
                  dataset.getMetadata(u'Import column'),
                  dataset.getMetadata(u'Export column')])
             #

@@ -109,7 +109,7 @@ class DatasetNode(envmonlib.DatasetBase, DataNode):
         self._sample_lookup = {}
         self._variable_lookup = {}
         #
-        self._importmatrixrows = []
+        self._datasetparserrows = []
         self._exporttablecolumns = []
         self._semantics = []
 
@@ -147,16 +147,16 @@ class DatasetNode(envmonlib.DatasetBase, DataNode):
         """ """
         return self._variable_lookup.get(idString, None)
 
-    def setImportsMatrixRows(self):
+    def setDatasetParserRows(self):
         """ """
 
-    def loadImportExportMatrix(self, matrix_file, import_column = None, export_column = None, semantics_column = None):
+    def loadDatasetParser(self, parser_file, import_column = None, export_column = None, semantics_column = None):
         """ """
         # Add metadata
-        self.addMetadata(u'Matrix', matrix_file)
-        # Read matrix.
+        self.addMetadata(u'Parser', parser_file)
+        # Read dataset parser.
         tabledata = envmonlib.DatasetTable()
-        envmonlib.ExcelFiles().readToTableDataset(tabledata, file_name = matrix_file)
+        envmonlib.ExcelFiles().readToTableDataset(tabledata, file_name = parser_file)
         # Create import info.
         if import_column:
             self.addMetadata(u'Import column', import_column)
@@ -167,7 +167,7 @@ class DatasetNode(envmonlib.DatasetBase, DataNode):
                     nodelevel = tabledata.getDataItem(rowindex, 0)
                     key = tabledata.getDataItem(rowindex, 1)
                     importrows.append({u'Node': nodelevel, u'Key': key, u'Command': importcolumndata}) 
-            self.setImportMatrixRows(importrows)
+            self.setDatasetParserRows(importrows)
         # Create export info.
         if export_column:
             self.addMetadata(u'Export column', export_column)
@@ -193,13 +193,13 @@ class DatasetNode(envmonlib.DatasetBase, DataNode):
                         semanticsinfo.append({u'Header': exportcolumndata, u'Node': nodelevel, u'Key': key}) 
             self.setSemantics(semanticsinfo)
 
-    def setImportMatrixRows(self, import_matrix_rows):
+    def setDatasetParserRows(self, dataset_parser_rows):
         """ """
-        self._importmatrixrows = import_matrix_rows
+        self._datasetparserrows = dataset_parser_rows
 
-    def getImportMatrixRows(self):
+    def getDatasetParserRows(self):
         """ """
-        return self._importmatrixrows
+        return self._datasetparserrows
 
     def setExportTableColumns(self, columns_info_list):
         """ """
