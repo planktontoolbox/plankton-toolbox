@@ -97,7 +97,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         #
         self.connect(self._x_axis_column_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._updateEnabledDisabled)                
         # - Add available column names.
-#        self._x_axis_column_list.addItems(self._matrix_list)                
+#        self._x_axis_column_list.addItems(self._parser_list)                
         # - Select column for y-axis:
         self._y_axis_column_list = QtGui.QComboBox()
         self._y_axis_column_list.setMinimumContentsLength(20)
@@ -109,7 +109,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         #
         self.connect(self._y_axis_column_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._updateEnabledDisabled)                
         # - Add available column names.
-#        self._x_axis_column_list.addItems(self._matrix_list)                
+#        self._x_axis_column_list.addItems(self._parser_list)                
 
         # Draw graph.
         self._plotindex_list = QtGui.QComboBox()
@@ -226,7 +226,8 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         selected_dict = self._main_activity.getSelectDataDict()
         selected_startdate = selected_dict[u'Start date']
         selected_enddate = selected_dict[u'End date']
-        selected_stations = selected_dict[u'Stations']
+#        selected_stations = selected_dict[u'Stations']
+        selected_visits = selected_dict[u'Visits']
         selected_minmaxdepth =  selected_dict[u'Min max depth']
         selected_taxon = selected_dict[u'Taxon']
         selected_trophy = selected_dict[u'Trophy']
@@ -239,7 +240,9 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                 continue
             if selected_enddate < visitnode.getData(u'Date'):
                 continue
-            if visitnode.getData(u'Station name') not in selected_stations:
+#            if visitnode.getData(u'Station name') not in selected_stations:
+#                continue
+            if (visitnode.getData(u'Station name') + u' : ' + visitnode.getData(u'Date')) not in selected_visits:
                 continue
 
             

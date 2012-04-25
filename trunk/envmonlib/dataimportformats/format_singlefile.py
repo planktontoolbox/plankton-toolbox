@@ -36,18 +36,18 @@ class FormatSingleFile(envmonlib.FormatBase):
         """ """
         self._dataset = dataset        
         #        
-        importmatrixrows = dataset.getImportMatrixRows()
+        datasetparserrows = dataset.getDatasetParserRows()
         #
         visitkeycommand = None
         samplekeycommand = None
 #        variablekeycommand = None
         #
         try:
-            for matrixrow in importmatrixrows:
-                matrixnode = matrixrow.get(u'Node', u'') 
-                matrixkey = matrixrow.get(u'Key', u'') 
-                matrixcommand = matrixrow.get(u'Command', u'')
-                if matrixcommand:         
+            for parserrow in datasetparserrows:
+                parsernode = parserrow.get(u'Node', u'') 
+                parserkey = parserrow.get(u'Key', u'') 
+                parsercommand = parserrow.get(u'Command', u'')
+                if parsercommand:         
                     #    
                     ### TODO: Replace:
                     # $Text(   --> self._asText(
@@ -60,53 +60,54 @@ class FormatSingleFile(envmonlib.FormatBase):
                     # $Position(   --> self._asPosition(
                     # $Station(   --> self._asStation(
                     # $Param(   --> self._asParam(
-                    matrixcommand = matrixcommand.replace(u'$Text(', u'self._asText(')
-                    matrixcommand = matrixcommand.replace(u'$Float(', u'self._asFloat(')
-                    matrixcommand = matrixcommand.replace(u'$Species(', u'self._speciesByKey(')
-                    matrixcommand = matrixcommand.replace(u'$Sizeclass(', u'self._sizeclassByKey(')
+                    parsercommand = parsercommand.replace(u'$Text(', u'self._asText(')
+                    parsercommand = parsercommand.replace(u'$Float(', u'self._asFloat(')
+                    parsercommand = parsercommand.replace(u'$Species(', u'self._speciesByKey(')
+                    parsercommand = parsercommand.replace(u'$Sizeclass(', u'self._sizeclassByKey(')
                     #
-                    if matrixnode == u'Dataset':
-                        commandstring = u"dataset.addData('" + matrixkey + u"', " + matrixcommand + u")"
-                        self.appendMatrixCommand(commandstring)
-                    if matrixnode == u'Visit':
-                        commandstring = u"currentvisit.addData('" + matrixkey + u"', " + matrixcommand + u")"
-                        self.appendMatrixCommand(commandstring)
-                    elif matrixnode == u'Sample':
-                        commandstring = u"currentsample.addData('" + matrixkey + u"', " + matrixcommand + u")"
-                        self.appendMatrixCommand(commandstring)
-                    elif matrixnode == u'Variable':
-                        commandstring = u"currentvariable.addData('" + matrixkey + u"', " + matrixcommand + u")"
-                        self.appendMatrixCommand(commandstring)
+                    if parsernode == u'Dataset':
+                        commandstring = u"dataset.addData('" + parserkey + u"', " + parsercommand + u")"
+                        self.appendParserCommand(commandstring)
+                    if parsernode == u'Visit':
+                        commandstring = u"currentvisit.addData('" + parserkey + u"', " + parsercommand + u")"
+                        self.appendParserCommand(commandstring)
+                    elif parsernode == u'Sample':
+                        commandstring = u"currentsample.addData('" + parserkey + u"', " + parsercommand + u")"
+                        self.appendParserCommand(commandstring)
+                    elif parsernode == u'Variable':
+                        commandstring = u"currentvariable.addData('" + parserkey + u"', " + parsercommand + u")"
+                        self.appendParserCommand(commandstring)
                     #
-                    elif (matrixnode == u'INFO') and (matrixkey == u'Visit key'):
-                        commandstring = u"keystring = " + matrixcommand
+                    elif (parsernode == u'INFO') and (parserkey == u'Visit key'):
+                        commandstring = u"keystring = " + parsercommand
                         visitkeycommand = compile(commandstring, '', 'exec')
-                    elif (matrixnode == u'INFO') and (matrixkey == u'Sample key'):
-                        commandstring = u"keystring = " + matrixcommand
+                    elif (parsernode == u'INFO') and (parserkey == u'Sample key'):
+                        commandstring = u"keystring = " + parsercommand
                         samplekeycommand = compile(commandstring, '', 'exec')
-#                    elif (matrixnode == u'INFO') and (matrixkey == u'Variable key'):
-#                        commandstring = u"keystring = " + matrixcommand
+#                    elif (parsernode == u'INFO') and (parserkey == u'Variable key'):
+#                        commandstring = u"keystring = " + parsercommand
 #                        variablekeycommand = compile(commandstring, '', 'exec')
                     #
-                    elif matrixnode == u'FUNCTION Dataset':
-                        matrixkey = matrixkey.replace(u'()', u'') # Remove () from function name and add later.
-                        commandstring = u"self._" + matrixkey + u"(dataset, "  + matrixcommand + u")"
-                        self.appendMatrixCommand(commandstring)
-                    elif matrixnode == u'FUNCTION Visit':
-                        matrixkey = matrixkey.replace(u'()', u'') # Remove () from function name and add later.
-                        commandstring = u"self._" + matrixkey + u"(currentvisit, "  + matrixcommand + u")"
-                        self.appendMatrixCommand(commandstring)
-                    elif matrixnode == u'FUNCTION Sample':
-                        matrixkey = matrixkey.replace(u'()', u'') # Remove () from function name and add later.
-                        commandstring = u"self._" + matrixkey + u"(currentsample, "  + matrixcommand + u")"
-                        self.appendMatrixCommand(commandstring)
-                    elif matrixnode == u'FUNCTION Variable':
-                        matrixkey = matrixkey.replace(u'()', u'') # Remove () from function name and add later.
-                        commandstring = u"self._" + matrixkey + u"(currentvariable, "  + matrixcommand + u")"
-                        self.appendMatrixCommand(commandstring)
+                    elif parsernode == u'FUNCTION Dataset':
+                        parserkey = parserkey.replace(u'()', u'') # Remove () from function name and add later.
+                        commandstring = u"self._" + parserkey + u"(dataset, "  + parsercommand + u")"
+                        self.appendParserCommand(commandstring)
+                    elif parsernode == u'FUNCTION Visit':
+                        parserkey = parserkey.replace(u'()', u'') # Remove () from function name and add later.
+                        commandstring = u"self._" + parserkey + u"(currentvisit, "  + parsercommand + u")"
+                        self.appendParserCommand(commandstring)
+                    elif parsernode == u'FUNCTION Sample':
+                        parserkey = parserkey.replace(u'()', u'') # Remove () from function name and add later.
+                        commandstring = u"self._" + parserkey + u"(currentsample, "  + parsercommand + u")"
+                        self.appendParserCommand(commandstring)
+                    elif parsernode == u'FUNCTION Variable':
+                        parserkey = parserkey.replace(u'()', u'') # Remove () from function name and add later.
+                        commandstring = u"self._" + parserkey + u"(currentvariable, "  + parsercommand + u")"
+                        self.appendParserCommand(commandstring)
        
         except:
-            print(u"Failed to parse import matrix: " + commandstring)
+            print(u"Failed to parse dataset. Command: " + commandstring)
+            raise
         #
         try:
             # Base class must know header for _asText(), etc.
@@ -139,7 +140,7 @@ class FormatSingleFile(envmonlib.FormatBase):
                     currentvariable = envmonlib.VariableNode()
                     currentsample.addChild(currentvariable)    
                     # === Parse row and add fields on nodes. ===
-                    for cmd in self._matrixcommands:
+                    for cmd in self._parsercommands:
                         try:
                             exec(cmd[u'Command'])
                         except Exception as e:
@@ -148,5 +149,5 @@ class FormatSingleFile(envmonlib.FormatBase):
 #                            print("- Command string: %s" % (cmd[u'Command string']))
         #
         except Exception as e:
-            print("ERROR: Failed to parse imported data: %s" % (e.args[0]))
+            print("ERROR: Failed to parse dataset: %s" % (e.args[0]))
 

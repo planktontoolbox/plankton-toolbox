@@ -62,7 +62,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         # Aggregate over taxonomic rank.
         self._aggregate_rank_list = QtGui.QComboBox()
         self._aggregate_rank_list.addItems([
-            "<none>",
+            "Biota",
             "Kingdom",
             "Phylum",
             "Class",
@@ -107,9 +107,9 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
     def _aggregateCurrentData(self):
         """ """
         try:
-            if self._aggregate_rank_list.currentIndex() == 0:
-                envmonlib.Logging().log("Taxon level is not selected. Please try again.")
-                raise UserWarning("Taxon level is not selected. Please try again.")
+#            if self._aggregate_rank_list.currentIndex() == 0:
+#                envmonlib.Logging().log("Taxon level is not selected. Please try again.")
+#                raise UserWarning("Taxon level is not selected. Please try again.")
             if not self._main_activity.getCurrentData():
                 envmonlib.Logging().log("No data is selected for analysis. Please try again.")
                 raise UserWarning("No data is selected for analysis. Please try again.")                
@@ -128,7 +128,10 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                             value = value.replace(u',', u'.').replace(u' ', u'', 100)
                             value = float(value) 
                             #
-                            newtaxon = variablenode.getData(selected_taxon_rank)
+                            if selected_taxon_rank == u'Biota':
+                                newtaxon = u'Biota' # Biota is above kingdom in the taxonomic hierarchy. 
+                            else:
+                                newtaxon = variablenode.getData(selected_taxon_rank) # Get taxon name for the selected rank.
                             #
                             taxontrophy = variablenode.getData(u'Trophy')
                             if taxontrophy in selected_trophy_list:

@@ -178,7 +178,8 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         selected_dict = self._main_activity.getSelectDataDict()
         selected_startdate = selected_dict[u'Start date']
         selected_enddate = selected_dict[u'End date']
-        selected_stations = selected_dict[u'Stations']
+#        selected_stations = selected_dict[u'Stations']
+        selected_visits = selected_dict[u'Visits']
         selected_minmaxdepth =  selected_dict[u'Min max depth']
         selected_taxon = selected_dict[u'Taxon']
         selected_trophy = selected_dict[u'Trophy']
@@ -190,8 +191,10 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         tool_manager.ToolManager().showToolByName(u'Graph plot') # Show tool if hidden.
         graphtool = tool_manager.ToolManager().getToolByName(u'Graph plot')
 
-        # Step 1: Create lists of stations and taxa.
-        station_set = set()
+#       # Step 1: Create lists of stations and taxa.
+        # Step 1: Create lists of visits and taxa.
+#        station_set = set()
+        visit_set = set()
         taxon_set = set()
         for visitnode in currentdata.getChildren():
 
@@ -199,11 +202,14 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                 continue
             if selected_enddate < visitnode.getData(u'Date'):
                 continue
-            if visitnode.getData(u'Station name') not in selected_stations:
+#            if visitnode.getData(u'Station name') not in selected_stations:
+#                continue
+            if (visitnode.getData(u'Station name') + u' : ' + visitnode.getData(u'Date')) not in selected_visits:
                 continue
 
 
-            station_set.add(visitnode.getData(u"Station name")) # Station name
+#            station_set.add(visitnode.getData(u"Station name")) # Station name
+            visit_set.add(visitnode.getData(u"Station name") + " : " + visitnode.getData(u"Date")) # Station name
             for samplenode in visitnode.getChildren():
 
                 minmax = samplenode.getData(u'Sample min depth') + u'-' + samplenode.getData(u'Sample max depth')
@@ -225,11 +231,15 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                     else:
                         taxon_set.add(u'---')
         # Step 2: Create a station dictionary containing taxa and value for each taxa.
-        station_taxon_dict = {}
-        for station in station_set:
-            station_taxon_dict[station] = {} 
+#        station_taxon_dict = {}
+        visit_taxon_dict = {}
+#        for station in station_set:
+        for visit in visit_set:
+#            station_taxon_dict[station] = {} 
+            visit_taxon_dict[visit] = {} 
             for taxon in taxon_set:
-                station_taxon_dict[station][taxon] = 0.0
+#                station_taxon_dict[station][taxon] = 0.0
+                visit_taxon_dict[visit][taxon] = 0.0
         # Step 3. Which parameter is selected?
         selectedparameter = unicode(self._parameter_list.currentText())
         # Step 4: Fill with data.
@@ -239,11 +249,14 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                 continue
             if selected_enddate < visitnode.getData(u'Date'):
                 continue
-            if visitnode.getData(u'Station name') not in selected_stations:
+#            if visitnode.getData(u'Station name') not in selected_stations:
+#                continue
+            if (visitnode.getData(u'Station name') + u' : ' + visitnode.getData(u'Date')) not in selected_visits:
                 continue
 
 
-            stationname = visitnode.getData(u"Station name")
+#            stationname = visitnode.getData(u"Station name")
+            visit = (visitnode.getData(u'Station name') + u' : ' + visitnode.getData(u'Date'))
             for samplenode in visitnode.getChildren():
 
                 minmax = samplenode.getData(u'Sample min depth') + u'-' + samplenode.getData(u'Sample max depth')
@@ -267,20 +280,29 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                         value = variablenode.getData(u"Value")
                         try:
 #                            value = float(value.replace(u' ', u'').replace(u',', u'.'))
-                            station_taxon_dict[stationname][taxonname] += value
+#                            station_taxon_dict[stationname][taxonname] += value
+                            visit_taxon_dict[visit][taxonname] += value
                         except:
-                            print ("ERROR: Float conversion (2): Station: " + stationname + 
+#                            print ("ERROR: Float conversion (2): Station: " + stationname + 
+                            print ("ERROR: Float conversion (2): Station: " + visit + 
                                    " Taxon name: " + taxonname + " Value: " + unicode(variablenode.getData(u"Value")))
+                            raise
         # Step 5: Reorganize. 
-        station_list = sorted(station_set)
+#        station_list = sorted(station_set)
+        visit_list = sorted(visit_set)
         taxon_list = sorted(taxon_set)
-        taxon_station_value_list = []
+#        taxon_station_value_list = []
+        taxon_visit_value_list = []
         for taxonindex, taxon in enumerate(taxon_list):
-            taxon_station_value_list.append([])
-            for stationindex, station in enumerate(station_list):
-                taxon_station_value_list[taxonindex].append(station_taxon_dict[station][taxon])
+#            taxon_station_value_list.append([])
+            taxon_visit_value_list.append([])
+#            for stationindex, station in enumerate(station_list):
+            for stationindex, station in enumerate(visit_list):
+#                taxon_station_value_list[taxonindex].append(station_taxon_dict[station][taxon])
+                taxon_visit_value_list[taxonindex].append(visit_taxon_dict[station][taxon])
         # Step 6: Plot
-        graphtool.addTestPlot(selectedparameter, station_list, taxon_list, taxon_station_value_list)
+#        graphtool.addTestPlot(selectedparameter, station_list, taxon_list, taxon_station_value_list)
+        graphtool.addTestPlot(selectedparameter, visit_list, taxon_list, taxon_visit_value_list)
                 
             
         
@@ -346,7 +368,8 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         selected_dict = self._main_activity.getSelectDataDict()
         selected_startdate = selected_dict[u'Start date']
         selected_enddate = selected_dict[u'End date']
-        selected_stations = selected_dict[u'Stations']
+#        selected_stations = selected_dict[u'Stations']
+        selected_visits = selected_dict[u'Visits']
         selected_minmaxdepth =  selected_dict[u'Min max depth']
         selected_taxon = selected_dict[u'Taxon']
         selected_trophy = selected_dict[u'Trophy']
@@ -359,7 +382,9 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                 continue
             if selected_enddate < visitnode.getData(u'Date'):
                 continue
-            if visitnode.getData(u'Station name') not in selected_stations:
+#            if visitnode.getData(u'Station name') not in selected_stations:
+#                continue
+            if (visitnode.getData(u'Station name') + u' : ' + visitnode.getData(u'Date')) not in selected_visits:
                 continue
 
             

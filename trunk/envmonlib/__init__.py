@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-MMFW, Marine Monitoring Framework.
+envmonlib, Environmental monitoring library.
 
 Main modules:
 - datasets 

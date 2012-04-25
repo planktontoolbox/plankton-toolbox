@@ -39,7 +39,7 @@ class ImportManager(object):
 #        try:            
         formatparser = envmonlib.FormatSingleFile()
                
-#        matrixcolumn = self.metadata.getField(u'Dataset format')
+#        parsercolumn = self.metadata.getField(u'Dataset format')
         
         # Phase 1: Parse file and import to memory model.
         tabledataset = envmonlib.DatasetTable()
@@ -62,7 +62,7 @@ class ImportManager(object):
 #        try:            
         formatparser = envmonlib.FormatSingleFile()
                
-#        matrixcolumn = self.metadata.getField(u'Dataset format')
+#        parsercolumn = self.metadata.getField(u'Dataset format')
 
 #Header row
 #First data row
@@ -101,7 +101,7 @@ class ImportManager(object):
             
             formatparser = envmonlib.FormatSingleFile()
                    
-    #        matrixcolumn = self.metadata.getField(u'Dataset format')
+    #        parsercolumn = self.metadata.getField(u'Dataset format')
             
             # Phase 1: Parse file and import to memory model.
             formatparser.importDataset(dataset, zipfile)

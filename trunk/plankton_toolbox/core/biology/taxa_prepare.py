@@ -242,6 +242,7 @@ class PrepareDyntaxaDbTablesAsTextFiles(PrepareDataSources):
     def _createTaxonTypeDict(self):
         """ """
         self._taxonTypeDict = {        
+            "0": "Biota",
             "1": "Kingdom",
             "2": "Phylum",
             "3": "Subphylum",

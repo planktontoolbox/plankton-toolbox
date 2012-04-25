@@ -43,7 +43,8 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         """ """
         self._startdate_edit.clear()
         self._enddate_edit.clear()
-        self._stations_listview.clear()
+#        self._stations_listview.clear()
+        self._visits_listview.clear()
         self._minmaxdepth_listview.clear()
         self._taxon_listview.clear()
         self._trophy_listview.clear()
@@ -60,7 +61,8 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         selected_dict[u'Start date'] = unicode(self._startdate_edit.text())
         selected_dict[u'End date'] = unicode(self._enddate_edit.text())
         # Selection lists.
-        selected_dict[u'Stations'] = self._stations_listview.getSelectedDataList()
+#        selected_dict[u'Stations'] = self._stations_listview.getSelectedDataList()
+        selected_dict[u'Visits'] = self._visits_listview.getSelectedDataList()
         selected_dict[u'Min max depth'] = self._minmaxdepth_listview.getSelectedDataList()
         selected_dict[u'Taxon'] = self._taxon_listview.getSelectedDataList()
         selected_dict[u'Trophy'] = self._trophy_listview.getSelectedDataList()
@@ -86,8 +88,10 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         self._startdate_edit = QtGui.QLineEdit("")
         self._enddate_edit = QtGui.QLineEdit("")
         # Stations
-        self._stations_listview = utils_qt.SelectableQListView()
-        self._stations_listview.setMaximumHeight(100)
+#        self._stations_listview = utils_qt.SelectableQListView()
+#        self._stations_listview.setMaximumHeight(100)
+        self._visits_listview = utils_qt.SelectableQListView()
+        self._visits_listview.setMaximumHeight(100)
         # Min-max depth.
         self._minmaxdepth_listview = utils_qt.SelectableQListView()
         self._minmaxdepth_listview.setMaximumHeight(100)
@@ -106,8 +110,10 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         clicklabel6 = utils_qt.ClickableQLabel("Mark all") # TODO:
         clicklabel7 = utils_qt.ClickableQLabel("Clear all") # TODO:
         clicklabel8 = utils_qt.ClickableQLabel("Mark all") # TODO:
-        self.connect(clicklabel1, QtCore.SIGNAL("clicked()"), self._stations_listview.uncheckAll)                
-        self.connect(clicklabel2, QtCore.SIGNAL("clicked()"), self._stations_listview.checkAll)                
+#        self.connect(clicklabel1, QtCore.SIGNAL("clicked()"), self._stations_listview.uncheckAll)                
+#        self.connect(clicklabel2, QtCore.SIGNAL("clicked()"), self._stations_listview.checkAll)                
+        self.connect(clicklabel1, QtCore.SIGNAL("clicked()"), self._visits_listview.uncheckAll)                
+        self.connect(clicklabel2, QtCore.SIGNAL("clicked()"), self._visits_listview.checkAll)                
         self.connect(clicklabel3, QtCore.SIGNAL("clicked()"), self._minmaxdepth_listview.uncheckAll)                
         self.connect(clicklabel4, QtCore.SIGNAL("clicked()"), self._minmaxdepth_listview.checkAll)                
         self.connect(clicklabel5, QtCore.SIGNAL("clicked()"), self._taxon_listview.uncheckAll)                
@@ -129,7 +135,8 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         form1.addWidget(label5, gridrow, 10, 1, 3)
         gridrow += 1
         form1.addWidget(self._startdate_edit, gridrow, 0, 1, 1)
-        form1.addWidget(self._stations_listview, gridrow, 1, 4, 3)
+#        form1.addWidget(self._stations_listview, gridrow, 1, 4, 3)
+        form1.addWidget(self._visits_listview, gridrow, 1, 4, 3)
         form1.addWidget(self._minmaxdepth_listview, gridrow, 4, 4, 3)
         form1.addWidget(self._taxon_listview, gridrow, 7, 4, 3)
         form1.addWidget(self._trophy_listview, gridrow, 10, 4, 3)
@@ -166,13 +173,15 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         #
         startdate = '9999-99-99'
         enddate = '0000-00-00'
-        stationset = set()
+#        stationset = set()
+        visitset = set()
         minmaxdepthset = set()
         taxonset = set()
         trophyset = set()
         #
         for visitnode in currentdata.getChildren():
-            stationset.add(visitnode.getData(u'Station name'))
+#            stationset.add(visitnode.getData(u'Station name'))
+            visitset.add(visitnode.getData(u'Station name') + u' : ' + visitnode.getData(u'Date'))
             startdate = min(startdate, visitnode.getData(u'Date'))
             enddate = max(enddate, visitnode.getData(u'Date'))
             for samplenode in visitnode.getChildren():
@@ -185,11 +194,12 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         self._startdate_edit.setText(startdate)
         self._enddate_edit.setText(enddate)
         # Selection lists.
-        self._stations_listview.setList(sorted(stationset))
+#        self._stations_listview.setList(sorted(stationset))
+        self._visits_listview.setList(sorted(visitset))
         self._minmaxdepth_listview.setList(sorted(minmaxdepthset))
         self._taxon_listview.setList(sorted(taxonset))
         self._trophy_listview.setList(sorted(trophyset))
             
-        # TEST
-        self.getSelectDataDict()    
+#        # TEST
+#        self.getSelectDataDict()    
 

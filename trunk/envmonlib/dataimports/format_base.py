@@ -35,7 +35,7 @@ class FormatBase(object):
         self._dataset = None
         self._header = []
         self._row = None
-        self._matrixcommands = []
+        self._parsercommands = []
     
     def parseTableDataset(self, dataset, imported_table):
         """ Abstract method. """
@@ -54,12 +54,12 @@ class FormatBase(object):
         """ """
         self._row = row
         
-    def appendMatrixCommand(self, command_string):
+    def appendParserCommand(self, command_string):
         """ """
         commanddict = {}
         commanddict[u'Command string'] = command_string
         commanddict[u'Command'] = compile(command_string, '', 'exec')
-        self._matrixcommands.append(commanddict)
+        self._parsercommands.append(commanddict)
     
     def _asText(self, column_name):
         """ """
