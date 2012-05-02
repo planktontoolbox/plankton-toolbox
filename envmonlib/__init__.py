@@ -49,7 +49,13 @@ from dataimports.import_manager import ImportManager
 from dataimportformats.format_singlefile import FormatSingleFile
  
 # Module dataexports:
+from dataexports.export_manager import ExportManager
  
 # Module datascreening:
+from datascreening.screening_manager import ScreeningManager
  
 # Module datareports: 
+from datareports.reports_manager import ReportsManager
+ 
+# Module tests: 
+from tests.tests_manager import TestsManager
