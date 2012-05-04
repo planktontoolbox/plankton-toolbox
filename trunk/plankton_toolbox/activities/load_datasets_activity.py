@@ -202,30 +202,35 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             self._tabledataset = envmonlib.DatasetTable()
             if filenames:
                 for filename in filenames:
+                    # Store selected path. Will be used as default next time.
                     self._last_used_textfile_name = filename
-                    
-                    
-                    # Create a new dataset.
-                    dataset = envmonlib.DatasetNode()
-                    # Add info to dataset about how to import and export data to/from dataset.
-                    dataset.loadDatasetParser(self._parser_path + unicode(self._textfile_parser_list.currentText()),
-                                              unicode(self._textfile_importcolumn_list.currentText()),
-                                              unicode(self._textfile_exportcolumn_list.currentText()),
-                                              self._semantics_column)  # _semantics_column: NOT USED.
-                    # Add metadata related to imported file.
-                    dataset.addMetadata(u'File name', os.path.basename(filename))
-                    dataset.addMetadata(u'File path', filename)
-                    # Perform import.
-                    impMgr = envmonlib.ImportManager()
+                    # Text files may have strange encodings.
                     if unicode(self._textfile_encoding_list.currentText()) == u'<auto>':
                         textfileencoding = locale.getpreferredencoding()
                     else:
                         textfileencoding = unicode(self._textfile_encoding_list.currentText())                        
-
-                    impMgr.importTextFileToDataset(dataset, filename, textfileencoding)
-                    # Note: Not the envmonlib datasets class. This is a wrapper containing Qt-code.
+                    # Set up for import file parsing.
+                    impMgr = envmonlib.ImportManager(self._parser_path + unicode(self._textfile_parser_list.currentText()),
+                                                     unicode(self._textfile_importcolumn_list.currentText()),
+                                                     unicode(self._textfile_exportcolumn_list.currentText()),
+                                                     self._semantics_column)  # _semantics_column: NOT USED.
+                    # Import and parse file.
+                    dataset = impMgr.importTextFile(filename, textfileencoding)
+                    # Add metadata related to imported file.
+                    dataset.addMetadata(u'Parser', self._parser_path + unicode(self._textfile_parser_list.currentText()))
+                    dataset.addMetadata(u'File name', os.path.basename(filename))
+                    dataset.addMetadata(u'File path', filename)
+                    dataset.addMetadata(u'Import column', unicode(self._textfile_importcolumn_list.currentText()))
+                    dataset.addMetadata(u'Export column', unicode(self._textfile_exportcolumn_list.currentText()))
+                    dataset.addMetadata(u'Semantics column', self._semantics_column)
+                    # Add to dataset list. (Note:ToolboxDatasets is a wrapper containing the 'datasetListChanged'-signal).
                     toolbox_datasets.ToolboxDatasets().addDataset(dataset)
             #
+        except Exception, e:
+            envmonlib.Logging().error(u"Text file loading failed on exception: " + unicode(e))
+            QtGui.QMessageBox.warning(self, u"Text file loading.\n", 
+                                      u"Text file loading failed on exception.\n" + unicode(e))
+            raise
         finally:
             datasetcount = len(envmonlib.Datasets().getDatasets())
             self._parent.statusBar().showMessage(
@@ -328,22 +333,50 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             self._tabledataset = envmonlib.DatasetTable()
             if filenames:
                 for filename in filenames:
+                    # Store selected path. Will be used as default next time.
                     self._last_used_excelfile_name = filename
-                    # Create a new dataset.
-                    dataset = envmonlib.DatasetNode()
-                    # Add info to dataset about how to import and export data to/from dataset.
-                    dataset.loadDatasetParser(self._parser_path + unicode(self._excel_parser_list.currentText()),
-                                                   unicode(self._excel_importcolumn_list.currentText()),
-                                                   unicode(self._excel_exportcolumn_list.currentText()))
+                    # Set up for import file parsing.
+                    impMgr = envmonlib.ImportManager(self._parser_path + unicode(self._excel_parser_list.currentText()),
+                                                     unicode(self._excel_importcolumn_list.currentText()),
+                                                     unicode(self._excel_exportcolumn_list.currentText()),
+                                                     self._semantics_column)  # _semantics_column: NOT USED.
+                    # Import and parse file.
+                    dataset = impMgr.importExcelFile(filename)
                     # Add metadata related to imported file.
+                    dataset.addMetadata(u'Parser', self._parser_path + unicode(self._excel_parser_list.currentText()))
                     dataset.addMetadata(u'File name', os.path.basename(filename))
                     dataset.addMetadata(u'File path', filename)
-                    # Perform import.
-                    impMgr = envmonlib.ImportManager()
-                    impMgr.importExcelFileToDataset(dataset, filename)
-                    # Note: Not the envmonlib datasets class. This is a wrapper containing Qt-code.
-                    toolbox_datasets.ToolboxDatasets().addDataset(dataset)        
+                    dataset.addMetadata(u'Import column', unicode(self._excel_importcolumn_list.currentText()))
+                    dataset.addMetadata(u'Export column', unicode(self._excel_exportcolumn_list.currentText()))
+                    dataset.addMetadata(u'Semantics column', self._semantics_column)
+                    # Add to dataset list. (Note:ToolboxDatasets is a wrapper containing the 'datasetListChanged'-signal).
+                    toolbox_datasets.ToolboxDatasets().addDataset(dataset)
+
+                    
+                    
+                    
+#                    self._last_used_excelfile_name = filename
+#                    # Create a new dataset.
+#                    dataset = envmonlib.DatasetNode()
+#                    # Add info to dataset about how to import and export data to/from dataset.
+#                    dataset.loadDatasetParser(self._parser_path + unicode(self._excel_parser_list.currentText()),
+#                                                   unicode(self._excel_importcolumn_list.currentText()),
+#                                                   unicode(self._excel_exportcolumn_list.currentText()))
+#                    # Add metadata related to imported file.
+#                    dataset.addMetadata(u'Parser', self._parser_path + unicode(self._excel_parser_list.currentText())
+#                    dataset.addMetadata(u'File name', os.path.basename(filename))
+#                    dataset.addMetadata(u'File path', filename)
+#                    # Perform import.
+#                    impMgr = envmonlib.ImportManager()
+#                    impMgr.importExcelFileToDataset(dataset, filename)
+#                    # Note: Not the envmonlib datasets class. This is a wrapper containing Qt-code.
+#                    toolbox_datasets.ToolboxDatasets().addDataset(dataset)        
         #
+        except Exception, e:
+            envmonlib.Logging().error(u"Excel file loading failed on exception: " + unicode(e))
+            QtGui.QMessageBox.warning(self, u"Excel file loading.\n", 
+                                      u"Excel file loading failed on exception.\n" + unicode(e))
+            raise
         finally:
             datasetcount = len(envmonlib.Datasets().getDatasets())
             self._parent.statusBar().showMessage(
@@ -364,7 +397,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                                           u'Content      ', 
                                           u'File         ', 
                                           u'File path    ',
-                                          u'parser       ',
+                                          u'Parser       ',
                                           u'Import column',
                                           u'Export column'])
         self._datasets_table.tablemodel.setModeldata(self._datasettabledata)
@@ -457,7 +490,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                  contentinfo,
                  dataset.getMetadata(u'File name'),
                  dataset.getMetadata(u'File path'),
-                 dataset.getMetadata(u'parser'),
+                 dataset.getMetadata(u'Parser'),
                  dataset.getMetadata(u'Import column'),
                  dataset.getMetadata(u'Export column')])
             #

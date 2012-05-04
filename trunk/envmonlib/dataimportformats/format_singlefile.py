@@ -26,7 +26,7 @@
 
 import envmonlib
 
-class FormatSingleFile(envmonlib.FormatBase):
+class FormatSingleFile(envmonlib.ParsedFormat):
     """ Import format for single file. """
     def __init__(self):
         """ Import format for single file. """
@@ -48,22 +48,23 @@ class FormatSingleFile(envmonlib.FormatBase):
                 parserkey = parserrow.get(u'Key', u'') 
                 parsercommand = parserrow.get(u'Command', u'')
                 if parsercommand:         
-                    #    
-                    ### TODO: Replace:
-                    # $Text(   --> self._asText(
-                    # $Year(   --> self._asYear(
-                    # $Datetime(   --> self._asDatetime(
-                    # $Date(   --> self._asDate(
-                    # $Time(   --> self._asTime(
-                    # $Int(   --> self._asInt(
-                    # $Float(   --> self._asFloat(
-                    # $Position(   --> self._asPosition(
-                    # $Station(   --> self._asStation(
-                    # $Param(   --> self._asParam(
-                    parsercommand = parsercommand.replace(u'$Text(', u'self._asText(')
-                    parsercommand = parsercommand.replace(u'$Float(', u'self._asFloat(')
-                    parsercommand = parsercommand.replace(u'$Species(', u'self._speciesByKey(')
-                    parsercommand = parsercommand.replace(u'$Sizeclass(', u'self._sizeclassByKey(')
+                    #
+                    parsercommand = self.replaceMethodKeywords(parsercommand)    
+#                    ### TODO: Replace:
+#                    # $Text(   --> self._asText(
+#                    # $Year(   --> self._asYear(
+#                    # $Datetime(   --> self._asDatetime(
+#                    # $Date(   --> self._asDate(
+#                    # $Time(   --> self._asTime(
+#                    # $Int(   --> self._asInt(
+#                    # $Float(   --> self._asFloat(
+#                    # $Position(   --> self._asPosition(
+#                    # $Station(   --> self._asStation(
+#                    # $Param(   --> self._asParam(
+#                    parsercommand = parsercommand.replace(u'$Text(', u'self._asText(')
+#                    parsercommand = parsercommand.replace(u'$Float(', u'self._asFloat(')
+#                    parsercommand = parsercommand.replace(u'$Species(', u'self._speciesByKey(')
+#                    parsercommand = parsercommand.replace(u'$Sizeclass(', u'self._sizeclassByKey(')
                     #
                     if parsernode == u'Dataset':
                         commandstring = u"dataset.addData('" + parserkey + u"', " + parsercommand + u")"

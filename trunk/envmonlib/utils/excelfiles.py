@@ -49,15 +49,15 @@ class ExcelFiles():
                            header_row = 0, 
                            data_rows_from = 1, 
                            data_rows_to = None, # None = read all.
-                           used_columns_from = 0, 
-                           used_columns_to = None): # None = read all.
+                           columns_from = 0, 
+                           columns_to = None): # None = read all.
         """ """
         if file_name == None:
             raise UserWarning("File name is missing.")
         if not isinstance(target_dataset, envmonlib.DatasetTable):
             raise UserWarning("Target dataset is not of valid type.")
         try:
-            workbook = load_workbook(file_name, use_iterators = True) ### BIG.
+            workbook = load_workbook(file_name, use_iterators = True) # Supports big files.
             if workbook == None:
                 raise UserWarning("Can't read Excel (.xlsx) file.")
             worksheet = None
@@ -77,9 +77,9 @@ class ExcelFiles():
                     break # Break loop if data_row_to is defined and exceeded.
                 elif rowindex == header_row:
                     for columnindex, cell in enumerate(row):
-                        if used_columns_to and (columnindex > used_columns_to):
+                        if columns_to and (columnindex > columns_to):
                             break # Break loop if used_columns_to is defined and exceeded.
-                        elif columnindex >= used_columns_from:
+                        elif columnindex >= columns_from:
                             value = cell.internal_value
                             if value:
                                 header.append(unicode(value).strip())
@@ -90,9 +90,9 @@ class ExcelFiles():
                 elif rowindex >= data_rows_from:
                     newrow = []
                     for columnindex, cell in enumerate(row): ### BIG.
-                        if used_columns_to and (columnindex > used_columns_to):
+                        if columns_to and (columnindex > columns_to):
                             break # Break loop if used_columns_to is defined and exceeded.
-                        elif columnindex >= used_columns_from:
+                        elif columnindex >= columns_from:
                             value = cell.internal_value
                             if value:
                                 newrow.append(unicode(value).strip())
@@ -172,7 +172,7 @@ class ExcelFiles():
         if not isinstance(table_dataset, envmonlib.DatasetTable):
             raise UserWarning("Dataset is not of a valid type.")
         try:
-            workbook =  Workbook(optimized_write = True) # Create workbook.
+            workbook =  Workbook(optimized_write = True)  # Supports big files.
             worksheet = workbook.create_sheet()
             # Header.
             worksheet.append(table_dataset.getHeader())
