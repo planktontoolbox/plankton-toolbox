@@ -43,6 +43,7 @@ from datasets.datasets import Datasets
 
 # Module dataimports:
 from dataimports.format_base import FormatBase
+from dataimports.parsed_format import ParsedFormat
 from dataimports.import_manager import ImportManager
 
 # Module dataimportformats:

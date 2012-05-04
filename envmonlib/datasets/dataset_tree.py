@@ -147,51 +147,48 @@ class DatasetNode(envmonlib.DatasetBase, DataNode):
         """ """
         return self._variable_lookup.get(idString, None)
 
-    def setDatasetParserRows(self):
-        """ """
-
-    def loadDatasetParser(self, parser_file, import_column = None, export_column = None, semantics_column = None):
-        """ """
-        # Add metadata
-        self.addMetadata(u'Parser', parser_file)
-        # Read dataset parser.
-        tabledata = envmonlib.DatasetTable()
-        envmonlib.ExcelFiles().readToTableDataset(tabledata, file_name = parser_file)
-        # Create import info.
-        if import_column:
-            self.addMetadata(u'Import column', import_column)
-            importrows = []
-            for rowindex in xrange(0, tabledata.getRowCount()):
-                importcolumndata = tabledata.getDataItemByColumnName(rowindex, import_column)
-                if importcolumndata:
-                    nodelevel = tabledata.getDataItem(rowindex, 0)
-                    key = tabledata.getDataItem(rowindex, 1)
-                    importrows.append({u'Node': nodelevel, u'Key': key, u'Command': importcolumndata}) 
-            self.setDatasetParserRows(importrows)
-        # Create export info.
-        if export_column:
-            self.addMetadata(u'Export column', export_column)
-            columnsinfo = []
-            for rowindex in xrange(0, tabledata.getRowCount()):
-                exportcolumndata = tabledata.getDataItemByColumnName(rowindex, export_column)
-                if exportcolumndata:
-                    nodelevel = tabledata.getDataItem(rowindex, 0)
-                    if nodelevel != u'INFO':
-                        key = tabledata.getDataItem(rowindex, 1)
-                        columnsinfo.append({u'Header': exportcolumndata, u'Node': nodelevel, u'Key': key}) 
-            self.setExportTableColumns(columnsinfo)
-        # Create semantics info.
-        if semantics_column:
-            self.addMetadata(u'Semantics column', semantics_column)
-            semanticsinfo = []
-            for rowindex in xrange(0, tabledata.getRowCount()):
-                exportcolumndata = tabledata.getDataItemByColumnName(rowindex, semantics_column)
-                if exportcolumndata:
-                    nodelevel = tabledata.getDataItem(rowindex, 0)
-                    if nodelevel != u'INFO':
-                        key = tabledata.getDataItem(rowindex, 1)
-                        semanticsinfo.append({u'Header': exportcolumndata, u'Node': nodelevel, u'Key': key}) 
-            self.setSemantics(semanticsinfo)
+#    def loadParserInfo(self, parser_file, import_column = None, export_column = None, semantics_column = None):
+#        """ """
+#        # Add metadata
+#        self.addMetadata(u'Parser', parser_file)
+#        # Read dataset parser.
+#        tabledata = envmonlib.DatasetTable()
+#        envmonlib.ExcelFiles().readToTableDataset(tabledata, file_name = parser_file)
+#        # Create import info.
+#        if import_column:
+#            self.addMetadata(u'Import column', import_column)
+#            importrows = []
+#            for rowindex in xrange(0, tabledata.getRowCount()):
+#                importcolumndata = tabledata.getDataItemByColumnName(rowindex, import_column)
+#                if importcolumndata:
+#                    nodelevel = tabledata.getDataItem(rowindex, 0)
+#                    key = tabledata.getDataItem(rowindex, 1)
+#                    importrows.append({u'Node': nodelevel, u'Key': key, u'Command': importcolumndata}) 
+#            self.setDatasetParserRows(importrows)
+#        # Create export info.
+#        if export_column:
+#            self.addMetadata(u'Export column', export_column)
+#            columnsinfo = []
+#            for rowindex in xrange(0, tabledata.getRowCount()):
+#                exportcolumndata = tabledata.getDataItemByColumnName(rowindex, export_column)
+#                if exportcolumndata:
+#                    nodelevel = tabledata.getDataItem(rowindex, 0)
+#                    if nodelevel != u'INFO':
+#                        key = tabledata.getDataItem(rowindex, 1)
+#                        columnsinfo.append({u'Header': exportcolumndata, u'Node': nodelevel, u'Key': key}) 
+#            self.setExportTableColumns(columnsinfo)
+#        # Create semantics info.
+#        if semantics_column:
+#            self.addMetadata(u'Semantics column', semantics_column)
+#            semanticsinfo = []
+#            for rowindex in xrange(0, tabledata.getRowCount()):
+#                exportcolumndata = tabledata.getDataItemByColumnName(rowindex, semantics_column)
+#                if exportcolumndata:
+#                    nodelevel = tabledata.getDataItem(rowindex, 0)
+#                    if nodelevel != u'INFO':
+#                        key = tabledata.getDataItem(rowindex, 1)
+#                        semanticsinfo.append({u'Header': exportcolumndata, u'Node': nodelevel, u'Key': key}) 
+#            self.setSemantics(semanticsinfo)
 
     def setDatasetParserRows(self, dataset_parser_rows):
         """ """
