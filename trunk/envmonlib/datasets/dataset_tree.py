@@ -65,7 +65,15 @@ class DataNode(object):
 
     def getChildren(self):
         """ """
-        return self._children
+#        return self._children
+
+        # Don't use empty children.
+        children = []
+        for child in self._children:
+            if child:
+                children.append(child)
+        return children
+
         
     def removeAllChildren(self):
         """ """
@@ -83,6 +91,10 @@ class DataNode(object):
     def getDataDict(self):
         """ """
         return self._datadict
+        
+    def setDataDict(self, data_dict):
+        """ """
+        self._datadict = data_dict
         
 #    def setIdString(self, _idstring):
 #        """ """
