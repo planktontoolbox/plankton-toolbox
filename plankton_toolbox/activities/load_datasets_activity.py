@@ -143,7 +143,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         form1.addWidget(self._textfile_exportcolumn_list, gridrow, 1, 1, 1)
         #
         hbox1 = QtGui.QHBoxLayout()
-        label1 = QtGui.QLabel("Dataset character encoding:")
+        label1 = QtGui.QLabel("Text file character encoding:")
         hbox1.addWidget(label1)
         hbox1.addWidget(self._textfile_encoding_list)
         hbox1.addStretch(10)

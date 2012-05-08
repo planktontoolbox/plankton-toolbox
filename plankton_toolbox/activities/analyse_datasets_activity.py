@@ -80,7 +80,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         selectdatabox = QtGui.QGroupBox("", self)
         tabWidget = QtGui.QTabWidget()
         tabWidget.addTab(tab1.AnalyseDatasetsTab1().contentSelectDatasets(), "Select dataset(s)")
-###        tabWidget.addTab(tab2.AnalyseDatasetsTab2().contentFilterData(), "Filter data")
+        tabWidget.addTab(tab2.AnalyseDatasetsTab2().contentFilterData(), "Filter data")
         tabWidget.addTab(tab3.AnalyseDatasetsTab3().contentAggregateData(), "Aggregate data")
         tabWidget.addTab(tab4.AnalyseDatasetsTab4().contentSelectData(), "Select data")
         tabWidget.addTab(tab5.AnalyseDatasetsTab5().contentPreparedGraphs(), "Prepared graphs")
@@ -96,23 +96,63 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
     def _contentCurrentDataTable(self):
         """ """
         # Active widgets and connections.
-        currentdatagroupbox = QtGui.QGroupBox("Current data", self)
+        currentdatagroupbox = QtGui.QGroupBox("Current data/selected data", self)
         # Active widgets and connections.
+        self._viewdata_list = QtGui.QComboBox()
+        self._viewdata_list.addItems(["Current data",
+                                      "Selected data",
+                                      "Hide data (to increase performance)"])
+        self.connect(self._viewdata_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._viewDataListChanged)                
+        #
+#        self._hidedata_checkbox = QtGui.QCheckBox("Hide data")
+#        self._hidedata_checkbox.setChecked(False)
+#        self.connect(self._hidedata_checkbox, QtCore.SIGNAL("clicked()"), self._viewHideDataChanged)                
+        #
+        self._refreshselecteddata_button = QtGui.QPushButton("Refresh selected data") # TODO:
+        self._refreshselecteddata_button.hide()
+        self.connect(self._refreshselecteddata_button, QtCore.SIGNAL("clicked()"), self._refreshSelectedData)                
+        #
         self._tableview = utils_qt.ToolboxQTableView()
         # Layout widgets.
         layout = QtGui.QVBoxLayout()
+        #
+        hbox1 = QtGui.QHBoxLayout()
+        hbox1.addWidget(QtGui.QLabel("View:"))
+        hbox1.addWidget(self._viewdata_list)
+#        hbox1.addWidget(self._hidedata_checkbox)
+        hbox1.addWidget(self._refreshselecteddata_button)
+        hbox1.addStretch(5)
+        #
+        layout.addLayout(hbox1)
         layout.addWidget(self._tableview)
         #
         currentdatagroupbox.setLayout(layout)
         #
         return currentdatagroupbox
 
+    def _viewDataListChanged(self, row_index):
+        """ """
+        if row_index == 1:
+            self._refreshselecteddata_button.show()
+        else:
+            self._refreshselecteddata_button.hide()
+        #
+        self.updateViewedData()
+        
+    def _refreshSelectedData(self):
+        """ """
+        # Note: row_index used inside updateViewedData().
+        self.updateViewedData()
+        
+    def _viewHideDataChanged(self):
+        """ """
+        self.updateViewedData()
+        
     def _contentSaveCurrentData(self):
         """ """
-        saveresultbox = QtGui.QGroupBox("Save current data", self)
+        saveresultbox = QtGui.QGroupBox("Save current data/selected data", self)
         # Active widgets and connections.
         self._saveformat_list = QtGui.QComboBox()
-        #
         self._saveformat_list.addItems(["Tab delimited text file (*.txt)",
                                          "Excel file (*.xlsx)"])
         self._savedataset_button = QtGui.QPushButton("Save...")
@@ -131,29 +171,60 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
     def setCurrentData(self, current_data):
         """ """
         self._currentdata = current_data
-        self.updateCurrentData()
+        self.updateViewedData()
+        self.updateAllTabs()    
     
+    def updateCurrentData(self):
+        """ """
+        self.updateViewedData()
+        self.updateAllTabs()
+        
     def getCurrentData(self):
         """ """
         return self._currentdata
     
-    def updateCurrentData(self):
+    def hideViewedData(self):
         """ """
         # Clear table.
         self._tableview.tablemodel.setModeldata(None)
-        self._refreshCurrentDataTable()
+        self._refreshViewedDataTable()
+
+        
+    def updateViewedData(self):
+        """ """
+        # Clear table.
+        self._tableview.tablemodel.setModeldata(None)
+        self._refreshViewedDataTable()
+#        # Don't show data if the hide data checkbox is checked. 
+#        if self._hidedata_checkbox.isChecked():
+#            return
+        # 
+        if not self._currentdata:
+            return
         #
-        if self._currentdata:
+        selectedviewindex = self._viewdata_list.currentIndex()
+        if selectedviewindex == 0:
+            # View current data.
             # Convert from tree model to table model.
             targetdataset = envmonlib.DatasetTable()
             self._currentdata.convertToTableDataset(targetdataset)
             # View model.
             self._tableview.tablemodel.setModeldata(targetdataset)
-            self._refreshCurrentDataTable()
-        #
-        self.updateAllTabs()
-    
-    def _refreshCurrentDataTable(self):
+            self._refreshViewedDataTable()
+        elif selectedviewindex == 1:
+            # View selected data only. 
+            selecteddataset = self.createSelectedTreeDataset()
+            # Convert from tree model to table model.
+            targetdataset = envmonlib.DatasetTable()
+            selecteddataset.convertToTableDataset(targetdataset)
+            # View model.
+            self._tableview.tablemodel.setModeldata(targetdataset)
+            self._refreshViewedDataTable()
+        elif selectedviewindex == 3:
+            # Hidden data.
+            pass
+        
+    def _refreshViewedDataTable(self):
         """ """
         self._tableview.tablemodel.reset() # Model data has changed.
         self._tableview.resizeColumnsToContents()
@@ -202,4 +273,58 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
     def getSelectDataDict(self):
         """ """
         return tab4.AnalyseDatasetsTab4().getSelectDataDict()
+
+    def createSelectedTreeDataset(self):
+        """ """
+        # Create tree dataset för  selected data.
+        selecteddata = envmonlib.DatasetNode() 
+        #
+        currentdata = self.getCurrentData()
+        if not currentdata:        
+            return selecteddata
+        # Export info needed to convert from tree to table.
+        selecteddata.setExportTableColumns(currentdata.getExportTableColumns())        
+        # Get selected data info.
+        selected_dict = self.getSelectDataDict()
+        selected_startdate = selected_dict[u'Start date']
+        selected_enddate = selected_dict[u'End date']
+#        selected_stations = selected_dict[u'Stations']
+        selected_visits = selected_dict[u'Visits']
+        selected_minmaxdepth =  selected_dict[u'Min max depth']
+        selected_taxon = selected_dict[u'Taxon']
+        selected_trophy = selected_dict[u'Trophy']
+        #
+        for visitnode in currentdata.getChildren():
+            if selected_startdate > visitnode.getData(u'Date'):
+                continue
+            if selected_enddate < visitnode.getData(u'Date'):
+                continue
+            if (visitnode.getData(u'Station name') + u' : ' + visitnode.getData(u'Date')) not in selected_visits:
+                continue
+            # Create node and copy node data.            
+            selectedvisit = envmonlib.VisitNode()
+            selectedvisit.setDataDict(visitnode.getDataDict())
+            selecteddata.addChild(selectedvisit)    
+            #
+            for samplenode in visitnode.getChildren():
+                minmax = samplenode.getData(u'Sample min depth') + u'-' + samplenode.getData(u'Sample max depth')
+                if minmax not in selected_minmaxdepth:
+                    continue
+                #
+                # Create node and copy node data.            
+                selectedsample = envmonlib.SampleNode()
+                selectedsample.setDataDict(samplenode.getDataDict())
+                selectedvisit.addChild(selectedsample)    
+                #
+                for variablenode in samplenode.getChildren():
+                    if variablenode.getData(u'Taxon name') not in selected_taxon:
+                        continue
+                    if variablenode.getData(u'Trophy') not in selected_trophy:
+                        continue
+                    # Create node and copy node data.            
+                    selectedvariable = envmonlib.VariableNode()
+                    selectedvariable.setDataDict(variablenode.getDataDict())
+                    selectedsample.addChild(selectedvariable)
+        #
+        return selecteddata    
 
