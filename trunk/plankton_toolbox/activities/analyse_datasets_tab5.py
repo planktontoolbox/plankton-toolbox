@@ -74,13 +74,13 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         self._parameter_list.setMinimumContentsLength(20)
         #
         # Prepared graphs.
-        self._addplot_1_button = QtGui.QPushButton("Plot 1")
+        self._addplot_1_button = QtGui.QPushButton("Plot 1. Aggreagated value / taxa / station")
         self.connect(self._addplot_1_button, QtCore.SIGNAL("clicked()"), self._addPlot_1)                
-        self._addplot_2_button = QtGui.QPushButton("Plot 2")
+        self._addplot_2_button = QtGui.QPushButton("Plot 2. Value / taxa / station and date")
         self.connect(self._addplot_2_button, QtCore.SIGNAL("clicked()"), self._addPlot_2)                
-        self._addplot_3_button = QtGui.QPushButton("Plot 3")
+        self._addplot_3_button = QtGui.QPushButton("(Plot 3)")
         self.connect(self._addplot_3_button, QtCore.SIGNAL("clicked()"), self._addPlot_3)                
-        self._addplot_4_button = QtGui.QPushButton("Plot 4")
+        self._addplot_4_button = QtGui.QPushButton("(Plot 4)")
         self.connect(self._addplot_4_button, QtCore.SIGNAL("clicked()"), self._addPlot_4)                
 
         # Layout widgets.
@@ -149,10 +149,11 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                         value = variablenode.getData(u"Value")
                         try:
 #                            value = float(value.replace(u' ', u'').replace(u',', u'.'))
-                            station_taxon_dict[stationname][taxonname] += value
+                            station_taxon_dict[stationname][taxonname] += float(value)
                         except:
                             print ("ERROR: Float conversion (1): Station: " + stationname + 
                                    " Taxon name: " + taxonname + " Value: " + unicode(variablenode.getData(u"Value")))
+                            ###raise
         # Step 5: Reorganize. 
         station_list = sorted(station_set)
         taxon_list = sorted(taxon_set)
@@ -291,7 +292,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
 #                            print ("ERROR: Float conversion (2): Station: " + stationname + 
                             print ("ERROR: Float conversion (2): Station: " + visit + 
                                    " Taxon name: " + taxonname + " Value: " + unicode(variablenode.getData(u"Value")))
-                            raise
+                            ###raise
         # Step 5: Reorganize. 
 #        station_list = sorted(station_set)
         visit_list = sorted(visit_set)

@@ -57,6 +57,3 @@ from datascreening.screening_manager import ScreeningManager
  
 # Module datareports: 
 from datareports.reports_manager import ReportsManager
- 
-# Module tests: 
-from tests.tests_manager import TestsManager
