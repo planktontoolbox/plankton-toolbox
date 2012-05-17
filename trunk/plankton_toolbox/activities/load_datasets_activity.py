@@ -443,23 +443,12 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         toolbox_datasets.ToolboxDatasets().clear()
 
     def _unloadMarkedDatasets(self):
-        """ """
-        
-        ###self.columnView.selectionModel().selection().indexes()
-        ###tableView->currentIndex()
-        ###tableView->selectionModel()->currentIndex()
-
         # Remove datasets, start with the last one. 
         rowcount = self._datasets_table.tablemodel.rowCount()
         for rowindex in range(rowcount):
-#            item = self._datasets_table.item(rowcount - rowindex - 1, 0)
-#            if item.checkState(): # Check if selected by user.
-            if self._datasets_table.selectionModel.isSelected(self._datasets_table.tablemodel.createIndex(rowindex, 0)): # Check if selected by user.
-                # TODO: envmonlib:
-                toolbox_datasets.ToolboxDatasets().removeDatasetByIndex(rowcount - rowindex - 1)
-
-                
-#                toolbox_datasets.ToolboxDatasets().removeDatasetByIndex(rowcount - rowindex - 1)
+            index = rowcount - rowindex - 1
+            if self._datasets_table.selectionModel.isSelected(self._datasets_table.tablemodel.createIndex(index, 0)): # Check if selected by user.
+                toolbox_datasets.ToolboxDatasets().removeDatasetByIndex(index)
 
     def _updateDatasetList(self):
         """ """
