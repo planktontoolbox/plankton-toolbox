@@ -65,19 +65,26 @@ class DataNode(object):
 
     def getChildren(self):
         """ """
-#        return self._children
+        return self._children
 
-        # Don't use empty children.
-        children = []
-        for child in self._children:
-            if child:
-                children.append(child)
-        return children
+### REMOVE, used for test.
+#        # Don't use empty children.
+#        children = []
+#        for child in self._children:
+#            if child:
+#                children.append(child)
+#        return children
 
-        
     def removeAllChildren(self):
         """ """
         self._children = []
+        
+    def removeChild(self, child_object):
+        """ """
+        if child_object in self._children: 
+            self._children.remove(child_object)
+        else:
+            print(u"DEBUG: Can't remove child.")
         
     def addData(self, key, value):
         """ """

@@ -80,7 +80,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         selectdatabox = QtGui.QGroupBox("", self)
         tabWidget = QtGui.QTabWidget()
         tabWidget.addTab(tab1.AnalyseDatasetsTab1().contentSelectDatasets(), "Select dataset(s)")
-        tabWidget.addTab(tab2.AnalyseDatasetsTab2().contentFilterData(), "Filter data")
+        tabWidget.addTab(tab2.AnalyseDatasetsTab2().contentPrepareData(), "Prepare data")
         tabWidget.addTab(tab3.AnalyseDatasetsTab3().contentAggregateData(), "Aggregate data")
         tabWidget.addTab(tab4.AnalyseDatasetsTab4().contentSelectData(), "Select data")
         tabWidget.addTab(tab5.AnalyseDatasetsTab5().contentPreparedGraphs(), "Prepared graphs")

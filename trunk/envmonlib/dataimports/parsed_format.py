@@ -87,13 +87,13 @@ class ParsedFormat(envmonlib.FormatBase):
 
     def _speciesByKey(self, taxon_name, key):
         """ """
-        return envmonlib.Taxa().getTaxonValue(key, taxon_name)
+        return envmonlib.Species().getTaxonValue(key, taxon_name)
 
     def _sizeclassByKey(self, taxon_name, size_class, key):
         """ """
 #        # TODO: For test:
 #        print("DEBUG: " + taxon_name)
-        return envmonlib.Taxa().getSizeclassValue(key, taxon_name, size_class)
+        return envmonlib.Species().getSizeclassValue(key, taxon_name, size_class)
 
     def _toStation(self, current_node, station_name, **more):
         """ """
