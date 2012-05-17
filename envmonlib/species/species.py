@@ -29,7 +29,7 @@ import json
 import envmonlib
 
 @envmonlib.singleton
-class Taxa(object):
+class Species(object):
     """ """
     def __init__(self,
                  taxa_filename = u'toolbox_data/species/taxa_utf16.txt', 
@@ -321,7 +321,7 @@ class Taxa(object):
         if (header[column] == u'Author'): return True
         if (header[column] == u'SFLAG'): return True
         if (header[column] == u'Stage'): return True
-        ###if (header[column] == u'Trophy'): return True
+        ###if (header[column] == u'Trophy'): return True # Will differ for Unicode and Flagelates.
         if (header[column] == u'Geometric shape'): return True
         if (header[column] == u'Formula'): return True
         return False # Related to size class.     

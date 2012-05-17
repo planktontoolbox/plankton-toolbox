@@ -162,6 +162,17 @@ class SelectableQListView(QtGui.QListView):
         #
         return selecteddata
 
+    def getNotSelectedDataList(self):
+        """ """
+        selecteddata = []
+        self._selected_data_list = []
+        for rowindex in range(self.tablemodel.rowCount()):
+            item = self.tablemodel.item(rowindex, 0)
+            if item.checkState() != QtCore.Qt.Checked:
+                selecteddata.append(unicode(item.text()))
+        #
+        return selecteddata
+
     def getSelectedIndexList(self):
         """ """
         selectedindexes = []
@@ -169,6 +180,17 @@ class SelectableQListView(QtGui.QListView):
         for rowindex in range(self.tablemodel.rowCount()):
             item = self.tablemodel.item(rowindex, 0)
             if item.checkState() == QtCore.Qt.Checked:
+                selectedindexes.append(rowindex)
+        #
+        return selectedindexes
+
+    def getNotSelectedIndexList(self):
+        """ """
+        selectedindexes = []
+        self._selected_data_list = []
+        for rowindex in range(self.tablemodel.rowCount()):
+            item = self.tablemodel.item(rowindex, 0)
+            if item.checkState() != QtCore.Qt.Checked:
                 selectedindexes.append(rowindex)
         #
         return selectedindexes

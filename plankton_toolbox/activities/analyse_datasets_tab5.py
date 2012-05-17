@@ -281,7 +281,12 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                         try:
 #                            value = float(value.replace(u' ', u'').replace(u',', u'.'))
 #                            station_taxon_dict[stationname][taxonname] += value
-                            visit_taxon_dict[visit][taxonname] += value
+
+                            
+                            
+                            
+#                            visit_taxon_dict[visit][taxonname] += value
+                            visit_taxon_dict[visit][taxonname] += float(value)
                         except:
 #                            print ("ERROR: Float conversion (2): Station: " + stationname + 
                             print ("ERROR: Float conversion (2): Station: " + visit + 

@@ -70,6 +70,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             "Family",
             "Genus",
             "Species" ])
+        self._aggregate_rank_list.setCurrentIndex(3) # Default: Class
         #  Aggregate over trophy.
         self._trophy_listview = utils_qt.SelectableQListView()
         self._trophy_listview.setMaximumHeight(80)
