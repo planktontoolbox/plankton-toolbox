@@ -44,8 +44,6 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         """ """
         # Tree dataset used for analysis. 
         self._currentdata = None
-        # Initialize parent.
-        super(AnalyseDatasetsActivity, self).__init__(name, parentwidget)
         # Filename used when saving data to file.
         self._lastuseddirectory = '.'
         # Initiate tab's.
@@ -55,6 +53,8 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         tab4.AnalyseDatasetsTab4().setMainActivity(self)
         tab5.AnalyseDatasetsTab5().setMainActivity(self)
         tab6.AnalyseDatasetsTab6().setMainActivity(self)
+        # Initialize parent.
+        super(AnalyseDatasetsActivity, self).__init__(name, parentwidget)
 
     def _createContent(self):
         """ """

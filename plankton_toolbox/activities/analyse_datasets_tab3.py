@@ -75,8 +75,10 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         self._trophy_listview = utils_qt.SelectableQListView()
         self._trophy_listview.setMaximumHeight(80)
         # Button.
-        self._aggregatecurrentdata_button = QtGui.QPushButton("Aggregate current data")
-        self.connect(self._aggregatecurrentdata_button, QtCore.SIGNAL("clicked()"), self._aggregateCurrentData)                
+        self._aggregatedata_button = QtGui.QPushButton("Aggregate data")
+        self.connect(self._aggregatedata_button, QtCore.SIGNAL("clicked()"), self._aggregateData)                
+        self._addmissingtaxa_button = QtGui.QPushButton("Add missing taxa in each sample")
+        self.connect(self._addmissingtaxa_button, QtCore.SIGNAL("clicked()"), self._addMissingTaxa)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         gridrow = 0
@@ -87,25 +89,28 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         label2 = QtGui.QLabel("Trophy:")
         form1.addWidget(label1, gridrow, 0, 1, 1)
         form1.addWidget(label2, gridrow, 1, 1, 3)
-        form1.addWidget(QtGui.QLabel(""), gridrow, 2, 1, 10) # Stretch.
+        form1.addWidget(QtGui.QLabel(""), gridrow, 2, 1, 6) # Stretch.
         gridrow += 1
         form1.addWidget(self._aggregate_rank_list, gridrow, 0, 1, 1)
         form1.addWidget(self._trophy_listview, gridrow, 1, 4, 3)
+        gridrow += 4
+        form1.addWidget(self._aggregatedata_button, gridrow, 3, 1, 1)
+        form1.addWidget(self._addmissingtaxa_button, gridrow, 10, 1, 1)
         #
-        hbox1 = QtGui.QHBoxLayout()
-        hbox1.addStretch(5)
-        hbox1.addWidget(self._aggregatecurrentdata_button)
+#        hbox1 = QtGui.QHBoxLayout()
+#        hbox1.addStretch(5)
+#        hbox1.addWidget(self._aggregatedata_button)
         #
         layout = QtGui.QVBoxLayout()
         layout.addWidget(introlabel)
         layout.addLayout(form1)
 #        layout.addStretch(5)
-        layout.addLayout(hbox1)
+#        layout.addLayout(hbox1)
         widget.setLayout(layout)                
         #
         return widget
 
-    def _aggregateCurrentData(self):
+    def _aggregateData(self):
         """ """
         try:
 #            if self._aggregate_rank_list.currentIndex() == 0:
@@ -182,3 +187,55 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         # Selection lists.
         self._trophy_listview.setList(sorted(trophyset))
             
+    def _addMissingTaxa(self):
+        """ """
+        try:
+            currentdata = self._main_activity.getCurrentData()
+            if not currentdata:        
+                return
+            # Step 1: Create lists of taxa (name and trophy) and parameters (parameter and unit).
+            parameter_set = set()
+            taxon_set = set()
+            for visitnode in currentdata.getChildren():
+                for samplenode in visitnode.getChildren():
+                    for variablenode in samplenode.getChildren():
+                        parameter = variablenode.getData(u"Parameter")
+                        unit = variablenode.getData(u"Unit")
+                        if parameter:
+                            parameter_set.add((parameter, unit))
+                        taxonname = variablenode.getData(u"Taxon name")
+                        trophy = variablenode.getData(u"Trophy")
+                        if taxonname:
+                            taxon_set.add((taxonname, trophy))
+            # Step 2: Create list with parameter-taxon pairs.
+            parameter_taxon_list = []
+            for parameterpair in parameter_set:
+                for taxonpair in taxon_set:
+                    parameter_taxon_list.append((parameterpair, taxonpair))
+            # Step 3: Iterate over samples. 
+            parameter_set = set()
+            taxon_set = set()
+            for visitnode in currentdata.getChildren():
+                for samplenode in visitnode.getChildren():
+                    sample_parameter_taxon_list = []
+                    for variablenode in samplenode.getChildren():
+                        parameter = variablenode.getData(u"Parameter")
+                        unit = variablenode.getData(u"Unit")
+                        taxon = variablenode.getData(u"Taxon name")
+                        trophy = variablenode.getData(u"Trophy")
+                        sample_parameter_taxon_list.append(((parameter, unit), (taxon, trophy)))
+                    # Add missing variables.
+                    for itempairs in parameter_taxon_list:
+                        if itempairs not in sample_parameter_taxon_list:
+                            variable = envmonlib.VariableNode()
+                            samplenode.addChild(variable)
+                            variable.addData(u"Taxon name", itempairs[1][0])
+                            variable.addData(u"Trophy", itempairs[1][1])
+                            variable.addData(u"Parameter", itempairs[0][0])
+                            variable.addData(u"Value", u'0.0')
+                            variable.addData(u"Unit", itempairs[0][1])
+                #
+                self._main_activity.updateCurrentData()    
+        except UserWarning, e:
+            QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
+

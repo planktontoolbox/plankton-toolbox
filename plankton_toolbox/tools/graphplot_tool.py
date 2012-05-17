@@ -39,6 +39,9 @@ from matplotlib.figure import Figure
 from matplotlib.dates import MonthLocator, WeekdayLocator, DateFormatter
 import matplotlib.dates as dates
 import matplotlib.ticker as ticker
+
+from matplotlib.font_manager import FontProperties
+
 # FOR TEST:
 from numpy import arange, sin, pi
 
@@ -234,74 +237,74 @@ class GraphPlotTool(tool_base.ToolBase):
     # === Private methods. ===    
     def _clearSelectedPlot(self):
         """ """
-#        #
-#        index = self._viewplot_list.currentIndex()
-#        # Time series.
-#        if index in [0]:
-#            for ix in [0, 1, 2, 3]:
-#                self._ax_timeseries[ix] = {'time':[], 'y':[]}
-#        elif index in [1, 2, 3, 4]:
-#            self._ax_timeseries[index - 1] = {'time':[], 'y':[]}
-#        # X/Y plots.
-#        elif index in [5]:
-#            for ix in [0, 1, 2, 3]:
-#                self._ax_xyplot[ix] = {'x':[], 'y':[]}
-#        elif index in [6, 7, 8, 9]:
-#            self._ax_xyplot[index - 6] = {'x':[], 'y':[]}
-#        #
-#        self._drawPlots()
+        #
+        index = self._viewplot_list.currentIndex()
+        # Time series.
+        if index in [0]:
+            for ix in [0, 1, 2, 3]:
+                self._ax_timeseries[ix] = {'time':[], 'y':[]}
+        elif index in [1, 2, 3, 4]:
+            self._ax_timeseries[index - 1] = {'time':[], 'y':[]}
+        # X/Y plots.
+        elif index in [5]:
+            for ix in [0, 1, 2, 3]:
+                self._ax_xyplot[ix] = {'x':[], 'y':[]}
+        elif index in [6, 7, 8, 9]:
+            self._ax_xyplot[index - 6] = {'x':[], 'y':[]}
+        #
+        self._drawPlots()
 
 
 
         
-        ### TEST TEST TEST
-        ### TEST TEST TEST
-        ### TEST TEST TEST
-        
-        
-        import numpy as np
-        import matplotlib.pyplot as plt
-        
-        N = 5
-        menMeans = (20, 35, 30, 35, 27)
-        menStd =   (2, 3, 4, 1, 2)
-        
-        ind = np.arange(N)  # the x locations for the groups
-        width = 0.35       # the width of the bars
-        
-#        fig = plt.figure()
-#        ax = fig.add_subplot(111)        
-#        self._figure = Figure()
-#        self._canvas = FigureCanvas(self._figure)        
-
-        ax = self._figure.add_subplot(111)        
-        
-        
-        rects1 = ax.bar(ind, menMeans, width, color='r', yerr=menStd)
-        
-        womenMeans = (25, 32, 34, 20, 25)
-        womenStd =   (3, 5, 2, 3, 3)
-        rects2 = ax.bar(ind+width, womenMeans, width, color='y', yerr=womenStd)
-        
-        # add some
-        ax.set_ylabel('Scores')
-        ax.set_title('Scores by group and gender')
-        ax.set_xticks(ind+width)
-        ax.set_xticklabels( ('G1', 'G2', 'G3', 'G4', 'G5') )
-        
-        ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
-        
-        def autolabel(rects):
-            # attach some text labels
-            for rect in rects:
-                height = rect.get_height()
-                ax.text(rect.get_x()+rect.get_width()/2., 1.05*height, '%d'%int(height),
-                        ha='center', va='bottom')
-        
-        autolabel(rects1)
-        autolabel(rects2)
-        
-        self._canvas.draw()
+#        ### TEST TEST TEST
+#        ### TEST TEST TEST
+#        ### TEST TEST TEST
+#        
+#        
+#        import numpy as np
+#        import matplotlib.pyplot as plt
+#        
+#        N = 5
+#        menMeans = (20, 35, 30, 35, 27)
+#        menStd =   (2, 3, 4, 1, 2)
+#        
+#        ind = np.arange(N)  # the x locations for the groups
+#        width = 0.35       # the width of the bars
+#        
+##        fig = plt.figure()
+##        ax = fig.add_subplot(111)        
+##        self._figure = Figure()
+##        self._canvas = FigureCanvas(self._figure)        
+#
+#        ax = self._figure.add_subplot(111)        
+#        
+#        
+#        rects1 = ax.bar(ind, menMeans, width, color='r', yerr=menStd)
+#        
+#        womenMeans = (25, 32, 34, 20, 25)
+#        womenStd =   (3, 5, 2, 3, 3)
+#        rects2 = ax.bar(ind+width, womenMeans, width, color='y', yerr=womenStd)
+#        
+#        # add some
+#        ax.set_ylabel('Scores')
+#        ax.set_title('Scores by group and gender')
+#        ax.set_xticks(ind+width)
+#        ax.set_xticklabels( ('G1', 'G2', 'G3', 'G4', 'G5') )
+#        
+#        ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
+#        
+#        def autolabel(rects):
+#            # attach some text labels
+#            for rect in rects:
+#                height = rect.get_height()
+#                ax.text(rect.get_x()+rect.get_width()/2., 1.05*height, '%d'%int(height),
+#                        ha='center', va='bottom')
+#        
+#        autolabel(rects1)
+#        autolabel(rects2)
+#        
+#        self._canvas.draw()
 
 
 
@@ -349,6 +352,16 @@ class GraphPlotTool(tool_base.ToolBase):
         if 'time' in self._ax_timeseries[plotindex]: 
             if len(self._ax_timeseries[plotindex]['time']) > 0: 
                 ax = self._figure.add_subplot(111)
+                
+                
+                        
+                ax.set_yscale('log')
+        
+        
+
+                
+                
+                
                 ax.plot(self._ax_timeseries[plotindex]['time'], self._ax_timeseries[plotindex]['y'], plotformat)
                 #
                 ax.set_xlim( self._ax_timeseries[plotindex]['time'][0], self._ax_timeseries[plotindex]['time'][-1] )
@@ -372,7 +385,7 @@ class GraphPlotTool(tool_base.ToolBase):
                 ax.xaxis.set_minor_formatter(dates.DateFormatter('%b'))
     
     
-                self._figure.autofmt_xdate()
+                self._figure.autofmt_xdate(rotation=30)
                 #
                 self._canvas.draw()
             
@@ -430,6 +443,7 @@ class GraphPlotTool(tool_base.ToolBase):
         
         
         
+        ax.set_yscale('log')
         
         
         
@@ -447,10 +461,43 @@ class GraphPlotTool(tool_base.ToolBase):
         ax.set_ylabel(parameter)
         ax.set_title(parameter)
         ax.set_xticks(ind + (width * len(taxon_list) * 0.5))
-        ax.set_xticklabels(station_list)
+        ax.set_xticklabels(station_list, rotation=20.0)
+        
+        for tl in ax.get_xticklabels():
+            tl.set_fontsize(10)
+#            tl.set_rotation(30)
+        
+        self._figure.subplots_adjust(bottom = 0.2, right = 0.8)        
+        
+        
+        fontP = FontProperties()
+        fontP.set_size('small')
+#        legend([plot1], "title", prop = fontP)
         
 #        ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
-        ax.legend(rects_list, taxon_list)
+#        ax.legend(rects_list, taxon_list, prop = fontP, loc='center left', bbox_to_anchor=(1, 0.5))
+        ax.legend(rects_list, taxon_list, prop = fontP, loc='upper left', bbox_to_anchor=(1.0, 1.0))
+        
+        ###ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))        
+        
+        
+#        # set some legend properties.  All the code below is optional.  The
+#        # defaults are usually sensible but if you need more control, this
+#        # shows you how
+#        leg = ax.get_legend()
+#        ltext  = leg.get_texts()  # all the text.Text instance in the legend
+#        llines = leg.get_lines()  # all the lines.Line2D instance in the legend
+#        frame  = leg.get_frame()  # the patch.Rectangle instance surrounding the legend
+#        
+#        # see text.Text, lines.Line2D, and patches.Rectangle for more info on
+#        # the settable properties of lines, text, and rectangles
+##        frame.set_facecolor('0.80')      # set the frame face color to light gray
+#        matplotlib.pyplot.setp(ltext, fontsize='small')    # the legend text fontsize
+#        matplotlib.pyplot.setp(llines, linewidth=1.5)      # the legend linewidth
+#        #leg.draw_frame(False)           # don't draw the legend frame
+        
+        
+        
         
 #        def autolabel(rects):
 #            # attach some text labels
