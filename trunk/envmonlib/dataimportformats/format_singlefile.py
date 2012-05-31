@@ -49,22 +49,8 @@ class FormatSingleFile(envmonlib.ParsedFormat):
                 parsercommand = parserrow.get(u'Command', u'')
                 if parsercommand:         
                     #
-                    parsercommand = self.replaceMethodKeywords(parsercommand)    
-#                    ### TODO: Replace:
-#                    # $Text(   --> self._asText(
-#                    # $Year(   --> self._asYear(
-#                    # $Datetime(   --> self._asDatetime(
-#                    # $Date(   --> self._asDate(
-#                    # $Time(   --> self._asTime(
-#                    # $Int(   --> self._asInt(
-#                    # $Float(   --> self._asFloat(
-#                    # $Position(   --> self._asPosition(
-#                    # $Station(   --> self._asStation(
-#                    # $Param(   --> self._asParam(
-#                    parsercommand = parsercommand.replace(u'$Text(', u'self._asText(')
-#                    parsercommand = parsercommand.replace(u'$Float(', u'self._asFloat(')
-#                    parsercommand = parsercommand.replace(u'$Species(', u'self._speciesByKey(')
-#                    parsercommand = parsercommand.replace(u'$Sizeclass(', u'self._sizeclassByKey(')
+                    parserkey = self.replaceMethodKeywords(parserkey, parsernode)    
+                    parsercommand = self.replaceMethodKeywords(parsercommand, parsernode)    
                     #
                     if parsernode == u'Dataset':
                         commandstring = u"dataset.addData('" + parserkey + u"', " + parsercommand + u")"
@@ -90,20 +76,25 @@ class FormatSingleFile(envmonlib.ParsedFormat):
 #                        variablekeycommand = compile(commandstring, '', 'exec')
                     #
                     elif parsernode == u'FUNCTION Dataset':
-                        parserkey = parserkey.replace(u'()', u'') # Remove () from function name and add later.
-                        commandstring = u"self._" + parserkey + u"(dataset, "  + parsercommand + u")"
+#                        parserkey = parserkey.replace(u'()', u'') # Remove () from function name and add later.
+#                        commandstring = u"self._" + parserkey + u"(dataset, "  + parsercommand + u")"
+                        commandstring = parserkey + parsercommand
                         self.appendParserCommand(commandstring)
                     elif parsernode == u'FUNCTION Visit':
-                        parserkey = parserkey.replace(u'()', u'') # Remove () from function name and add later.
-                        commandstring = u"self._" + parserkey + u"(currentvisit, "  + parsercommand + u")"
+#                        parserkey = parserkey.replace(u'()', u'') # Remove () from function name and add later.
+#                        commandstring = u"self._" + parserkey + u"(currentvisit, "  + parsercommand + u")"
+                        commandstring = parserkey + parsercommand
                         self.appendParserCommand(commandstring)
                     elif parsernode == u'FUNCTION Sample':
-                        parserkey = parserkey.replace(u'()', u'') # Remove () from function name and add later.
-                        commandstring = u"self._" + parserkey + u"(currentsample, "  + parsercommand + u")"
+#                        parserkey = parserkey.replace(u'()', u'') # Remove () from function name and add later.
+#                        commandstring = u"self._" + parserkey + u"(currentsample, "  + parsercommand + u")"
+                        commandstring = parserkey + parsercommand
                         self.appendParserCommand(commandstring)
                     elif parsernode == u'FUNCTION Variable':
                         parserkey = parserkey.replace(u'()', u'') # Remove () from function name and add later.
-                        commandstring = u"self._" + parserkey + u"(currentvariable, "  + parsercommand + u")"
+#                        commandstring = u"self._" + parserkey + u"(currentvariable, "  + parsercommand + u")"
+#                        commandstring = parserkey + u"(currentvariable, "  + parsercommand + u")"
+                        commandstring = parserkey + parsercommand
                         self.appendParserCommand(commandstring)
        
         except:

@@ -74,7 +74,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         self._parameter_list.setMinimumContentsLength(20)
         #
         # Prepared graphs.
-        self._addplot_1_button = QtGui.QPushButton("Plot 1. Aggreagated value / taxa / station")
+        self._addplot_1_button = QtGui.QPushButton("Plot 1. Aggreagated value / taxa / station (no filter)")
         self.connect(self._addplot_1_button, QtCore.SIGNAL("clicked()"), self._addPlot_1)                
         self._addplot_2_button = QtGui.QPushButton("Plot 2. Value / taxa / station and date")
         self.connect(self._addplot_2_button, QtCore.SIGNAL("clicked()"), self._addPlot_2)                
