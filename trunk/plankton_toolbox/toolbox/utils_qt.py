@@ -218,6 +218,12 @@ class ToolboxQTableView( QtGui.QTableView):
         self.setSelectionModel(self.selectionModel)
         self.resizeColumnsToContents()
           
+    def clear(self):
+        """ """
+        self.selectionModel.clear()
+        # Call same method in parent class.
+        super(ToolboxQTableView, self).clear()
+        
     def setTablemodel(self, model):
         """ Use this method if the default model should be replaced. """
         self.tablemodel = model

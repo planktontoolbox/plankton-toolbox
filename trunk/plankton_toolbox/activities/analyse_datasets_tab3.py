@@ -138,6 +138,8 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                                 newtaxon = u'Biota' # Biota is above kingdom in the taxonomic hierarchy. 
                             else:
                                 newtaxon = variablenode.getData(selected_taxon_rank) # Get taxon name for the selected rank.
+                                if not newtaxon:
+                                    newtaxon = selected_taxon_rank + u'-not-designated' # Use this if empty.
                             #
                             taxontrophy = variablenode.getData(u'Trophy')
                             if taxontrophy in selected_trophy_list:
