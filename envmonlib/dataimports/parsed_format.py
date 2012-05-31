@@ -34,7 +34,7 @@ class ParsedFormat(envmonlib.FormatBase):
         #
         self._parsercommands = []
     
-    def replaceMethodKeywords(self, parse_command):
+    def replaceMethodKeywords(self, parse_command, node_level = None):
         """ """
         command = parse_command
         #
@@ -42,6 +42,11 @@ class ParsedFormat(envmonlib.FormatBase):
         command = command.replace(u'$Float(', u'self._asFloat(')
         command = command.replace(u'$Species(', u'self._speciesByKey(')
         command = command.replace(u'$Sizeclass(', u'self._sizeclassByKey(')
+        #
+        if node_level == u'FUNCTION Sample':
+            command = command.replace(u'$CreateVariable(', u'self._createVariable(currentsample, ')
+        if node_level == u'FUNCTION Variable':
+            command = command.replace(u'$CopyVariable(', u'self._copyVariable(currentvariable, ')
         ### TODO: Also replace:
         # $Text(   --> self._asText(
         # $Year(   --> self._asYear(

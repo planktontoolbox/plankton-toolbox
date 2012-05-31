@@ -141,7 +141,9 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                             #
                             taxontrophy = variablenode.getData(u'Trophy')
                             if taxontrophy in selected_trophy_list:
-                                taxontrophy = selected_trophy_text # Concatenated string of ranks. 
+                                taxontrophy = selected_trophy_text # Concatenated string of ranks.
+                            else:
+                                continue # New: Use selected trophy only, don't use others.  
                             #
                             parameter = variablenode.getData(u'Parameter')
                             unit = variablenode.getData(u'Unit')
@@ -152,7 +154,8 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                             else:
                                 aggregatedvariables[agg_tuple] = value
                         except:
-                            print('DEBUG: Value not valid float: ' + unicode(variablenode.getData(u'Value')))
+                            if variablenode.getData(u'Value'):
+                                print('DEBUG: Value not valid float: ' + unicode(variablenode.getData(u'Value')))
                     #Remove all variables for this sample.
                     samplenode.removeAllChildren()
                     # Add the new aggregated variables instead.  
@@ -215,7 +218,9 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             # Step 3: Iterate over samples. 
             parameter_set = set()
             taxon_set = set()
+            #
             for visitnode in currentdata.getChildren():
+                #
                 for samplenode in visitnode.getChildren():
                     sample_parameter_taxon_list = []
                     for variablenode in samplenode.getChildren():
@@ -234,8 +239,8 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                             variable.addData(u"Parameter", itempairs[0][0])
                             variable.addData(u"Value", u'0.0')
                             variable.addData(u"Unit", itempairs[0][1])
-                #
-                self._main_activity.updateCurrentData()    
+            #
+            self._main_activity.updateCurrentData()    
         except UserWarning, e:
             QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
 
