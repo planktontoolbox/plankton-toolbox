@@ -46,15 +46,23 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         self._currentdata = None
         # Filename used when saving data to file.
         self._lastuseddirectory = '.'
-        # Initiate tab's.
-        tab1.AnalyseDatasetsTab1().setMainActivity(self)
-        tab2.AnalyseDatasetsTab2().setMainActivity(self)
-        tab3.AnalyseDatasetsTab3().setMainActivity(self)
-        tab4.AnalyseDatasetsTab4().setMainActivity(self)
-        tab5.AnalyseDatasetsTab5().setMainActivity(self)
-        tab6.AnalyseDatasetsTab6().setMainActivity(self)
+        # Create tab widgets.
+        self._tab1widget = tab1.AnalyseDatasetsTab1()
+        self._tab2widget = tab2.AnalyseDatasetsTab2()
+        self._tab3widget = tab3.AnalyseDatasetsTab3()
+        self._tab4widget = tab4.AnalyseDatasetsTab4()
+        self._tab5widget = tab5.AnalyseDatasetsTab5()
+        self._tab6widget = tab6.AnalyseDatasetsTab6()
+        # 
+        self._tab1widget.setMainActivity(self)
+        self._tab2widget.setMainActivity(self)
+        self._tab3widget.setMainActivity(self)
+        self._tab4widget.setMainActivity(self)
+        self._tab5widget.setMainActivity(self)
+        self._tab6widget.setMainActivity(self)
         # Initialize parent.
         super(AnalyseDatasetsActivity, self).__init__(name, parentwidget)
+
 
     def _createContent(self):
         """ """
@@ -79,12 +87,12 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         # Active widgets and connections.
         selectdatabox = QtGui.QGroupBox("", self)
         tabWidget = QtGui.QTabWidget()
-        tabWidget.addTab(tab1.AnalyseDatasetsTab1().contentSelectDatasets(), "Select dataset(s)")
-        tabWidget.addTab(tab2.AnalyseDatasetsTab2().contentPrepareData(), "Prepare data")
-        tabWidget.addTab(tab3.AnalyseDatasetsTab3().contentAggregateData(), "Aggregate data")
-        tabWidget.addTab(tab4.AnalyseDatasetsTab4().contentSelectData(), "Select data")
-        tabWidget.addTab(tab5.AnalyseDatasetsTab5().contentPreparedGraphs(), "Prepared graphs")
-        tabWidget.addTab(tab6.AnalyseDatasetsTab6().contentGenericGraphs(), "Generic graphs")
+        tabWidget.addTab(self._tab1widget.contentSelectDatasets(), "Select dataset(s)")
+        tabWidget.addTab(self._tab2widget.contentPrepareData(), "Prepare data")
+        tabWidget.addTab(self._tab3widget.contentAggregateData(), "Aggregate data")
+        tabWidget.addTab(self._tab4widget.contentSelectData(), "Select data")
+        tabWidget.addTab(self._tab5widget.contentPreparedGraphs(), "Prepared graphs")
+        tabWidget.addTab(self._tab6widget.contentGenericGraphs(), "Generic graphs")
         # Layout widgets.
         layout = QtGui.QVBoxLayout()
         layout.addWidget(tabWidget)
@@ -254,25 +262,25 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
 
     def clearAllTabs(self):
         """ """
-        tab1.AnalyseDatasetsTab1().clear()
-        tab2.AnalyseDatasetsTab2().clear()
-        tab3.AnalyseDatasetsTab3().clear()
-        tab4.AnalyseDatasetsTab4().clear()
-        tab5.AnalyseDatasetsTab5().clear()
-        tab6.AnalyseDatasetsTab6().clear()
+        self._tab1widget.clear()
+        self._tab2widget.clear()
+        self._tab3widget.clear()
+        self._tab4widget.clear()
+        self._tab5widget.clear()
+        self._tab6widget.clear()
 
     def updateAllTabs(self):
         """ """
-        tab1.AnalyseDatasetsTab1().update()
-        tab2.AnalyseDatasetsTab2().update()
-        tab3.AnalyseDatasetsTab3().update()
-        tab4.AnalyseDatasetsTab4().update()
-        tab5.AnalyseDatasetsTab5().update()
-        tab6.AnalyseDatasetsTab6().update()
+        self._tab1widget.update()
+        self._tab2widget.update()
+        self._tab3widget.update()
+        self._tab4widget.update()
+        self._tab5widget.update()
+        self._tab6widget.update()
 
     def getSelectDataDict(self):
         """ """
-        return tab4.AnalyseDatasetsTab4().getSelectDataDict()
+        return self._tab4widget.getSelectDataDict()
 
     def createSelectedTreeDataset(self):
         """ """
