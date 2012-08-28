@@ -29,11 +29,11 @@ import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import envmonlib
 
-@envmonlib.singleton
 class AnalyseDatasetsTab3(QtGui.QWidget):
     """ """
     def __init__(self):
         """ """
+        super(AnalyseDatasetsTab3, self).__init__()
 
     def setMainActivity(self, main_activity):
         """ """
@@ -51,7 +51,6 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
     # ===== TAB: Aggregate data ===== 
     def contentAggregateData(self):
         """ """
-        widget = QtGui.QWidget()
         # Active widgets and connections.
         introlabel = utils_qt.RichTextQLabel()
         introlabel.setText("""
@@ -106,9 +105,9 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         layout.addLayout(form1)
 #        layout.addStretch(5)
 #        layout.addLayout(hbox1)
-        widget.setLayout(layout)                
+        self.setLayout(layout)                
         #
-        return widget
+        return self
 
     def _aggregateData(self):
         """ """

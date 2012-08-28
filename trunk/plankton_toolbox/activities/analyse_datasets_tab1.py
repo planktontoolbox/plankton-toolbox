@@ -32,11 +32,11 @@ import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 import envmonlib
 
-@envmonlib.singleton
 class AnalyseDatasetsTab1(QtGui.QWidget):
     """ """
     def __init__(self):
         """ """
+        super(AnalyseDatasetsTab1, self).__init__()
 
     def setMainActivity(self, main_activity):
         """ """
@@ -51,7 +51,6 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
     # ===== TAB: Select dataset(s) ===== 
     def contentSelectDatasets(self):
         """ """
-        widget = QtGui.QWidget()
         # Active widgets and connections.
         introlabel = utils_qt.RichTextQLabel()
         introlabel.setText("""
@@ -84,9 +83,9 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
         layout.addWidget(loaded_datasets_listview)
 #        layout.addStretch(1)
         layout.addLayout(hbox1)
-        widget.setLayout(layout)                
+        self.setLayout(layout)                
         #
-        return widget
+        return self
 
     def _updateLoadedDatasetList(self):
         """ """

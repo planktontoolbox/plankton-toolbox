@@ -30,11 +30,11 @@ import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import envmonlib
 
-@envmonlib.singleton
 class AnalyseDatasetsTab2(QtGui.QWidget):
     """ """
     def __init__(self):
         """ """
+        super(AnalyseDatasetsTab2, self).__init__()
 
     def setMainActivity(self, main_activity):
         """ """
@@ -58,7 +58,6 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
     # ===== TAB: Prepare data ===== 
     def contentPrepareData(self):
         """ """
-        widget = QtGui.QWidget()
         # Active widgets and connections.
         introlabel = utils_qt.RichTextQLabel()
         introlabel.setText("""
@@ -105,9 +104,9 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
         layout.addWidget(introlabel)
         layout.addLayout(form1)
         layout.addStretch(5)
-        widget.setLayout(layout)                
+        self.setLayout(layout)                
         #
-        return widget
+        return self
 
     def _updateColumnContent(self, selected_row):
         """ """
