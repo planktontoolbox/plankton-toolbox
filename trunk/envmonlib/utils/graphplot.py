@@ -32,6 +32,9 @@ from matplotlib.figure import Figure
 from matplotlib.dates import MonthLocator, WeekdayLocator, DateFormatter
 import matplotlib.dates as dates
 import matplotlib.ticker as ticker
+import numpy
+import pylab # For color maps
+
 
 def graphplot_test():
     """ """
@@ -62,11 +65,19 @@ def graphplot_test():
                         x_label = u'X first',
                         y_label = u'Y first')
     graphdata_2.addPlot(plot_name = u"Second plot", 
-                        x_array = [4,5,6,7,8,9], 
-                        y_array = [2,3,2,4,1,9], 
+                        x_array = [4,5,6,7,8,9,10,11], 
+                        y_array = [2,3,2,4,1,9,2,1], 
                         x_label = u'X second',
                         y_label = u'Y second')
     #
+    
+    
+    
+#    graphdata_2.mergeData()
+#    return
+    
+    
+    
     graphdata_3 = PlotDataThreeVariables(
                         title = u"Three variable data object", 
                         x_label = u'X (three variable)',
@@ -99,9 +110,9 @@ def graphplot_test():
                         title = u"Two variable data object, string", 
                         x_label = u'X (two variables)',
                         y_label = u'Y (two variables)')
-    graphdata_4.addPlot(plot_name = u"First plot", 
-                        x_array = ['aa','bb','cc','dd','ee','ff'], 
-                        y_array = [20,30,20,40,10,90], 
+    graphdata_4.addPlot(plot_name = u"Dinophysis acuta", 
+                        x_array = [u'BY15',u'Släggö',u'cc','dd','ee'], 
+                        y_array = [10,30,5,5,1], 
                         x_label = u'X First',
                         y_label = u'Y First')
     graphdata_4.addPlot(plot_name = u"Second plot", 
@@ -110,8 +121,8 @@ def graphplot_test():
                         x_label = u'X Second',
                         y_label = u'Y Second')
     graphdata_4.addPlot(plot_name = u"Third plot", 
-                        x_array = ['aa','bb','cc','dd','ee','ff'], 
-                        y_array = [2,3,2,4,1,9], 
+                        x_array = ['AA','BB','cc','dd','ee','ff'], 
+                        y_array = [5,5,5,1,2,3], 
                         x_label = u'X Third',
                         y_label = u'Y Third')
     #
@@ -137,8 +148,9 @@ def graphplot_test():
     #
     #
     graph = BarGraph(graphdata_4)
+    graph.plotGraph(combined = True, y_log_scale = False)
     graph.plotGraph(combined = True, y_log_scale = True)
-    graph.plotGraph(combined = False, y_log_scale = True)
+    graph.plotGraph(combined = False, y_log_scale = False)
 
 
 class PlotData(object):
@@ -207,6 +219,36 @@ class PlotData(object):
         #
         return ymin, ymax
 
+    def mergeData(self):
+        """ Creates a common x array and add zero values for plots with no corresponding x value. """
+        
+        # Create a union list containing all x values.
+        x_union = []
+        for plotdict in self._plot_list:
+            x_union = list(set(x_union) | set(plotdict[u'X array'])) # List union
+        # Sort the list.                   
+        x_union.sort()
+
+        print (x_union)
+
+        for plotdict in self._plot_list:
+            newyarray = []
+            yarrayasdict = dict(zip(plotdict[u'X array'], plotdict[u'Y array']))
+            
+            print(yarrayasdict)
+            
+            for x in x_union:
+                if x in yarrayasdict:
+                    newyarray.append(yarrayasdict[x])
+                else:
+                    newyarray.append(0)        
+            #
+            print(yarrayasdict)
+            print (newyarray)
+            #
+            plotdict[u'X array'] = x_union[:]
+            plotdict[u'Y array'] = newyarray[:]
+        
 
 class PlotDataOneVariable(PlotData):
     """ """
@@ -460,19 +502,35 @@ class BarGraph(GraphBase):
         fig = pyplot.figure()
         #
         if combined:
-#            subplot = fig.add_subplot(111)
+            # All plots should have the same x axis items.
+            self._graph_data.mergeData()
+            # Get axes from first plot.
+            x_axis = plotlist[0][u'X array']
+            x_axis_positions = numpy.arange(len(x_axis))
+            # Set up width and color of bars.
+            barwidth = (1.0 / (len(plotlist))) * 0.7
+            colourcount = len(plotlist)
+            colourmap = pylab.get_cmap('Dark2')
+            #
             subplot = fig.add_subplot(111)
             #
             if y_log_scale:
                 subplot.set_yscale('log')
             #
-            for plotdict in plotlist:
-                subplot.bar(range(len(plotdict[u'X array'])), plotdict[u'Y array'])
+            for plotindex, plotdict in enumerate(plotlist):
+                #                
+                rect = subplot.bar(x_axis_positions + (plotindex * barwidth), 
+                                   plotdict[u'Y array'],
+                                   barwidth,
+                                   color=colourmap(1.0 * plotindex / colourcount))
             #
+            subplot.set_xticks(x_axis_positions + (barwidth * len(plotlist) * 0.5))
             subplot.set_xticklabels(plotdict[u'X array'], rotation=20.0)
             #
             leg = subplot.legend([data[u'Plot name'] for data in plotlist],
                             'upper center', shadow=True)
+#            leg = subplot.legend([data[u'Plot name'] for data in plotlist],
+#                            'upper left', shadow=True, bbox_to_anchor=(1.0, 1.0))
             #
             if self._graph_data.getPlotDataInfo()[u'Title']:
                 subplot.set_title(self._graph_data.getPlotDataInfo()[u'Title'])
@@ -484,7 +542,25 @@ class BarGraph(GraphBase):
             #
             pyplot.tight_layout()
             pyplot.show()
+#            
+#            for tl in ax.get_xticklabels():
+#                tl.set_fontsize(10)
+#            self._figure.subplots_adjust(bottom = 0.2, right = 0.8)        
+#            fontP = FontProperties()
+#            fontP.set_size('small')
+#            ax.legend(rects_list, taxon_list, prop = fontP, loc='upper left', bbox_to_anchor=(1.0, 1.0))
+            
         else:
+            # All plots should have the same x axis items.
+            self._graph_data.mergeData()
+            # Get axes from first plot.
+            x_axis = plotlist[0][u'X array']
+            x_axis_positions = numpy.arange(len(x_axis))
+            # Set up width and color of bars.
+            barwidth = 0.7
+            colourcount = len(plotlist)
+            colourmap = pylab.get_cmap('Dark2')
+            #
             subplotcount = len(plotlist)
             #  Get min/max-limits or concatenate x axis items.
             xmin = None
@@ -495,24 +571,55 @@ class BarGraph(GraphBase):
                 xmin, xmax = self._graph_data.getXMinMaxValues()
             #
             for plotindex, plotdict in enumerate(plotlist):
+            
                 subplot = fig.add_subplot(subplotcount, 1, plotindex + 1)    
                 #
                 if y_log_scale:
                     subplot.set_yscale('log')
                 #
-                subplot.bar(range(len(plotdict[u'X array'])), plotdict[u'Y array'])
+                rect = subplot.bar(x_axis_positions, 
+                                   plotdict[u'Y array'],
+                                   barwidth,
+                                   color=colourmap(1.0 * plotindex / colourcount))
                 #
+                subplot.set_xticks(x_axis_positions + (barwidth * 0.5))
                 subplot.set_xticklabels(plotdict[u'X array'], rotation=20.0)
-
-#                subplot.grid(False)
+                #
+#                leg = subplot.legend([data[u'Plot name'] for data in plotlist],
+#                                'upper center', shadow=True)
+                #
                 if (xmin != None) and (xmax != None):
                     subplot.set_xlim([xmin, xmax])
-#                subplot.set_ylim([-1,20])
                 #
                 subplot.set_title(plotdict[u'Plot name'])
                 # Use settings from first plot in list.
                 subplot.set_xlabel(plotdict[u'X label'])
                 subplot.set_ylabel(plotdict[u'Y label'])
+
+################                
+#                
+#                print('BAR')
+#                print(plotdict[u'X array'])
+#                print(plotdict[u'Y array'])
+#            
+#                subplot = fig.add_subplot(subplotcount, 1, plotindex + 1)    
+#                #
+#                if y_log_scale:
+#                    subplot.set_yscale('log')
+#                #
+#                subplot.bar(range(len(plotdict[u'X array'])), plotdict[u'Y array'])
+#                #
+#                subplot.set_xticklabels(plotdict[u'X array'], rotation=20.0)
+#
+##                subplot.grid(False)
+#                if (xmin != None) and (xmax != None):
+#                    subplot.set_xlim([xmin, xmax])
+##                subplot.set_ylim([-1,20])
+#                #
+#                subplot.set_title(plotdict[u'Plot name'])
+#                # Use settings from first plot in list.
+#                subplot.set_xlabel(plotdict[u'X label'])
+#                subplot.set_ylabel(plotdict[u'Y label'])
             #
             pyplot.tight_layout()
             pyplot.show()
