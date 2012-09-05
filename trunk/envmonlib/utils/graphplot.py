@@ -24,80 +24,66 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from mpl_toolkits.mplot3d import Axes3D
-
-import matplotlib
+import matplotlib.dates
 import matplotlib.pyplot as pyplot
-from matplotlib.figure import Figure
-from matplotlib.dates import MonthLocator, WeekdayLocator, DateFormatter
-import matplotlib.dates as dates
-import matplotlib.ticker as ticker
 import numpy
 import pylab # For color maps
-
+import datetime
 
 def graphplot_test():
     """ """
     print("Graph plot test...")
     #
-    graphdata_1 = PlotDataOneVariable(
+    plotdata_1 = PlotDataOneVariable(
                         title = u"One variable data object", 
                         x_label = u'X (one variable)',
                         y_label = u'Y (one variable)')
     
-    graphdata_1.addPlot(plot_name = u"First plot", 
+    plotdata_1.addPlot(plot_name = u"First plot", 
                         y_array = [2,3,2,4,1,9], 
                         y_label = u'Y first')
-    graphdata_1.addPlot(plot_name = u"Second plot", 
+    plotdata_1.addPlot(plot_name = u"Second plot", 
                         y_array = [1,2,3], 
                         y_label = u'Y second')
-    graphdata_1.addPlot(plot_name = u"Third plot", 
+    plotdata_1.addPlot(plot_name = u"Third plot", 
                         y_array = [12,10,6,3,9], 
                         y_label = u'Y third')
     #
-    graphdata_2 = PlotDataTwoVariables(
-                        title = u"Two variable data object", 
+    plotdata_2 = PlotDataTwoVariables(
+                        title = u"Two variables data object", 
                         x_label = u'X (two variable)',
                         y_label = u'Y (two variable)')
-    graphdata_2.addPlot(plot_name = u"First plot", 
+    plotdata_2.addPlot(plot_name = u"First plot", 
                         x_array = [1,2,5,6,7,8], 
                         y_array = [2,3,2,4,1,9], 
                         x_label = u'X first',
                         y_label = u'Y first')
-    graphdata_2.addPlot(plot_name = u"Second plot", 
+    plotdata_2.addPlot(plot_name = u"Second plot", 
                         x_array = [4,5,6,7,8,9,10,11], 
                         y_array = [2,3,2,4,1,9,2,1], 
                         x_label = u'X second',
                         y_label = u'Y second')
     #
-    
-    
-    
-#    graphdata_2.mergeData()
-#    return
-    
-    
-    
-    graphdata_3 = PlotDataThreeVariables(
-                        title = u"Three variable data object", 
+    plotdata_3 = PlotDataThreeVariables(
+                        title = u"Three variables data object", 
                         x_label = u'X (three variable)',
                         y_label = u'Y (three variable)',
                         z_label = u'Z (three variable)')
-    graphdata_3.addPlot(plot_name = u"First plot", 
+    plotdata_3.addPlot(plot_name = u"First plot", 
                         x_array = [1,2,5,6,7,8], 
                         y_array = [20,30,20,40,10,90], 
                         z_array = [10,10,80,20,30,30], 
                         x_label = u'X First',
                         y_label = u'Y First',
                         z_label = u'Z First')
-    graphdata_3.addPlot(plot_name = u"Second plot", 
+    plotdata_3.addPlot(plot_name = u"Second plot", 
                         x_array = [1,2,5,6,7,8], 
                         y_array = [2,3,2,4,1,9], 
                         z_array = [10,10,20,20,30,30], 
                         x_label = u'X Second',
                         y_label = u'Y Second',
                         z_label = u'Z Second')
-    graphdata_3.addPlot(plot_name = u"Third plot", 
+    plotdata_3.addPlot(plot_name = u"Third plot", 
                         x_array = [10,20,50,60,70,80], 
                         y_array = [2,3,2,4,1,9], 
                         z_array = [10,60,20,90,30,30], 
@@ -105,52 +91,89 @@ def graphplot_test():
                         y_label = u'Y Third',
                         z_label = u'Z Third')
     #
-    graphdata_4 = PlotDataTwoVariables(
+    plotdata_4 = PlotDataTwoVariables(
                         x_type = u'String',
-                        title = u"Two variable data object, string", 
+                        title = u"Two variables data object, string", 
                         x_label = u'X (two variables)',
                         y_label = u'Y (two variables)')
-    graphdata_4.addPlot(plot_name = u"Dinophysis acuta", 
+    plotdata_4.addPlot(plot_name = u"Dinophysis acuta", 
                         x_array = [u'BY15',u'Släggö',u'cc','dd','ee'], 
                         y_array = [10,30,5,5,1], 
                         x_label = u'X First',
                         y_label = u'Y First')
-    graphdata_4.addPlot(plot_name = u"Second plot", 
+    plotdata_4.addPlot(plot_name = u"Second plot", 
                         x_array = ['cc','dd','ee','ff', 'gg', 'hh'], 
                         y_array = [2,3,2,4,1,9], 
                         x_label = u'X Second',
                         y_label = u'Y Second')
-    graphdata_4.addPlot(plot_name = u"Third plot", 
+    plotdata_4.addPlot(plot_name = u"Third plot", 
                         x_array = ['AA','BB','cc','dd','ee','ff'], 
                         y_array = [5,5,5,1,2,3], 
                         x_label = u'X Third',
                         y_label = u'Y Third')
     #
-    #
-    graph = XYGraph(graphdata_1)
-    graph.plotGraph(combined = True, y_log_scale = True)
-    graph.plotGraph(combined = False, y_log_scale = True)
-    #
-    #
-    graph = XYGraph(graphdata_2)
-    graph.plotGraph(combined = True, y_log_scale = True)
-    graph.plotGraph(combined = False, y_log_scale = True)
-    #
-    #
-    graph = BarGraph(graphdata_2)
-    graph.plotGraph(combined = True, y_log_scale = True)
-    graph.plotGraph(combined = False, y_log_scale = True)
-    #
-    #
-    graph = ScatterGraph(graphdata_3)
-    graph.plotGraph(combined = True, y_log_scale = True)
-    graph.plotGraph(combined = False, y_log_scale = True)
+    plotdata_5 = PlotDataTwoVariables(
+                        x_type = u'Date',
+                        title = u"Two variables x:date", 
+                        x_label = u'X (date)',
+                        y_label = u'Y (two variable)')
+    plotdata_5.addPlot(plot_name = u"First plot", 
+                        x_array = [u'2012-03-07', u'2012-04-01', u'2012-05-10', u'2012-06-20'], 
+                        y_array = [2,4,1,9], 
+                        x_label = u'X first (date)',
+                        y_label = u'Y first')
+    plotdata_5.addPlot(plot_name = u"Second plot", 
+                        x_array = [u'2012-01-01', u'2012-02-01', u'2012-03-21', u'2012-04-01', u'2012-05-01', u'2012-06-01', u'2012-07-01', u'2012-08-01'], 
+                        y_array = [2,3,2,4,1,9,2,1], 
+                        x_label = u'X second (date)',
+                        y_label = u'Y second')
     #
     #
-    graph = BarGraph(graphdata_4)
-    graph.plotGraph(combined = True, y_log_scale = False)
-    graph.plotGraph(combined = True, y_log_scale = True)
-    graph.plotGraph(combined = False, y_log_scale = False)
+    graph = LineChart(plotdata_1)
+    graph.plotChart(combined = True, y_log_scale = True)
+    graph.plotChart(combined = False, y_log_scale = True)
+    #
+    #
+    graph = LineChart(plotdata_2)
+    graph.plotChart(combined = True, y_log_scale = True)
+    graph.plotChart(combined = False, y_log_scale = True)
+    #
+    #
+    graph = BarChart(plotdata_2)
+    graph.plotChart(combined = True, y_log_scale = False)
+    graph.plotChart(combined = True, y_log_scale = False, stacked = True)
+    graph.plotChart(combined = False, y_log_scale = True)
+    graph.plotChart(combined = False, y_log_scale = True, stacked = True)
+    #
+    #
+    graph = ScatterChart(plotdata_3)
+    graph.plotChart(combined = True, y_log_scale = False)
+    graph.plotChart(combined = False, y_log_scale = True)
+    #
+    #
+    graph = BarChart(plotdata_4)
+    graph.plotChart(combined = True, y_log_scale = False)
+    graph.plotChart(combined = True, y_log_scale = False, stacked = True)
+    graph.plotChart(combined = True, y_log_scale = False)
+    graph.plotChart(combined = True, y_log_scale = False, stacked = True)
+    graph.plotChart(combined = False, y_log_scale = False)
+    graph.plotChart(combined = False, y_log_scale = False, stacked = True)
+    #
+    graph = PieChart(plotdata_1)
+    graph.plotChart(combined = False, y_log_scale = False)
+    #
+    graph = PieChart(plotdata_2)
+    graph.plotChart(combined = False, y_log_scale = False)
+    #
+    graph = PieChart(plotdata_3)
+    graph.plotChart(combined = False, y_log_scale = False)
+    #
+    graph = PieChart(plotdata_4)
+    graph.plotChart(combined = False, y_log_scale = False)
+    #
+    graph = LineChart(plotdata_5)
+    graph.plotChart(combined = True, y_log_scale = True)
+    graph.plotChart(combined = False, y_log_scale = True)
 
 
 class PlotData(object):
@@ -191,7 +214,7 @@ class PlotData(object):
             else:
                 # x = position in array if x is missing.
                 xminvalue = 0
-                xmaxvalue = len(plotdict[u'Y array'])
+                xmaxvalue = len(plotdict[u'Y array']) - 1
             #
             if not xmin: xmin = xminvalue
             if not xmax: xmax = xmaxvalue
@@ -226,7 +249,7 @@ class PlotData(object):
         x_union = []
         for plotdict in self._plot_list:
             x_union = list(set(x_union) | set(plotdict[u'X array'])) # List union
-        # Sort the list.                   
+        # Sorts the list.                   
         x_union.sort()
 
         print (x_union)
@@ -257,12 +280,10 @@ class PlotDataOneVariable(PlotData):
                  title = u'', 
                  x_label = u'',
                  y_label = u'',
-                 x_type = u'Integer', # Integer, Float, String, Datetime.
+                 x_type = u'Integer', # Integer, Float, String, Date.
                  x_format = None,
-                 y_type = u'', # Integer, Float, String, Datetime.
-                 y_format = None,
-                 z_type = u'', # Integer, Float, String, Datetime.
-                 z_format = None):
+                 y_type = u'', # Integer, Float.
+                 y_format = None,):
         """ """
         super(PlotDataOneVariable, self).__init__()
         #
@@ -298,10 +319,8 @@ class PlotDataTwoVariables(PlotData):
                  y_label = u'',
                  x_type = u'', # Integer, Float, String, Datetime.
                  x_format = None,
-                 y_type = u'', # Integer, Float, String, Datetime.
-                 y_format = None,
-                 z_type = u'', # Integer, Float, String, Datetime.
-                 z_format = None):
+                 y_type = u'', # Integer, Float.
+                 y_format = None):
         """ """
         super(PlotDataTwoVariables, self).__init__()
         #
@@ -319,7 +338,7 @@ class PlotDataTwoVariables(PlotData):
                 y_array = [],
                 x_type = u'', # Integer, Float, String, Datetime.
                 x_format = None,
-                y_type = u'', # Integer, Float, String, Datetime.
+                y_type = u'', # Integer, Float.
                 y_format = None,
                 x_label = u'',
                 y_label = u''):
@@ -349,9 +368,9 @@ class PlotDataThreeVariables(PlotData):
                  z_label = u'',
                  x_type = u'', # Integer, Float, String, Datetime.
                  x_format = None,
-                 y_type = u'', # Integer, Float, String, Datetime.
+                 y_type = u'', # Integer, Float.
                  y_format = None,
-                 z_type = u'', # Integer, Float, String, Datetime.
+                 z_type = u'', # Integer, Float.
                  z_format = None):
         """ """
         super(PlotDataThreeVariables, self).__init__()
@@ -388,47 +407,51 @@ class PlotDataThreeVariables(PlotData):
         self._plot_list.append(plotdict)
 
 
-class GraphBase(object):
+class ChartBase(object):
     def __init__(self, graph_data):
         """ Abstract base class for  """
-        super(GraphBase, self).__init__()
+        super(ChartBase, self).__init__()
         #
         self._graph_data = graph_data
         #
-        self._settings = {}
-        self.default_settings()
+#        self._settings = {}
+#        self.default_settings()
 
-    def default_settings(self):
-        """ """
-        self._settings = {
-            "Title": None,
-            "X min": None,
-            "X max": None,
-            "Y min": None,
-            "Y max": None,
-            "X log": False,
-            "Y log": False,
+#    def default_settings(self):
+#        """ """
+#        self._settings = {
+#            "Title": None,
+#            "X min": None,
+#            "X max": None,
+#            "Y min": None,
+#            "Y max": None,
+#            "X log": False,
+#            "Y log": False,
 #            "Legend position": None,
 #            "Legend color map": None,
 #            "Font": None,
 #            "Font size": None,
-        }
+#        }
 
-    def getSettings(self):
-        """ """
-        return self._settings
+#    def getSettings(self):
+#        """ """
+#        return self._settings
     
-    def plotGraph(self):
-        """ """
-        
-class XYGraph(GraphBase):
+    def plotChart(self):
+        """ Abstract."""
+
+
+class LineChart(ChartBase):
     def __init__(self, graph_data):
         """ """
-        super(XYGraph, self).__init__(graph_data)
+        super(LineChart, self).__init__(graph_data)
 
-    def plotGraph(self, combined = False, y_log_scale = False):
+    def plotChart(self, 
+                  combined = False, 
+                  y_log_scale = False):
         """ """
         plotlist = self._graph_data.getPlotList()
+        x_type = self._graph_data.getPlotDataInfo()[u'X type']
         fig = pyplot.figure()
         #
         if combined:
@@ -437,14 +460,37 @@ class XYGraph(GraphBase):
             if y_log_scale:
                 subplot.set_yscale('log')
             #
-            for plotdict in plotlist:
-                if u'X array' in plotdict: 
-                    subplot.plot(plotdict[u'X array'], plotdict[u'Y array'])
+            markers = [u'o', u's', u'D', u'^', u'<']
+            colours = [u'r', u'b', u'g', u'y', u'b']
+            #
+            for plotindex, plotdict in enumerate(plotlist):
+                if x_type == u'Date':
+                    # Convert date strings.
+                    x_array = []
+                    for timestring in plotdict[u'X array']:
+                        try:
+                            time = datetime.datetime.strptime(timestring, '%Y-%m-%d')
+                        except: 
+                            time = datetime.datetime.strptime(timestring, '%Y-%m-%d %H:%M:%S')
+                        x_array.append(time)
+                    # 
+                    subplot.plot_date(x_array, plotdict[u'Y array'],
+                                      marker = markers[plotindex], c =  colours[plotindex])
+                    #
+                    subplot.xaxis.set_major_locator(matplotlib.dates.MonthLocator())
+                    subplot.xaxis.set_minor_locator(matplotlib.dates.WeekdayLocator())
+                    subplot.xaxis.set_major_formatter(matplotlib.dates.DateFormatter(u'%Y-%m-%d')) 
+                    #
+                    fig.autofmt_xdate(bottom = 0.2)                     
                 else:
-                    subplot.plot(plotdict[u'Y array'])
+                    if u'X array' in plotdict: 
+                        subplot.plot(plotdict[u'X array'], plotdict[u'Y array'])
+                    else:
+                        subplot.plot(plotdict[u'Y array'])
             #
             leg = subplot.legend([data[u'Plot name'] for data in plotlist],
-                            'upper center', shadow=True)
+                                 loc='best', fancybox=True)
+            leg.get_frame().set_alpha(0.5)
             #
             if self._graph_data.getPlotDataInfo()[u'Title']:
                 subplot.set_title(self._graph_data.getPlotDataInfo()[u'Title'])
@@ -461,26 +507,46 @@ class XYGraph(GraphBase):
             #  Get min/max-limits or concatenate x axis items.
             xmin = None
             xmax = None
-            if self._graph_data.getPlotDataInfo()[u'X type'] == u'String':
-                """ """
-            else:
-                xmin, xmax = self._graph_data.getXMinMaxValues()
+            if x_type == u'String':
+                self._graph_data.mergeData()
+            #
+            share_x_axis = None
             #
             for plotindex, plotdict in enumerate(plotlist):
-                subplot = fig.add_subplot(subplotcount, 1, plotindex + 1)    
+                subplot = fig.add_subplot(subplotcount, 1, plotindex + 1, sharex = share_x_axis)
+                if not share_x_axis: share_x_axis = subplot    
                 #
                 if y_log_scale:
                     subplot.set_yscale('log')
                 #
-                if u'X array' in plotdict: 
-                    subplot.plot(plotdict[u'X array'], plotdict[u'Y array'])
+                if x_type == u'Date':
+                    # Convert date strings.
+                    x_array = []
+                    for timestring in plotdict[u'X array']:
+                        try:
+                            time = datetime.datetime.strptime(timestring, '%Y-%m-%d')
+                        except: 
+                            time = datetime.datetime.strptime(timestring, '%Y-%m-%d %H:%M:%S')
+                        x_array.append(time)
+                    # 
+                    subplot.plot_date(x_array, plotdict[u'Y array'])
+                    #
+                    subplot.xaxis.set_major_locator(matplotlib.dates.MonthLocator())
+                    subplot.xaxis.set_minor_locator(matplotlib.dates.WeekdayLocator())
+                    subplot.xaxis.set_major_formatter(matplotlib.dates.DateFormatter(u'%Y-%m-%d')) 
+                    #
+                    fig.autofmt_xdate(bottom = 0.2)                     
                 else:
-                    subplot.plot(plotdict[u'Y array'])
-
+                    if u'X array' in plotdict:
+                        subplot.plot(plotdict[u'X array'], plotdict[u'Y array'])
+                    else:
+                        subplot.plot(plotdict[u'Y array']) 
+                    #
+                    if (xmin != None) and (xmax != None):
+                        subplot.set_xlim([xmin, xmax])
+                #
+                subplot.axis(u'auto')
 #                subplot.grid(False)
-                if (xmin != None) and (xmax != None):
-                    subplot.set_xlim([xmin, xmax])
-#                subplot.set_ylim([-1,20])
                 #
                 subplot.set_title(plotdict[u'Plot name'])
                 # Use settings from first plot in list.
@@ -491,14 +557,18 @@ class XYGraph(GraphBase):
             pyplot.show()
 
 
-class BarGraph(GraphBase):
+class BarChart(ChartBase):
     def __init__(self, graph_data):
         """ """
-        super(BarGraph, self).__init__(graph_data)
+        super(BarChart, self).__init__(graph_data)
 
-    def plotGraph(self, combined = False, y_log_scale = False):
+    def plotChart(self, 
+                  combined = False, 
+                  y_log_scale = False,
+                  stacked = False):
         """ """
         plotlist = self._graph_data.getPlotList()
+        x_type = self._graph_data.getPlotDataInfo()[u'X type']
         fig = pyplot.figure()
         #
         if combined:
@@ -512,25 +582,35 @@ class BarGraph(GraphBase):
             colourcount = len(plotlist)
             colourmap = pylab.get_cmap('Dark2')
             #
+#            subplot = fig.add_subplot(111)
             subplot = fig.add_subplot(111)
             #
             if y_log_scale:
                 subplot.set_yscale('log')
+            #        
+            accumulatedplots = [0] * len(x_axis) # For stacked bars.
             #
             for plotindex, plotdict in enumerate(plotlist):
-                #                
-                rect = subplot.bar(x_axis_positions + (plotindex * barwidth), 
-                                   plotdict[u'Y array'],
-                                   barwidth,
-                                   color=colourmap(1.0 * plotindex / colourcount))
+                #
+                if stacked:
+                    rect = subplot.bar(x_axis_positions, 
+                                       plotdict[u'Y array'],
+                                       0.7,
+                                       color=colourmap(1.0 * plotindex / colourcount),
+                                       bottom = accumulatedplots)
+                    accumulatedplots = [(x + y) for x, y in zip(accumulatedplots, plotdict[u'Y array'])] # For stacked bars.
+                else:                        
+                    rect = subplot.bar(x_axis_positions + (plotindex * barwidth),
+                                       plotdict[u'Y array'],
+                                       barwidth,
+                                       color=colourmap(1.0 * plotindex / colourcount))
             #
             subplot.set_xticks(x_axis_positions + (barwidth * len(plotlist) * 0.5))
             subplot.set_xticklabels(plotdict[u'X array'], rotation=20.0)
             #
             leg = subplot.legend([data[u'Plot name'] for data in plotlist],
-                            'upper center', shadow=True)
-#            leg = subplot.legend([data[u'Plot name'] for data in plotlist],
-#                            'upper left', shadow=True, bbox_to_anchor=(1.0, 1.0))
+                                 loc='best', fancybox=True)
+            leg.get_frame().set_alpha(0.5)
             #
             if self._graph_data.getPlotDataInfo()[u'Title']:
                 subplot.set_title(self._graph_data.getPlotDataInfo()[u'Title'])
@@ -542,14 +622,6 @@ class BarGraph(GraphBase):
             #
             pyplot.tight_layout()
             pyplot.show()
-#            
-#            for tl in ax.get_xticklabels():
-#                tl.set_fontsize(10)
-#            self._figure.subplots_adjust(bottom = 0.2, right = 0.8)        
-#            fontP = FontProperties()
-#            fontP.set_size('small')
-#            ax.legend(rects_list, taxon_list, prop = fontP, loc='upper left', bbox_to_anchor=(1.0, 1.0))
-            
         else:
             # All plots should have the same x axis items.
             self._graph_data.mergeData()
@@ -565,14 +637,15 @@ class BarGraph(GraphBase):
             #  Get min/max-limits or concatenate x axis items.
             xmin = None
             xmax = None
-            if self._graph_data.getPlotDataInfo()[u'X type'] == u'String':
-                """ """
-            else:
-                xmin, xmax = self._graph_data.getXMinMaxValues()
+            if x_type == u'String':
+                self._graph_data.mergeData()
+            #
+            share_x_axis = None
             #
             for plotindex, plotdict in enumerate(plotlist):
             
-                subplot = fig.add_subplot(subplotcount, 1, plotindex + 1)    
+                subplot = fig.add_subplot(subplotcount, 1, plotindex + 1, sharex = share_x_axis)    
+                if not share_x_axis: share_x_axis = subplot    
                 #
                 if y_log_scale:
                     subplot.set_yscale('log')
@@ -585,54 +658,58 @@ class BarGraph(GraphBase):
                 subplot.set_xticks(x_axis_positions + (barwidth * 0.5))
                 subplot.set_xticklabels(plotdict[u'X array'], rotation=20.0)
                 #
-#                leg = subplot.legend([data[u'Plot name'] for data in plotlist],
-#                                'upper center', shadow=True)
-                #
-                if (xmin != None) and (xmax != None):
-                    subplot.set_xlim([xmin, xmax])
+                subplot.axis(u'auto')
                 #
                 subplot.set_title(plotdict[u'Plot name'])
                 # Use settings from first plot in list.
                 subplot.set_xlabel(plotdict[u'X label'])
                 subplot.set_ylabel(plotdict[u'Y label'])
-
-################                
-#                
-#                print('BAR')
-#                print(plotdict[u'X array'])
-#                print(plotdict[u'Y array'])
-#            
-#                subplot = fig.add_subplot(subplotcount, 1, plotindex + 1)    
-#                #
-#                if y_log_scale:
-#                    subplot.set_yscale('log')
-#                #
-#                subplot.bar(range(len(plotdict[u'X array'])), plotdict[u'Y array'])
-#                #
-#                subplot.set_xticklabels(plotdict[u'X array'], rotation=20.0)
-#
-##                subplot.grid(False)
-#                if (xmin != None) and (xmax != None):
-#                    subplot.set_xlim([xmin, xmax])
-##                subplot.set_ylim([-1,20])
-#                #
-#                subplot.set_title(plotdict[u'Plot name'])
-#                # Use settings from first plot in list.
-#                subplot.set_xlabel(plotdict[u'X label'])
-#                subplot.set_ylabel(plotdict[u'Y label'])
             #
             pyplot.tight_layout()
             pyplot.show()
 
 
-class ScatterGraph(GraphBase):
+class PieChart(ChartBase):
     def __init__(self, graph_data):
         """ """
-        super(ScatterGraph, self).__init__(graph_data)
+        super(PieChart, self).__init__(graph_data)
         
-    def plotGraph(self, combined = False, y_log_scale = False):
+    def plotChart(self, 
+                  combined = False, 
+                  y_log_scale = False):
+        """ """
+        #
+        plotlist = self._graph_data.getPlotList()
+        fig = pyplot.figure()
+        #
+        subplotcount = len(plotlist)
+        #
+        for plotindex, plotdict in enumerate(plotlist):
+            subplot = fig.add_subplot(subplotcount, 1, plotindex + 1)
+            if u'X array' in plotdict:    
+                subplot.pie(plotdict[u'Y array'], labels=plotdict[u'X array'])
+            else:
+                subplot.pie(plotdict[u'Y array'])
+#                subplot.pie(plotdict[u'Y array'], labels=plotdict[u'X array'], autopct='%1.1f%%', shadow=True)
+            subplot.axis(u'equal')
+            #
+            subplot.set_title(plotdict[u'Plot name'])
+        #
+        pyplot.tight_layout()
+        pyplot.show()
+
+                
+class ScatterChart(ChartBase):
+    def __init__(self, graph_data):
+        """ """
+        super(ScatterChart, self).__init__(graph_data)
+        
+    def plotChart(self, 
+                  combined = False, 
+                  y_log_scale = False):
         """ """
         plotlist = self._graph_data.getPlotList()
+        x_type = self._graph_data.getPlotDataInfo()[u'X type']
         fig = pyplot.figure()
         #
         if combined:
@@ -648,7 +725,8 @@ class ScatterGraph(GraphBase):
                                 marker = markers[plotindex], c =  colours[plotindex])
             #
             leg = subplot.legend([data[u'Plot name'] for data in plotlist],
-                            'upper center', shadow=True)
+                                 loc='best', fancybox=True)
+            leg.get_frame().set_alpha(0.5)
             #
             if self._graph_data.getPlotDataInfo()[u'Title']:
                 subplot.set_title(self._graph_data.getPlotDataInfo()[u'Title'])
@@ -662,29 +740,25 @@ class ScatterGraph(GraphBase):
             pyplot.show()
         else:
             subplotcount = len(plotlist)
-            #  Get min/max-limits or concatenate x axis items.
-            xmin = None
-            xmax = None
-            if self._graph_data.getPlotDataInfo()[u'X type'] == u'String':
-                """ """
-            else:
-                xmin, xmax = self._graph_data.getXMinMaxValues()
+            #  Concatenate x axis items if they contains texts.
+            if x_type == u'String':
+                self._graph_data.mergeData()
+            #
+            share_x_axis = None
             #
             markers = [u'o', u's', u'D', u'^', u'<']
             colours = [u'r', u'b', u'g', u'y', u'b']
             for plotindex, plotdict in enumerate(plotlist):
-                subplot = fig.add_subplot(subplotcount, 1, plotindex + 1)    
+                subplot = fig.add_subplot(subplotcount, 1, plotindex + 1, sharex = share_x_axis)    
+                if not share_x_axis: share_x_axis = subplot    
                 #
                 if y_log_scale:
                     subplot.set_yscale('log')
                 #
                 subplot.scatter(plotdict[u'X array'], plotdict[u'Y array'], s = plotdict[u'Z array'], 
                                 marker = markers[plotindex], c =  colours[plotindex])
-
-#                subplot.grid(False)
-                if (xmin != None) and (xmax != None):
-                    subplot.set_xlim([xmin, xmax])
-#                subplot.set_ylim([-1,20])
+                #
+                subplot.axis(u'auto')
                 #
                 subplot.set_title(plotdict[u'Plot name'])
                 # Use settings from first plot in list.
