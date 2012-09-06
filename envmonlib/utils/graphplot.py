@@ -25,7 +25,7 @@
 # THE SOFTWARE.
 
 import matplotlib.dates
-import matplotlib.pyplot as pyplot
+#import matplotlib.pyplot as pyplot
 import numpy
 import pylab # For color maps
 import datetime
@@ -165,9 +165,6 @@ def graphplot_test():
     graph = PieChart(plotdata_2)
     graph.plotChart(combined = False, y_log_scale = False)
     #
-    graph = PieChart(plotdata_3)
-    graph.plotChart(combined = False, y_log_scale = False)
-    #
     graph = PieChart(plotdata_4)
     graph.plotChart(combined = False, y_log_scale = False)
     #
@@ -252,13 +249,13 @@ class PlotData(object):
         # Sorts the list.                   
         x_union.sort()
 
-        print (x_union)
+#        print (x_union)
 
         for plotdict in self._plot_list:
             newyarray = []
             yarrayasdict = dict(zip(plotdict[u'X array'], plotdict[u'Y array']))
             
-            print(yarrayasdict)
+#            print(yarrayasdict)
             
             for x in x_union:
                 if x in yarrayasdict:
@@ -266,8 +263,8 @@ class PlotData(object):
                 else:
                     newyarray.append(0)        
             #
-            print(yarrayasdict)
-            print (newyarray)
+#            print(yarrayasdict)
+#            print (newyarray)
             #
             plotdict[u'X array'] = x_union[:]
             plotdict[u'Y array'] = newyarray[:]
@@ -295,6 +292,12 @@ class PlotDataOneVariable(PlotData):
         self._plotdata_info[u'Y type'] = y_type
         self._plotdata_info[u'Y format'] = y_format
         
+    def getAvailableCharts(self):
+        """ """
+        return {
+                u'Line chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
+                }
+
     def addPlot(self,
                 plot_name = u'', 
                 y_array = [],
@@ -332,6 +335,15 @@ class PlotDataTwoVariables(PlotData):
         self._plotdata_info[u'Y type'] = y_type
         self._plotdata_info[u'Y format'] = y_format
         
+    def getAvailableCharts(self):
+        """ """
+        return {
+                u'Line chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
+                u'Bar chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
+                u'Scatter chart': {u'Parameters': [u'combined', u'y_log_scale']},
+                u'Pie chart': {u'Parameters': []},
+                }
+
     def addPlot(self,
                 plot_name = u'', 
                 x_array = [],
@@ -386,6 +398,14 @@ class PlotDataThreeVariables(PlotData):
         self._plotdata_info[u'Z type'] = z_type
         self._plotdata_info[u'Z format'] = z_format
         
+    def getAvailableCharts(self):
+        """ """
+        return {
+                u'Line chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
+                u'Bar chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
+                u'Scatter chart': {u'Parameters': [u'combined', u'y_log_scale']},
+                }
+
     def addPlot(self,
                 plot_name = u'', 
                 x_array = [],
@@ -408,6 +428,7 @@ class PlotDataThreeVariables(PlotData):
 
 
 class ChartBase(object):
+    """ """
     def __init__(self, graph_data):
         """ Abstract base class for  """
         super(ChartBase, self).__init__()
@@ -442,9 +463,11 @@ class ChartBase(object):
 
 
 class LineChart(ChartBase):
-    def __init__(self, graph_data):
+    """ """
+    def __init__(self, graph_data, figure = None):
         """ """
         super(LineChart, self).__init__(graph_data)
+        self._figure = figure
 
     def plotChart(self, 
                   combined = False, 
@@ -452,7 +475,13 @@ class LineChart(ChartBase):
         """ """
         plotlist = self._graph_data.getPlotList()
         x_type = self._graph_data.getPlotDataInfo()[u'X type']
-        fig = pyplot.figure()
+        #
+        if self._figure:
+            fig = self._figure
+        else:
+            # Use pyplot for tests.
+            import matplotlib.pyplot as pyplot    
+            fig = pyplot.figure()
         #
         if combined:
             subplot = fig.add_subplot(111)
@@ -558,9 +587,11 @@ class LineChart(ChartBase):
 
 
 class BarChart(ChartBase):
-    def __init__(self, graph_data):
+    """ """
+    def __init__(self, graph_data, figure = None):
         """ """
         super(BarChart, self).__init__(graph_data)
+        self._figure = figure
 
     def plotChart(self, 
                   combined = False, 
@@ -569,7 +600,13 @@ class BarChart(ChartBase):
         """ """
         plotlist = self._graph_data.getPlotList()
         x_type = self._graph_data.getPlotDataInfo()[u'X type']
-        fig = pyplot.figure()
+        #
+        if self._figure:
+            fig = self._figure
+        else:
+            # Use pyplot for tests.
+            import matplotlib.pyplot as pyplot    
+            fig = pyplot.figure()
         #
         if combined:
             # All plots should have the same x axis items.
@@ -620,8 +657,9 @@ class BarChart(ChartBase):
             subplot.set_xlabel(self._graph_data.getPlotDataInfo()[u'X label'])
             subplot.set_ylabel(self._graph_data.getPlotDataInfo()[u'Y label'])
             #
-            pyplot.tight_layout()
-            pyplot.show()
+            if not self._figure:
+                pyplot.tight_layout()
+                pyplot.show()
         else:
             # All plots should have the same x axis items.
             self._graph_data.mergeData()
@@ -665,14 +703,17 @@ class BarChart(ChartBase):
                 subplot.set_xlabel(plotdict[u'X label'])
                 subplot.set_ylabel(plotdict[u'Y label'])
             #
-            pyplot.tight_layout()
-            pyplot.show()
+            if not self._figure:
+                pyplot.tight_layout()
+                pyplot.show()
 
 
 class PieChart(ChartBase):
-    def __init__(self, graph_data):
+    """ """
+    def __init__(self, graph_data, figure = None):
         """ """
         super(PieChart, self).__init__(graph_data)
+        self._figure = figure
         
     def plotChart(self, 
                   combined = False, 
@@ -680,7 +721,13 @@ class PieChart(ChartBase):
         """ """
         #
         plotlist = self._graph_data.getPlotList()
-        fig = pyplot.figure()
+        #
+        if self._figure:
+            fig = self._figure
+        else:
+            # Use pyplot for tests.
+            import matplotlib.pyplot as pyplot    
+            fig = pyplot.figure()
         #
         subplotcount = len(plotlist)
         #
@@ -700,9 +747,11 @@ class PieChart(ChartBase):
 
                 
 class ScatterChart(ChartBase):
-    def __init__(self, graph_data):
+    """ """
+    def __init__(self, graph_data, figure = None):
         """ """
         super(ScatterChart, self).__init__(graph_data)
+        self._figure = figure
         
     def plotChart(self, 
                   combined = False, 
@@ -710,7 +759,13 @@ class ScatterChart(ChartBase):
         """ """
         plotlist = self._graph_data.getPlotList()
         x_type = self._graph_data.getPlotDataInfo()[u'X type']
-        fig = pyplot.figure()
+        #
+        if self._figure:
+            fig = self._figure
+        else:
+            # Use pyplot for tests.
+            import matplotlib.pyplot as pyplot    
+            fig = pyplot.figure()
         #
         if combined:
             subplot = fig.add_subplot(111)
