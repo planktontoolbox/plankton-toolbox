@@ -29,6 +29,9 @@ import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.tools.tool_base as tool_base
+
+import envmonlib
+
 #
 import matplotlib
 matplotlib.use('Qt4Agg')
@@ -410,106 +413,143 @@ class GraphPlotTool(tool_base.ToolBase):
 
 
 
-
-    def addTestPlot(self, parameter, station_list, taxon_list, taxon_station_value_list):
+    def addTestPlot_NEW(self, data_object = None, chart_type = u'Bar chart'):
         """ """
-        import numpy as np
-#        import matplotlib.pyplot as plt
-        
         # Clear all plots before redrawing.
         self._figure.clear()
         self._canvas.draw()
 
+#        plotdata_4 = envmonlib.PlotDataTwoVariables(
+#                            x_type = u'String',
+#                            title = u"Two variables data object, string", 
+#                            x_label = u'X (two variables)',
+#                            y_label = u'Y (two variables)')
+#        plotdata_4.addPlot(plot_name = u"Dinophysis acuta", 
+#                            x_array = [u'BY15',u'Släggö',u'cc','dd','ee'], 
+#                            y_array = [10,30,5,5,1], 
+#                            x_label = u'X First',
+#                            y_label = u'Y First')
+#        plotdata_4.addPlot(plot_name = u"Second plot", 
+#                            x_array = ['cc','dd','ee','ff', 'gg', 'hh'], 
+#                            y_array = [2,3,2,4,1,9], 
+#                            x_label = u'X Second',
+#                            y_label = u'Y Second')
+#        plotdata_4.addPlot(plot_name = u"Third plot", 
+#                            x_array = ['AA','BB','cc','dd','ee','ff'], 
+#                            y_array = [5,5,5,1,2,3], 
+#                            x_label = u'X Third',
+#                            y_label = u'Y Third')
         
-        N = len(station_list)
-        ind = np.arange(N)  # the x locations for the groups
-        width = (1.0 / (len(taxon_list))) * 0.7       # the width of the bars
-        
-        ax = self._figure.add_subplot(111)
-        
-        
-        import pylab
-        NUM_COLORS = len(taxon_list)
-        
-#        cm = pylab.get_cmap('gist_rainbow')
-#        cm = pylab.get_cmap('Set1')
-#        cm = pylab.get_cmap('Set2')
-        cm = pylab.get_cmap('Dark2')
-#        for i in range(NUM_COLORS):
-#            color = cm(1.*i/NUM_COLORS)  # color will now be an RGBA tuple
-#        
-#        # or if you really want a generator:
-#        cgen = (cm(1.*i/NUM_COLORS) for i in range(NUM_COLORS))        
-        
-        
-        
-        ax.set_yscale('log')
-        
-        
-        
-
-        rects_list = []                        
-        for taxonindex, taxon in enumerate(taxon_list):
-#            rects = ax.bar(ind + (taxonindex * width), taxon_station_value_list[taxonindex], width, color='r')
-            rects = ax.bar(ind + (taxonindex * width), taxon_station_value_list[taxonindex], width, 
-                           color=cm(1.0 * taxonindex / NUM_COLORS))
-#            rects = ax.bar(ind + (taxonindex * width), taxon_station_value_list[taxonindex], width)
-            rects_list.append(rects[0])
-        
-        
-        # add some
-        ax.set_ylabel(parameter)
-        ax.set_title(parameter)
-        ax.set_xticks(ind + (width * len(taxon_list) * 0.5))
-        ax.set_xticklabels(station_list, rotation=20.0)
-        
-        for tl in ax.get_xticklabels():
-            tl.set_fontsize(10)
-#            tl.set_rotation(30)
-        
-        self._figure.subplots_adjust(bottom = 0.2, right = 0.8)        
-        
-        
-        fontP = FontProperties()
-        fontP.set_size('small')
-#        legend([plot1], "title", prop = fontP)
-        
-#        ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
-#        ax.legend(rects_list, taxon_list, prop = fontP, loc='center left', bbox_to_anchor=(1, 0.5))
-        ax.legend(rects_list, taxon_list, prop = fontP, loc='upper left', bbox_to_anchor=(1.0, 1.0))
-        
-        ###ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))        
-        
-        
-#        # set some legend properties.  All the code below is optional.  The
-#        # defaults are usually sensible but if you need more control, this
-#        # shows you how
-#        leg = ax.get_legend()
-#        ltext  = leg.get_texts()  # all the text.Text instance in the legend
-#        llines = leg.get_lines()  # all the lines.Line2D instance in the legend
-#        frame  = leg.get_frame()  # the patch.Rectangle instance surrounding the legend
-#        
-#        # see text.Text, lines.Line2D, and patches.Rectangle for more info on
-#        # the settable properties of lines, text, and rectangles
-##        frame.set_facecolor('0.80')      # set the frame face color to light gray
-#        matplotlib.pyplot.setp(ltext, fontsize='small')    # the legend text fontsize
-#        matplotlib.pyplot.setp(llines, linewidth=1.5)      # the legend linewidth
-#        #leg.draw_frame(False)           # don't draw the legend frame
-        
-        
-        
-        
-#        def autolabel(rects):
-#            # attach some text labels
-#            for rect in rects:
-#                height = rect.get_height()
-#                ax.text(rect.get_x()+rect.get_width()/2., 1.05*height, '%d'%int(height),
-#                        ha='center', va='bottom')
-#        
-#        autolabel(rects1)
-#        autolabel(rects2)
+        graph = envmonlib.BarChart(data_object, figure = self._figure)
+        graph.plotChart(combined = False, y_log_scale = False, stacked = False)
         
         self._canvas.draw()
+        
+        
+        
+        
+        
+        
+    def addTestPlot(self, parameter, station_list, taxon_list, taxon_station_value_list):
+        """ """
+        
+#        import numpy as np
+##        import matplotlib.pyplot as plt
+#        
+#        # Clear all plots before redrawing.
+#        self._figure.clear()
+#        self._canvas.draw()
+#
+#        
+#        N = len(station_list)
+#        ind = np.arange(N)  # the x locations for the groups
+#        width = (1.0 / (len(taxon_list))) * 0.7       # the width of the bars
+#        
+#        ax = self._figure.add_subplot(111)
+#        
+#        
+#        import pylab
+#        NUM_COLORS = len(taxon_list)
+#        
+##        cm = pylab.get_cmap('gist_rainbow')
+##        cm = pylab.get_cmap('Set1')
+##        cm = pylab.get_cmap('Set2')
+#        cm = pylab.get_cmap('Dark2')
+##        for i in range(NUM_COLORS):
+##            color = cm(1.*i/NUM_COLORS)  # color will now be an RGBA tuple
+##        
+##        # or if you really want a generator:
+##        cgen = (cm(1.*i/NUM_COLORS) for i in range(NUM_COLORS))        
+#        
+#        
+#        
+#        ax.set_yscale('log')
+#        
+#        
+#        
+#
+#        rects_list = []                        
+#        for taxonindex, taxon in enumerate(taxon_list):
+##            rects = ax.bar(ind + (taxonindex * width), taxon_station_value_list[taxonindex], width, color='r')
+#            rects = ax.bar(ind + (taxonindex * width), taxon_station_value_list[taxonindex], width, 
+#                           color=cm(1.0 * taxonindex / NUM_COLORS))
+##            rects = ax.bar(ind + (taxonindex * width), taxon_station_value_list[taxonindex], width)
+#            rects_list.append(rects[0])
+#        
+#        
+#        # add some
+#        ax.set_ylabel(parameter)
+#        ax.set_title(parameter)
+#        ax.set_xticks(ind + (width * len(taxon_list) * 0.5))
+#        ax.set_xticklabels(station_list, rotation=20.0)
+#        
+#        for tl in ax.get_xticklabels():
+#            tl.set_fontsize(10)
+##            tl.set_rotation(30)
+#        
+#        self._figure.subplots_adjust(bottom = 0.2, right = 0.8)        
+#        
+#        
+#        fontP = FontProperties()
+#        fontP.set_size('small')
+##        legend([plot1], "title", prop = fontP)
+#        
+##        ax.legend( (rects1[0], rects2[0]), ('Men', 'Women') )
+##        ax.legend(rects_list, taxon_list, prop = fontP, loc='center left', bbox_to_anchor=(1, 0.5))
+#        ax.legend(rects_list, taxon_list, prop = fontP, loc='upper left', bbox_to_anchor=(1.0, 1.0))
+#        
+#        ###ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))        
+#        
+#        
+##        # set some legend properties.  All the code below is optional.  The
+##        # defaults are usually sensible but if you need more control, this
+##        # shows you how
+##        leg = ax.get_legend()
+##        ltext  = leg.get_texts()  # all the text.Text instance in the legend
+##        llines = leg.get_lines()  # all the lines.Line2D instance in the legend
+##        frame  = leg.get_frame()  # the patch.Rectangle instance surrounding the legend
+##        
+##        # see text.Text, lines.Line2D, and patches.Rectangle for more info on
+##        # the settable properties of lines, text, and rectangles
+###        frame.set_facecolor('0.80')      # set the frame face color to light gray
+##        matplotlib.pyplot.setp(ltext, fontsize='small')    # the legend text fontsize
+##        matplotlib.pyplot.setp(llines, linewidth=1.5)      # the legend linewidth
+##        #leg.draw_frame(False)           # don't draw the legend frame
+#        
+#        
+#        
+#        
+##        def autolabel(rects):
+##            # attach some text labels
+##            for rect in rects:
+##                height = rect.get_height()
+##                ax.text(rect.get_x()+rect.get_width()/2., 1.05*height, '%d'%int(height),
+##                        ha='center', va='bottom')
+##        
+##        autolabel(rects1)
+##        autolabel(rects2)
+#        
+#        self._canvas.draw()
         
     
 

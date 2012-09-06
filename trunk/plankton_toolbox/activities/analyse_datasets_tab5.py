@@ -292,22 +292,53 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                             print ("ERROR: Float conversion (2): Station: " + visit + 
                                    " Taxon name: " + taxonname + " Value: " + unicode(variablenode.getData(u"Value")))
                             ###raise
-        # Step 5: Reorganize. 
-#        station_list = sorted(station_set)
+        
+        # Step 5: Reorganize.
+    
+        
         visit_list = sorted(visit_set)
         taxon_list = sorted(taxon_set)
-#        taxon_station_value_list = []
-        taxon_visit_value_list = []
+        #
+        plotdata = envmonlib.PlotDataTwoVariables(
+                                x_type = u'String',
+                                title = u"Taxa per station and date", 
+                                x_label = u'Station',
+                                y_label = selectedparameter)
+        #
         for taxonindex, taxon in enumerate(taxon_list):
-#            taxon_station_value_list.append([])
-            taxon_visit_value_list.append([])
-#            for stationindex, station in enumerate(station_list):
+            taxon_visit_value_list = []
             for stationindex, station in enumerate(visit_list):
-#                taxon_station_value_list[taxonindex].append(station_taxon_dict[station][taxon])
-                taxon_visit_value_list[taxonindex].append(visit_taxon_dict[station][taxon])
+                taxon_visit_value_list.append(visit_taxon_dict[station][taxon])
+            # 
+            plotdata.addPlot(plot_name = taxon, 
+                                x_array = visit_list, 
+                                y_array = taxon_visit_value_list, 
+                                x_label = station,
+                                y_label = selectedparameter)
         # Step 6: Plot
-#        graphtool.addTestPlot(selectedparameter, station_list, taxon_list, taxon_station_value_list)
-        graphtool.addTestPlot(selectedparameter, visit_list, taxon_list, taxon_visit_value_list)
+        
+#        graphtool.addTestPlot(selectedparameter, visit_list, taxon_list, taxon_visit_value_list)
+        graphtool.addTestPlot_NEW(data_object = plotdata, chart_type = u'Bar chart')
+        
+        
+        
+        
+         
+##        station_list = sorted(station_set)
+#        visit_list = sorted(visit_set)
+#        taxon_list = sorted(taxon_set)
+##        taxon_station_value_list = []
+#        taxon_visit_value_list = []
+#        for taxonindex, taxon in enumerate(taxon_list):
+##            taxon_station_value_list.append([])
+#            taxon_visit_value_list.append([])
+##            for stationindex, station in enumerate(station_list):
+#            for stationindex, station in enumerate(visit_list):
+##                taxon_station_value_list[taxonindex].append(station_taxon_dict[station][taxon])
+#                taxon_visit_value_list[taxonindex].append(visit_taxon_dict[station][taxon])
+#        # Step 6: Plot
+##        graphtool.addTestPlot(selectedparameter, station_list, taxon_list, taxon_station_value_list)
+#        graphtool.addTestPlot(selectedparameter, visit_list, taxon_list, taxon_visit_value_list)
                 
             
         
