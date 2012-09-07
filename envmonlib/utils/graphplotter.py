@@ -24,13 +24,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import matplotlib.dates
-#import matplotlib.pyplot as pyplot
 import numpy
-import pylab # For color maps
 import datetime
+import matplotlib.dates as mpl_dates
+import matplotlib.font_manager as mpl_font_manager
+import pylab # For color maps
 
-def graphplot_test():
+
+def graphplotter_test():
     """ """
     print("Graph plot test...")
     #
@@ -196,9 +197,17 @@ class PlotData(object):
         """ """
         return self._plot_list
     
+    def setPlotList(self, plot_list):
+        """ """
+        self._plot_list = plot_list
+    
     def getPlotDataInfo(self):
         """ """
         return self._plotdata_info
+    
+    def setPlotDataInfo(self, plotdata_info):
+        """ """
+        self._plotdata_info = plotdata_info
     
     def getXMinMaxValues(self):
         """ """
@@ -273,6 +282,13 @@ class PlotData(object):
 class PlotDataOneVariable(PlotData):
     """ """
     
+    @staticmethod
+    def getAvailableCharts():
+        """ """
+        return {
+                u'Line chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
+                }
+
     def __init__(self,
                  title = u'', 
                  x_label = u'',
@@ -291,12 +307,6 @@ class PlotDataOneVariable(PlotData):
         self._plotdata_info[u'X format'] = x_format
         self._plotdata_info[u'Y type'] = y_type
         self._plotdata_info[u'Y format'] = y_format
-        
-    def getAvailableCharts(self):
-        """ """
-        return {
-                u'Line chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
-                }
 
     def addPlot(self,
                 plot_name = u'', 
@@ -316,6 +326,16 @@ class PlotDataOneVariable(PlotData):
 class PlotDataTwoVariables(PlotData):
     """ """
     
+    @staticmethod
+    def getAvailableCharts(self):
+        """ """
+        return {
+                u'Line chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
+                u'Bar chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
+                u'Scatter chart': {u'Parameters': [u'combined', u'y_log_scale']},
+                u'Pie chart': {u'Parameters': []},
+                }
+
     def __init__(self,
                  title = u'', 
                  x_label = u'',
@@ -335,15 +355,6 @@ class PlotDataTwoVariables(PlotData):
         self._plotdata_info[u'Y type'] = y_type
         self._plotdata_info[u'Y format'] = y_format
         
-    def getAvailableCharts(self):
-        """ """
-        return {
-                u'Line chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
-                u'Bar chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
-                u'Scatter chart': {u'Parameters': [u'combined', u'y_log_scale']},
-                u'Pie chart': {u'Parameters': []},
-                }
-
     def addPlot(self,
                 plot_name = u'', 
                 x_array = [],
@@ -373,6 +384,15 @@ class PlotDataTwoVariables(PlotData):
 class PlotDataThreeVariables(PlotData):
     """ """
     
+    @staticmethod
+    def getAvailableCharts(self):
+        """ """
+        return {
+                u'Line chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
+                u'Bar chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
+                u'Scatter chart': {u'Parameters': [u'combined', u'y_log_scale']},
+                }
+
     def __init__(self,
                  title = u'', 
                  x_label = u'',
@@ -398,14 +418,6 @@ class PlotDataThreeVariables(PlotData):
         self._plotdata_info[u'Z type'] = z_type
         self._plotdata_info[u'Z format'] = z_format
         
-    def getAvailableCharts(self):
-        """ """
-        return {
-                u'Line chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
-                u'Bar chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
-                u'Scatter chart': {u'Parameters': [u'combined', u'y_log_scale']},
-                }
-
     def addPlot(self,
                 plot_name = u'', 
                 x_array = [],
@@ -459,8 +471,8 @@ class ChartBase(object):
 #        return self._settings
     
     def plotChart(self):
-        """ Abstract."""
-
+        """ Abstract. """
+        raise NotImplementedError("Please implement plotChart() in subclass. ")
 
 class LineChart(ChartBase):
     """ """
@@ -506,9 +518,9 @@ class LineChart(ChartBase):
                     subplot.plot_date(x_array, plotdict[u'Y array'],
                                       marker = markers[plotindex], c =  colours[plotindex])
                     #
-                    subplot.xaxis.set_major_locator(matplotlib.dates.MonthLocator())
-                    subplot.xaxis.set_minor_locator(matplotlib.dates.WeekdayLocator())
-                    subplot.xaxis.set_major_formatter(matplotlib.dates.DateFormatter(u'%Y-%m-%d')) 
+                    subplot.xaxis.set_major_locator(mpl_dates.MonthLocator())
+                    subplot.xaxis.set_minor_locator(mpl_dates.WeekdayLocator())
+                    subplot.xaxis.set_major_formatter(mpl_dates.DateFormatter(u'%Y-%m-%d')) 
                     #
                     fig.autofmt_xdate(bottom = 0.2)                     
                 else:
@@ -517,8 +529,10 @@ class LineChart(ChartBase):
                     else:
                         subplot.plot(plotdict[u'Y array'])
             #
+            font_properties = mpl_font_manager.FontProperties()
+            font_properties.set_size('small')
             leg = subplot.legend([data[u'Plot name'] for data in plotlist],
-                                 loc='best', fancybox=True)
+                                 loc='best', fancybox=True, prop = font_properties)
             leg.get_frame().set_alpha(0.5)
             #
             if self._graph_data.getPlotDataInfo()[u'Title']:
@@ -529,8 +543,9 @@ class LineChart(ChartBase):
             subplot.set_xlabel(self._graph_data.getPlotDataInfo()[u'X label'])
             subplot.set_ylabel(self._graph_data.getPlotDataInfo()[u'Y label'])
             #
-            pyplot.tight_layout()
-            pyplot.show()
+            if not self._figure:
+                pyplot.tight_layout()
+                pyplot.show()
         else:
             subplotcount = len(plotlist)
             #  Get min/max-limits or concatenate x axis items.
@@ -560,9 +575,9 @@ class LineChart(ChartBase):
                     # 
                     subplot.plot_date(x_array, plotdict[u'Y array'])
                     #
-                    subplot.xaxis.set_major_locator(matplotlib.dates.MonthLocator())
-                    subplot.xaxis.set_minor_locator(matplotlib.dates.WeekdayLocator())
-                    subplot.xaxis.set_major_formatter(matplotlib.dates.DateFormatter(u'%Y-%m-%d')) 
+                    subplot.xaxis.set_major_locator(mpl_dates.MonthLocator())
+                    subplot.xaxis.set_minor_locator(mpl_dates.WeekdayLocator())
+                    subplot.xaxis.set_major_formatter(mpl_dates.DateFormatter(u'%Y-%m-%d')) 
                     #
                     fig.autofmt_xdate(bottom = 0.2)                     
                 else:
@@ -582,8 +597,9 @@ class LineChart(ChartBase):
                 subplot.set_xlabel(plotdict[u'X label'])
                 subplot.set_ylabel(plotdict[u'Y label'])
             #
-            pyplot.tight_layout()
-            pyplot.show()
+            if not self._figure:
+                pyplot.tight_layout()
+                pyplot.show()
 
 
 class BarChart(ChartBase):
@@ -642,11 +658,14 @@ class BarChart(ChartBase):
                                        barwidth,
                                        color=colourmap(1.0 * plotindex / colourcount))
             #
-            subplot.set_xticks(x_axis_positions + (barwidth * len(plotlist) * 0.5))
-            subplot.set_xticklabels(plotdict[u'X array'], rotation=20.0)
+###            subplot.set_xticks(x_axis_positions + (barwidth * len(plotlist) * 0.5))
+            subplot.set_xticks(x_axis_positions)
+            subplot.set_xticklabels(plotdict[u'X array'], rotation = 20.0)
             #
-            leg = subplot.legend([data[u'Plot name'] for data in plotlist],
-                                 loc='best', fancybox=True)
+            font_properties = mpl_font_manager.FontProperties()
+            font_properties.set_size('small')
+            leg = subplot.legend([data[u'Plot name'] for data in plotlist], 
+                                 loc='best', fancybox=True, prop = font_properties)
             leg.get_frame().set_alpha(0.5)
             #
             if self._graph_data.getPlotDataInfo()[u'Title']:
@@ -693,7 +712,8 @@ class BarChart(ChartBase):
                                    barwidth,
                                    color=colourmap(1.0 * plotindex / colourcount))
                 #
-                subplot.set_xticks(x_axis_positions + (barwidth * 0.5))
+##                subplot.set_xticks(x_axis_positions + (barwidth * 0.5))
+                subplot.set_xticks(x_axis_positions)
                 subplot.set_xticklabels(plotdict[u'X array'], rotation=20.0)
                 #
                 subplot.axis(u'auto')
@@ -742,8 +762,9 @@ class PieChart(ChartBase):
             #
             subplot.set_title(plotdict[u'Plot name'])
         #
-        pyplot.tight_layout()
-        pyplot.show()
+            if not self._figure:
+                pyplot.tight_layout()
+                pyplot.show()
 
                 
 class ScatterChart(ChartBase):
@@ -779,8 +800,10 @@ class ScatterChart(ChartBase):
                 subplot.scatter(plotdict[u'X array'], plotdict[u'Y array'], s = plotdict[u'Z array'], 
                                 marker = markers[plotindex], c =  colours[plotindex])
             #
+            font_properties = mpl_font_manager.FontProperties()
+            font_properties.set_size('small')
             leg = subplot.legend([data[u'Plot name'] for data in plotlist],
-                                 loc='best', fancybox=True)
+                                 loc='best', fancybox=True, prop = font_properties)
             leg.get_frame().set_alpha(0.5)
             #
             if self._graph_data.getPlotDataInfo()[u'Title']:
@@ -791,8 +814,9 @@ class ScatterChart(ChartBase):
             subplot.set_xlabel(self._graph_data.getPlotDataInfo()[u'X label'])
             subplot.set_ylabel(self._graph_data.getPlotDataInfo()[u'Y label'])
             #
-            pyplot.tight_layout()
-            pyplot.show()
+            if not self._figure:
+                pyplot.tight_layout()
+                pyplot.show()
         else:
             subplotcount = len(plotlist)
             #  Concatenate x axis items if they contains texts.
@@ -820,10 +844,11 @@ class ScatterChart(ChartBase):
                 subplot.set_xlabel(plotdict[u'X label'])
                 subplot.set_ylabel(plotdict[u'Y label'])
             #
-            pyplot.tight_layout()
-            pyplot.show()
+            if not self._figure:
+                pyplot.tight_layout()
+                pyplot.show()
 
                 
 if __name__ == "__main__":
-    graphplot_test()
+    graphplotter_test()
 
