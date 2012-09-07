@@ -189,7 +189,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
             return
         #
         tool_manager.ToolManager().showToolByName(u'Graph plot') # Show tool if hidden.
-        graphtool = tool_manager.ToolManager().getToolByName(u'Graph plot')
+        graphtool = tool_manager.ToolManager().getToolByName(u'Graph plotter')
 
 #       # Step 1: Create lists of stations and taxa.
         # Step 1: Create lists of visits and taxa.
@@ -316,9 +316,9 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                                 x_label = station,
                                 y_label = selectedparameter)
         # Step 6: Plot
-        
-#        graphtool.addTestPlot(selectedparameter, visit_list, taxon_list, taxon_visit_value_list)
-        graphtool.addTestPlot_NEW(data_object = plotdata, chart_type = u'Bar chart')
+        graphtool.setChartSelection(chart = u"Bar chart",
+                                    combined = True, stacked = False, y_log_scale = False)
+        graphtool.setPlotData(plotdata)
         
         
         

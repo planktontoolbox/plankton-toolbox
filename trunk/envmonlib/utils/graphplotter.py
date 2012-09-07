@@ -26,6 +26,7 @@
 
 import numpy
 import datetime
+import copy
 import matplotlib.dates as mpl_dates
 import matplotlib.font_manager as mpl_font_manager
 import pylab # For color maps
@@ -250,17 +251,18 @@ class PlotData(object):
 
     def mergeData(self):
         """ Creates a common x array and add zero values for plots with no corresponding x value. """
-        
+        # Copy the plot list.
+        plotlist = copy.deepcopy(self._plot_list)
         # Create a union list containing all x values.
         x_union = []
-        for plotdict in self._plot_list:
+        for plotdict in plotlist:
             x_union = list(set(x_union) | set(plotdict[u'X array'])) # List union
         # Sorts the list.                   
         x_union.sort()
 
 #        print (x_union)
 
-        for plotdict in self._plot_list:
+        for plotdict in plotlist:
             newyarray = []
             yarrayasdict = dict(zip(plotdict[u'X array'], plotdict[u'Y array']))
             
@@ -275,9 +277,10 @@ class PlotData(object):
 #            print(yarrayasdict)
 #            print (newyarray)
             #
-            plotdict[u'X array'] = x_union[:]
-            plotdict[u'Y array'] = newyarray[:]
-        
+            plotdict[u'X array'] = x_union
+            plotdict[u'Y array'] = newyarray      
+        #
+        return plotlist
 
 class PlotDataOneVariable(PlotData):
     """ """
@@ -492,7 +495,7 @@ class LineChart(ChartBase):
             fig = self._figure
         else:
             # Use pyplot for tests.
-            import matplotlib.pyplot as pyplot    
+            import matplotlib.pyplot as pyplot
             fig = pyplot.figure()
         #
         if combined:
@@ -502,7 +505,11 @@ class LineChart(ChartBase):
                 subplot.set_yscale('log')
             #
             markers = [u'o', u's', u'D', u'^', u'<']
-            colours = [u'r', u'b', u'g', u'y', u'b']
+            colors = ['b', 'r', 'c', 'm', 'k', 'g', 'y']
+#            symbols = ['-', '--', '-.', ':']
+            markers_len = len(markers)
+            colors_len = len(colors)
+#            symbols_len = len(symbols)
             #
             for plotindex, plotdict in enumerate(plotlist):
                 if x_type == u'Date':
@@ -516,7 +523,7 @@ class LineChart(ChartBase):
                         x_array.append(time)
                     # 
                     subplot.plot_date(x_array, plotdict[u'Y array'],
-                                      marker = markers[plotindex], c =  colours[plotindex])
+                                      marker = markers[plotindex % markers_len], c =  colors[plotindex % colors_len])
                     #
                     subplot.xaxis.set_major_locator(mpl_dates.MonthLocator())
                     subplot.xaxis.set_minor_locator(mpl_dates.WeekdayLocator())
@@ -548,11 +555,6 @@ class LineChart(ChartBase):
                 pyplot.show()
         else:
             subplotcount = len(plotlist)
-            #  Get min/max-limits or concatenate x axis items.
-            xmin = None
-            xmax = None
-            if x_type == u'String':
-                self._graph_data.mergeData()
             #
             share_x_axis = None
             #
@@ -585,9 +587,6 @@ class LineChart(ChartBase):
                         subplot.plot(plotdict[u'X array'], plotdict[u'Y array'])
                     else:
                         subplot.plot(plotdict[u'Y array']) 
-                    #
-                    if (xmin != None) and (xmax != None):
-                        subplot.set_xlim([xmin, xmax])
                 #
                 subplot.axis(u'auto')
 #                subplot.grid(False)
@@ -623,10 +622,10 @@ class BarChart(ChartBase):
             # Use pyplot for tests.
             import matplotlib.pyplot as pyplot    
             fig = pyplot.figure()
+        # All plots should have the same x axis items. 
+        plotlist = self._graph_data.mergeData()        
         #
         if combined:
-            # All plots should have the same x axis items.
-            self._graph_data.mergeData()
             # Get axes from first plot.
             x_axis = plotlist[0][u'X array']
             x_axis_positions = numpy.arange(len(x_axis))
@@ -680,8 +679,6 @@ class BarChart(ChartBase):
                 pyplot.tight_layout()
                 pyplot.show()
         else:
-            # All plots should have the same x axis items.
-            self._graph_data.mergeData()
             # Get axes from first plot.
             x_axis = plotlist[0][u'X array']
             x_axis_positions = numpy.arange(len(x_axis))
@@ -691,11 +688,6 @@ class BarChart(ChartBase):
             colourmap = pylab.get_cmap('Dark2')
             #
             subplotcount = len(plotlist)
-            #  Get min/max-limits or concatenate x axis items.
-            xmin = None
-            xmax = None
-            if x_type == u'String':
-                self._graph_data.mergeData()
             #
             share_x_axis = None
             #
@@ -728,45 +720,6 @@ class BarChart(ChartBase):
                 pyplot.show()
 
 
-class PieChart(ChartBase):
-    """ """
-    def __init__(self, graph_data, figure = None):
-        """ """
-        super(PieChart, self).__init__(graph_data)
-        self._figure = figure
-        
-    def plotChart(self, 
-                  combined = False, 
-                  y_log_scale = False):
-        """ """
-        #
-        plotlist = self._graph_data.getPlotList()
-        #
-        if self._figure:
-            fig = self._figure
-        else:
-            # Use pyplot for tests.
-            import matplotlib.pyplot as pyplot    
-            fig = pyplot.figure()
-        #
-        subplotcount = len(plotlist)
-        #
-        for plotindex, plotdict in enumerate(plotlist):
-            subplot = fig.add_subplot(subplotcount, 1, plotindex + 1)
-            if u'X array' in plotdict:    
-                subplot.pie(plotdict[u'Y array'], labels=plotdict[u'X array'])
-            else:
-                subplot.pie(plotdict[u'Y array'])
-#                subplot.pie(plotdict[u'Y array'], labels=plotdict[u'X array'], autopct='%1.1f%%', shadow=True)
-            subplot.axis(u'equal')
-            #
-            subplot.set_title(plotdict[u'Plot name'])
-        #
-            if not self._figure:
-                pyplot.tight_layout()
-                pyplot.show()
-
-                
 class ScatterChart(ChartBase):
     """ """
     def __init__(self, graph_data, figure = None):
@@ -795,10 +748,15 @@ class ScatterChart(ChartBase):
                 subplot.set_yscale('log')
             #
             markers = [u'o', u's', u'D', u'^', u'<']
-            colours = [u'r', u'b', u'g', u'y', u'b']
+            colors = ['b', 'r', 'c', 'm', 'k', 'g', 'y']
+#            symbols = ['-', '--', '-.', ':']
+            markers_len = len(markers)
+            colors_len = len(colors)
+#            symbols_len = len(symbols)
+            #
             for plotindex, plotdict in enumerate(plotlist):
                 subplot.scatter(plotdict[u'X array'], plotdict[u'Y array'], s = plotdict[u'Z array'], 
-                                marker = markers[plotindex], c =  colours[plotindex])
+                                marker = markers[plotindex % markers_len], c =  colors[plotindex % colors_len])
             #
             font_properties = mpl_font_manager.FontProperties()
             font_properties.set_size('small')
@@ -819,9 +777,6 @@ class ScatterChart(ChartBase):
                 pyplot.show()
         else:
             subplotcount = len(plotlist)
-            #  Concatenate x axis items if they contains texts.
-            if x_type == u'String':
-                self._graph_data.mergeData()
             #
             share_x_axis = None
             #
@@ -844,6 +799,44 @@ class ScatterChart(ChartBase):
                 subplot.set_xlabel(plotdict[u'X label'])
                 subplot.set_ylabel(plotdict[u'Y label'])
             #
+            if not self._figure:
+                pyplot.tight_layout()
+                pyplot.show()
+
+                
+class PieChart(ChartBase):
+    """ """
+    def __init__(self, graph_data, figure = None):
+        """ """
+        super(PieChart, self).__init__(graph_data)
+        self._figure = figure
+        
+    def plotChart(self, 
+                  combined = False, 
+                  y_log_scale = False):
+        """ """
+        #
+        plotlist = self._graph_data.getPlotList()
+        #
+        if self._figure:
+            fig = self._figure
+        else:
+            # Use pyplot for tests.
+            import matplotlib.pyplot as pyplot
+            fig = pyplot.figure()
+        #
+        subplotcount = len(plotlist)
+        #
+        for plotindex, plotdict in enumerate(plotlist):
+            subplot = fig.add_subplot(subplotcount, 1, plotindex + 1)
+            if u'X array' in plotdict:    
+                subplot.pie(plotdict[u'Y array'], labels=plotdict[u'X array'])
+            else:
+                subplot.pie(plotdict[u'Y array'])
+            subplot.axis(u'equal')
+            #
+            subplot.set_title(plotdict[u'Plot name'])
+        #
             if not self._figure:
                 pyplot.tight_layout()
                 pyplot.show()
