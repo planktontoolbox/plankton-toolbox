@@ -284,6 +284,108 @@ class ToolboxTableModel(QtCore.QAbstractTableModel):
 
 
 
+
+
+
+class ToolboxEditableQTableView( QtGui.QTableView):  
+    """ Customized QTableView for editing. The table is automatically connected to an 
+        instance of ToolboxEditableTableModel.  """
+    def __init__(self, parent = None):
+        """ """
+        QtGui.QTableView.__init__(self, parent)
+        self.tablemodel = None # Note: Public. 
+        self.selectionModel = None # Note: Public. 
+        
+        # Default setup for tables.
+        self.setAlternatingRowColors(True)
+        self.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
+        #self.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        self.setSelectionMode(QtGui.QAbstractItemView.ContiguousSelection)
+        self.verticalHeader().setDefaultSectionSize(18)
+        # Default model, data and selection        
+        self.tablemodel = ToolboxEditableTableModel()
+        self.setModel(self.tablemodel)
+        self.selectionModel = QtGui.QItemSelectionModel(self.tablemodel)
+        self.setSelectionModel(self.selectionModel)
+        self.resizeColumnsToContents()
+          
+    def clear(self):
+        """ """
+        self.selectionModel.clear()
+        # Call same method in parent class.
+        super(ToolboxQTableView, self).clear()
+        
+    def setTablemodel(self, model):
+        """ Use this method if the default model should be replaced. """
+        self.tablemodel = model
+        self.setModel(self.tablemodel)
+        self.selectionModel = QtGui.QItemSelectionModel(self.tablemodel)
+        self.setSelectionModel(self.selectionModel)
+        self.resizeColumnsToContents()
+
+class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
+    """ Table model for editing. """
+    def __init__(self, modeldata = None):
+        """ """
+        self._modeldata = modeldata
+        # Initialize parent.
+        QtCore.QAbstractTableModel.__init__(self)
+        
+    def setModeldata(self, modeldata):
+        """ """
+        self._modeldata = modeldata
+        self.reset() 
+
+    def getModeldata(self):
+        """ """
+        return self._modeldata
+
+    def rowCount(self, parent=QtCore.QModelIndex()):
+        """ """
+        if self._modeldata == None:
+            return 0
+        return self._modeldata.getRowCount()
+
+    def columnCount(self, parent=QtCore.QModelIndex()):
+        """ """
+        if self._modeldata == None:
+            return 0
+        return self._modeldata.getColumnCount()
+
+    def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
+        """ """
+        if self._modeldata == None:
+            return QtCore.QVariant()
+        if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
+            return QtCore.QVariant(self._modeldata.getHeaderItem(section))
+        if orientation == QtCore.Qt.Vertical and role == QtCore.Qt.DisplayRole:
+            return QtCore.QVariant(section + 1)
+        return QtCore.QVariant()
+
+    def data(self, index=QtCore.QModelIndex(), role=QtCore.Qt.DisplayRole):
+        """ """
+        if self._modeldata == None:
+            return QtCore.QVariant()
+        if role == QtCore.Qt.DisplayRole:
+            if index.isValid():
+                return QtCore.QVariant(self._modeldata.getDataItem(index.row(), index.column()))
+        return QtCore.QVariant()
+
+    # For editing:
+    def setData(self, index, value, role):
+        """ """
+        try:        
+            self._modeldata.setDataItem(index.row(), index.column(), unicode(value.toString()))
+            return True
+        except:
+            return False
+
+    # For editing:
+    def flags(self, index):
+        return QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+
+
+
 # === Style sheets: ===
 
     # Nordic Microalgae colors:

@@ -39,7 +39,7 @@ import plankton_toolbox.tools.taxon_facts_tool as taxon_facts_tool
 import plankton_toolbox.tools.taxon_images_tool as taxon_images_tool
 import plankton_toolbox.tools.latlong_tool as latlong_tool
 
-import plankton_toolbox.tools.graphplot_tool as graphplot_tool
+import plankton_toolbox.tools.graphplotter_tool as graphplotter_tool
 
 import envmonlib
 
@@ -71,7 +71,7 @@ class ToolManager(object):
         """ Tool activator. """
         # The log tool should be loaded before other tools.
         self._toollist.append(dataset_viewer_tool.DatasetViewerTool("Dataset viewer", self._parent))
-        self._toollist.append(graphplot_tool.GraphPlotTool("Graph plot", self._parent))
+        self._toollist.append(graphplotter_tool.GraphPlotterTool("Graph plotter", self._parent))
 #        self._toollist.append(dyntaxa_browser_tool.DyntaxaBrowserTool("Dyntaxa browser", self._parent))
 #        self._toollist.append(peg_browser_tool.PegBrowserTool("PEG browser", self._parent))
 #        self._toollist.append(harmful_plankton_browser_tool.HarmfulPlanktonBrowserTool("Harmful plankton", self._parent))
