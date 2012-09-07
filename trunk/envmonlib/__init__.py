@@ -26,15 +26,15 @@ from utils.excelfiles import ExcelFiles
 from utils.textfiles import TextFiles
 from utils.zipfiles import ZipFileReader
 from utils.zipfiles import ZipFileWriter
-from utils.graphplot import PlotData
-from utils.graphplot import PlotDataOneVariable
-from utils.graphplot import PlotDataTwoVariables
-from utils.graphplot import PlotDataThreeVariables
-from utils.graphplot import ChartBase
-from utils.graphplot import LineChart
-from utils.graphplot import BarChart
-from utils.graphplot import ScatterChart
-from utils.graphplot import PieChart
+from utils.graphplotter import PlotData
+from utils.graphplotter import PlotDataOneVariable
+from utils.graphplotter import PlotDataTwoVariables
+from utils.graphplotter import PlotDataThreeVariables
+from utils.graphplotter import ChartBase
+from utils.graphplotter import LineChart
+from utils.graphplotter import BarChart
+from utils.graphplotter import ScatterChart
+from utils.graphplotter import PieChart
 
 # Module species:
 from species.species import Species

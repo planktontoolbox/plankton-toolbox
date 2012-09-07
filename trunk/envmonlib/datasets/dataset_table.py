@@ -72,6 +72,10 @@ class DatasetTable(envmonlib.DatasetBase):
         except Exception:
             return ''
 
+    def setDataItem(self, row, column, value):
+        """ Used for calls from editable table model. """
+        self._rows[row][column] = value
+
     def getDataItemByColumnName(self, row, column_name):
         """  """
         try:
