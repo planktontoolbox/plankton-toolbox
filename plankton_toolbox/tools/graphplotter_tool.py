@@ -60,6 +60,29 @@ class GraphPlotterTool(tool_base.ToolBase):
         self._testData()
         self._drawChart()
         
+    def setPlotData(self, plot_data):
+        """ """
+        self._figure.clear()
+        self._canvas.draw()
+        #
+        self._plotdata = plot_data
+        #
+        self._resetPlotdata()
+        self._drawChart()
+
+    def setChartSelection(self, 
+                          chart = u"Line chart", # Line chart, Bar chart, Scatter chart, Pie chart.
+                          combined = False,
+                          stacked = False,
+                          y_log_scale = False):
+        """ """
+        comboindex = self._charttype_list.findText(chart)
+        if comboindex >= 0:  self._charttype_list.setCurrentIndex(comboindex)
+        #
+        self._combined_checkbox.setChecked(combined)
+        self._stacked_checkbox.setChecked(stacked)
+        self._ylogscale_checkbox.setChecked(y_log_scale)
+        
     def _testData(self):
         """ """
         testdata = envmonlib.PlotDataThreeVariables(
@@ -109,7 +132,7 @@ class GraphPlotterTool(tool_base.ToolBase):
 #                            x_label = u'X Third',
 #                            y_label = u'Y Third')
         #
-        self._setPlotData(testdata)
+        self.setPlotData(testdata)
 
     def _createContent(self):
         """ """
@@ -157,8 +180,8 @@ class GraphPlotterTool(tool_base.ToolBase):
 #        self.connect(self._applysettings_button, QtCore.SIGNAL("clicked()"), self._applySettings)                
         # Layout.
         form = QtGui.QFormLayout()
-        form.addRow("Time series, format:", self._timeseriesforat_edit)
-        form.addRow("X/Y plot, format", self._xyplotformat_edit)
+        form.addRow("Test 1:", self._timeseriesforat_edit)
+        form.addRow("Test 2", self._xyplotformat_edit)
         form.addRow("'Plot labels", self._editable_listview)
         #
         hbox = QtGui.QHBoxLayout()
@@ -266,29 +289,9 @@ class GraphPlotterTool(tool_base.ToolBase):
         #
         return layout
         
-    def _setPlotData(self, plot_data):
-        """ """
-        self._figure.clear()
-        self._canvas.draw()
-        #
-        self._plotdata = plot_data
-        #
-        self._resetPlotdata()
-#        self.plotdatainfo_textedit.setText(
-#                   json.dumps(self._plotdata.getPlotDataInfo(), 
-#                              encoding = u'utf8', 
-#                              sort_keys=True, indent=4))
-#        self.plotdatalist_textedit.setText(
-#                   json.dumps(self._plotdata.getPlotList(), 
-#                              encoding = u'utf8', 
-#                              sort_keys=True, indent=4))
-        self._plotdata
-        #
-        self._drawChart()
-
     def _clearPlotData(self):
         """ """
-        self._setPlotData(None)
+        self.setPlotData(None)
 
     def _drawChart(self):
         """ """
