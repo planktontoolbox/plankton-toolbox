@@ -176,8 +176,8 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         if not currentdata:
             return # Can't plot from empty dataset
         #
-        tool_manager.ToolManager().showToolByName(u'Graph plot') # Show tool if hidden.
-        graphtool = tool_manager.ToolManager().getToolByName(u'Graph plot')
+        tool_manager.ToolManager().showToolByName(u'Graph plotter') # Show tool if hidden.
+        graphtool = tool_manager.ToolManager().getToolByName(u'Graph plotter')
         # Selected columns.
         x_column = unicode(self._x_axis_column_list.currentText())
         y_column = unicode(self._y_axis_column_list.currentText())
@@ -307,10 +307,45 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
             if y_visit_key: y_value = None    
         #
 
-        # Check if this is a time series or not.
-        selectedplotindex = self._plotindex_list.currentIndex() 
-        if selectedplotindex in [0, 1, 2, 3]:
-            graphtool.addTimeseriesPlot(selectedplotindex, x_data, y_data)
-        else:
-            graphtool.addXYPlot(selectedplotindex - 4, x_data, y_data)
+#        # Check if this is a time series or not.
+#        selectedplotindex = self._plotindex_list.currentIndex() 
+#        if selectedplotindex in [0, 1, 2, 3]:
+#            graphtool.addTimeseriesPlot(selectedplotindex, x_data, y_data)
+#        else:
+#            graphtool.addXYPlot(selectedplotindex - 4, x_data, y_data)
+
+
+        # Convert numeric values. 
+        # TODO: Type info should be in import parser.
+        for index, item in enumerate(x_data):
+            try:
+                x_data[index] = item.replace(u',', u'.')
+            except:
+                pass
+        for index, item in enumerate(y_data):
+            try:
+                y_data[index] = item.replace(u',', u'.')
+            except:
+                pass
+
+
+
+        # Create plot data object.
+        plotdata = envmonlib.PlotDataTwoVariables(x_type = u'',
+                                                  title = y_column + " / " + x_column, 
+                                                  x_label = x_column,
+                                                  y_label = y_column)
+        # Add plot data.
+        plotdata.addPlot(plot_name = y_column + " / " + x_column, 
+                         x_array = x_data, 
+                         y_array = y_data, 
+                         x_label = x_column,
+                         y_label = y_column)
+        # View in Graph plotter tool.
+        graphtool.setChartSelection(chart = u"Bar chart",
+                                    combined = True, stacked = False, y_log_scale = False)
+        graphtool.setPlotData(plotdata)
+
+
+
 

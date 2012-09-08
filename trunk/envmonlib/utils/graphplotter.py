@@ -34,7 +34,7 @@ import pylab # For color maps
 
 def graphplotter_test():
     """ """
-    print("Graph plot test...")
+    print("Graph plotter test...")
     #
     plotdata_1 = PlotDataOneVariable(
                         title = u"One variable data object", 
@@ -148,6 +148,11 @@ def graphplotter_test():
     graph.plotChart(combined = False, y_log_scale = True, stacked = True)
     #
     #
+    graph = ScatterChart(plotdata_2)
+    graph.plotChart(combined = True, y_log_scale = False)
+    graph.plotChart(combined = False, y_log_scale = True)
+    #
+    #
     graph = ScatterChart(plotdata_3)
     graph.plotChart(combined = True, y_log_scale = False)
     graph.plotChart(combined = False, y_log_scale = True)
@@ -160,9 +165,6 @@ def graphplotter_test():
     graph.plotChart(combined = True, y_log_scale = False, stacked = True)
     graph.plotChart(combined = False, y_log_scale = False)
     graph.plotChart(combined = False, y_log_scale = False, stacked = True)
-    #
-    graph = PieChart(plotdata_1)
-    graph.plotChart(combined = False, y_log_scale = False)
     #
     graph = PieChart(plotdata_2)
     graph.plotChart(combined = False, y_log_scale = False)
@@ -549,10 +551,6 @@ class LineChart(ChartBase):
             # 
             subplot.set_xlabel(self._graph_data.getPlotDataInfo()[u'X label'])
             subplot.set_ylabel(self._graph_data.getPlotDataInfo()[u'Y label'])
-            #
-            if not self._figure:
-                pyplot.tight_layout()
-                pyplot.show()
         else:
             subplotcount = len(plotlist)
             #
@@ -595,10 +593,12 @@ class LineChart(ChartBase):
                 # Use settings from first plot in list.
                 subplot.set_xlabel(plotdict[u'X label'])
                 subplot.set_ylabel(plotdict[u'Y label'])
-            #
-            if not self._figure:
-                pyplot.tight_layout()
-                pyplot.show()
+        #
+        if not self._figure:
+            pyplot.tight_layout()
+            pyplot.show()
+        else:
+            self._figure.tight_layout()
 
 
 class BarChart(ChartBase):
@@ -674,10 +674,6 @@ class BarChart(ChartBase):
             #
             subplot.set_xlabel(self._graph_data.getPlotDataInfo()[u'X label'])
             subplot.set_ylabel(self._graph_data.getPlotDataInfo()[u'Y label'])
-            #
-            if not self._figure:
-                pyplot.tight_layout()
-                pyplot.show()
         else:
             # Get axes from first plot.
             x_axis = plotlist[0][u'X array']
@@ -714,10 +710,12 @@ class BarChart(ChartBase):
                 # Use settings from first plot in list.
                 subplot.set_xlabel(plotdict[u'X label'])
                 subplot.set_ylabel(plotdict[u'Y label'])
-            #
-            if not self._figure:
-                pyplot.tight_layout()
-                pyplot.show()
+        #
+        if not self._figure:
+            pyplot.tight_layout()
+            pyplot.show()
+        else:
+            self._figure.tight_layout()
 
 
 class ScatterChart(ChartBase):
@@ -755,8 +753,12 @@ class ScatterChart(ChartBase):
 #            symbols_len = len(symbols)
             #
             for plotindex, plotdict in enumerate(plotlist):
-                subplot.scatter(plotdict[u'X array'], plotdict[u'Y array'], s = plotdict[u'Z array'], 
-                                marker = markers[plotindex % markers_len], c =  colors[plotindex % colors_len])
+                if u'Z array' in plotdict:
+                    subplot.scatter(plotdict[u'X array'], plotdict[u'Y array'], s = plotdict[u'Z array'], 
+                                    marker = markers[plotindex % markers_len], c =  colors[plotindex % colors_len])
+                else:
+                    subplot.scatter(plotdict[u'X array'], plotdict[u'Y array'], s = [10.0] * len(plotdict[u'X array']),
+                                    marker = markers[plotindex % markers_len], c =  colors[plotindex % colors_len])
             #
             font_properties = mpl_font_manager.FontProperties()
             font_properties.set_size('small')
@@ -771,10 +773,6 @@ class ScatterChart(ChartBase):
             # 
             subplot.set_xlabel(self._graph_data.getPlotDataInfo()[u'X label'])
             subplot.set_ylabel(self._graph_data.getPlotDataInfo()[u'Y label'])
-            #
-            if not self._figure:
-                pyplot.tight_layout()
-                pyplot.show()
         else:
             subplotcount = len(plotlist)
             #
@@ -789,8 +787,12 @@ class ScatterChart(ChartBase):
                 if y_log_scale:
                     subplot.set_yscale('log')
                 #
-                subplot.scatter(plotdict[u'X array'], plotdict[u'Y array'], s = plotdict[u'Z array'], 
-                                marker = markers[plotindex], c =  colours[plotindex])
+                if u'Z array' in plotdict:
+                    subplot.scatter(plotdict[u'X array'], plotdict[u'Y array'], s = plotdict[u'Z array'], 
+                                    marker = markers[plotindex], c =  colours[plotindex])
+                else:
+                    subplot.scatter(plotdict[u'X array'], plotdict[u'Y array'], s = [10.0] * len(plotdict[u'X array']),
+                                    marker = markers[plotindex], c =  colours[plotindex])
                 #
                 subplot.axis(u'auto')
                 #
@@ -798,10 +800,12 @@ class ScatterChart(ChartBase):
                 # Use settings from first plot in list.
                 subplot.set_xlabel(plotdict[u'X label'])
                 subplot.set_ylabel(plotdict[u'Y label'])
-            #
-            if not self._figure:
-                pyplot.tight_layout()
-                pyplot.show()
+        #
+        if not self._figure:
+            pyplot.tight_layout()
+            pyplot.show()
+        else:
+            self._figure.tight_layout()
 
                 
 class PieChart(ChartBase):
@@ -837,9 +841,12 @@ class PieChart(ChartBase):
             #
             subplot.set_title(plotdict[u'Plot name'])
         #
-            if not self._figure:
-                pyplot.tight_layout()
-                pyplot.show()
+        if not self._figure:
+            pyplot.tight_layout()
+            pyplot.show()
+        else:
+            self._figure.tight_layout()
+        
 
                 
 if __name__ == "__main__":
