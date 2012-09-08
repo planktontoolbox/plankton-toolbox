@@ -356,7 +356,6 @@ class GraphPlotterTool(tool_base.ToolBase):
         # Update chart.
         self._drawChart()
 
-
     def _saveChartToFile(self):
         """ """
         if self._plotdata:
@@ -372,5 +371,5 @@ class GraphPlotterTool(tool_base.ToolBase):
             if filename:
                 self._lastuseddirectory = os.path.dirname(filename)
                 # Save to file.
-                self._figure.savefig(filename)
-        
+                self._figure.savefig(filename, dpi = 300)
+

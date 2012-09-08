@@ -112,8 +112,8 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         if not currentdata:        
             return
         #
-        tool_manager.ToolManager().showToolByName(u'Graph plot') # Show tool if hidden.
-        graphtool = tool_manager.ToolManager().getToolByName(u'Graph plot')
+        tool_manager.ToolManager().showToolByName(u'Graph plotter') # Show tool if hidden.
+        graphtool = tool_manager.ToolManager().getToolByName(u'Graph plotter')
 
         # Step 1: Create lists of stations and taxa.
         station_set = set()
@@ -188,7 +188,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         if not currentdata:        
             return
         #
-        tool_manager.ToolManager().showToolByName(u'Graph plot') # Show tool if hidden.
+        tool_manager.ToolManager().showToolByName(u'Graph plotter') # Show tool if hidden.
         graphtool = tool_manager.ToolManager().getToolByName(u'Graph plotter')
 
 #       # Step 1: Create lists of stations and taxa.
@@ -313,7 +313,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
             plotdata.addPlot(plot_name = taxon, 
                                 x_array = visit_list, 
                                 y_array = taxon_visit_value_list, 
-                                x_label = station,
+                                x_label = u"Sampling occation",
                                 y_label = selectedparameter)
         # Step 6: Plot
         graphtool.setChartSelection(chart = u"Bar chart",
@@ -355,8 +355,8 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         if not currentdata:
             return # Can't plot from empty dataset
         #
-        tool_manager.ToolManager().showToolByName(u'Graph plot') # Show tool if hidden.
-        graphtool = tool_manager.ToolManager().getToolByName(u'Graph plot')
+        tool_manager.ToolManager().showToolByName(u'Graph plotter') # Show tool if hidden.
+        graphtool = tool_manager.ToolManager().getToolByName(u'Graph plotter')
         # Selected columns.
         x_column = unicode(self._x_axis_column_list.currentText())
         y_column = unicode(self._y_axis_column_list.currentText())
