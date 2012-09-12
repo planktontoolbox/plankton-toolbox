@@ -65,7 +65,14 @@ class GraphPlotterTool(tool_base.ToolBase):
         self._figure.clear()
         self._canvas.draw()
         #
-        self._plotdata = plot_data
+        if plot_data:
+            if isinstance(plot_data, envmonlib.PlotData):
+                self._plotdata = plot_data
+            else:
+                # Invalid type. 
+                self._plotdata = None
+        else:
+            self._plotdata = None
         #
         self._resetPlotdata()
         self._drawChart()
