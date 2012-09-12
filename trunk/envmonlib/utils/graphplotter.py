@@ -36,7 +36,7 @@ def graphplotter_test():
     """ """
     print("Graph plotter test...")
     #
-    plotdata_1 = PlotDataOneVariable(
+    plotdata_1 = GraphPlotData(
                         title = u"One variable data object", 
                         x_label = u'X (one variable)',
                         y_label = u'Y (one variable)')
@@ -51,7 +51,7 @@ def graphplotter_test():
                         y_array = [12,10,6,3,9], 
                         y_label = u'Y third')
     #
-    plotdata_2 = PlotDataTwoVariables(
+    plotdata_2 = GraphPlotData(
                         title = u"Two variables data object", 
                         x_label = u'X (two variable)',
                         y_label = u'Y (two variable)')
@@ -66,7 +66,7 @@ def graphplotter_test():
                         x_label = u'X second',
                         y_label = u'Y second')
     #
-    plotdata_3 = PlotDataThreeVariables(
+    plotdata_3 = GraphPlotData(
                         title = u"Three variables data object", 
                         x_label = u'X (three variable)',
                         y_label = u'Y (three variable)',
@@ -93,7 +93,7 @@ def graphplotter_test():
                         y_label = u'Y Third',
                         z_label = u'Z Third')
     #
-    plotdata_4 = PlotDataTwoVariables(
+    plotdata_4 = GraphPlotData(
                         x_type = u'String',
                         title = u"Two variables data object, string", 
                         x_label = u'X (two variables)',
@@ -114,7 +114,7 @@ def graphplotter_test():
                         x_label = u'X Third',
                         y_label = u'Y Third')
     #
-    plotdata_5 = PlotDataTwoVariables(
+    plotdata_5 = GraphPlotData(
                         x_type = u'Date',
                         title = u"Two variables x:date", 
                         x_label = u'X (date)',
@@ -177,15 +177,74 @@ def graphplotter_test():
     graph.plotChart(combined = False, y_log_scale = True)
 
 
-class PlotData(object):
+class GraphPlotData(object):
     """ Abstract base class for data objects. """
     
-    def __init__(self):
+#    @staticmethod
+#    def getAvailableCharts(self):
+#        """ """
+#        return {
+#                u'Line chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
+#                u'Bar chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
+#                u'Scatter chart': {u'Parameters': [u'combined', u'y_log_scale']},
+#                }
+
+    def __init__(self,
+                 title = u'', 
+                 x_label = u'',
+                 x_type = u'', # Number, String, Date.
+                 x_format = None, # Used for date type. 
+                 y_label = u'',
+                 y_type = u'', # Integer, Float.
+                 y_format = None, # Used for date type. 
+                 z_label = u'',
+                 z_type = u'', # Integer, Float.
+                 z_format = None): # Used for date type. 
         """ """
-        super(PlotData, self).__init__()
+        super(GraphPlotData, self).__init__()
         #
         self._plot_list = []
         self._plotdata_info = {}
+        #
+        self._plotdata_info[u'Title'] = title
+        self._plotdata_info[u'X label'] = x_label
+        self._plotdata_info[u'X type'] = x_type
+        self._plotdata_info[u'X format'] = x_format
+        #
+        self._plotdata_info[u'Y label'] = y_label
+        self._plotdata_info[u'Y type'] = y_type
+        self._plotdata_info[u'Y format'] = y_format
+        #
+        self._plotdata_info[u'Z label'] = z_label
+        self._plotdata_info[u'Z type'] = z_type
+        self._plotdata_info[u'Z format'] = z_format
+        
+    def addPlot(self,
+                plot_name = u'', 
+                x_label = u'',
+                x_array = None,
+                y_label = u'',
+                y_array = None,
+                z_label = u'',
+                z_array = None):
+        """ """
+        if not y_array:
+            # TODO: Log.
+            print(u"GraphPlotData.addPlot() must contain at least an Y-array.")
+            return
+        #
+        plotdict = {}
+        plotdict[u'Plot name'] = plot_name
+        plotdict[u'X label'] = x_label
+        plotdict[u'X array'] = x_array
+        #
+        plotdict[u'Y label'] = y_label
+        plotdict[u'Y array'] = y_array
+        #
+        plotdict[u'Z label'] = z_label
+        plotdict[u'Z array'] = z_array
+        #
+        self._plot_list.append(plotdict)
         
     def clear(self):
         """ """
@@ -200,24 +259,16 @@ class PlotData(object):
         """ """
         return self._plot_list
     
-    def setPlotList(self, plot_list):
-        """ """
-        self._plot_list = plot_list
-    
     def getPlotDataInfo(self):
         """ """
         return self._plotdata_info
-    
-    def setPlotDataInfo(self, plotdata_info):
-        """ """
-        self._plotdata_info = plotdata_info
     
     def getXMinMaxValues(self):
         """ """
         xmin = None
         xmax = None
         for plotdict in self._plot_list:
-            if (u'X array' in plotdict) and (len(plotdict[u'X array']) > 0):                    
+            if (plotdict[u'X array']) and (len(plotdict[u'X array']) > 0):                    
                 xminvalue = min(plotdict[u'X array'])
                 xmaxvalue = max(plotdict[u'X array'])
             else:
@@ -237,7 +288,7 @@ class PlotData(object):
         ymin = None
         ymax = None
         for plotdict in self._plot_list:
-            if u'Y array' in plotdict:                    
+            if plotdict[u'Y array']:                    
                 yminvalue = min(plotdict[u'Y array'])
                 ymaxvalue = max(plotdict[u'Y array'])
             else:
@@ -251,6 +302,25 @@ class PlotData(object):
         #
         return ymin, ymax
 
+    def getZMinMaxValues(self):
+        """ """
+        zmin = None
+        zmax = None
+        for plotdict in self._plot_list:
+            if plotdict[u'Z array']:                    
+                zminvalue = min(plotdict[u'Z array'])
+                zmaxvalue = max(plotdict[u'Z array'])
+            else:
+                zyminvalue = 0
+                zmaxvalue = 0
+            #
+            if not zmin: zmin = zminvalue
+            if not zmax: zmax = zmaxvalue
+            if zmin > zminvalue: zmin = zminvalue
+            if zmax < zmaxvalue: zmax = zmaxvalue
+        #
+        return zmin, zmax
+
     def mergeData(self):
         """ Creates a common x array and add zero values for plots with no corresponding x value. """
         # Copy the plot list.
@@ -261,187 +331,179 @@ class PlotData(object):
             x_union = list(set(x_union) | set(plotdict[u'X array'])) # List union
         # Sorts the list.                   
         x_union.sort()
-
-#        print (x_union)
-
+        #
         for plotdict in plotlist:
             newyarray = []
             yarrayasdict = dict(zip(plotdict[u'X array'], plotdict[u'Y array']))
-            
-#            print(yarrayasdict)
-            
+            #
             for x in x_union:
                 if x in yarrayasdict:
                     newyarray.append(yarrayasdict[x])
                 else:
                     newyarray.append(0)        
             #
-#            print(yarrayasdict)
-#            print (newyarray)
-            #
             plotdict[u'X array'] = x_union
             plotdict[u'Y array'] = newyarray      
         #
         return plotlist
 
-class PlotDataOneVariable(PlotData):
-    """ """
-    
-    @staticmethod
-    def getAvailableCharts():
-        """ """
-        return {
-                u'Line chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
-                }
-
-    def __init__(self,
-                 title = u'', 
-                 x_label = u'',
-                 y_label = u'',
-                 x_type = u'Integer', # Integer, Float, String, Date.
-                 x_format = None,
-                 y_type = u'', # Integer, Float.
-                 y_format = None,):
-        """ """
-        super(PlotDataOneVariable, self).__init__()
-        #
-        self._plotdata_info[u'Title'] = title
-        self._plotdata_info[u'X label'] = x_label
-        self._plotdata_info[u'Y label'] = y_label
-        self._plotdata_info[u'X type'] = x_type
-        self._plotdata_info[u'X format'] = x_format
-        self._plotdata_info[u'Y type'] = y_type
-        self._plotdata_info[u'Y format'] = y_format
-
-    def addPlot(self,
-                plot_name = u'', 
-                y_array = [],
-                x_label = u'Position in data array',
-                y_label = u''):
-        """ X data will automatically be created by Matplotlib (0, 1, 2, ...). """
-        plotdict = {}
-        plotdict[u'Plot name'] = plot_name
-        plotdict[u'Y array'] = y_array
-        #
-        plotdict[u'X label'] = x_label
-        plotdict[u'Y label'] = y_label
-        self._plot_list.append(plotdict)
-
-
-class PlotDataTwoVariables(PlotData):
-    """ """
-    
-    @staticmethod
-    def getAvailableCharts(self):
-        """ """
-        return {
-                u'Line chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
-                u'Bar chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
-                u'Scatter chart': {u'Parameters': [u'combined', u'y_log_scale']},
-                u'Pie chart': {u'Parameters': []},
-                }
-
-    def __init__(self,
-                 title = u'', 
-                 x_label = u'',
-                 y_label = u'',
-                 x_type = u'', # Integer, Float, String, Datetime.
-                 x_format = None,
-                 y_type = u'', # Integer, Float.
-                 y_format = None):
-        """ """
-        super(PlotDataTwoVariables, self).__init__()
-        #
-        self._plotdata_info[u'Title'] = title
-        self._plotdata_info[u'X label'] = x_label
-        self._plotdata_info[u'Y label'] = y_label
-        self._plotdata_info[u'X type'] = x_type
-        self._plotdata_info[u'X format'] = x_format
-        self._plotdata_info[u'Y type'] = y_type
-        self._plotdata_info[u'Y format'] = y_format
-        
-    def addPlot(self,
-                plot_name = u'', 
-                x_array = [],
-                y_array = [],
-                x_type = u'', # Integer, Float, String, Datetime.
-                x_format = None,
-                y_type = u'', # Integer, Float.
-                y_format = None,
-                x_label = u'',
-                y_label = u''):
-        """ """
-        plotdict = {}
-        plotdict[u'Plot name'] = plot_name
-        plotdict[u'X array'] = x_array
-        plotdict[u'Y array'] = y_array
-        #
-        plotdict[u'X type'] = x_type
-        plotdict[u'X format'] = x_format
-        plotdict[u'Y type'] = y_type
-        plotdict[u'Y format'] = y_format
-        #
-        plotdict[u'X label'] = x_label
-        plotdict[u'Y label'] = y_label
-        self._plot_list.append(plotdict)
+#class PlotDataOneVariable(PlotData):
+#    """ """
+#    @staticmethod
+#    def getAvailableCharts():
+#        """ """
+#        return {
+#                u'Line chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
+#                }
+#
+#    def __init__(self,
+#                 title = u'', 
+#                 x_label = u'',
+#                 y_label = u'',
+#                 x_type = u'Integer', # Integer, Float, String, Date.
+#                 x_format = None,
+#                 y_type = u'', # Integer, Float.
+#                 y_format = None,):
+#        """ """
+#        super(PlotDataOneVariable, self).__init__()
+#        #
+#        self._plotdata_info[u'Title'] = title
+#        self._plotdata_info[u'X label'] = x_label
+#        self._plotdata_info[u'Y label'] = y_label
+#        self._plotdata_info[u'X type'] = x_type
+#        self._plotdata_info[u'X format'] = x_format
+#        self._plotdata_info[u'Y type'] = y_type
+#        self._plotdata_info[u'Y format'] = y_format
+#
+#    def addPlot(self,
+#                plot_name = u'', 
+#                y_array = [],
+#                x_label = u'Position in data array',
+#                y_label = u''):
+#        """ X data will automatically be created by Matplotlib (0, 1, 2, ...). """
+#        plotdict = {}
+#        plotdict[u'Plot name'] = plot_name
+#        plotdict[u'Y array'] = y_array
+#        #
+#        plotdict[u'X label'] = x_label
+#        plotdict[u'Y label'] = y_label
+#        self._plot_list.append(plotdict)
 
 
-class PlotDataThreeVariables(PlotData):
-    """ """
-    
-    @staticmethod
-    def getAvailableCharts(self):
-        """ """
-        return {
-                u'Line chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
-                u'Bar chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
-                u'Scatter chart': {u'Parameters': [u'combined', u'y_log_scale']},
-                }
+#class PlotDataTwoVariables(PlotData):
+#    """ """
+#    
+#    @staticmethod
+#    def getAvailableCharts(self):
+#        """ """
+#        return {
+#                u'Line chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
+#                u'Bar chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
+#                u'Scatter chart': {u'Parameters': [u'combined', u'y_log_scale']},
+#                u'Pie chart': {u'Parameters': []},
+#                }
+#
+#    def __init__(self,
+#                 title = u'', 
+#                 x_label = u'',
+#                 y_label = u'',
+#                 x_type = u'', # Integer, Float, String, Datetime.
+#                 x_format = None,
+#                 y_type = u'', # Integer, Float.
+#                 y_format = None):
+#        """ """
+#        super(PlotDataTwoVariables, self).__init__()
+#        #
+#        self._plotdata_info[u'Title'] = title
+#        self._plotdata_info[u'X label'] = x_label
+#        self._plotdata_info[u'Y label'] = y_label
+#        self._plotdata_info[u'X type'] = x_type
+#        self._plotdata_info[u'X format'] = x_format
+#        self._plotdata_info[u'Y type'] = y_type
+#        self._plotdata_info[u'Y format'] = y_format
+#        
+#    def addPlot(self,
+#                plot_name = u'', 
+#                x_array = [],
+#                y_array = [],
+#                x_type = u'', # Integer, Float, String, Datetime.
+#                x_format = None,
+#                y_type = u'', # Integer, Float.
+#                y_format = None,
+#                x_label = u'',
+#                y_label = u''):
+#        """ """
+#        plotdict = {}
+#        plotdict[u'Plot name'] = plot_name
+#        plotdict[u'X array'] = x_array
+#        plotdict[u'Y array'] = y_array
+#        #
+#        plotdict[u'X type'] = x_type
+#        plotdict[u'X format'] = x_format
+#        plotdict[u'Y type'] = y_type
+#        plotdict[u'Y format'] = y_format
+#        #
+#        plotdict[u'X label'] = x_label
+#        plotdict[u'Y label'] = y_label
+#        self._plot_list.append(plotdict)
 
-    def __init__(self,
-                 title = u'', 
-                 x_label = u'',
-                 y_label = u'',
-                 z_label = u'',
-                 x_type = u'', # Integer, Float, String, Datetime.
-                 x_format = None,
-                 y_type = u'', # Integer, Float.
-                 y_format = None,
-                 z_type = u'', # Integer, Float.
-                 z_format = None):
-        """ """
-        super(PlotDataThreeVariables, self).__init__()
-        #
-        self._plotdata_info[u'Title'] = title
-        self._plotdata_info[u'X label'] = x_label
-        self._plotdata_info[u'Y label'] = y_label
-        self._plotdata_info[u'Z label'] = z_label
-        self._plotdata_info[u'X type'] = x_type
-        self._plotdata_info[u'X format'] = x_format
-        self._plotdata_info[u'Y type'] = y_type
-        self._plotdata_info[u'Y format'] = y_format
-        self._plotdata_info[u'Z type'] = z_type
-        self._plotdata_info[u'Z format'] = z_format
-        
-    def addPlot(self,
-                plot_name = u'', 
-                x_array = [],
-                y_array = [],
-                z_array = [],
-                x_label = u'',
-                y_label = u'',
-                z_label = u''):
-        """ """
-        plotdict = {}
-        plotdict[u'Plot name'] = plot_name
-        plotdict[u'X array'] = x_array
-        plotdict[u'Y array'] = y_array
-        plotdict[u'Z array'] = z_array
-        #
-        plotdict[u'X label'] = x_label
-        plotdict[u'Y label'] = y_label
-        plotdict[u'Z label'] = z_label
-        self._plot_list.append(plotdict)
+
+#class PlotDataThreeVariables(PlotData):
+#    """ """
+#    
+#    @staticmethod
+#    def getAvailableCharts(self):
+#        """ """
+#        return {
+#                u'Line chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
+#                u'Bar chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
+#                u'Scatter chart': {u'Parameters': [u'combined', u'y_log_scale']},
+#                }
+#
+#    def __init__(self,
+#                 title = u'', 
+#                 x_label = u'',
+#                 y_label = u'',
+#                 z_label = u'',
+#                 x_type = u'', # Integer, Float, String, Datetime.
+#                 x_format = None,
+#                 y_type = u'', # Integer, Float.
+#                 y_format = None,
+#                 z_type = u'', # Integer, Float.
+#                 z_format = None):
+#        """ """
+#        super(PlotDataThreeVariables, self).__init__()
+#        #
+#        self._plotdata_info[u'Title'] = title
+#        self._plotdata_info[u'X label'] = x_label
+#        self._plotdata_info[u'Y label'] = y_label
+#        self._plotdata_info[u'Z label'] = z_label
+#        self._plotdata_info[u'X type'] = x_type
+#        self._plotdata_info[u'X format'] = x_format
+#        self._plotdata_info[u'Y type'] = y_type
+#        self._plotdata_info[u'Y format'] = y_format
+#        self._plotdata_info[u'Z type'] = z_type
+#        self._plotdata_info[u'Z format'] = z_format
+#        
+#    def addPlot(self,
+#                plot_name = u'', 
+#                x_array = [],
+#                y_array = [],
+#                z_array = [],
+#                x_label = u'',
+#                y_label = u'',
+#                z_label = u''):
+#        """ """
+#        plotdict = {}
+#        plotdict[u'Plot name'] = plot_name
+#        plotdict[u'X array'] = x_array
+#        plotdict[u'Y array'] = y_array
+#        plotdict[u'Z array'] = z_array
+#        #
+#        plotdict[u'X label'] = x_label
+#        plotdict[u'Y label'] = y_label
+#        plotdict[u'Z label'] = z_label
+#        self._plot_list.append(plotdict)
 
 
 class ChartBase(object):
@@ -500,20 +562,28 @@ class LineChart(ChartBase):
             import matplotlib.pyplot as pyplot
             fig = pyplot.figure()
         #
+        markers = [u'o', u's', u'D', u'^', u'<']
+        colors = ['b', 'r', 'c', 'm', 'k', 'g', 'y']
+#            symbols = ['-', '--', '-.', ':']
+        markers_len = len(markers)
+        colors_len = len(colors)
+#            symbols_len = len(symbols)
+        #
+        if self._graph_data.getPlotDataInfo()[u'Title']:
+            fig.suptitle(self._graph_data.getPlotDataInfo()[u'Title'], verticalalignment = 'top')
+        # 
         if combined:
             subplot = fig.add_subplot(111)
             #
             if y_log_scale:
                 subplot.set_yscale('log')
             #
-            markers = [u'o', u's', u'D', u'^', u'<']
-            colors = ['b', 'r', 'c', 'm', 'k', 'g', 'y']
-#            symbols = ['-', '--', '-.', ':']
-            markers_len = len(markers)
-            colors_len = len(colors)
-#            symbols_len = len(symbols)
-            #
             for plotindex, plotdict in enumerate(plotlist):
+                #
+                x_array = plotdict[u'X array']
+                y_array = plotdict[u'Y array']
+#                z_array = plotdict[u'Z array']
+
                 if x_type == u'Date':
                     # Convert date strings.
                     x_array = []
@@ -533,10 +603,12 @@ class LineChart(ChartBase):
                     #
                     fig.autofmt_xdate(bottom = 0.2)                     
                 else:
-                    if u'X array' in plotdict: 
-                        subplot.plot(plotdict[u'X array'], plotdict[u'Y array'])
+                    if plotdict[u'X array']: 
+                        subplot.plot(x_array, y_array,
+                                     marker = markers[plotindex % markers_len])
                     else:
-                        subplot.plot(plotdict[u'Y array'])
+                        subplot.plot(y_array,
+                                     marker = markers[plotindex % markers_len])
             #
             font_properties = mpl_font_manager.FontProperties()
             font_properties.set_size('small')
@@ -544,36 +616,37 @@ class LineChart(ChartBase):
                                  loc='best', fancybox=True, prop = font_properties)
             leg.get_frame().set_alpha(0.5)
             #
-            if self._graph_data.getPlotDataInfo()[u'Title']:
-                subplot.set_title(self._graph_data.getPlotDataInfo()[u'Title'])
-            else:
-                subplot.set_title('X/Y, combined')
-            # 
             subplot.set_xlabel(self._graph_data.getPlotDataInfo()[u'X label'])
             subplot.set_ylabel(self._graph_data.getPlotDataInfo()[u'Y label'])
         else:
             subplotcount = len(plotlist)
             #
-            share_x_axis = None
+            sharesubplotxaxis = None
             #
             for plotindex, plotdict in enumerate(plotlist):
-                subplot = fig.add_subplot(subplotcount, 1, plotindex + 1, sharex = share_x_axis)
-                if not share_x_axis: share_x_axis = subplot    
+                x_array = plotdict[u'X array']
+                y_array = plotdict[u'Y array']
+#                z_array = plotdict[u'Z array']
+                #
+                x_date_array = []
+                #
+                subplot = fig.add_subplot(subplotcount, 1, plotindex + 1, sharex = sharesubplotxaxis)
+                if not sharesubplotxaxis: sharesubplotxaxis = subplot    
                 #
                 if y_log_scale:
                     subplot.set_yscale('log')
                 #
                 if x_type == u'Date':
                     # Convert date strings.
-                    x_array = []
-                    for timestring in plotdict[u'X array']:
+                    for timestring in x_array:
                         try:
                             time = datetime.datetime.strptime(timestring, '%Y-%m-%d')
                         except: 
                             time = datetime.datetime.strptime(timestring, '%Y-%m-%d %H:%M:%S')
-                        x_array.append(time)
+                        x_date_array.append(time)
                     # 
-                    subplot.plot_date(x_array, plotdict[u'Y array'])
+                    subplot.plot_date(x_date_array, y_array,
+                                      marker = markers[plotindex % markers_len], c =  colors[plotindex % colors_len])
                     #
                     subplot.xaxis.set_major_locator(mpl_dates.MonthLocator())
                     subplot.xaxis.set_minor_locator(mpl_dates.WeekdayLocator())
@@ -581,18 +654,19 @@ class LineChart(ChartBase):
                     #
                     fig.autofmt_xdate(bottom = 0.2)                     
                 else:
-                    if u'X array' in plotdict:
-                        subplot.plot(plotdict[u'X array'], plotdict[u'Y array'])
-                    else:
-                        subplot.plot(plotdict[u'Y array']) 
-                #
-                subplot.axis(u'auto')
-#                subplot.grid(False)
+                    if not x_array:
+                        x_array = numpy.arange(len(y_array))
+                    #   
+                    subplot.plot(x_array, y_array,
+                                 marker = markers[plotindex % markers_len])
                 #
                 subplot.set_title(plotdict[u'Plot name'])
-                # Use settings from first plot in list.
-                subplot.set_xlabel(plotdict[u'X label'])
                 subplot.set_ylabel(plotdict[u'Y label'])
+                #
+                if (plotindex + 1) == len(plotlist):
+                    # Last subplot.
+                    subplot.set_xlabel(self._graph_data.getPlotDataInfo()[u'X label'])
+                    subplot.set_xticklabels(x_array, visible = True)                    
         #
         if not self._figure:
             pyplot.tight_layout()
@@ -644,22 +718,26 @@ class BarChart(ChartBase):
             #
             for plotindex, plotdict in enumerate(plotlist):
                 #
+                x_array = plotdict[u'X array']
+                y_array = plotdict[u'Y array']
+#                z_array = plotdict[u'Z array']
+                #
                 if stacked:
                     rect = subplot.bar(x_axis_positions, 
-                                       plotdict[u'Y array'],
+                                       y_array,
                                        0.7,
                                        color=colourmap(1.0 * plotindex / colourcount),
                                        bottom = accumulatedplots)
-                    accumulatedplots = [(x + y) for x, y in zip(accumulatedplots, plotdict[u'Y array'])] # For stacked bars.
+                    accumulatedplots = [(x + y) for x, y in zip(accumulatedplots, y_array)] # For stacked bars.
                 else:                        
                     rect = subplot.bar(x_axis_positions + (plotindex * barwidth),
-                                       plotdict[u'Y array'],
+                                       y_array,
                                        barwidth,
                                        color=colourmap(1.0 * plotindex / colourcount))
             #
 ###            subplot.set_xticks(x_axis_positions + (barwidth * len(plotlist) * 0.5))
             subplot.set_xticks(x_axis_positions)
-            subplot.set_xticklabels(plotdict[u'X array'], rotation = 20.0)
+            subplot.set_xticklabels(x_array, rotation = 20.0)
             #
             font_properties = mpl_font_manager.FontProperties()
             font_properties.set_size('small')
@@ -695,21 +773,22 @@ class BarChart(ChartBase):
                 if y_log_scale:
                     subplot.set_yscale('log')
                 #
+                x_array = plotdict[u'X array']
+                y_array = plotdict[u'Y array']
+                z_array = plotdict[u'Z array']
+                #
                 rect = subplot.bar(x_axis_positions, 
                                    plotdict[u'Y array'],
                                    barwidth,
                                    color=colourmap(1.0 * plotindex / colourcount))
                 #
-##                subplot.set_xticks(x_axis_positions + (barwidth * 0.5))
-                subplot.set_xticks(x_axis_positions)
-                subplot.set_xticklabels(plotdict[u'X array'], rotation=20.0)
-                #
-                subplot.axis(u'auto')
-                #
                 subplot.set_title(plotdict[u'Plot name'])
-                # Use settings from first plot in list.
-                subplot.set_xlabel(plotdict[u'X label'])
                 subplot.set_ylabel(plotdict[u'Y label'])
+                #
+                if (plotindex + 1) == len(plotlist):
+                    # Last subplot.
+                    subplot.set_xlabel(self._graph_data.getPlotDataInfo()[u'X label'])
+                    subplot.set_xticklabels(x_array, rotation=20.0, visible = True)
         #
         if not self._figure:
             pyplot.tight_layout()
@@ -739,26 +818,31 @@ class ScatterChart(ChartBase):
             import matplotlib.pyplot as pyplot    
             fig = pyplot.figure()
         #
+        markers = [u'o', u's', u'D', u'^', u'<']
+        colors = ['b', 'r', 'c', 'm', 'k', 'g', 'y']
+        symbols = ['-', '--', '-.', ':']
+        markers_len = len(markers)
+        colors_len = len(colors)
+        symbols_len = len(symbols)
+        #
         if combined:
             subplot = fig.add_subplot(111)
             #
             if y_log_scale:
                 subplot.set_yscale('log')
             #
-            markers = [u'o', u's', u'D', u'^', u'<']
-            colors = ['b', 'r', 'c', 'm', 'k', 'g', 'y']
-#            symbols = ['-', '--', '-.', ':']
-            markers_len = len(markers)
-            colors_len = len(colors)
-#            symbols_len = len(symbols)
-            #
             for plotindex, plotdict in enumerate(plotlist):
-                if u'Z array' in plotdict:
-                    subplot.scatter(plotdict[u'X array'], plotdict[u'Y array'], s = plotdict[u'Z array'], 
-                                    marker = markers[plotindex % markers_len], c =  colors[plotindex % colors_len])
+                #
+                x_array = plotdict[u'X array']
+                y_array = plotdict[u'Y array']
+                z_array = plotdict[u'Z array']
+                #
+                if z_array:
+                    subplot.scatter(x_array, y_array, s = z_array, 
+                                    marker = markers[plotindex % markers_len], c = colors[plotindex % colors_len])
                 else:
-                    subplot.scatter(plotdict[u'X array'], plotdict[u'Y array'], s = [10.0] * len(plotdict[u'X array']),
-                                    marker = markers[plotindex % markers_len], c =  colors[plotindex % colors_len])
+                    subplot.scatter(x_array, y_array, 
+                                    marker = markers[plotindex % markers_len], c = colors[plotindex % colors_len])
             #
             font_properties = mpl_font_manager.FontProperties()
             font_properties.set_size('small')
@@ -778,8 +862,6 @@ class ScatterChart(ChartBase):
             #
             share_x_axis = None
             #
-            markers = [u'o', u's', u'D', u'^', u'<']
-            colours = [u'r', u'b', u'g', u'y', u'b']
             for plotindex, plotdict in enumerate(plotlist):
                 subplot = fig.add_subplot(subplotcount, 1, plotindex + 1, sharex = share_x_axis)    
                 if not share_x_axis: share_x_axis = subplot    
@@ -787,19 +869,29 @@ class ScatterChart(ChartBase):
                 if y_log_scale:
                     subplot.set_yscale('log')
                 #
-                if u'Z array' in plotdict:
-                    subplot.scatter(plotdict[u'X array'], plotdict[u'Y array'], s = plotdict[u'Z array'], 
-                                    marker = markers[plotindex], c =  colours[plotindex])
-                else:
-                    subplot.scatter(plotdict[u'X array'], plotdict[u'Y array'], s = [10.0] * len(plotdict[u'X array']),
-                                    marker = markers[plotindex], c =  colours[plotindex])
+                x_array = plotdict[u'X array']
+                y_array = plotdict[u'Y array']
+                z_array = plotdict[u'Z array']
+#                #
+#                x_array = numpy.float64(x_array)
+#                y_array = numpy.float64(y_array)
+#                if z_array:
+#                    z_array = numpy.float64(plotdict[u'Z array'])
                 #
-                subplot.axis(u'auto')
+                if z_array:
+                    subplot.scatter(x_array, y_array, s = z_array, 
+                                    marker = markers[plotindex % markers_len], c = colors[plotindex % colors_len])
+                else:
+                    subplot.scatter(x_array, y_array, 
+                                    marker = markers[plotindex % markers_len], c = colors[plotindex % colors_len])
                 #
                 subplot.set_title(plotdict[u'Plot name'])
-                # Use settings from first plot in list.
-                subplot.set_xlabel(plotdict[u'X label'])
                 subplot.set_ylabel(plotdict[u'Y label'])
+                #
+                if (plotindex + 1) == len(plotlist):
+                    # Last subplot.
+                    subplot.set_xlabel(self._graph_data.getPlotDataInfo()[u'X label'])
+                    subplot.set_xticklabels(plotdict[u'X array'], rotation=20.0, visible = True)
         #
         if not self._figure:
             pyplot.tight_layout()
@@ -819,27 +911,28 @@ class PieChart(ChartBase):
                   combined = False, 
                   y_log_scale = False):
         """ """
-        #
-        plotlist = self._graph_data.getPlotList()
-        #
+        # Use externally defined figure, or pyplot for tests.
         if self._figure:
             fig = self._figure
         else:
-            # Use pyplot for tests.
             import matplotlib.pyplot as pyplot
             fig = pyplot.figure()
+        #
+        plotlist = self._graph_data.getPlotList()
         #
         subplotcount = len(plotlist)
         #
         for plotindex, plotdict in enumerate(plotlist):
             subplot = fig.add_subplot(subplotcount, 1, plotindex + 1)
-            if u'X array' in plotdict:    
+            if plotdict[u'X array']:
                 subplot.pie(plotdict[u'Y array'], labels=plotdict[u'X array'])
             else:
                 subplot.pie(plotdict[u'Y array'])
+            #
             subplot.axis(u'equal')
             #
-            subplot.set_title(plotdict[u'Plot name'])
+            if plotdict[u'Plot name']:
+                subplot.set_title(plotdict[u'Plot name'])
         #
         if not self._figure:
             pyplot.tight_layout()
