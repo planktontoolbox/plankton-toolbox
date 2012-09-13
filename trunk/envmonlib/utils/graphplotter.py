@@ -36,6 +36,21 @@ def graphplotter_test():
     """ """
     print("Graph plotter test...")
     #
+
+    plotdata_0 = GraphPlotData(
+                        title = u"One variable data object", 
+                        x_label = u'X (one variable)',
+                        y_label = u'Y (one variable)')
+
+    plotdata_0.addPlot(plot_name = u"First plot", 
+                        y_array = [2006.0, 2006.0, 2006.0, 2006.0], 
+                        y_label = u'Y first')
+
+    graph = LineChart(plotdata_0)
+    graph.plotChart(combined = False, y_log_scale = True)
+    graph.plotChart(combined = True, y_log_scale = True)
+    
+    
     plotdata_1 = GraphPlotData(
                         title = u"One variable data object", 
                         x_label = u'X (one variable)',
@@ -228,7 +243,7 @@ class GraphPlotData(object):
                 z_label = u'',
                 z_array = None):
         """ """
-        if not y_array:
+        if (not y_array) or (len(y_array) == 0):
             # TODO: Log.
             print(u"GraphPlotData.addPlot() must contain at least an Y-array.")
             return
@@ -584,17 +599,17 @@ class LineChart(ChartBase):
                 y_array = plotdict[u'Y array']
 #                z_array = plotdict[u'Z array']
 
-                if x_type == u'Date':
+                if x_array and (x_type == u'Date'):
                     # Convert date strings.
-                    x_array = []
+                    x_date_array = []
                     for timestring in plotdict[u'X array']:
                         try:
                             time = datetime.datetime.strptime(timestring, '%Y-%m-%d')
                         except: 
                             time = datetime.datetime.strptime(timestring, '%Y-%m-%d %H:%M:%S')
-                        x_array.append(time)
+                        x_date_array.append(time)
                     # 
-                    subplot.plot_date(x_array, plotdict[u'Y array'],
+                    subplot.plot_date(x_date_array, plotdict[u'Y array'],
                                       marker = markers[plotindex % markers_len], c =  colors[plotindex % colors_len])
                     #
                     subplot.xaxis.set_major_locator(mpl_dates.MonthLocator())
@@ -603,12 +618,11 @@ class LineChart(ChartBase):
                     #
                     fig.autofmt_xdate(bottom = 0.2)                     
                 else:
-                    if plotdict[u'X array']: 
-                        subplot.plot(x_array, y_array,
-                                     marker = markers[plotindex % markers_len])
-                    else:
-                        subplot.plot(y_array,
-                                     marker = markers[plotindex % markers_len])
+                    if (not x_array) or (len(x_array) == 0):
+                        x_array = list(numpy.arange(len(y_array)))
+                    #   
+                    subplot.plot(x_array, y_array,
+                                 marker = markers[plotindex % markers_len])
             #
             font_properties = mpl_font_manager.FontProperties()
             font_properties.set_size('small')
@@ -628,16 +642,15 @@ class LineChart(ChartBase):
                 y_array = plotdict[u'Y array']
 #                z_array = plotdict[u'Z array']
                 #
-                x_date_array = []
-                #
                 subplot = fig.add_subplot(subplotcount, 1, plotindex + 1, sharex = sharesubplotxaxis)
                 if not sharesubplotxaxis: sharesubplotxaxis = subplot    
                 #
                 if y_log_scale:
                     subplot.set_yscale('log')
                 #
-                if x_type == u'Date':
+                if x_array and (x_type == u'Date'):
                     # Convert date strings.
+                    x_date_array = []
                     for timestring in x_array:
                         try:
                             time = datetime.datetime.strptime(timestring, '%Y-%m-%d')
@@ -654,10 +667,12 @@ class LineChart(ChartBase):
                     #
                     fig.autofmt_xdate(bottom = 0.2)                     
                 else:
-                    if not x_array:
-                        x_array = numpy.arange(len(y_array))
+                    if (not x_array) or (len(x_array) == 0):
+                        x_num_array = list(numpy.arange(len(y_array)))
+                    else:
+                        x_num_array = x_array[:] # TEST ????
                     #   
-                    subplot.plot(x_array, y_array,
+                    subplot.plot(x_num_array, y_array,
                                  marker = markers[plotindex % markers_len])
                 #
                 subplot.set_title(plotdict[u'Plot name'])
@@ -666,7 +681,7 @@ class LineChart(ChartBase):
                 if (plotindex + 1) == len(plotlist):
                     # Last subplot.
                     subplot.set_xlabel(self._graph_data.getPlotDataInfo()[u'X label'])
-                    subplot.set_xticklabels(x_array, visible = True)                    
+#                    subplot.set_xticklabels(x_array, visible = True)                    
         #
         if not self._figure:
             pyplot.tight_layout()
@@ -872,7 +887,7 @@ class ScatterChart(ChartBase):
                 x_array = plotdict[u'X array']
                 y_array = plotdict[u'Y array']
                 z_array = plotdict[u'Z array']
-#                #
+                #
 #                x_array = numpy.float64(x_array)
 #                y_array = numpy.float64(y_array)
 #                if z_array:

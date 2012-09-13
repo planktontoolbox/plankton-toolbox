@@ -26,10 +26,7 @@ from utils.excelfiles import ExcelFiles
 from utils.textfiles import TextFiles
 from utils.zipfiles import ZipFileReader
 from utils.zipfiles import ZipFileWriter
-from utils.graphplotter import PlotData
-from utils.graphplotter import PlotDataOneVariable
-from utils.graphplotter import PlotDataTwoVariables
-from utils.graphplotter import PlotDataThreeVariables
+from utils.graphplotter import GraphPlotData
 from utils.graphplotter import ChartBase
 from utils.graphplotter import LineChart
 from utils.graphplotter import BarChart
