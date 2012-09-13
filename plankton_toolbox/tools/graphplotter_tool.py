@@ -66,7 +66,7 @@ class GraphPlotterTool(tool_base.ToolBase):
         self._canvas.draw()
         #
         if plot_data:
-            if isinstance(plot_data, envmonlib.PlotData):
+            if isinstance(plot_data, envmonlib.GraphPlotData):
                 self._plotdata = plot_data
             else:
                 # Invalid type. 
@@ -92,7 +92,7 @@ class GraphPlotterTool(tool_base.ToolBase):
         
     def _testData(self):
         """ """
-        testdata = envmonlib.PlotDataThreeVariables(
+        testdata = envmonlib.GraphPlotData(
                             title = u"Three variables data object", 
                             x_label = u'X (three variable)',
                             y_label = u'Y (three variable)',
@@ -118,7 +118,7 @@ class GraphPlotterTool(tool_base.ToolBase):
                             x_label = u'X Third',
                             y_label = u'Y Third',
                             z_label = u'Z Third')
-#        testdata = envmonlib.PlotDataTwoVariables(
+#        testdata = envmonlib.GraphPlotData(
 #                            x_type = u'String',
 #                            title = u"Two variables data object, string", 
 #                            x_label = u'X (two variables)',

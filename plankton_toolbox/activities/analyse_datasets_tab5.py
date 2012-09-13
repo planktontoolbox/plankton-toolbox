@@ -299,7 +299,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         visit_list = sorted(visit_set)
         taxon_list = sorted(taxon_set)
         #
-        plotdata = envmonlib.PlotDataTwoVariables(
+        plotdata = envmonlib.GraphPlotData(
                                 x_type = u'String',
                                 title = u"Taxa per station and date", 
                                 x_label = u'Station',
