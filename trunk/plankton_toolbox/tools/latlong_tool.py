@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 #
-# Project: Mellifica toolbox. http://toolbox.mellifica.org
+# Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010-2011 Arnold Andreasson
+# Copyright (c) 2010-2012 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
