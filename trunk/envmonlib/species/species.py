@@ -125,6 +125,8 @@ class Species(object):
                         speciesobject[u'Order'] = parentobject[u'Scientific name']
                     if parentobject[u'Rank'] == u'Class':
                         speciesobject[u'Class'] = parentobject[u'Scientific name']
+                    if parentobject[u'Rank'] == u'Phylum':
+                        speciesobject[u'Phylum'] = parentobject[u'Scientific name']
                         parentobject = None # Done. Continue with next.
                         continue
                 # One step up in hierarchy.
@@ -319,3 +321,77 @@ class Species(object):
         if (header[column] == u'Calculated Carbon pg/counting unit'): return True
         return False
 
+    def getPlanktonGroupFromTaxonName(self, taxon_name):
+        """ """
+        taxon_phylum = self.getTaxonValue(u'Phylum', taxon_name)
+        taxon_class = self.getTaxonValue(u'Class', taxon_name)
+        #
+        plankton_group = u'group-not-designated' # Use this if not found.
+        # - GROUPS OF ORGANISMS: Cyanobacteria.
+        #   (Cyanobacteria)
+        if taxon_phylum in [u'Cyanobacteria']:
+            plankton_group = u'Cyanobacteria'      
+        # - GROUPS OF ORGANISMS: Diatoms.
+        #   (Bacillariophyta)
+        if taxon_phylum in [u'Bacillariophyta']:
+            plankton_group = u'Diatoms'        
+        # - GROUPS OF ORGANISMS: Dinoflagellates.
+        #   (Dinophyceae)
+        if taxon_class in [u'Dinophyceae']:
+            plankton_group = u'Dinoflagellates'        
+        # - GROUPS OF ORGANISMS: Other microalgae.
+        #   (Cryptophyceae + Haptophyta + Bolidophyceae + Chrysophyceae + Dictyochophyceae + 
+        #   Eustigmatophyceae + Pelagophyceae  + Raphidophyceae  + Synurophyceae  + Chlorophyta + 
+        #   Glaucophyta + Coleochaetophyceae + Klebsormidiophyceae + Mesostigmatophyceae + 
+        #   Zygnematophyceae + Euglenophyceae)
+        if taxon_phylum in [
+                            u'Haptophyta', # Phylum
+                            u'Chlorophyta', # Phylum
+                            u'Glaucophyta',  # Phylum
+                            ]:
+            plankton_group = u'Other microalgae'
+        else:
+            if taxon_class in [
+                                u'Cryptophyceae', # Class
+                                u'Bolidophyceae', # Class 
+                                u'Chrysophyceae', # Class 
+                                u'Dictyochophyceae', # Class
+                                u'Eustigmatophyceae',  # Class
+                                u'Pelagophyceae',  # Class
+                                u'Raphidophyceae',  # Class
+                                u'Synurophyceae',  # Class
+                                u'Coleochaetophyceae',  # Class
+                                u'Klebsormidiophyceae',  # Class
+                                u'Mesostigmatophyceae', # Class
+                                u'Zygnematophyceae',  # Class
+                                u'Euglenophyceae' # Class
+                                ]:
+                plankton_group = u'Other microalgae'
+        # - GROUPS OF ORGANISMS: Ciliates.
+        #   (Ciliophora)
+        if taxon_phylum in [u'Ciliophora']:
+            plankton_group = u'Ciliates'        
+        # - GROUPS OF ORGANISMS: Other protozoa.
+        #   (Cryptophyta, ordines incertae sedis + Bicosoecophyceae + Bodonophyceae + 
+        #   Heterokontophyta, ordines incertae sedis + Cercozoa + Craspedophyceae + 
+        #   Ellobiopsea + Protozoa, classes incertae sedis)
+        if taxon_phylum in ['Cercozoa', # Phylum
+                            'Protozoa, classes incertae sedis']: # Phylum
+            plankton_group = u'Other protozoa'
+        else:
+            if taxon_class in [
+                               'Cryptophyta, ordines incertae sedis', # Class
+                               'Bicosoecophyceae', # Class
+                               'Bodonophyceae', # Class
+                               'Heterokontophyta, ordines incertae sedis', # Class
+                               'Craspedophyceae', # Class
+                               'Ellobiopsea' # Class
+                               ]:
+                plankton_group = u'Other protozoa'
+        #
+        return plankton_group
+
+
+
+
+        

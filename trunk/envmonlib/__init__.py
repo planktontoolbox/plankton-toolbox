@@ -25,21 +25,24 @@
 # THE SOFTWARE.
 
 """
-envmonlib, Environmental monitoring library.
+Envmonlib, Environmental monitoring library.
+
+Envmonlib contains functionality to be used when working with biologically 
+environmental monitoring data. Envmonlib is developed in Python 2.7 and released 
+under the MIT-license.
+
+Envmonlib is the core module in the application "Plankton Toolbox". 
+More information can be found here: http://plankton-toolbox.org
 
 Main modules:
 - datasets 
 - dataimports 
+- dataimportformats 
 - dataexports 
 - datascreening 
 - datareports 
+- species
 - utils
-
-Test:
-
-Data:
-- testdata
-- templates
 
 """
 

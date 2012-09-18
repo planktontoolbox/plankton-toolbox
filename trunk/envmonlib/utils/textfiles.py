@@ -29,9 +29,7 @@ import codecs
 import envmonlib
 
 class TextFiles():
-    """
-    This class ...  
-    """
+    """ """
     def __init__(self):
         """ """
         
@@ -67,7 +65,6 @@ class TextFiles():
         #
         finally:
             if infile: infile.close()
-
 
     def writeTableDataset(self, 
                           table_dataset, 
