@@ -49,12 +49,19 @@ def plankton_toolbox_application():
     """
     Main application for the Plankton Toolbox.
     """
+    
+# TEST for windows:    
+    import ctypes
+    myappid = 'smhi.se.plankton-toolbox'
+    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+
     app = QtGui.QApplication(sys.argv)
     app.setOrganizationName("SMHI")
     app.setOrganizationDomain("smhi.se")
+    
     app.setApplicationName("Plankton Toolbox")
-#    app.setWindowIcon(":/plankton_toolbox_icon.png") # TODO:.
-
+    app.setWindowIcon(QtGui.QIcon(u'plankton_toolbox_icon.jpg'))
+    
     utils_qt.setAppStyleSheet(app)
     
     window = toolbox_main_window.MainWindow()

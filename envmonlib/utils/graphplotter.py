@@ -31,167 +31,6 @@ import matplotlib.dates as mpl_dates
 import matplotlib.font_manager as mpl_font_manager
 import pylab # For color maps
 
-
-def graphplotter_test():
-    """ """
-    print("Graph plotter test...")
-    #
-
-    plotdata_0 = GraphPlotData(
-                        title = u"One variable data object", 
-                        x_label = u'X (one variable)',
-                        y_label = u'Y (one variable)')
-
-    plotdata_0.addPlot(plot_name = u"First plot", 
-                        y_array = [2006.0, 2006.0, 2006.0, 2006.0], 
-                        y_label = u'Y first')
-
-    graph = LineChart(plotdata_0)
-    graph.plotChart(combined = False, y_log_scale = True)
-    graph.plotChart(combined = True, y_log_scale = True)
-    
-    
-    plotdata_1 = GraphPlotData(
-                        title = u"One variable data object", 
-                        x_label = u'X (one variable)',
-                        y_label = u'Y (one variable)')
-    
-    plotdata_1.addPlot(plot_name = u"First plot", 
-                        y_array = [2,3,2,4,1,9], 
-                        y_label = u'Y first')
-    plotdata_1.addPlot(plot_name = u"Second plot", 
-                        y_array = [1,2,3], 
-                        y_label = u'Y second')
-    plotdata_1.addPlot(plot_name = u"Third plot", 
-                        y_array = [12,10,6,3,9], 
-                        y_label = u'Y third')
-    #
-    plotdata_2 = GraphPlotData(
-                        title = u"Two variables data object", 
-                        x_label = u'X (two variable)',
-                        y_label = u'Y (two variable)')
-    plotdata_2.addPlot(plot_name = u"First plot", 
-                        x_array = [1,2,5,6,7,8], 
-                        y_array = [2,3,2,4,1,9], 
-                        x_label = u'X first',
-                        y_label = u'Y first')
-    plotdata_2.addPlot(plot_name = u"Second plot", 
-                        x_array = [4,5,6,7,8,9,10,11], 
-                        y_array = [2,3,2,4,1,9,2,1], 
-                        x_label = u'X second',
-                        y_label = u'Y second')
-    #
-    plotdata_3 = GraphPlotData(
-                        title = u"Three variables data object", 
-                        x_label = u'X (three variable)',
-                        y_label = u'Y (three variable)',
-                        z_label = u'Z (three variable)')
-    plotdata_3.addPlot(plot_name = u"First plot", 
-                        x_array = [1,2,5,6,7,8], 
-                        y_array = [20,30,20,40,10,90], 
-                        z_array = [10,10,80,20,30,30], 
-                        x_label = u'X First',
-                        y_label = u'Y First',
-                        z_label = u'Z First')
-    plotdata_3.addPlot(plot_name = u"Second plot", 
-                        x_array = [1,2,5,6,7,8], 
-                        y_array = [2,3,2,4,1,9], 
-                        z_array = [10,10,20,20,30,30], 
-                        x_label = u'X Second',
-                        y_label = u'Y Second',
-                        z_label = u'Z Second')
-    plotdata_3.addPlot(plot_name = u"Third plot", 
-                        x_array = [10,20,50,60,70,80], 
-                        y_array = [2,3,2,4,1,9], 
-                        z_array = [10,60,20,90,30,30], 
-                        x_label = u'X Third',
-                        y_label = u'Y Third',
-                        z_label = u'Z Third')
-    #
-    plotdata_4 = GraphPlotData(
-                        x_type = u'String',
-                        title = u"Two variables data object, string", 
-                        x_label = u'X (two variables)',
-                        y_label = u'Y (two variables)')
-    plotdata_4.addPlot(plot_name = u"Dinophysis acuta", 
-                        x_array = [u'BY15',u'Släggö',u'cc','dd','ee'], 
-                        y_array = [10,30,5,5,1], 
-                        x_label = u'X First',
-                        y_label = u'Y First')
-    plotdata_4.addPlot(plot_name = u"Second plot", 
-                        x_array = ['cc','dd','ee','ff', 'gg', 'hh'], 
-                        y_array = [2,3,2,4,1,9], 
-                        x_label = u'X Second',
-                        y_label = u'Y Second')
-    plotdata_4.addPlot(plot_name = u"Third plot", 
-                        x_array = ['AA','BB','cc','dd','ee','ff'], 
-                        y_array = [5,5,5,1,2,3], 
-                        x_label = u'X Third',
-                        y_label = u'Y Third')
-    #
-    plotdata_5 = GraphPlotData(
-                        x_type = u'Date',
-                        title = u"Two variables x:date", 
-                        x_label = u'X (date)',
-                        y_label = u'Y (two variable)')
-    plotdata_5.addPlot(plot_name = u"First plot", 
-                        x_array = [u'2012-03-07', u'2012-04-01', u'2012-05-10', u'2012-06-20'], 
-                        y_array = [2,4,1,9], 
-                        x_label = u'X first (date)',
-                        y_label = u'Y first')
-    plotdata_5.addPlot(plot_name = u"Second plot", 
-                        x_array = [u'2012-01-01', u'2012-02-01', u'2012-03-21', u'2012-04-01', u'2012-05-01', u'2012-06-01', u'2012-07-01', u'2012-08-01'], 
-                        y_array = [2,3,2,4,1,9,2,1], 
-                        x_label = u'X second (date)',
-                        y_label = u'Y second')
-    #
-    #
-    graph = LineChart(plotdata_1)
-    graph.plotChart(combined = True, y_log_scale = True)
-    graph.plotChart(combined = False, y_log_scale = True)
-    #
-    #
-    graph = LineChart(plotdata_2)
-    graph.plotChart(combined = True, y_log_scale = True)
-    graph.plotChart(combined = False, y_log_scale = True)
-    #
-    #
-    graph = BarChart(plotdata_2)
-    graph.plotChart(combined = True, y_log_scale = False)
-    graph.plotChart(combined = True, y_log_scale = False, stacked = True)
-    graph.plotChart(combined = False, y_log_scale = True)
-    graph.plotChart(combined = False, y_log_scale = True, stacked = True)
-    #
-    #
-    graph = ScatterChart(plotdata_2)
-    graph.plotChart(combined = True, y_log_scale = False)
-    graph.plotChart(combined = False, y_log_scale = True)
-    #
-    #
-    graph = ScatterChart(plotdata_3)
-    graph.plotChart(combined = True, y_log_scale = False)
-    graph.plotChart(combined = False, y_log_scale = True)
-    #
-    #
-    graph = BarChart(plotdata_4)
-    graph.plotChart(combined = True, y_log_scale = False)
-    graph.plotChart(combined = True, y_log_scale = False, stacked = True)
-    graph.plotChart(combined = True, y_log_scale = False)
-    graph.plotChart(combined = True, y_log_scale = False, stacked = True)
-    graph.plotChart(combined = False, y_log_scale = False)
-    graph.plotChart(combined = False, y_log_scale = False, stacked = True)
-    #
-    graph = PieChart(plotdata_2)
-    graph.plotChart(combined = False, y_log_scale = False)
-    #
-    graph = PieChart(plotdata_4)
-    graph.plotChart(combined = False, y_log_scale = False)
-    #
-    graph = LineChart(plotdata_5)
-    graph.plotChart(combined = True, y_log_scale = True)
-    graph.plotChart(combined = False, y_log_scale = True)
-
-
 class GraphPlotData(object):
     """ Abstract base class for data objects. """
     
@@ -362,163 +201,6 @@ class GraphPlotData(object):
         #
         return plotlist
 
-#class PlotDataOneVariable(PlotData):
-#    """ """
-#    @staticmethod
-#    def getAvailableCharts():
-#        """ """
-#        return {
-#                u'Line chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
-#                }
-#
-#    def __init__(self,
-#                 title = u'', 
-#                 x_label = u'',
-#                 y_label = u'',
-#                 x_type = u'Integer', # Integer, Float, String, Date.
-#                 x_format = None,
-#                 y_type = u'', # Integer, Float.
-#                 y_format = None,):
-#        """ """
-#        super(PlotDataOneVariable, self).__init__()
-#        #
-#        self._plotdata_info[u'Title'] = title
-#        self._plotdata_info[u'X label'] = x_label
-#        self._plotdata_info[u'Y label'] = y_label
-#        self._plotdata_info[u'X type'] = x_type
-#        self._plotdata_info[u'X format'] = x_format
-#        self._plotdata_info[u'Y type'] = y_type
-#        self._plotdata_info[u'Y format'] = y_format
-#
-#    def addPlot(self,
-#                plot_name = u'', 
-#                y_array = [],
-#                x_label = u'Position in data array',
-#                y_label = u''):
-#        """ X data will automatically be created by Matplotlib (0, 1, 2, ...). """
-#        plotdict = {}
-#        plotdict[u'Plot name'] = plot_name
-#        plotdict[u'Y array'] = y_array
-#        #
-#        plotdict[u'X label'] = x_label
-#        plotdict[u'Y label'] = y_label
-#        self._plot_list.append(plotdict)
-
-
-#class PlotDataTwoVariables(PlotData):
-#    """ """
-#    
-#    @staticmethod
-#    def getAvailableCharts(self):
-#        """ """
-#        return {
-#                u'Line chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
-#                u'Bar chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
-#                u'Scatter chart': {u'Parameters': [u'combined', u'y_log_scale']},
-#                u'Pie chart': {u'Parameters': []},
-#                }
-#
-#    def __init__(self,
-#                 title = u'', 
-#                 x_label = u'',
-#                 y_label = u'',
-#                 x_type = u'', # Integer, Float, String, Datetime.
-#                 x_format = None,
-#                 y_type = u'', # Integer, Float.
-#                 y_format = None):
-#        """ """
-#        super(PlotDataTwoVariables, self).__init__()
-#        #
-#        self._plotdata_info[u'Title'] = title
-#        self._plotdata_info[u'X label'] = x_label
-#        self._plotdata_info[u'Y label'] = y_label
-#        self._plotdata_info[u'X type'] = x_type
-#        self._plotdata_info[u'X format'] = x_format
-#        self._plotdata_info[u'Y type'] = y_type
-#        self._plotdata_info[u'Y format'] = y_format
-#        
-#    def addPlot(self,
-#                plot_name = u'', 
-#                x_array = [],
-#                y_array = [],
-#                x_type = u'', # Integer, Float, String, Datetime.
-#                x_format = None,
-#                y_type = u'', # Integer, Float.
-#                y_format = None,
-#                x_label = u'',
-#                y_label = u''):
-#        """ """
-#        plotdict = {}
-#        plotdict[u'Plot name'] = plot_name
-#        plotdict[u'X array'] = x_array
-#        plotdict[u'Y array'] = y_array
-#        #
-#        plotdict[u'X type'] = x_type
-#        plotdict[u'X format'] = x_format
-#        plotdict[u'Y type'] = y_type
-#        plotdict[u'Y format'] = y_format
-#        #
-#        plotdict[u'X label'] = x_label
-#        plotdict[u'Y label'] = y_label
-#        self._plot_list.append(plotdict)
-
-
-#class PlotDataThreeVariables(PlotData):
-#    """ """
-#    
-#    @staticmethod
-#    def getAvailableCharts(self):
-#        """ """
-#        return {
-#                u'Line chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
-#                u'Bar chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
-#                u'Scatter chart': {u'Parameters': [u'combined', u'y_log_scale']},
-#                }
-#
-#    def __init__(self,
-#                 title = u'', 
-#                 x_label = u'',
-#                 y_label = u'',
-#                 z_label = u'',
-#                 x_type = u'', # Integer, Float, String, Datetime.
-#                 x_format = None,
-#                 y_type = u'', # Integer, Float.
-#                 y_format = None,
-#                 z_type = u'', # Integer, Float.
-#                 z_format = None):
-#        """ """
-#        super(PlotDataThreeVariables, self).__init__()
-#        #
-#        self._plotdata_info[u'Title'] = title
-#        self._plotdata_info[u'X label'] = x_label
-#        self._plotdata_info[u'Y label'] = y_label
-#        self._plotdata_info[u'Z label'] = z_label
-#        self._plotdata_info[u'X type'] = x_type
-#        self._plotdata_info[u'X format'] = x_format
-#        self._plotdata_info[u'Y type'] = y_type
-#        self._plotdata_info[u'Y format'] = y_format
-#        self._plotdata_info[u'Z type'] = z_type
-#        self._plotdata_info[u'Z format'] = z_format
-#        
-#    def addPlot(self,
-#                plot_name = u'', 
-#                x_array = [],
-#                y_array = [],
-#                z_array = [],
-#                x_label = u'',
-#                y_label = u'',
-#                z_label = u''):
-#        """ """
-#        plotdict = {}
-#        plotdict[u'Plot name'] = plot_name
-#        plotdict[u'X array'] = x_array
-#        plotdict[u'Y array'] = y_array
-#        plotdict[u'Z array'] = z_array
-#        #
-#        plotdict[u'X label'] = x_label
-#        plotdict[u'Y label'] = y_label
-#        plotdict[u'Z label'] = z_label
-#        self._plot_list.append(plotdict)
 
 
 class ChartBase(object):
@@ -955,6 +637,167 @@ class PieChart(ChartBase):
         else:
             self._figure.tight_layout()
         
+#
+# Test.
+#
+def graphplotter_test():
+    """ """
+    print("Graph plotter test...")
+    #
+
+    plotdata_0 = GraphPlotData(
+                        title = u"One variable data object", 
+                        x_label = u'X (one variable)',
+                        y_label = u'Y (one variable)')
+
+    plotdata_0.addPlot(plot_name = u"First plot", 
+                        y_array = [2006.0, 2006.0, 2006.0, 2006.0], 
+                        y_label = u'Y first')
+
+    graph = LineChart(plotdata_0)
+    graph.plotChart(combined = False, y_log_scale = True)
+    graph.plotChart(combined = True, y_log_scale = True)
+    
+    
+    plotdata_1 = GraphPlotData(
+                        title = u"One variable data object", 
+                        x_label = u'X (one variable)',
+                        y_label = u'Y (one variable)')
+    
+    plotdata_1.addPlot(plot_name = u"First plot", 
+                        y_array = [2,3,2,4,1,9], 
+                        y_label = u'Y first')
+    plotdata_1.addPlot(plot_name = u"Second plot", 
+                        y_array = [1,2,3], 
+                        y_label = u'Y second')
+    plotdata_1.addPlot(plot_name = u"Third plot", 
+                        y_array = [12,10,6,3,9], 
+                        y_label = u'Y third')
+    #
+    plotdata_2 = GraphPlotData(
+                        title = u"Two variables data object", 
+                        x_label = u'X (two variable)',
+                        y_label = u'Y (two variable)')
+    plotdata_2.addPlot(plot_name = u"First plot", 
+                        x_array = [1,2,5,6,7,8], 
+                        y_array = [2,3,2,4,1,9], 
+                        x_label = u'X first',
+                        y_label = u'Y first')
+    plotdata_2.addPlot(plot_name = u"Second plot", 
+                        x_array = [4,5,6,7,8,9,10,11], 
+                        y_array = [2,3,2,4,1,9,2,1], 
+                        x_label = u'X second',
+                        y_label = u'Y second')
+    #
+    plotdata_3 = GraphPlotData(
+                        title = u"Three variables data object", 
+                        x_label = u'X (three variable)',
+                        y_label = u'Y (three variable)',
+                        z_label = u'Z (three variable)')
+    plotdata_3.addPlot(plot_name = u"First plot", 
+                        x_array = [1,2,5,6,7,8], 
+                        y_array = [20,30,20,40,10,90], 
+                        z_array = [10,10,80,20,30,30], 
+                        x_label = u'X First',
+                        y_label = u'Y First',
+                        z_label = u'Z First')
+    plotdata_3.addPlot(plot_name = u"Second plot", 
+                        x_array = [1,2,5,6,7,8], 
+                        y_array = [2,3,2,4,1,9], 
+                        z_array = [10,10,20,20,30,30], 
+                        x_label = u'X Second',
+                        y_label = u'Y Second',
+                        z_label = u'Z Second')
+    plotdata_3.addPlot(plot_name = u"Third plot", 
+                        x_array = [10,20,50,60,70,80], 
+                        y_array = [2,3,2,4,1,9], 
+                        z_array = [10,60,20,90,30,30], 
+                        x_label = u'X Third',
+                        y_label = u'Y Third',
+                        z_label = u'Z Third')
+    #
+    plotdata_4 = GraphPlotData(
+                        x_type = u'String',
+                        title = u"Two variables data object, string", 
+                        x_label = u'X (two variables)',
+                        y_label = u'Y (two variables)')
+    plotdata_4.addPlot(plot_name = u"Dinophysis acuta", 
+                        x_array = [u'BY15',u'Släggö',u'cc','dd','ee'], 
+                        y_array = [10,30,5,5,1], 
+                        x_label = u'X First',
+                        y_label = u'Y First')
+    plotdata_4.addPlot(plot_name = u"Second plot", 
+                        x_array = ['cc','dd','ee','ff', 'gg', 'hh'], 
+                        y_array = [2,3,2,4,1,9], 
+                        x_label = u'X Second',
+                        y_label = u'Y Second')
+    plotdata_4.addPlot(plot_name = u"Third plot", 
+                        x_array = ['AA','BB','cc','dd','ee','ff'], 
+                        y_array = [5,5,5,1,2,3], 
+                        x_label = u'X Third',
+                        y_label = u'Y Third')
+    #
+    plotdata_5 = GraphPlotData(
+                        x_type = u'Date',
+                        title = u"Two variables x:date", 
+                        x_label = u'X (date)',
+                        y_label = u'Y (two variable)')
+    plotdata_5.addPlot(plot_name = u"First plot", 
+                        x_array = [u'2012-03-07', u'2012-04-01', u'2012-05-10', u'2012-06-20'], 
+                        y_array = [2,4,1,9], 
+                        x_label = u'X first (date)',
+                        y_label = u'Y first')
+    plotdata_5.addPlot(plot_name = u"Second plot", 
+                        x_array = [u'2012-01-01', u'2012-02-01', u'2012-03-21', u'2012-04-01', u'2012-05-01', u'2012-06-01', u'2012-07-01', u'2012-08-01'], 
+                        y_array = [2,3,2,4,1,9,2,1], 
+                        x_label = u'X second (date)',
+                        y_label = u'Y second')
+    #
+    #
+    graph = LineChart(plotdata_1)
+    graph.plotChart(combined = True, y_log_scale = True)
+    graph.plotChart(combined = False, y_log_scale = True)
+    #
+    #
+    graph = LineChart(plotdata_2)
+    graph.plotChart(combined = True, y_log_scale = True)
+    graph.plotChart(combined = False, y_log_scale = True)
+    #
+    #
+    graph = BarChart(plotdata_2)
+    graph.plotChart(combined = True, y_log_scale = False)
+    graph.plotChart(combined = True, y_log_scale = False, stacked = True)
+    graph.plotChart(combined = False, y_log_scale = True)
+    graph.plotChart(combined = False, y_log_scale = True, stacked = True)
+    #
+    #
+    graph = ScatterChart(plotdata_2)
+    graph.plotChart(combined = True, y_log_scale = False)
+    graph.plotChart(combined = False, y_log_scale = True)
+    #
+    #
+    graph = ScatterChart(plotdata_3)
+    graph.plotChart(combined = True, y_log_scale = False)
+    graph.plotChart(combined = False, y_log_scale = True)
+    #
+    #
+    graph = BarChart(plotdata_4)
+    graph.plotChart(combined = True, y_log_scale = False)
+    graph.plotChart(combined = True, y_log_scale = False, stacked = True)
+    graph.plotChart(combined = True, y_log_scale = False)
+    graph.plotChart(combined = True, y_log_scale = False, stacked = True)
+    graph.plotChart(combined = False, y_log_scale = False)
+    graph.plotChart(combined = False, y_log_scale = False, stacked = True)
+    #
+    graph = PieChart(plotdata_2)
+    graph.plotChart(combined = False, y_log_scale = False)
+    #
+    graph = PieChart(plotdata_4)
+    graph.plotChart(combined = False, y_log_scale = False)
+    #
+    graph = LineChart(plotdata_5)
+    graph.plotChart(combined = True, y_log_scale = True)
+    graph.plotChart(combined = False, y_log_scale = True)
 
                 
 if __name__ == "__main__":

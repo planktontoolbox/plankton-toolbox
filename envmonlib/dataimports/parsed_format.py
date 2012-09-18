@@ -42,6 +42,7 @@ class ParsedFormat(envmonlib.FormatBase):
         command = command.replace(u'$Float(', u'self._asFloat(')
         command = command.replace(u'$Species(', u'self._speciesByKey(')
         command = command.replace(u'$Sizeclass(', u'self._sizeclassByKey(')
+        command = command.replace(u'$PlanktonGroup(', u'self._planktonGroup(')
         #
         if node_level == u'FUNCTION Sample':
             command = command.replace(u'$CreateVariable(', u'self._createVariable(currentsample, ')
@@ -96,9 +97,11 @@ class ParsedFormat(envmonlib.FormatBase):
 
     def _sizeclassByKey(self, taxon_name, size_class, key):
         """ """
-#        # TODO: For test:
-#        print("DEBUG: " + taxon_name)
         return envmonlib.Species().getSizeclassValue(key, taxon_name, size_class)
+
+    def _planktonGroup(self, taxon_name):
+        """ """
+        return envmonlib.Species().getPlanktonGroupFromTaxonName(taxon_name)
 
     def _toStation(self, current_node, station_name, **more):
         """ """

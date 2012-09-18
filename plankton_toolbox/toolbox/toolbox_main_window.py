@@ -45,7 +45,7 @@ import plankton_toolbox.tools.log_tool as log_tool
 import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
 
-__version__ = '0.0.2' # Plankton Toolbox version.
+__version__ = '0.2.1' # Plankton Toolbox version.
 
 class MainWindow(QtGui.QMainWindow):
     """ 
@@ -283,14 +283,18 @@ class MainWindow(QtGui.QMainWindow):
 <b>Plankton Toolbox</b> version %s
 </p>
 <p>
-Plankton Toolbox is an application... (TODO:)  
+Plankton Toolbox is... (TODO:)  
 </p>
 <p>
-Developed in Python 2.6 and Qt/PyQt4. Released under the MIT license.
+Plankton Toolbox is developed by the 
+<a href="http://smhi.se">Swedish Meterological and Hydrological Institute (SMHI)</a> 
+with funding from the 
+<a href="http://svenskalifewatch.se">Swedish LifeWatch project</a>.
 </p>
 <p>
-More info at 
-<a href="http://plankton-toolbox.org">http://plankton-toolbox.org</a>
+Developed in Python 2.7 and Qt/PyQt4. Released under the MIT license. <br/>
+More info for developers at: 
+<a href="http://plankton-toolbox.org">http://plankton-toolbox.org</a>.
 </p>
 """ % (__version__)))
         

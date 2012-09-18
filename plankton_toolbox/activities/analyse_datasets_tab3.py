@@ -61,14 +61,15 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         # Aggregate over taxonomic rank.
         self._aggregate_rank_list = QtGui.QComboBox()
         self._aggregate_rank_list.addItems([
-            "Biota",
-            "Kingdom",
-            "Phylum",
-            "Class",
-            "Order",
-            "Family",
-            "Genus",
-            "Species" ])
+            u"Biota",
+            u"Plankton groups",
+            u"Kingdom",
+            u"Phylum",
+            u"Class",
+            u"Order",
+            u"Family",
+            u"Genus",
+            u"Species" ])
         self._aggregate_rank_list.setCurrentIndex(3) # Default: Class
         #  Aggregate over trophy.
         self._trophy_listview = utils_qt.SelectableQListView()
@@ -135,6 +136,8 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                             #
                             if selected_taxon_rank == u'Biota':
                                 newtaxon = u'Biota' # Biota is above kingdom in the taxonomic hierarchy. 
+                            elif selected_taxon_rank == u'Plankton groups':
+                                newtaxon = variablenode.getData(u'Plankton group')  
                             else:
                                 newtaxon = variablenode.getData(selected_taxon_rank) # Get taxon name for the selected rank.
                                 if not newtaxon:
