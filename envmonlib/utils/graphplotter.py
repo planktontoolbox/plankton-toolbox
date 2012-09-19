@@ -405,13 +405,15 @@ class BarChart(ChartBase):
             colourcount = len(plotlist)
             colourmap = pylab.get_cmap('Dark2')
             #
-#            subplot = fig.add_subplot(111)
             subplot = fig.add_subplot(111)
             #
+            accumulatedplots = None
             if y_log_scale:
                 subplot.set_yscale('log')
-            #        
-            accumulatedplots = [0] * len(x_axis) # For stacked bars.
+                accumulatedplots = [0.1] * len(x_axis) # For stacked bars. log(0) not defined.
+            else:
+                accumulatedplots = [0] * len(x_axis) # For stacked bars.
+               
             #
             for plotindex, plotdict in enumerate(plotlist):
                 #

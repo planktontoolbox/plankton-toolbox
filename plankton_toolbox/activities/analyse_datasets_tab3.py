@@ -70,13 +70,17 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             u"Family",
             u"Genus",
             u"Species" ])
-        self._aggregate_rank_list.setCurrentIndex(3) # Default: Class
+        self._aggregate_rank_list.setCurrentIndex(1) # Default: Plankton groups.
         #  Aggregate over trophy.
         self._trophy_listview = utils_qt.SelectableQListView()
         self._trophy_listview.setMaximumHeight(80)
-        # Button.
+        # Buttons.
         self._aggregatedata_button = QtGui.QPushButton("Aggregate data")
-        self.connect(self._aggregatedata_button, QtCore.SIGNAL("clicked()"), self._aggregateData)                
+        self.connect(self._aggregatedata_button, QtCore.SIGNAL("clicked()"), self._aggregateData)
+        #
+        self._reloaddata_button = QtGui.QPushButton("Reload current data")
+        self.connect(self._reloaddata_button, QtCore.SIGNAL("clicked()"), self._main_activity._tab1widget._useSelectedDatasets)
+        #               
         self._addmissingtaxa_button = QtGui.QPushButton("Add missing taxa in each sample")
         self.connect(self._addmissingtaxa_button, QtCore.SIGNAL("clicked()"), self._addMissingTaxa)                
         # Layout widgets.
@@ -94,6 +98,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         form1.addWidget(self._aggregate_rank_list, gridrow, 0, 1, 1)
         form1.addWidget(self._trophy_listview, gridrow, 1, 4, 3)
         gridrow += 4
+        form1.addWidget(self._reloaddata_button, gridrow, 2, 1, 1)
         form1.addWidget(self._aggregatedata_button, gridrow, 3, 1, 1)
         form1.addWidget(self._addmissingtaxa_button, gridrow, 10, 1, 1)
         #
