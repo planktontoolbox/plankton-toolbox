@@ -26,8 +26,7 @@
 
 import envmonlib
 try: 
-    from openpyxl import load_workbook
-    from openpyxl import Workbook
+    import openpyxl
 except ImportError: 
     print("Python package openpyxl missing. Please use openpyxl version 1.5.8 or later. Download from http://pypi.python.org/pypi/openpyxl.")
     raise UserWarning("Python package openpyxl missing. Please use openpyxl version 1.5.8 or later. Download from http://pypi.python.org/pypi/openpyxl.")
@@ -57,7 +56,7 @@ class ExcelFiles():
         if not isinstance(target_dataset, envmonlib.DatasetTable):
             raise UserWarning("Target dataset is not of valid type.")
         try:
-            workbook = load_workbook(file_name, use_iterators = True) # Supports big files.
+            workbook = openpyxl.load_workbook(file_name, use_iterators = True) # Supports big files.
             if workbook == None:
                 raise UserWarning("Can't read Excel (.xlsx) file.")
             worksheet = None
@@ -172,7 +171,7 @@ class ExcelFiles():
         if not isinstance(table_dataset, envmonlib.DatasetTable):
             raise UserWarning("Dataset is not of a valid type.")
         try:
-            workbook =  Workbook(optimized_write = True)  # Supports big files.
+            workbook =  openpyxl.Workbook(optimized_write = True)  # Supports big files.
             worksheet = workbook.create_sheet()
             # Header.
             worksheet.append(table_dataset.getHeader())
