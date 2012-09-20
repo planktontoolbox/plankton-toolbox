@@ -60,6 +60,8 @@ class TextFiles():
                     target_dataset.setHeader(row)
                 else:
                     # Row.
+                    if len(row.strip()) == 0: 
+                        continue # Don't add empty rows.
                     row = [item.strip() for item in row.split(fieldseparator)]
                     target_dataset.appendRow(row)             
         #

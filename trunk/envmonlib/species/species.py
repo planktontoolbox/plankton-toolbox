@@ -25,48 +25,61 @@
 # THE SOFTWARE.
 
 import envmonlib
-#import codecs
-#import json
-#import locale
+import os.path
 
 @envmonlib.singleton
 class Species(object):
-    """ """
+    """ 
+    
+    Rules.
+    Filenames:
+    - Species files must be in the Excel (xlsx) format.
+    - Taxa files must contain the string '_species'.
+    - BVOL files must contain the string '_bvol'.
+    - Harmful species files must contain the string '_harmful'.
+    - Translations files must begin with 'translate_to_'.
+    File columns:
+    - Species files must contain the columns: ......
+    - BVOL files must follow the PEG BVOL format.
+    - Translation files for species must... 
+    - Translation files for BVOL must... 
+    
+    """
     def __init__(self,
-                 taxa_filenames = [u'toolbox_data/species/Dyntaxa_species.xlsx',
-                                   u'toolbox_data/species/SMHI_species.xlsx'], 
-                 sizeclasses_filenames = [u'toolbox_data/species/PEG_BVOL2011.xlsx',
-                                          u'toolbox_data/species/SMHI_BVOL2011.xlsx'], 
-                 sizeclasses_to_taxa_filename = u'toolbox_data/species/Translate_sizeclasses_to_dyntaxa.xlsx', 
-                 harmful_filename = u'toolbox_data/species/SMHI_harmful_species.xlsx', 
-                 harmful_to_taxa_filename = u'toolbox_data/species/translate_harmful_to_taxa.xlsx'):
+                 taxa_filenames = [u'toolbox_data/species/nordicmicroalgae_species.xlsx',
+                                   u'toolbox_data/species/smhi_species.xlsx'], 
+                 bvol_filenames = [u'toolbox_data/species/peg_bvol_2011.xlsx',
+                                   u'toolbox_data/species/smhi_bvol_2011.xlsx'], 
+                 harmful_filenames = [u'toolbox_data/species/smhi_harmful.xlsx']):
         # Parameters.
         self._taxa_filenames = taxa_filenames 
-        self._sizeclasses_filenames = sizeclasses_filenames
-        self._sizeclasses_to_taxa_filename = sizeclasses_to_taxa_filename
-        self._harmful_filename = harmful_filename
-        self._harmful_to_taxa_filename = harmful_to_taxa_filename
+        self._bvol_filenames = bvol_filenames
+        self._harmful_filenames = harmful_filenames
         # Local storage.
         self._taxa = {} # Main dictionary for taxa.
-        self._sizeclasses_name_lookup = {}
-        self._harmful_name_lookup = {}
+        self._taxa_lookup = {} # Includes both taxon names and synonyms.
+        self._plankton_group_phylum_dict = None
+        self._plankton_group_class_dict = None
         # Run.
-        self._loadAllData()
+        try:
+            self._loadAllData()
+        except:
+            print(u'Failed to load species data.')
 
     def getTaxaDict(self):
         """ """
         return self._taxa 
     
-    def getTaxonValue(self, key, taxon_name):
+    def getTaxonValue(self, taxon_name, key):
         """ """
         if taxon_name in self._taxa:
             return self._taxa[taxon_name].get(key, u'')
         return u''
     
-    def getSizeclassValue(self, key, taxon_name, size_class):
+    def getBvolValue(self, key, taxon_name, size_class):
         """ """
-        if taxon_name in self._sizeclasses_name_lookup:
-            speciesobject = self._sizeclasses_name_lookup[taxon_name]
+        if taxon_name in self._taxa_lookup:
+            speciesobject = self._taxa_lookup[taxon_name]
             if u'Size classes' in speciesobject:
                 for sizeclassobject in speciesobject[u'Size classes']:
                     if sizeclassobject.get(u'Size class', u'') == size_class:
@@ -76,42 +89,125 @@ class Species(object):
     def _clear(self):
         """ """
         self._taxa = {}
-        self._sizeclasses_name_lookup = {}
-        self._harmful_name_lookup = {}
+        self._taxa_synonyms = {}
+#        self._bvol_name_lookup = {}
+#        self._harmful_name_lookup = {}
 
     def _loadAllData(self):
         """ """
-        self._clear()
-        for excelfilename in self._taxa_filenames:
-            self._loadTaxa(excelfilename)
-        for excelfilename in self._sizeclasses_filenames:
-            self._loadSizeClassesData(excelfilename)
-        self._loadHarmfulData()
-        self._updateLookupDictionaries()
-        self._precalculateData()
+        try:
+            self._clear()
+            # Create taxa.
+            for excelfilename in self._taxa_filenames:
+                self._loadTaxa(excelfilename)                
+            # Add synonyms to taxa. Note: 'translate_to_' will be added to filenames.
+            for excelfilename in self._taxa_filenames:
+                self._loadSynonyms(excelfilename)                            
+            self._updateLookupDictionaries()
+            
+            # Load harmful species.
+            for excelfilename in self._harmful_filenames:
+                self._loadHarmful(excelfilename)
+
+            # Load BVOL species data.
+            for excelfilename in self._bvol_filenames:
+                self._loadBvol(excelfilename)            
+            # Add BVOL translations.
+            ### TODO: ....
+            
+            # Perform some useful pre-calculations.
+            self._precalculateData()
         #
-#        # Used for DEBUG:
-#        fileencoding = locale.getpreferredencoding()
-#        out = codecs.open(u'DEBUG_species_list.txt', mode = 'w', 
-#                          encoding = fileencoding)
-#        out.write(json.dumps(self._taxa, encoding = 'utf8', sort_keys=True, indent=4))
-#        out.close()
-#        #
+        except Exception, e:
+            envmonlib.Logging().error(u"Failed when loading species data: " + unicode(e))
+            print(u"Failed when loading species data: " + unicode(e))
+
+        #
+        # Used for DEBUG:
+        import locale
+        import codecs
+        import json
+        fileencoding = locale.getpreferredencoding()
+        out = codecs.open(u'DEBUG_species_list.txt', mode = 'w', encoding = fileencoding)
+        out.write(json.dumps(self._taxa, encoding = 'utf8', sort_keys=True, indent=4))
+        out.close()
+        #
         #
         
+    def _loadTaxa(self, excel_file_name):
+        """ Creates one data object for each taxon. """
+        # Get data from Excel file.
+        tabledataset = envmonlib.DatasetTable()
+        envmonlib.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
+        #
+        for row in tabledataset.getRows():
+            scientificname = row[0] # ScientificName
+            author = row[1] if row[1] != 'NULL' else '' # Author
+            rank = row[2] # Rank
+            parentname = row[3]
+            #
+            if scientificname:
+                if scientificname not in self._taxa:
+                    self._taxa[scientificname] = {}
+                speciesobject = self._taxa[scientificname] 
+                speciesobject[u'Scientific name'] = scientificname
+                speciesobject[u'Author'] = author
+                speciesobject[u'Rank'] = rank
+                speciesobject[u'Parent name'] = parentname
+
+    def _loadSynonyms(self, excel_file_name):
+        """ Add synonyms from the corresponding 'translate_to_' file. """
+        dirname = os.path.dirname(excel_file_name)        
+        basename = os.path.basename(excel_file_name)
+        translate_file_name = dirname + u'/translate_to_' + basename
+        # 
+        if os.path.exists(translate_file_name):
+            tabledataset = envmonlib.DatasetTable()
+            envmonlib.ExcelFiles().readToTableDataset(tabledataset, translate_file_name)
+            for row in tabledataset.getRows():
+                toname = row[1]
+                fromname = row[0]
+                if toname in self._taxa:
+                    taxon = self._taxa[toname]
+                    if not u'Synonyms' in self._taxa[toname]:
+                        taxon[u'Synonyms'] = []
+                    taxon[u'Synonyms'].append(fromname)
+                else:
+                    print(translate_file_name + u': Species missing ' + toname)
+                    
+    def _loadHarmful(self, excel_file_name):
+        """ Adds info about harmfulness to the species objects. """
+        # Get data from Excel file.
+        tabledataset = envmonlib.DatasetTable()
+        envmonlib.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
+        #
+        for row in tabledataset.getRows():
+            scientificname = row[0] # Scientific name
+            aphiaid = row[1] if row[1] != 'NULL' else '' # Aphia id
+            #
+            if scientificname:
+                if scientificname not in self._taxa:
+                    self._taxa[scientificname] = {}
+                    self._taxa[scientificname][u'Scientific name'] = scientificname
+                speciesobject = self._taxa[scientificname] 
+                speciesobject[u'Harmful name'] = scientificname
+                speciesobject[u'Harmful'] = True 
+                speciesobject[u'Aphia id'] = aphiaid
+#        infile.close()
+
     def _updateLookupDictionaries(self):
         """ """
-        self._sizeclasses_name_lookup = {}
-        self._harmful_name_lookup = {}
-        #
-        for speciesobject in self._taxa.values():
-            if u'Size classes name' in speciesobject:
-                self._sizeclasses_name_lookup[speciesobject[u'Size classes name']] = speciesobject
-            if u'Harmful name' in speciesobject:
-                self._harmful_name_lookup[speciesobject[u'Harmful name']] = speciesobject
-
+        self._taxa_lookup = {}
+        for taxonobject in self._taxa.values():
+            # Add the taxon itself.
+            self._taxa_lookup[taxonobject[u'Scientific name']] = taxonobject 
+            if u'Synonyms' in taxonobject:
+                for synonym in taxonobject[u'Synonyms']:
+                    # Add synonyms.
+                    self._taxa_lookup[synonym] = taxonobject
+        
     def _precalculateData(self):
-        """ Calculates data from loaded datasets. I.e. class and order info. """
+        """ Calculates data from loaded datasets. I.e. phylum, class and order info. """
         for speciesobject in self._taxa.values():
             counter = 0
             parentobject = speciesobject
@@ -135,75 +231,16 @@ class Species(object):
                 else:
                     parentobject = None
 
-    def _loadTaxa(self, excel_file_name):
-        """ Creates one data object for each taxon. """
-        # Get data from Excel file.
-        tabledataset = envmonlib.DatasetTable()
-        envmonlib.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
-        #
-        for row in tabledataset.getRows():
-            scientificname = row[0] # ScientificName
-            author = row[1] if row[1] != 'NULL' else '' # Author
-            rank = row[2] # Rank
-            parentname = row[3]
-            #
-            if scientificname:
-                if scientificname not in self._taxa:
-                    self._taxa[scientificname] = {}
-                speciesobject = self._taxa[scientificname] 
-                speciesobject[u'Scientific name'] = scientificname
-                speciesobject[u'Author'] = author
-                speciesobject[u'Rank'] = rank
-                speciesobject[u'Parent name'] = parentname
-#        infile.close()
-                    
-    def _loadHarmfulData(self):
-        """ Adds info about harmfulness to the species objects. """
-        #
-        #
-        # TODO: Use self._harmful_to_taxa_filename if available.
-        #
-        #
-        #
-        # Get data from Excel file.
-        tabledataset = envmonlib.DatasetTable()
-        envmonlib.ExcelFiles().readToTableDataset(tabledataset, self._harmful_filename)
-        #
-        for row in tabledataset.getRows():
-            scientificname = row[0] # Scientific name
-            aphiaid = row[1] if row[1] != 'NULL' else '' # Aphia id
-            #
-            if scientificname:
-                if scientificname not in self._taxa:
-                    self._taxa[scientificname] = {}
-                    self._taxa[scientificname][u'Scientific name'] = scientificname
-                speciesobject = self._taxa[scientificname] 
-                speciesobject[u'Harmful name'] = scientificname
-                speciesobject[u'Harmful'] = True 
-                speciesobject[u'Aphia id'] = aphiaid
-#        infile.close()
-
-    def _loadSizeClassesData(self, excel_file_name):
-        """ Adds PEG data to species objects. Creates additional species objects if missing 
+    def _loadBvol(self, excel_file_name):
+        """ Adds BVOL data to species objects. Creates additional species objects if missing 
             (i.e. for Unicell, Flagellates). """
-        # Create mapping between PEG and Dyntaxa names.
-        pegtodyntaxa = {}
-        # Get data from Excel file.
-        tabledataset = envmonlib.DatasetTable()
-        envmonlib.ExcelFiles().readToTableDataset(tabledataset, self._sizeclasses_to_taxa_filename)
-        #
-        for row in tabledataset.getRows():
-                pegtodyntaxa[row[0]] = row[1]
-        #
         # Import size class data.
-        pegtodyntaxa = {}
-        header = []
-        #
         tabledataset = envmonlib.DatasetTable()
         envmonlib.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
-        #
+        # Create header list for mapping and translations.
+        header = []
         for columnname in tabledataset.getHeader(): 
-            header.append(self._translatePegHeader(columnname.strip()))
+            header.append(self._translateBvolHeader(columnname.strip()))
         #
         for row in tabledataset.getRows():
             taxondict = {}
@@ -213,7 +250,7 @@ class Species(object):
                 if len(value.strip()) > 0:
                     # Separate columns containing taxon and 
                     # size-class related info.                
-                    if self._isPegTaxonRelated(header, column):
+                    if self._isBvolTaxonRelated(header, column):
                         taxondict[header[column]] = value.strip()
                     else:
                         if (header[column] == u'Size class'):
@@ -222,26 +259,26 @@ class Species(object):
                                 sizeclassdict[header[column]] = unicode(int(float(value)))
                             except:
                                 sizeclassdict[header[column]] = u''
-                                print(u'_loadPegData, Size class: ' + row[1])
-                        elif self._isPegColumnNumeric(header, column):
+                                print(u'_loadBvol, Size class: ' + row[1])
+                        elif self._isBvolColumnNumeric(header, column):
                             sizeclassdict[header[column]] = value.strip().replace(',', '.')
                         else:
                             sizeclassdict[header[column]] = value.strip()
                 column += 1
             # Check if exists in self._taxa
             scientificname = taxondict[u'Species']
-            if scientificname in pegtodyntaxa:
-                scientificname = pegtodyntaxa[scientificname]
-            if scientificname in self._taxa:
-                speciesobject = self._taxa[scientificname]
+            if scientificname in self._taxa_lookup:
+                speciesobject = self._taxa_lookup[scientificname]
             else:
-                self._taxa[taxondict[u'Species']] = {}
-                speciesobject = self._taxa[scientificname] 
-                speciesobject[u'Scientific name'] = scientificname
-                if u'Author' in taxondict:
-                    speciesobject[u'Author'] = taxondict[u'Author']
+                continue # Only add BVOL info if taxon exists in taxa.
+#            else:
+#                self._taxa[taxondict[u'Species']] = {}
+#                speciesobject = self._taxa[scientificname] 
+#                speciesobject[u'Scientific name'] = scientificname
+#                if u'Author' in taxondict:
+#                    speciesobject[u'Author'] = taxondict[u'Author']
             #
-            speciesobject[u'Size classes name'] = scientificname
+            speciesobject[u'BVOL name'] = scientificname
             #
             if u'Size classes' not in speciesobject:
                 speciesobject[u'Size classes'] = []
@@ -259,8 +296,8 @@ class Species(object):
                 taxon[u'Trophy'] = list(trophyset)[0]
 
         
-    def _translatePegHeader(self, importFileHeader):
-        """ Used when importing PEG data.         
+    def _translateBvolHeader(self, importFileHeader):
+        """ Used when importing BVOL data.         
             Converts import file column names to key names used in dictionary. """        
     #        if (importFileHeader == u'Division'): return u'Division'
     #        if (importFileHeader == u'Class'): return u'Class'
@@ -290,10 +327,11 @@ class Species(object):
         if (importFileHeader == u'CORRECTION / ADDITION                            2009'): return u'Correction/addition 2009' # Modified
         if (importFileHeader == u'CORRECTION / ADDITION                            2010'): return u'Correction/addition 2010' # Modified
         if (importFileHeader == u'CORRECTION / ADDITION                            2011'): return u'Correction/addition 2011' # Modified
+        if (importFileHeader == u'CORRECTION / ADDITION                            2012'): return u'Correction/addition 2012' # Modified
         return importFileHeader     
             
-    def _isPegTaxonRelated(self, header, column):
-        """ Used when importing PEG data. """        
+    def _isBvolTaxonRelated(self, header, column):
+        """ Used when importing BVOL data. """        
         if (header[column] == u'Division'): return True
         if (header[column] == u'Class'): return True
         if (header[column] == u'Order'): return True
@@ -306,8 +344,8 @@ class Species(object):
         if (header[column] == u'Formula'): return True
         return False # Related to size class.     
         
-    def _isPegColumnNumeric(self, header, column):
-        """ Used when importing PEG data. """        
+    def _isBvolColumnNumeric(self, header, column):
+        """ Used when importing BVOL data. """        
         if (header[column] == u'Size class'): return False # Note: Should be handled as unicode. Could be empty string.
         if (header[column] == u'Length(l1), µm'): return True
         if (header[column] == u'Length(l2), µm'): return True
@@ -322,76 +360,57 @@ class Species(object):
         return False
 
     def getPlanktonGroupFromTaxonName(self, taxon_name):
-        """ """
-        taxon_phylum = self.getTaxonValue(u'Phylum', taxon_name)
-        taxon_class = self.getTaxonValue(u'Class', taxon_name)
-        #
-        plankton_group = u'group-not-designated' # Use this if not found.
-        # - GROUPS OF ORGANISMS: Cyanobacteria.
-        #   (Cyanobacteria)
-        if taxon_phylum in [u'Cyanobacteria']:
-            plankton_group = u'Cyanobacteria'      
-        # - GROUPS OF ORGANISMS: Diatoms.
-        #   (Bacillariophyta)
-        if taxon_phylum in [u'Bacillariophyta']:
-            plankton_group = u'Diatoms'        
-        # - GROUPS OF ORGANISMS: Dinoflagellates.
-        #   (Dinophyceae)
-        if taxon_class in [u'Dinophyceae']:
-            plankton_group = u'Dinoflagellates'        
-        # - GROUPS OF ORGANISMS: Other microalgae.
-        #   (Cryptophyceae + Haptophyta + Bolidophyceae + Chrysophyceae + Dictyochophyceae + 
-        #   Eustigmatophyceae + Pelagophyceae  + Raphidophyceae  + Synurophyceae  + Chlorophyta + 
-        #   Glaucophyta + Coleochaetophyceae + Klebsormidiophyceae + Mesostigmatophyceae + 
-        #   Zygnematophyceae + Euglenophyceae)
-        if taxon_phylum in [
-                            u'Haptophyta', # Phylum
-                            u'Chlorophyta', # Phylum
-                            u'Glaucophyta',  # Phylum
-                            ]:
-            plankton_group = u'Other microalgae'
-        else:
-            if taxon_class in [
-                                u'Cryptophyceae', # Class
-                                u'Bolidophyceae', # Class 
-                                u'Chrysophyceae', # Class 
-                                u'Dictyochophyceae', # Class
-                                u'Eustigmatophyceae',  # Class
-                                u'Pelagophyceae',  # Class
-                                u'Raphidophyceae',  # Class
-                                u'Synurophyceae',  # Class
-                                u'Coleochaetophyceae',  # Class
-                                u'Klebsormidiophyceae',  # Class
-                                u'Mesostigmatophyceae', # Class
-                                u'Zygnematophyceae',  # Class
-                                u'Euglenophyceae' # Class
-                                ]:
-                plankton_group = u'Other microalgae'
-        # - GROUPS OF ORGANISMS: Ciliates.
-        #   (Ciliophora)
-        if taxon_phylum in [u'Ciliophora']:
-            plankton_group = u'Ciliates'        
-        # - GROUPS OF ORGANISMS: Other protozoa.
-        #   (Cryptophyta, ordines incertae sedis + Bicosoecophyceae + Bodonophyceae + 
-        #   Heterokontophyta, ordines incertae sedis + Cercozoa + Craspedophyceae + 
-        #   Ellobiopsea + Protozoa, classes incertae sedis)
-        if taxon_phylum in ['Cercozoa', # Phylum
-                            'Protozoa, classes incertae sedis']: # Phylum
-            plankton_group = u'Other protozoa'
-        else:
-            if taxon_class in [
-                               'Cryptophyta, ordines incertae sedis', # Class
-                               'Bicosoecophyceae', # Class
-                               'Bodonophyceae', # Class
-                               'Heterokontophyta, ordines incertae sedis', # Class
-                               'Craspedophyceae', # Class
-                               'Ellobiopsea' # Class
-                               ]:
-                plankton_group = u'Other protozoa'
-        #
-        return plankton_group
+        """ This is another way to organize organisms into groups. """
+        # TODO: Check this...
+        if taxon_name == u'Unicell':
+            return u'Unicell'
+        # TODO: Check this...
+        if taxon_name == u'Flagellates':
+            return u'Flagellates'
+        # Load dictionaries if not done before.
+        if not self._plankton_group_phylum_dict:
+            self._plankton_group_phylum_dict = {
+                u'Cyanobacteria': u'Cyanobacteria',
+                u'Bacillariophyta': u'Diatoms',
+                u'Haptophyta': u'Other microalgae',
+                u'Chlorophyta': u'Other microalgae',
+                u'Glaucophyta': u'Other microalgae',
+                u'Ciliophora': u'Ciliates',
+                u'Cercozoa': u'Other protozoa',
+                u'Protozoa, classes incertae sedis': u'Other protozoa'
+                }
+        if not self._plankton_group_class_dict:
+            self._plankton_group_class_dict = {
+                u'Dinophyceae': u'Dinoflagellates',
+                u'Bacillariophyta': u'Diatoms',
+                u'Cryptophyceae': u'Other microalgae',
+                u'Bolidophyceae': u'Other microalgae',
+                u'Chrysophyceae': u'Other microalgae',
+                u'Dictyochophyceae': u'Other microalgae',
+                u'Eustigmatophyceae': u'Other microalgae',
+                u'Pelagophyceae': u'Other microalgae',
+                u'Raphidophyceae': u'Other microalgae',
+                u'Synurophyceae': u'Other microalgae',
+                u'Coleochaetophyceae': u'Other microalgae',
+                u'Klebsormidiophyceae': u'Other microalgae',
+                u'Mesostigmatophyceae': u'Other microalgae',
+                u'Zygnematophyceae': u'Other microalgae',
+                u'Euglenophyceae': u'Other microalgae',
+                u'Cryptophyta, ordines incertae sedis': u'Other protozoa',
+                u'Bicosoecophyceae': u'Other protozoa',
+                u'Bodonophyceae': u'Other protozoa',
+                u'Heterokontophyta, ordines incertae sedis': u'Other protozoa',
+                u'Craspedophyceae': u'Other protozoa',
+                u'Ellobiopsea': u'Other protozoa'
+                }
+        # Check on phylym:
+        taxonphylum = self.getTaxonValue(taxon_name, u'Phylum')
+        if taxonphylum in self._plankton_group_phylum_dict:
+            return self._plankton_group_phylum_dict[taxonphylum]
+        # Check on class.
+        taxonclass = self.getTaxonValue(taxon_name, u'Class')
+        if taxonclass in self._plankton_group_class_dict:
+            return self._plankton_group_class_dict[taxonclass]
+        # Return this if plankton group not found.
+        return u'group-not-designated'
 
-
-
-
-        
