@@ -97,7 +97,7 @@ class ParsedFormat(envmonlib.FormatBase):
 
     def _sizeclassByKey(self, taxon_name, size_class, key):
         """ """
-        return envmonlib.Species().getBvolValue(key, taxon_name, size_class)
+        return envmonlib.Species().getBvolValue(taxon_name, size_class, key)
 
     def _planktonGroup(self, taxon_name):
         """ """

@@ -125,17 +125,17 @@ class Logging(object):
         
     def logAllInfoRows(self):
         """ Log all the content in the accumulated info row list. """
-        for message in self._infoacc:
+        for message in sorted(self._infoacc):
             self.log('- ' + message + ' (' + unicode(self._infoacc[message]) + ' times)')
         
     def logAllWarnings(self):
         """ Log all the content in the accumulated warning list. """
-        for message in self._warningacc:
+        for message in sorted(self._warningacc):
             self.log('- ' + message + ' (' + unicode(self._warningacc[message]) + ' times)')
         
     def logAllErrors(self):
         """ Log all the content in the accumulated error list. """
-        for message in self._erroracc:
+        for message in sorted(self._erroracc):
             self.log('- ' + message + ' (' + unicode(self._erroracc[message]) + ' times)')
 
 

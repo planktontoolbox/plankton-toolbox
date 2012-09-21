@@ -60,7 +60,7 @@ class Species(object):
         self._taxa_lookup = {} # Includes both taxon names and synonyms.
         self._plankton_group_phylum_dict = None
         self._plankton_group_class_dict = None
-        # Run.
+        # Run (only done once because the class is declared as singleton).
         try:
             self._loadAllData()
         except:
@@ -70,13 +70,19 @@ class Species(object):
         """ """
         return self._taxa 
     
+    def getTaxaLookupDict(self):
+        """ """
+        return self._taxa_lookup 
+    
     def getTaxonValue(self, taxon_name, key):
         """ """
-        if taxon_name in self._taxa:
-            return self._taxa[taxon_name].get(key, u'')
+#        if taxon_name in self._taxa:
+#            return self._taxa[taxon_name].get(key, u'')
+        if taxon_name in self._taxa_lookup:
+            return self._taxa_lookup[taxon_name].get(key, u'')
         return u''
     
-    def getBvolValue(self, key, taxon_name, size_class):
+    def getBvolValue(self, taxon_name, size_class, key):
         """ """
         if taxon_name in self._taxa_lookup:
             speciesobject = self._taxa_lookup[taxon_name]
@@ -89,7 +95,7 @@ class Species(object):
     def _clear(self):
         """ """
         self._taxa = {}
-        self._taxa_synonyms = {}
+        self._taxa_lookup = {}
 #        self._bvol_name_lookup = {}
 #        self._harmful_name_lookup = {}
 
@@ -121,18 +127,15 @@ class Species(object):
         except Exception, e:
             envmonlib.Logging().error(u"Failed when loading species data: " + unicode(e))
             print(u"Failed when loading species data: " + unicode(e))
-
-        #
-        # Used for DEBUG:
-        import locale
-        import codecs
-        import json
-        fileencoding = locale.getpreferredencoding()
-        out = codecs.open(u'DEBUG_species_list.txt', mode = 'w', encoding = fileencoding)
-        out.write(json.dumps(self._taxa, encoding = 'utf8', sort_keys=True, indent=4))
-        out.close()
-        #
-        #
+#        # Used for DEBUG:
+#        import locale
+#        import codecs
+#        import json
+#        fileencoding = locale.getpreferredencoding()
+#        out = codecs.open(u'DEBUG_species_list.txt', mode = 'w', encoding = fileencoding)
+#        out.write(json.dumps(self._taxa, encoding = 'utf8', sort_keys=True, indent=4))
+#        out.close()
+#        # DEBUG end.
         
     def _loadTaxa(self, excel_file_name):
         """ Creates one data object for each taxon. """
