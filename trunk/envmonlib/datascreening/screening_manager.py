@@ -26,9 +26,66 @@
 
 import envmonlib
 
+@envmonlib.singleton
 class ScreeningManager(object):
     """ """
-    def __init__(self):
+    def __init__(self,
+                 codelist_filenames = [u'toolbox_data/code_lists/smhi_code_list.xlsx']):
+        # Parameters.
+        self._codelist_filenames = codelist_filenames 
+        # Local storage.
+        self._codelist = {} # Main dictionary.
+        # Run (only done once because the class is declared as singleton).
+        self._loadAllData()
+
+    def getCodeTypes(self):
         """ """
-        # Initialize parent.
-        super(ScreeningManager, self).__init__()
+        return self._codelist.keys() 
+    
+    def getCodes(self, code_type):
+        """ """
+        if code_type in self._codelist.keys():
+            return self._codelist[code_type]
+        return []
+    
+    def _clear(self):
+        """ """
+        self._codelist = {} # Main dictionary.
+
+    def _loadAllData(self):
+        """ """
+        try:
+            self._clear()
+            # Create codelist from files.
+            for excelfilename in self._codelist_filenames:
+                self._loadCodeLists(excelfilename)                
+        #
+        except Exception, e:
+            envmonlib.Logging().error(u"Failed when loading code lists. Exception: " + unicode(e))
+            print(u"Failed when loading code lists. Exception: " + unicode(e))
+        #
+        # Used for DEBUG:
+        import locale
+        import codecs
+        import json
+        fileencoding = locale.getpreferredencoding()
+        out = codecs.open(u'DEBUG_codelist.txt', mode = 'w', encoding = fileencoding)
+        out.write(json.dumps(self._codelist, encoding = 'utf8', sort_keys=True, indent=4))
+        out.close()
+        # end DEBUG.
+        
+    def _loadCodeLists(self, excel_file_name):
+        """ """
+        # Get data from Excel file.
+        tabledataset = envmonlib.DatasetTable()
+        envmonlib.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
+        #
+        for row in tabledataset.getRows():
+            codetype = row[0]
+            code = row[1]
+            #
+            if codetype:
+                if codetype not in self._codelist:
+                    self._codelist[codetype] = []
+                self._codelist[codetype].append(code)
+
