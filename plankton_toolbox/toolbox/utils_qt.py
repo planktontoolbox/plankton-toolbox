@@ -281,12 +281,6 @@ class ToolboxTableModel(QtCore.QAbstractTableModel):
         return QtCore.QVariant()
 
 
-
-
-
-
-
-
 class ToolboxEditableQTableView( QtGui.QTableView):  
     """ Customized QTableView for editing. The table is automatically connected to an 
         instance of ToolboxEditableTableModel.  """
@@ -388,16 +382,16 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
 
 # === Style sheets: ===
 
-    # Nordic Microalgae colors:
-    #    Red: #d1581c
-    #    Blue: #00677f
-    #    Green: #89a45e
-    #    Red 50%: #eaa97e
-    #    Blue 50%: (#6da88d) #6da8bd 
-    #    Green 50%: #cbd1aa
-    #    Red 25%: #f5d5bd
-    #    Blue 25%: #b7d3de
-    #    Green 30%: #e0e3cd
+# Nordic Microalgae colors:
+#    Red: #d1581c
+#    Blue: #00677f
+#    Green: #89a45e
+#    Red 50%: #eaa97e
+#    Blue 50%: (#6da88d) #6da8bd 
+#    Green 50%: #cbd1aa
+#    Red 25%: #f5d5bd
+#    Blue 25%: #b7d3de
+#    Green 30%: #e0e3cd
          
 #def setAppStyleSheet(app):
 #    app.setStyleSheet("""

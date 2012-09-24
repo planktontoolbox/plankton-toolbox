@@ -24,10 +24,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""
-This activity is "a welcome page" with some possibilities to set up the environment.
-"""
-
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import envmonlib
@@ -36,7 +32,8 @@ import plankton_toolbox.activities.activity_base as activity_base
 
 class StartActivity(activity_base.ActivityBase):
     """
-    """    
+    This activity is "a welcome page" with some possibilities to set up the environment.
+    """
     def __init__(self, name, parentwidget):
         """ """
         # Initialize parent. Should be called after other 
@@ -52,9 +49,9 @@ class StartActivity(activity_base.ActivityBase):
         self._activityheader = QtGui.QLabel('<h2>' + self.objectName() + '</h2>', self)
         self._activityheader.setTextFormat(QtCore.Qt.RichText)
         self._activityheader.setAlignment(QtCore.Qt.AlignHCenter)
-#        self._activityheader.setStyleSheet(""" 
-#            * { color: white; background-color: #00677f; }
-#            """)
+        self._activityheader.setStyleSheet(""" 
+            * { color: white; background-color: #00677f; }
+            """)
         contentLayout.addWidget(self._activityheader)
         # Add content to the activity.
         contentLayout.addLayout(self._contentWelcome())

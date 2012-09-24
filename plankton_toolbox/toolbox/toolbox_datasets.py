@@ -24,15 +24,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""
-"""
-
 import PyQt4.QtCore as QtCore
 import envmonlib
 
 @envmonlib.singleton
 class ToolboxDatasets(QtCore.QObject):
-    """ Wrapper for envmonlib.Datasets. Emitted signals for change notifications are added. """
+    """ Toolbox wrapper for envmonlib.Datasets. Emitted signals for change notifications are added. """
     def __init__(self):
         """ """
         envmonlib.Datasets()

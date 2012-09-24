@@ -26,7 +26,12 @@
 
 """
 
+
+TODO: Not used in current version. Should be rewritten and integrated with envmonlib.
+
+
 """
+
 
 import codecs
 import envmonlib

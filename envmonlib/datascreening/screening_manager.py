@@ -63,16 +63,15 @@ class ScreeningManager(object):
         except Exception, e:
             envmonlib.Logging().error(u"Failed when loading code lists. Exception: " + unicode(e))
             print(u"Failed when loading code lists. Exception: " + unicode(e))
-        #
-        # Used for DEBUG:
-        import locale
-        import codecs
-        import json
-        fileencoding = locale.getpreferredencoding()
-        out = codecs.open(u'DEBUG_codelist.txt', mode = 'w', encoding = fileencoding)
-        out.write(json.dumps(self._codelist, encoding = 'utf8', sort_keys=True, indent=4))
-        out.close()
-        # end DEBUG.
+#        # Used for DEBUG:
+#        import locale
+#        import codecs
+#        import json
+#        fileencoding = locale.getpreferredencoding()
+#        out = codecs.open(u'DEBUG_codelist.txt', mode = 'w', encoding = fileencoding)
+#        out.write(json.dumps(self._codelist, encoding = 'utf8', sort_keys=True, indent=4))
+#        out.close()
+#        # end DEBUG.
         
     def _loadCodeLists(self, excel_file_name):
         """ """

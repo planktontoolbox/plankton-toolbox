@@ -1,5 +1,6 @@
-
- - Environmental Monitoring Library, Envmonlib. 
+ 
+ ENVMONLIB, Environmental Monitoring Library.
+ Part of Plankton Toolbox: http://plankton-toolbox.org
 
  Author: Arnold Andreasson, info@mellifica.se
  Copyright (c) 2011-2012 SMHI, Swedish Meteorological and Hydrological Institute 

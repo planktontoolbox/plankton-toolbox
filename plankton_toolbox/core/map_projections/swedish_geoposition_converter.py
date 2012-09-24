@@ -25,6 +25,15 @@
 # THE SOFTWARE.
 
 """
+
+
+TODO: Should be integrated with envmonlib.
+
+
+"""
+
+
+"""
 This module contains an implementation of the "Gauss Conformal Projection 
 (Transverse Mercator), Kr�gers Formulas" and a set of parameters for the most 
 commonly used map projections in Sweden. The Gauss-Kr�ger formula transforms 

@@ -24,14 +24,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""
-Main window for the Plankton Toolbox.
-
-The layout is an activity area in the middle, activity-and-tool-selector to the
-left and movable tools to the right. Activites are handled as stacked widgets 
-and tools are dockable widgets. The activity-and-tool-selector is also dockable.
-"""
-
 import time
 import codecs
 import PyQt4.QtGui as QtGui
@@ -48,8 +40,13 @@ import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
 __version__ = '0.2.1' # Plankton Toolbox version.
 
 class MainWindow(QtGui.QMainWindow):
-    """ 
-    Main window for the Plankton Toolbox application.
+    """
+    Main window for the Plankton Toolbox.
+    
+    The layout is an activity area in the middle, activity-and-tool-selector to the
+    left and movable tools to the right and bottom. Activites are handled as stacked widgets 
+    and tools are dockable widgets. The activity-and-tool-selector can also be dockable by 
+    is currently locked.
     """
     def __init__(self):
         """ """
@@ -283,7 +280,7 @@ class MainWindow(QtGui.QMainWindow):
 <b>Plankton Toolbox</b> version %s
 </p>
 <p>
-Plankton Toolbox is... (TODO:)  
+Plankton Toolbox... (TODO:)  
 </p>
 <p>
 Plankton Toolbox is developed by the 
@@ -293,7 +290,7 @@ with funding from the
 </p>
 <p>
 Developed in Python 2.7 and Qt/PyQt4. Released under the MIT license. <br/>
-More info for developers at: 
+Source code and info for developers at: 
 <a href="http://plankton-toolbox.org">http://plankton-toolbox.org</a>.
 </p>
 """ % (__version__)))

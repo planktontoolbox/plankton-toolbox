@@ -24,9 +24,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""
-"""
-
 import os.path
 import glob
 import locale
@@ -500,7 +497,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         """ """
         if modelIndex.isValid():
             print('TEST Selected row: ' + unicode(modelIndex.row()))
-            toolbox_sync.ToolboxSync().setRowTest(modelIndex.row())
+            toolbox_sync.ToolboxSync().setRow(modelIndex.row())
 
     
 class DatasetTableData(object):

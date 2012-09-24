@@ -25,12 +25,13 @@
 # THE SOFTWARE.
 
 """
-Resources are datasets that are commonly used in the Plankton Toolbox.
-Datasets managed as resources are:
-- Dyntaxa. Taxa received from Artdatabanken.se
-- PEG. From HELCOM Phytoplankton Expert Group (HELCOM PEG). Contains sizeclass related information. 
-- Harmful plankton. From IOC.
+
+
+TODO: Not used in current version. Should be rewritten and integrated with envmonlib.
+
+
 """
+
 
 #import plankton_toolbox.PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
@@ -43,6 +44,10 @@ import plankton_toolbox.core.biology.taxa_sources as taxa_sources
 class ToolboxResources(QtCore.QObject):
     """
     Resources are datasets that are commonly used in the Plankton Toolbox.
+    Datasets managed as resources are:
+    - Dyntaxa. Taxa received from Artdatabanken.se
+    - PEG. From HELCOM Phytoplankton Expert Group (HELCOM PEG). Contains sizeclass related information. 
+    - Harmful plankton. From IOC.
     """
     def __init__(self):
         """ """

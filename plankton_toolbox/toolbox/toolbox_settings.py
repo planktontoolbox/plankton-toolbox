@@ -25,8 +25,13 @@
 # THE SOFTWARE.
 
 """
-Contains settings for the Plankton Toolbox application.
+
+
+TODO: Not used in current version. Should be rewritten and integrated with envmonlib.
+
+
 """
+
 
 import pickle
 import copy

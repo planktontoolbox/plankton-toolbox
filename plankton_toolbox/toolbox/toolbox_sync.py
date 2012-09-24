@@ -24,10 +24,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""
-
-"""
-
 import PyQt4.QtCore as QtCore
 import envmonlib
 
@@ -46,16 +42,16 @@ class ToolboxSync(QtCore.QObject):
         # Emit signal after short delay.
         QtCore.QTimer.singleShot(100, self._emitChangeNotification)
         
-    def setRowTest(self, rowIndex):
+    def setRow(self, rowIndex):
         """ """
         self._test = rowIndex 
         # Emit signal after short delay.
         QtCore.QTimer.singleShot(100, self._emitSelectedRowChangedTEST)
         
-    def getRowTest(self):
+    def getRow(self):
         """ """
         return self._test 
         
     def _emitSelectedRowChangedTEST(self):
         """ """
-        self.emit(QtCore.SIGNAL('syncSelectedRowTEST'))
+        self.emit(QtCore.SIGNAL('toolboxSyncSelectedRow'))

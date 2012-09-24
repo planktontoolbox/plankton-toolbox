@@ -32,9 +32,7 @@ except ImportError:
     raise UserWarning("Python package openpyxl missing. Please use openpyxl version 1.5.8 or later. Download from http://pypi.python.org/pypi/openpyxl.")
 
 class ExcelFiles():
-    """
-    This class ...  
-    """
+    """ """
     def __init__(self):
         """ """
         self._metadata = {}
