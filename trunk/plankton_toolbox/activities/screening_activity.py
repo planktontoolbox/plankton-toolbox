@@ -24,9 +24,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""
-"""
-
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
@@ -36,7 +33,7 @@ import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 import envmonlib
 
 class ScreeningActivity(activity_base.ActivityBase):
-    """ Used for screening of loaded datasets content. """
+    """ Used for screening of content of loaded datasets. """
     
     def __init__(self, name, parentwidget):
         """ """

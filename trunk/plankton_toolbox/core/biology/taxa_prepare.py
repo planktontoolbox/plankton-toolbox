@@ -25,6 +25,15 @@
 # THE SOFTWARE.
 
 """
+
+
+TODO: Not used in current version. Should be rewritten and integrated with envmonlib.
+
+
+"""
+
+
+"""
 This module is used for preparation of resource files. Resource files are 
 stored in the json format, but they can be prepared from various sources.
 

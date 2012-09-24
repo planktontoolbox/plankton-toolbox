@@ -24,10 +24,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""
-Tool manager.
-"""
-
 import plankton_toolbox.tools.toolbox_settings_tool as toolbox_settings_tool
 import plankton_toolbox.tools.log_tool as log_tool
 import plankton_toolbox.tools.dataset_viewer_tool as dataset_viewer_tool

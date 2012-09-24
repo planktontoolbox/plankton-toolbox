@@ -24,9 +24,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""
-"""
-
 import os.path
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
@@ -67,7 +64,7 @@ class DatasetViewerTool(tool_base.ToolBase):
                      self._updateDatasetList)
         # Listen for changes in the toolbox sync.
         self.connect(toolbox_sync.ToolboxSync(), 
-                     QtCore.SIGNAL("syncSelectedRowTEST"), 
+                     QtCore.SIGNAL("toolboxSyncSelectedRow"), 
                      self._setSelectedDataset)
 
     def _contentSelectDataset(self):
@@ -182,7 +179,7 @@ class DatasetViewerTool(tool_base.ToolBase):
     def _setSelectedDataset(self):
         """ """
         if self._allowsync_checkbox.isChecked():
-            index = toolbox_sync.ToolboxSync().getRowTest()
+            index = toolbox_sync.ToolboxSync().getRow()
             self._selectdataset_list.setCurrentIndex(index + 1)
             self._viewDataset(index + 1)
         

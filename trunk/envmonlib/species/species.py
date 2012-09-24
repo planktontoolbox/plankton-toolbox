@@ -37,7 +37,8 @@ class Species(object):
     - Taxa files must contain the string '_species'.
     - BVOL files must contain the string '_bvol'.
     - Harmful species files must contain the string '_harmful'.
-    - Translations files must begin with 'translate_to_'.
+    - Translations files must begin with 'translate_to_' as a prefix to the 
+      corresponding file.
     File columns:
     - Species files must contain the columns: ......
     - BVOL files must follow the PEG BVOL format.

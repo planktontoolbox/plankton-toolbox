@@ -55,11 +55,14 @@ def plankton_toolbox_application():
     app.setOrganizationDomain("smhi.se")
     app.setApplicationName("Plankton Toolbox")
     
-    # Windows only (needed for app icon):
-    if sys.platform.startswith('win'):    
-        import ctypes
-        myappid = 'smhi.se.plankton-toolbox'
-        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+    # Windows only (needed for application icon):
+    try:
+        if sys.platform.startswith('win'):    
+            import ctypes
+            myappid = 'smhi.se.plankton-toolbox'
+            ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+    except:
+        pass
 
     app.setWindowIcon(QtGui.QIcon(u'plankton_toolbox_icon.jpg'))
     

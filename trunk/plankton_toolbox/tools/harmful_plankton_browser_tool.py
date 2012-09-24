@@ -24,10 +24,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""
-
-"""
-
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import webbrowser

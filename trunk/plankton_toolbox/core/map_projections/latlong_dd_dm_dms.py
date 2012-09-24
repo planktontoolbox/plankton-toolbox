@@ -25,6 +25,15 @@
 # THE SOFTWARE.
 
 """
+
+
+TODO: Should be integrated with envmonlib.
+
+
+"""
+
+
+"""
 Converts latitude and longitude from/to text representation. Formats: 
 - DD, Decimal degree.
 - DM, Degree/minute.
