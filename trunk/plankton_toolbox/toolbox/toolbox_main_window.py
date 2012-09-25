@@ -62,8 +62,9 @@ class MainWindow(QtGui.QMainWindow):
         # it is available.
         txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
         self._logfile = codecs.open('plankton_toolbox_log.txt', mode = 'w', encoding = txtencode)
-        self._logfile.write('Plankton Toolbox. ' +
-                             time.strftime("%Y-%m-%d %H:%M:%S") +'\r\n\r\n')
+        self._logfile.write(u"Plankton Toolbox. " +
+                             time.strftime("%Y-%m-%d %H:%M:%S") )
+        self._logfile.write(u"")
         self._logtool = None # Should be initiated later.
         envmonlib.Logging().setLogTarget(self)
         # Setup main window.
@@ -87,12 +88,14 @@ class MainWindow(QtGui.QMainWindow):
         position = self._ui_settings.value("MainWindow/Position", QtCore.QVariant(QtCore.QPoint(100, 50))).toPoint()
         self.resize(size)
         self.move(position)        
-        # Load resources when the main event loop has started.
-        if toolbox_settings.ToolboxSettings().getValue('Resources:Load at startup'):
-            QtCore.QTimer.singleShot(10, toolbox_resources.ToolboxResources().loadAllResources)
         # Tell the user.
-        envmonlib.Logging().log('Plankton Toolbox started.')
-        envmonlib.Logging().log('Note: Log rows are sent to the "Log tool" and written to "plankton_toolbox_log.txt".\r\n')
+        tool_manager.ToolManager().showToolByName(u'Toolbox logging') # Show the log tool if hidden.
+        envmonlib.Logging().log(u"Welcome to the Plankton Toolbox.")
+        envmonlib.Logging().log(u"Note: Log rows are both sent to the 'Toolbox logging' tool and written to the text file 'plankton_toolbox_log.txt'.")
+        # Load resources when the main event loop has started.
+#        if toolbox_settings.ToolboxSettings().getValue('Resources:Load at startup'):
+#            QtCore.QTimer.singleShot(10, toolbox_resources.ToolboxResources().loadAllResources)
+        QtCore.QTimer.singleShot(100, envmonlib.Species) # Load species files.
         
     def closeEvent(self, event):
         """ Called on application shutdown. """
@@ -118,15 +121,15 @@ class MainWindow(QtGui.QMainWindow):
         self.toolsmenu = self.menuBar().addMenu(self.tr("&Tools")) # Note: Public.
         self._helpmenu = self.menuBar().addMenu(self.tr("&Help"))
         self._helpmenu.addAction(self._aboutaction)
-        # Add sub-menu in the tools menu to close all tools.
-        self._closealltools = QtGui.QAction(self.tr("Close all tools"), self)
-        self._closealltools.setStatusTip(self.tr("Make all tools invisible."))
-        self._closealltools.triggered.connect(self._closeAllTools)
-        self.toolsmenu.addAction(self._closealltools)
+        # Add sub-menu in the tools menu to hide all tools.
+        self._hidealltools = QtGui.QAction(self.tr("Hide all tools"), self)
+        self._hidealltools.setStatusTip(self.tr("Make all tools invisible."))
+        self._hidealltools.triggered.connect(self._hideAllTools)
+        self.toolsmenu.addAction(self._hidealltools)
         #
         self.toolsmenu.addSeparator()
         
-    def _closeAllTools(self):
+    def _hideAllTools(self):
         """ """
         tools = self._toolmanager.getToolList()
         for tool in tools:

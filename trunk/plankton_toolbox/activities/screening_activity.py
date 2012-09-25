@@ -40,6 +40,10 @@ class ScreeningActivity(activity_base.ActivityBase):
         # Initialize parent. Should be called after other 
         # initialization since the base class calls _createContent().
         super(ScreeningActivity, self).__init__(name, parentwidget)
+        # Listen for changes in the toolbox dataset list.
+        self.connect(toolbox_datasets.ToolboxDatasets(), 
+                     QtCore.SIGNAL("datasetListChanged"), 
+                     self.update)
 
     def _createContent(self):
         """ """
@@ -64,6 +68,8 @@ class ScreeningActivity(activity_base.ActivityBase):
         tabWidget = QtGui.QTabWidget()
         tabWidget.addTab(self._contentCodeListScreening(), "Code lists")
         tabWidget.addTab(self._contentSpeciesScreening(), "Species")
+        tabWidget.addTab(self._contentCheckColumnValues(), "Column values")
+        tabWidget.addTab(self._contentPlotParameters(), "Plot parameters")
         # Layout widgets.
         layout = QtGui.QVBoxLayout()
         layout.addWidget(tabWidget)
@@ -126,122 +132,360 @@ class ScreeningActivity(activity_base.ActivityBase):
         #
         return widget
 
+    def _contentCheckColumnValues(self):
+        """ """
+        widget = QtGui.QWidget()
+        # Active widgets and connections.
+        introlabel = utils_qt.RichTextQLabel()
+        introlabel.setText("""
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
+        tempor incididunt ut labore et dolore magna aliqua.<br/><br/>
+        """)        
+        #
+        self._column_list = QtGui.QComboBox()
+        self._column_list.setMinimumContentsLength(30)
+        self._column_list.setEnabled(False)
+        #
+        self.connect(self._column_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._updateColumnContent)                
+        # Column content.
+##        self._content_list = utils_qt.SelectableQListView()
+        self._content_list = QtGui.QListWidget()
+#        self._content_list.setMaximumHeight(200)
+        # Layout widgets.
+        form1 = QtGui.QGridLayout()
+        gridrow = 0
+        label1 = QtGui.QLabel("Column:")
+        label2 = QtGui.QLabel("Content:")
+        form1.addWidget(label1, gridrow, 0, 1, 1)
+        form1.addWidget(label2, gridrow, 1, 1, 1)
+        gridrow += 1
+        form1.addWidget(self._column_list, gridrow, 0, 1, 1)
+        form1.addWidget(self._content_list, gridrow, 1, 10, 1)
+        #
+        layout = QtGui.QVBoxLayout()
+        layout.addWidget(introlabel)
+        layout.addLayout(form1, 10)
+        layout.addStretch(1)
+        widget.setLayout(layout)                
+        #
+        return widget
+
+    def update(self):
+        """ """
+        self.updateColumnList()
+        self.updateParameterList()
+        
+    def updateColumnList(self):
+        """ """
+        self._column_list.clear()
+        self._content_list.clear()
+        datasets = toolbox_datasets.ToolboxDatasets().getDatasets()
+        if datasets and (len(datasets) > 0):        
+            columns_set = set()
+            for dataset in toolbox_datasets.ToolboxDatasets().getDatasets():
+                for column in dataset.getExportTableColumns():
+                    columns_set.add(column[u'Header']) 
+            #    
+            self._column_list.addItems(sorted(columns_set))
+            self._column_list.setEnabled(True)
+        else:
+            self._column_list.clear()
+            self._column_list.setEnabled(False)
+            
+    def updateParameterList(self):
+        """ """
+        self._parameter_list.clear()
+        datasets = toolbox_datasets.ToolboxDatasets().getDatasets()
+        if datasets and (len(datasets) > 0):        
+            parameter_set = set()
+            for dataset in toolbox_datasets.ToolboxDatasets().getDatasets():
+                for visitnode in dataset.getChildren():
+                    for samplenode in visitnode.getChildren():
+                        for variablenode in samplenode.getChildren():
+                            parameter_set.add(variablenode.getData(u"Parameter"))
+            self._parameter_list.setList(sorted(parameter_set))
+
+                   
+    def _updateColumnContent(self, selected_row):
+        """ """
+        datasets = toolbox_datasets.ToolboxDatasets().getDatasets()
+        self._content_list.clear()
+        if not (datasets and (len(datasets) > 0)):        
+            self._content_list.clear()
+            return # Empty data.
+        #
+        columncontent_set = set()
+        selectedcolumn = unicode(self._column_list.currentText())
+        # Search for export column corresponding model element.
+        nodelevel = u''
+        key = u''
+        for dataset in datasets:
+            for info_dict in dataset.getExportTableColumns():
+                if info_dict[u'Header'] == selectedcolumn:
+                    nodelevel = info_dict[u'Node']
+                    key = info_dict[u'Key']
+                    break # Break loop.
+            if nodelevel:
+                break # Also break next loop.
+        #
+        for dataset in datasets:
+            for visitnode in dataset.getChildren():
+                if nodelevel == u'Visit':
+                    if key in visitnode.getDataDict().keys():
+                        columncontent_set.add(visitnode.getData(key))
+                    else:
+                        columncontent_set.add(u'') # Add empty field.
+                    continue    
+                #
+                for samplenode in visitnode.getChildren():
+                    if nodelevel == u'Sample':
+                        if key in samplenode.getDataDict().keys():
+                            columncontent_set.add(samplenode.getData(key))
+                        else:
+                            columncontent_set.add(u'') # Add empty field.
+                        continue    
+                    #
+                    for variablenode in samplenode.getChildren():
+                        if nodelevel == u'Variable':
+                            if key in variablenode.getDataDict().keys():
+                                columncontent_set.add(variablenode.getData(key))
+                            else:
+                                columncontent_set.add(u'') # Add empty field.
+                            continue    
+        # Content list.
+        self._content_list.addItems(sorted(columncontent_set))
+
+    def _contentPlotParameters(self):
+        """ """
+        widget = QtGui.QWidget()
+        # Active widgets and connections.
+        introlabel = utils_qt.RichTextQLabel()
+        introlabel.setText("""
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
+        tempor incididunt ut labore et dolore magna aliqua.<br/><br/>
+        """)        
+        #
+        self._parameter_list = utils_qt.SelectableQListView()       
+        #
+        clearall_label = utils_qt.ClickableQLabel("Clear all")
+        markall_label = utils_qt.ClickableQLabel("Mark all")
+        self.connect(clearall_label, QtCore.SIGNAL("clicked()"), self._parameter_list.uncheckAll)                
+        self.connect(markall_label, QtCore.SIGNAL("clicked()"), self._parameter_list.checkAll)                
+        #
+        self._plotparameterscreening_button = QtGui.QPushButton("Plot selected parameters")
+        self.connect(self._plotparameterscreening_button, QtCore.SIGNAL("clicked()"), self._plotScreening)                
+        # Layout widgets.
+        form1 = QtGui.QGridLayout()
+        gridrow = 0
+        label1 = QtGui.QLabel("Parameters:")
+        form1.addWidget(label1, gridrow, 0, 1, 2)
+        gridrow += 1
+        form1.addWidget(self._parameter_list, gridrow, 0, 1, 2)
+        gridrow += 5
+        form1.addWidget(clearall_label, gridrow, 0, 1, 1)
+        form1.addWidget(markall_label, gridrow, 1, 1, 1)
+        gridrow += 1
+        form1.addWidget(self._plotparameterscreening_button, gridrow, 0, 1, 1)
+        #
+        layout = QtGui.QVBoxLayout()
+        layout.addWidget(introlabel)
+        layout.addLayout(form1)
+        layout.addStretch(5)
+        widget.setLayout(layout)                
+        #
+        return widget
+        # Layout widgets.
+        #
+        hbox1 = QtGui.QHBoxLayout()
+        hbox1.addWidget(self._codelistscreening_button)
+        hbox1.addStretch(10)
+        #
+        layout = QtGui.QVBoxLayout()
+        layout.addWidget(introlabel)
+        layout.addLayout(hbox1)
+        layout.addStretch(1)
+        widget.setLayout(layout)                
+        #
+        return widget
+
+    def _plotScreening(self):
+        """ """
+        
+        
+        
+        
+        
+#    def _addPlot(self):
+#        """ """
+#        # Show the Graph plotter tool if hidden. 
+#        tool_manager.ToolManager().showToolByName(u'Graph plotter')
+#        graphtool = tool_manager.ToolManager().getToolByName(u'Graph plotter')
+#        #
+#        # Selected columns.
+#        x_selected_column = unicode(self._x_axis_column_list.currentText())
+#        y_selected_column = unicode(self._y_axis_column_list.currentText())
+#        z_selected_column = unicode(self._z_axis_column_list.currentText())
+#        # Selected parameters.
+#        x_selected_param = unicode(self._x_axis_parameter_list.currentText())
+#        y_selected_param = unicode(self._y_axis_parameter_list.currentText())
+#        z_selected_param = unicode(self._z_axis_parameter_list.currentText())
+#        # Selected types.
+#        x_selected_type = unicode(self._x_axistype_list.currentText())
+#        y_selected_type = unicode(self._y_axistype_list.currentText())
+#        z_selected_type = unicode(self._z_axistype_list.currentText())
+#        #
+#        plotdatainfo = self._graph_plot_data.getPlotDataInfo()
+#        #
+#        plotdatainfo[u'Title'] = u'Plot screening'
+#        plotdatainfo[u'X label'] = x_selected_column if x_selected_column != u"Parameter:" else x_selected_param
+#        plotdatainfo[u'X type'] = x_selected_type
+#        plotdatainfo[u'X format'] = u''
+#        #
+#        plotdatainfo[u'Y label'] = y_selected_column if y_selected_column != u"Parameter:" else y_selected_param
+#        plotdatainfo[u'Y type'] = y_selected_type
+#        plotdatainfo[u'Y format'] = u''
+#        #
+#        plotdatainfo[u'Z label'] = z_selected_column if z_selected_column != u"Parameter:" else z_selected_param
+#        plotdatainfo[u'Z type'] = z_selected_type
+#        plotdatainfo[u'Z format'] = u''
+#        #
+#        # Add plot data.
+#
+##        x_data = [1,2,3] 
+##        y_data = [4,5,6] 
+##        z_data = [7,8,9] 
+#        x_column = u'x_column'
+#        y_column = u'y_column'
+#        z_column = u'z_column'
+#
+#
+#        #
+#        x_data, y_data, z_data = self._getFilteredData()
+#        
+#        
+#        
+#        ##############
+#        
+#        # Iterate over visits. 
+#        for visitnode in currentdata.getChildren():
+#            # Iterate over samples.
+#                # Iterate over variables.
+#                for variablenode in samplenode.getChildren():
+#                        parameter = variablenode.getData(u'Parameter')
+#                        x_value = variablenode.getData(u'Value')
+#                        y_data.append(y_value)
+#        if y_selected_type == u'Number':
+#            for index, item in enumerate(y_data):
+#                try:
+#                    y_data[index] = item.replace(u',', u'.')
+#                except:
+#                    pass
+#        if z_selected_type == u'Number':
+#            for index, item in enumerate(z_data):
+#                try:
+#                    z_data[index] = item.replace(u',', u'.')
+#                except:
+#                    pass
+#
+#        return x_data, y_data, z_data
+#
+#        
+#        ##############
+#        
+#        #
+#        if x_data and (x_selected_type == u'Number'):
+#            for index, item in enumerate(x_data):
+#                try:
+#                    x_data[index] = float(item)
+#                except:
+#                    x_data[index] = 0.0
+#        if y_data and (y_selected_type == u'Number'):
+#            for index, item in enumerate(y_data):
+#                try:
+#                    y_data[index] = float(item)
+#                except:
+#                    y_data[index] = 0.0
+#        if z_data and (z_selected_type == u'Number'):
+#            for index, item in enumerate(z_data):
+#                try:
+#                    z_data[index] = float(item)
+#                except:
+#                    z_data[index] = 0.0
+#        
+#        
+#        
+#        
+#        
+#        plot_name = y_selected_column if y_selected_column != u"Parameter:" else y_selected_param + u' / ' + \
+#                    x_selected_column if x_selected_column != u"Parameter:" else x_selected_param
+#        x_label = u''
+#        x_array = None
+#        y_label = u''
+#        y_array = None
+#        z_label = u''
+#        z_array = None
+#
+#        self._graph_plot_data.addPlot(
+#                        plot_name = y_column + " / " + x_column, 
+#                         x_label = x_selected_column if x_selected_column != u"Parameter:" else x_selected_param,
+#                         x_array = x_data, 
+#                         y_label = y_selected_column if y_selected_column != u"Parameter:" else y_selected_param,
+#                         y_array = y_data, 
+#                         z_label = z_selected_column if z_selected_column != u"Parameter:" else z_selected_param,
+#                         z_array = z_data)
+#        # View in Graph plotter tool.
+#        graphtool.setPlotData(self._graph_plot_data)
+
     def _codeListScreening(self):
         """ """
-        #
-        screeningmanager = envmonlib.ScreeningManager()
-        #
+        # Screening results is only shown in the toolbox log.
         tool_manager.ToolManager().showToolByName(u'Toolbox logging')
         #
         try:
-            envmonlib.Logging().log("Screening started...")
+            envmonlib.Logging().log(u"") # Empty line.
+            envmonlib.Logging().log("Code list screening started...")
             envmonlib.Logging().startAccumulatedLogging()
-            self._writeToStatusBar("Screening in progress...")
-            #
-            codetypes_set = set()
-            #
-            for dataset in toolbox_datasets.ToolboxDatasets().getDatasets():
-                self._writeToStatusBar(u"Screening in progress (" + dataset.getMetadata(u'File name') + u")...")
-                #
-                for visitnode in dataset.getChildren():
-                    #
-                    data_dict = visitnode.getDataDict()
-                    for key in data_dict:
-                        if key in screeningmanager.getCodeTypes():
-                            codetypes_set.add(key)
-                            if data_dict[key] not in screeningmanager.getCodes(key):
-                                envmonlib.Logging().warning(u"Visit level. Code is not valid. Code type: " + unicode(key) + u" Code: " + unicode(data_dict[key]))
-#                                print(u"Visit level. Code is not valid. Code type: " + unicode(key) + u" Code: " + unicode(data_dict[key]))
-                    #
-                    for samplenode in visitnode.getChildren():
-                        #
-                        data_dict = samplenode.getDataDict()
-                        for key in data_dict:
-                            if key in screeningmanager.getCodeTypes():
-                                codetypes_set.add(key)
-                                if data_dict[key] not in screeningmanager.getCodes(key):
-                                    envmonlib.Logging().warning(u"Visit level. Code is not valid. Code type: " + unicode(key) + u" Code: " + unicode(data_dict[key]))
-#                                    print(u"Sample level. Code is not valid. Code type: " + unicode(key) + u" Code: " + unicode(data_dict[key]))
-                        #                        
-                        for variablenode in samplenode.getChildren():
-                            #
-                            data_dict = variablenode.getDataDict()
-                            for key in data_dict:
-                                if key in screeningmanager.getCodeTypes():
-                                    codetypes_set.add(key)
-                                    if data_dict[key] not in screeningmanager.getCodes(key):
-                                        envmonlib.Logging().warning(u"Visit level. Code is not valid. Code type: " + unicode(key) + u" Code: " + unicode(data_dict[key]))
-#                                        print(u"Variable level. Code is not valid. Code type: " + unicode(key) + u" Code: " + unicode(data_dict[key]))
-     
+            self._writeToStatusBar("Code list screening in progress...")
+            # Perform screening.
+            codetypes_set = envmonlib.ScreeningManager().codeListScreening(toolbox_datasets.ToolboxDatasets().getDatasets())
         finally:
             envmonlib.Logging().logAllAccumulatedRows()    
             envmonlib.Logging().log("Screening was done on these code types: " + 
                                     unicode(sorted(codetypes_set)))
-            envmonlib.Logging().log("Screening done.\r\n")
+            envmonlib.Logging().log("Code list screening done.")
             self._writeToStatusBar("")
 
     def _speciesScreening(self):
         """ """
-        #
-        species = envmonlib.Species()
-        #
+        # Screening results is only shown in the toolbox log.
         tool_manager.ToolManager().showToolByName(u'Toolbox logging')
         #
         try:
-            envmonlib.Logging().log("Screening started...")
+            envmonlib.Logging().log(u"") # Empty line.
+            envmonlib.Logging().log("Species screening started...")
             envmonlib.Logging().startAccumulatedLogging()
-            self._writeToStatusBar("Screening in progress...")
-            #
-            for dataset in toolbox_datasets.ToolboxDatasets().getDatasets():
-                self._writeToStatusBar(u"Screening in progress (" + dataset.getMetadata(u'File name') + u")...")
-                #
-                for visitnode in dataset.getChildren():
-                    #
-                    for samplenode in visitnode.getChildren():
-                        #
-                        for variablenode in samplenode.getChildren():
-                            #
-                            data_dict = variablenode.getDataDict()
-                            if u'Taxon name' in data_dict:
-                                if data_dict[u'Taxon name'] not in species.getTaxaLookupDict():
-                                    envmonlib.Logging().warning(u"Taxon name not in species list. Taxon name: " + unicode(data_dict[u'Taxon name']))
-     
+            self._writeToStatusBar("Species screening in progress...")
+            # Perform screening.
+            envmonlib.ScreeningManager().speciesScreening(toolbox_datasets.ToolboxDatasets().getDatasets())
         finally:
             envmonlib.Logging().logAllAccumulatedRows()    
-            envmonlib.Logging().log(u"Screening done.\r\n")
+            envmonlib.Logging().log(u"Species screening done.")
             self._writeToStatusBar("")
 
     def _bvolScreening(self):
         """ """
-        #
-        species = envmonlib.Species()
-        #
+        # Screening results is only shown in the toolbox log.
         tool_manager.ToolManager().showToolByName(u'Toolbox logging')
         #
         try:
-            envmonlib.Logging().log("Screening started...")
+            envmonlib.Logging().log(u"") # Empty line.
+            envmonlib.Logging().log("BVOL Species screening started...")
             envmonlib.Logging().startAccumulatedLogging()
-            self._writeToStatusBar("Screening in progress...")
-            #
-            for dataset in toolbox_datasets.ToolboxDatasets().getDatasets():
-                self._writeToStatusBar(u"Screening in progress (" + dataset.getMetadata(u'File name') + u")...")
-                #
-                for visitnode in dataset.getChildren():
-                    #
-                    for samplenode in visitnode.getChildren():
-                        #
-                        for variablenode in samplenode.getChildren():
-                            #
-                            data_dict = variablenode.getDataDict()
-                            if (u'Taxon name' in data_dict) and (u'Size class' in data_dict):
-                                taxonname = data_dict[u'Taxon name']
-                                sizeclass = data_dict[u'Size class'] 
-                                
-                                if species.getBvolValue(taxonname, sizeclass, u'Size class') == None:
-                                    envmonlib.Logging().warning(u"Taxon name/size clas not in BVOL list. Taxon name: " + unicode(taxonname) + u" Size class: " + unicode(sizeclass))
-     
+            self._writeToStatusBar("BVOL Species screening in progress...")
+            # Perform screening.
+            envmonlib.ScreeningManager().bvolSpeciesScreening(toolbox_datasets.ToolboxDatasets().getDatasets())
         finally:
             envmonlib.Logging().logAllAccumulatedRows()    
-            envmonlib.Logging().log(u"Screening done.\r\n")
+            envmonlib.Logging().log(u"BVOL Species screening done.")
             self._writeToStatusBar("")
 

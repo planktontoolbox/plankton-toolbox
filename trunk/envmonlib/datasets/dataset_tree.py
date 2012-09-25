@@ -93,7 +93,19 @@ class DataNode(object):
         
     def getData(self, key):
         """ """
-        return self._datadict.get(key, u'')
+#        return self._datadict.get(key, u'')
+    
+    
+    
+    
+    
+        return unicode(self._datadict.get(key, u''))
+        
+        
+        
+        
+        
+        
         
     def getDataDict(self):
         """ """

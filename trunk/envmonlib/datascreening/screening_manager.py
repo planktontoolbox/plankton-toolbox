@@ -62,7 +62,6 @@ class ScreeningManager(object):
         #
         except Exception, e:
             envmonlib.Logging().error(u"Failed when loading code lists. Exception: " + unicode(e))
-            print(u"Failed when loading code lists. Exception: " + unicode(e))
 #        # Used for DEBUG:
 #        import locale
 #        import codecs
@@ -87,4 +86,78 @@ class ScreeningManager(object):
                 if codetype not in self._codelist:
                     self._codelist[codetype] = []
                 self._codelist[codetype].append(code)
+
+    def codeListScreening(self, datasets):
+        """ """
+        # Checked code types shoud be returned to caller.
+        checked_codetypes_set = set()
+        #
+        for dataset in datasets:
+            #
+            for visitnode in dataset.getChildren():
+                #
+                data_dict = visitnode.getDataDict()
+                for key in data_dict:
+                    if key in self.getCodeTypes():
+                        checked_codetypes_set.add(key)
+                        if data_dict[key] not in self.getCodes(key):
+                            envmonlib.Logging().warning(u"Visit level. Code is not valid.  Code type: " + unicode(key) + u"  Code: " + unicode(data_dict[key]))
+                #
+                for samplenode in visitnode.getChildren():
+                    #
+                    data_dict = samplenode.getDataDict()
+                    for key in data_dict:
+                        if key in self.getCodeTypes():
+                            checked_codetypes_set.add(key)
+                            if data_dict[key] not in self.getCodes(key):
+                                envmonlib.Logging().warning(u"Sample level. Code is not valid.  Code type: " + unicode(key) + u"  Code: " + unicode(data_dict[key]))
+                    #                        
+                    for variablenode in samplenode.getChildren():
+                        #
+                        data_dict = variablenode.getDataDict()
+                        for key in data_dict:
+                            if key in self.getCodeTypes():
+                                checked_codetypes_set.add(key)
+                                if data_dict[key] not in self.getCodes(key):
+                                    envmonlib.Logging().warning(u"Variable level. Code is not valid.  Code type: " + unicode(key) + u"  Code: " + unicode(data_dict[key]))
+        # Returns set of checked code types.
+        return checked_codetypes_set
+
+    def speciesScreening(self, datasets):
+        """ """
+        species = envmonlib.Species()
+        #
+        for dataset in datasets:
+            #
+            for visitnode in dataset.getChildren():
+                #
+                for samplenode in visitnode.getChildren():
+                    #
+                    for variablenode in samplenode.getChildren():
+                        #
+                        data_dict = variablenode.getDataDict()
+                        if u'Taxon name' in data_dict:
+                            if data_dict[u'Taxon name'] not in species.getTaxaLookupDict():
+                                envmonlib.Logging().warning(u"Taxon name not in species list.  Taxon name: " + unicode(data_dict[u'Taxon name']))
+     
+    def bvolSpeciesScreening(self, datasets):
+        """ """
+        species = envmonlib.Species()
+        #
+        for dataset in datasets:
+            #
+            for visitnode in dataset.getChildren():
+                #
+                for samplenode in visitnode.getChildren():
+                    #
+                    for variablenode in samplenode.getChildren():
+                        #
+                        data_dict = variablenode.getDataDict()
+                        if (u'Taxon name' in data_dict) and (u'Size class' in data_dict):
+                            taxonname = data_dict[u'Taxon name']
+                            sizeclass = data_dict[u'Size class'] 
+                            
+                            if species.getBvolValue(taxonname, sizeclass, u'Size class') == None:
+                                envmonlib.Logging().warning(u"Taxon name/size clas not in BVOL list.  Taxon name: " + unicode(taxonname) + u"  Size class: " + unicode(sizeclass))
+     
 

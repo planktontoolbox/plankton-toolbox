@@ -65,7 +65,7 @@ class Species(object):
         try:
             self._loadAllData()
         except:
-            print(u'Failed to load species data.')
+            envmonlib.Logging().warning(u"Failed to load species data.")
 
     def getTaxaDict(self):
         """ """
@@ -104,21 +104,32 @@ class Species(object):
         """ """
         try:
             self._clear()
-            # Create taxa.
+            envmonlib.Logging().log(u"") # Empty line.
+            envmonlib.Logging().log(u"Loading species lists (located in 'toolbox_data/species'):")
+            # Load taxa.
             for excelfilename in self._taxa_filenames:
                 self._loadTaxa(excelfilename)                
+                envmonlib.Logging().log(u"- " + os.path.basename(excelfilename) + u" (taxa)")
             # Add synonyms to taxa. Note: 'translate_to_' will be added to filenames.
             for excelfilename in self._taxa_filenames:
-                self._loadSynonyms(excelfilename)                            
+                dirname = os.path.dirname(excelfilename)        
+                basename = os.path.basename(excelfilename)
+                translate_file_name = dirname + u'/translate_to_' + basename
+                # 
+                if os.path.exists(translate_file_name):
+                    self._loadSynonyms(translate_file_name)                            
+                    envmonlib.Logging().log(u"- " + os.path.basename(translate_file_name) + u" (synonyms and misspellings)")
             self._updateLookupDictionaries()
             
             # Load harmful species.
             for excelfilename in self._harmful_filenames:
                 self._loadHarmful(excelfilename)
+                envmonlib.Logging().log(u"- " + os.path.basename(excelfilename) + u" (harmful)")
 
             # Load BVOL species data.
             for excelfilename in self._bvol_filenames:
                 self._loadBvol(excelfilename)            
+                envmonlib.Logging().log("- " + os.path.basename(excelfilename) + u" (BVOL)")
             # Add BVOL translations.
             ### TODO: ....
             
@@ -127,7 +138,6 @@ class Species(object):
         #
         except Exception, e:
             envmonlib.Logging().error(u"Failed when loading species data: " + unicode(e))
-            print(u"Failed when loading species data: " + unicode(e))
 #        # Used for DEBUG:
 #        import locale
 #        import codecs
@@ -161,23 +171,18 @@ class Species(object):
 
     def _loadSynonyms(self, excel_file_name):
         """ Add synonyms from the corresponding 'translate_to_' file. """
-        dirname = os.path.dirname(excel_file_name)        
-        basename = os.path.basename(excel_file_name)
-        translate_file_name = dirname + u'/translate_to_' + basename
-        # 
-        if os.path.exists(translate_file_name):
-            tabledataset = envmonlib.DatasetTable()
-            envmonlib.ExcelFiles().readToTableDataset(tabledataset, translate_file_name)
-            for row in tabledataset.getRows():
-                toname = row[1]
-                fromname = row[0]
-                if toname in self._taxa:
-                    taxon = self._taxa[toname]
-                    if not u'Synonyms' in self._taxa[toname]:
-                        taxon[u'Synonyms'] = []
-                    taxon[u'Synonyms'].append(fromname)
-                else:
-                    print(translate_file_name + u': Species missing ' + toname)
+        tabledataset = envmonlib.DatasetTable()
+        envmonlib.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
+        for row in tabledataset.getRows():
+            toname = row[1]
+            fromname = row[0]
+            if toname in self._taxa:
+                taxon = self._taxa[toname]
+                if not u'Synonyms' in self._taxa[toname]:
+                    taxon[u'Synonyms'] = []
+                taxon[u'Synonyms'].append(fromname)
+            else:
+                envmonlib.Logging().log(u": Species missing: " + toname + u" (" + excel_file_name + u")")
                     
     def _loadHarmful(self, excel_file_name):
         """ Adds info about harmfulness to the species objects. """
@@ -263,7 +268,6 @@ class Species(object):
                                 sizeclassdict[header[column]] = unicode(int(float(value)))
                             except:
                                 sizeclassdict[header[column]] = u''
-                                print(u'_loadBvol, Size class: ' + row[1])
                         elif self._isBvolColumnNumeric(header, column):
                             sizeclassdict[header[column]] = value.strip().replace(',', '.')
                         else:

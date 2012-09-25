@@ -136,10 +136,11 @@ class FormatSingleFile(envmonlib.ParsedFormat):
                         try:
                             exec(cmd[u'Command'])
                         except Exception as e:
-                            pass
+                            envmonlib.Logging().warning(u"Failed to parse command: %s" % (e.args[0]) + 
+                                                        "- Command string: %s" % (cmd[u'Command string']))
 #                            print("ERROR: Failed to parse command: %s" % (e.args[0]))
 #                            print("- Command string: %s" % (cmd[u'Command string']))
         #
         except Exception as e:
-            print("ERROR: Failed to parse dataset: %s" % (e.args[0]))
+            envmonlib.Logging().warning(u"Failed to parse dataset: %s" % (e.args[0]))
 

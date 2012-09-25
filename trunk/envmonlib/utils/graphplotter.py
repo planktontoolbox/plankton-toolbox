@@ -653,13 +653,31 @@ def graphplotter_test():
                         y_label = u'Y (one variable)')
 
     plotdata_0.addPlot(plot_name = u"First plot", 
-                        y_array = [2006.0, 2006.0, 2006.0, 2006.0], 
+                        y_array = [20007.0, None, 20008.0, 20009.0, 20010.0], 
+                        y_label = u'Y first')
+    plotdata_0.addPlot(plot_name = u"First plot", 
+                        y_array = [2006.0, 2006.0, 2006.0, None, 2006.0], 
                         y_label = u'Y first')
 
     graph = LineChart(plotdata_0)
     graph.plotChart(combined = False, y_log_scale = True)
     graph.plotChart(combined = True, y_log_scale = True)
     
+#    graph = BarChart(plotdata_0)
+#    graph.plotChart(combined = False, y_log_scale = True)
+#    graph.plotChart(combined = True, y_log_scale = True)
+#    
+#    graph = ScatterChart(plotdata_0)
+#    graph.plotChart(combined = False, y_log_scale = True)
+#    graph.plotChart(combined = True, y_log_scale = True)
+    
+    graph = PieChart(plotdata_0)
+    graph.plotChart(combined = False, y_log_scale = True)
+    graph.plotChart(combined = True, y_log_scale = True)
+    
+
+    return
+
     
     plotdata_1 = GraphPlotData(
                         title = u"One variable data object", 

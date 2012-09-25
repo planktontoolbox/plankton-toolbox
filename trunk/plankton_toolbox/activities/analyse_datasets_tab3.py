@@ -164,7 +164,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                                 aggregatedvariables[agg_tuple] = value
                         except:
                             if variablenode.getData(u'Value'):
-                                print('DEBUG: Value not valid float: ' + unicode(variablenode.getData(u'Value')))
+                                envmonlib.Logging().warning(u"Value is not a valid float: " + unicode(variablenode.getData(u'Value')))
                     #Remove all variables for this sample.
                     samplenode.removeAllChildren()
                     # Add the new aggregated variables instead.  
