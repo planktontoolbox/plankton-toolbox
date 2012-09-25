@@ -116,11 +116,11 @@ class MonitoringFiles(object):
 #            out = codecs.open(fileName, mode = 'w', encoding = txtencode)
 #            separator = '\t' # Use tab as item separator.
 #            # Header.
-#            out.write(separator.join(map(unicode, self._header)) + '\r\n')
+#            out.write(separator.join(map(unicode, self._header)))
 #            # Rows.
 #            for row in self._rows:
 #                # Use tab as column separator and CR/LF as row delimiter.
-#                out.write(separator.join(map(unicode, row)) + '\r\n')
+#                out.write(separator.join(map(unicode, row))')
 #        except (IOError, OSError):
 #            envmonlib.Logging().log("Failed to write to file: " + fileName)
 #            raise

@@ -70,7 +70,6 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                
         # - Select parameter:
         self._parameter_list = QtGui.QComboBox()        
-        self._parameter_list.setMinimumContentsLength(20)
         #
         # Prepared graphs.
         self._addplot_1_button = QtGui.QPushButton("Plot 1. Aggreagated value / taxa / station (no filter)")

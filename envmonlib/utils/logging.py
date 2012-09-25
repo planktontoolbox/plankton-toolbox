@@ -58,10 +58,19 @@ class Logging(object):
     def log(self, message):
         """ Used for direct logging. """
         message = unicode(message)
-        if self._logtarget:
-            self._logtarget.writeToLog(time.strftime("%Y-%m-%d %H:%M:%S") + ': ' + message)
+        if message:
+            if self._logtarget:
+                self._logtarget.writeToLog(time.strftime("%Y-%m-%d %H:%M:%S") + ': ' + message)
+            else:
+                # Use console if no target is defined.
+                print(time.strftime("%Y-%m-%d %H:%M:%S") + ': ' + message)
         else:
-            print(time.strftime("%Y-%m-%d %H:%M:%S") + ': ' + message)
+            # Don't write time info if row is empty.
+            if self._logtarget:
+                self._logtarget.writeToLog(u"")
+            else:
+                print(u"")
+
         
     def info(self, message):
         """ Accumulates info rows. Increment counter if it already exists. """
@@ -126,17 +135,17 @@ class Logging(object):
     def logAllInfoRows(self):
         """ Log all the content in the accumulated info row list. """
         for message in sorted(self._infoacc):
-            self.log('- ' + message + ' (' + unicode(self._infoacc[message]) + ' times)')
+            self.log('- ' + message + '   (' + unicode(self._infoacc[message]) + ' times)')
         
     def logAllWarnings(self):
         """ Log all the content in the accumulated warning list. """
         for message in sorted(self._warningacc):
-            self.log('- ' + message + ' (' + unicode(self._warningacc[message]) + ' times)')
+            self.log('- ' + message + '   (' + unicode(self._warningacc[message]) + ' times)')
         
     def logAllErrors(self):
         """ Log all the content in the accumulated error list. """
         for message in sorted(self._erroracc):
-            self.log('- ' + message + ' (' + unicode(self._erroracc[message]) + ' times)')
+            self.log('- ' + message + '   (' + unicode(self._erroracc[message]) + ' times)')
 
 
 class DefaultLogTarget(object):

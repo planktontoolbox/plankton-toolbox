@@ -224,6 +224,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
         if self._report_list.currentIndex() == 0:
             QtGui.QMessageBox.information(self, "Info", 'Report type must be selected.')
             return        
+        envmonlib.Logging().log(u"") # Empty line.
         envmonlib.Logging().log("PW reports started...")
         envmonlib.Logging().startAccumulatedLogging()
         self._writeToStatusBar("Generating PW report...")
@@ -277,7 +278,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
             raise
         finally:
             envmonlib.Logging().logAllAccumulatedRows()    
-            envmonlib.Logging().log("PW reports finished.\r\n")
+            envmonlib.Logging().log("PW reports finished.")
             self._writeToStatusBar("")
 
 

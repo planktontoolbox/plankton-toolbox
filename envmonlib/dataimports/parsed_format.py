@@ -87,7 +87,7 @@ class ParsedFormat(envmonlib.FormatBase):
                     str = str.replace(u' ', u'').replace(u',', u'.')
                     return float(str)
                 except:
-                    print(u"Failed to convert to float: " + self._row[index])
+                    envmonlib.Logging().warning(u"Failed to convert to float: " + self._row[index])
                     return None
         return None
 
