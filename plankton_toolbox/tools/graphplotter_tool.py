@@ -56,10 +56,14 @@ class GraphPlotterTool(tool_base.ToolBase):
         self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea | QtCore.Qt.BottomDockWidgetArea)
         self.setBaseSize(600,600)
         #
-        # Add and view simple data for test:
-        self._testData()
-        self._drawChart()
+#        # Add and view simple data for test:
+#        self._testData()
+#        self._drawChart()
         
+    def clearPlotData(self):
+        """ """
+        self.setPlotData(None)
+
     def setPlotData(self, plot_data):
         """ """
         self._figure.clear()
@@ -267,7 +271,7 @@ class GraphPlotterTool(tool_base.ToolBase):
         self.connect(self._ylogscale_checkbox, QtCore.SIGNAL("stateChanged(int)"), self._drawChart)
         #                
         self._clear_button = QtGui.QPushButton("Clear")
-        self.connect(self._clear_button, QtCore.SIGNAL("clicked()"), self._clearPlotData)                
+        self.connect(self._clear_button, QtCore.SIGNAL("clicked()"), self.clearPlotData)                
         #                
         self._savecharttofile_button = QtGui.QPushButton("Save...")
         self.connect(self._savecharttofile_button, QtCore.SIGNAL("clicked()"), self._saveChartToFile)                
@@ -296,10 +300,6 @@ class GraphPlotterTool(tool_base.ToolBase):
         #
         return layout
         
-    def _clearPlotData(self):
-        """ """
-        self.setPlotData(None)
-
     def _drawChart(self):
         """ """
         self._figure.clear()

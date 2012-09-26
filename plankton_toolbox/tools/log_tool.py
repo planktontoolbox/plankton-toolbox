@@ -76,6 +76,7 @@ class LogTool(tool_base.ToolBase):
         """ """
         # Active widgets and connections.
         self._logarea = QtGui.QListWidget(self)
+##        self._logarea = QtGui.QTextEdit(self)
         self._logarea.setMinimumHeight(20)
         self._logarea.setMinimumWidth(100)
         # Layout.
@@ -87,12 +88,14 @@ class LogTool(tool_base.ToolBase):
     def writeToLog(self, message):
         """ """
         self._logarea.addItem(message)
+##        self._logarea.append(message)
         self._logarea.scrollToBottom()
+##        self._logarea.ensureCursorVisible()
         # Remove oldest lines if max exceeded.
         try:
-            max = int(unicode(self._limitedit.text())) 
-            if max > 1:
-                while self._logarea.count() > max:
+            maxrows = int(unicode(self._limit_edit.text())) 
+            if maxrows > 1:
+                while self._logarea.count() > maxrows:
                     self._logarea.takeItem(0)
         except:
             pass # Don't remove rows if max is not a valid integer.    

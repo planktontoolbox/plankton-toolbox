@@ -124,17 +124,19 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         # - Select import column:
         self._textfile_importcolumn_list = QtGui.QComboBox()
         self._textfile_importcolumn_list.addItems(["<no parser selected>"])        
+        self.connect(self._textfile_parser_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._textfileImportColumnSelected)                
         # - Select export column:
         self._textfile_exportcolumn_list = QtGui.QComboBox()
         self._textfile_exportcolumn_list.addItems(["<no parser selected>"])        
         # - Select text coding.
         self._textfile_encoding_list = QtGui.QComboBox()
-        self._encodings_list = [u"<auto>", 
-                                u"cp1258",
-                                u"windows-1258", 
+        self._encodings_list = [u"<platform default>", 
                                 u"utf8",
                                 u"utf16",
-                                u"ascii"]
+                                u"ascii",
+                                u"latin1",
+                                u"cp1258",
+                                u"windows-1258"]
         self._textfile_encoding_list.addItems(self._encodings_list)
         # Load dataset.
         self._textfile_getdataset_button = QtGui.QPushButton("Load dataset(s)...")
@@ -199,6 +201,24 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             self._textfile_exportcolumn_list.clear()
             self._textfile_exportcolumn_list.addItems(["no parser selected"])
 
+    def _textfileImportColumnSelected(self, selected_row):
+        """ """
+        # Reset. 
+        self._textfile_encoding_list.setCurrentIndex(0)
+        #
+        selectedimportcolumn = unicode(self._textfile_importcolumn_list.currentText())
+        # Read parser file.
+        tabledata = envmonlib.DatasetTable()
+        envmonlib.ExcelFiles().readToTableDataset(tabledata, 
+                                file_name = self._parser_path + self._parser_list[selected_row - 1])
+        header = tabledata.getHeader()
+        for index, headeritem in enumerate(header):
+            if headeritem == selectedimportcolumn:
+                for row in tabledata.getRows():
+                    if (row[0] == u"INFO") and (row[1] == u"Character encoding"):
+                        if row[index] and (row[index] in self._encodings_list):
+                            self._textfile_encoding_list.setCurrentIndex(self._encodings_list.index(row[index]))
+
     def _loadTextFiles(self):
         """ """
         try:
@@ -222,7 +242,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                     # Store selected path. Will be used as default next time.
                     self._last_used_textfile_name = filename
                     # Text files may have strange encodings.
-                    if unicode(self._textfile_encoding_list.currentText()) == u'<auto>':
+                    if unicode(self._textfile_encoding_list.currentText()) == u'<platform default>':
                         textfileencoding = locale.getpreferredencoding()
                     else:
                         textfileencoding = unicode(self._textfile_encoding_list.currentText())                        

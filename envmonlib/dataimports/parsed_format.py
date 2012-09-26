@@ -88,7 +88,8 @@ class ParsedFormat(envmonlib.FormatBase):
                     return float(str)
                 except:
                     envmonlib.Logging().warning(u"Failed to convert to float: " + self._row[index])
-                    return None
+#                    return None
+                    return float('nan')
         return None
 
     def _speciesByKey(self, taxon_name, key):
