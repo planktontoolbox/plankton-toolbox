@@ -25,11 +25,13 @@
 # THE SOFTWARE.
 
 import numpy
+import numpy.ma
 import datetime
 import copy
 import matplotlib.dates as mpl_dates
 import matplotlib.font_manager as mpl_font_manager
 import pylab # For color maps
+import envmonlib
 
 class GraphPlotData(object):
     """ Abstract base class for data objects. """
@@ -275,12 +277,13 @@ class LineChart(ChartBase):
             if y_log_scale:
                 subplot.set_yscale('log')
             #
+            legendname_list = []
+            #
             for plotindex, plotdict in enumerate(plotlist):
                 #
                 x_array = plotdict[u'X array']
                 y_array = plotdict[u'Y array']
 #                z_array = plotdict[u'Z array']
-
                 if x_array and (x_type == u'Date'):
                     # Convert date strings.
                     x_date_array = []
@@ -301,15 +304,54 @@ class LineChart(ChartBase):
                     fig.autofmt_xdate(bottom = 0.2)                     
                 else:
                     if (not x_array) or (len(x_array) == 0):
-                        x_array = list(numpy.arange(len(y_array)))
-                    #   
-                    subplot.plot(x_array, y_array,
-                                 marker = markers[plotindex % markers_len])
+                        x_num_array = list(numpy.arange(len(y_array)))
+                    else:
+                        x_num_array = x_array[:] # TEST ????
+                    #
+                    
+                    
+                    
+                    try: 
+                        y_floatarray = []
+                        failedconversions_set = set()
+                        for value in y_array:
+                            try:
+                                value = float(value.replace(u' ', u'').replace(u',', u'.'))
+                                y_floatarray.append(value)
+                            except:
+                                failedconversions_set.add(value)
+                                y_floatarray.append(float('nan'))
+                        if len(failedconversions_set) > 0:
+                            envmonlib.Logging().warning(u"GraphPlot: These values could not be converted to float: '" + 
+                                                        u"', '".join(sorted(failedconversions_set)) + u"'")
+
+                       
+                       
+                        x_masked = numpy.ma.masked_array(x_num_array, numpy.isnan(x_num_array))
+                        y_masked = numpy.ma.masked_array(y_floatarray, numpy.isnan(y_floatarray))
+    
+    
+    
+    
+    
+                        subplot.plot(x_masked, y_masked,
+                                     marker = markers[plotindex % markers_len])
+                        legendname_list.append(plotdict[u'Plot name'])
+                    except Exception as e:
+                        envmonlib.Logging().warning(u"DEBUG: Plot skipped: %s" % (e.args[0]))
+                    
+                    
+                    
+                    
+#                    subplot.plot(x_num_array, y_array,
+#                                 marker = markers[plotindex % markers_len])
             #
             font_properties = mpl_font_manager.FontProperties()
             font_properties.set_size('small')
-            leg = subplot.legend([data[u'Plot name'] for data in plotlist],
+            leg = subplot.legend(legendname_list,
                                  loc='best', fancybox=True, prop = font_properties)
+#            leg = subplot.legend([data[u'Plot name'] for data in plotlist],
+#                                 loc='best', fancybox=True, prop = font_properties)
             leg.get_frame().set_alpha(0.5)
             #
             subplot.set_xlabel(self._graph_data.getPlotDataInfo()[u'X label'])
@@ -354,8 +396,35 @@ class LineChart(ChartBase):
                     else:
                         x_num_array = x_array[:] # TEST ????
                     #   
-                    subplot.plot(x_num_array, y_array,
-                                 marker = markers[plotindex % markers_len])
+
+
+
+                    try: 
+                        y_floatarray = []
+                        failedconversions_set = set()
+                        containsvalidvalues = False
+                        for value in y_array:
+                            try:
+                                value = float(value.replace(u' ', u'').replace(u',', u'.'))
+                                y_floatarray.append(value)
+                                containsvalidvalues = True
+                            except:
+                                failedconversions_set.add(value)
+                                y_floatarray.append(float('nan'))
+                        if len(failedconversions_set) > 0:
+                            envmonlib.Logging().warning(u"GraphPlot: These values could not be converted to float: '" + 
+                                                        u"', '".join(sorted(failedconversions_set)) + u"'")
+
+                       
+                        if containsvalidvalues:
+                            x_masked = numpy.ma.masked_array(x_num_array, numpy.isnan(x_num_array))
+                            y_masked = numpy.ma.masked_array(y_floatarray, numpy.isnan(y_floatarray))
+        
+                            subplot.plot(x_masked, y_masked,
+                                         marker = markers[plotindex % markers_len])
+                    #
+                    except Exception as e:
+                        envmonlib.Logging().warning(u"DEBUG: Plot skipped: %s" % (e.args[0]))
                 #
                 subplot.set_title(plotdict[u'Plot name'])
                 subplot.set_ylabel(plotdict[u'Y label'])
@@ -652,12 +721,18 @@ def graphplotter_test():
                         x_label = u'X (one variable)',
                         y_label = u'Y (one variable)')
 
-    plotdata_0.addPlot(plot_name = u"First plot", 
-                        y_array = [20007.0, None, 20008.0, 20009.0, 20010.0], 
+    plotdata_0.addPlot(plot_name = u"1 plot", 
+                        y_array = [20007.0, float('nan'), 20008.0, 20009.0, 20010.0], 
                         y_label = u'Y first')
-    plotdata_0.addPlot(plot_name = u"First plot", 
-                        y_array = [2006.0, 2006.0, 2006.0, None, 2006.0], 
-                        y_label = u'Y first')
+#    plotdata_0.addPlot(plot_name = u"2 plot", 
+#                        y_array = [2006.0, 2006.0, 2006.0, 'nan', 2006.0], 
+#                        y_label = u'Y first')
+#    plotdata_0.addPlot(plot_name = u"3 plot", 
+#                        y_array = [2006.0, 'NaN', 2006.0, 2006.0, 2006.0], 
+#                        y_label = u'Y first')
+#    plotdata_0.addPlot(plot_name = u"4 plot", 
+#                        y_array = [2006.0, 2006.0, None, 2006.0, 2006.0], 
+#                        y_label = u'Y first')
 
     graph = LineChart(plotdata_0)
     graph.plotChart(combined = False, y_log_scale = True)
