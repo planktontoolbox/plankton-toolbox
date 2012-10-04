@@ -56,8 +56,8 @@ class StartActivity(activity_base.ActivityBase):
         # Add content to the activity.
         contentLayout.addLayout(self._contentWelcome())
         contentLayout.addLayout(self._contentActivities())
-        contentLayout.addLayout(self._contentTools())
-        contentLayout.addLayout(self._contentGetDataFromNordicMicroalgae())
+#        contentLayout.addLayout(self._contentTools())
+#        contentLayout.addLayout(self._contentGetDataFromNordicMicroalgae())
         contentLayout.addStretch(5)
 
     def _contentWelcome(self):
@@ -94,119 +94,125 @@ class StartActivity(activity_base.ActivityBase):
         <h4>Activities</h4>
         Activities are... 
         """)
-        createdatasetbutton = utils_qt.ClickableQLabel("- Create dataset.")
-        loaddatasetsbutton = utils_qt.ClickableQLabel("- Load datasets.")
-        analysedatasetsbutton = utils_qt.ClickableQLabel("- Analyse datasets.")
-        createreportsbutton = utils_qt.ClickableQLabel("- Create reports.")
-        managespecieslistsbutton = utils_qt.ClickableQLabel("- Manage species lists.")
+#        createdatasetbutton = utils_qt.ClickableLinkQLabel("- Create dataset.")
+        loaddatasetsbutton = utils_qt.ClickableLinkQLabel("- Load datasets.")
+        screeningbutton = utils_qt.ClickableLinkQLabel("- Screening.")
+        analysedatasetsbutton = utils_qt.ClickableLinkQLabel("- Analyse datasets.")
+#        createreportsbutton = utils_qt.ClickableQLabel("- Create reports.")
+#        managespecieslistsbutton = utils_qt.ClickableQLabel("- Manage species lists.")
         #    
-        self.connect(createdatasetbutton, QtCore.SIGNAL("clicked()"), self._gotoCreateDataset)
+#        self.connect(createdatasetbutton, QtCore.SIGNAL("clicked()"), self._gotoCreateDataset)
         self.connect(loaddatasetsbutton, QtCore.SIGNAL("clicked()"), self._gotoLoadDatasets)
+        self.connect(screeningbutton, QtCore.SIGNAL("clicked()"), self._gotoScreeningDatasets)
         self.connect(analysedatasetsbutton, QtCore.SIGNAL("clicked()"), self._gotoAnalyseDatasets)
-        self.connect(createreportsbutton, QtCore.SIGNAL("clicked()"), self._gotoCreateReports)
-        self.connect(managespecieslistsbutton, QtCore.SIGNAL("clicked()"), self._gotoManageSpeciesLists)
+#        self.connect(createreportsbutton, QtCore.SIGNAL("clicked()"), self._gotoCreateReports)
+#        self.connect(managespecieslistsbutton, QtCore.SIGNAL("clicked()"), self._gotoManageSpeciesLists)
         # Layout.
         layout = QtGui.QGridLayout()
         gridrow = 0
         layout.addWidget(QtGui.QLabel(''), gridrow, 0, 1, 1) # Add space to the left.
         layout.addWidget(label1, gridrow, 1, 1, 20)
-        gridrow += 1
-        layout.addWidget(createdatasetbutton, gridrow, 1, 1, 20)
+#        gridrow += 1
+#        layout.addWidget(createdatasetbutton, gridrow, 1, 1, 20)
         gridrow += 1
         layout.addWidget(loaddatasetsbutton, gridrow, 1, 1, 20)
         gridrow += 1
+        layout.addWidget(screeningbutton, gridrow, 1, 1, 20)
+        gridrow += 1
         layout.addWidget(analysedatasetsbutton, gridrow, 1, 1, 20)
-        gridrow += 1
-        layout.addWidget(createreportsbutton, gridrow, 1, 1, 20)
-        gridrow += 1
-        layout.addWidget(managespecieslistsbutton, gridrow, 1, 1, 20)
+#        gridrow += 1
+#        layout.addWidget(createreportsbutton, gridrow, 1, 1, 20)
+#        gridrow += 1
+#        layout.addWidget(managespecieslistsbutton, gridrow, 1, 1, 20)
         gridrow += 1
         layout.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 20)
         gridrow += 1
         #
         return layout
 
-    def _gotoCreateDataset(self):
-        self._parent.showActivityByName('(Create dataset)')
+#    def _gotoCreateDataset(self):
+#        self._parent.showActivityByName('(Create dataset)')
     
     def _gotoLoadDatasets(self):
         self._parent.showActivityByName('Load datasets')
     
+    def _gotoScreeningDatasets(self):
+        self._parent.showActivityByName('Screening')
+    
     def _gotoAnalyseDatasets(self):
-        self._parent.showActivityByName('(Analyse datasets)')
+        self._parent.showActivityByName('Analyse datasets')
     
-    def _gotoCreateReports(self):
-        self._parent.showActivityByName('Create reports')
+#    def _gotoCreateReports(self):
+#        self._parent.showActivityByName('Create reports')
+#    
+#    def _gotoManageSpeciesLists(self):
+#        self._parent.showActivityByName('Manage species lists')
     
-    def _gotoManageSpeciesLists(self):
-        self._parent.showActivityByName('Manage species lists')
-    
-    def _contentTools(self):
-        """ """
-        # Active widgets and connections.
-        label1 = utils_qt.RichTextQLabel()
-        label1.setText("""
-        <h4>Tools</h4>
-        Tools are... 
-        <br/> 
-        """)        
-        # Layout.
-        layout = QtGui.QGridLayout()
-        gridrow = 0
-        layout.addWidget( QtGui.QLabel(''), gridrow, 0, 1, 1) # Add space to the left.
-        layout.addWidget(label1, gridrow, 1, 1, 20)
-        #
-        return layout
-
-    def _contentGetDataFromNordicMicroalgae(self):
-        """ """
-        # Active widgets and connections.
-        label1 = utils_qt.RichTextQLabel()
-        label1.setText("""
-        <h4>Nordic Microalgae</h4>
-        Species lists and images can automatically be loaded from the 
-        web application Nordic Microalgae, 
-        <a href="http://nordicmicroalgae.org">http://nordicmicroalgae.org</a> 
-        """)
-        #
-        clearspeciesbutton = utils_qt.ClickableQLabel("- Clear species lists.")
-        loadspeciesbutton = utils_qt.ClickableQLabel("- Load species lists from Nordic Microalgae.")
-        clearimagesbutton = utils_qt.ClickableQLabel("- Clear species images.")
-        loadimagesbutton = utils_qt.ClickableQLabel("- Load species images from Nordic Microalgae.")
-        #
-        self.connect(clearspeciesbutton, QtCore.SIGNAL("clicked()"), self._clearSpecies)
-        self.connect(loadspeciesbutton, QtCore.SIGNAL("clicked()"), self._loadSpecies)
-        self.connect(clearimagesbutton, QtCore.SIGNAL("clicked()"), self._clearImages)
-        self.connect(loadimagesbutton, QtCore.SIGNAL("clicked()"), self._loadImages)
-        # Layout.
-        layout = QtGui.QGridLayout()
-        gridrow = 0
-        layout.addWidget( QtGui.QLabel(''), gridrow, 0, 1, 1) # Add space to the left.
-        layout.addWidget(label1, gridrow, 1, 1, 20)
-        gridrow += 1
-        layout.addWidget(clearspeciesbutton, gridrow, 1, 1, 20)
-        gridrow += 1
-        layout.addWidget(loadspeciesbutton, gridrow, 1, 1, 20)
-        gridrow += 1
-        layout.addWidget(clearimagesbutton, gridrow, 1, 1, 20)
-        gridrow += 1
-        layout.addWidget(loadimagesbutton, gridrow, 1, 1, 20)
-        gridrow += 1
-        layout.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 20)
-        gridrow += 1
-        #
-        return layout
-
-    def _clearSpecies(self):
-        QtGui.QMessageBox.information(self, "Information", 'Sorry, not yet implemented.')
-    
-    def _loadSpecies(self):
-        QtGui.QMessageBox.information(self, "Information", 'Sorry, not yet implemented.')
-    
-    def _clearImages(self):
-        QtGui.QMessageBox.information(self, "Information", 'Sorry, not yet implemented.')
-    
-    def _loadImages(self):
-        QtGui.QMessageBox.information(self, "Information", 'Sorry, not yet implemented.')
+#    def _contentTools(self):
+#        """ """
+#        # Active widgets and connections.
+#        label1 = utils_qt.RichTextQLabel()
+#        label1.setText("""
+#        <h4>Tools</h4>
+#        Tools are... 
+#        <br/> 
+#        """)        
+#        # Layout.
+#        layout = QtGui.QGridLayout()
+#        gridrow = 0
+#        layout.addWidget( QtGui.QLabel(''), gridrow, 0, 1, 1) # Add space to the left.
+#        layout.addWidget(label1, gridrow, 1, 1, 20)
+#        #
+#        return layout
+#    def _contentGetDataFromNordicMicroalgae(self):
+#        """ """
+#        # Active widgets and connections.
+#        label1 = utils_qt.RichTextQLabel()
+#        label1.setText("""
+#        <h4>Nordic Microalgae</h4>
+#        Species lists and images can automatically be loaded from the 
+#        web application Nordic Microalgae, 
+#        <a href="http://nordicmicroalgae.org">http://nordicmicroalgae.org</a> 
+#        """)
+#        #
+#        clearspeciesbutton = utils_qt.ClickableQLabel("- Clear species lists.")
+#        loadspeciesbutton = utils_qt.ClickableQLabel("- Load species lists from Nordic Microalgae.")
+#        clearimagesbutton = utils_qt.ClickableQLabel("- Clear species images.")
+#        loadimagesbutton = utils_qt.ClickableQLabel("- Load species images from Nordic Microalgae.")
+#        #
+#        self.connect(clearspeciesbutton, QtCore.SIGNAL("clicked()"), self._clearSpecies)
+#        self.connect(loadspeciesbutton, QtCore.SIGNAL("clicked()"), self._loadSpecies)
+#        self.connect(clearimagesbutton, QtCore.SIGNAL("clicked()"), self._clearImages)
+#        self.connect(loadimagesbutton, QtCore.SIGNAL("clicked()"), self._loadImages)
+#        # Layout.
+#        layout = QtGui.QGridLayout()
+#        gridrow = 0
+#        layout.addWidget( QtGui.QLabel(''), gridrow, 0, 1, 1) # Add space to the left.
+#        layout.addWidget(label1, gridrow, 1, 1, 20)
+#        gridrow += 1
+#        layout.addWidget(clearspeciesbutton, gridrow, 1, 1, 20)
+#        gridrow += 1
+#        layout.addWidget(loadspeciesbutton, gridrow, 1, 1, 20)
+#        gridrow += 1
+#        layout.addWidget(clearimagesbutton, gridrow, 1, 1, 20)
+#        gridrow += 1
+#        layout.addWidget(loadimagesbutton, gridrow, 1, 1, 20)
+#        gridrow += 1
+#        layout.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 20)
+#        gridrow += 1
+#        #
+#        return layout
+#
+#    def _clearSpecies(self):
+#        QtGui.QMessageBox.information(self, "Information", 'Sorry, not yet implemented.')
+#    
+#    def _loadSpecies(self):
+#        QtGui.QMessageBox.information(self, "Information", 'Sorry, not yet implemented.')
+#    
+#    def _clearImages(self):
+#        QtGui.QMessageBox.information(self, "Information", 'Sorry, not yet implemented.')
+#    
+#    def _loadImages(self):
+#        QtGui.QMessageBox.information(self, "Information", 'Sorry, not yet implemented.')
     
 

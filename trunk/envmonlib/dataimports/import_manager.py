@@ -27,20 +27,29 @@
 import envmonlib
 
 class ImportManager(object):
-    """ """
-    def __init__(self, parser_file_path, import_column, export_column, semantics_column):
+    """ 
+    
+    Parser file columns and values:
+    
+    - First column: Node level. Content: INFO, VISIT, SAMPLE, VARIABLE, FUNCTION Sample, FUNCTION Variable 
+    - Second column: Key. INFO: Fixed set of key values. Other: Field name in the internal memory model.
+    - Fourth column: Format. Content: Text, Date:format, Time:format, Datetime:format, Integer, Float:n (where n = shown decimals).
+    
+    ...
+    
+    
+    """
+    def __init__(self, parser_file_path, import_column, export_column):
         """ """
         #
         self._parser_file_path = parser_file_path
         self._import_column = import_column
         self._export_column = export_column
-        self._semantics_column = semantics_column        
         # Initialize parent.
         super(ImportManager, self).__init__()
         # 
         self._importrows = None
         self._columnsinfo = None
-        self._semanticsinfo = None        
         self._loadParserInfo()
 
     def importTextFile(self, filename, textfile_encoding):
@@ -55,7 +64,6 @@ class ImportManager(object):
         #
         targetdataset.setDatasetParserRows(self._importrows)
         targetdataset.setExportTableColumns(self._columnsinfo)
-        targetdataset.setSemantics(self._semanticsinfo)
         #
         formatparser.parseTableDataset(targetdataset, tabledataset)
         # Phase 3: Reorganize between nodes in tree structure.
@@ -102,7 +110,6 @@ class ImportManager(object):
         #
         targetdataset.setDatasetParserRows(self._importrows)
         targetdataset.setExportTableColumns(self._columnsinfo)
-        targetdataset.setSemantics(self._semanticsinfo)
         #
         formatparser.parseTableDataset(targetdataset, tabledataset)
         # Phase 3: Reorganize between nodes in tree structure.
@@ -155,7 +162,8 @@ class ImportManager(object):
                 if importcolumndata:
                     nodelevel = tabledata.getDataItem(rowindex, 0)
                     key = tabledata.getDataItem(rowindex, 1)
-                    self._importrows.append({u'Node': nodelevel, u'Key': key, u'Command': importcolumndata}) 
+                    fieldformat = tabledata.getDataItem(rowindex, 2)
+                    self._importrows.append({u'Node': nodelevel, u'Key': key, u'Format': fieldformat, u'Command': importcolumndata}) 
 #            self.setDatasetParserRows(self._importrows)
         # Create export info.
         if self._export_column:
@@ -167,18 +175,6 @@ class ImportManager(object):
                     nodelevel = tabledata.getDataItem(rowindex, 0)
                     if nodelevel != u'INFO':
                         key = tabledata.getDataItem(rowindex, 1)
-                        self._columnsinfo.append({u'Header': exportcolumndata, u'Node': nodelevel, u'Key': key}) 
+                        fieldformat = tabledata.getDataItem(rowindex, 2)
+                        self._columnsinfo.append({u'Header': exportcolumndata, u'Node': nodelevel, u'Key': key, u'Format': fieldformat}) 
 #            self.setExportTableColumns(self._columnsinfo)
-        # Create semantics info.
-        if self._semantics_column:
-#            self.addMetadata(u'Semantics column', self._semantics_column)
-            self._semanticsinfo = []
-            for rowindex in xrange(0, tabledata.getRowCount()):
-                exportcolumndata = tabledata.getDataItemByColumnName(rowindex, self._semantics_column)
-                if exportcolumndata:
-                    nodelevel = tabledata.getDataItem(rowindex, 0)
-                    if nodelevel != u'INFO':
-                        key = tabledata.getDataItem(rowindex, 1)
-                        self._semanticsinfo.append({u'Header': exportcolumndata, u'Node': nodelevel, u'Key': key}) 
-#            self.setSemantics(self._semanticsinfo)
-

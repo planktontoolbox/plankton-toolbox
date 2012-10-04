@@ -94,7 +94,7 @@ class LogTool(tool_base.ToolBase):
         # Remove oldest lines if max exceeded.
         try:
             maxrows = int(unicode(self._limit_edit.text())) 
-            if maxrows > 1:
+            if maxrows > 0:
                 while self._logarea.count() > maxrows:
                     self._logarea.takeItem(0)
         except:

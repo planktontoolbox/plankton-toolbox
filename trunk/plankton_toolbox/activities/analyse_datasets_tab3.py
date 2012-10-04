@@ -61,7 +61,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         # Aggregate over taxonomic rank.
         self._aggregate_rank_list = QtGui.QComboBox()
         self._aggregate_rank_list.addItems([
-            u"Biota",
+            u"Biota (all levels)",
             u"Plankton groups",
             u"Kingdom",
             u"Phylum",
@@ -139,7 +139,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                             value = value.replace(u',', u'.').replace(u' ', u'', 100)
                             value = float(value) 
                             #
-                            if selected_taxon_rank == u'Biota':
+                            if selected_taxon_rank == u'Biota (all levels)':
                                 newtaxon = u'Biota' # Biota is above kingdom in the taxonomic hierarchy. 
                             elif selected_taxon_rank == u'Plankton groups':
                                 newtaxon = variablenode.getData(u'Plankton group')  

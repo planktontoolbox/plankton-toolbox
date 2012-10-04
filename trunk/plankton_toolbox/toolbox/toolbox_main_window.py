@@ -35,9 +35,9 @@ import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.activities.activity_manager as activity_manager
 import plankton_toolbox.tools.log_tool as log_tool
 import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
-import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
+#import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
 
-__version__ = '0.2.1' # Plankton Toolbox version.
+__version__ = '0.2.2' # Plankton Toolbox version.
 
 class MainWindow(QtGui.QMainWindow):
     """
@@ -95,7 +95,7 @@ class MainWindow(QtGui.QMainWindow):
         # Load resources when the main event loop has started.
 #        if toolbox_settings.ToolboxSettings().getValue('Resources:Load at startup'):
 #            QtCore.QTimer.singleShot(10, toolbox_resources.ToolboxResources().loadAllResources)
-        QtCore.QTimer.singleShot(100, envmonlib.Species) # Load species files.
+        QtCore.QTimer.singleShot(100, self._loadResources)
         
     def closeEvent(self, event):
         """ Called on application shutdown. """
@@ -274,6 +274,12 @@ class MainWindow(QtGui.QMainWindow):
         # Log message.                   
         if self._logtool: self._logtool.writeToLog(message)
 
+    def _loadResources(self):
+        """ """
+        self.statusBar().showMessage(self.tr("Loading species lists..."))
+        envmonlib.Species() # Load species files.
+        self.statusBar().showMessage(self.tr(""))
+
     def _about(self):
         """ """
         QtGui.QMessageBox.about(self, self.tr("About Plankton Toolbox"),
@@ -283,7 +289,13 @@ class MainWindow(QtGui.QMainWindow):
 <b>Plankton Toolbox</b> version %s
 </p>
 <p>
-Plankton Toolbox... (TODO:)  
+Plankton Toolbox contains functionality to be used when working with environmental monitoring data. 
+The toolbox is pre-loaded with the same set of 
+species and size class data used by the 
+<a href="http://nordicmicroalgae.org">Nordic Microalgae</a> site.
+</p>
+<p>
+Plankton Toolbox can be run on Windows, Mac OS X and Ubuntu (UNIX). 
 </p>
 <p>
 Plankton Toolbox is developed by the 
