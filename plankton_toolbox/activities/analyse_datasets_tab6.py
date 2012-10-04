@@ -106,7 +106,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         self._x_axis_parameter_list = QtGui.QComboBox()        
         self._x_axis_parameter_list.setMinimumContentsLength(20)
         self._x_axistype_list = QtGui.QComboBox()
-        self._x_axistype_list.addItems(["Number", "Date", "Text"])
+        self._x_axistype_list.addItems(["Integer", "Float", "Date", "Time", "Datetime", "Text"])
         self.connect(self._x_axis_column_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._updateEnabledDisabled)                
         # - Select column for y-axis:
         self._y_axis_column_list = QtGui.QComboBox()
@@ -114,7 +114,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         self._y_axis_parameter_list = QtGui.QComboBox()
         self._y_axis_parameter_list.setMinimumContentsLength(20)
         self._y_axistype_list = QtGui.QComboBox()
-        self._y_axistype_list.addItems(["Number", "Date", "Text"])
+        self._y_axistype_list.addItems(["Integer", "Float", "Date", "Time", "Datetime", "Text"])
         self.connect(self._y_axis_column_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._updateEnabledDisabled)                
         # - Select column for z-axis:
         self._z_axis_column_list = QtGui.QComboBox()
@@ -122,7 +122,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         self._z_axis_parameter_list = QtGui.QComboBox()
         self._z_axis_parameter_list.setMinimumContentsLength(20)
         self._z_axistype_list = QtGui.QComboBox()
-        self._z_axistype_list.addItems(["Number", "Date", "Text"])
+        self._z_axistype_list.addItems(["Integer", "Float", "Date", "Time", "Datetime", "Text"])
         self.connect(self._z_axis_column_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._updateEnabledDisabled)                
         # Info, current number of subplots.
         self._subplotsinfo_label = QtGui.QLabel()
@@ -643,7 +643,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                 continue
 #            if visitnode.getData(u'Station name') not in selected_stations:
 #                continue
-            if (visitnode.getData(u'Station name') + u' : ' + visitnode.getData(u'Date')) not in selected_visits:
+            if (unicode(visitnode.getData(u'Station name')) + u' : ' + unicode(visitnode.getData(u'Date'))) not in selected_visits:
                 continue
             # Get data.
             if x_visit_key: x_value = visitnode.getData(x_visit_key) # if x_visit_key else None
@@ -668,7 +668,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
             # Iterate over samples.
             for samplenode in visitnode.getChildren():
                 # Filter.
-                minmax = samplenode.getData(u'Sample min depth') + u'-' + samplenode.getData(u'Sample max depth')
+                minmax = unicode(samplenode.getData(u'Sample min depth')) + u'-' + unicode(samplenode.getData(u'Sample max depth'))
                 if minmax not in selected_minmaxdepth:
                     continue
                 # Get data.

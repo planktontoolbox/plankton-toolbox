@@ -180,11 +180,11 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         #
         for visitnode in currentdata.getChildren():
 #            stationset.add(visitnode.getData(u'Station name'))
-            visitset.add(visitnode.getData(u'Station name') + u' : ' + visitnode.getData(u'Date'))
+            visitset.add(unicode(visitnode.getData(u'Station name')) + u' : ' + unicode(visitnode.getData(u'Date')))
             startdate = min(startdate, visitnode.getData(u'Date'))
             enddate = max(enddate, visitnode.getData(u'Date'))
             for samplenode in visitnode.getChildren():
-                depthstring = samplenode.getData(u'Sample min depth') + '-' + samplenode.getData(u'Sample max depth')
+                depthstring = unicode(samplenode.getData(u'Sample min depth')) + '-' + unicode(samplenode.getData(u'Sample max depth'))
                 minmaxdepthset.add(depthstring)
                 for variablenode in samplenode.getChildren():
                     taxonset.add(variablenode.getData(u'Taxon name'))

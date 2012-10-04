@@ -85,18 +85,19 @@ class ImportManager(object):
         headerrow = 1
         datarowsfrom = 2
         columnsfrom = 1
+        #
         for rowdict in self._importrows:
             if rowdict[u'Node'] == u'INFO':
                 if rowdict[u'Key'] == u'Excel sheet name':
                     sheetname = rowdict.get(u'Command', None)
                 if rowdict[u'Key'] == u'Header row':
-                    headerrow = int(float(rowdict.get(u'Command', u'1')))
+                    headerrow = envmonlib.FieldFormats().format(rowdict.get(u'Command', u'1'), u'Integer')
                     if headerrow: headerrow -= 1
                 if rowdict[u'Key'] == u'First data row':
-                    datarowsfrom = int(float(rowdict.get(u'Command', u'2')))
+                    datarowsfrom = envmonlib.FieldFormats().format(rowdict.get(u'Command', u'2'), u'Integer')
                     if datarowsfrom: datarowsfrom -= 1
                 if rowdict[u'Key'] == u'First column':
-                    columnsfrom = int(float(rowdict.get(u'Command', u'1')))
+                    columnsfrom = envmonlib.FieldFormats().format(rowdict.get(u'Command', u'1'), u'Integer')
                     if columnsfrom: columnsfrom -= 1
         
         tabledataset = envmonlib.DatasetTable()

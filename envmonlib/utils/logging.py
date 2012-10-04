@@ -25,9 +25,9 @@
 # THE SOFTWARE.
 
 import time
-from envmonlib.utils import patterns
+import envmonlib
 
-@patterns.singleton
+@envmonlib.singleton
 class Logging(object):
     """
     Utility class for logging.
