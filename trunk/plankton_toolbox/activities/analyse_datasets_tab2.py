@@ -129,7 +129,7 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
         for visitnode in currentdata.getChildren():
             if nodelevel == u'Visit':
                 if key in visitnode.getDataDict().keys():
-                    columncontent_set.add(visitnode.getData(key))
+                    columncontent_set.add(unicode(visitnode.getData(key)))
                 else:
                     columncontent_set.add(u'') # Add empty field.
                 continue    
@@ -137,7 +137,7 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
             for samplenode in visitnode.getChildren():
                 if nodelevel == u'Sample':
                     if key in samplenode.getDataDict().keys():
-                        columncontent_set.add(samplenode.getData(key))
+                        columncontent_set.add(unicode(samplenode.getData(key)))
                     else:
                         columncontent_set.add(u'') # Add empty field.
                     continue    
@@ -145,7 +145,7 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
                 for variablenode in samplenode.getChildren():
                     if nodelevel == u'Variable':
                         if key in variablenode.getDataDict().keys():
-                            columncontent_set.add(variablenode.getData(key))
+                            columncontent_set.add(unicode(variablenode.getData(key)))
                         else:
                             columncontent_set.add(u'') # Add empty field.
                         continue    

@@ -307,7 +307,8 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
                 continue
             if selected_enddate < visitnode.getData(u'Date'):
                 continue
-            if (visitnode.getData(u'Station name') + u' : ' + visitnode.getData(u'Date')) not in selected_visits:
+            if (unicode(visitnode.getData(u'Station name')) + u' : ' + 
+                unicode(visitnode.getData(u'Date'))) not in selected_visits:
                 continue
             # Create node and copy node data.            
             selectedvisit = envmonlib.VisitNode()
@@ -315,7 +316,8 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
             selecteddata.addChild(selectedvisit)    
             #
             for samplenode in visitnode.getChildren():
-                minmax = samplenode.getData(u'Sample min depth') + u'-' + samplenode.getData(u'Sample max depth')
+                minmax = unicode(samplenode.getData(u'Sample min depth')) +  u'-' + \
+                         unicode(samplenode.getData(u'Sample max depth'))
                 if minmax not in selected_minmaxdepth:
                     continue
                 #

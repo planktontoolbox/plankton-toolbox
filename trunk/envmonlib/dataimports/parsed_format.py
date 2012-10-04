@@ -39,6 +39,7 @@ class ParsedFormat(envmonlib.FormatBase):
         command = parse_command
         #
         command = command.replace(u'$Text(', u'self._asText(')
+        command = command.replace(u'$Integer(', u'self._asInteger(')
         command = command.replace(u'$Float(', u'self._asFloat(')
         command = command.replace(u'$Species(', u'self._speciesByKey(')
         command = command.replace(u'$Sizeclass(', u'self._sizeclassByKey(')
@@ -77,6 +78,20 @@ class ParsedFormat(envmonlib.FormatBase):
         else:
             return u''
 
+    def _asInteger(self, column_name):
+        """ """
+        if column_name in self._header:
+            index = self._header.index(column_name)
+            if len(self._row) > index:
+                try:
+                    string = self._row[index]
+                    string = string.replace(u' ', u'').replace(u',', u'.')
+                    return int(round(string))
+                except:
+                    envmonlib.Logging().warning(u"Parser: Failed to convert to integer: " + self._row[index])
+                    return self._row[index]
+        return u''
+
     def _asFloat(self, column_name):
         """ """
         if column_name in self._header:
@@ -88,9 +103,8 @@ class ParsedFormat(envmonlib.FormatBase):
                     return float(string)
                 except:
                     envmonlib.Logging().warning(u"Parser: Failed to convert to float: " + self._row[index])
-#                    return None
-                    return float('nan')
-        return None
+                    return self._row[index]
+        return u''
 
     def _speciesByKey(self, taxon_name, key):
         """ """
@@ -104,49 +118,49 @@ class ParsedFormat(envmonlib.FormatBase):
         """ """
         return envmonlib.Species().getPlanktonGroupFromTaxonName(taxon_name)
 
-    def _toStation(self, current_node, station_name, **more):
+    def _toStation(self, current_node, station_name, **kwargs):
         """ """
         # TODO: For test:
         current_node.addData(u'Station name', station_name)
 
-    def _toPosition(self, current_node, latitude, longitude, **more):
+    def _toPosition(self, current_node, latitude, longitude, **kwargs):
         """ """
 #        print(u'DEBUG: _toPosition: ' + latitude + u' ' + longitude)
 
-    def _createVariable(self, current_node, **more):
+    def _createVariable(self, current_node, **kwargs):
         """ """
         if isinstance(current_node, envmonlib.VisitNode):
             newsample = envmonlib.SampleNode()
             current_node.addChild(newsample)
             variable = envmonlib.VariableNode()
             newsample.addChild(variable)
-            variable.addData(u'Parameter', more[u'p'])    
-            variable.addData(u'Value', unicode(more[u'v']))    
-            #variable.addData(u'Value float', more[u'v'])    
-            variable.addData(u'Unit', more[u'u'])    
+            variable.addData(u'Parameter', kwargs[u'p'])    
+            variable.addData(u'Value', unicode(kwargs))    
+            #variable.addData(u'Value float', kwargs[u'v'])    
+            variable.addData(u'Unit', kwargs[u'u'])    
         if isinstance(current_node, envmonlib.SampleNode):
             variable = envmonlib.VariableNode()
             current_node.addChild(variable)
-            variable.addData(u'Parameter', more[u'p'])    
-            variable.addData(u'Value', unicode(more[u'v']))    
-            #variable.addData(u'Value float', more[u'v'])    
-            variable.addData(u'Unit', more[u'u'])    
+            variable.addData(u'Parameter', kwargs[u'p'])    
+            variable.addData(u'Value', unicode(kwargs[u'v']))    
+            #variable.addData(u'Value float', kwargs[u'v'])    
+            variable.addData(u'Unit', kwargs[u'u'])    
 
-    def _copyVariable(self, current_node, **more):
+    def _copyVariable(self, current_node, **kwargs):
         """ """
         if isinstance(current_node, envmonlib.VariableNode):
             variable = current_node.clone()
-            variable.addData(u'Parameter', more[u'p'])    
-            variable.addData(u'Value', unicode(more[u'v']))    
-            #variable.addData(u'Value float', more[u'v'])    
-            variable.addData(u'Unit', more[u'u'])    
+            variable.addData(u'Parameter', kwargs[u'p'])    
+            variable.addData(u'Value', unicode(kwargs[u'v']))    
+            #variable.addData(u'Value float', kwargs[u'v'])    
+            variable.addData(u'Unit', kwargs[u'u'])    
 
-    def _modifyVariable(self, current_node, **more):
+    def _modifyVariable(self, current_node, **kwargs):
         """ """
         if isinstance(current_node, envmonlib.VariableNode):
-            current_node.addData(u'Parameter', more[u'p'])    
-            current_node.addData(u'Value', unicode(more[u'v']))    
-            #current_node.addData(u'Value float', more[u'v'])    
-            current_node.addData(u'Unit', more[u'u'])    
+            current_node.addData(u'Parameter', kwargs[u'p'])    
+            current_node.addData(u'Value', unicode(kwargs[u'v']))    
+            #current_node.addData(u'Value float', kwargs[u'v'])    
+            current_node.addData(u'Unit', kwargs[u'u'])    
 
 

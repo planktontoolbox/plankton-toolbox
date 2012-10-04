@@ -195,7 +195,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         for visitnode in currentdata.getChildren():
             for samplenode in visitnode.getChildren():
                 for variablenode in samplenode.getChildren():
-                    trophyset.add(variablenode.getData(u'Trophy'))
+                    trophyset.add(unicode(variablenode.getData(u'Trophy')))
         # Selection lists.
         self._trophy_listview.setList(sorted(trophyset))
             

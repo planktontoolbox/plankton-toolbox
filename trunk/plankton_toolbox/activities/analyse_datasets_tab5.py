@@ -54,7 +54,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
             for visitnode in currentdata.getChildren():
                 for samplenode in visitnode.getChildren():
                     for variablenode in samplenode.getChildren():
-                        parameterset.add(variablenode.getData(u"Parameter"))
+                        parameterset.add(unicode(variablenode.getData(u"Parameter")))
             parameterlist = sorted(parameterset)
             self._parameter_list.addItems(parameterlist)
 
@@ -205,15 +205,15 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                 continue
 #            if visitnode.getData(u'Station name') not in selected_stations:
 #                continue
-            if (visitnode.getData(u'Station name') + u' : ' + visitnode.getData(u'Date')) not in selected_visits:
+            if (unicode(visitnode.getData(u'Station name')) + u' : ' + unicode(visitnode.getData(u'Date'))) not in selected_visits:
                 continue
 
 
 #            station_set.add(visitnode.getData(u"Station name")) # Station name
-            visit_set.add(visitnode.getData(u"Station name") + " : " + visitnode.getData(u"Date")) # Station name
+            visit_set.add(unicode(visitnode.getData(u"Station name")) + " : " + unicode(visitnode.getData(u"Date"))) # Station name
             for samplenode in visitnode.getChildren():
 
-                minmax = samplenode.getData(u'Sample min depth') + u'-' + samplenode.getData(u'Sample max depth')
+                minmax = unicode(samplenode.getData(u'Sample min depth')) + u'-' + unicode(samplenode.getData(u'Sample max depth'))
                 if minmax not in selected_minmaxdepth:
                     continue
 
@@ -252,15 +252,15 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                 continue
 #            if visitnode.getData(u'Station name') not in selected_stations:
 #                continue
-            if (visitnode.getData(u'Station name') + u' : ' + visitnode.getData(u'Date')) not in selected_visits:
+            if (unicode(visitnode.getData(u'Station name')) + u' : ' + unicode(visitnode.getData(u'Date'))) not in selected_visits:
                 continue
 
 
 #            stationname = visitnode.getData(u"Station name")
-            visit = (visitnode.getData(u'Station name') + u' : ' + visitnode.getData(u'Date'))
+            visit = (unicode(visitnode.getData(u'Station name')) + u' : ' + unicode(visitnode.getData(u'Date')))
             for samplenode in visitnode.getChildren():
 
-                minmax = samplenode.getData(u'Sample min depth') + u'-' + samplenode.getData(u'Sample max depth')
+                minmax = unicode(samplenode.getData(u'Sample min depth')) + u'-' + unicode(samplenode.getData(u'Sample max depth'))
                 if minmax not in selected_minmaxdepth:
                     continue
 
@@ -422,7 +422,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                 continue
 #            if visitnode.getData(u'Station name') not in selected_stations:
 #                continue
-            if (visitnode.getData(u'Station name') + u' : ' + visitnode.getData(u'Date')) not in selected_visits:
+            if (unicode(visitnode.getData(u'Station name')) + u' : ' + unicode(visitnode.getData(u'Date'))) not in selected_visits:
                 continue
 
             
@@ -431,7 +431,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
             if y_visit_key: y_value = visitnode.getData(y_visit_key) # if y_visit_key else None
             for samplenode in visitnode.getChildren():
             
-                minmax = samplenode.getData(u'Sample min depth') + u'-' + samplenode.getData(u'Sample max depth')
+                minmax = unicode(samplenode.getData(u'Sample min depth')) + u'-' + unicode(samplenode.getData(u'Sample max depth'))
                 if minmax not in selected_minmaxdepth:
                     continue
                 
