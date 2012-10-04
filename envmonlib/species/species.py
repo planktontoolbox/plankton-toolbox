@@ -108,8 +108,8 @@ class Species(object):
             envmonlib.Logging().log(u"Loading species lists (located in 'toolbox_data/species'):")
             # Load taxa.
             for excelfilename in self._taxa_filenames:
-                self._loadTaxa(excelfilename)                
                 envmonlib.Logging().log(u"- " + os.path.basename(excelfilename) + u" (taxa)")
+                self._loadTaxa(excelfilename)                
             # Add synonyms to taxa. Note: 'translate_to_' will be added to filenames.
             for excelfilename in self._taxa_filenames:
                 dirname = os.path.dirname(excelfilename)        
@@ -117,19 +117,19 @@ class Species(object):
                 translate_file_name = dirname + u'/translate_to_' + basename
                 # 
                 if os.path.exists(translate_file_name):
-                    self._loadSynonyms(translate_file_name)                            
                     envmonlib.Logging().log(u"- " + os.path.basename(translate_file_name) + u" (synonyms and misspellings)")
+                    self._loadSynonyms(translate_file_name)                            
             self._updateLookupDictionaries()
             
             # Load harmful species.
             for excelfilename in self._harmful_filenames:
-                self._loadHarmful(excelfilename)
                 envmonlib.Logging().log(u"- " + os.path.basename(excelfilename) + u" (harmful)")
+                self._loadHarmful(excelfilename)
 
             # Load BVOL species data.
             for excelfilename in self._bvol_filenames:
-                self._loadBvol(excelfilename)            
                 envmonlib.Logging().log("- " + os.path.basename(excelfilename) + u" (BVOL)")
+                self._loadBvol(excelfilename)            
             # Add BVOL translations.
             ### TODO: ....
             
@@ -182,7 +182,7 @@ class Species(object):
                     taxon[u'Synonyms'] = []
                 taxon[u'Synonyms'].append(fromname)
             else:
-                envmonlib.Logging().log(u": Species missing: " + toname + u" (" + excel_file_name + u")")
+                envmonlib.Logging().warning(u": Species missing: " + toname + u"   (Source: " + excel_file_name + u")")
                     
     def _loadHarmful(self, excel_file_name):
         """ Adds info about harmfulness to the species objects. """

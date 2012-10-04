@@ -92,6 +92,30 @@ class ClickableQLabel(QtGui.QLabel):
             """)
 
 
+class ClickableLinkQLabel(QtGui.QLabel):  
+    """ Customized QLabel. Emits signal when clicked, and change color when hovering. """
+    def __init__(self, parent = None):  
+        QtGui.QLabel.__init__(self, parent)
+        #  
+        self.setStyleSheet(""" 
+            * { color: #00677f; }
+            """)
+  
+    def mouseReleaseEvent(self, ev):  
+        self.emit(QtCore.SIGNAL('clicked()'))  
+  
+    def enterEvent(self, ev):
+        self.setStyleSheet(""" 
+            * { color: #d1581c; }
+
+            """)
+  
+    def leaveEvent(self, ev):  
+        self.setStyleSheet(""" 
+            * { color: #00677f; }
+            """)
+
+
 class ActivityMenuQLabel(ClickableQLabel):  
     """ Customized QLabel. Contains a list of all ActivityMenuQLabel objects. Only one is marked as active.  """
     # Static variable:
