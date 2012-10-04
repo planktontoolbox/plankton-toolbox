@@ -83,11 +83,11 @@ class ParsedFormat(envmonlib.FormatBase):
             index = self._header.index(column_name)
             if len(self._row) > index:
                 try:
-                    str = self._row[index]
-                    str = str.replace(u' ', u'').replace(u',', u'.')
-                    return float(str)
+                    string = self._row[index]
+                    string = string.replace(u' ', u'').replace(u',', u'.')
+                    return float(string)
                 except:
-                    envmonlib.Logging().warning(u"Failed to convert to float: " + self._row[index])
+                    envmonlib.Logging().warning(u"Parser: Failed to convert to float: " + self._row[index])
 #                    return None
                     return float('nan')
         return None

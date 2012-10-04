@@ -101,14 +101,14 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         self._trophy_listview = utils_qt.SelectableQListView()
         self._trophy_listview.setMaximumHeight(100)
         #
-        clicklabel1 = utils_qt.ClickableQLabel("Clear all") # TODO:
-        clicklabel2 = utils_qt.ClickableQLabel("Mark all") # TODO:
-        clicklabel3 = utils_qt.ClickableQLabel("Clear all") # TODO:
-        clicklabel4 = utils_qt.ClickableQLabel("Mark all") # TODO:
-        clicklabel5 = utils_qt.ClickableQLabel("Clear all") # TODO:
-        clicklabel6 = utils_qt.ClickableQLabel("Mark all") # TODO:
-        clicklabel7 = utils_qt.ClickableQLabel("Clear all") # TODO:
-        clicklabel8 = utils_qt.ClickableQLabel("Mark all") # TODO:
+        clicklabel1 = utils_qt.ClickableQLabel("Clear all")
+        clicklabel2 = utils_qt.ClickableQLabel("Mark all")
+        clicklabel3 = utils_qt.ClickableQLabel("Clear all")
+        clicklabel4 = utils_qt.ClickableQLabel("Mark all")
+        clicklabel5 = utils_qt.ClickableQLabel("Clear all")
+        clicklabel6 = utils_qt.ClickableQLabel("Mark all")
+        clicklabel7 = utils_qt.ClickableQLabel("Clear all")
+        clicklabel8 = utils_qt.ClickableQLabel("Mark all")
 #        self.connect(clicklabel1, QtCore.SIGNAL("clicked()"), self._stations_listview.uncheckAll)                
 #        self.connect(clicklabel2, QtCore.SIGNAL("clicked()"), self._stations_listview.checkAll)                
         self.connect(clicklabel1, QtCore.SIGNAL("clicked()"), self._visits_listview.uncheckAll)                

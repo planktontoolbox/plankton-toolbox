@@ -505,7 +505,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
     def _selectionChanged(self, modelIndex):
         """ """
         if modelIndex.isValid():
-            print('TEST Selected row: ' + unicode(modelIndex.row()))
+#            print('TEST Selected row: ' + unicode(modelIndex.row()))
             toolbox_sync.ToolboxSync().setRow(modelIndex.row())
 
     

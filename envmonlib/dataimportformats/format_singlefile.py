@@ -97,8 +97,9 @@ class FormatSingleFile(envmonlib.ParsedFormat):
                         commandstring = parserkey + parsercommand
                         self.appendParserCommand(commandstring)
        
-        except:
-            print(u"Failed to parse dataset. Command: " + commandstring)
+        except Exception as e:
+            envmonlib.Logging().warning(u"Failed to parse dataset: %s" % (e.args[0]) + 
+                                        "- Command string: %s" % (commandstring))
             raise
         #
         try:
@@ -138,8 +139,6 @@ class FormatSingleFile(envmonlib.ParsedFormat):
                         except Exception as e:
                             envmonlib.Logging().warning(u"Failed to parse command: %s" % (e.args[0]) + 
                                                         "- Command string: %s" % (cmd[u'Command string']))
-#                            print("ERROR: Failed to parse command: %s" % (e.args[0]))
-#                            print("- Command string: %s" % (cmd[u'Command string']))
         #
         except Exception as e:
             envmonlib.Logging().warning(u"Failed to parse dataset: %s" % (e.args[0]))

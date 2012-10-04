@@ -375,7 +375,7 @@ class Species(object):
         # TODO: Check this...
         if taxon_name == u'Flagellates':
             return u'Flagellates'
-        # Load dictionaries if not done before.
+        # Load dictionaries on demand.
         if not self._plankton_group_phylum_dict:
             self._plankton_group_phylum_dict = {
                 u'Cyanobacteria': u'Cyanobacteria',
