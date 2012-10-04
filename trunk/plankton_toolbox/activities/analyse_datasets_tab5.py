@@ -149,8 +149,10 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
 #                            value = float(value.replace(u' ', u'').replace(u',', u'.'))
                             station_taxon_dict[stationname][taxonname] += float(value)
                         except:
-                            print ("ERROR: Float conversion (1): Station: " + stationname + 
-                                   " Taxon name: " + taxonname + " Value: " + unicode(variablenode.getData(u"Value")))
+                            envmonlib.Logging().warning("Float conversion (1): Station: " + stationname + 
+                                   " Taxon name: " + taxonname + 
+                                   " Parameter: " + selectedparameter + 
+                                   " Value: " + unicode(variablenode.getData(u"Value")))
                             ###raise
         # Step 5: Reorganize. 
         station_list = sorted(station_set)
@@ -287,9 +289,10 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
 #                            visit_taxon_dict[visit][taxonname] += value
                             visit_taxon_dict[visit][taxonname] += float(value)
                         except:
-#                            print ("ERROR: Float conversion (2): Station: " + stationname + 
-                            print ("ERROR: Float conversion (2): Station: " + visit + 
-                                   " Taxon name: " + taxonname + " Value: " + unicode(variablenode.getData(u"Value")))
+                            envmonlib.Logging().warning("Float conversion (2) failed: Station: " + visit + 
+                                   " Taxon name: " + taxonname + 
+                                   " Parameter: " + selectedparameter + 
+                                   " Value: " + unicode(variablenode.getData(u"Value")))
                             ###raise
         
         # Step 5: Reorganize.

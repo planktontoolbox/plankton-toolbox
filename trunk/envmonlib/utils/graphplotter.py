@@ -85,8 +85,7 @@ class GraphPlotData(object):
                 z_array = None):
         """ """
         if (not y_array) or (len(y_array) == 0):
-            # TODO: Log.
-            print(u"GraphPlotData.addPlot() must contain at least an Y-array.")
+            envmonlib.Logging().warning(u"GraphPlotData.addPlot() must contain at least an Y-array. Plotting terminated.")
             return
         #
         plotdict = {}
