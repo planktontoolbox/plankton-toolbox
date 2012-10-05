@@ -63,7 +63,7 @@ class DatasetTable(envmonlib.DatasetBase):
         try:
             return self._header[column]
         except Exception:
-            return ''
+            return u''
 
     def getDataItem(self, row, column):
         """ Used for calls from QAbstractTableModel. """
