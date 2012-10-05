@@ -290,9 +290,9 @@ class ToolboxTableModel(QtCore.QAbstractTableModel):
         if self._modeldata == None:
             return QtCore.QVariant()
         if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
-            return QtCore.QVariant(self._modeldata.getHeaderItem(section))
+            return QtCore.QVariant(unicode(self._modeldata.getHeaderItem(section)))
         if orientation == QtCore.Qt.Vertical and role == QtCore.Qt.DisplayRole:
-            return QtCore.QVariant(section + 1)
+            return QtCore.QVariant(unicode(section + 1))
         return QtCore.QVariant()
 
     def data(self, index=QtCore.QModelIndex(), role=QtCore.Qt.DisplayRole):
@@ -301,7 +301,7 @@ class ToolboxTableModel(QtCore.QAbstractTableModel):
             return QtCore.QVariant()
         if role == QtCore.Qt.DisplayRole:
             if index.isValid():
-                return QtCore.QVariant(self._modeldata.getDataItem(index.row(), index.column()))
+                return QtCore.QVariant(unicode(self._modeldata.getDataItem(index.row(), index.column())))
         return QtCore.QVariant()
 
 
@@ -375,9 +375,9 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
         if self._modeldata == None:
             return QtCore.QVariant()
         if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
-            return QtCore.QVariant(self._modeldata.getHeaderItem(section))
+            return QtCore.QVariant(unicode(self._modeldata.getHeaderItem(section)))
         if orientation == QtCore.Qt.Vertical and role == QtCore.Qt.DisplayRole:
-            return QtCore.QVariant(section + 1)
+            return QtCore.QVariant(unicode(section + 1))
         return QtCore.QVariant()
 
     def data(self, index=QtCore.QModelIndex(), role=QtCore.Qt.DisplayRole):
@@ -386,7 +386,7 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
             return QtCore.QVariant()
         if role == QtCore.Qt.DisplayRole:
             if index.isValid():
-                return QtCore.QVariant(self._modeldata.getDataItem(index.row(), index.column()))
+                return QtCore.QVariant((unicode(self._modeldata.getDataItem(index.row(), index.column()))))
         return QtCore.QVariant()
 
     # For editing:

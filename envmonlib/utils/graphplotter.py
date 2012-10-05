@@ -315,7 +315,8 @@ class LineChart(ChartBase):
                         failedconversions_set = set()
                         for value in y_array:
                             try:
-                                value = float(value.replace(u' ', u'').replace(u',', u'.'))
+#                                value = float(value.replace(u' ', u'').replace(u',', u'.'))
+                                value = float(value)
                                 y_floatarray.append(value)
                             except:
                                 failedconversions_set.add(value)
@@ -404,7 +405,8 @@ class LineChart(ChartBase):
                         containsvalidvalues = False
                         for value in y_array:
                             try:
-                                value = float(value.replace(u' ', u'').replace(u',', u'.'))
+#                                value = float(value.replace(u' ', u'').replace(u',', u'.'))
+                                value = float(value)
                                 y_floatarray.append(value)
                                 containsvalidvalues = True
                             except:

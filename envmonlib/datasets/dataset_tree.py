@@ -88,7 +88,10 @@ class DataNode(object):
         
     def addData(self, key, value):
         """ """
-        if value:
+#        if value:
+#            self._datadict[key] = value
+        # TODO: Will use more memory, but otherwise float with value 0 will be missed in dict. Check other types... 
+        if key:
             self._datadict[key] = value
         
     def getData(self, key):

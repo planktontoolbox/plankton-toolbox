@@ -84,12 +84,15 @@ class ParsedFormat(envmonlib.FormatBase):
             index = self._header.index(column_name)
             if len(self._row) > index:
                 try:
-                    string = self._row[index]
-                    string = string.replace(u' ', u'').replace(u',', u'.')
-                    return int(round(string))
+                    value = self._row[index]
+                    value = value.replace(u' ', u'').replace(u',', u'.')
+                    return int(round(float(value)))
                 except:
                     envmonlib.Logging().warning(u"Parser: Failed to convert to integer: " + self._row[index])
                     return self._row[index]
+#                except Exception as e:
+#                    print(u"Parser: Failed to convert to integer: %s" % (e.args[0]))                
+#                    return self._row[index]
         return u''
 
     def _asFloat(self, column_name):
@@ -98,9 +101,9 @@ class ParsedFormat(envmonlib.FormatBase):
             index = self._header.index(column_name)
             if len(self._row) > index:
                 try:
-                    string = self._row[index]
-                    string = string.replace(u' ', u'').replace(u',', u'.')
-                    return float(string)
+                    value = self._row[index]
+                    value = value.replace(u' ', u'').replace(u',', u'.')
+                    return float(value)
                 except:
                     envmonlib.Logging().warning(u"Parser: Failed to convert to float: " + self._row[index])
                     return self._row[index]
@@ -135,14 +138,14 @@ class ParsedFormat(envmonlib.FormatBase):
             variable = envmonlib.VariableNode()
             newsample.addChild(variable)
             variable.addData(u'Parameter', kwargs[u'p'])    
-            variable.addData(u'Value', unicode(kwargs))    
+            variable.addData(u'Value', kwargs[u'v'])
             #variable.addData(u'Value float', kwargs[u'v'])    
             variable.addData(u'Unit', kwargs[u'u'])    
         if isinstance(current_node, envmonlib.SampleNode):
             variable = envmonlib.VariableNode()
             current_node.addChild(variable)
             variable.addData(u'Parameter', kwargs[u'p'])    
-            variable.addData(u'Value', unicode(kwargs[u'v']))    
+            variable.addData(u'Value', kwargs[u'v'])    
             #variable.addData(u'Value float', kwargs[u'v'])    
             variable.addData(u'Unit', kwargs[u'u'])    
 
@@ -151,7 +154,7 @@ class ParsedFormat(envmonlib.FormatBase):
         if isinstance(current_node, envmonlib.VariableNode):
             variable = current_node.clone()
             variable.addData(u'Parameter', kwargs[u'p'])    
-            variable.addData(u'Value', unicode(kwargs[u'v']))    
+            variable.addData(u'Value', kwargs[u'v'])    
             #variable.addData(u'Value float', kwargs[u'v'])    
             variable.addData(u'Unit', kwargs[u'u'])    
 
@@ -159,7 +162,7 @@ class ParsedFormat(envmonlib.FormatBase):
         """ """
         if isinstance(current_node, envmonlib.VariableNode):
             current_node.addData(u'Parameter', kwargs[u'p'])    
-            current_node.addData(u'Value', unicode(kwargs[u'v']))    
+            current_node.addData(u'Value', kwargs[u'v'])
             #current_node.addData(u'Value float', kwargs[u'v'])    
             current_node.addData(u'Unit', kwargs[u'u'])    
 
