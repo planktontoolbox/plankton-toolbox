@@ -749,26 +749,26 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                         x_value = y_value = z_value = None
                         continue            
         #
-        # Convert numeric values. 
-        # TODO: Type info should be in import parser.
-        if x_selected_type == u'Number':
-            for index, item in enumerate(x_data):
-                try:
-                    x_data[index] = item.replace(u',', u'.')
-                except:
-                    pass
-        if y_selected_type == u'Number':
-            for index, item in enumerate(y_data):
-                try:
-                    y_data[index] = item.replace(u',', u'.')
-                except:
-                    pass
-        if z_selected_type == u'Number':
-            for index, item in enumerate(z_data):
-                try:
-                    z_data[index] = item.replace(u',', u'.')
-                except:
-                    pass
+#        # Convert numeric values. 
+#        # TODO: Type info should be in import parser.
+#        if x_selected_type == u'Number':
+#            for index, item in enumerate(x_data):
+#                try:
+#                    x_data[index] = item.replace(u',', u'.')
+#                except:
+#                    pass
+#        if y_selected_type == u'Number':
+#            for index, item in enumerate(y_data):
+#                try:
+#                    y_data[index] = item.replace(u',', u'.')
+#                except:
+#                    pass
+#        if z_selected_type == u'Number':
+#            for index, item in enumerate(z_data):
+#                try:
+#                    z_data[index] = item.replace(u',', u'.')
+#                except:
+#                    pass
 
         return x_data, y_data, z_data
 
