@@ -136,7 +136,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                         value = variablenode.getData(u'Value')
                         # Use values containing valid float data.
                         try:
-#                            value = value.replace(u',', u'.').replace(u' ', u'', 100)
+#                            value = value.replace(u',', u'.').replace(u' ', u'')
                             value = float(value) 
                             #
                             if selected_taxon_rank == u'Biota (all levels)':
