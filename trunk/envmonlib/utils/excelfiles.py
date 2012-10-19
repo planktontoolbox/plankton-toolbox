@@ -78,10 +78,10 @@ class ExcelFiles():
                             break # Break loop if used_columns_to is defined and exceeded.
                         elif columnindex >= columns_from:
                             value = cell.internal_value
-                            if value:
-                                header.append(unicode(value).strip())
-                            else:
+                            if value == None:
                                 header.append(u'')
+                            else:
+                                header.append(unicode(value).strip())
                     #
                     target_dataset.setHeader(header)
                 elif rowindex >= data_rows_from:
@@ -91,10 +91,10 @@ class ExcelFiles():
                             break # Break loop if used_columns_to is defined and exceeded.
                         elif columnindex >= columns_from:
                             value = cell.internal_value
-                            if value:
-                                newrow.append(unicode(value).strip())
-                            else:
+                            if value == None:
                                 newrow.append(u'')
+                            else:
+                                newrow.append(unicode(value).strip())
                     target_dataset.appendRow(newrow)
         #  
         except Exception:

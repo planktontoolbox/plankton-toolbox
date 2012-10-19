@@ -371,10 +371,10 @@ class Species(object):
         """ This is another way to organize organisms into groups. """
         # TODO: Check this...
         if taxon_name == u'Unicell':
-            return u'Unicell'
+            return u'Unidentified coccoid eukaryots'
         # TODO: Check this...
         if taxon_name == u'Flagellates':
-            return u'Flagellates'
+            return u'Unidentified flagellated eukaryots'
         # Load dictionaries on demand.
         if not self._plankton_group_phylum_dict:
             self._plankton_group_phylum_dict = {
@@ -420,5 +420,5 @@ class Species(object):
         if taxonclass in self._plankton_group_class_dict:
             return self._plankton_group_class_dict[taxonclass]
         # Return this if plankton group not found.
-        return u'group-not-designated'
+        return u'planton-group-not-designated'
 

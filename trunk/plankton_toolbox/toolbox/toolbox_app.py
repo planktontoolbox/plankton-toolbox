@@ -64,7 +64,7 @@ def plankton_toolbox_application():
     except:
         pass
 
-    app.setWindowIcon(QtGui.QIcon(u'plankton_toolbox_icon.jpg'))
+    app.setWindowIcon(QtGui.QIcon(u'plankton_toolbox_icon.ico'))
     
     utils_qt.setAppStyleSheet(app)
     

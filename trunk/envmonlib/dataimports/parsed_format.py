@@ -24,6 +24,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+import dateutil.parser
 import envmonlib
 
 class ParsedFormat(envmonlib.FormatBase):
@@ -41,6 +42,7 @@ class ParsedFormat(envmonlib.FormatBase):
         command = command.replace(u'$Text(', u'self._asText(')
         command = command.replace(u'$Integer(', u'self._asInteger(')
         command = command.replace(u'$Float(', u'self._asFloat(')
+        command = command.replace(u'$Date(', u'self._asDate(')
         command = command.replace(u'$Species(', u'self._speciesByKey(')
         command = command.replace(u'$Sizeclass(', u'self._sizeclassByKey(')
         command = command.replace(u'$PlanktonGroup(', u'self._planktonGroup(')
@@ -102,8 +104,24 @@ class ParsedFormat(envmonlib.FormatBase):
             if len(self._row) > index:
                 try:
                     value = self._row[index]
+                    if value == '':
+                        return u''
                     value = value.replace(u' ', u'').replace(u',', u'.')
                     return float(value)
+                except:
+                    envmonlib.Logging().warning(u"Parser: Failed to convert to float: " + self._row[index])
+                    return self._row[index]
+        return u''
+
+    def _asDate(self, column_name):
+        """ Reformat to match the ISO format. (20000-01-01) """
+        if column_name in self._header:
+            index = self._header.index(column_name)
+            if len(self._row) > index:
+                try:
+                    value = dateutil.parser.parse(self._row[index])
+#                    value = value
+                    return value.strftime(u'%Y-%m-%d')
                 except:
                     envmonlib.Logging().warning(u"Parser: Failed to convert to float: " + self._row[index])
                     return self._row[index]
