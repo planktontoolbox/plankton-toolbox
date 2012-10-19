@@ -61,8 +61,8 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
         # Active widgets and connections.
         introlabel = utils_qt.RichTextQLabel()
         introlabel.setText("""
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
-        tempor incididunt ut labore et dolore magna aliqua.
+        Prepare your data by removing unwanted rows from "Current data".
+        This may be useful if you want to use data from one or a few stations or data from a certain depth or time period.
         """)
         #
         self._column_list = QtGui.QComboBox()

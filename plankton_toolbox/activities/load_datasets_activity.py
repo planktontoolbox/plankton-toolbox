@@ -111,8 +111,12 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         # Active widgets and connections.
         introlabel = utils_qt.RichTextQLabel()
         introlabel.setText("""
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
-        tempor incididunt ut labore et dolore magna aliqua.
+        Choose the Excel-tab or the Text-tab to load one or several files with your 
+        plankton or hydrography data as text files or Excel-files. 
+        Before loading data you need to set up the import and export formats by selecting parsers. 
+        The parsers are Excel-files with information on how to interpret the data you import in 
+        txt-format or in xlsx format. 
+        Note that the xls-format in older versions of Excel is not supported.
         """)        
         # - Select dataset parsers:
         self._textfile_parser_list = QtGui.QComboBox()
@@ -158,7 +162,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         form1.addWidget(self._textfile_exportcolumn_list, gridrow, 1, 1, 1)
         #
         hbox1 = QtGui.QHBoxLayout()
-        label1 = QtGui.QLabel("Text file character encoding:")
+        label1 = QtGui.QLabel(u"Text file character encoding (affects å, è, µ, etc.):")
         hbox1.addWidget(label1)
         hbox1.addWidget(self._textfile_encoding_list)
         hbox1.addStretch(10)
@@ -276,8 +280,10 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         # Intro:
         introlabel = utils_qt.RichTextQLabel()
         introlabel.setText("""
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
-        tempor incididunt ut labore et dolore magna aliqua.
+        Load one or several files with your plankton or hydrography data as text files or Excel-files. 
+        Before loading data you need to set up the import and export formats by selecting parsers. 
+        The parsers are Excel-files with information on how to interpret the data you import in txt-format or in xlsx format. 
+        Note that the xls-format in older versions of Excel is not supported.
         """)
         # - Select dataset parser:
         self._excel_parser_list = QtGui.QComboBox()

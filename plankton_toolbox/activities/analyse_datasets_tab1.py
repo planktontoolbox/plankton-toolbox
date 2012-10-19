@@ -54,8 +54,9 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
         # Active widgets and connections.
         introlabel = utils_qt.RichTextQLabel()
         introlabel.setText("""
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
-        tempor incididunt ut labore et dolore magna aliqua.
+        Select dataset(s) to be analyzed. 
+        Note that "Current data" contains a working copy of one or several loaded datasets. 
+        Rows in "Current data" can be removed, added or aggregated during the analysis.
         """)
         #
         loaded_datasets_listview = QtGui.QListView()

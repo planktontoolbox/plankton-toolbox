@@ -58,28 +58,27 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
             parameterlist = sorted(parameterset)
             self._parameter_list.addItems(parameterlist)
 
-    # ===== TAB: Prepared graphs ===== 
-    def contentPreparedGraphs(self):
+    # ===== TAB: Predefined graphs ===== 
+    def contentPredefinedGraphs(self):
         """ """
         # Active widgets and connections.
         introlabel = utils_qt.RichTextQLabel()
         introlabel.setText("""
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
-        tempor incididunt ut labore et dolore magna aliqua.
+        Plot your data. A number of pre-defined types of graphs are available.
         """) 
                
         # - Select parameter:
         self._parameter_list = QtGui.QComboBox()        
         #
-        # Prepared graphs.
-        self._addplot_1_button = QtGui.QPushButton("Plot 1. Aggreagated value / taxa / station (no filter)")
-        self.connect(self._addplot_1_button, QtCore.SIGNAL("clicked()"), self._addPlot_1)                
-        self._addplot_2_button = QtGui.QPushButton("Plot 2. Value / taxa / station and date")
+        # Predefined graphs.
+#        self._addplot_1_button = QtGui.QPushButton("Plot 1. Value/taxa/station and date (no filter)")
+#        self.connect(self._addplot_1_button, QtCore.SIGNAL("clicked()"), self._addPlot_1)                
+        self._addplot_2_button = QtGui.QPushButton("Plot 1. Value/taxa/station and date")
         self.connect(self._addplot_2_button, QtCore.SIGNAL("clicked()"), self._addPlot_2)                
-        self._addplot_3_button = QtGui.QPushButton("(Plot 3)")
-        self.connect(self._addplot_3_button, QtCore.SIGNAL("clicked()"), self._addPlot_3)                
-        self._addplot_4_button = QtGui.QPushButton("(Plot 4)")
-        self.connect(self._addplot_4_button, QtCore.SIGNAL("clicked()"), self._addPlot_4)                
+#        self._addplot_3_button = QtGui.QPushButton("(Plot 3)")
+#        self.connect(self._addplot_3_button, QtCore.SIGNAL("clicked()"), self._addPlot_3)                
+#        self._addplot_4_button = QtGui.QPushButton("(Plot 4)")
+#        self.connect(self._addplot_4_button, QtCore.SIGNAL("clicked()"), self._addPlot_4)                
 
         # Layout widgets.
         form1 = QtGui.QGridLayout()
@@ -89,13 +88,13 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         form1.addWidget(label1, gridrow, 0, 1, 1)
         form1.addWidget(self._parameter_list, gridrow, 1, 1, 1)
         form1.addWidget(stretchlabel, gridrow,4, 1, 20)
-        form1.addWidget(self._addplot_1_button, gridrow, 3, 1, 1)
-        gridrow += 1
+#        form1.addWidget(self._addplot_1_button, gridrow, 3, 1, 1)
+#        gridrow += 1
         form1.addWidget(self._addplot_2_button, gridrow, 3, 1, 1)
-        gridrow += 1
-        form1.addWidget(self._addplot_3_button, gridrow, 3, 1, 1)
-        gridrow += 1
-        form1.addWidget(self._addplot_4_button, gridrow, 3, 1, 1)
+#        gridrow += 1
+#        form1.addWidget(self._addplot_3_button, gridrow, 3, 1, 1)
+#        gridrow += 1
+#        form1.addWidget(self._addplot_4_button, gridrow, 3, 1, 1)
         #
         layout = QtGui.QVBoxLayout()
         layout.addWidget(introlabel)

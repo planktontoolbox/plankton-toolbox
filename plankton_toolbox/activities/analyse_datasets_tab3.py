@@ -54,8 +54,13 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         # Active widgets and connections.
         introlabel = utils_qt.RichTextQLabel()
         introlabel.setText("""
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
-        tempor incididunt ut labore et dolore magna aliqua.
+        You may want to aggregate abundance or biovolume data from the level of size group or 
+        species level to a higher taxonomic level. 
+        A common task is to aggregate to genus or class level. 
+        Also a level termed Algal groups with fewer classes is available. 
+        Here you can also select only autotrophs (AU), mixotrophs (MX), heterotrophs (HT) or 
+        organisms with trophic type not specified (NS). 
+        For phytoplankton most often a combination is used, e.g. AU + MX for all organisms with photosynthesis.
         """)
         # Active widgets and connections.
         # Aggregate over taxonomic rank.
