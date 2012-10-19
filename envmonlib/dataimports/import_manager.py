@@ -91,14 +91,27 @@ class ImportManager(object):
                 if rowdict[u'Key'] == u'Excel sheet name':
                     sheetname = rowdict.get(u'Command', None)
                 if rowdict[u'Key'] == u'Header row':
-                    headerrow = envmonlib.FieldFormats().format(rowdict.get(u'Command', u'1'), u'Integer')
+                    headerrow = int(float(rowdict.get(u'Command', u'1')))
                     if headerrow: headerrow -= 1
                 if rowdict[u'Key'] == u'First data row':
-                    datarowsfrom = envmonlib.FieldFormats().format(rowdict.get(u'Command', u'2'), u'Integer')
+                    datarowsfrom = int(float(rowdict.get(u'Command', u'2')))
                     if datarowsfrom: datarowsfrom -= 1
                 if rowdict[u'Key'] == u'First column':
-                    columnsfrom = envmonlib.FieldFormats().format(rowdict.get(u'Command', u'1'), u'Integer')
+                    columnsfrom = int(float(rowdict.get(u'Command', u'1')))
                     if columnsfrom: columnsfrom -= 1
+#        for rowdict in self._importrows:
+#            if rowdict[u'Node'] == u'INFO':
+#                if rowdict[u'Key'] == u'Excel sheet name':
+#                    sheetname = rowdict.get(u'Command', None)
+#                if rowdict[u'Key'] == u'Header row':
+#                    headerrow = envmonlib.FieldFormats().format(rowdict.get(u'Command', u'1'), u'Integer')
+#                    if headerrow: headerrow -= 1
+#                if rowdict[u'Key'] == u'First data row':
+#                    datarowsfrom = envmonlib.FieldFormats().format(rowdict.get(u'Command', u'2'), u'Integer')
+#                    if datarowsfrom: datarowsfrom -= 1
+#                if rowdict[u'Key'] == u'First column':
+#                    columnsfrom = envmonlib.FieldFormats().format(rowdict.get(u'Command', u'1'), u'Integer')
+#                    if columnsfrom: columnsfrom -= 1
         
         tabledataset = envmonlib.DatasetTable()
         envmonlib.ExcelFiles().readToTableDataset(tabledataset, filename,

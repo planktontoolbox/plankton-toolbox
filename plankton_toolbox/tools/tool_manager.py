@@ -71,7 +71,7 @@ class ToolManager(object):
 #        self._toollist.append(dyntaxa_browser_tool.DyntaxaBrowserTool("Dyntaxa browser", self._parent))
 #        self._toollist.append(peg_browser_tool.PegBrowserTool("PEG browser", self._parent))
 #        self._toollist.append(harmful_plankton_browser_tool.HarmfulPlanktonBrowserTool("Harmful plankton", self._parent))
-        self._toollist.append(latlong_tool.LatLongTool("Latitude-longitude", self._parent))
+#        self._toollist.append(latlong_tool.LatLongTool("Latitude-longitude", self._parent))
 #        self._toollist.append(toolbox_settings_tool.ToolboxSettingsTool("Toolbox settings", self._parent))
         self._toollist.append(log_tool.LogTool("Toolbox logging", self._parent))
 #        self._toollist.append(metadata_editor_tool.MetadataEditorTool("(Metadata editor)", self._parent))
