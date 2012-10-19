@@ -37,7 +37,7 @@ import plankton_toolbox.tools.log_tool as log_tool
 import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 #import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
 
-__version__ = '0.2.2' # Plankton Toolbox version.
+__version__ = '2012-10-22' # Plankton Toolbox version.
 
 class MainWindow(QtGui.QMainWindow):
     """
@@ -289,19 +289,27 @@ class MainWindow(QtGui.QMainWindow):
 <b>Plankton Toolbox</b> version %s
 </p>
 <p>
-Plankton Toolbox contains functionality to be used when working with environmental monitoring data. 
-The toolbox is pre-loaded with the same set of 
-species and size class data used by the 
-<a href="http://nordicmicroalgae.org">Nordic Microalgae</a> site.
+The Plankton Toolbox is a free tool for aquatic scientists, and others, 
+working with environmental monitoring related to phyto- and zooplankton.
 </p>
 <p>
-Plankton Toolbox can be run on Windows, Mac OS X and Ubuntu (UNIX). 
+The software is under development and provided free with no 
+guarantees regarding functionality. Comments, bug reports and requests 
+for new functionality are welcome and can be sent to 
+<a href="mailto:info@nordicmicroalgae.org">info@nordicmicroalgae.org</a>
 </p>
 <p>
-Plankton Toolbox is developed by the 
-<a href="http://smhi.se">Swedish Meterological and Hydrological Institute (SMHI)</a> 
-with funding from the 
-<a href="http://svenskalifewatch.se">Swedish LifeWatch project</a>.
+Plankton Toolbox can be run on Windows, Mac OS X and Ubuntu (UNIX). No installation is needed.
+The latest version can be found at: 
+<a href="http://downloads.plankton-toolbox.org">http://downloads.plankton-toolbox.org</a>.
+</p>
+<p>
+Plankton Toolbox is developed by the oceanographic unit of the 
+<a href="http://smhi.se">Swedish Meterological and Hydrological Institute (SMHI)</a>.
+The software is a product of the 
+<a href="http://svenskalifewatch.se">Swedish LifeWatch project</a> 
+funded by the 
+<a href="http://www.vr.se">Swedish Science Council</a>.
 </p>
 <p>
 Developed in Python 2.7 and Qt/PyQt4. Released under the MIT license. <br/>

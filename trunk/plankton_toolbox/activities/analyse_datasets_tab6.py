@@ -93,8 +93,8 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         # Active widgets and connections.
         introlabel = utils_qt.RichTextQLabel()
         introlabel.setText("""
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
-        tempor incididunt ut labore et dolore magna aliqua.
+        Plot almost any combination of data you like. 
+        These graphs are in general not as nice looking as the pre-defined graphs but are more flexible.
         """)        
         # Select type of data object.
         self._numberofvariables_list = QtGui.QComboBox()

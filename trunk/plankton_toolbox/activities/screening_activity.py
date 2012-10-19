@@ -90,8 +90,8 @@ class ScreeningActivity(activity_base.ActivityBase):
         # Active widgets and connections.
         introlabel = utils_qt.RichTextQLabel()
         introlabel.setText("""
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
-        tempor incididunt ut labore et dolore magna aliqua.<br/><br/>
+        Screen your data for inconsistences regarding code values etc. 
+        Used lists of codes can be found in the folder "toolbox_data/code_lists". 
         """)        
         #
         self._codelistscreening_button = QtGui.QPushButton("Code list screening")
@@ -135,8 +135,17 @@ class ScreeningActivity(activity_base.ActivityBase):
         # Active widgets and connections.
         introlabel = utils_qt.RichTextQLabel()
         introlabel.setText("""
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
-        tempor incididunt ut labore et dolore magna aliqua.<br/><br/>
+        Screen your data for inconsistences regarding species names etc.
+        """)        
+        specieslabel = utils_qt.RichTextQLabel()
+        specieslabel.setText("""
+        The taxonomic hierarchy in www.nordicmicroalgae.org is used as a reference. 
+        This is based on www.algaebase.org and the Dyntaxa database at the Swedish Species Centre.
+        """)        
+        bvollabel = utils_qt.RichTextQLabel()
+        bvollabel.setText("""
+        BVOL screening is for work with biovolumes of phytoplanton. 
+        The HELCOM-PEG list of species and biovolumes is used as default. The latest version is available at www.ices.dk/
         """)        
         #
         self._speciesscreening_button = QtGui.QPushButton("Species screening")
@@ -147,12 +156,18 @@ class ScreeningActivity(activity_base.ActivityBase):
         #
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addWidget(self._speciesscreening_button)
-        hbox1.addWidget(self._bvolscreening_button)
         hbox1.addStretch(10)
+        #
+        hbox2 = QtGui.QHBoxLayout()
+        hbox2.addWidget(self._bvolscreening_button)
+        hbox2.addStretch(10)
         #
         layout = QtGui.QVBoxLayout()
         layout.addWidget(introlabel)
+        layout.addWidget(specieslabel)
         layout.addLayout(hbox1)
+        layout.addWidget(bvollabel)
+        layout.addLayout(hbox2)
         layout.addStretch(1)
         widget.setLayout(layout)                
         #
@@ -198,8 +213,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         # Active widgets and connections.
         introlabel = utils_qt.RichTextQLabel()
         introlabel.setText("""
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
-        tempor incididunt ut labore et dolore magna aliqua.<br/><br/>
+        Used for manual check of column values to find outliers or misspellings in the datasets.
         """)        
         #
         self._column_list = QtGui.QComboBox()
@@ -304,8 +318,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         # Active widgets and connections.
         introlabel = utils_qt.RichTextQLabel()
         introlabel.setText("""
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
-        tempor incididunt ut labore et dolore magna aliqua.<br/><br/>
+        Plot your raw data to find outliers or errors. Select parameters to plot.
         """)        
         #
         self._parameter_list = utils_qt.SelectableQListView()       

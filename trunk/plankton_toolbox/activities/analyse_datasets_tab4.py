@@ -80,8 +80,8 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         # Active widgets and connections.
         introlabel = utils_qt.RichTextQLabel()
         introlabel.setText("""
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
-        tempor incididunt ut labore et dolore magna aliqua.
+        Select parts of "Current data".
+        This is only a filter and the content of "Current data" is not changed. To view and save the filtered data select "View: Selected data" below.
         """)
         # Start date and end date.
         self._startdate_edit = QtGui.QLineEdit("")
