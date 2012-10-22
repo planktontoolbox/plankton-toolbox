@@ -130,7 +130,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         self._clear_button = QtGui.QPushButton("Clear plot data")
         self.connect(self._clear_button, QtCore.SIGNAL("clicked()"), self._clearPlotData)                
         # Add subplot data to the Graph plotter tool.
-        self._addsubplotdata_button = QtGui.QPushButton("Add plot data to Graf plotter")
+        self._addsubplotdata_button = QtGui.QPushButton("Add plot data to Graph plotter")
         self.connect(self._addsubplotdata_button, QtCore.SIGNAL("clicked()"), self._addPlot)                
 
         # Layout widgets.

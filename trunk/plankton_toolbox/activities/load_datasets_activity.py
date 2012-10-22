@@ -280,7 +280,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         # Intro:
         introlabel = utils_qt.RichTextQLabel()
         introlabel.setText("""
-        Load one or several files with your plankton or hydrography data as text files or Excel-files. 
+        Choose the Excel-tab or the Text-tab to load one or several files with your plankton or hydrography data as text files or Excel-files. 
         Before loading data you need to set up the import and export formats by selecting parsers. 
         The parsers are Excel-files with information on how to interpret the data you import in txt-format or in xlsx format. 
         Note that the xls-format in older versions of Excel is not supported.
