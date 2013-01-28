@@ -57,8 +57,29 @@ class ImportManager(object):
         # Select import format.
         formatparser = envmonlib.FormatSingleFile()
         # Phase 1: Read file into a temporary table.
+                
+        sheetname = None
+        headerrow = 1
+        datarowsfrom = 2
+        #
+        for rowdict in self._importrows:
+            if rowdict[u'Node'] == u'INFO':
+                if rowdict[u'Key'] == u'Header row':
+                    headerrow = int(float(rowdict.get(u'Command', u'1')))
+                    if headerrow: headerrow -= 1
+                if rowdict[u'Key'] == u'First data row':
+                    datarowsfrom = int(float(rowdict.get(u'Command', u'2')))
+                    if datarowsfrom: datarowsfrom -= 1
+
         tabledataset = envmonlib.DatasetTable()
-        envmonlib.TextFiles().readToTableDataset(tabledataset, filename, encoding = textfile_encoding)
+        envmonlib.TextFiles().readToTableDataset(tabledataset, filename, 
+                                                 encoding = textfile_encoding,
+                                                 header_row = headerrow,
+                                                 data_rows_from = datarowsfrom)
+        #
+        envmonlib.Logging().info(u"Loading file. Header content: " +  
+                                 unicode(tabledataset.getHeader()))
+        
         # Phase 2: Parse the table and create a corresponding tree structure.
         targetdataset = envmonlib.DatasetNode()
         #
@@ -84,7 +105,6 @@ class ImportManager(object):
         sheetname = None
         headerrow = 1
         datarowsfrom = 2
-        columnsfrom = 1
         #
         for rowdict in self._importrows:
             if rowdict[u'Node'] == u'INFO':
@@ -96,9 +116,6 @@ class ImportManager(object):
                 if rowdict[u'Key'] == u'First data row':
                     datarowsfrom = int(float(rowdict.get(u'Command', u'2')))
                     if datarowsfrom: datarowsfrom -= 1
-                if rowdict[u'Key'] == u'First column':
-                    columnsfrom = int(float(rowdict.get(u'Command', u'1')))
-                    if columnsfrom: columnsfrom -= 1
 #        for rowdict in self._importrows:
 #            if rowdict[u'Node'] == u'INFO':
 #                if rowdict[u'Key'] == u'Excel sheet name':
@@ -109,16 +126,16 @@ class ImportManager(object):
 #                if rowdict[u'Key'] == u'First data row':
 #                    datarowsfrom = envmonlib.FieldFormats().format(rowdict.get(u'Command', u'2'), u'Integer')
 #                    if datarowsfrom: datarowsfrom -= 1
-#                if rowdict[u'Key'] == u'First column':
-#                    columnsfrom = envmonlib.FieldFormats().format(rowdict.get(u'Command', u'1'), u'Integer')
-#                    if columnsfrom: columnsfrom -= 1
         
         tabledataset = envmonlib.DatasetTable()
         envmonlib.ExcelFiles().readToTableDataset(tabledataset, filename,
                                                   sheet_name = sheetname,
                                                   header_row = headerrow,
-                                                  data_rows_from = datarowsfrom,
-                                                  columns_from = columnsfrom)
+                                                  data_rows_from = datarowsfrom)
+        #
+        envmonlib.Logging().info(u"Loading file. Header content: " +  
+                                 unicode(tabledataset.getHeader()))
+
         # Phase 2: Parse the table and create a corresponding tree structure.
         targetdataset = envmonlib.DatasetNode()
         #

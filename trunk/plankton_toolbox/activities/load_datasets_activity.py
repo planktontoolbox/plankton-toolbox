@@ -127,7 +127,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         # - Select import column:
         self._textfile_importcolumn_list = QtGui.QComboBox()
         self._textfile_importcolumn_list.addItems(["<no parser selected>"])        
-        self.connect(self._textfile_parser_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._textfileImportColumnSelected)                
+        self.connect(self._textfile_importcolumn_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._textfileImportColumnSelected)                
         # - Select export column:
         self._textfile_exportcolumn_list = QtGui.QComboBox()
         self._textfile_exportcolumn_list.addItems(["<no parser selected>"])        
@@ -210,7 +210,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         # Read parser file.
         tabledata = envmonlib.DatasetTable()
         envmonlib.ExcelFiles().readToTableDataset(tabledata, 
-                                file_name = self._parser_path + self._parser_list[selected_row - 1])
+                                file_name = self._parser_path + self._parser_list[self._textfile_parser_list.currentIndex() - 1])
         header = tabledata.getHeader()
         for index, headeritem in enumerate(header):
             if headeritem == selectedimportcolumn:
