@@ -226,6 +226,8 @@ class Species(object):
                     parentobject = None # Too many levels, or infinite loop.
                     continue
                 if u'Rank' in parentobject:
+                    if parentobject[u'Rank'] == u'Species':
+                        speciesobject[u'Species'] = parentobject[u'Scientific name']
                     if parentobject[u'Rank'] == u'Order':
                         speciesobject[u'Order'] = parentobject[u'Scientific name']
                     if parentobject[u'Rank'] == u'Class':

@@ -68,12 +68,12 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         self._aggregate_rank_list.addItems([
             u"Biota (all levels)",
             u"Plankton groups",
-            u"Kingdom",
+            # u"Kingdom",
             u"Phylum",
             u"Class",
             u"Order",
-            u"Family",
-            u"Genus",
+            # u"Family",
+            # u"Genus",
             u"Species" ])
         self._aggregate_rank_list.setCurrentIndex(1) # Default: Plankton groups.
         #  Aggregate over trophy.
@@ -184,6 +184,8 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                         newvariable.addData(u'Parameter', parameter)
                         newvariable.addData(u'Unit', unit)
                         newvariable.addData(u'Value', aggregatedvariables[variablekeytuple])
+                        # Add taxon class based on taxon name.
+                        newvariable.addData(u'Class', envmonlib.Species().getTaxonValue(newtaxon, "Class"))
             #
             self._main_activity.updateCurrentData()    
         except UserWarning, e:

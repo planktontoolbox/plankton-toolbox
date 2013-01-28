@@ -36,7 +36,10 @@ class TextFiles():
     def readToTableDataset(self, 
                            target_dataset, 
                            file_name,
-                           encoding = None):
+                           encoding = None, 
+                           header_row = 0, 
+                           data_rows_from = 1, 
+                           data_rows_to = None): # None = read all.):
         """ """
         if file_name == None:
             raise UserWarning("File name is missing.")
@@ -51,14 +54,16 @@ class TextFiles():
             fieldseparator = None
             # Iterate over rows in file.            
             for rowindex, row in enumerate(infile):
+                if data_rows_to and (rowindex > data_rows_to):
+                    break # Break loop if data_row_to is defined and exceeded.
                 # Convert to unicode.
                 row = unicode(row, encoding, 'strict')
-                if rowindex == 0:
+                if rowindex == header_row:
                     # Header.
                     fieldseparator = self.getSeparator(row)
                     row = [item.strip() for item in row.split(fieldseparator)]
                     target_dataset.setHeader(row)
-                else:
+                elif rowindex >= data_rows_from:
                     # Row.
                     if len(row.strip()) == 0: 
                         continue # Don't add empty rows.

@@ -45,9 +45,7 @@ class ExcelFiles():
                            sheet_name = None, 
                            header_row = 0, 
                            data_rows_from = 1, 
-                           data_rows_to = None, # None = read all.
-                           columns_from = 0, 
-                           columns_to = None): # None = read all.
+                           data_rows_to = None): # None = read all.
         """ """
         if file_name == None:
             raise UserWarning("File name is missing.")
@@ -73,28 +71,22 @@ class ExcelFiles():
                 if data_rows_to and (rowindex > data_rows_to):
                     break # Break loop if data_row_to is defined and exceeded.
                 elif rowindex == header_row:
-                    for columnindex, cell in enumerate(row):
-                        if columns_to and (columnindex > columns_to):
-                            break # Break loop if used_columns_to is defined and exceeded.
-                        elif columnindex >= columns_from:
-                            value = cell.internal_value
-                            if value == None:
-                                header.append(u'')
-                            else:
-                                header.append(unicode(value).strip())
+                    for cell in row:
+                        value = cell.internal_value
+                        if value == None:
+                            header.append(u'')
+                        else:
+                            header.append(unicode(value).strip())
                     #
                     target_dataset.setHeader(header)
                 elif rowindex >= data_rows_from:
                     newrow = []
-                    for columnindex, cell in enumerate(row): ### BIG.
-                        if columns_to and (columnindex > columns_to):
-                            break # Break loop if used_columns_to is defined and exceeded.
-                        elif columnindex >= columns_from:
-                            value = cell.internal_value
-                            if value == None:
-                                newrow.append(u'')
-                            else:
-                                newrow.append(unicode(value).strip())
+                    for cell in row: ### BIG.
+                        value = cell.internal_value
+                        if value == None:
+                            newrow.append(u'')
+                        else:
+                            newrow.append(unicode(value).strip())
                     target_dataset.appendRow(newrow)
         #  
         except Exception:
