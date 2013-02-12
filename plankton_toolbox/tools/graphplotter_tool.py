@@ -302,16 +302,26 @@ class GraphPlotterTool(tool_base.ToolBase):
         
     def _drawChart(self):
         """ """
-        self._figure.clear()
-        self._canvas.draw()
-        #
-        if not self._plotdata:
-            return
         # User selections.
         selectedchart = unicode(self._charttype_list.currentText())
         combined = self._combined_checkbox.isChecked()
         stacked = self._stacked_checkbox.isChecked()
         ylogscale = self._ylogscale_checkbox.isChecked()
+        # Adjust visibility of checkboxes, etc.
+        if combined:
+            self._stacked_checkbox.setEnabled(True)
+        else:
+            self._stacked_checkbox.setEnabled(False)
+        if stacked:
+            self._ylogscale_checkbox.setEnabled(False)
+        else:
+            self._ylogscale_checkbox.setEnabled(True)
+        #
+        self._figure.clear()
+        self._canvas.draw()
+        #
+        if not self._plotdata:
+            return
         # Draw selected chart.
         if selectedchart == u'Line chart':
             if self._plotdata.getPlotDataInfo()[u'X type'] != u'String':

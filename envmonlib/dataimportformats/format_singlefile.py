@@ -49,8 +49,11 @@ class FormatSingleFile(envmonlib.ParsedFormat):
                 parsercommand = parserrow.get(u'Command', u'')
                 if parsercommand:         
                     #
-                    parserkey = self.replaceMethodKeywords(parserkey, parsernode)    
-                    parsercommand = self.replaceMethodKeywords(parsercommand, parsernode)    
+#                    parserkey = self.replaceMethodKeywords(parserkey, parsernode)    
+#                    parsercommand = self.replaceMethodKeywords(parsercommand, parsernode)    
+                    #
+                    parserkey = unicode(self.replaceMethodKeywords(parserkey, parsernode))    
+                    parsercommand = unicode(self.replaceMethodKeywords(parsercommand, parsernode))    
                     #
                     if parsernode == u'Dataset':
                         commandstring = u"dataset.addData('" + parserkey + u"', " + parsercommand + u")"

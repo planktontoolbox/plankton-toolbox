@@ -31,12 +31,15 @@ class ImportManager(object):
     
     Parser file columns and values:
     
-    - First column: Node level. Content: INFO, VISIT, SAMPLE, VARIABLE, FUNCTION Sample, FUNCTION Variable 
+    - First column: Node level. Content: INFO, VISIT, SAMPLE, VARIABLE, FUNCTION Visit, FUNCTION Sample, FUNCTION Variable. 
     - Second column: Key. INFO: Fixed set of key values. Other: Field name in the internal memory model.
-    - Fourth column: Format. Content: Text, Date:format, Time:format, Datetime:format, Integer, Float:n (where n = shown decimals).
-    
-    ...
-    
+    - Fourth column: View format. Content:  Text, 
+                                            Integer, 
+                                            Numeric: number of shown decimals,
+                                            Boolean,
+                                            Datetime: view format, 
+                                            Date: view format, 
+                                            Time: view format.
     
     """
     def __init__(self, parser_file_path, import_column, export_column):
@@ -121,10 +124,10 @@ class ImportManager(object):
 #                if rowdict[u'Key'] == u'Excel sheet name':
 #                    sheetname = rowdict.get(u'Command', None)
 #                if rowdict[u'Key'] == u'Header row':
-#                    headerrow = envmonlib.FieldFormats().format(rowdict.get(u'Command', u'1'), u'Integer')
+#                    headerrow = envmonlib.ViewFormats().format(rowdict.get(u'Command', u'1'), u'Integer')
 #                    if headerrow: headerrow -= 1
 #                if rowdict[u'Key'] == u'First data row':
-#                    datarowsfrom = envmonlib.FieldFormats().format(rowdict.get(u'Command', u'2'), u'Integer')
+#                    datarowsfrom = envmonlib.ViewFormats().format(rowdict.get(u'Command', u'2'), u'Integer')
 #                    if datarowsfrom: datarowsfrom -= 1
         
         tabledataset = envmonlib.DatasetTable()
@@ -193,8 +196,8 @@ class ImportManager(object):
                 if importcolumndata:
                     nodelevel = tabledata.getDataItem(rowindex, 0)
                     key = tabledata.getDataItem(rowindex, 1)
-                    fieldformat = tabledata.getDataItem(rowindex, 2)
-                    self._importrows.append({u'Node': nodelevel, u'Key': key, u'Format': fieldformat, u'Command': importcolumndata}) 
+                    viewformat = tabledata.getDataItem(rowindex, 2)
+                    self._importrows.append({u'Node': nodelevel, u'Key': key, u'View format': viewformat, u'Command': importcolumndata}) 
 #            self.setDatasetParserRows(self._importrows)
         # Create export info.
         if self._export_column:
@@ -206,6 +209,6 @@ class ImportManager(object):
                     nodelevel = tabledata.getDataItem(rowindex, 0)
                     if nodelevel != u'INFO':
                         key = tabledata.getDataItem(rowindex, 1)
-                        fieldformat = tabledata.getDataItem(rowindex, 2)
-                        self._columnsinfo.append({u'Header': exportcolumndata, u'Node': nodelevel, u'Key': key, u'Format': fieldformat}) 
+                        viewformat = tabledata.getDataItem(rowindex, 2)
+                        self._columnsinfo.append({u'Header': exportcolumndata, u'Node': nodelevel, u'Key': key, u'View format': viewformat}) 
 #            self.setExportTableColumns(self._columnsinfo)

@@ -133,13 +133,12 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         self._textfile_exportcolumn_list.addItems(["<no parser selected>"])        
         # - Select text coding.
         self._textfile_encoding_list = QtGui.QComboBox()
-        self._encodings_list = [u"<platform default>", 
-                                u"utf8",
-                                u"utf16",
+        self._encodings_list = [u"<platform default>",
+                                u"windows-1252",
+                                u"utf-8",
+                                u"utf-16",
                                 u"ascii",
-                                u"latin1",
-                                u"cp1258",
-                                u"windows-1258"]
+                                u"latin1"]
         self._textfile_encoding_list.addItems(self._encodings_list)
         # Load dataset.
         self._textfile_getdataset_button = QtGui.QPushButton("Load dataset(s)...")

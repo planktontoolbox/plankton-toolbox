@@ -27,9 +27,9 @@
 import envmonlib
 
 @envmonlib.singleton
-class FieldTypes(object):
+class ViewFormats(object):
     """
-    Utility class for formatting field content.
+    Utility class for formatting field content for viewing.
     """
     def __init__(self):
         """ """
@@ -40,11 +40,11 @@ class FieldTypes(object):
         if not value:
             return u''
         #
-        fieldformat = None
+        viewformat = None
         if u':' in fieldtype:
             formatparts = fieldtype.split(u':')
             fieldtype = formatparts[0]
-            fieldformat = formatparts[1] if len(formatparts) > 1 else None
+            viewformat = formatparts[1] if len(formatparts) > 1 else None
         #
         value = value.trim()
         #

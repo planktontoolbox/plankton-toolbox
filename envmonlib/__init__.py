@@ -49,7 +49,7 @@ Main modules:
 # Module utils:
 from utils.patterns import singleton
 from utils.logging import Logging
-from utils.fieldformats import FieldTypes
+from utils.viewformats import ViewFormats
 from utils.excelfiles import ExcelFiles
 from utils.textfiles import TextFiles
 from utils.zipfiles import ZipFileReader

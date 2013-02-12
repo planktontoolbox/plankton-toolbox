@@ -56,7 +56,7 @@ class Logging(object):
         self._erroracc.clear()
         
     def log(self, message):
-        """ Used for direct logging. """
+        """ Used for direct logging. Also used by other methods in the class. """
         message = unicode(message)
         if message:
             if self._logtarget:
