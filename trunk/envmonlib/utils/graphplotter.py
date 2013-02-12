@@ -24,37 +24,50 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import numpy
+#import numpy
 import numpy.ma
 import datetime
 import copy
 import matplotlib.dates as mpl_dates
 import matplotlib.font_manager as mpl_font_manager
+
+
+import matplotlib.pyplot as pyplot # ???????????????????
+
+
+#ax1.set_xticklabels([])
+#Similar for the yticklabels. However, you cannot share the x-axis with the plots that do have tick labels.
+
+
+
+
 import pylab # For color maps
 import envmonlib
 
 class GraphPlotData(object):
-    """ Abstract base class for data objects. """
+    """ Class containing data needed when plotting. 
     
-#    @staticmethod
-#    def getAvailableCharts(self):
-#        """ """
-#        return {
-#                u'Line chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
-#                u'Bar chart': {u'Parameters': [u'combined', u'stacked', u'y_log_scale']},
-#                u'Scatter chart': {u'Parameters': [u'combined', u'y_log_scale']},
-#                }
+        View format: Text, 
+                    Integer, 
+                    Numeric: number of shown decimals,
+                    Boolean,
+                    Datetime: view format, 
+                    Date: view format, 
+                    Time: view format.
 
+        Text, Integer, Numeric Boolean Datetime Date Time.
+    """
+    
     def __init__(self,
                  title = u'', 
                  x_label = u'',
-                 x_type = u'', # Number, String, Date.
+                 x_type = u'Integer', # Text, Integer, Numeric Boolean Datetime Date Time.
                  x_format = None, # Used for date type. 
                  y_label = u'',
-                 y_type = u'', # Integer, Float.
+                 y_type = u'', # Text, Integer, Numeric Boolean Datetime Date Time.
                  y_format = None, # Used for date type. 
                  z_label = u'',
-                 z_type = u'', # Integer, Float.
+                 z_type = u'', # Text, Integer, Numeric Boolean Datetime Date Time.
                  z_format = None): # Used for date type. 
         """ """
         super(GraphPlotData, self).__init__()
@@ -100,7 +113,7 @@ class GraphPlotData(object):
         plotdict[u'Z array'] = z_array
         #
         self._plot_list.append(plotdict)
-        
+               
     def clear(self):
         """ """
         self._plot_list = []
@@ -118,63 +131,63 @@ class GraphPlotData(object):
         """ """
         return self._plotdata_info
     
-    def getXMinMaxValues(self):
-        """ """
-        xmin = None
-        xmax = None
-        for plotdict in self._plot_list:
-            if (plotdict[u'X array']) and (len(plotdict[u'X array']) > 0):                    
-                xminvalue = min(plotdict[u'X array'])
-                xmaxvalue = max(plotdict[u'X array'])
-            else:
-                # x = position in array if x is missing.
-                xminvalue = 0
-                xmaxvalue = len(plotdict[u'Y array']) - 1
-            #
-            if not xmin: xmin = xminvalue
-            if not xmax: xmax = xmaxvalue
-            if xmin > xminvalue: xmin = xminvalue
-            if xmax < xmaxvalue: xmax = xmaxvalue
-        #
-        return xmin, xmax
+#    def getXMinMaxValues(self):
+#        """ """
+#        xmin = None
+#        xmax = None
+#        for plotdict in self._plot_list:
+#            if (plotdict[u'X array']) and (len(plotdict[u'X array']) > 0):                    
+#                xminvalue = min(plotdict[u'X array'])
+#                xmaxvalue = max(plotdict[u'X array'])
+#            else:
+#                # x = position in array if x is missing.
+#                xminvalue = 0
+#                xmaxvalue = len(plotdict[u'Y array']) - 1
+#            #
+#            if not xmin: xmin = xminvalue
+#            if not xmax: xmax = xmaxvalue
+#            if xmin > xminvalue: xmin = xminvalue
+#            if xmax < xmaxvalue: xmax = xmaxvalue
+#        #
+#        return xmin, xmax
 
-    def getYMinMaxValues(self):
-        """ """
-        ymin = None
-        ymax = None
-        for plotdict in self._plot_list:
-            if plotdict[u'Y array']:                    
-                yminvalue = min(plotdict[u'Y array'])
-                ymaxvalue = max(plotdict[u'Y array'])
-            else:
-                yminvalue = 0
-                ymaxvalue = 0
-            #
-            if not ymin: ymin = yminvalue
-            if not ymax: ymax = ymaxvalue
-            if ymin > yminvalue: ymin = yminvalue
-            if ymax < ymaxvalue: ymax = ymaxvalue
-        #
-        return ymin, ymax
+#    def getYMinMaxValues(self):
+#        """ """
+#        ymin = None
+#        ymax = None
+#        for plotdict in self._plot_list:
+#            if plotdict[u'Y array']:                    
+#                yminvalue = min(plotdict[u'Y array'])
+#                ymaxvalue = max(plotdict[u'Y array'])
+#            else:
+#                yminvalue = 0
+#                ymaxvalue = 0
+#            #
+#            if not ymin: ymin = yminvalue
+#            if not ymax: ymax = ymaxvalue
+#            if ymin > yminvalue: ymin = yminvalue
+#            if ymax < ymaxvalue: ymax = ymaxvalue
+#        #
+#        return ymin, ymax
 
-    def getZMinMaxValues(self):
-        """ """
-        zmin = None
-        zmax = None
-        for plotdict in self._plot_list:
-            if plotdict[u'Z array']:                    
-                zminvalue = min(plotdict[u'Z array'])
-                zmaxvalue = max(plotdict[u'Z array'])
-            else:
-                zyminvalue = 0
-                zmaxvalue = 0
-            #
-            if not zmin: zmin = zminvalue
-            if not zmax: zmax = zmaxvalue
-            if zmin > zminvalue: zmin = zminvalue
-            if zmax < zmaxvalue: zmax = zmaxvalue
-        #
-        return zmin, zmax
+#    def getZMinMaxValues(self):
+#        """ """
+#        zmin = None
+#        zmax = None
+#        for plotdict in self._plot_list:
+#            if plotdict[u'Z array']:                    
+#                zminvalue = min(plotdict[u'Z array'])
+#                zmaxvalue = max(plotdict[u'Z array'])
+#            else:
+#                zyminvalue = 0
+#                zmaxvalue = 0
+#            #
+#            if not zmin: zmin = zminvalue
+#            if not zmax: zmax = zmaxvalue
+#            if zmin > zminvalue: zmin = zminvalue
+#            if zmax < zmaxvalue: zmax = zmaxvalue
+#        #
+#        return zmin, zmax
 
     def mergeData(self):
         """ Creates a common x array and add zero values for plots with no corresponding x value. """
@@ -206,12 +219,18 @@ class GraphPlotData(object):
 
 class ChartBase(object):
     """ """
-    def __init__(self, graph_data):
-        """ Abstract base class for  """
+    
+    def __init__(self, plot_data, figure):
+        """ Abstract base class for charts. """
+        #
         super(ChartBase, self).__init__()
+        self._data = plot_data
+        self._figure = figure
         #
-        self._graph_data = graph_data
-        #
+        self._pyplot_used = False # Embedded in Qt or file plotting.
+        if not self._figure:         
+            self._pyplot_used = True  # Use pyplot for tests.
+
 #        self._settings = {}
 #        self.default_settings()
 
@@ -235,43 +254,102 @@ class ChartBase(object):
 #        """ """
 #        return self._settings
     
+    def setData(self, plot_data):
+        """ """
+        self._data = plot_data
+    
+    def getData(self, plot_data):
+        """ """
+        return self._data
+    
+    def _initPlotting(self):
+        """ """
+        if self._pyplot_used:         
+            # Use pyplot for tests.
+            self._figure = pyplot.figure()
+        #
+#        if self._data.getPlotDataInfo()[u'Title']:
+#            self._figure.suptitle(self._data.getPlotDataInfo()[u'Title'], verticalalignment = 'top', size = 'medium')
+        # 
+        self._markers = [u'o', u's', u'D', u'^', u'<']
+        self._colors = ['b', 'r', 'c', 'm', 'k', 'g', 'y']
+        self._symbols = ['-', '--', '-.', ':']
+        
+    def _finalizePlotting(self):
+        """ """
+        #
+        if self._pyplot_used:
+            pyplot.tight_layout()
+            pyplot.show()
+        else:
+            self._figure.tight_layout()
+        
+    def _formatArray(self, data_type, data_array):
+        """ """
+
+        
+        data_type = u'Number' # TEST:
+        
+        
+        
+        if data_type == u'Number':
+            float_array = []
+            failedconversions_set = set() # Used in error log.
+            #
+            for value in data_array:
+                try:
+                    value = float(value)
+                    float_array.append(value)
+                except:
+                    failedconversions_set.add(value)
+                    float_array.append(float('nan'))
+            #
+            if len(failedconversions_set) > 0:
+                envmonlib.Logging().warning(u"GraphPlot: These values could not be converted to float: '" + 
+                                            u"', '".join(sorted(failedconversions_set)) + u"'")
+            #
+            return numpy.ma.masked_array(float_array, numpy.isnan(float_array))
+        #
+        elif data_type == u'Text':
+            # Convert to unicode.
+            for index, value in enumerate(data_array):
+                data_array[index] = unicode(value)
+            return data_array
+        #
+        elif data_type == u'Datetime': 
+            return data_array # TODO.
+        #
+        elif data_type == u'Date': 
+            return data_array # TODO.
+        #
+        elif data_type == u'Time': 
+            return data_array # TODO.
+        #
+        else:
+            return data_array 
+        
     def plotChart(self):
         """ Abstract. """
-        raise NotImplementedError("Please implement plotChart() in subclass. ")
+        raise NotImplementedError("The abstract method plotChart() is not implement. ")
 
 class LineChart(ChartBase):
     """ """
-    def __init__(self, graph_data, figure = None):
+    def __init__(self, plot_data, figure = None):
         """ """
-        super(LineChart, self).__init__(graph_data)
-        self._figure = figure
+        super(LineChart, self).__init__(plot_data, figure)
 
     def plotChart(self, 
                   combined = False, 
                   y_log_scale = False):
         """ """
-        plotlist = self._graph_data.getPlotList()
-        x_type = self._graph_data.getPlotDataInfo()[u'X type']
         #
-        if self._figure:
-            fig = self._figure
-        else:
-            # Use pyplot for tests.
-            import matplotlib.pyplot as pyplot
-            fig = pyplot.figure()
+        self._initPlotting()
         #
-        markers = [u'o', u's', u'D', u'^', u'<']
-        colors = ['b', 'r', 'c', 'm', 'k', 'g', 'y']
-#            symbols = ['-', '--', '-.', ':']
-        markers_len = len(markers)
-        colors_len = len(colors)
-#            symbols_len = len(symbols)
-        #
-        if self._graph_data.getPlotDataInfo()[u'Title']:
-            fig.suptitle(self._graph_data.getPlotDataInfo()[u'Title'], verticalalignment = 'top')
+        plotlist = self._data.getPlotList()
+        x_type = self._data.getPlotDataInfo()[u'X type']
         # 
         if combined:
-            subplot = fig.add_subplot(111)
+            subplot = self._figure.add_subplot(111)
             #
             if y_log_scale:
                 subplot.set_yscale('log')
@@ -294,13 +372,13 @@ class LineChart(ChartBase):
                         x_date_array.append(time)
                     # 
                     subplot.plot_date(x_date_array, plotdict[u'Y array'],
-                                      marker = markers[plotindex % markers_len], c =  colors[plotindex % colors_len])
+                                      marker = self._markers[plotindex % len(self._markers)], c =  self._colors[plotindex % len(self._colors)])
                     #
                     subplot.xaxis.set_major_locator(mpl_dates.MonthLocator())
                     subplot.xaxis.set_minor_locator(mpl_dates.WeekdayLocator())
                     subplot.xaxis.set_major_formatter(mpl_dates.DateFormatter(u'%Y-%m-%d')) 
                     #
-                    fig.autofmt_xdate(bottom = 0.2)                     
+                    self._figure.autofmt_xdate(bottom = 0.2)                     
                 else:
                     if (not x_array) or (len(x_array) == 0):
                         x_num_array = list(numpy.arange(len(y_array)))
@@ -311,31 +389,31 @@ class LineChart(ChartBase):
                     
                     
                     try: 
-                        y_floatarray = []
-                        failedconversions_set = set()
-                        for value in y_array:
-                            try:
-#                                value = float(value.replace(u' ', u'').replace(u',', u'.'))
-                                value = float(value)
-                                y_floatarray.append(value)
-                            except:
-                                failedconversions_set.add(value)
-                                y_floatarray.append(float('nan'))
-                        if len(failedconversions_set) > 0:
-                            envmonlib.Logging().warning(u"GraphPlot: These values could not be converted to float: '" + 
-                                                        u"', '".join(sorted(failedconversions_set)) + u"'")
-
-                       
-                       
-                        x_masked = numpy.ma.masked_array(x_num_array, numpy.isnan(x_num_array))
-                        y_masked = numpy.ma.masked_array(y_floatarray, numpy.isnan(y_floatarray))
+#                        y_floatarray = []
+#                        failedconversions_set = set()
+#                        for value in y_array:
+#                            try:
+##                                value = float(value.replace(u' ', u'').replace(u',', u'.'))
+#                                value = float(value)
+#                                y_floatarray.append(value)
+#                            except:
+#                                failedconversions_set.add(value)
+#                                y_floatarray.append(float('nan'))
+#                        if len(failedconversions_set) > 0:
+#                            envmonlib.Logging().warning(u"GraphPlot: These values could not be converted to float: '" + 
+#                                                        u"', '".join(sorted(failedconversions_set)) + u"'")
+#
+#                       
+#                       
+                        x_masked = self._formatArray(u'Integer', x_num_array)
+                        y_masked = self._formatArray(u'Numeric', y_array)
     
     
     
     
     
                         subplot.plot(x_masked, y_masked,
-                                     marker = markers[plotindex % markers_len])
+                                     marker = self._markers[plotindex % len(self._markers)])
                         legendname_list.append(plotdict[u'Plot name'])
                     except Exception as e:
                         envmonlib.Logging().warning(u"DEBUG: Plot skipped: %s" % (e.args[0]))
@@ -344,7 +422,7 @@ class LineChart(ChartBase):
                     
                     
 #                    subplot.plot(x_num_array, y_array,
-#                                 marker = markers[plotindex % markers_len])
+#                                 marker = self._markers[plotindex % len(self._markers)])
             #
             font_properties = mpl_font_manager.FontProperties()
             font_properties.set_size('small')
@@ -354,8 +432,8 @@ class LineChart(ChartBase):
 #                                 loc='best', fancybox=True, prop = font_properties)
             leg.get_frame().set_alpha(0.5)
             #
-            subplot.set_xlabel(self._graph_data.getPlotDataInfo()[u'X label'])
-            subplot.set_ylabel(self._graph_data.getPlotDataInfo()[u'Y label'])
+            subplot.set_xlabel(self._data.getPlotDataInfo()[u'X label'])
+            subplot.set_ylabel(self._data.getPlotDataInfo()[u'Y label'])
         else:
             subplotcount = len(plotlist)
             #
@@ -366,7 +444,7 @@ class LineChart(ChartBase):
                 y_array = plotdict[u'Y array']
 #                z_array = plotdict[u'Z array']
                 #
-                subplot = fig.add_subplot(subplotcount, 1, plotindex + 1, sharex = sharesubplotxaxis)
+                subplot = self._figure.add_subplot(subplotcount, 1, plotindex + 1, sharex = sharesubplotxaxis)
                 if not sharesubplotxaxis: sharesubplotxaxis = subplot    
                 #
                 if y_log_scale:
@@ -383,13 +461,13 @@ class LineChart(ChartBase):
                         x_date_array.append(time)
                     # 
                     subplot.plot_date(x_date_array, y_array,
-                                      marker = markers[plotindex % markers_len], c =  colors[plotindex % colors_len])
+                                      marker = self._markers[plotindex % len(self._markers)], c =  self._colors[plotindex % len(self._colors)])
                     #
                     subplot.xaxis.set_major_locator(mpl_dates.MonthLocator())
                     subplot.xaxis.set_minor_locator(mpl_dates.WeekdayLocator())
                     subplot.xaxis.set_major_formatter(mpl_dates.DateFormatter(u'%Y-%m-%d')) 
                     #
-                    fig.autofmt_xdate(bottom = 0.2)                     
+                    self._figure.autofmt_xdate(bottom = 0.2)                     
                 else:
                     if (not x_array) or (len(x_array) == 0):
                         x_num_array = list(numpy.arange(len(y_array)))
@@ -422,49 +500,40 @@ class LineChart(ChartBase):
                             y_masked = numpy.ma.masked_array(y_floatarray, numpy.isnan(y_floatarray))
         
                             subplot.plot(x_masked, y_masked,
-                                         marker = markers[plotindex % markers_len])
+                                         marker = self._markers[plotindex % len(self._markers)])
                     #
                     except Exception as e:
                         envmonlib.Logging().warning(u"DEBUG: Plot skipped: %s" % (e.args[0]))
                 #
-                subplot.set_title(plotdict[u'Plot name'])
+                subplot.set_title(plotdict[u'Plot name'], size = 'medium')
                 subplot.set_ylabel(plotdict[u'Y label'])
                 #
                 if (plotindex + 1) == len(plotlist):
                     # Last subplot.
-                    subplot.set_xlabel(self._graph_data.getPlotDataInfo()[u'X label'])
+                    subplot.set_xlabel(self._data.getPlotDataInfo()[u'X label'])
 #                    subplot.set_xticklabels(x_array, visible = True)                    
         #
-        if not self._figure:
-            pyplot.tight_layout()
-            pyplot.show()
-        else:
-            self._figure.tight_layout()
+        self._finalizePlotting()
 
 
 class BarChart(ChartBase):
     """ """
-    def __init__(self, graph_data, figure = None):
+    def __init__(self, plot_data, figure = None):
         """ """
-        super(BarChart, self).__init__(graph_data)
-        self._figure = figure
+        super(BarChart, self).__init__(plot_data, figure)
 
     def plotChart(self, 
                   combined = False, 
                   y_log_scale = False,
                   stacked = False):
         """ """
-        plotlist = self._graph_data.getPlotList()
-        x_type = self._graph_data.getPlotDataInfo()[u'X type']
         #
-        if self._figure:
-            fig = self._figure
-        else:
-            # Use pyplot for tests.
-            import matplotlib.pyplot as pyplot    
-            fig = pyplot.figure()
+        self._initPlotting()
+        #
+        plotlist = self._data.getPlotList()
+        x_type = self._data.getPlotDataInfo()[u'X type'] 
         # All plots should have the same x axis items. 
-        plotlist = self._graph_data.mergeData()        
+        plotlist = self._data.mergeData()        
         #
         if combined:
             # Get axes from first plot.
@@ -475,7 +544,7 @@ class BarChart(ChartBase):
             colourcount = len(plotlist)
             colourmap = pylab.get_cmap('Dark2')
             #
-            subplot = fig.add_subplot(111)
+            subplot = self._figure.add_subplot(111)
             #
             accumulatedplots = None
             if y_log_scale:
@@ -513,14 +582,12 @@ class BarChart(ChartBase):
             leg = subplot.legend([data[u'Plot name'] for data in plotlist], 
                                  loc='best', fancybox=True, prop = font_properties)
             leg.get_frame().set_alpha(0.5)
+#            #
+#            if self._data.getPlotDataInfo()[u'Title']:
+#                subplot.set_title(self._data.getPlotDataInfo()[u'Title'], size = 'small')
             #
-            if self._graph_data.getPlotDataInfo()[u'Title']:
-                subplot.set_title(self._graph_data.getPlotDataInfo()[u'Title'])
-            else:
-                subplot.set_title('Bar, combined')
-            #
-            subplot.set_xlabel(self._graph_data.getPlotDataInfo()[u'X label'])
-            subplot.set_ylabel(self._graph_data.getPlotDataInfo()[u'Y label'])
+            subplot.set_xlabel(self._data.getPlotDataInfo()[u'X label'])
+            subplot.set_ylabel(self._data.getPlotDataInfo()[u'Y label'])
         else:
             # Get axes from first plot.
             x_axis = plotlist[0][u'X array']
@@ -536,7 +603,7 @@ class BarChart(ChartBase):
             #
             for plotindex, plotdict in enumerate(plotlist):
             
-                subplot = fig.add_subplot(subplotcount, 1, plotindex + 1, sharex = share_x_axis)    
+                subplot = self._figure.add_subplot(subplotcount, 1, plotindex + 1, sharex = share_x_axis)    
                 if not share_x_axis: share_x_axis = subplot    
                 #
                 if y_log_scale:
@@ -551,51 +618,34 @@ class BarChart(ChartBase):
                                    barwidth,
                                    color=colourmap(1.0 * plotindex / colourcount))
                 #
-                subplot.set_title(plotdict[u'Plot name'])
+                subplot.set_title(plotdict[u'Plot name'], size = 'medium')
                 subplot.set_ylabel(plotdict[u'Y label'])
                 #
                 if (plotindex + 1) == len(plotlist):
                     # Last subplot.
-                    subplot.set_xlabel(self._graph_data.getPlotDataInfo()[u'X label'])
+                    subplot.set_xlabel(self._data.getPlotDataInfo()[u'X label'])
                     subplot.set_xticklabels(x_array, rotation=20.0, visible = True)
         #
-        if not self._figure:
-            pyplot.tight_layout()
-            pyplot.show()
-        else:
-            self._figure.tight_layout()
+        self._finalizePlotting()
 
 
 class ScatterChart(ChartBase):
     """ """
-    def __init__(self, graph_data, figure = None):
+    def __init__(self, plot_data, figure = None):
         """ """
-        super(ScatterChart, self).__init__(graph_data)
-        self._figure = figure
+        super(ScatterChart, self).__init__(plot_data, figure)
         
     def plotChart(self, 
                   combined = False, 
                   y_log_scale = False):
         """ """
-        plotlist = self._graph_data.getPlotList()
-        x_type = self._graph_data.getPlotDataInfo()[u'X type']
-        #
-        if self._figure:
-            fig = self._figure
-        else:
-            # Use pyplot for tests.
-            import matplotlib.pyplot as pyplot    
-            fig = pyplot.figure()
-        #
-        markers = [u'o', u's', u'D', u'^', u'<']
-        colors = ['b', 'r', 'c', 'm', 'k', 'g', 'y']
-        symbols = ['-', '--', '-.', ':']
-        markers_len = len(markers)
-        colors_len = len(colors)
-        symbols_len = len(symbols)
+        self._initPlotting()
+        # 
+        plotlist = self._data.getPlotList()
+        x_type = self._data.getPlotDataInfo()[u'X type']
         #
         if combined:
-            subplot = fig.add_subplot(111)
+            subplot = self._figure.add_subplot(111)
             #
             if y_log_scale:
                 subplot.set_yscale('log')
@@ -608,31 +658,31 @@ class ScatterChart(ChartBase):
                 #
                 if z_array:
                     subplot.scatter(x_array, y_array, s = z_array, 
-                                    marker = markers[plotindex % markers_len], c = colors[plotindex % colors_len])
+                                    marker = self._markers[plotindex % len(self._markers)], c = self._colors[plotindex % len(self._colors)])
                 else:
                     subplot.scatter(x_array, y_array, 
-                                    marker = markers[plotindex % markers_len], c = colors[plotindex % colors_len])
+                                    marker = self._markers[plotindex % len(self._markers)], c = self._colors[plotindex % len(self._colors)])
             #
             font_properties = mpl_font_manager.FontProperties()
             font_properties.set_size('small')
             leg = subplot.legend([data[u'Plot name'] for data in plotlist],
                                  loc='best', fancybox=True, prop = font_properties)
             leg.get_frame().set_alpha(0.5)
-            #
-            if self._graph_data.getPlotDataInfo()[u'Title']:
-                subplot.set_title(self._graph_data.getPlotDataInfo()[u'Title'])
-            else:
-                subplot.set_title('Scatter, combined') # Default.
+#            #
+#            if self._data.getPlotDataInfo()[u'Title']:
+#                subplot.set_title(self._data.getPlotDataInfo()[u'Title'])
+#            else:
+#                subplot.set_title('Scatter, combined') # Default.
             # 
-            subplot.set_xlabel(self._graph_data.getPlotDataInfo()[u'X label'])
-            subplot.set_ylabel(self._graph_data.getPlotDataInfo()[u'Y label'])
+            subplot.set_xlabel(self._data.getPlotDataInfo()[u'X label'])
+            subplot.set_ylabel(self._data.getPlotDataInfo()[u'Y label'])
         else:
             subplotcount = len(plotlist)
             #
             share_x_axis = None
             #
             for plotindex, plotdict in enumerate(plotlist):
-                subplot = fig.add_subplot(subplotcount, 1, plotindex + 1, sharex = share_x_axis)    
+                subplot = self._figure.add_subplot(subplotcount, 1, plotindex + 1, sharex = share_x_axis)    
                 if not share_x_axis: share_x_axis = subplot    
                 #
                 if y_log_scale:
@@ -649,65 +699,72 @@ class ScatterChart(ChartBase):
                 #
                 if z_array:
                     subplot.scatter(x_array, y_array, s = z_array, 
-                                    marker = markers[plotindex % markers_len], c = colors[plotindex % colors_len])
+                                    marker = self._markers[plotindex % len(self._markers)], c = self._colors[plotindex % len(self._colors)])
                 else:
                     subplot.scatter(x_array, y_array, 
-                                    marker = markers[plotindex % markers_len], c = colors[plotindex % colors_len])
+                                    marker = self._markers[plotindex % len(self._markers)], c = self._colors[plotindex % len(self._colors)])
                 #
-                subplot.set_title(plotdict[u'Plot name'])
+                subplot.set_title(plotdict[u'Plot name'], size = 'medium')
                 subplot.set_ylabel(plotdict[u'Y label'])
                 #
                 if (plotindex + 1) == len(plotlist):
                     # Last subplot.
-                    subplot.set_xlabel(self._graph_data.getPlotDataInfo()[u'X label'])
+                    subplot.set_xlabel(self._data.getPlotDataInfo()[u'X label'])
                     subplot.set_xticklabels(plotdict[u'X array'], rotation=20.0, visible = True)
         #
-        if not self._figure:
-            pyplot.tight_layout()
-            pyplot.show()
-        else:
-            self._figure.tight_layout()
+        self._finalizePlotting()
 
                 
 class PieChart(ChartBase):
     """ """
-    def __init__(self, graph_data, figure = None):
+    def __init__(self, plot_data, figure = None):
         """ """
-        super(PieChart, self).__init__(graph_data)
-        self._figure = figure
+        super(PieChart, self).__init__(plot_data, figure)
         
     def plotChart(self, 
-                  combined = False, 
-                  y_log_scale = False):
+                  combined = False, # Not used. 
+                  y_log_scale = False): # Not used.
         """ """
-        # Use externally defined figure, or pyplot for tests.
-        if self._figure:
-            fig = self._figure
-        else:
-            import matplotlib.pyplot as pyplot
-            fig = pyplot.figure()
         #
-        plotlist = self._graph_data.getPlotList()
+        self._initPlotting()
         #
-        subplotcount = len(plotlist)
+        plotlist = self._data.getPlotList()
         #
         for plotindex, plotdict in enumerate(plotlist):
-            subplot = fig.add_subplot(subplotcount, 1, plotindex + 1)
-            if plotdict[u'X array']:
-                subplot.pie(plotdict[u'Y array'], labels=plotdict[u'X array'])
-            else:
-                subplot.pie(plotdict[u'Y array'])
+            subplot = self._figure.add_subplot(len(plotlist), 1, plotindex + 1)
             #
-            subplot.axis(u'equal')
+            if plotdict[u'X array']:
+                # Remove invalid positions in both arrays.
+                x_array = plotdict[u'X array']
+                y_array = plotdict[u'Y array']
+                y_cleaned = []
+                x_labels = []
+                for index, item in enumerate(y_array):
+                    try:
+                        if not numpy.isnan(item):
+                            x_labels.append(unicode(x_array[index])) # Labels should be text.
+                            y_cleaned.append(y_array[index])
+                    except:
+                        pass
+                subplot.pie(y_cleaned, labels = x_labels)
+            else:
+                # Remove invalid positions in y array.
+                y_array = plotdict[u'Y array']
+                y_cleaned = []
+                for index, item in enumerate(y_array):
+                    try:
+                        if not numpy.isnan(item):
+                            y_cleaned.append(y_array[index])
+                    except:
+                        pass
+                subplot.pie(y_cleaned)
+            #
+            subplot.axis(u'equal') # A circle should be circular.
             #
             if plotdict[u'Plot name']:
-                subplot.set_title(plotdict[u'Plot name'])
+                subplot.set_title(plotdict[u'Plot name'], size = 'medium')
         #
-        if not self._figure:
-            pyplot.tight_layout()
-            pyplot.show()
-        else:
-            self._figure.tight_layout()
+        self._finalizePlotting()
         
 #
 # Test.
@@ -723,33 +780,33 @@ def graphplotter_test():
                         y_label = u'Y (one variable)')
 
     plotdata_0.addPlot(plot_name = u"1 plot", 
-                        y_array = [20007.0, float('nan'), 20008.0, 20009.0, 20010.0], 
+                        y_array = [7.0, float('nan'), 88.0, 900.0, 9000.0], 
                         y_label = u'Y first')
-#    plotdata_0.addPlot(plot_name = u"2 plot", 
-#                        y_array = [2006.0, 2006.0, 2006.0, 'nan', 2006.0], 
-#                        y_label = u'Y first')
-#    plotdata_0.addPlot(plot_name = u"3 plot", 
-#                        y_array = [2006.0, 'NaN', 2006.0, 2006.0, 2006.0], 
-#                        y_label = u'Y first')
-#    plotdata_0.addPlot(plot_name = u"4 plot", 
-#                        y_array = [2006.0, 2006.0, None, 2006.0, 2006.0], 
-#                        y_label = u'Y first')
+    plotdata_0.addPlot(plot_name = u"2 plot", 
+                        y_array = [2006.0, 2006.0, 2006.0, 'nan', 2006.0], 
+                        y_label = u'Y first')
+    plotdata_0.addPlot(plot_name = u"3 plot", 
+                        y_array = [2006.0, 'NaN', 2006.0, 2006.0, 2006.0], 
+                        y_label = u'Y first')
+    plotdata_0.addPlot(plot_name = u"4 plot", 
+                        y_array = [2006.0, 2006.0, None, 2006.0, 2006.0], 
+                        y_label = u'Y first')
 
-    graph = LineChart(plotdata_0)
-    graph.plotChart(combined = False, y_log_scale = True)
-    graph.plotChart(combined = True, y_log_scale = True)
+#    graph = LineChart(plotdata_0)
+#    graph.plotChart(combined = False, y_log_scale = True)
+#    graph.plotChart(combined = True, y_log_scale = True)
     
 #    graph = BarChart(plotdata_0)
 #    graph.plotChart(combined = False, y_log_scale = True)
 #    graph.plotChart(combined = True, y_log_scale = True)
-#    
-#    graph = ScatterChart(plotdata_0)
-#    graph.plotChart(combined = False, y_log_scale = True)
-#    graph.plotChart(combined = True, y_log_scale = True)
     
-    graph = PieChart(plotdata_0)
+    graph = ScatterChart(plotdata_0)
     graph.plotChart(combined = False, y_log_scale = True)
     graph.plotChart(combined = True, y_log_scale = True)
+    
+#    graph = PieChart(plotdata_0)
+#    graph.plotChart(combined = False, y_log_scale = False)
+#    graph.plotChart(combined = False, y_log_scale = True)
     
 
     return

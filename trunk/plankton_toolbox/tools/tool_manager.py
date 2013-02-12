@@ -24,6 +24,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+import plankton_toolbox.tools.dev_test_tool as dev_test_tool
 import plankton_toolbox.tools.toolbox_settings_tool as toolbox_settings_tool
 import plankton_toolbox.tools.log_tool as log_tool
 import plankton_toolbox.tools.dataset_viewer_tool as dataset_viewer_tool
@@ -66,6 +67,7 @@ class ToolManager(object):
     def initTools(self):
         """ Tool activator. """
         # The log tool should be loaded before other tools.
+        self._toollist.append(dev_test_tool.DevTestTool("Development and test", self._parent))
         self._toollist.append(dataset_viewer_tool.DatasetViewerTool("Dataset viewer", self._parent))
         self._toollist.append(graphplotter_tool.GraphPlotterTool("Graph plotter", self._parent))
 #        self._toollist.append(dyntaxa_browser_tool.DyntaxaBrowserTool("Dyntaxa browser", self._parent))
