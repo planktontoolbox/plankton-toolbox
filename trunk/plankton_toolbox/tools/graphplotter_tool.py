@@ -273,7 +273,7 @@ class GraphPlotterTool(tool_base.ToolBase):
         self._clear_button = QtGui.QPushButton("Clear")
         self.connect(self._clear_button, QtCore.SIGNAL("clicked()"), self.clearPlotData)                
         #                
-        self._savecharttofile_button = QtGui.QPushButton("Save...")
+        self._savecharttofile_button = QtGui.QPushButton("Edit and save...")
         self.connect(self._savecharttofile_button, QtCore.SIGNAL("clicked()"), self._saveChartToFile)                
         # Layout widgets.
         layout = QtGui.QHBoxLayout()
@@ -300,8 +300,14 @@ class GraphPlotterTool(tool_base.ToolBase):
         #
         return layout
         
-    def _drawChart(self):
+    def _drawChart(self, embedded = True):
         """ """
+        if embedded:
+            # Draw embedded in Qt.
+            figure = self._figure
+        else:
+            # Use matplotlib.pyplot for drawing.
+            figure = None
         # User selections.
         selectedchart = unicode(self._charttype_list.currentText())
         combined = self._combined_checkbox.isChecked()
@@ -317,31 +323,32 @@ class GraphPlotterTool(tool_base.ToolBase):
         else:
             self._ylogscale_checkbox.setEnabled(True)
         #
-        self._figure.clear()
-        self._canvas.draw()
+        if embedded:
+            self._figure.clear()
+            self._canvas.draw()
         #
         if not self._plotdata:
             return
         # Draw selected chart.
         if selectedchart == u'Line chart':
-            if self._plotdata.getPlotDataInfo()[u'X type'] != u'String':
-                self._current_chart = envmonlib.LineChart(self._plotdata, figure = self._figure)
-                self._current_chart.plotChart(combined = combined, y_log_scale = ylogscale)        
+            if self._plotdata.getPlotDataInfo()[u'x_type'] != u'text':
+                self._current_chart = envmonlib.LineChart(self._plotdata, figure = figure)
+                self._current_chart.plotChart(combined = combined, stacked = stacked, y_log_scale = ylogscale)        
                 self._canvas.draw()
         #
         if selectedchart == u'Bar chart':
-            self._current_chart = envmonlib.BarChart(self._plotdata, figure = self._figure)
+            self._current_chart = envmonlib.BarChart(self._plotdata, figure = figure)
             self._current_chart.plotChart(combined = combined, stacked = stacked, y_log_scale = ylogscale)                
             self._canvas.draw()
         #
         if selectedchart == u'Scatter chart':
-            if self._plotdata.getPlotDataInfo()[u'X type'] != u'String':
-                self._current_chart = envmonlib.ScatterChart(self._plotdata, figure = self._figure)
+            if self._plotdata.getPlotDataInfo()[u'x_type'] != u'text':
+                self._current_chart = envmonlib.ScatterChart(self._plotdata, figure = figure)
                 self._current_chart.plotChart(combined = combined, y_log_scale = ylogscale)                
                 self._canvas.draw()
         #
         if selectedchart == u'Pie chart':
-            self._current_chart = envmonlib.PieChart(self._plotdata, figure = self._figure)
+            self._current_chart = envmonlib.PieChart(self._plotdata, figure = figure)
             self._current_chart.plotChart()        
             self._canvas.draw()
 
@@ -376,17 +383,21 @@ class GraphPlotterTool(tool_base.ToolBase):
     def _saveChartToFile(self):
         """ """
         if self._plotdata:
-            # Show select file dialog box.
-            namefilter = 'Image file (*.png);;All files (*.*)'
-            filename = QtGui.QFileDialog.getSaveFileName(
-                            self,
-                            'Save chart to file',
-                            self._lastuseddirectory,
-                            namefilter)
-            filename = unicode(filename) # QString to unicode.
-            # Check if user pressed ok or cancel.
-            if filename:
-                self._lastuseddirectory = os.path.dirname(filename)
-                # Save to file.
-                self._figure.savefig(filename, dpi = 300)
+            # Use matplotlib.pyplot for drawing.
+            self._drawChart(embedded = False)
+
+#         if self._plotdata:
+#             # Show select file dialog box.
+#             namefilter = 'Image file (*.png);;All files (*.*)'
+#             filename = QtGui.QFileDialog.getSaveFileName(
+#                             self,
+#                             'Save chart to file',
+#                             self._lastuseddirectory,
+#                             namefilter)
+#             filename = unicode(filename) # QString to unicode.
+#             # Check if user pressed ok or cancel.
+#             if filename:
+#                 self._lastuseddirectory = os.path.dirname(filename)
+#                 # Save to file.
+#                 self._figure.savefig(filename, dpi = 300)
 
