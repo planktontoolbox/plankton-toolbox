@@ -60,6 +60,7 @@ from utils.graphplotter import LineChart
 from utils.graphplotter import BarChart
 from utils.graphplotter import ScatterChart
 from utils.graphplotter import PieChart
+from utils.graphplotter import MapChart
 
 # Module species:
 from species.species import Species
