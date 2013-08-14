@@ -82,7 +82,7 @@ class GraphPlotterTool(tool_base.ToolBase):
         self._drawChart()
 
     def setChartSelection(self, 
-                          chart = u"Line chart", # Line chart, Bar chart, Scatter chart, Pie chart.
+                          chart = u"Line chart", # Line chart, Bar chart, Scatter chart, Pie chart, Map chart.
                           combined = False,
                           stacked = False,
                           y_log_scale = False):
@@ -251,7 +251,8 @@ class GraphPlotterTool(tool_base.ToolBase):
         self._charttype_list.addItems([u"Line chart",
                                        u"Bar chart",
                                        u"Scatter chart",
-                                       u"Pie chart"])
+                                       u"Pie chart",
+                                       u"Map chart"])
 #        self._charttype_list.setDisabled(True)
         self.connect(self._charttype_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._drawChart)
         #
@@ -349,6 +350,11 @@ class GraphPlotterTool(tool_base.ToolBase):
         #
         if selectedchart == u'Pie chart':
             self._current_chart = envmonlib.PieChart(self._plotdata, figure = figure)
+            self._current_chart.plotChart()        
+            self._canvas.draw()
+        #
+        if selectedchart == u'Map chart':
+            self._current_chart = envmonlib.MapChart(self._plotdata, figure = figure)
             self._current_chart.plotChart()        
             self._canvas.draw()
 

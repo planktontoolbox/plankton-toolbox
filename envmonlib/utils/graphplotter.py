@@ -27,10 +27,13 @@
 import numpy.ma
 import datetime
 import copy
+import matplotlib as mpl
 import matplotlib.dates as mpl_dates
 import matplotlib.font_manager as mpl_font_manager
+# import matplotlib.figure as mpl_figure
 import pylab # Usedfor color maps.
 import matplotlib.pyplot as pyplot # Used when not embedded plotting.
+import mpl_toolkits.basemap as basemap
 
 import envmonlib
 
@@ -990,6 +993,84 @@ class PieChart(ChartBase):
             raise
 
 
+class MapChart(ChartBase):
+    """ """
+    def __init__(self, plot_data = None, figure = None):
+        """ """
+        super(MapChart, self).__init__(plot_data, figure)
+        
+    def plotChart(self, 
+                  combined = False, 
+                  x_log_scale = False, 
+                  y_log_scale = False, 
+                  **kwargs):
+        """ """
+        try:                    
+            x_type = self._data.getPlotDataInfo()[u'x_type']
+            y_type = self._data.getPlotDataInfo()[u'y_type']
+            z_type = self._data.getPlotDataInfo()[u'z_type']
+#             # Map charts needs float values. 
+#             if not x_type in [u'float']:
+#                 envmonlib.Logging().warning(u"GraphPlotter.MapChart: Plot skipped, X-axis type not valid: " + x_type)
+#                 raise UserWarning(u"GraphPlotter.MapChart: Plot skipped, X-axis type not valid: " + x_type)
+#             if not y_type in [u'float']:
+#                 envmonlib.Logging().warning(u"GraphPlotter.MapChart: Plot skipped, Y-axis type not valid: " + y_type)
+#                 raise UserWarning(u"GraphPlotter.MapChart: Plot skipped, Y-axis type not valid: " + y_type)
+#             if not z_type in [u'integer', u'float']:
+#                 envmonlib.Logging().warning(u"GraphPlotter.MapChart: Plot skipped, Z-axis type not valid: " + z_type)
+#                 raise UserWarning(u"GraphPlotter.MapChart: Plot skipped, Z-axis type not valid: " + z_type)
+            # 
+            self._initPlotting()
+            
+            map_width_km = 1500
+            map_height_km = 1500
+            map_centre_lat = 60.0
+            map_centre_lon = 15.0
+            
+            #
+            subplot = self._figure.add_subplot(111)
+            #
+            m = basemap.Basemap(width = map_width_km * 1000,
+                                height = map_height_km * 1000,
+                                resolution = u'l', # Can be c (crude), l (low), i (intermediate), h (high), f (full) or None.
+                                projection = 'tmerc', # 'tmerc', 'aeqd', ...
+                                lat_0 = map_centre_lat,
+                                lon_0 = map_centre_lon,
+                                ax = subplot)
+            # 
+#             m.drawmapboundary(fill_color = 'aqua')
+            m.drawcoastlines(linewidth = 0.33)
+            m.drawcountries(linewidth = 0.2)
+            m.fillcontinents(
+#                              color = [0.8, 0.8, 0.8], # 'coral', 
+#                              lake_color = 'aqua',
+                             alpha = 0.5) # Transparency.
+            #
+            m.drawparallels(numpy.arange(-0,89, 2.0), linewidth = 0.125, linestyle = '--')
+            m.drawmeridians(numpy.arange(-180,180, 2.0), linewidth = 0.125, linestyle = '--')
+            #
+            plotlist = self._data.getPlotList()
+            #
+            for plotindex, plotdict in enumerate(plotlist):
+                #
+                x_array = plotdict[u'x_array']
+                y_array = plotdict[u'y_array']
+                z_array = plotdict[u'z_array']
+                #
+                x_longitude, y_latitude = m(y_array, x_array)
+                #
+                m.scatter(x_longitude, y_latitude, c = z_array, s=25, edgecolors = 'none')
+            #
+            
+#             #cb = fig.colorbar(cax=cbaxes, mappable=mappable, orientation='horizontal')            
+#             cbar = m.colorbar(ax = subplot)
+#             cbar.set_label(self._data.getPlotDataInfo()[u'z_label'], size = 'medium')
+            #
+            self._finalizePlotting()
+        #
+        except Exception as e:
+            envmonlib.Logging().warning(u"GraphPlotter.MapChart: Plot skipped: %s" % (e.args[0]))
+            raise
 
 
 #
@@ -999,6 +1080,37 @@ def graphplotter_test():
     """ """
     print("Graph plotter test...")
     #
+    graph = MapChart()
+    #
+    data = GraphPlotData(
+                title = u"Map test", 
+                x_type = u'float',
+                x_label = u'x as longitude',
+                y_type = u'float',
+                y_label = u'y as latitude',
+                z_type = u'float',
+                z_label = u'z as value')
+    data.addPlot(
+                plot_name = u"First plot", 
+                x_array = [55.0, 55.2, 55.4, 55.6],
+                y_array = [15.0, 15.1, 15.2, 15.3],
+                z_array = [10.0, 100.0, 200.0, 500.0])
+    data.addPlot(
+                plot_name = u"First plot", 
+                x_array = [58.0, 58.2, 58.4, 58.6],
+                y_array = [15.0, 15.1, 15.2, 15.3],
+                z_array = [10.0, 100.0, 200.0, 500.0])
+    data.addPlot(
+                plot_name = u"Second plot", 
+                x_array = [56.0, 56.2, 56.4, 56.6],
+                y_array = [16.0, 16.1, 16.2, 16.3],
+                z_array = [10.0, 100.0, 200.0, 500.0])
+
+    graph.setData(data)
+    graph.plotChart(combined = False, y_log_scale = True)
+
+    return
+
 #    graph = LineChart()
 #    graph = BarChart()
 #    graph = ScatterChart()
