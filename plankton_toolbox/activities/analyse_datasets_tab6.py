@@ -34,6 +34,8 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
     """ """
     def __init__(self):
         """ """
+        self._main_activity = None
+        self._analysisdata = None
         super(AnalyseDatasetsTab6, self).__init__()
         #
         self._graph_plot_data = envmonlib.GraphPlotData()
@@ -41,6 +43,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
     def setMainActivity(self, main_activity):
         """ """
         self._main_activity = main_activity
+        self._analysisdata = main_activity.getAnalysisData()
                 
     def clear(self):
         """ """
@@ -67,7 +70,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
     def update(self):
         """ """
         self.clear()
-        currentdata = self._main_activity.getCurrentData()
+        currentdata = self._analysisdata.getData()
         if currentdata:        
             # For tab "Generic graphs".        
             self._x_axis_column_list.addItems([item[u'Header'] for item in currentdata.getExportTableColumns()])
@@ -235,7 +238,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
             
 #    def _addPlot(self):
 #        """ """
-#        currentdata = self._main_activity.getCurrentData()
+#        currentdata = self._analysisdata.getData()
 #        if not currentdata:
 #            return # Can't plot from empty dataset
 #        # Show the Graph plotter tool if hidden. 
@@ -469,18 +472,18 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         #
         plotdatainfo = self._graph_plot_data.getPlotDataInfo()
         #
-        plotdatainfo[u'Title'] = u'Generic graph'
-        plotdatainfo[u'X label'] = x_selected_column if x_selected_column != u"Parameter:" else x_selected_param
-        plotdatainfo[u'X type'] = x_selected_type
-        plotdatainfo[u'X format'] = u''
+        plotdatainfo[u'title'] = u'Generic graph'
+        plotdatainfo[u'x_label'] = x_selected_column if x_selected_column != u"Parameter:" else x_selected_param
+        plotdatainfo[u'x_type'] = x_selected_type
+        plotdatainfo[u'x_format'] = u''
         #
-        plotdatainfo[u'Y label'] = y_selected_column if y_selected_column != u"Parameter:" else y_selected_param
-        plotdatainfo[u'Y type'] = y_selected_type
-        plotdatainfo[u'Y format'] = u''
+        plotdatainfo[u'y_label'] = y_selected_column if y_selected_column != u"Parameter:" else y_selected_param
+        plotdatainfo[u'y_type'] = y_selected_type
+        plotdatainfo[u'y_format'] = u''
         #
-        plotdatainfo[u'Z label'] = z_selected_column if z_selected_column != u"Parameter:" else z_selected_param
-        plotdatainfo[u'Z type'] = z_selected_type
-        plotdatainfo[u'Z format'] = u''
+        plotdatainfo[u'z_label'] = z_selected_column if z_selected_column != u"Parameter:" else z_selected_param
+        plotdatainfo[u'z_type'] = z_selected_type
+        plotdatainfo[u'z_format'] = u''
         #
         # Add plot data.
 
@@ -530,11 +533,11 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         self._graph_plot_data.addPlot(
                         plot_name = y_column + " / " + x_column, 
                          x_label = x_selected_column if x_selected_column != u"Parameter:" else x_selected_param,
-                         x_array = x_data, 
+                         x_array = x_data,
                          y_label = y_selected_column if y_selected_column != u"Parameter:" else y_selected_param,
                          y_array = y_data, 
                          z_label = z_selected_column if z_selected_column != u"Parameter:" else z_selected_param,
-                         z_array = z_data)
+                         z_array = z_data) 
         # View in Graph plotter tool.
         graphtool.setPlotData(self._graph_plot_data)
 
@@ -544,7 +547,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
     
     def _getFilteredData(self):
         """ """
-        currentdata = self._main_activity.getCurrentData()
+        currentdata = self._analysisdata.getData()
         if not currentdata:
             return # Can't plot from empty dataset
         # Selected columns.
@@ -626,7 +629,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         y_value = None
         z_value = None
         # Get data for filtering.
-        selected_dict = self._main_activity.getSelectDataDict()
+        selected_dict = self._analysisdata.getSelectDataDict()
         selected_startdate = selected_dict[u'Start date']
         selected_enddate = selected_dict[u'End date']
 #        selected_stations = selected_dict[u'Stations']

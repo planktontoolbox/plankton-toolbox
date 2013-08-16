@@ -243,7 +243,7 @@ class DatasetNode(envmonlib.DatasetBase, DataNode):
         # Header.
         header = []
         for item in self._exporttablecolumns:
-            header.append(item.get('Header', u'---'))
+            header.append(item.get('header', u'---'))
         target_dataset.setHeader(header)
         # Rows.
         for visitnode in self.getChildren():
@@ -252,14 +252,14 @@ class DatasetNode(envmonlib.DatasetBase, DataNode):
                     #  Create row based on column_info from self._exporttablecolumns.
                     row = []
                     for column_info in self._exporttablecolumns:
-                        if column_info.get('Node', u'') == 'Dataset':
-                            row.append(self.getData(column_info.get('Key', u'---')))
-                        elif column_info.get('Node', u'') == 'Visit':
-                            row.append(visitnode.getData(column_info.get('Key', u'---')))
-                        elif column_info.get('Node', u'') == 'Sample':
-                            row.append(samplenode.getData(column_info.get('Key', u'---')))
-                        elif column_info.get('Node', u'') == 'Variable':
-                            row.append(variablenode.getData(column_info.get('Key', u'---')))
+                        if column_info.get('node', u'') == 'dataset':
+                            row.append(self.getData(column_info.get('key', u'---')))
+                        elif column_info.get('node', u'') == 'visit':
+                            row.append(visitnode.getData(column_info.get('key', u'---')))
+                        elif column_info.get('node', u'') == 'sample':
+                            row.append(samplenode.getData(column_info.get('key', u'---')))
+                        elif column_info.get('node', u'') == 'variable':
+                            row.append(variablenode.getData(column_info.get('key', u'---')))
                         else:
                             row.append(u'')
                     # To target.

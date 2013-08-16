@@ -92,3 +92,7 @@ from datascreening.screening_manager import ScreeningManager
  
 # Module datareports: 
 from datareports.reports_manager import ReportsManager
+ 
+# Module dataanalysis: 
+from dataanalysis.analysisdata import AnalysisData
+from dataanalysis.aggregatedata import AggregateData 

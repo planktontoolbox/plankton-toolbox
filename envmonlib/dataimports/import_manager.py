@@ -33,13 +33,11 @@ class ImportManager(object):
     
     - First column: Node level. Content: INFO, VISIT, SAMPLE, VARIABLE, FUNCTION Visit, FUNCTION Sample, FUNCTION Variable. 
     - Second column: Key. INFO: Fixed set of key values. Other: Field name in the internal memory model.
-    - Fourth column: View format. Content:  Text, 
-                                            Integer, 
-                                            Numeric: number of shown decimals,
-                                            Boolean,
-                                            Datetime: view format, 
-                                            Date: view format, 
-                                            Time: view format.
+    - Fourth column: View format. Content:  text, 
+                                            integer, 
+                                            float: number of shown decimals,
+                                            date: view format,
+                                            datetime: view format. 
     
     """
     def __init__(self, parser_file_path, import_column, export_column):
@@ -66,12 +64,12 @@ class ImportManager(object):
         datarowsfrom = 2
         #
         for rowdict in self._importrows:
-            if rowdict[u'Node'] == u'INFO':
-                if rowdict[u'Key'] == u'Header row':
-                    headerrow = int(float(rowdict.get(u'Command', u'1')))
+            if rowdict[u'node'] == u'info':
+                if rowdict[u'key'] == u'header_row':
+                    headerrow = int(float(rowdict.get(u'command', u'1')))
                     if headerrow: headerrow -= 1
-                if rowdict[u'Key'] == u'First data row':
-                    datarowsfrom = int(float(rowdict.get(u'Command', u'2')))
+                if rowdict[u'key'] == u'first_data_row':
+                    datarowsfrom = int(float(rowdict.get(u'command', u'2')))
                     if datarowsfrom: datarowsfrom -= 1
 
         tabledataset = envmonlib.DatasetTable()
@@ -110,13 +108,13 @@ class ImportManager(object):
         datarowsfrom = 2
         #
         for rowdict in self._importrows:
-            if rowdict[u'Node'] == u'INFO':
-                if rowdict[u'Key'] == u'Excel sheet name':
+            if rowdict[u'node'] == u'info':
+                if rowdict[u'key'] == u'excel_sheet_name':
                     sheetname = rowdict.get(u'Command', None)
-                if rowdict[u'Key'] == u'Header row':
+                if rowdict[u'key'] == u'header_row':
                     headerrow = int(float(rowdict.get(u'Command', u'1')))
                     if headerrow: headerrow -= 1
-                if rowdict[u'Key'] == u'First data row':
+                if rowdict[u'key'] == u'first_data_row':
                     datarowsfrom = int(float(rowdict.get(u'Command', u'2')))
                     if datarowsfrom: datarowsfrom -= 1
 #        for rowdict in self._importrows:
@@ -197,7 +195,7 @@ class ImportManager(object):
                     nodelevel = tabledata.getDataItem(rowindex, 0)
                     key = tabledata.getDataItem(rowindex, 1)
                     viewformat = tabledata.getDataItem(rowindex, 2)
-                    self._importrows.append({u'Node': nodelevel, u'Key': key, u'View format': viewformat, u'Command': importcolumndata}) 
+                    self._importrows.append({u'node': nodelevel, u'key': key, u'view_format': viewformat, u'command': importcolumndata}) 
 #            self.setDatasetParserRows(self._importrows)
         # Create export info.
         if self._export_column:
@@ -207,8 +205,8 @@ class ImportManager(object):
                 exportcolumndata = tabledata.getDataItemByColumnName(rowindex, self._export_column)
                 if exportcolumndata:
                     nodelevel = tabledata.getDataItem(rowindex, 0)
-                    if nodelevel != u'INFO':
+                    if nodelevel != u'info':
                         key = tabledata.getDataItem(rowindex, 1)
                         viewformat = tabledata.getDataItem(rowindex, 2)
-                        self._columnsinfo.append({u'Header': exportcolumndata, u'Node': nodelevel, u'Key': key, u'View format': viewformat}) 
+                        self._columnsinfo.append({u'header': exportcolumndata, u'node': nodelevel, u'key': key, u'view_format': viewformat}) 
 #            self.setExportTableColumns(self._columnsinfo)

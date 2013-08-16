@@ -332,10 +332,9 @@ class GraphPlotterTool(tool_base.ToolBase):
             return
         # Draw selected chart.
         if selectedchart == u'Line chart':
-            if self._plotdata.getPlotDataInfo()[u'x_type'] != u'text':
-                self._current_chart = envmonlib.LineChart(self._plotdata, figure = figure)
-                self._current_chart.plotChart(combined = combined, stacked = stacked, y_log_scale = ylogscale)        
-                self._canvas.draw()
+            self._current_chart = envmonlib.LineChart(self._plotdata, figure = figure)
+            self._current_chart.plotChart(combined = combined, stacked = stacked, y_log_scale = ylogscale)        
+            self._canvas.draw()
         #
         if selectedchart == u'Bar chart':
             self._current_chart = envmonlib.BarChart(self._plotdata, figure = figure)
@@ -343,10 +342,9 @@ class GraphPlotterTool(tool_base.ToolBase):
             self._canvas.draw()
         #
         if selectedchart == u'Scatter chart':
-            if self._plotdata.getPlotDataInfo()[u'x_type'] != u'text':
-                self._current_chart = envmonlib.ScatterChart(self._plotdata, figure = figure)
-                self._current_chart.plotChart(combined = combined, y_log_scale = ylogscale)                
-                self._canvas.draw()
+            self._current_chart = envmonlib.ScatterChart(self._plotdata, figure = figure)
+            self._current_chart.plotChart(combined = combined, y_log_scale = ylogscale)                
+            self._canvas.draw()
         #
         if selectedchart == u'Pie chart':
             self._current_chart = envmonlib.PieChart(self._plotdata, figure = figure)

@@ -44,9 +44,9 @@ class FormatSingleFile(envmonlib.ParsedFormat):
         #
         try:
             for parserrow in datasetparserrows:
-                parsernode = parserrow.get(u'Node', u'') 
-                parserkey = parserrow.get(u'Key', u'') 
-                parsercommand = parserrow.get(u'Command', u'')
+                parsernode = parserrow.get(u'node', u'') 
+                parserkey = parserrow.get(u'key', u'') 
+                parsercommand = parserrow.get(u'command', u'')
                 if parsercommand:         
                     #
 #                    parserkey = self.replaceMethodKeywords(parserkey, parsernode)    
@@ -55,45 +55,45 @@ class FormatSingleFile(envmonlib.ParsedFormat):
                     parserkey = unicode(self.replaceMethodKeywords(parserkey, parsernode))    
                     parsercommand = unicode(self.replaceMethodKeywords(parsercommand, parsernode))    
                     #
-                    if parsernode == u'Dataset':
+                    if parsernode == u'dataset':
                         commandstring = u"dataset.addData('" + parserkey + u"', " + parsercommand + u")"
                         self.appendParserCommand(commandstring)
-                    if parsernode == u'Visit':
+                    if parsernode == u'visit':
                         commandstring = u"currentvisit.addData('" + parserkey + u"', " + parsercommand + u")"
                         self.appendParserCommand(commandstring)
-                    elif parsernode == u'Sample':
+                    elif parsernode == u'sample':
                         commandstring = u"currentsample.addData('" + parserkey + u"', " + parsercommand + u")"
                         self.appendParserCommand(commandstring)
-                    elif parsernode == u'Variable':
+                    elif parsernode == u'variable':
                         commandstring = u"currentvariable.addData('" + parserkey + u"', " + parsercommand + u")"
                         self.appendParserCommand(commandstring)
                     #
-                    elif (parsernode == u'INFO') and (parserkey == u'Visit key'):
+                    elif (parsernode == u'info') and (parserkey == u'visit_key'):
                         commandstring = u"keystring = " + parsercommand
                         visitkeycommand = compile(commandstring, '', 'exec')
-                    elif (parsernode == u'INFO') and (parserkey == u'Sample key'):
+                    elif (parsernode == u'info') and (parserkey == u'sample_key'):
                         commandstring = u"keystring = " + parsercommand
                         samplekeycommand = compile(commandstring, '', 'exec')
 #                    elif (parsernode == u'INFO') and (parserkey == u'Variable key'):
 #                        commandstring = u"keystring = " + parsercommand
 #                        variablekeycommand = compile(commandstring, '', 'exec')
                     #
-                    elif parsernode == u'FUNCTION Dataset':
+                    elif parsernode == u'function_dataset':
 #                        parserkey = parserkey.replace(u'()', u'') # Remove () from function name and add later.
 #                        commandstring = u"self._" + parserkey + u"(dataset, "  + parsercommand + u")"
                         commandstring = parserkey + parsercommand
                         self.appendParserCommand(commandstring)
-                    elif parsernode == u'FUNCTION Visit':
+                    elif parsernode == u'function_visit':
 #                        parserkey = parserkey.replace(u'()', u'') # Remove () from function name and add later.
 #                        commandstring = u"self._" + parserkey + u"(currentvisit, "  + parsercommand + u")"
                         commandstring = parserkey + parsercommand
                         self.appendParserCommand(commandstring)
-                    elif parsernode == u'FUNCTION Sample':
+                    elif parsernode == u'function_sample':
 #                        parserkey = parserkey.replace(u'()', u'') # Remove () from function name and add later.
 #                        commandstring = u"self._" + parserkey + u"(currentsample, "  + parsercommand + u")"
                         commandstring = parserkey + parsercommand
                         self.appendParserCommand(commandstring)
-                    elif parsernode == u'FUNCTION Variable':
+                    elif parsernode == u'function_variable':
                         parserkey = parserkey.replace(u'()', u'') # Remove () from function name and add later.
 #                        commandstring = u"self._" + parserkey + u"(currentvariable, "  + parsercommand + u")"
 #                        commandstring = parserkey + u"(currentvariable, "  + parsercommand + u")"
@@ -138,7 +138,7 @@ class FormatSingleFile(envmonlib.ParsedFormat):
                     # === Parse row and add fields on nodes. ===
                     for cmd in self._parsercommands:
                         try:
-                            exec(cmd[u'Command'])
+                            exec(cmd[u'command'])
                         except Exception as e:
                             envmonlib.Logging().warning(u"Failed to parse command: %s" % (e.args[0]) + 
                                                         "- Command string: %s" % (cmd[u'Command string']))

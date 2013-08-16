@@ -34,11 +34,14 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
     """ """
     def __init__(self):
         """ """
+        self._main_activity = None
+        self._analysisdata = None
         super(AnalyseDatasetsTab5, self).__init__()
 
     def setMainActivity(self, main_activity):
         """ """
         self._main_activity = main_activity
+        self._analysisdata = main_activity.getAnalysisData()
                 
     def clear(self):
         """ """
@@ -47,7 +50,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
     def update(self):
         """ """
         self.clear()
-        currentdata = self._main_activity.getCurrentData()
+        currentdata = self._analysisdata.getData()
         if currentdata:        
             # Search for all parameters in current data.
             parameterset = set()
@@ -106,7 +109,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         
     def _addPlot_1(self):
         """ """
-        currentdata = self._main_activity.getCurrentData()
+        currentdata = self._analysisdata.getData()
         if not currentdata:        
             return
         #
@@ -175,7 +178,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
     def _addPlot_2(self):
         """ """
 
-        selected_dict = self._main_activity.getSelectDataDict()
+        selected_dict = self._analysisdata.getSelectDataDict()
         selected_startdate = selected_dict[u'Start date']
         selected_enddate = selected_dict[u'End date']
 #        selected_stations = selected_dict[u'Stations']
@@ -184,7 +187,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         selected_taxon = selected_dict[u'Taxon']
         selected_trophy = selected_dict[u'Trophy']
         
-        currentdata = self._main_activity.getCurrentData()
+        currentdata = self._analysisdata.getData()
         if not currentdata:        
             return
         #
@@ -301,7 +304,8 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         taxon_list = sorted(taxon_set)
         #
         plotdata = envmonlib.GraphPlotData(
-                                x_type = u'String',
+                                x_type = u'text',
+                                y_type = u'float',
                                 title = u"Taxa per station and date", 
                                 x_label = u'Station',
                                 y_label = selectedparameter)
@@ -352,7 +356,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         
     def _addPlot(self):
         """ """
-        currentdata = self._main_activity.getCurrentData()
+        currentdata = self._analysisdata.getData()
         if not currentdata:
             return # Can't plot from empty dataset
         #
@@ -364,9 +368,9 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         # Selected parameters.
         x_param = None
         y_param = None
-        if x_column == u"Parameter:":
+        if x_column == u"parameter:":
             x_param = unicode(self._x_axis_parameter_list.currentText())
-        if y_column == u"Parameter:":
+        if y_column == u"parameter:":
             y_param = unicode(self._y_axis_parameter_list.currentText())
         # Check exports columns backwards.
         x_visit_key = None
@@ -375,24 +379,24 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         y_visit_key = None
         y_sample_key = None                      
         y_variable_key = None
-        if x_column != u"Parameter:":
+        if x_column != u"parameter:":
             for export_info in currentdata.getExportTableColumns():
-                if export_info.get('Header', u'') == x_column:
-                    if export_info.get('Node', u'') == 'Visit':
-                        x_visit_key =  export_info.get('Key', None)
-                    elif export_info.get('Node', u'') == 'Sample':
-                        x_sample_key =  export_info.get('Key', None)                        
-                    elif export_info.get('Node', u'') == 'Variable':
-                        x_variable_key =  export_info.get('Key', None)
-        if y_column != u"Parameter:":
+                if export_info.get('header', u'') == x_column:
+                    if export_info.get('node', u'') == 'visit':
+                        x_visit_key =  export_info.get('key', None)
+                    elif export_info.get('node', u'') == 'sample':
+                        x_sample_key =  export_info.get('key', None)                        
+                    elif export_info.get('node', u'') == 'variable':
+                        x_variable_key =  export_info.get('key', None)
+        if y_column != u"parameter:":
             for export_info in currentdata.getExportTableColumns():
-                if export_info.get('Header', u'') == y_column:
-                    if export_info.get('Node', u'') == 'Visit':
-                        y_visit_key =  export_info.get('Key', None)
-                    elif export_info.get('Node', u'') == 'Sample':
-                        y_sample_key =  export_info.get('Key', None)                        
-                    elif export_info.get('Node', u'') == 'Variable':
-                        y_variable_key =  export_info.get('Key', None)
+                if export_info.get('header', u'') == y_column:
+                    if export_info.get('node', u'') == 'visit':
+                        y_visit_key =  export_info.get('key', None)
+                    elif export_info.get('node', u'') == 'sample':
+                        y_sample_key =  export_info.get('key', None)                        
+                    elif export_info.get('node', u'') == 'variable':
+                        y_variable_key =  export_info.get('key', None)
         
         # Extract data.
         x_data = []
@@ -402,7 +406,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         #
         
         
-        selected_dict = self._main_activity.getSelectDataDict()
+        selected_dict = self._analysisdata.getSelectDataDict()
         selected_startdate = selected_dict[u'Start date']
         selected_enddate = selected_dict[u'End date']
 #        selected_stations = selected_dict[u'Stations']

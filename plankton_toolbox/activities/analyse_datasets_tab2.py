@@ -34,11 +34,14 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
     """ """
     def __init__(self):
         """ """
+        self._main_activity = None
+        self._analysisdata = None
         super(AnalyseDatasetsTab2, self).__init__()
 
     def setMainActivity(self, main_activity):
         """ """
         self._main_activity = main_activity
+        self._analysisdata = main_activity.getAnalysisData()
                 
     def clear(self):
         """ """
@@ -48,10 +51,10 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
     def update(self):
         """ """
         self.clear()
-        currentdata = self._main_activity.getCurrentData()
+        currentdata = self._analysisdata.getData()
         if currentdata:        
             # For tab "Generic graphs".        
-            self._column_list.addItems([item[u'Header'] for item in currentdata.getExportTableColumns()])
+            self._column_list.addItems([item[u'header'] for item in currentdata.getExportTableColumns()])
             #  Make combo-boxes visible.
             self._column_list.setEnabled(True)
 
@@ -110,7 +113,7 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
 
     def _updateColumnContent(self, selected_row):
         """ """
-        currentdata = self._main_activity.getCurrentData()
+        currentdata = self._analysisdata.getData()
         if not currentdata:
             self._content_listview.clear()
             return # Empty data.
@@ -121,13 +124,13 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
         nodelevel = u''
         key = u''
         for info_dict in currentdata.getExportTableColumns():
-            if info_dict[u'Header'] == selectedcolumn:
-                nodelevel = info_dict[u'Node']
-                key = info_dict[u'Key']
+            if info_dict[u'header'] == selectedcolumn:
+                nodelevel = info_dict[u'node']
+                key = info_dict[u'key']
                 break # Break loop.
         #
         for visitnode in currentdata.getChildren():
-            if nodelevel == u'Visit':
+            if nodelevel == u'visit':
                 if key in visitnode.getDataDict().keys():
                     columncontent_set.add(unicode(visitnode.getData(key)))
                 else:
@@ -135,7 +138,7 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
                 continue    
             #
             for samplenode in visitnode.getChildren():
-                if nodelevel == u'Sample':
+                if nodelevel == u'sample':
                     if key in samplenode.getDataDict().keys():
                         columncontent_set.add(unicode(samplenode.getData(key)))
                     else:
@@ -143,7 +146,7 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
                     continue    
                 #
                 for variablenode in samplenode.getChildren():
-                    if nodelevel == u'Variable':
+                    if nodelevel == u'variable':
                         if key in variablenode.getDataDict().keys():
                             columncontent_set.add(unicode(variablenode.getData(key)))
                         else:
@@ -159,7 +162,7 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
         
 #        # TODO: Mostly the same as removeData()
 #        
-#        currentdata = self._main_activity.getCurrentData()
+#        currentdata = self._analysisdata.getData()
 #        if not currentdata:
 #            self._content_listview.clear()
 #            return # Empty data.
@@ -170,36 +173,36 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
 #
 #        # Search for export column corresponding model element.
 #        for info_dict in currentdata.getExportTableColumns():
-#            if info_dict[u'Header'] == selectedcolumn:
-#                nodelevel = info_dict[u'Node']
-#                key = info_dict[u'Key']
+#            if info_dict[u'header'] == selectedcolumn:
+#                nodelevel = info_dict[u'node']
+#                key = info_dict[u'key']
 #                break # Break loop.
 #        #
 #        for visitnode in currentdata.getChildren()[:]:
-#            if nodelevel == u'Visit':
+#            if nodelevel == u'visit':
 #                if key in visitnode.getDataDict().keys():
 #                    if visitnode.getData(key) in selectedcontent:
 #                        currentdata.removeChild(visitnode)
 #                        continue
 #            #
 #            for samplenode in visitnode.getChildren()[:]:
-#                if nodelevel == u'Sample':
+#                if nodelevel == u'sample':
 #                    if key in samplenode.getDataDict().keys():
 #                        if samplenode.getData(key) in selectedcontent:
 #                            visitnode.removeChild(samplenode)
 #                            continue
 #                #
 #                for variablenode in samplenode.getChildren()[:]:
-#                    if nodelevel == u'Variable':
+#                    if nodelevel == u'variable':
 #                        if key in variablenode.getDataDict().keys():
 #                            if variablenode.getData(key) in selectedcontent:
 #                                samplenode.removeChild(variablenode)
 #        #
-#        self._main_activity.updateCurrentData()    
+#        self._main_activity.updateAnalysisData()    
 
     def _removeData(self, keep_data = False):
         """ """
-        currentdata = self._main_activity.getCurrentData()
+        currentdata = self._analysisdata.getData()
         if not currentdata:
             self._content_listview.clear()
             return # Empty data.
@@ -213,13 +216,13 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
         
         # Search for export column corresponding model element.
         for info_dict in currentdata.getExportTableColumns():
-            if info_dict[u'Header'] == selectedcolumn:
-                nodelevel = info_dict[u'Node']
-                key = info_dict[u'Key']
+            if info_dict[u'header'] == selectedcolumn:
+                nodelevel = info_dict[u'node']
+                key = info_dict[u'key']
                 break # Break loop.
         #
         for visitnode in currentdata.getChildren()[:]:
-            if nodelevel == u'Visit':
+            if nodelevel == u'visit':
                 if key in visitnode.getDataDict().keys():
                     if visitnode.getData(key) in selectedcontent:
                         currentdata.removeChild(visitnode)
@@ -231,7 +234,7 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
                         continue
             #
             for samplenode in visitnode.getChildren()[:]:
-                if nodelevel == u'Sample':
+                if nodelevel == u'sample':
                     if key in samplenode.getDataDict().keys():
                         if samplenode.getData(key) in selectedcontent:
                             visitnode.removeChild(samplenode)
@@ -243,7 +246,7 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
                             continue
                 #
                 for variablenode in samplenode.getChildren()[:]:
-                    if nodelevel == u'Variable':
+                    if nodelevel == u'variable':
                         if key in variablenode.getDataDict().keys():
                             if variablenode.getData(key) in selectedcontent:
                                 samplenode.removeChild(variablenode)
@@ -254,5 +257,5 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
                                 continue
                                 
         #
-        self._main_activity.updateCurrentData()    
+        self._main_activity.updateAnalysisData()    
 

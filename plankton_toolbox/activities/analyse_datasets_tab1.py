@@ -27,7 +27,7 @@
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 #import datetime
-import copy
+# import copy
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 import envmonlib
@@ -36,11 +36,14 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
     """ """
     def __init__(self):
         """ """
+        self._main_activity = None
+        self._analysisdata = None
         super(AnalyseDatasetsTab1, self).__init__()
 
     def setMainActivity(self, main_activity):
         """ """
         self._main_activity = main_activity
+        self._analysisdata = main_activity.getAnalysisData()
                 
     def clear(self):
         """ """
@@ -93,58 +96,58 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
         self._loaded_datasets_model.clear()        
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
             item = QtGui.QStandardItem(u"Dataset-" + unicode(rowindex) + 
-                                       u".   Source: " + dataset.getMetadata(u'File name'))
+                                       u".   Source: " + dataset.getMetadata(u'file_name'))
             item.setCheckState(QtCore.Qt.Unchecked)
             item.setCheckable(True)
             self._loaded_datasets_model.appendRow(item)
 
     def _clearCurrentData(self):
         """ """
-        self._main_activity.setCurrentData(None)    
+        self._analysisdata.setData(None)    
 
     def _useSelectedDatasets(self):
         """ """
-        try:
-            # Clear current data.
-            self._clearCurrentData()    
-            # Check if all selected datasets contains the same columns.
-            compareheaders = None
-            for rowindex in range(self._loaded_datasets_model.rowCount()):
-                item = self._loaded_datasets_model.item(rowindex, 0)
-                if item.checkState() == QtCore.Qt.Checked:
-                    dataset = envmonlib.Datasets().getDatasets()[rowindex]
-                    if compareheaders == None:
-                        compareheaders = dataset.getExportTableColumns()
-                    else:
-                        newheader = dataset.getExportTableColumns()
-                        if len(compareheaders)==len(newheader) and \
-                           all(compareheaders[i] == newheader[i] for i in range(len(compareheaders))):
-                            pass # OK since export columns are equal.
-                        else:
-                            envmonlib.Logging().log("Can't use datasets with different export columns. Please try again.")
-                            raise UserWarning("Can't use datasets with different export columns. Please try again.")
-            # Concatenate selected datasets.        
-            dataset = None
-            for rowindex in range(self._loaded_datasets_model.rowCount()):
-                item = self._loaded_datasets_model.item(rowindex, 0)
-                if item.checkState() == QtCore.Qt.Checked:        
-                #             
-                    if dataset == None:
-                        # Deep copy of the first dataset.
-                        dataset = copy.deepcopy(envmonlib.Datasets().getDatasets()[rowindex])
-                    else:
-                        # Append top node data and children. Start with a deep copy.
-                        tmp_dataset = copy.deepcopy(envmonlib.Datasets().getDatasets()[rowindex])
-                        for key, value in dataset.getDataDict():
-                            dataset.addData(key, value)
-                        for child in tmp_dataset.getChildren():
-                            dataset.addChild(child)
-            # Check.
-            if (dataset == None) or (len(dataset.getChildren()) == 0):
-                envmonlib.Logging().log("Selected datasets are empty. Please try again.")
-                raise UserWarning("Selected datasets are empty. Please try again.")
-            # Use the concatenated datasets as current data.
-            self._main_activity.setCurrentData(dataset)    
-        except UserWarning, e:
-            QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
+#         try:
+#             # Clear current data.
+#             self._clearCurrentData()    
+#             # Check if all selected datasets contains the same columns.
+#             compareheaders = None
+#             for rowindex in range(self._loaded_datasets_model.rowCount()):
+#                 item = self._loaded_datasets_model.item(rowindex, 0)
+#                 if item.checkState() == QtCore.Qt.Checked:
+#                     dataset = envmonlib.Datasets().getDatasets()[rowindex]
+#                     if compareheaders == None:
+#                         compareheaders = dataset.getExportTableColumns()
+#                     else:
+#                         newheader = dataset.getExportTableColumns()
+#                         if len(compareheaders)==len(newheader) and \
+#                            all(compareheaders[i] == newheader[i] for i in range(len(compareheaders))):
+#                             pass # OK since export columns are equal.
+#                         else:
+#                             envmonlib.Logging().log("Can't use datasets with different export columns. Please try again.")
+#                             raise UserWarning("Can't use datasets with different export columns. Please try again.")
+#             # Concatenate selected datasets.        
+#             dataset = None
+#             for rowindex in range(self._loaded_datasets_model.rowCount()):
+#                 item = self._loaded_datasets_model.item(rowindex, 0)
+#                 if item.checkState() == QtCore.Qt.Checked:        
+#                 #             
+#                     if dataset == None:
+#                         # Deep copy of the first dataset.
+#                         dataset = copy.deepcopy(envmonlib.Datasets().getDatasets()[rowindex])
+#                     else:
+#                         # Append top node data and children. Start with a deep copy.
+#                         tmp_dataset = copy.deepcopy(envmonlib.Datasets().getDatasets()[rowindex])
+#                         for key, value in dataset.getDataDict():
+#                             dataset.addData(key, value)
+#                         for child in tmp_dataset.getChildren():
+#                             dataset.addChild(child)
+#             # Check.
+#             if (dataset == None) or (len(dataset.getChildren()) == 0):
+#                 envmonlib.Logging().log("Selected datasets are empty. Please try again.")
+#                 raise UserWarning("Selected datasets are empty. Please try again.")
+#             # Use the concatenated datasets as current data.
+#             self._analysisdata.setData(dataset)    
+#         except UserWarning, e:
+#             QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
 

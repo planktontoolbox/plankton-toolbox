@@ -86,9 +86,9 @@ class DevTestTool(tool_base.ToolBase):
         
         self._parent.showActivityByName(u'Load datasets')
         
-       # Set up for import file parsing.
+        # Set up for import file parsing.
         impMgr = envmonlib.ImportManager(u'C:/Users/arnold/Desktop/python/w_plankton_toolbox/p_plankton_toolbox/src/toolbox_data/parsers/' + 
-                                         u'sharkweb_phytoplankton_parser.xlsx',
+                                         u'1_sharkweb_phytoplankton_parser.xlsx',
                                          u'PP Sharkweb download en',
                                          u'PP export 1')
         # Import and parse file.
@@ -98,10 +98,10 @@ class DevTestTool(tool_base.ToolBase):
         # Add metadata related to imported file.
         dataset.addMetadata(u'Parser', u'C:/Users/arnold/Desktop/python/w_plankton_toolbox/p_plankton_toolbox/src/toolbox_data/parsers/' + 
                                        u'sharkweb_phytoplankton_parser.xlsx')
-        dataset.addMetadata(u'File name', u'TEST')
-        dataset.addMetadata(u'File path', u'TEST')
-        dataset.addMetadata(u'Import column', u'PP Sharkweb download en')
-        dataset.addMetadata(u'Export column', u'PP export 1')
+        dataset.addMetadata(u'file_name', u'TEST')
+        dataset.addMetadata(u'file_path', u'TEST')
+        dataset.addMetadata(u'import_column', u'PP Sharkweb download en')
+        dataset.addMetadata(u'export_column', u'PP export 1')
         toolbox_datasets.ToolboxDatasets().addDataset(dataset)
         
         

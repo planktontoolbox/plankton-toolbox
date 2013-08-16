@@ -188,11 +188,11 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             self._textfile_exportcolumn_list.clear()
             header = tabledata.getHeader()
             for row in tabledata.getRows():
-                if (row[0] == u"INFO") and (row[1] == u"Column type"):
+                if (row[0] == u"info") and (row[1] == u"column_type"):
                     for index, item in enumerate(row):
-                        if item == u"Import":
+                        if item == u"import":
                             self._textfile_importcolumn_list.addItems([header[index]])
-                        if item == u"Export":
+                        if item == u"export":
                             self._textfile_exportcolumn_list.addItems([header[index]])
         else:
             self._textfile_importcolumn_list.clear()
@@ -214,7 +214,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         for index, headeritem in enumerate(header):
             if headeritem == selectedimportcolumn:
                 for row in tabledata.getRows():
-                    if (row[0] == u"INFO") and (row[1] == u"Character encoding"):
+                    if (row[0] == u"info") and (row[1] == u"character_encoding"):
                         if row[index] and (row[index] in self._encodings_list):
                             self._textfile_encoding_list.setCurrentIndex(self._encodings_list.index(row[index]))
 
@@ -252,11 +252,11 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                     # Import and parse file.
                     dataset = impMgr.importTextFile(filename, textfileencoding)
                     # Add metadata related to imported file.
-                    dataset.addMetadata(u'Parser', self._parser_path + unicode(self._textfile_parser_list.currentText()))
-                    dataset.addMetadata(u'File name', os.path.basename(filename))
-                    dataset.addMetadata(u'File path', filename)
-                    dataset.addMetadata(u'Import column', unicode(self._textfile_importcolumn_list.currentText()))
-                    dataset.addMetadata(u'Export column', unicode(self._textfile_exportcolumn_list.currentText()))
+                    dataset.addMetadata(u'parser', self._parser_path + unicode(self._textfile_parser_list.currentText()))
+                    dataset.addMetadata(u'file_name', os.path.basename(filename))
+                    dataset.addMetadata(u'file_path', filename)
+                    dataset.addMetadata(u'import_column', unicode(self._textfile_importcolumn_list.currentText()))
+                    dataset.addMetadata(u'export_column', unicode(self._textfile_exportcolumn_list.currentText()))
                     # Add to dataset list. (Note:ToolboxDatasets is a wrapper containing the 'datasetListChanged'-signal).
                     toolbox_datasets.ToolboxDatasets().addDataset(dataset)
             #
@@ -341,11 +341,11 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             self._excel_exportcolumn_list.clear()
             header = tabledata.getHeader()
             for row in tabledata.getRows():
-                if (row[0] == u"INFO") and (row[1] == u"Column type"):
+                if (row[0] == u"info") and (row[1] == u"column_type"):
                     for index, item in enumerate(row):
-                        if item == u"Import":
+                        if item == u"import":
                             self._excel_importcolumn_list.addItems([header[index]])
-                        if item == u"Export":
+                        if item == u"export":
                             self._excel_exportcolumn_list.addItems([header[index]])
         else:
             self._excel_importcolumn_list.clear()
@@ -382,11 +382,11 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                     # Import and parse file.
                     dataset = impMgr.importExcelFile(filename)
                     # Add metadata related to imported file.
-                    dataset.addMetadata(u'Parser', self._parser_path + unicode(self._excel_parser_list.currentText()))
-                    dataset.addMetadata(u'File name', os.path.basename(filename))
-                    dataset.addMetadata(u'File path', filename)
-                    dataset.addMetadata(u'Import column', unicode(self._excel_importcolumn_list.currentText()))
-                    dataset.addMetadata(u'Export column', unicode(self._excel_exportcolumn_list.currentText()))
+                    dataset.addMetadata(u'parser', self._parser_path + unicode(self._excel_parser_list.currentText()))
+                    dataset.addMetadata(u'file_name', os.path.basename(filename))
+                    dataset.addMetadata(u'file_path', filename)
+                    dataset.addMetadata(u'import_column', unicode(self._excel_importcolumn_list.currentText()))
+                    dataset.addMetadata(u'export_column', unicode(self._excel_exportcolumn_list.currentText()))
                     # Add to dataset list. (Note:ToolboxDatasets is a wrapper containing the 'datasetListChanged'-signal).
                     toolbox_datasets.ToolboxDatasets().addDataset(dataset)
         #
@@ -489,11 +489,11 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                 [u'Dataset-' + unicode(rowindex),
                  datasettype,
                  contentinfo,
-                 dataset.getMetadata(u'File name'),
-                 dataset.getMetadata(u'File path'),
-                 dataset.getMetadata(u'Parser'),
-                 dataset.getMetadata(u'Import column'),
-                 dataset.getMetadata(u'Export column')])
+                 dataset.getMetadata(u'file_name'),
+                 dataset.getMetadata(u'file_path'),
+                 dataset.getMetadata(u'parser'),
+                 dataset.getMetadata(u'import_column'),
+                 dataset.getMetadata(u'export_column')])
             #
         self._datasets_table.tablemodel.reset()
         self._datasets_table.resizeColumnsToContents()
