@@ -33,11 +33,14 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
     """ """
     def __init__(self):
         """ """
+        self._main_activity = None
+        self._analysisdata = None
         super(AnalyseDatasetsTab3, self).__init__()
 
     def setMainActivity(self, main_activity):
         """ """
         self._main_activity = main_activity
+        self._analysisdata = main_activity.getAnalysisData()
 
     def clear(self):
         """ """
@@ -126,7 +129,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
 #            if self._aggregate_rank_list.currentIndex() == 0:
 #                envmonlib.Logging().log("Taxon level is not selected. Please try again.")
 #                raise UserWarning("Taxon level is not selected. Please try again.")
-            if not self._main_activity.getCurrentData():
+            if not self._analysisdata.getData():
                 envmonlib.Logging().log("No data is selected for analysis. Please try again.")
                 raise UserWarning("No data is selected for analysis. Please try again.")                
             #
@@ -134,7 +137,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             selected_trophy_list = self._trophy_listview.getSelectedDataList()
             selected_trophy_text = u'-'.join(selected_trophy_list) 
             #
-            for visitnode in self._main_activity.getCurrentData().getChildren(): 
+            for visitnode in self._analysisdata.getData().getChildren(): 
                 for samplenode in visitnode.getChildren():
                     aggregatedvariables = {}
                     for variablenode in samplenode.getChildren():
@@ -187,13 +190,13 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                         # Add taxon class based on taxon name.
                         newvariable.addData(u'Class', envmonlib.Species().getTaxonValue(newtaxon, "Class"))
             #
-            self._main_activity.updateCurrentData()    
+            self._main_activity.updateAnalysisData()    
         except UserWarning, e:
             QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
 
     def _updateSelectDataAlternatives(self):
         """ """
-        currentdata = self._main_activity.getCurrentData()
+        currentdata = self._analysisdata.getData()
         if not currentdata:
             return # Empty data.
         #
@@ -209,7 +212,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
     def _addMissingTaxa(self):
         """ """
         try:
-            currentdata = self._main_activity.getCurrentData()
+            currentdata = self._analysisdata.getData()
             if not currentdata:        
                 return
             # Step 1: Create lists of taxa (name and trophy) and parameters (parameter and unit).
@@ -256,7 +259,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                             variable.addData(u"Value", u'0.0')
                             variable.addData(u"Unit", itempairs[0][1])
             #
-            self._main_activity.updateCurrentData()    
+            self._main_activity.updateAnalysisData()    
         except UserWarning, e:
             QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
 

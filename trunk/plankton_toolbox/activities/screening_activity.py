@@ -254,7 +254,7 @@ class ScreeningActivity(activity_base.ActivityBase):
             columns_set = set()
             for dataset in toolbox_datasets.ToolboxDatasets().getDatasets():
                 for column in dataset.getExportTableColumns():
-                    columns_set.add(column[u'Header']) 
+                    columns_set.add(column[u'header']) 
             #    
             self._column_list.addItems(sorted(columns_set))
             self._column_list.setEnabled(True)
@@ -276,16 +276,16 @@ class ScreeningActivity(activity_base.ActivityBase):
         key = u''
         for dataset in datasets:
             for info_dict in dataset.getExportTableColumns():
-                if info_dict[u'Header'] == selectedcolumn:
-                    nodelevel = info_dict[u'Node']
-                    key = info_dict[u'Key']
+                if info_dict[u'header'] == selectedcolumn:
+                    nodelevel = info_dict[u'node']
+                    key = info_dict[u'key']
                     break # Break loop.
             if nodelevel:
                 break # Also break next loop.
         #
         for dataset in datasets:
             for visitnode in dataset.getChildren():
-                if nodelevel == u'Visit':
+                if nodelevel == u'visit':
                     if key in visitnode.getDataDict().keys():
                         columncontent_set.add(unicode(visitnode.getData(key)))
                     else:
@@ -293,7 +293,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                     continue    
                 #
                 for samplenode in visitnode.getChildren():
-                    if nodelevel == u'Sample':
+                    if nodelevel == u'sample':
                         if key in samplenode.getDataDict().keys():
                             columncontent_set.add(unicode(samplenode.getData(key)))
                         else:
@@ -301,7 +301,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                         continue    
                     #
                     for variablenode in samplenode.getChildren():
-                        if nodelevel == u'Variable':
+                        if nodelevel == u'variable':
                             if key in variablenode.getDataDict().keys():
                                 columncontent_set.add(unicode(variablenode.getData(key)))
                             else:
@@ -377,7 +377,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                 for visitnode in dataset.getChildren():
                     for samplenode in visitnode.getChildren():
                         for variablenode in samplenode.getChildren():
-                            parameter_set.add(variablenode.getData(u"Parameter"))
+                            parameter_set.add(variablenode.getData(u"parameter"))
             self._parameter_list.setList(sorted(parameter_set))
 
     def _plotScreening(self):
@@ -403,14 +403,14 @@ class ScreeningActivity(activity_base.ActivityBase):
         yarray = []
         unit_set = set() # In case of different units on the same parameter.
         #
-        if datasets and (len(datasets) > 0):        
+        if datasets and (len(datasets) > 0):
             for dataset in toolbox_datasets.ToolboxDatasets().getDatasets():
                 for visitnode in dataset.getChildren():
                     for samplenode in visitnode.getChildren():
                         for variablenode in samplenode.getChildren():
-                            if variablenode.getData(u"Parameter") == parameter:
-                                unit_set.add(variablenode.getData(u"Unit"))
-                                value = variablenode.getData(u"Value")
+                            if variablenode.getData(u"parameter") == parameter:
+                                unit_set.add(variablenode.getData(u"unit"))
+                                value = variablenode.getData(u"value")
                                 yarray.append(value)                  
         #
         units = u' --- '.join(sorted(unit_set))

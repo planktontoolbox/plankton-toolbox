@@ -47,9 +47,9 @@ class ParsedFormat(envmonlib.FormatBase):
         command = command.replace(u'$Sizeclass(', u'self._sizeclassByKey(')
         command = command.replace(u'$PlanktonGroup(', u'self._planktonGroup(')
         #
-        if node_level == u'FUNCTION Sample':
+        if node_level == u'function_sample':
             command = command.replace(u'$CreateVariable(', u'self._createVariable(currentsample, ')
-        if node_level == u'FUNCTION Variable':
+        if node_level == u'function_variable':
             command = command.replace(u'$CopyVariable(', u'self._copyVariable(currentvariable, ')
         ### TODO: Also replace:
         # $Text(   --> self._asText(
@@ -68,8 +68,8 @@ class ParsedFormat(envmonlib.FormatBase):
     def appendParserCommand(self, command_string):
         """ """
         commanddict = {}
-        commanddict[u'Command string'] = command_string
-        commanddict[u'Command'] = compile(command_string, '', 'exec')
+        commanddict[u'command_string'] = command_string
+        commanddict[u'command'] = compile(command_string, '', 'exec')
         self._parsercommands.append(commanddict)
     
     def _asText(self, column_name):
@@ -142,7 +142,7 @@ class ParsedFormat(envmonlib.FormatBase):
     def _toStation(self, current_node, station_name, **kwargs):
         """ """
         # TODO: For test:
-        current_node.addData(u'Station name', station_name)
+        current_node.addData(u'station_name', station_name)
 
     def _toPosition(self, current_node, latitude, longitude, **kwargs):
         """ """
@@ -155,33 +155,33 @@ class ParsedFormat(envmonlib.FormatBase):
             current_node.addChild(newsample)
             variable = envmonlib.VariableNode()
             newsample.addChild(variable)
-            variable.addData(u'Parameter', kwargs[u'p'])    
-            variable.addData(u'Value', kwargs[u'v'])
-            #variable.addData(u'Value float', kwargs[u'v'])    
-            variable.addData(u'Unit', kwargs[u'u'])    
+            variable.addData(u'parameter', kwargs[u'p'])    
+            variable.addData(u'value', kwargs[u'v'])
+            #variable.addData(u'value_float', kwargs[u'v'])    
+            variable.addData(u'unit', kwargs[u'u'])    
         if isinstance(current_node, envmonlib.SampleNode):
             variable = envmonlib.VariableNode()
             current_node.addChild(variable)
-            variable.addData(u'Parameter', kwargs[u'p'])    
-            variable.addData(u'Value', kwargs[u'v'])    
-            #variable.addData(u'Value float', kwargs[u'v'])    
-            variable.addData(u'Unit', kwargs[u'u'])    
+            variable.addData(u'parameter', kwargs[u'p'])    
+            variable.addData(u'value', kwargs[u'v'])    
+            #variable.addData(u'value_float', kwargs[u'v'])    
+            variable.addData(u'unit', kwargs[u'u'])    
 
     def _copyVariable(self, current_node, **kwargs):
         """ """
         if isinstance(current_node, envmonlib.VariableNode):
             variable = current_node.clone()
-            variable.addData(u'Parameter', kwargs[u'p'])    
-            variable.addData(u'Value', kwargs[u'v'])    
-            #variable.addData(u'Value float', kwargs[u'v'])    
-            variable.addData(u'Unit', kwargs[u'u'])    
+            variable.addData(u'parameter', kwargs[u'p'])    
+            variable.addData(u'value', kwargs[u'v'])    
+            #variable.addData(u'value_float', kwargs[u'v'])    
+            variable.addData(u'unit', kwargs[u'u'])    
 
     def _modifyVariable(self, current_node, **kwargs):
         """ """
         if isinstance(current_node, envmonlib.VariableNode):
-            current_node.addData(u'Parameter', kwargs[u'p'])    
-            current_node.addData(u'Value', kwargs[u'v'])
-            #current_node.addData(u'Value float', kwargs[u'v'])    
-            current_node.addData(u'Unit', kwargs[u'u'])    
+            current_node.addData(u'parameter', kwargs[u'p'])    
+            current_node.addData(u'value', kwargs[u'v'])
+            #current_node.addData(u'value_float', kwargs[u'v'])    
+            current_node.addData(u'unit', kwargs[u'u'])    
 
 

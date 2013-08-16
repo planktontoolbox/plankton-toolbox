@@ -42,8 +42,11 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
     """
     def __init__(self, name, parentwidget):
         """ """
-        # Tree dataset used for analysis. 
-        self._currentdata = None
+#         # Tree dataset used for analysis. 
+#         self._currentdata = None
+        # Create object containing analysis data.
+        self._analysisdata = envmonlib.AnalysisData()
+        
         # Filename used when saving data to file.
         self._lastuseddirectory = '.'
         # Create tab widgets.
@@ -63,7 +66,10 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         # Initialize parent.
         super(AnalyseDatasetsActivity, self).__init__(name, parentwidget)
 
-
+    def getAnalysisData(self):
+        """ """
+        return self._analysisdata 
+        
     def _createContent(self):
         """ """
         content = self._createScrollableContent()
