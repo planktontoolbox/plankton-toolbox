@@ -62,7 +62,7 @@ class AnalysisData(object):
     def loadDatasets(self, datasets):
         """ """
         # Clear current data.
-        self.clearAnalysisData()    
+        self.clearData()    
         # Check if all the selected datasets contains the same columns.
         compareheaders = None
         for dataset in datasets:
@@ -100,6 +100,50 @@ class AnalysisData(object):
 #         """ """
 #         return self._currentdata
     
+    def removeData(self, selectedcolumn, selectedcontent):
+        """ """        
+        # Search for export column corresponding model element.
+        for info_dict in self._data.getExportTableColumns():
+            if info_dict[u'header'] == selectedcolumn:
+                nodelevel = info_dict[u'node']
+                key = info_dict[u'key']
+                break # Break loop.
+        #
+        for visitnode in self._data.getChildren()[:]:
+            if nodelevel == u'visit':
+                if key in visitnode.getDataDict().keys():
+                    if visitnode.getData(key) in selectedcontent:
+                        self._data.removeChild(visitnode)
+                        continue
+                else:
+                    # Handle empty keys.
+                    if u'' in selectedcontent:
+                        self._data.removeChild(visitnode)
+                        continue
+            #
+            for samplenode in visitnode.getChildren()[:]:
+                if nodelevel == u'sample':
+                    if key in samplenode.getDataDict().keys():
+                        if samplenode.getData(key) in selectedcontent:
+                            visitnode.removeChild(samplenode)
+                            continue
+                    else:
+                        # Handle empty keys.
+                        if u'' in selectedcontent:
+                            visitnode.removeChild(samplenode)
+                            continue
+                #
+                for variablenode in samplenode.getChildren()[:]:
+                    if nodelevel == u'variable':
+                        if key in variablenode.getDataDict().keys():
+                            if variablenode.getData(key) in selectedcontent:
+                                samplenode.removeChild(variablenode)
+                        else:
+                            # Handle empty values.
+                            if u'' in selectedcontent:
+                                samplenode.removeChild(variablenode)
+                                continue
+
     def createFilteredTreeDataset(self, filterdict):
         """ """
         # Create a tree dataset for filtered data.

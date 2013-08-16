@@ -42,8 +42,6 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
     """
     def __init__(self, name, parentwidget):
         """ """
-#         # Tree dataset used for analysis. 
-#         self._currentdata = None
         # Create object containing analysis data.
         self._analysisdata = envmonlib.AnalysisData()
         
@@ -213,7 +211,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
 #        if self._hidedata_checkbox.isChecked():
 #            return
         # 
-        if not self._currentdata:
+        if not self._analysisdata.getData():
             return
         #
         selectedviewindex = self._viewdata_list.currentIndex()
@@ -221,7 +219,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
             # View current data.
             # Convert from tree model to table model.
             targetdataset = envmonlib.DatasetTable()
-            self._currentdata.convertToTableDataset(targetdataset)
+            self._analysisdata.getData().convertToTableDataset(targetdataset)
             # View model.
             self._tableview.tablemodel.setModeldata(targetdataset)
             self._refreshViewedDataTable()

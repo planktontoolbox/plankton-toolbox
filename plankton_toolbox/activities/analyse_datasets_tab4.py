@@ -61,14 +61,14 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         """ """
         selected_dict = {}        
         # Start date and end date.
-        selected_dict[u'Start date'] = unicode(self._startdate_edit.text())
-        selected_dict[u'End date'] = unicode(self._enddate_edit.text())
+        selected_dict[u'start_date'] = unicode(self._startdate_edit.text())
+        selected_dict[u'end_date'] = unicode(self._enddate_edit.text())
         # Selection lists.
 #        selected_dict[u'Stations'] = self._stations_listview.getSelectedDataList()
-        selected_dict[u'Visits'] = self._visits_listview.getSelectedDataList()
-        selected_dict[u'Min max depth'] = self._minmaxdepth_listview.getSelectedDataList()
-        selected_dict[u'Taxon'] = self._taxon_listview.getSelectedDataList()
-        selected_dict[u'Trophy'] = self._trophy_listview.getSelectedDataList()
+        selected_dict[u'visits'] = self._visits_listview.getSelectedDataList()
+        selected_dict[u'min_max_depth'] = self._minmaxdepth_listview.getSelectedDataList()
+        selected_dict[u'taxon'] = self._taxon_listview.getSelectedDataList()
+        selected_dict[u'trophy'] = self._trophy_listview.getSelectedDataList()
 #        # TEST
 #        print('DEBUG: Selected stations: ' + ', '.join(selected_dict[u'Stations']))
 #        print('DEBUG: Selected_min max depth: ' + ', '.join(selected_dict[u'Min max depth']))
@@ -183,15 +183,15 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         #
         for visitnode in currentdata.getChildren():
 #            stationset.add(visitnode.getData(u'Station name'))
-            visitset.add(unicode(visitnode.getData(u'Station name')) + u' : ' + unicode(visitnode.getData(u'Date')))
-            startdate = min(startdate, visitnode.getData(u'Date'))
-            enddate = max(enddate, visitnode.getData(u'Date'))
+            visitset.add(unicode(visitnode.getData(u'station_name')) + u' : ' + unicode(visitnode.getData(u'date')))
+            startdate = min(startdate, visitnode.getData(u'date'))
+            enddate = max(enddate, visitnode.getData(u'date'))
             for samplenode in visitnode.getChildren():
-                depthstring = unicode(samplenode.getData(u'Sample min depth')) + '-' + unicode(samplenode.getData(u'Sample max depth'))
+                depthstring = unicode(samplenode.getData(u'sample_min_depth')) + '-' + unicode(samplenode.getData(u'sample_max_depth'))
                 minmaxdepthset.add(depthstring)
                 for variablenode in samplenode.getChildren():
-                    taxonset.add(variablenode.getData(u'Taxon name'))
-                    trophyset.add(variablenode.getData(u'Trophy'))
+                    taxonset.add(variablenode.getData(u'taxon_name'))
+                    trophyset.add(variablenode.getData(u'trophy'))
         # Start date and end date.
         self._startdate_edit.setText(startdate)
         self._enddate_edit.setText(enddate)
