@@ -49,19 +49,19 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         """ """
         self._x_axis_column_list.clear()
         self._x_axis_parameter_list.clear()
-        self._x_axis_column_list.addItems([u"Parameter:"])
+        self._x_axis_column_list.addItems([u"parameter:"])
         self._x_axis_column_list.setEnabled(False)
         self._x_axis_parameter_list.setEnabled(False)
         #
         self._y_axis_column_list.clear()
         self._y_axis_parameter_list.clear()
-        self._y_axis_column_list.addItems([u"Parameter:"])
+        self._y_axis_column_list.addItems([u"parameter:"])
         self._y_axis_column_list.setEnabled(False)
         self._y_axis_parameter_list.setEnabled(False)
         #
         self._z_axis_column_list.clear()
         self._z_axis_parameter_list.clear()
-        self._z_axis_column_list.addItems([u"Parameter:"])
+        self._z_axis_column_list.addItems([u"parameter:"])
         self._z_axis_column_list.setEnabled(False)
         self._z_axis_parameter_list.setEnabled(False)
         #
@@ -73,15 +73,15 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         currentdata = self._analysisdata.getData()
         if currentdata:        
             # For tab "Generic graphs".        
-            self._x_axis_column_list.addItems([item[u'Header'] for item in currentdata.getExportTableColumns()])
-            self._y_axis_column_list.addItems([item[u'Header'] for item in currentdata.getExportTableColumns()])
-            self._z_axis_column_list.addItems([item[u'Header'] for item in currentdata.getExportTableColumns()])
+            self._x_axis_column_list.addItems([item[u'header'] for item in currentdata.getExportTableColumns()])
+            self._y_axis_column_list.addItems([item[u'header'] for item in currentdata.getExportTableColumns()])
+            self._z_axis_column_list.addItems([item[u'header'] for item in currentdata.getExportTableColumns()])
             # Search for all parameters in current data.
             parameterset = set()
             for visitnode in currentdata.getChildren():
                 for samplenode in visitnode.getChildren():
                     for variablenode in samplenode.getChildren():
-                        parameterset.add(variablenode.getData(u"Parameter"))
+                        parameterset.add(variablenode.getData(u"parameter"))
             parameterlist = sorted(parameterset)
             #
             self._x_axis_parameter_list.addItems(parameterlist)

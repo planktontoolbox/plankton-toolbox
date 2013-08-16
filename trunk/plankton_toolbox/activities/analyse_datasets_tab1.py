@@ -107,6 +107,27 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
 
     def _useSelectedDatasets(self):
         """ """
+        try:
+            # Clear analysis data
+            self._analysisdata.clearData()
+            self._main_activity.updateCurrentData() 
+            # Create a list of selected datasets.        
+            datasets = []
+            for rowindex in range(self._loaded_datasets_model.rowCount()):
+                item = self._loaded_datasets_model.item(rowindex, 0)
+                if item.checkState() == QtCore.Qt.Checked:        
+                    datasets.append(envmonlib.Datasets().getDatasets()[rowindex])
+            # Use the datasets for analysis.
+            self._analysisdata.loadDatasets(datasets)  
+            # Check.
+            if (self._analysisdata.getData() == None) or (len(self._analysisdata.getData().getChildren()) == 0):
+                envmonlib.Logging().log("Selected datasets are empty.")
+                raise UserWarning("Selected datasets are empty.")
+            self._main_activity.updateCurrentData() 
+        #
+        except UserWarning, e:
+            QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
+
 #         try:
 #             # Clear current data.
 #             self._clearCurrentData()    

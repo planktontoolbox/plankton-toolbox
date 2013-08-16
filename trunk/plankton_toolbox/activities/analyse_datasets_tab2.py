@@ -156,106 +156,18 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
         self._content_listview.setList(sorted(columncontent_set))
 
     def _keepData(self):
-        """ """
-        
+        """ """        
         self._removeData(keep_data = True)
-        
-#        # TODO: Mostly the same as removeData()
-#        
-#        currentdata = self._analysisdata.getData()
-#        if not currentdata:
-#            self._content_listview.clear()
-#            return # Empty data.
-#        #
-#        selectedcolumn = unicode(self._column_list.currentText())
-#        #
-#        selectedcontent = self._content_listview.getNotSelectedDataList() # Note: "Not-selected" list.
-#
-#        # Search for export column corresponding model element.
-#        for info_dict in currentdata.getExportTableColumns():
-#            if info_dict[u'header'] == selectedcolumn:
-#                nodelevel = info_dict[u'node']
-#                key = info_dict[u'key']
-#                break # Break loop.
-#        #
-#        for visitnode in currentdata.getChildren()[:]:
-#            if nodelevel == u'visit':
-#                if key in visitnode.getDataDict().keys():
-#                    if visitnode.getData(key) in selectedcontent:
-#                        currentdata.removeChild(visitnode)
-#                        continue
-#            #
-#            for samplenode in visitnode.getChildren()[:]:
-#                if nodelevel == u'sample':
-#                    if key in samplenode.getDataDict().keys():
-#                        if samplenode.getData(key) in selectedcontent:
-#                            visitnode.removeChild(samplenode)
-#                            continue
-#                #
-#                for variablenode in samplenode.getChildren()[:]:
-#                    if nodelevel == u'variable':
-#                        if key in variablenode.getDataDict().keys():
-#                            if variablenode.getData(key) in selectedcontent:
-#                                samplenode.removeChild(variablenode)
-#        #
-#        self._main_activity.updateAnalysisData()    
 
     def _removeData(self, keep_data = False):
         """ """
-        currentdata = self._analysisdata.getData()
-        if not currentdata:
-            self._content_listview.clear()
-            return # Empty data.
-        #
         selectedcolumn = unicode(self._column_list.currentText())
         #
         if keep_data == False:
             selectedcontent = self._content_listview.getSelectedDataList()
         else:
             selectedcontent = self._content_listview.getNotSelectedDataList() # Note: "Not-selected" list.       
-        
-        # Search for export column corresponding model element.
-        for info_dict in currentdata.getExportTableColumns():
-            if info_dict[u'header'] == selectedcolumn:
-                nodelevel = info_dict[u'node']
-                key = info_dict[u'key']
-                break # Break loop.
         #
-        for visitnode in currentdata.getChildren()[:]:
-            if nodelevel == u'visit':
-                if key in visitnode.getDataDict().keys():
-                    if visitnode.getData(key) in selectedcontent:
-                        currentdata.removeChild(visitnode)
-                        continue
-                else:
-                    # Handle empty keys.
-                    if u'' in selectedcontent:
-                        currentdata.removeChild(visitnode)
-                        continue
-            #
-            for samplenode in visitnode.getChildren()[:]:
-                if nodelevel == u'sample':
-                    if key in samplenode.getDataDict().keys():
-                        if samplenode.getData(key) in selectedcontent:
-                            visitnode.removeChild(samplenode)
-                            continue
-                    else:
-                        # Handle empty keys.
-                        if u'' in selectedcontent:
-                            visitnode.removeChild(samplenode)
-                            continue
-                #
-                for variablenode in samplenode.getChildren()[:]:
-                    if nodelevel == u'variable':
-                        if key in variablenode.getDataDict().keys():
-                            if variablenode.getData(key) in selectedcontent:
-                                samplenode.removeChild(variablenode)
-                        else:
-                            # Handle empty values.
-                            if u'' in selectedcontent:
-                                samplenode.removeChild(variablenode)
-                                continue
-                                
+        self._analysisdata.removeData(selectedcolumn, selectedcontent)
         #
-        self._main_activity.updateAnalysisData()    
-
+        self._main_activity.updateCurrentData()    

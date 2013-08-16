@@ -137,11 +137,11 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             selected_trophy_list = self._trophy_listview.getSelectedDataList()
             selected_trophy_text = u'-'.join(selected_trophy_list) 
             #
-            for visitnode in self._analysisdata.getData().getChildren(): 
-                for samplenode in visitnode.getChildren():
+            for visitnode in self._analysisdata.getData().getChildren()[:]: 
+                for samplenode in visitnode.getChildren()[:]:
                     aggregatedvariables = {}
-                    for variablenode in samplenode.getChildren():
-                        value = variablenode.getData(u'Value')
+                    for variablenode in samplenode.getChildren()[:]:
+                        value = variablenode.getData(u'value')
                         # Use values containing valid float data.
                         try:
 #                            value = value.replace(u',', u'.').replace(u' ', u'')
@@ -150,20 +150,21 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                             if selected_taxon_rank == u'Biota (all levels)':
                                 newtaxon = u'Biota' # Biota is above kingdom in the taxonomic hierarchy. 
                             elif selected_taxon_rank == u'Plankton groups':
-                                newtaxon = variablenode.getData(u'Plankton group')  
+                                newtaxon = variablenode.getData(u'plankton_group')  
                             else:
-                                newtaxon = variablenode.getData(selected_taxon_rank) # Get taxon name for the selected rank.
+                                rank_as_key = selected_taxon_rank.lower()
+                                newtaxon = variablenode.getData(rank_as_key) # Get taxon name for the selected rank.
                                 if not newtaxon:
                                     newtaxon = selected_taxon_rank.lower() + u'-not-designated' # Use this if empty. Lower case for sort reason.
                             #
-                            taxontrophy = variablenode.getData(u'Trophy')
+                            taxontrophy = variablenode.getData(u'trophy')
                             if taxontrophy in selected_trophy_list:
                                 taxontrophy = selected_trophy_text # Concatenated string of ranks.
                             else:
                                 continue # New: Use selected trophy only, don't use others.  
                             #
-                            parameter = variablenode.getData(u'Parameter')
-                            unit = variablenode.getData(u'Unit')
+                            parameter = variablenode.getData(u'parameter')
+                            unit = variablenode.getData(u'unit')
                             
                             agg_tuple = (newtaxon, taxontrophy, parameter, unit)
                             if agg_tuple in aggregatedvariables:
@@ -171,7 +172,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                             else:
                                 aggregatedvariables[agg_tuple] = value
                         except:
-                            if variablenode.getData(u'Value'):
+                            if variablenode.getData(u'value'):
                                 envmonlib.Logging().warning(u"Value is not a valid float: " + unicode(variablenode.getData(u'Value')))
                     #Remove all variables for this sample.
                     samplenode.removeAllChildren()
@@ -182,15 +183,15 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                         newvariable = envmonlib.VariableNode()
                         samplenode.addChild(newvariable)    
                         #
-                        newvariable.addData(u'Taxon name', newtaxon)
-                        newvariable.addData(u'Trophy', taxontrophy)
-                        newvariable.addData(u'Parameter', parameter)
-                        newvariable.addData(u'Unit', unit)
-                        newvariable.addData(u'Value', aggregatedvariables[variablekeytuple])
+                        newvariable.addData(u'taxon_name', newtaxon)
+                        newvariable.addData(u'trophy', taxontrophy)
+                        newvariable.addData(u'parameter', parameter)
+                        newvariable.addData(u'unit', unit)
+                        newvariable.addData(u'value', aggregatedvariables[variablekeytuple])
                         # Add taxon class based on taxon name.
-                        newvariable.addData(u'Class', envmonlib.Species().getTaxonValue(newtaxon, "Class"))
+                        newvariable.addData(u'class', envmonlib.Species().getTaxonValue(newtaxon, "Class"))
             #
-            self._main_activity.updateAnalysisData()    
+            self._main_activity.updateCurrentData()    
         except UserWarning, e:
             QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
 
@@ -205,7 +206,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         for visitnode in currentdata.getChildren():
             for samplenode in visitnode.getChildren():
                 for variablenode in samplenode.getChildren():
-                    trophyset.add(unicode(variablenode.getData(u'Trophy')))
+                    trophyset.add(unicode(variablenode.getData(u'trophy')))
         # Selection lists.
         self._trophy_listview.setList(sorted(trophyset))
             
@@ -221,12 +222,12 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             for visitnode in currentdata.getChildren():
                 for samplenode in visitnode.getChildren():
                     for variablenode in samplenode.getChildren():
-                        parameter = variablenode.getData(u"Parameter")
-                        unit = variablenode.getData(u"Unit")
+                        parameter = variablenode.getData(u'parameter')
+                        unit = variablenode.getData(u'unit')
                         if parameter:
                             parameter_set.add((parameter, unit))
-                        taxonname = variablenode.getData(u"Taxon name")
-                        trophy = variablenode.getData(u"Trophy")
+                        taxonname = variablenode.getData(u'taxon_name')
+                        trophy = variablenode.getData(u'trophy')
                         if taxonname:
                             taxon_set.add((taxonname, trophy))
             # Step 2: Create list with parameter-taxon pairs.
@@ -243,21 +244,21 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                 for samplenode in visitnode.getChildren():
                     sample_parameter_taxon_list = []
                     for variablenode in samplenode.getChildren():
-                        parameter = variablenode.getData(u"Parameter")
-                        unit = variablenode.getData(u"Unit")
-                        taxon = variablenode.getData(u"Taxon name")
-                        trophy = variablenode.getData(u"Trophy")
+                        parameter = variablenode.getData(u'parameter')
+                        unit = variablenode.getData(u'unit')
+                        taxon = variablenode.getData(u'taxon_name')
+                        trophy = variablenode.getData(u'trophy')
                         sample_parameter_taxon_list.append(((parameter, unit), (taxon, trophy)))
                     # Add missing variables.
                     for itempairs in parameter_taxon_list:
                         if itempairs not in sample_parameter_taxon_list:
                             variable = envmonlib.VariableNode()
                             samplenode.addChild(variable)
-                            variable.addData(u"Taxon name", itempairs[1][0])
-                            variable.addData(u"Trophy", itempairs[1][1])
-                            variable.addData(u"Parameter", itempairs[0][0])
-                            variable.addData(u"Value", u'0.0')
-                            variable.addData(u"Unit", itempairs[0][1])
+                            variable.addData(u'taxon_name', itempairs[1][0])
+                            variable.addData(u'trophy', itempairs[1][1])
+                            variable.addData(u'parameter', itempairs[0][0])
+                            variable.addData(u'value', u'0.0')
+                            variable.addData(u'unit', itempairs[0][1])
             #
             self._main_activity.updateAnalysisData()    
         except UserWarning, e:

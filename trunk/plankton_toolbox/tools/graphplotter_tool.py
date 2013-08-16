@@ -79,7 +79,7 @@ class GraphPlotterTool(tool_base.ToolBase):
             self._plotdata = None
         #
         self._resetPlotdata()
-        self._drawChart()
+        self._drawEmbeddedChart()
 
     def setChartSelection(self, 
                           chart = u"Line chart", # Line chart, Bar chart, Scatter chart, Pie chart, Map chart.
@@ -254,22 +254,22 @@ class GraphPlotterTool(tool_base.ToolBase):
                                        u"Pie chart",
                                        u"Map chart"])
 #        self._charttype_list.setDisabled(True)
-        self.connect(self._charttype_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._drawChart)
+        self.connect(self._charttype_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._drawEmbeddedChart)
         #
         self._combined_checkbox = QtGui.QCheckBox("Combined")
         self._combined_checkbox.setChecked(False) 
 #        self._combined_checkbox.setDisabled(True)
-        self.connect(self._combined_checkbox, QtCore.SIGNAL("stateChanged(int)"), self._drawChart)
+        self.connect(self._combined_checkbox, QtCore.SIGNAL("stateChanged(int)"), self._drawEmbeddedChart)
         #
         self._stacked_checkbox = QtGui.QCheckBox("Stacked")
         self._stacked_checkbox.setChecked(False) 
 #        self._stacked_checkbox.setDisabled(True)
-        self.connect(self._stacked_checkbox, QtCore.SIGNAL("stateChanged(int)"), self._drawChart)
+        self.connect(self._stacked_checkbox, QtCore.SIGNAL("stateChanged(int)"), self._drawEmbeddedChart)
         #
         self._ylogscale_checkbox = QtGui.QCheckBox("Y log scale")
         self._ylogscale_checkbox.setChecked(False) 
 #        self._ylogscale_checkbox.setDisabled(True)
-        self.connect(self._ylogscale_checkbox, QtCore.SIGNAL("stateChanged(int)"), self._drawChart)
+        self.connect(self._ylogscale_checkbox, QtCore.SIGNAL("stateChanged(int)"), self._drawEmbeddedChart)
         #                
         self._clear_button = QtGui.QPushButton("Clear")
         self.connect(self._clear_button, QtCore.SIGNAL("clicked()"), self.clearPlotData)                
@@ -300,6 +300,10 @@ class GraphPlotterTool(tool_base.ToolBase):
         layout.addWidget(self._canvas)
         #
         return layout
+        
+    def _drawEmbeddedChart(self):
+        """ """
+        self._drawChart(embedded = True)
         
     def _drawChart(self, embedded = True):
         """ """
@@ -382,7 +386,7 @@ class GraphPlotterTool(tool_base.ToolBase):
                                 json.loads(unicode(self.plotdatalist_textedit.toPlainText()), 
                                            encoding = u'utf8'))
         # Update chart.
-        self._drawChart()
+        self._drawEmbeddedChart()
 
     def _saveChartToFile(self):
         """ """
