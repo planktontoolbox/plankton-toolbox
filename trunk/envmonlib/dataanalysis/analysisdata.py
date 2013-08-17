@@ -59,6 +59,10 @@ class AnalysisData(object):
         """ """
         return self._data
     
+#     def loadDatasetsByName(self, datasets_names):
+#         """ """
+#         return self._currentdata
+    
     def loadDatasets(self, datasets):
         """ """
         # Clear current data.
@@ -95,10 +99,6 @@ class AnalysisData(object):
             raise UserWarning("The selected datasets are empty.")
         # Use the concatenated dataset for analysis.
         self.setData(analysis_dataset)    
-    
-#     def loadDatasetsByName(self, datasets_names):
-#         """ """
-#         return self._currentdata
     
     def removeData(self, selectedcolumn, selectedcontent):
         """ """        
@@ -144,12 +144,12 @@ class AnalysisData(object):
                                 samplenode.removeChild(variablenode)
                                 continue
 
-    def createFilteredTreeDataset(self, filterdict):
+    def createFilteredDataset(self, filterdict):
         """ """
         # Create a tree dataset for filtered data.
         filtereddata = envmonlib.DatasetNode() 
         #
-        analysisdata = self.getAnalysisData()
+        analysisdata = self.getData()
         if not analysisdata:        
             return filtereddata
         # Export info needed to convert from tree to table.
@@ -158,7 +158,7 @@ class AnalysisData(object):
         filter_startdate = filterdict[u'start_date']
         filter_enddate = filterdict[u'end_date']
 #        filter_stations = filterdict[u'Stations']
-        filter_visits = filterdict[u'Visits']
+        filter_visits = filterdict[u'visits']
         filter_minmaxdepth =  filterdict[u'min_max_depth']
         filter_taxon = filterdict[u'taxon']
         filter_trophy = filterdict[u'trophy']

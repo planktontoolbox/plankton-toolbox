@@ -225,7 +225,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
             self._refreshViewedDataTable()
         elif selectedviewindex == 1:
             # View selected data only. 
-            selecteddataset = self.createSelectedTreeDataset()
+            selecteddataset = self._analysisdata.createFilteredDataset(self.getSelectDataDict())
             # Convert from tree model to table model.
             targetdataset = envmonlib.DatasetTable()
             selecteddataset.convertToTableDataset(targetdataset)
@@ -286,59 +286,59 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         """ """
         return self._tab4widget.getSelectDataDict()
 
-    def createSelectedTreeDataset(self):
-        """ """
-        # Create tree dataset för  selected data.
-        selecteddata = envmonlib.DatasetNode() 
-        #
-        currentdata = self.getCurrentData()
-        if not currentdata:        
-            return selecteddata
-        # Export info needed to convert from tree to table.
-        selecteddata.setExportTableColumns(currentdata.getExportTableColumns())        
-        # Get selected data info.
-        selected_dict = self.getSelectDataDict()
-        selected_startdate = selected_dict[u'Start date']
-        selected_enddate = selected_dict[u'End date']
-#        selected_stations = selected_dict[u'Stations']
-        selected_visits = selected_dict[u'Visits']
-        selected_minmaxdepth =  selected_dict[u'Min max depth']
-        selected_taxon = selected_dict[u'Taxon']
-        selected_trophy = selected_dict[u'Trophy']
-        #
-        for visitnode in currentdata.getChildren():
-            if selected_startdate > visitnode.getData(u'Date'):
-                continue
-            if selected_enddate < visitnode.getData(u'Date'):
-                continue
-            if (unicode(visitnode.getData(u'Station name')) + u' : ' + 
-                unicode(visitnode.getData(u'Date'))) not in selected_visits:
-                continue
-            # Create node and copy node data.            
-            selectedvisit = envmonlib.VisitNode()
-            selectedvisit.setDataDict(visitnode.getDataDict())
-            selecteddata.addChild(selectedvisit)    
-            #
-            for samplenode in visitnode.getChildren():
-                minmax = unicode(samplenode.getData(u'Sample min depth')) +  u'-' + \
-                         unicode(samplenode.getData(u'Sample max depth'))
-                if minmax not in selected_minmaxdepth:
-                    continue
-                #
-                # Create node and copy node data.            
-                selectedsample = envmonlib.SampleNode()
-                selectedsample.setDataDict(samplenode.getDataDict())
-                selectedvisit.addChild(selectedsample)    
-                #
-                for variablenode in samplenode.getChildren():
-                    if variablenode.getData(u'Taxon name') not in selected_taxon:
-                        continue
-                    if variablenode.getData(u'Trophy') not in selected_trophy:
-                        continue
-                    # Create node and copy node data.            
-                    selectedvariable = envmonlib.VariableNode()
-                    selectedvariable.setDataDict(variablenode.getDataDict())
-                    selectedsample.addChild(selectedvariable)
-        #
-        return selecteddata    
+#     def createSelectedTreeDataset(self):
+#         """ """
+#         # Create tree dataset för  selected data.
+#         selecteddata = envmonlib.DatasetNode() 
+#         #
+#         currentdata = self.getCurrentData()
+#         if not currentdata:        
+#             return selecteddata
+#         # Export info needed to convert from tree to table.
+#         selecteddata.setExportTableColumns(currentdata.getExportTableColumns())        
+#         # Get selected data info.
+#         selected_dict = self.getSelectDataDict()
+#         selected_startdate = selected_dict[u'Start date']
+#         selected_enddate = selected_dict[u'End date']
+# #        selected_stations = selected_dict[u'Stations']
+#         selected_visits = selected_dict[u'Visits']
+#         selected_minmaxdepth =  selected_dict[u'Min max depth']
+#         selected_taxon = selected_dict[u'Taxon']
+#         selected_trophy = selected_dict[u'Trophy']
+#         #
+#         for visitnode in currentdata.getChildren():
+#             if selected_startdate > visitnode.getData(u'Date'):
+#                 continue
+#             if selected_enddate < visitnode.getData(u'Date'):
+#                 continue
+#             if (unicode(visitnode.getData(u'Station name')) + u' : ' + 
+#                 unicode(visitnode.getData(u'Date'))) not in selected_visits:
+#                 continue
+#             # Create node and copy node data.            
+#             selectedvisit = envmonlib.VisitNode()
+#             selectedvisit.setDataDict(visitnode.getDataDict())
+#             selecteddata.addChild(selectedvisit)    
+#             #
+#             for samplenode in visitnode.getChildren():
+#                 minmax = unicode(samplenode.getData(u'Sample min depth')) +  u'-' + \
+#                          unicode(samplenode.getData(u'Sample max depth'))
+#                 if minmax not in selected_minmaxdepth:
+#                     continue
+#                 #
+#                 # Create node and copy node data.            
+#                 selectedsample = envmonlib.SampleNode()
+#                 selectedsample.setDataDict(samplenode.getDataDict())
+#                 selectedvisit.addChild(selectedsample)    
+#                 #
+#                 for variablenode in samplenode.getChildren():
+#                     if variablenode.getData(u'Taxon name') not in selected_taxon:
+#                         continue
+#                     if variablenode.getData(u'Trophy') not in selected_trophy:
+#                         continue
+#                     # Create node and copy node data.            
+#                     selectedvariable = envmonlib.VariableNode()
+#                     selectedvariable.setDataDict(variablenode.getDataDict())
+#                     selectedsample.addChild(selectedvariable)
+#         #
+#         return selecteddata    
 
