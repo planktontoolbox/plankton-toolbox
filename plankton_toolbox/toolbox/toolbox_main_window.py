@@ -77,7 +77,8 @@ class MainWindow(QtGui.QMainWindow):
         self._toolmanager = tool_manager.ToolManager()
         self._toolmanager.setParent(self)
         self._toolmanager.initTools()
-        self._activitymanager = activity_manager.ActivityManager(self)
+        self._activitymanager = activity_manager.ActivityManager()
+        self._activitymanager.setParent(self)
         self._activitymanager.initActivities()
         # Add tools to selector.
         self._createContentSelectors()
