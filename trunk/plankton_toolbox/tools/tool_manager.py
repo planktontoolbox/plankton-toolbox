@@ -56,7 +56,6 @@ class ToolManager(object):
 
     def __init__(self):
         """ """
-        # Initialize parent.
         self._parent = None
         self._toollist = [] # List of tools derived from ToolsBase.        
 
@@ -82,10 +81,11 @@ class ToolManager(object):
 #        self._toollist.append(template_tool.TemplateTool("(Tool template)", self._parent))
         
     def getToolByName(self, object_name):
-        """ Makes a tool visible. """
+        """ Returns the tool. """
         for tool in self._toollist:
             if tool.objectName() == object_name: 
                 return tool
+        return None
         
     def showToolByIndex(self, index):
         """ Makes a tool visible. """
