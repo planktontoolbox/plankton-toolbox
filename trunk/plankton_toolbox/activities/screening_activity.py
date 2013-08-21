@@ -284,6 +284,12 @@ class ScreeningActivity(activity_base.ActivityBase):
                 break # Also break next loop.
         #
         for dataset in datasets:
+            if nodelevel == u'dataset':
+                if key in dataset.getDataDict().keys():
+                    columncontent_set.add(unicode(dataset.getData(key)))
+                else:
+                    columncontent_set.add(u'') # Add empty field.
+            #
             for visitnode in dataset.getChildren():
                 if nodelevel == u'visit':
                     if key in visitnode.getDataDict().keys():

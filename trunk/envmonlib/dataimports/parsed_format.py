@@ -114,7 +114,7 @@ class ParsedFormat(envmonlib.FormatBase):
         return u''
 
     def _asDate(self, column_name):
-        """ Reformat to match the ISO format. (20000-01-01) """
+        """ Reformat to match the ISO format. (2000-01-01) """
         if column_name in self._header:
             index = self._header.index(column_name)
             if len(self._row) > index:

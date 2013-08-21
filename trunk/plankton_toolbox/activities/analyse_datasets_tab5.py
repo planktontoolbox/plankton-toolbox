@@ -78,8 +78,8 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
 #        self.connect(self._addplot_1_button, QtCore.SIGNAL("clicked()"), self._addPlot_1)                
         self._addplot_2_button = QtGui.QPushButton("Plot 1. Value/taxa/station and date")
         self.connect(self._addplot_2_button, QtCore.SIGNAL("clicked()"), self._addPlot_2)                
-#        self._addplot_3_button = QtGui.QPushButton("(Plot 3)")
-#        self.connect(self._addplot_3_button, QtCore.SIGNAL("clicked()"), self._addPlot_3)                
+#         self._addplot_3_button = QtGui.QPushButton("Map")
+#         self.connect(self._addplot_3_button, QtCore.SIGNAL("clicked()"), self._addPlot_3)                
 #        self._addplot_4_button = QtGui.QPushButton("(Plot 4)")
 #        self.connect(self._addplot_4_button, QtCore.SIGNAL("clicked()"), self._addPlot_4)                
 
@@ -94,8 +94,8 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
 #        form1.addWidget(self._addplot_1_button, gridrow, 3, 1, 1)
 #        gridrow += 1
         form1.addWidget(self._addplot_2_button, gridrow, 3, 1, 1)
-#        gridrow += 1
-#        form1.addWidget(self._addplot_3_button, gridrow, 3, 1, 1)
+#         gridrow += 1
+#         form1.addWidget(self._addplot_3_button, gridrow, 3, 1, 1)
 #        gridrow += 1
 #        form1.addWidget(self._addplot_4_button, gridrow, 3, 1, 1)
         #
@@ -358,147 +358,147 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
     def _addPlot_4(self):
         """ """
         
-    def _addPlot(self):
-        """ """
-        currentdata = self._analysisdata.getData()
-        if not currentdata:
-            return # Can't plot from empty dataset
-        #
-        tool_manager.ToolManager().showToolByName(u'Graph plotter') # Show tool if hidden.
-        graphtool = tool_manager.ToolManager().getToolByName(u'Graph plotter')
-        # Selected columns.
-        x_column = unicode(self._x_axis_column_list.currentText())
-        y_column = unicode(self._y_axis_column_list.currentText())
-        # Selected parameters.
-        x_param = None
-        y_param = None
-        if x_column == u"parameter:":
-            x_param = unicode(self._x_axis_parameter_list.currentText())
-        if y_column == u"parameter:":
-            y_param = unicode(self._y_axis_parameter_list.currentText())
-        # Check exports columns backwards.
-        x_visit_key = None
-        x_sample_key = None                      
-        x_variable_key = None
-        y_visit_key = None
-        y_sample_key = None                      
-        y_variable_key = None
-        if x_column != u"parameter:":
-            for export_info in currentdata.getExportTableColumns():
-                if export_info.get('header', u'') == x_column:
-                    if export_info.get('node', u'') == 'visit':
-                        x_visit_key =  export_info.get('key', None)
-                    elif export_info.get('node', u'') == 'sample':
-                        x_sample_key =  export_info.get('key', None)                        
-                    elif export_info.get('node', u'') == 'variable':
-                        x_variable_key =  export_info.get('key', None)
-        if y_column != u"parameter:":
-            for export_info in currentdata.getExportTableColumns():
-                if export_info.get('header', u'') == y_column:
-                    if export_info.get('node', u'') == 'visit':
-                        y_visit_key =  export_info.get('key', None)
-                    elif export_info.get('node', u'') == 'sample':
-                        y_sample_key =  export_info.get('key', None)                        
-                    elif export_info.get('node', u'') == 'variable':
-                        y_variable_key =  export_info.get('key', None)
-        
-        # Extract data.
-        x_data = []
-        y_data = []
-        x_value = None
-        y_value = None
-        #
-        
-        
-        selected_dict = self._analysisdata.getSelectDataDict()
-        selected_startdate = selected_dict[u'start_date']
-        selected_enddate = selected_dict[u'end_date']
-#        selected_stations = selected_dict[u'Stations']
-        selected_visits = selected_dict[u'visits']
-        selected_minmaxdepth =  selected_dict[u'min_max_depth']
-        selected_taxon = selected_dict[u'taxon']
-        selected_trophy = selected_dict[u'trophy']
-        
-        
-        
-        for visitnode in currentdata.getChildren():
-            
-            if selected_startdate > visitnode.getData(u'date'):
-                continue
-            if selected_enddate < visitnode.getData(u'date'):
-                continue
-#            if visitnode.getData(u'Station name') not in selected_stations:
-#                continue
-            if (unicode(visitnode.getData(u'station_name')) + u' : ' + unicode(visitnode.getData(u'date'))) not in selected_visits:
-                continue
-
-            
-             
-            if x_visit_key: x_value = visitnode.getData(x_visit_key) # if x_visit_key else None
-            if y_visit_key: y_value = visitnode.getData(y_visit_key) # if y_visit_key else None
-            for samplenode in visitnode.getChildren():
-            
-                minmax = unicode(samplenode.getData(u'sample_min_depth')) + u'-' + unicode(samplenode.getData(u'sample_max_depth'))
-                if minmax not in selected_minmaxdepth:
-                    continue
-                
-                
-                if x_sample_key: x_value = samplenode.getData(x_sample_key) # if x_sample_key else None
-                if y_sample_key: y_value = samplenode.getData(y_sample_key) # if y_sample_key else None
-                for variablenode in samplenode.getChildren():
-                
-                    if variablenode.getData(u'taxon_name') not in selected_taxon:
-                        continue
-                    if variablenode.getData(u'trophy') not in selected_trophy:
-                        continue
-                    
-                    
-                    
-                    #
-                    if x_variable_key: x_value = variablenode.getData(x_variable_key) # if x_variable_key else None
-                    if y_variable_key: y_value = variablenode.getData(y_variable_key) # if y_variable_key else None
-                    #
-                    if x_param or y_param:
-                        parameter = variablenode.getData(u'parameter')
-                        if x_param:
-                            if parameter == x_param:
-                                x_value = variablenode.getData(u'value')
-                        if y_param:
-                            if parameter == y_param:
-                                y_value = variablenode.getData(u'value')
-                    # If NOT both are parameters, add data on variable level.
-                    if not (x_param and y_param):
-                        # Add values to lists if both values are available.
-                        if (x_value and y_value):
-                            x_data.append(x_value)
-                            y_data.append(y_value)
-                        # Clear used values.
-                        if x_param: x_value = None    
-                        if y_param: y_value = None    
-                    # Clear used values.
-                    if x_variable_key: x_value = None    
-                    if x_variable_key: y_value = None
-                # If both are parameters, add data on sample level.     
-                if (x_param and y_param):
-                    # Add values to lists if both values are available.
-                    if (x_value and y_value):
-                        x_data.append(x_value)
-                        y_data.append(y_value)
-                        # Clear used values.
-                        if x_param: x_value = None    
-                        if y_param: y_value = None    
-                # Clear used values.
-                if x_sample_key: x_value = None    
-                if y_sample_key: y_value = None    
-            # Clear used values.
-            if x_visit_key: x_value = None    
-            if y_visit_key: y_value = None    
-        #
-
-        # Check if this is a time series or not.
-        selectedplotindex = self._plotindex_list.currentIndex() 
-        if selectedplotindex in [0, 1, 2, 3]:
-            graphtool.addTimeseriesPlot(selectedplotindex, x_data, y_data)
-        else:
-            graphtool.addXYPlot(selectedplotindex - 4, x_data, y_data)
+#     def _addPlot(self):
+#         """ """
+#         currentdata = self._analysisdata.getData()
+#         if not currentdata:
+#             return # Can't plot from empty dataset
+#         #
+#         tool_manager.ToolManager().showToolByName(u'Graph plotter') # Show tool if hidden.
+#         graphtool = tool_manager.ToolManager().getToolByName(u'Graph plotter')
+#         # Selected columns.
+#         x_column = unicode(self._x_axis_column_list.currentText())
+#         y_column = unicode(self._y_axis_column_list.currentText())
+#         # Selected parameters.
+#         x_param = None
+#         y_param = None
+#         if x_column == u"parameter:":
+#             x_param = unicode(self._x_axis_parameter_list.currentText())
+#         if y_column == u"parameter:":
+#             y_param = unicode(self._y_axis_parameter_list.currentText())
+#         # Check exports columns backwards.
+#         x_visit_key = None
+#         x_sample_key = None                      
+#         x_variable_key = None
+#         y_visit_key = None
+#         y_sample_key = None                      
+#         y_variable_key = None
+#         if x_column != u"parameter:":
+#             for export_info in currentdata.getExportTableColumns():
+#                 if export_info.get('header', u'') == x_column:
+#                     if export_info.get('node', u'') == 'visit':
+#                         x_visit_key =  export_info.get('key', None)
+#                     elif export_info.get('node', u'') == 'sample':
+#                         x_sample_key =  export_info.get('key', None)                        
+#                     elif export_info.get('node', u'') == 'variable':
+#                         x_variable_key =  export_info.get('key', None)
+#         if y_column != u"parameter:":
+#             for export_info in currentdata.getExportTableColumns():
+#                 if export_info.get('header', u'') == y_column:
+#                     if export_info.get('node', u'') == 'visit':
+#                         y_visit_key =  export_info.get('key', None)
+#                     elif export_info.get('node', u'') == 'sample':
+#                         y_sample_key =  export_info.get('key', None)                        
+#                     elif export_info.get('node', u'') == 'variable':
+#                         y_variable_key =  export_info.get('key', None)
+#         
+#         # Extract data.
+#         x_data = []
+#         y_data = []
+#         x_value = None
+#         y_value = None
+#         #
+#         
+#         
+#         selected_dict = self._analysisdata.getSelectDataDict()
+#         selected_startdate = selected_dict[u'start_date']
+#         selected_enddate = selected_dict[u'end_date']
+# #        selected_stations = selected_dict[u'Stations']
+#         selected_visits = selected_dict[u'visits']
+#         selected_minmaxdepth =  selected_dict[u'min_max_depth']
+#         selected_taxon = selected_dict[u'taxon']
+#         selected_trophy = selected_dict[u'trophy']
+#         
+#         
+#         
+#         for visitnode in currentdata.getChildren():
+#             
+#             if selected_startdate > visitnode.getData(u'date'):
+#                 continue
+#             if selected_enddate < visitnode.getData(u'date'):
+#                 continue
+# #            if visitnode.getData(u'Station name') not in selected_stations:
+# #                continue
+#             if (unicode(visitnode.getData(u'station_name')) + u' : ' + unicode(visitnode.getData(u'date'))) not in selected_visits:
+#                 continue
+# 
+#             
+#              
+#             if x_visit_key: x_value = visitnode.getData(x_visit_key) # if x_visit_key else None
+#             if y_visit_key: y_value = visitnode.getData(y_visit_key) # if y_visit_key else None
+#             for samplenode in visitnode.getChildren():
+#             
+#                 minmax = unicode(samplenode.getData(u'sample_min_depth')) + u'-' + unicode(samplenode.getData(u'sample_max_depth'))
+#                 if minmax not in selected_minmaxdepth:
+#                     continue
+#                 
+#                 
+#                 if x_sample_key: x_value = samplenode.getData(x_sample_key) # if x_sample_key else None
+#                 if y_sample_key: y_value = samplenode.getData(y_sample_key) # if y_sample_key else None
+#                 for variablenode in samplenode.getChildren():
+#                 
+#                     if variablenode.getData(u'taxon_name') not in selected_taxon:
+#                         continue
+#                     if variablenode.getData(u'trophy') not in selected_trophy:
+#                         continue
+#                     
+#                     
+#                     
+#                     #
+#                     if x_variable_key: x_value = variablenode.getData(x_variable_key) # if x_variable_key else None
+#                     if y_variable_key: y_value = variablenode.getData(y_variable_key) # if y_variable_key else None
+#                     #
+#                     if x_param or y_param:
+#                         parameter = variablenode.getData(u'parameter')
+#                         if x_param:
+#                             if parameter == x_param:
+#                                 x_value = variablenode.getData(u'value')
+#                         if y_param:
+#                             if parameter == y_param:
+#                                 y_value = variablenode.getData(u'value')
+#                     # If NOT both are parameters, add data on variable level.
+#                     if not (x_param and y_param):
+#                         # Add values to lists if both values are available.
+#                         if (x_value and y_value):
+#                             x_data.append(x_value)
+#                             y_data.append(y_value)
+#                         # Clear used values.
+#                         if x_param: x_value = None    
+#                         if y_param: y_value = None    
+#                     # Clear used values.
+#                     if x_variable_key: x_value = None    
+#                     if x_variable_key: y_value = None
+#                 # If both are parameters, add data on sample level.     
+#                 if (x_param and y_param):
+#                     # Add values to lists if both values are available.
+#                     if (x_value and y_value):
+#                         x_data.append(x_value)
+#                         y_data.append(y_value)
+#                         # Clear used values.
+#                         if x_param: x_value = None    
+#                         if y_param: y_value = None    
+#                 # Clear used values.
+#                 if x_sample_key: x_value = None    
+#                 if y_sample_key: y_value = None    
+#             # Clear used values.
+#             if x_visit_key: x_value = None    
+#             if y_visit_key: y_value = None    
+#         #
+# 
+#         # Check if this is a time series or not.
+#         selectedplotindex = self._plotindex_list.currentIndex() 
+#         if selectedplotindex in [0, 1, 2, 3]:
+#             graphtool.addTimeseriesPlot(selectedplotindex, x_data, y_data)
+#         else:
+#             graphtool.addXYPlot(selectedplotindex - 4, x_data, y_data)
 

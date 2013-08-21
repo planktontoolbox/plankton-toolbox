@@ -129,6 +129,12 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
                 key = info_dict[u'key']
                 break # Break loop.
         #
+        if nodelevel == u'dataset':
+            if key in currentdata.getDataDict().keys():
+                columncontent_set.add(unicode(currentdata.getData(key)))
+            else:
+                columncontent_set.add(u'') # Add empty field.
+        #    
         for visitnode in currentdata.getChildren():
             if nodelevel == u'visit':
                 if key in visitnode.getDataDict().keys():
