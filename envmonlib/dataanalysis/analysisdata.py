@@ -112,7 +112,7 @@ class AnalysisData(object):
         for visitnode in self._data.getChildren()[:]:
             if nodelevel == u'visit':
                 if key in visitnode.getDataDict().keys():
-                    if visitnode.getData(key) in selectedcontent:
+                    if unicode(visitnode.getData(key)) in selectedcontent:
                         self._data.removeChild(visitnode)
                         continue
                 else:
@@ -124,7 +124,7 @@ class AnalysisData(object):
             for samplenode in visitnode.getChildren()[:]:
                 if nodelevel == u'sample':
                     if key in samplenode.getDataDict().keys():
-                        if samplenode.getData(key) in selectedcontent:
+                        if unicode(samplenode.getData(key)) in selectedcontent:
                             visitnode.removeChild(samplenode)
                             continue
                     else:
@@ -136,7 +136,7 @@ class AnalysisData(object):
                 for variablenode in samplenode.getChildren()[:]:
                     if nodelevel == u'variable':
                         if key in variablenode.getDataDict().keys():
-                            if variablenode.getData(key) in selectedcontent:
+                            if unicode(variablenode.getData(key)) in selectedcontent:
                                 samplenode.removeChild(variablenode)
                         else:
                             # Handle empty values.

@@ -59,112 +59,175 @@ class DevTestTool(tool_base.ToolBase):
     def _contentButtons(self):
         """ """
         # Active widgets and connections.
-        self._testbutton_1 = QtGui.QPushButton("Test 1")
+        self._testbutton_1 = QtGui.QPushButton("Select TEST_Sharkweb_PP_en.txt")
         self.connect(self._testbutton_1, QtCore.SIGNAL("clicked()"), self._test_1)                
-        self._testbutton_2 = QtGui.QPushButton("Test 2")
+        self._testbutton_2 = QtGui.QPushButton("Select TEST_Sharkweb_PP_sv.txt")
         self.connect(self._testbutton_2, QtCore.SIGNAL("clicked()"), self._test_2)                
-        self._testbutton_3 = QtGui.QPushButton("Test 3")
+        self._testbutton_3 = QtGui.QPushButton("Select TEST_Sharkweb_ZP_en.txt")
         self.connect(self._testbutton_3, QtCore.SIGNAL("clicked()"), self._test_3)                
-        self._testbutton_4 = QtGui.QPushButton("Test 4")
+        self._testbutton_4 = QtGui.QPushButton("Select TEST_Sharkweb_ZP_sv.txt")
         self.connect(self._testbutton_4, QtCore.SIGNAL("clicked()"), self._test_4)                
-        self._testbutton_5 = QtGui.QPushButton("Test 5")
-        self.connect(self._testbutton_5, QtCore.SIGNAL("clicked()"), self._test_5)                
+#         self._testbutton_5 = QtGui.QPushButton("Test 5")
+#         self.connect(self._testbutton_5, QtCore.SIGNAL("clicked()"), self._test_5)                
         # Layout.
         layout = QtGui.QVBoxLayout()
         layout.addWidget(self._testbutton_1)
         layout.addWidget(self._testbutton_2)
         layout.addWidget(self._testbutton_3)
         layout.addWidget(self._testbutton_4)
-        layout.addWidget(self._testbutton_5)
+#         layout.addWidget(self._testbutton_5)
         layout.addStretch(5)
         #
         return layout
 
     def _test_1(self):
         """ """
-        envmonlib.Logging().log("Button Test 1")
+        try:
+            envmonlib.Logging().log("Select TEST_Sharkweb_PP_en.txt")
+            
+    #         import_parser_path = u'C:/Users/arnold/Desktop/python/w_plankton_toolbox/p_plankton_toolbox/src/toolbox_data/parsers/'
+            import_parser_path = u'toolbox_data/parsers/'
+            import_parser = u'sharkweb_phytoplankton_parser.xlsx'
+            import_column = u'Sharkweb english'
+            export_column = u'Export english'
+    #         data_file_path = u'C:/Users/arnold/Desktop/python/w_plankton_toolbox/p_plankton_toolbox/src/'
+            data_file_path = u''
+            data_file_name = u'TEST_Sharkweb_PP_en.txt'
+            data_file_encoding = 'windows-1252'
+            
+            self._parent.showActivityByName(u'Load datasets')
+            
+            # Set up for import file parsing.
+            impMgr = envmonlib.ImportManager(import_parser_path + import_parser,
+                                             import_column,
+                                             export_column)
+            # Import and parse file.
+            dataset = impMgr.importTextFile(data_file_path + data_file_name,
+                                            data_file_encoding)
+            # Add metadata related to imported file.
+            dataset.addMetadata(u'parser', import_parser)
+            dataset.addMetadata(u'file_name', data_file_name)
+            dataset.addMetadata(u'file_path', data_file_path)
+            dataset.addMetadata(u'import_column', import_column)
+            dataset.addMetadata(u'export_column', export_column)
+            toolbox_datasets.ToolboxDatasets().addDataset(dataset)
+            
+            self._parent.showActivityByName(u'Analyse datasets')
+        except Exception as e:
+            envmonlib.Logging().warning(u"Failed to run script: %s" % (e.args[0]))
+            raise
         
-        self._parent.showActivityByName(u'Load datasets')
-        
-        # Set up for import file parsing.
-        impMgr = envmonlib.ImportManager(u'C:/Users/arnold/Desktop/python/w_plankton_toolbox/p_plankton_toolbox/src/toolbox_data/parsers/' + 
-                                         u'1_sharkweb_phytoplankton_parser.xlsx',
-                                         u'PP Sharkweb download en',
-                                         u'PP export 1')
-        # Import and parse file.
-        dataset = impMgr.importTextFile(u'C:/Users/arnold/Desktop/python/w_plankton_toolbox/p_plankton_toolbox/src/' +
-                                        u'shark_data_å17_2008 maj-sept.txt',
-                                        u'utf8')
-        # Add metadata related to imported file.
-        dataset.addMetadata(u'Parser', u'C:/Users/arnold/Desktop/python/w_plankton_toolbox/p_plankton_toolbox/src/toolbox_data/parsers/' + 
-                                       u'sharkweb_phytoplankton_parser.xlsx')
-        dataset.addMetadata(u'file_name', u'TEST')
-        dataset.addMetadata(u'file_path', u'TEST')
-        dataset.addMetadata(u'import_column', u'PP Sharkweb download en')
-        dataset.addMetadata(u'export_column', u'PP export 1')
-        toolbox_datasets.ToolboxDatasets().addDataset(dataset)
-        
-        
-#    def _loadTextFiles(self):
-#        """ """
-#        try:
-#            envmonlib.Logging().log(u"") # Empty line.
-#            envmonlib.Logging().log(u"Loading datasets...")
-#            envmonlib.Logging().startAccumulatedLogging()
-#            self._writeToStatusBar(u"Loading datasets...")
-#            # Show select file dialog box. Multiple files can be selected.
-#            namefilter = 'Text files (*.txt);;All files (*.*)'
-#            filenames = QtGui.QFileDialog.getOpenFileNames(
-#                                self,
-#                                'Load dataset(s)',
-#                                self._last_used_textfile_name,
-#                                namefilter)
-#            # From QString to unicode.
-#            filenames = map(unicode, filenames)
-#            # Check if user pressed ok or cancel.
-#            self._tabledataset = envmonlib.DatasetTable()
-#            if filenames:
-#                for filename in filenames:
-#                    # Store selected path. Will be used as default next time.
-#                    self._last_used_textfile_name = filename
-#                    # Text files may have strange encodings.
-#                    if unicode(self._textfile_encoding_list.currentText()) == u'<platform default>':
-#                        textfileencoding = locale.getpreferredencoding()
-#                    else:
-#                        textfileencoding = unicode(self._textfile_encoding_list.currentText())                        
-#                    # Set up for import file parsing.
-#                    impMgr = envmonlib.ImportManager(self._parser_path + unicode(self._textfile_parser_list.currentText()),
-#                                                     unicode(self._textfile_importcolumn_list.currentText()),
-#                                                     unicode(self._textfile_exportcolumn_list.currentText()))
-#                    # Import and parse file.
-#                    dataset = impMgr.importTextFile(filename, textfileencoding)
-#                    # Add metadata related to imported file.
-#                    dataset.addMetadata(u'Parser', self._parser_path + unicode(self._textfile_parser_list.currentText()))
-#                    dataset.addMetadata(u'File name', os.path.basename(filename))
-#                    dataset.addMetadata(u'File path', filename)
-#                    dataset.addMetadata(u'Import column', unicode(self._textfile_importcolumn_list.currentText()))
-#                    dataset.addMetadata(u'Export column', unicode(self._textfile_exportcolumn_list.currentText()))
-#                    # Add to dataset list. (Note:ToolboxDatasets is a wrapper containing the 'datasetListChanged'-signal).
-#                    toolbox_datasets.ToolboxDatasets().addDataset(dataset)
-
-        
-        
-        
-        
-        
-
     def _test_2(self):
         """ """
-        envmonlib.Logging().log("Button Test 2")
+        try:
+            envmonlib.Logging().log("Select TEST_Sharkweb_PP_sv.txt")
+            
+    #         import_parser_path = u'C:/Users/arnold/Desktop/python/w_plankton_toolbox/p_plankton_toolbox/src/toolbox_data/parsers/'
+            import_parser_path = u'toolbox_data/parsers/'
+            import_parser = u'sharkweb_phytoplankton_parser.xlsx'
+            import_column = u'Sharkweb swedish'
+            export_column = u'Export swedish'
+    #         data_file_path = u'C:/Users/arnold/Desktop/python/w_plankton_toolbox/p_plankton_toolbox/src/'
+            data_file_path = u''
+            data_file_name = u'TEST_Sharkweb_PP_sv.txt'
+            data_file_encoding = 'windows-1252'
+            
+            self._parent.showActivityByName(u'Load datasets')
+            
+            # Set up for import file parsing.
+            impMgr = envmonlib.ImportManager(import_parser_path + import_parser,
+                                             import_column,
+                                             export_column)
+            # Import and parse file.
+            dataset = impMgr.importTextFile(data_file_path + data_file_name,
+                                            data_file_encoding)
+            # Add metadata related to imported file.
+            dataset.addMetadata(u'parser', import_parser)
+            dataset.addMetadata(u'file_name', data_file_name)
+            dataset.addMetadata(u'file_path', data_file_path)
+            dataset.addMetadata(u'import_column', import_column)
+            dataset.addMetadata(u'export_column', export_column)
+            toolbox_datasets.ToolboxDatasets().addDataset(dataset)
+            
+            self._parent.showActivityByName(u'Analyse datasets')
+        except Exception as e:
+            envmonlib.Logging().warning(u"Failed to run script: %s" % (e.args[0]))
+            raise
 
     def _test_3(self):
         """ """
-        envmonlib.Logging().log("Button Test 3")
+        try:
+            envmonlib.Logging().log("Select TEST_Sharkweb_ZP_en.txt")
+            
+    #         import_parser_path = u'C:/Users/arnold/Desktop/python/w_plankton_toolbox/p_plankton_toolbox/src/toolbox_data/parsers/'
+            import_parser_path = u'toolbox_data/parsers/'
+            import_parser = u'sharkweb_zooplankton_parser.xlsx'
+            import_column = u'Sharkweb english'
+            export_column = u'Export english'
+    #         data_file_path = u'C:/Users/arnold/Desktop/python/w_plankton_toolbox/p_plankton_toolbox/src/'
+            data_file_path = u''
+            data_file_name = u'TEST_Sharkweb_ZP_en.txt'
+            data_file_encoding = 'windows-1252'
+            
+            self._parent.showActivityByName(u'Load datasets')
+            
+            # Set up for import file parsing.
+            impMgr = envmonlib.ImportManager(import_parser_path + import_parser,
+                                             import_column,
+                                             export_column)
+            # Import and parse file.
+            dataset = impMgr.importTextFile(data_file_path + data_file_name,
+                                            data_file_encoding)
+            # Add metadata related to imported file.
+            dataset.addMetadata(u'parser', import_parser)
+            dataset.addMetadata(u'file_name', data_file_name)
+            dataset.addMetadata(u'file_path', data_file_path)
+            dataset.addMetadata(u'import_column', import_column)
+            dataset.addMetadata(u'export_column', export_column)
+            toolbox_datasets.ToolboxDatasets().addDataset(dataset)
+            
+            self._parent.showActivityByName(u'Analyse datasets')
+        except Exception as e:
+            envmonlib.Logging().warning(u"Failed to run script: %s" % (e.args[0]))
+            raise
 
     def _test_4(self):
         """ """
-        envmonlib.Logging().log("Button Test 4")
+        try:
+            envmonlib.Logging().log("Select TEST_Sharkweb_ZP_sv.txt")
+            
+    #         import_parser_path = u'C:/Users/arnold/Desktop/python/w_plankton_toolbox/p_plankton_toolbox/src/toolbox_data/parsers/'
+            import_parser_path = u'toolbox_data/parsers/'
+            import_parser = u'sharkweb_zooplankton_parser.xlsx'
+            import_column = u'Sharkweb swedish'
+            export_column = u'Export swedish'
+    #         data_file_path = u'C:/Users/arnold/Desktop/python/w_plankton_toolbox/p_plankton_toolbox/src/'
+            data_file_path = u''
+            data_file_name = u'TEST_Sharkweb_ZP_sv.txt'
+            data_file_encoding = 'windows-1252'
+            
+            self._parent.showActivityByName(u'Load datasets')
+            
+            # Set up for import file parsing.
+            impMgr = envmonlib.ImportManager(import_parser_path + import_parser,
+                                             import_column,
+                                             export_column)
+            # Import and parse file.
+            dataset = impMgr.importTextFile(data_file_path + data_file_name,
+                                            data_file_encoding)
+            # Add metadata related to imported file.
+            dataset.addMetadata(u'parser', import_parser)
+            dataset.addMetadata(u'file_name', data_file_name)
+            dataset.addMetadata(u'file_path', data_file_path)
+            dataset.addMetadata(u'import_column', import_column)
+            dataset.addMetadata(u'export_column', export_column)
+            toolbox_datasets.ToolboxDatasets().addDataset(dataset)
+            
+            self._parent.showActivityByName(u'Analyse datasets')
+        except Exception as e:
+            envmonlib.Logging().warning(u"Failed to run script: %s" % (e.args[0]))
+            raise
 
-    def _test_5(self):
-        """ """
-        envmonlib.Logging().log("Button Test 5")
+#     def _test_5(self):
+#         """ """
+#         envmonlib.Logging().log("Button Test 5")

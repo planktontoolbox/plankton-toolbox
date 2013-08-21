@@ -1,5 +1,9 @@
 #!/usr/bin/env python
-# -*- coding:utf-8 -*-
+
+
+###### -*- coding:utf-8 -*-
+
+
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
@@ -118,7 +122,12 @@ class FormatSingleFile(envmonlib.ParsedFormat):
                     currentvariable = None
                     # Check if visit exists. Create or reuse.
                     keystring = None
+                    
+                    
                     exec(visitkeycommand) # Command assigns keystring.
+#                     exec(visitkeycommand.encode('windows-1252')) # Command assigns keystring.
+                    
+                    
                     currentvisit = dataset.getVisitLookup(keystring)
                     if not currentvisit:
                         currentvisit = envmonlib.VisitNode()
@@ -126,7 +135,12 @@ class FormatSingleFile(envmonlib.ParsedFormat):
                         currentvisit.setIdString(keystring)
                     # Check if sample exists. Create or reuse.
                     keystring = None
+
+
                     exec(samplekeycommand) # Command assigns keystring.
+#                     exec(samplekeycommand.encode('windows-1252')) # Command assigns keystring.
+                    
+                    
                     currentsample = dataset.getSampleLookup(keystring)
                     if not currentsample:
                         currentsample = envmonlib.SampleNode()
@@ -136,9 +150,15 @@ class FormatSingleFile(envmonlib.ParsedFormat):
                     currentvariable = envmonlib.VariableNode()
                     currentsample.addChild(currentvariable)    
                     # === Parse row and add fields on nodes. ===
+                    
                     for cmd in self._parsercommands:
                         try:
+
+
                             exec(cmd[u'command'])
+#                             exec(cmd[u'command'].encode('windows-1252'))
+
+                        
                         except Exception as e:
                             envmonlib.Logging().warning(u"Failed to parse command: %s" % (e.args[0]) + 
                                                         "- Command string: %s" % (cmd[u'Command string']))
