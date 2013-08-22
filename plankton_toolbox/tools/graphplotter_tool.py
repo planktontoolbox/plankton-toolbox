@@ -313,20 +313,22 @@ class GraphPlotterTool(tool_base.ToolBase):
         else:
             # Use matplotlib.pyplot for drawing.
             figure = None
+        # Adjust visibility of checkboxes, etc.
+        if self._combined_checkbox.isChecked():
+            self._stacked_checkbox.setEnabled(True)
+        else:
+            self._stacked_checkbox.setChecked(False)
+            self._stacked_checkbox.setEnabled(False)
+        if self._stacked_checkbox.isChecked():
+            self._ylogscale_checkbox.setChecked(False)
+            self._ylogscale_checkbox.setEnabled(False)
+        else:
+            self._ylogscale_checkbox.setEnabled(True)
         # User selections.
         selectedchart = unicode(self._charttype_list.currentText())
         combined = self._combined_checkbox.isChecked()
         stacked = self._stacked_checkbox.isChecked()
         ylogscale = self._ylogscale_checkbox.isChecked()
-        # Adjust visibility of checkboxes, etc.
-        if combined:
-            self._stacked_checkbox.setEnabled(True)
-        else:
-            self._stacked_checkbox.setEnabled(False)
-        if stacked:
-            self._ylogscale_checkbox.setEnabled(False)
-        else:
-            self._ylogscale_checkbox.setEnabled(True)
         #
         if embedded:
             self._figure.clear()
