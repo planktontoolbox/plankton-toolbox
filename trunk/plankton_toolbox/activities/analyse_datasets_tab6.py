@@ -39,6 +39,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         super(AnalyseDatasetsTab6, self).__init__()
         #
         self._graph_plot_data = envmonlib.GraphPlotData()
+        self._type_list_values = ["float", "integer", "text", "date", "datetime"]
 
     def setMainActivity(self, main_activity):
         """ """
@@ -65,30 +66,31 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         self._z_axis_column_list.setEnabled(False)
         self._z_axis_parameter_list.setEnabled(False)
         #
-        self._updateEnabledDisabled()
+        self._updateEnabledDisabledAndTypes()
         
     def update(self):
         """ """
         self.clear()
         currentdata = self._analysisdata.getData()
         if currentdata:        
-            # For tab "Generic graphs".        
-            self._x_axis_column_list.addItems([item[u'header'] for item in currentdata.getExportTableColumns()])
-            self._y_axis_column_list.addItems([item[u'header'] for item in currentdata.getExportTableColumns()])
-            self._z_axis_column_list.addItems([item[u'header'] for item in currentdata.getExportTableColumns()])
+            # For tab "Generic graphs".
+            items = [item[u'header'] for item in currentdata.getExportTableColumns()]        
+            self._x_axis_column_list.addItems(items)
+            self._y_axis_column_list.addItems(items)
+            self._z_axis_column_list.addItems(items)
             # Search for all parameters in current data.
             parameterset = set()
             for visitnode in currentdata.getChildren():
                 for samplenode in visitnode.getChildren():
                     for variablenode in samplenode.getChildren():
-                        parameterset.add(variablenode.getData(u"parameter"))
+                        parameterset.add(variablenode.getData(u'parameter') + u' (' + variablenode.getData(u'unit') + u')')
             parameterlist = sorted(parameterset)
             #
             self._x_axis_parameter_list.addItems(parameterlist)
             self._y_axis_parameter_list.addItems(parameterlist)
             self._z_axis_parameter_list.addItems(parameterlist)
             #  Make combo-boxes visible.
-            self._updateEnabledDisabled()
+            self._updateEnabledDisabledAndTypes()
 
     # ===== TAB: Generic graphs ===== 
     def contentGenericGraphs(self):
@@ -107,34 +109,32 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         self._x_axis_column_list = QtGui.QComboBox()
         self._x_axis_column_list.setMinimumContentsLength(20)
         self._x_axis_parameter_list = QtGui.QComboBox()        
-        self._x_axis_parameter_list.setMinimumContentsLength(20)
+        self._x_axis_parameter_list.setMinimumContentsLength(30)
         self._x_axistype_list = QtGui.QComboBox()
-        self._x_axistype_list.addItems(["integer", "float", "date", "datetime", "text"])
-        self.connect(self._x_axis_column_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._updateEnabledDisabled)                
+        self._x_axistype_list.addItems(self._type_list_values)
+        self.connect(self._x_axis_column_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._updateEnabledDisabledAndTypes)                
         # - Select column for y-axis:
         self._y_axis_column_list = QtGui.QComboBox()
         self._y_axis_column_list.setMinimumContentsLength(20)
         self._y_axis_parameter_list = QtGui.QComboBox()
-        self._y_axis_parameter_list.setMinimumContentsLength(20)
+        self._y_axis_parameter_list.setMinimumContentsLength(30)
         self._y_axistype_list = QtGui.QComboBox()
-        self._y_axistype_list.addItems(["integer", "float", "date", "datetime", "text"])
-        self.connect(self._y_axis_column_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._updateEnabledDisabled)                
+        self._y_axistype_list.addItems(self._type_list_values)
+        self.connect(self._y_axis_column_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._updateEnabledDisabledAndTypes)                
         # - Select column for z-axis:
         self._z_axis_column_list = QtGui.QComboBox()
         self._z_axis_column_list.setMinimumContentsLength(20)
         self._z_axis_parameter_list = QtGui.QComboBox()
-        self._z_axis_parameter_list.setMinimumContentsLength(20)
+        self._z_axis_parameter_list.setMinimumContentsLength(30)
         self._z_axistype_list = QtGui.QComboBox()
-        self._z_axistype_list.addItems(["integer", "float", "date", "datetime", "text"])
-        self.connect(self._z_axis_column_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._updateEnabledDisabled)                
-        # Info, current number of subplots.
-        self._subplotsinfo_label = QtGui.QLabel()
+        self._z_axistype_list.addItems(self._type_list_values)
+        self.connect(self._z_axis_column_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._updateEnabledDisabledAndTypes)                
         # Clear data object.
-        self._clear_button = QtGui.QPushButton("Clear plot data")
-        self.connect(self._clear_button, QtCore.SIGNAL("clicked()"), self._clearPlotData)                
+        self._newgraph_button = QtGui.QPushButton("New graph")
+        self.connect(self._newgraph_button, QtCore.SIGNAL("clicked()"), self._newGraphAndPlotData)                
         # Add subplot data to the Graph plotter tool.
-        self._addsubplotdata_button = QtGui.QPushButton("Add plot data to Graph plotter")
-        self.connect(self._addsubplotdata_button, QtCore.SIGNAL("clicked()"), self._addPlot)                
+        self._addsubplotdata_button = QtGui.QPushButton("Add subplot to graph")
+        self.connect(self._addsubplotdata_button, QtCore.SIGNAL("clicked()"), self._addSubplotData)                
 
         # Layout widgets.
         #
@@ -180,9 +180,8 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         form1.addWidget(stretchlabel, gridrow,6, 1, 20)
         #
         hbox2 = QtGui.QHBoxLayout()
-        hbox2.addWidget(self._subplotsinfo_label)
         hbox2.addStretch(10)
-        hbox2.addWidget(self._clear_button)
+        hbox2.addWidget(self._newgraph_button)
         hbox2.addWidget(self._addsubplotdata_button)
         #
         layout = QtGui.QVBoxLayout()
@@ -193,7 +192,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         layout.addLayout(hbox2)
         self.setLayout(layout)                
         #
-        self._updateEnabledDisabled()
+        self._updateEnabledDisabledAndTypes()
         #
         return self
         
@@ -201,11 +200,9 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         """ """
         self._graph_plot_data.clear()
         # Enable/disable x, y or z-related items.
-        self._updateEnabledDisabled()
-        #
-        self._subplotsinfo_label.setText(u"No subplots.")
+        self._updateEnabledDisabledAndTypes()
 
-    def _updateEnabledDisabled(self):
+    def _updateEnabledDisabledAndTypes(self):
         """ """
         # Default is one variable.
         self._x_axis_column_list.setEnabled(False)
@@ -235,223 +232,39 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
             self._y_axis_parameter_list.setEnabled(False)
         if self._z_axis_column_list.currentIndex() != 0:
             self._z_axis_parameter_list.setEnabled(False)
+        # Autoselect types.
+        if self._analysisdata.getData():
+            x_selected_column = unicode(self._x_axis_column_list.currentText())
+            y_selected_column = unicode(self._y_axis_column_list.currentText())
+            z_selected_column = unicode(self._z_axis_column_list.currentText())
+            #
+            if x_selected_column == u'parameter:':
+                self._x_axistype_list.setCurrentIndex(0)
+            else:
+                for item in self._analysisdata.getData().getExportTableColumns():
+                        if item[u'header'] == x_selected_column:
+                            self._x_axistype_list.setCurrentIndex(self._type_list_values.index(item[u'view_format']))
+            #
+            if y_selected_column == u'parameter:':
+                self._y_axistype_list.setCurrentIndex(0)
+            else:
+                for item in self._analysisdata.getData().getExportTableColumns():
+                    if item[u'header'] == y_selected_column:
+                        self._y_axistype_list.setCurrentIndex(self._type_list_values.index(item[u'view_format']))
+            #
+            if z_selected_column == u'parameter:':
+                self._z_axistype_list.setCurrentIndex(0)
+            else:
+                for item in self._analysisdata.getData().getExportTableColumns():
+                    if item[u'header'] == z_selected_column:
+                        self._z_axistype_list.setCurrentIndex(self._type_list_values.index(item[u'view_format']))
             
-#    def _addPlot(self):
-#        """ """
-#        currentdata = self._analysisdata.getData()
-#        if not currentdata:
-#            return # Can't plot from empty dataset
-#        # Show the Graph plotter tool if hidden. 
-#        tool_manager.ToolManager().showToolByName(u'Graph plotter')
-#        graphtool = tool_manager.ToolManager().getToolByName(u'Graph plotter')
-#        # Selected columns.
-#        x_column = unicode(self._x_axis_column_list.currentText())
-#        y_column = unicode(self._y_axis_column_list.currentText())
-#        z_column = unicode(self._y_axis_column_list.currentText())
-#        # Selected parameters.
-#        x_param = None
-#        y_param = None
-#        z_param = None
-#        if x_column == u"Parameter:":
-#            x_param = unicode(self._x_axis_parameter_list.currentText())
-#        if y_column == u"Parameter:":
-#            y_param = unicode(self._y_axis_parameter_list.currentText())
-#        if z_column == u"Parameter:":
-#            z_param = unicode(self._z_axis_parameter_list.currentText())
-#        # Check exports columns backwards.
-#        x_visit_key = None
-#        x_sample_key = None                      
-#        x_variable_key = None
-#        y_visit_key = None
-#        y_sample_key = None                      
-#        y_variable_key = None
-#        z_visit_key = None
-#        z_sample_key = None                      
-#        z_variable_key = None
-#        if x_column != u"Parameter:":
-#            for export_info in currentdata.getExportTableColumns():
-#                if export_info.get('Header', u'') == x_column:
-#                    if export_info.get('Node', u'') == 'Visit':
-#                        x_visit_key =  export_info.get('Key', None)
-#                    elif export_info.get('Node', u'') == 'Sample':
-#                        x_sample_key =  export_info.get('Key', None)                        
-#                    elif export_info.get('Node', u'') == 'Variable':
-#                        x_variable_key =  export_info.get('Key', None)
-#        if y_column != u"Parameter:":
-#            for export_info in currentdata.getExportTableColumns():
-#                if export_info.get('Header', u'') == y_column:
-#                    if export_info.get('Node', u'') == 'Visit':
-#                        y_visit_key =  export_info.get('Key', None)
-#                    elif export_info.get('Node', u'') == 'Sample':
-#                        y_sample_key =  export_info.get('Key', None)                        
-#                    elif export_info.get('Node', u'') == 'Variable':
-#                        y_variable_key =  export_info.get('Key', None)
-#        if z_column != u"Parameter:":
-#            for export_info in currentdata.getExportTableColumns():
-#                if export_info.get('Header', u'') == z_column:
-#                    if export_info.get('Node', u'') == 'Visit':
-#                        z_visit_key =  export_info.get('Key', None)
-#                    elif export_info.get('Node', u'') == 'Sample':
-#                        z_sample_key =  export_info.get('Key', None)                        
-#                    elif export_info.get('Node', u'') == 'Variable':
-#                        z_variable_key =  export_info.get('Key', None)
-#        
-#        # Extract data.
-#        x_data = []
-#        y_data = []
-#        z_data = []
-#        x_value = None
-#        y_value = None
-#        z_value = None
-#        #
-#        
-#        selected_dict = self._main_activity.getSelectDataDict()
-#        selected_startdate = selected_dict[u'Start date']
-#        selected_enddate = selected_dict[u'End date']
-##        selected_stations = selected_dict[u'Stations']
-#        selected_visits = selected_dict[u'Visits']
-#        selected_minmaxdepth =  selected_dict[u'Min max depth']
-#        selected_taxon = selected_dict[u'Taxon']
-#        selected_trophy = selected_dict[u'Trophy']
-#        
-#        
-#        
-#        for visitnode in currentdata.getChildren():
-#            
-#            if selected_startdate > visitnode.getData(u'Date'):
-#                continue
-#            if selected_enddate < visitnode.getData(u'Date'):
-#                continue
-##            if visitnode.getData(u'Station name') not in selected_stations:
-##                continue
-#            if (visitnode.getData(u'Station name') + u' : ' + visitnode.getData(u'Date')) not in selected_visits:
-#                continue
-#
-#            
-#             
-#            if x_visit_key: x_value = visitnode.getData(x_visit_key) # if x_visit_key else None
-#            if y_visit_key: y_value = visitnode.getData(y_visit_key) # if y_visit_key else None
-#            if z_visit_key: y_value = visitnode.getData(y_visit_key) # if y_visit_key else None
-#            for samplenode in visitnode.getChildren():
-#            
-#                minmax = samplenode.getData(u'Sample min depth') + u'-' + samplenode.getData(u'Sample max depth')
-#                if minmax not in selected_minmaxdepth:
-#                    continue
-#                
-#                
-#                if x_sample_key: x_value = samplenode.getData(x_sample_key) # if x_sample_key else None
-#                if y_sample_key: y_value = samplenode.getData(y_sample_key) # if y_sample_key else None
-#                if z_sample_key: y_value = samplenode.getData(y_sample_key) # if y_sample_key else None
-#                for variablenode in samplenode.getChildren():
-#                
-#                    if variablenode.getData(u'Taxon name') not in selected_taxon:
-#                        continue
-#                    if variablenode.getData(u'Trophy') not in selected_trophy:
-#                        continue
-#                    
-#                    
-#                    
-#                    #
-#                    if x_variable_key: x_value = variablenode.getData(x_variable_key) # if x_variable_key else None
-#                    if y_variable_key: y_value = variablenode.getData(y_variable_key) # if y_variable_key else None
-#                    if z_variable_key: y_value = variablenode.getData(y_variable_key) # if y_variable_key else None
-#                    #
-#                    if x_param or y_param:
-#                        parameter = variablenode.getData(u'Parameter')
-#                        if x_param:
-#                            if parameter == x_param:
-#                                x_value = variablenode.getData(u'Value')
-#                        if y_param:
-#                            if parameter == y_param:
-#                                y_value = variablenode.getData(u'Value')
-#                    # If NOT both are parameters, add data on variable level.
-#                    if not (x_param and y_param):
-#                        # Add values to lists if both values are available.
-#                        if (x_value and y_value):
-#                            x_data.append(x_value)
-#                            y_data.append(y_value)
-#                        # Clear used values.
-#                        if x_param: x_value = None    
-#                        if y_param: y_value = None    
-#                    # Clear used values.
-#                    if x_variable_key: x_value = None    
-#                    if x_variable_key: y_value = None
-#                # If both are parameters, add data on sample level.     
-#                if (x_param and y_param):
-#                    # Add values to lists if both values are available.
-#                    if (x_value and y_value):
-#                        x_data.append(x_value)
-#                        y_data.append(y_value)
-#                        # Clear used values.
-#                        if x_param: x_value = None    
-#                        if y_param: y_value = None    
-#                # Clear used values.
-#                if x_sample_key: x_value = None    
-#                if y_sample_key: y_value = None    
-#            # Clear used values.
-#            if x_visit_key: x_value = None    
-#            if y_visit_key: y_value = None    
-#        #
-#
-##        # Check if this is a time series or not.
-##        selectedplotindex = self._plotindex_list.currentIndex() 
-##        if selectedplotindex in [0, 1, 2, 3]:
-##            graphtool.addTimeseriesPlot(selectedplotindex, x_data, y_data)
-##        else:
-##            graphtool.addXYPlot(selectedplotindex - 4, x_data, y_data)
-#
-#
-#        # Convert numeric values. 
-#        # TODO: Type info should be in import parser.
-#        for index, item in enumerate(x_data):
-#            try:
-#                x_data[index] = item.replace(u',', u'.')
-#            except:
-#                pass
-#        for index, item in enumerate(y_data):
-#            try:
-#                y_data[index] = item.replace(u',', u'.')
-#            except:
-#                pass
-#
-#
-#
-#        # Create plot data object.
-##        self._graph_plot_data = envmonlib.PlotDataTwoVariables(x_type = u'',
-##                                                  title = y_column + " / " + x_column, 
-##                                                  x_label = x_column,
-##                                                  y_label = y_column)
-#
-#        plotdatainfo = self._graph_plot_data.getPlotDataInfo()
-#
-#        plotdatainfo[u'Title'] = u'Generic graph'
-##        plotdatainfo[u'X label'] = u''
-##        plotdatainfo[u'Y label'] = u''
-#        plotdatainfo[u'X type'] = unicode(self._x_axistype_list.currentText())
-##        plotdatainfo[u'X format'] = u''
-#        plotdatainfo[u'Y type'] = unicode(self._y_axistype_list.currentText())
-##        plotdatainfo[u'Y format'] = u''
-#
-#        self._graph_plot_data.setPlotDataInfo(plotdatainfo)
-#
-#
-#        # Add plot data.
-#        self._graph_plot_data.addPlot(plot_name = y_column + " / " + x_column, 
-#                         x_array = x_data, 
-#                         y_array = y_data, 
-#                         x_label = x_column,
-#                         y_label = y_column)
-#        # View in Graph plotter tool.
-##        graphtool.setChartSelection(chart = u"Bar chart",
-##                                    combined = True, stacked = False, y_log_scale = False)
-#        graphtool.setPlotData(self._graph_plot_data)
-
-
-
-##########################################################################################################
-
-
-    def _addPlot(self):
+    def _newGraphAndPlotData(self):
+        """ """
+        self._clearPlotData()
+        self._addSubplotData()
+    
+    def _addSubplotData(self):
         """ """
         # Show the Graph plotter tool if hidden. 
         tool_manager.ToolManager().showToolByName(u'Graph plotter')
@@ -472,30 +285,19 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         #
         plotdatainfo = self._graph_plot_data.getPlotDataInfo()
         #
-        plotdatainfo[u'title'] = u'Generic graph'
         plotdatainfo[u'x_label'] = x_selected_column if x_selected_column != u"parameter:" else x_selected_param
         plotdatainfo[u'x_type'] = x_selected_type
-        plotdatainfo[u'x_format'] = u''
+        plotdatainfo[u'x_format'] = x_selected_type
         #
         plotdatainfo[u'y_label'] = y_selected_column if y_selected_column != u"parameter:" else y_selected_param
         plotdatainfo[u'y_type'] = y_selected_type
-        plotdatainfo[u'y_format'] = u''
+        plotdatainfo[u'y_format'] = y_selected_type
         #
         plotdatainfo[u'z_label'] = z_selected_column if z_selected_column != u"parameter:" else z_selected_param
         plotdatainfo[u'z_type'] = z_selected_type
-        plotdatainfo[u'z_format'] = u''
+        plotdatainfo[u'z_format'] = z_selected_type
         #
         # Add plot data.
-
-#        x_data = [1,2,3] 
-#        y_data = [4,5,6] 
-#        z_data = [7,8,9] 
-        x_column = u'x_column'
-        y_column = u'y_column'
-        z_column = u'z_column'
-
-
-        #
         x_data, y_data, z_data = self._getFilteredData()
         #
         if x_data and (x_selected_type == u'float'):
@@ -517,21 +319,12 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                 except:
                     z_data[index] = 0.0
         
-        
-        
-        
-        
-        plot_name = y_selected_column if y_selected_column != u"parameter:" else y_selected_param + u' / ' + \
-                    x_selected_column if x_selected_column != u"parameter:" else x_selected_param
-        x_label = u''
-        x_array = None
-        y_label = u''
-        y_array = None
-        z_label = u''
-        z_array = None
-
+        plot_name = u''
+#         plot_name = y_selected_column if y_selected_column != u"parameter:" else y_selected_param + u' / ' + \
+#                     x_selected_column if x_selected_column != u"parameter:" else x_selected_param
+        #
         self._graph_plot_data.addPlot(
-                        plot_name = y_column + " / " + x_column, 
+                        plot_name = plot_name, 
                          x_label = x_selected_column if x_selected_column != u"parameter:" else x_selected_param,
                          x_array = x_data,
                          y_label = y_selected_column if y_selected_column != u"parameter:" else y_selected_param,
@@ -541,9 +334,6 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         # View in Graph plotter tool.
         graphtool.setPlotData(self._graph_plot_data)
 
-
-    
-    
     
     def _getFilteredData(self):
         """ """
@@ -557,10 +347,6 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         x_column = unicode(self._x_axis_column_list.currentText())
         y_column = unicode(self._y_axis_column_list.currentText())
         z_column = unicode(self._z_axis_column_list.currentText())
-        # Selected types.
-        x_selected_type = unicode(self._x_axistype_list.currentText())
-        y_selected_type = unicode(self._y_axistype_list.currentText())
-        z_selected_type = unicode(self._z_axistype_list.currentText())
         # Selected parameters.
         x_param = None
         y_param = None
@@ -633,104 +419,146 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         y_value = None
         z_value = None
         
-        
-        
         # Iterate over visits. 
         for visitnode in currentdata.getChildren():
             # Get data.
-            if x_visit_key: x_value = visitnode.getData(x_visit_key) # if x_visit_key else None
-            if y_visit_key: y_value = visitnode.getData(y_visit_key) # if y_visit_key else None
-            if z_visit_key: z_value = visitnode.getData(z_visit_key) # if z_visit_key else None
+            if x_visit_key: x_value = visitnode.getData(x_visit_key)
+            if y_visit_key: y_value = visitnode.getData(y_visit_key)
+            if z_visit_key: z_value = visitnode.getData(z_visit_key)
             # Check if finished.
-            if y_value and (numberofvariables == 1):
+            if (y_value is not None) and (numberofvariables == 1):
                 y_data.append(y_value)
-                x_value = y_value = z_value = None
+                if y_visit_key: y_value = None
                 continue
-            if x_value and y_value and (numberofvariables == 2):
+            if (x_value is not None) and (y_value is not None) and (numberofvariables == 2):
                 x_data.append(x_value)
                 y_data.append(y_value)
-                x_value = y_value = z_value = None
+                if x_visit_key: x_value = None
+                if y_visit_key: y_value = None
                 continue            
-            if x_value and y_value and z_value and (numberofvariables == 3):
+            if (x_value is not None) and (y_value is not None) and (z_value is not None) and (numberofvariables == 3):
                 x_data.append(x_value)
                 y_data.append(y_value)
                 z_data.append(z_value)
-                x_value = y_value = z_value = None
+                if x_visit_key: x_value = None
+                if y_visit_key: y_value = None
+                if z_visit_key: z_value = None
                 continue            
             # Iterate over samples.
             for samplenode in visitnode.getChildren():
                 # Get data.
-                if x_sample_key: x_value = samplenode.getData(x_sample_key) # if x_sample_key else None
-                if y_sample_key: y_value = samplenode.getData(y_sample_key) # if y_sample_key else None
-                if z_sample_key: z_value = samplenode.getData(z_sample_key) # if z_sample_key else None
+                if x_sample_key: x_value = samplenode.getData(x_sample_key)
+                if y_sample_key: y_value = samplenode.getData(y_sample_key)
+                if z_sample_key: z_value = samplenode.getData(z_sample_key)
                 # Check if finished.
-                if y_value and (numberofvariables == 1):
+                if (y_value is not None) and (numberofvariables == 1):
                     y_data.append(y_value)
-                    x_value = y_value = z_value = None
+                    if y_sample_key: y_value = None
                     continue
-                if x_value and y_value and (numberofvariables == 2):
+                if (x_value is not None) and (y_value is not None) and (numberofvariables == 2):
                     x_data.append(x_value)
                     y_data.append(y_value)
-                    x_value = y_value = z_value = None
+                    if x_sample_key: x_value = None
+                    if y_sample_key: y_value = None
+                    if z_sample_key: z_value = None
                     continue            
-                if x_value and y_value and z_value and (numberofvariables == 3):
+                if (x_value is not None) and (y_value is not None) and (z_value is not None) and (numberofvariables == 3):
                     x_data.append(x_value)
                     y_data.append(y_value)
                     z_data.append(z_value)
-                    x_value = y_value = z_value = None
-                    continue            
-                # Iterate over variables.
+                    if x_sample_key: x_value = None
+                    if y_sample_key: y_value = None
+                    if z_sample_key: z_value = None
+                    continue
+            
+                # Iterate over sample content. 
+                # Note: Create a level between sample and variabel.
+                grouped_organisms = {}
                 for variablenode in samplenode.getChildren():
-                    # Get data.
-                    if x_variable_key: x_value = variablenode.getData(x_variable_key) # if x_variable_key else None
-                    if y_variable_key: y_value = variablenode.getData(y_variable_key) # if y_variable_key else None
-                    if z_variable_key: z_value = variablenode.getData(z_variable_key) # if z_variable_key else None
-                    # Get parameter data.
-                    if x_param or y_param or z_param:
-                        parameter = variablenode.getData(u'parameter')
-                        if x_param:
+                    group_key = variablenode.getData(u'taxon_name')
+                    group_key += u':' + variablenode.getData(u'size_class') # For phytoplankton 
+                    group_key += u':' + variablenode.getData(u'stage') # For zooplankton
+                    group_key += u':' + variablenode.getData(u'sex') # For zooplankton
+                
+                    if group_key not in grouped_organisms:
+                        grouped_organisms[group_key] = []
+                    grouped_organisms[group_key].append(variablenode)
+                
+                # Get parameters values from he group.
+                for group_key in grouped_organisms.keys():
+                    if x_param:
+                        x_value = None
+                        for variablenode in grouped_organisms[group_key]:
+                            parameter = variablenode.getData(u'parameter') + u' (' + variablenode.getData(u'unit') + u')'
                             if parameter == x_param:
                                 x_value = variablenode.getData(u'value')
-                        if y_param:
+                                break                    
+                    if y_param:
+                        y_value = None
+                        for variablenode in grouped_organisms[group_key]:
+                            parameter = variablenode.getData(u'parameter') + u' (' + variablenode.getData(u'unit') + u')'
                             if parameter == y_param:
                                 y_value = variablenode.getData(u'value')
-                        if z_param:
+                                break                    
+                    if z_param:
+                        z_value = None
+                        for variablenode in grouped_organisms[group_key]:
+                            parameter = variablenode.getData(u'parameter') + u' (' + variablenode.getData(u'unit') + u')'
                             if parameter == z_param:
                                 z_value = variablenode.getData(u'value')
-                                
-                    # Check if parameters are finished.
-                    # Break the variable loop if all parameters are found.
-#                    if y_param and y_value and (numberofvariables == 1):
-#                        y_data.append(y_value)
-#                        x_value = y_value = z_value = None
-#                        break
-                    if x_param and y_param and x_value and y_value and (numberofvariables == 2):
-                        x_data.append(x_value)
+                                break
+                    # Check if values are finished.
+                    if (y_value is not None) and (numberofvariables == 1):
                         y_data.append(y_value)
-                        x_value = y_value = z_value = None
-                        break            
-                    if x_param and y_param and z_param and x_value and y_value and z_value and (numberofvariables == 3):
-                        x_data.append(x_value)
-                        y_data.append(y_value)
-                        z_data.append(z_value)
-                        x_value = y_value = z_value = None
-                        break
-                    # Check if finished.
-                    if y_value and (numberofvariables == 1):
-                        y_data.append(y_value)
-                        x_value = y_value = z_value = None
+                        if y_param: y_value = None
                         continue
-                    if x_value and y_value and (numberofvariables == 2):
+                    if (x_value is not None) and (y_value is not None) and (numberofvariables == 2):
                         x_data.append(x_value)
                         y_data.append(y_value)
-                        x_value = y_value = z_value = None
+                        if x_param: x_value = None
+                        if y_param: y_value = None
                         continue            
-                    if x_value and y_value and z_value and (numberofvariables == 3):
+                    if (x_value is not None) and (y_value is not None) and (z_value is not None) and (numberofvariables == 3):
                         x_data.append(x_value)
                         y_data.append(y_value)
                         z_data.append(z_value)
-                        x_value = y_value = z_value = None
+                        if x_param: x_value = None
+                        if y_param: y_value = None
+                        if z_param: z_value = None
                         continue            
+
+                # Get other data from the group.    
+                for variablenode in grouped_organisms[group_key]:                        
+                    if x_variable_key: x_value = variablenode.getData(x_variable_key)
+                    if y_variable_key: y_value = variablenode.getData(y_variable_key)
+                    if z_variable_key: z_value = variablenode.getData(z_variable_key)
+
+                    # Check if values are finished.
+                    if (y_value is not None) and (numberofvariables == 1):
+                        y_data.append(y_value)
+                        if y_variable_key: y_value = None
+                        continue
+                    if (x_value is not None) and (y_value is not None) and (numberofvariables == 2):
+                        x_data.append(x_value)
+                        y_data.append(y_value)
+                        if x_variable_key: x_value = None
+                        if y_variable_key: y_value = None
+                        continue            
+                    if (x_value is not None) and (y_value is not None) and (z_value is not None) and (numberofvariables == 3):
+                        x_data.append(x_value)
+                        y_data.append(y_value)
+                        z_data.append(z_value)
+                        if x_variable_key: x_value = None
+                        if y_variable_key: y_value = None
+                        if z_variable_key: z_value = None
+                        continue            
+                #                    
+                if x_param: x_value = None
+                if y_param: y_value = None
+                if z_param: z_value = None
+                if x_variable_key: x_value = None
+                if y_variable_key: y_value = None
+                if z_variable_key: z_value = None
 
         return x_data, y_data, z_data
 

@@ -634,10 +634,10 @@ class BarChart(ChartBase):
             y_type = self._data.getPlotDataInfo()[u'y_type']
             # Bar charts needs text (text, integer, date or datetime) for the x-axis and 
             # values (integer or float) for the y-axis.
-            if not x_type in [u'text', u'integer', u'float', u'date', u'datetime']:
+            if not x_type in [u'', u'text', u'integer', u'float', u'date', u'datetime']:
                 envmonlib.Logging().warning(u"GraphPlotter.BarChart: Plot skipped, X-axis type not valid: " + x_type)
                 raise UserWarning(u"GraphPlotter.BarChart: Plot skipped, X-axis type not valid: " + x_type)
-            if not y_type in [u'integer', u'float']:
+            if not y_type in [u'', u'integer', u'float']:
                 envmonlib.Logging().warning(u"GraphPlotter.BarChart: Plot skipped, Y-axis type not valid: " + y_type)
                 raise UserWarning(u"GraphPlotter.BarChart: Plot skipped, Y-axis type not valid: " + y_type)
             #
@@ -768,10 +768,10 @@ class ScatterChart(ChartBase):
             z_type = self._data.getPlotDataInfo()[u'z_type']
             # Scatter charts needs text (text, integer, date or datetime) for the x-axis and 
             # values (integer or float) for the y-axis.
-            if not x_type in [u'text', u'integer', u'float', u'date', u'datetime']:
+            if not x_type in [u'', u'text', u'integer', u'float', u'date', u'datetime']:
                 envmonlib.Logging().warning(u"GraphPlotter.PieChart: Plot skipped, X-axis type not valid: " + x_type)
                 raise UserWarning(u"GraphPlotter.PieChart: Plot skipped, X-axis type not valid: " + x_type)
-            if not y_type in [u'integer', u'float']:
+            if not y_type in [u'', u'integer', u'float']:
                 envmonlib.Logging().warning(u"GraphPlotter.PieChart: Plot skipped, Y-axis type not valid: " + y_type)
                 raise UserWarning(u"GraphPlotter.PieChart: Plot skipped, Y-axis type not valid: " + y_type)
             if not z_type in [u'', u'integer', u'float']:
@@ -949,10 +949,10 @@ class PieChart(ChartBase):
             y_type = self._data.getPlotDataInfo()[u'y_type']
             # Pie charts needs text (text, integer or datetime) for the x-axis and 
             # values (integer or float) for the y-axis.
-            if not x_type in [u'text', u'integer', u'float', u'date', u'datetime']:
+            if not x_type in [u'', u'text', u'integer', u'float', u'date', u'datetime']:
                 envmonlib.Logging().warning(u"GraphPlotter.PieChart: Plot skipped, X-axis type not valid: " + x_type)
                 raise UserWarning(u"GraphPlotter.PieChart: Plot skipped, X-axis type not valid: " + x_type)
-            if not y_type in [u'integer', u'float']:
+            if not y_type in [u'', u'integer', u'float']:
                 envmonlib.Logging().warning(u"GraphPlotter.PieChart: Plot skipped, Y-axis type not valid: " + y_type)
                 raise UserWarning(u"GraphPlotter.PieChart: Plot skipped, Y-axis type not valid: " + y_type)
             # 
@@ -1018,13 +1018,13 @@ class MapChart(ChartBase):
 #             y_type = self._data.getPlotDataInfo()[u'y_type']
 #             z_type = self._data.getPlotDataInfo()[u'z_type']
 # #             # Map charts needs float values. 
-# #             if not x_type in [u'float']:
+# #             if not x_type in [u'', u'float']:
 # #                 envmonlib.Logging().warning(u"GraphPlotter.MapChart: Plot skipped, X-axis type not valid: " + x_type)
 # #                 raise UserWarning(u"GraphPlotter.MapChart: Plot skipped, X-axis type not valid: " + x_type)
-# #             if not y_type in [u'float']:
+# #             if not y_type in [u'', u'float']:
 # #                 envmonlib.Logging().warning(u"GraphPlotter.MapChart: Plot skipped, Y-axis type not valid: " + y_type)
 # #                 raise UserWarning(u"GraphPlotter.MapChart: Plot skipped, Y-axis type not valid: " + y_type)
-# #             if not z_type in [u'integer', u'float']:
+# #             if not z_type in [u'', u'integer', u'float']:
 # #                 envmonlib.Logging().warning(u"GraphPlotter.MapChart: Plot skipped, Z-axis type not valid: " + z_type)
 # #                 raise UserWarning(u"GraphPlotter.MapChart: Plot skipped, Z-axis type not valid: " + z_type)
 #             # 

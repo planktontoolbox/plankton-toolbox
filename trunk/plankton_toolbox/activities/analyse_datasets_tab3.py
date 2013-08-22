@@ -78,7 +78,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             # u"Family",
             # u"Genus",
             u"Species" ])
-        self._aggregate_rank_list.setCurrentIndex(1) # Default: Plankton groups.
+        self._aggregate_rank_list.setCurrentIndex(4) # Default: Class.
         #  Aggregate over trophy.
         self._trophy_listview = utils_qt.SelectableQListView()
         self._trophy_listview.setMaximumHeight(80)
