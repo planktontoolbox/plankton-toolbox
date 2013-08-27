@@ -3,7 +3,7 @@
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010-2012 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2013 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,6 +27,7 @@
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
+import plankton_toolbox.toolbox.help_texts as help_texts
 import envmonlib
 
 class AnalyseDatasetsTab3(QtGui.QWidget):
@@ -56,15 +57,16 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         """ """
         # Active widgets and connections.
         introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText("""
-        You may want to aggregate abundance or biovolume data from the level of size group or 
-        species level to a higher taxonomic level. 
-        A common task is to aggregate to genus or class level. 
-        Also a level termed Algal groups with fewer classes is available. 
-        Here you can also select only autotrophs (AU), mixotrophs (MX), heterotrophs (HT) or 
-        organisms with trophic type not specified (NS). 
-        For phytoplankton most often a combination is used, e.g. AU + MX for all organisms with photosynthesis.
-        """)
+        introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab3_intro'))
+#         introlabel.setText("""
+#         You may want to aggregate abundance or biovolume data from the level of size group or 
+#         species level to a higher taxonomic level. 
+#         A common task is to aggregate to genus or class level. 
+#         Also a level termed Algal groups with fewer classes is available. 
+#         Here you can also select only autotrophs (AU), mixotrophs (MX), heterotrophs (HT) or 
+#         organisms with trophic type not specified (NS). 
+#         For phytoplankton most often a combination is used, e.g. AU + MX for all organisms with photosynthesis.
+#         """)
         # Active widgets and connections.
         # Aggregate over taxonomic rank.
         self._aggregate_rank_list = QtGui.QComboBox()
@@ -78,7 +80,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             # u"Family",
             # u"Genus",
             u"Species" ])
-        self._aggregate_rank_list.setCurrentIndex(4) # Default: Class.
+        self._aggregate_rank_list.setCurrentIndex(3) # Default: Class.
         #  Aggregate over trophy.
         self._trophy_listview = utils_qt.SelectableQListView()
         self._trophy_listview.setMaximumHeight(80)
@@ -86,8 +88,8 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         self._aggregatedata_button = QtGui.QPushButton("Aggregate data")
         self.connect(self._aggregatedata_button, QtCore.SIGNAL("clicked()"), self._aggregateData)
         #
-        self._reloaddata_button = QtGui.QPushButton("Reload current data")
-        self.connect(self._reloaddata_button, QtCore.SIGNAL("clicked()"), self._main_activity._tab1widget._useSelectedDatasets)
+        self._reloaddata_button = QtGui.QPushButton("Reload analysis data (no clean up)")
+        self.connect(self._reloaddata_button, QtCore.SIGNAL("clicked()"), self._main_activity._tab1widget._copyDatasetsForAnalysis)
         #               
         self._addmissingtaxa_button = QtGui.QPushButton("Add missing taxa in each sample")
         self.connect(self._addmissingtaxa_button, QtCore.SIGNAL("clicked()"), self._addMissingTaxa)                
@@ -96,6 +98,8 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         gridrow = 0
         label1 = QtGui.QLabel("Aggregate over:")
         form1.addWidget(label1, gridrow, 0, 1, 4)
+        label2 = QtGui.QLabel("Complement data:")
+        form1.addWidget(label2, gridrow, 6, 1, 4)
         gridrow += 1
         label1 = QtGui.QLabel("Taxon level (rank):               ")
         label2 = QtGui.QLabel("Trophy:")
@@ -105,10 +109,10 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         gridrow += 1
         form1.addWidget(self._aggregate_rank_list, gridrow, 0, 1, 1)
         form1.addWidget(self._trophy_listview, gridrow, 1, 4, 3)
+        form1.addWidget(self._addmissingtaxa_button, gridrow, 6, 1, 1)
         gridrow += 4
         form1.addWidget(self._reloaddata_button, gridrow, 2, 1, 1)
         form1.addWidget(self._aggregatedata_button, gridrow, 3, 1, 1)
-        form1.addWidget(self._addmissingtaxa_button, gridrow, 10, 1, 1)
         #
 #        hbox1 = QtGui.QHBoxLayout()
 #        hbox1.addStretch(5)
@@ -130,8 +134,8 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
 #                envmonlib.Logging().log("Taxon level is not selected. Please try again.")
 #                raise UserWarning("Taxon level is not selected. Please try again.")
             if not self._analysisdata.getData():
-                envmonlib.Logging().log("No data is selected for analysis. Please try again.")
-                raise UserWarning("No data is selected for analysis. Please try again.")                
+                envmonlib.Logging().log("No data is loaded for analysis. Please try again.")
+                raise UserWarning("No data is loaded for analysis. Please try again.")                
             #
             selected_taxon_rank = unicode(self._aggregate_rank_list.currentText())
             selected_trophy_list = self._trophy_listview.getSelectedDataList()
@@ -191,19 +195,19 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                         # Add taxon class based on taxon name.
                         newvariable.addData(u'class', envmonlib.Species().getTaxonValue(newtaxon, "Class"))
             #
-            self._main_activity.updateCurrentData()    
+            self._main_activity.updateAnalysisData()    
         except UserWarning, e:
             QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
 
     def _updateSelectDataAlternatives(self):
         """ """
-        currentdata = self._analysisdata.getData()
-        if not currentdata:
+        analysisdata = self._analysisdata.getData()
+        if not analysisdata:
             return # Empty data.
         #
         trophyset = set()
         #
-        for visitnode in currentdata.getChildren():
+        for visitnode in analysisdata.getChildren():
             for samplenode in visitnode.getChildren():
                 for variablenode in samplenode.getChildren():
                     trophyset.add(unicode(variablenode.getData(u'trophy')))
@@ -213,13 +217,13 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
     def _addMissingTaxa(self):
         """ """
         try:
-            currentdata = self._analysisdata.getData()
-            if not currentdata:        
+            analysisdata = self._analysisdata.getData()
+            if not analysisdata:        
                 return
             # Step 1: Create lists of taxa (name and trophy) and parameters (parameter and unit).
             parameter_set = set()
             taxon_set = set()
-            for visitnode in currentdata.getChildren():
+            for visitnode in analysisdata.getChildren():
                 for samplenode in visitnode.getChildren():
                     for variablenode in samplenode.getChildren():
                         parameter = variablenode.getData(u'parameter')
@@ -239,7 +243,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             parameter_set = set()
             taxon_set = set()
             #
-            for visitnode in currentdata.getChildren():
+            for visitnode in analysisdata.getChildren():
                 #
                 for samplenode in visitnode.getChildren():
                     sample_parameter_taxon_list = []

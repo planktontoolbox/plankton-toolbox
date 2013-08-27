@@ -3,7 +3,7 @@
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010-2012 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2013 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -332,7 +332,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         
     def _contentSaveResult(self):
         """ """
-        saveresultbox = QtGui.QGroupBox("Save data", self)
+        saveresultbox = QtGui.QGroupBox("Export data", self)
         # Active widgets and connections.
         self._saveformat_list = QtGui.QComboBox()
         self._saveformat_list.addItems(["Tab delimited text file (.txt)",

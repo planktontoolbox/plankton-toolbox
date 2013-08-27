@@ -3,7 +3,7 @@
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010-2012 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2013 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -60,11 +60,11 @@ class ActivityManager(object):
 
     def initActivities(self):
         """ Activity activator. """
-        self._activitylist.append(start_activity.StartActivity("Start", self._parent))
+        self._activitylist.append(start_activity.StartActivity("Introduction", self._parent))
 #        self._activitylist.append(create_dataset_activity.CreateDatasetActivity("(Create dataset)", self._parent))
-        self._activitylist.append(load_datasets_activity.LoadDatasetsActivity("Load datasets", self._parent))
+        self._activitylist.append(load_datasets_activity.LoadDatasetsActivity("Import datasets", self._parent))
         self._activitylist.append(screening_activity.ScreeningActivity("Screening", self._parent))
-        self._activitylist.append(analyse_datasets_activity.AnalyseDatasetsActivity("Analyse datasets", self._parent))
+        self._activitylist.append(analyse_datasets_activity.AnalyseDatasetsActivity("Analyse data", self._parent))
 #        self._activitylist.append(create_reports_activity.CreateReportsActivity("(Create reports)", self._parent))
 #        self._activitylist.append(manage_species_lists_activity.ManageSpeciesListsActivity("Manage species lists", self._parent))
 

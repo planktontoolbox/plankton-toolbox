@@ -3,7 +3,7 @@
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010-2012 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2013 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -28,6 +28,7 @@ import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.toolbox.utils_qt as utils_qt
+import plankton_toolbox.toolbox.help_texts as help_texts
 import envmonlib
 
 class AnalyseDatasetsTab2(QtGui.QWidget):
@@ -51,10 +52,10 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
     def update(self):
         """ """
         self.clear()
-        currentdata = self._analysisdata.getData()
-        if currentdata:        
+        analysisdata = self._analysisdata.getData()
+        if analysisdata:        
             # For tab "Generic graphs".        
-            self._column_list.addItems([item[u'header'] for item in currentdata.getExportTableColumns()])
+            self._column_list.addItems([item[u'header'] for item in analysisdata.getExportTableColumns()])
             #  Make combo-boxes visible.
             self._column_list.setEnabled(True)
 
@@ -63,13 +64,15 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
         """ """
         # Active widgets and connections.
         introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText("""
-        Prepare your data by removing unwanted rows from "Current data".
-        This may be useful if you want to use data from one or a few stations or data from a certain depth or time period.
-        """)
+        introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab1_intro'))
+#         introlabel.setText("""
+#         Prepare your data by removing unwanted rows from "Analysis data".
+#         This may be useful if you want to use data from one or a few stations or data from a certain depth or time period.
+#         """)
         #
         self._column_list = QtGui.QComboBox()
         self._column_list.setMinimumContentsLength(20)
+        self._column_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         self._column_list.setEnabled(False)
         #
         self.connect(self._column_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._updateColumnContent)                
@@ -113,8 +116,8 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
 
     def _updateColumnContent(self, selected_row):
         """ """
-        currentdata = self._analysisdata.getData()
-        if not currentdata:
+        analysisdata = self._analysisdata.getData()
+        if not analysisdata:
             self._content_listview.clear()
             return # Empty data.
         #
@@ -123,19 +126,19 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
         # Search for export column corresponding model element.
         nodelevel = u''
         key = u''
-        for info_dict in currentdata.getExportTableColumns():
+        for info_dict in analysisdata.getExportTableColumns():
             if info_dict[u'header'] == selectedcolumn:
                 nodelevel = info_dict[u'node']
                 key = info_dict[u'key']
                 break # Break loop.
         #
         if nodelevel == u'dataset':
-            if key in currentdata.getDataDict().keys():
-                columncontent_set.add(unicode(currentdata.getData(key)))
+            if key in analysisdata.getDataDict().keys():
+                columncontent_set.add(unicode(analysisdata.getData(key)))
             else:
                 columncontent_set.add(u'') # Add empty field.
         #    
-        for visitnode in currentdata.getChildren():
+        for visitnode in analysisdata.getChildren():
             if nodelevel == u'visit':
                 if key in visitnode.getDataDict().keys():
                     columncontent_set.add(unicode(visitnode.getData(key)))
@@ -170,10 +173,10 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
         selectedcolumn = unicode(self._column_list.currentText())
         #
         if keep_data == False:
-            selectedcontent = self._content_listview.getSelectedDataList()
+            markedcontent = self._content_listview.getSelectedDataList()
         else:
-            selectedcontent = self._content_listview.getNotSelectedDataList() # Note: "Not-selected" list.       
+            markedcontent = self._content_listview.getNotSelectedDataList() # Note: "Not-selected" list.       
         #
-        self._analysisdata.removeData(selectedcolumn, selectedcontent)
+        self._analysisdata.removeData(selectedcolumn, markedcontent)
         #
-        self._main_activity.updateCurrentData()    
+        self._main_activity.updateAnalysisData()    

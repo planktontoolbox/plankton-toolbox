@@ -3,7 +3,7 @@
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010-2012 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2013 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -30,6 +30,7 @@ import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.activities.activity_base as activity_base
 import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
+import plankton_toolbox.toolbox.help_texts as help_texts
 import envmonlib
 
 class ScreeningActivity(activity_base.ActivityBase):
@@ -89,10 +90,11 @@ class ScreeningActivity(activity_base.ActivityBase):
         widget = QtGui.QWidget()
         # Active widgets and connections.
         introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText("""
-        Screen your data for inconsistences regarding code values etc. 
-        Used lists of codes can be found in the folder "toolbox_data/code_lists". 
-        """)        
+        introlabel.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_intro_1'))
+#         introlabel.setText("""
+#         Screen your data for inconsistences regarding code values etc. 
+#         Used lists of codes can be found in the folder "toolbox_data/code_lists". 
+#         """)        
         #
         self._codelistscreening_button = QtGui.QPushButton("Code list screening")
         self.connect(self._codelistscreening_button, QtCore.SIGNAL("clicked()"), self._codeListScreening)                
@@ -134,19 +136,22 @@ class ScreeningActivity(activity_base.ActivityBase):
         widget = QtGui.QWidget()
         # Active widgets and connections.
         introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText("""
-        Screen your data for inconsistences regarding species names etc.
-        """)        
+        introlabel.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_intro_2'))
+#         introlabel.setText("""
+#         Screen your data for inconsistences regarding species names etc.
+#         """)        
         specieslabel = utils_qt.RichTextQLabel()
-        specieslabel.setText("""
-        The taxonomic hierarchy in www.nordicmicroalgae.org is used as a reference. 
-        This is based on www.algaebase.org and the Dyntaxa database at the Swedish Species Centre.
-        """)        
+        specieslabel.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_species'))
+#         specieslabel.setText("""
+#         The taxonomic hierarchy in www.nordicmicroalgae.org is used as a reference. 
+#         This is based on www.algaebase.org and the Dyntaxa database at the Swedish Species Centre.
+#         """)        
         bvollabel = utils_qt.RichTextQLabel()
-        bvollabel.setText("""
-        BVOL screening is for work with biovolumes of phytoplanton. 
-        The HELCOM-PEG list of species and biovolumes is used as default. The latest version is available at www.ices.dk/
-        """)        
+        bvollabel.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_sizeclasses'))
+#         bvollabel.setText("""
+#         BVOL screening is for work with biovolumes of phytoplanton. 
+#         The HELCOM-PEG list of species and biovolumes is used as default. The latest version is available at www.ices.dk/
+#         """)        
         #
         self._speciesscreening_button = QtGui.QPushButton("Species screening")
         self.connect(self._speciesscreening_button, QtCore.SIGNAL("clicked()"), self._speciesScreening)                
@@ -212,12 +217,14 @@ class ScreeningActivity(activity_base.ActivityBase):
         widget = QtGui.QWidget()
         # Active widgets and connections.
         introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText("""
-        Used for manual check of column values to find outliers or misspellings in the datasets.
-        """)        
+        introlabel.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_intro_3'))
+#         introlabel.setText("""
+#         Used for manual check of column values to find outliers or misspellings in the datasets.
+#         """)        
         #
         self._column_list = QtGui.QComboBox()
         self._column_list.setMinimumContentsLength(30)
+        self._column_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         self._column_list.setEnabled(False)
         #
         self.connect(self._column_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._updateColumnContent)                
@@ -323,9 +330,10 @@ class ScreeningActivity(activity_base.ActivityBase):
         widget = QtGui.QWidget()
         # Active widgets and connections.
         introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText("""
-        Plot your raw data to find outliers or errors. Select parameters to plot.
-        """)        
+        introlabel.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_plotting'))
+#         introlabel.setText("""
+#         Plot your raw data to find outliers or errors. Select parameters to plot.
+#         """)        
         #
         self._parameter_list = utils_qt.SelectableQListView()       
         #

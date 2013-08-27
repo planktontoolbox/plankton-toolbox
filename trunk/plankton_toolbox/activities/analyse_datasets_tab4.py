@@ -3,7 +3,7 @@
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010-2012 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2013 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,6 +27,7 @@
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
+import plankton_toolbox.toolbox.help_texts as help_texts
 import envmonlib
 
 class AnalyseDatasetsTab4(QtGui.QWidget):
@@ -57,35 +58,31 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         self.clear()        
         self._updateSelectDataAlternatives()
 
-    def getSelectDataDict(self):
+    def getFilterDataDict(self):
         """ """
-        selected_dict = {}        
+        filter_dict = {}        
         # Start date and end date.
-        selected_dict[u'start_date'] = unicode(self._startdate_edit.text())
-        selected_dict[u'end_date'] = unicode(self._enddate_edit.text())
+        filter_dict[u'start_date'] = unicode(self._startdate_edit.text())
+        filter_dict[u'end_date'] = unicode(self._enddate_edit.text())
         # Selection lists.
 #        selected_dict[u'Stations'] = self._stations_listview.getSelectedDataList()
-        selected_dict[u'visits'] = self._visits_listview.getSelectedDataList()
-        selected_dict[u'min_max_depth'] = self._minmaxdepth_listview.getSelectedDataList()
-        selected_dict[u'taxon'] = self._taxon_listview.getSelectedDataList()
-        selected_dict[u'trophy'] = self._trophy_listview.getSelectedDataList()
-#        # TEST
-#        print('DEBUG: Selected stations: ' + ', '.join(selected_dict[u'Stations']))
-#        print('DEBUG: Selected_min max depth: ' + ', '.join(selected_dict[u'Min max depth']))
-#        print('DEBUG: Selected taxon: ' + ', '.join(selected_dict[u'Taxon']))
-#        print('DEBUG: Selected trophy: ' + ', '.join(selected_dict[u'Trophy']))
+        filter_dict[u'visits'] = self._visits_listview.getSelectedDataList()
+        filter_dict[u'min_max_depth'] = self._minmaxdepth_listview.getSelectedDataList()
+        filter_dict[u'taxon'] = self._taxon_listview.getSelectedDataList()
+        filter_dict[u'trophy'] = self._trophy_listview.getSelectedDataList()
         #
-        return selected_dict
+        return filter_dict
         
     # ===== TAB: Select data ===== 
     def contentSelectData(self):
         """ """
         # Active widgets and connections.
         introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText("""
-        Select parts of "Current data".
-        This is only a filter and the content of "Current data" is not changed. To view and save the filtered data select "View: Selected data" below.
-        """)
+        introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab4_intro'))
+#         introlabel.setText("""
+#         Select parts of "Analysis data".
+#         This is only a filter and the content of "Analysis data" is not changed. To view and save the filtered data select "View: Filtered data" below.
+#         """)
         # Start date and end date.
         self._startdate_edit = QtGui.QLineEdit("")
         self._enddate_edit = QtGui.QLineEdit("")
@@ -169,8 +166,8 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
 
     def _updateSelectDataAlternatives(self):
         """ """
-        currentdata = self._analysisdata.getData()
-        if not currentdata:
+        analysisdata = self._analysisdata.getData()
+        if not analysisdata:
             return # Empty data.
         #
         startdate = '9999-99-99'
@@ -181,7 +178,7 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         taxonset = set()
         trophyset = set()
         #
-        for visitnode in currentdata.getChildren():
+        for visitnode in analysisdata.getChildren():
 #            stationset.add(visitnode.getData(u'Station name'))
             visitset.add(unicode(visitnode.getData(u'station_name')) + u' : ' + unicode(visitnode.getData(u'date')))
             startdate = min(startdate, visitnode.getData(u'date'))
@@ -202,6 +199,4 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         self._taxon_listview.setList(sorted(taxonset))
         self._trophy_listview.setList(sorted(trophyset))
             
-#        # TEST
-#        self.getSelectDataDict()    
 

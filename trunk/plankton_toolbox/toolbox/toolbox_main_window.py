@@ -3,7 +3,7 @@
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010-2012 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2013 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -153,7 +153,7 @@ class MainWindow(QtGui.QMainWindow):
                             QtGui.QMainWindow.AllowTabbedDocks | 
                             QtGui.QMainWindow.VerticalTabs)
         # Create left dock widget and dock to main window.
-        dock = QtGui.QDockWidget(self.tr("Main menu "), self)
+        dock = QtGui.QDockWidget(self.tr(" Main menu "), self)
         dock.setObjectName("Activities and tools selector")
         dock.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea)
         dock.setFeatures(QtGui.QDockWidget.NoDockWidgetFeatures)
@@ -195,7 +195,7 @@ class MainWindow(QtGui.QMainWindow):
         grid1.addStretch(5)
         # Add one button for each activity. Create stacked widgets.
         for activity in self._activitymanager.getActivityList():
-            button = utils_qt.ActivityMenuQLabel(activity.objectName())
+            button = utils_qt.ActivityMenuQLabel(u' ' + activity.objectName())
             activity.setMainMenuButton(button)
             activitiesvbox.addWidget(button) # Adds to stack.                  
             # The activity is called to select stack item by object, not index.
@@ -206,7 +206,7 @@ class MainWindow(QtGui.QMainWindow):
         activitiesvbox.addStretch(5)
         # Add one button for each tool.
         for tool in self._toolmanager.getToolList():
-            button = utils_qt.ClickableQLabel(tool.objectName())
+            button = utils_qt.ClickableQLabel(u' ' + tool.objectName())
             toolsvbox.addWidget(button)
             self.connect(button, QtCore.SIGNAL("clicked()"), tool.show) # Show if hidden.
             self.connect(button, QtCore.SIGNAL("clicked()"), tool.raise_) # Bring to front.

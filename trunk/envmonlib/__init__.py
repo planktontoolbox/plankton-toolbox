@@ -3,7 +3,7 @@
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2011-2012 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2011-2013 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -95,4 +95,7 @@ from datareports.reports_manager import ReportsManager
  
 # Module dataanalysis: 
 from dataanalysis.analysisdata import AnalysisData
-from dataanalysis.aggregatedata import AggregateData 
+from dataanalysis.analysisprepare import AnalysisPrepare
+from dataanalysis.reportdata import ReportData
+from dataanalysis.statisticdata import StatisticData
+

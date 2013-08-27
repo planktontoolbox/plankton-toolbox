@@ -3,7 +3,7 @@
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010-2012 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2013 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -43,6 +43,7 @@ class AnalysisData(object):
         """ """
         # Tree dataset used for analysis. 
         self._data = None
+        self._filter = {}
         # Initialize parent.
         super(AnalysisData, self).__init__()
 
@@ -58,14 +59,30 @@ class AnalysisData(object):
     def getData(self):
         """ """
         return self._data
-    
+
+    def clearFilter(self):
+        """ """
+        self._filter ={}
+        
+    def setFilterItem(self, key, value):
+        """ """
+        self._filter[key] = value        
+
+    def getFilterItem(self, key):
+        """ """
+        return self._filter.get(key, u'')        
+
+    def getFilterDict(self):
+        """ """
+        return self._filter
+
 #     def loadDatasetsByName(self, datasets_names):
 #         """ """
-#         return self._currentdata
+#         return self._analysisdata
     
-    def loadDatasets(self, datasets):
+    def copyDatasetsToAnalysisData(self, datasets):
         """ """
-        # Clear current data.
+        # Clear analysis data.
         self.clearData()    
         # Check if all the selected datasets contains the same columns.
         compareheaders = None
@@ -95,8 +112,8 @@ class AnalysisData(object):
                     analysis_dataset.addChild(child)
         # Check.
         if (analysis_dataset == None) or (len(analysis_dataset.getChildren()) == 0):
-            envmonlib.Logging().log("The selected datasets are empty.")
-            raise UserWarning("The selected datasets are empty.")
+            envmonlib.Logging().log("Selected datasets are empty.")
+            raise UserWarning("Selected datasets are empty.")
         # Use the concatenated dataset for analysis.
         self.setData(analysis_dataset)    
     
@@ -145,7 +162,14 @@ class AnalysisData(object):
                                 continue
 
     def createFilteredDataset(self, filterdict):
-        """ """
+        """ Used filter items are:
+            - 'start_date'
+            - 'end_date'
+            - 'visits': Contains <station_name> : <date>
+            - 'min_max_depth': Contains <sample_min_depth>-<sample_max_depth>
+            - 'taxon'
+            - 'trophy'
+        """
         # Create a tree dataset for filtered data.
         filtereddata = envmonlib.DatasetNode() 
         #

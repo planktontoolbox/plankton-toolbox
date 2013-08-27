@@ -3,7 +3,7 @@
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2011-2013 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2013 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,9 +26,24 @@
 
 import envmonlib
 
-class ReportsManager(object):
-    """ """
-    def __init__(self):
+class StatisticData(object):
+    """
+    """
+    def __init__(self, name, parentwidget):
         """ """
         # Initialize parent.
-        super(ReportsManager, self).__init__()
+        super(StatisticData, self).__init__()
+
+    def clearData(self):
+        """ """
+        self._data = None
+        
+    def setData(self, analysisdata):
+        """ """
+        self._data = analysisdata
+        
+    def getData(self):
+        """ """
+        return self._data
+    
+
