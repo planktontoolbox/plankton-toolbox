@@ -3,7 +3,7 @@
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010-2012 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2013 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -35,6 +35,7 @@ import plankton_toolbox.activities.activity_base as activity_base
 #import plankton_toolbox.core.monitoring.monitoring_files as monitoring_files
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 import plankton_toolbox.toolbox.toolbox_sync as toolbox_sync
+import plankton_toolbox.toolbox.help_texts as help_texts
 
 import envmonlib
 
@@ -93,7 +94,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
     def _contentLoadDataset(self):
         """ """
         # Active widgets and connections.
-        selectdatabox = QtGui.QGroupBox("Load dataset", self)
+        selectdatabox = QtGui.QGroupBox("Import", self)
         tabWidget = QtGui.QTabWidget()
         tabWidget.addTab(self._contentTextfile(), "Text files (*.txt)")
         tabWidget.addTab(self._contentXlsx(), "Excel files (*.xlsx)")
@@ -110,26 +111,30 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         widget = QtGui.QWidget()
         # Active widgets and connections.
         introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText("""
-        Choose the Excel-tab or the Text-tab to load one or several files with your 
-        plankton or hydrography data as text files or Excel-files. 
-        Before loading data you need to set up the import and export formats by selecting parsers. 
-        The parsers are Excel-files with information on how to interpret the data you import in 
-        txt-format or in xlsx format. 
-        Note that the xls-format in older versions of Excel is not supported.
-        """)        
+        introlabel.setText(help_texts.HelpTexts().getText(u'LoadDatasetsActivity_text_intro'))
+#         introlabel.setText("""
+#         Choose the Excel-tab or the Text-tab to load one or several files with your 
+#         plankton or hydrography data as text files or Excel-files. 
+#         Before loading data you need to set up the import and export formats by selecting parsers. 
+#         The parsers are Excel-files with information on how to interpret the data you import in 
+#         txt-format or in xlsx format. 
+#         Note that the xls-format in older versions of Excel is not supported.
+#         """)        
         # - Select dataset parsers:
         self._textfile_parser_list = QtGui.QComboBox()
+        self._textfile_parser_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         self._textfile_parser_list.addItems(["<select>"])
         self.connect(self._textfile_parser_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._textfileParserSelected)                
         # - Add available dataset parsers.
         self._textfile_parser_list.addItems(self._parser_list)                
         # - Select import column:
         self._textfile_importcolumn_list = QtGui.QComboBox()
+        self._textfile_importcolumn_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         self._textfile_importcolumn_list.addItems(["<no parser selected>"])        
         self.connect(self._textfile_importcolumn_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._textfileImportColumnSelected)                
         # - Select export column:
         self._textfile_exportcolumn_list = QtGui.QComboBox()
+        self._textfile_exportcolumn_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         self._textfile_exportcolumn_list.addItems(["<no parser selected>"])        
         # - Select text coding.
         self._textfile_encoding_list = QtGui.QComboBox()
@@ -141,7 +146,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                                 u"latin1"]
         self._textfile_encoding_list.addItems(self._encodings_list)
         # Load dataset.
-        self._textfile_getdataset_button = QtGui.QPushButton("Load dataset(s)...")
+        self._textfile_getdataset_button = QtGui.QPushButton("Import dataset(s)...")
         self.connect(self._textfile_getdataset_button, QtCore.SIGNAL("clicked()"), self._loadTextFiles)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
@@ -222,14 +227,14 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         """ """
         try:
             envmonlib.Logging().log(u"") # Empty line.
-            envmonlib.Logging().log(u"Loading datasets...")
+            envmonlib.Logging().log(u"Importing datasets...")
             envmonlib.Logging().startAccumulatedLogging()
-            self._writeToStatusBar(u"Loading datasets...")
+            self._writeToStatusBar(u"Importing datasets...")
             # Show select file dialog box. Multiple files can be selected.
             namefilter = 'Text files (*.txt);;All files (*.*)'
             filenames = QtGui.QFileDialog.getOpenFileNames(
                                 self,
-                                'Load dataset(s)',
+                                'Import dataset(s)',
                                 self._last_used_textfile_name,
                                 namefilter)
             # From QString to unicode.
@@ -261,15 +266,15 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                     toolbox_datasets.ToolboxDatasets().addDataset(dataset)
             #
         except Exception, e:
-            envmonlib.Logging().error(u"Text file loading failed on exception: " + unicode(e))
+            envmonlib.Logging().error(u"Text file import failed on exception: " + unicode(e))
             QtGui.QMessageBox.warning(self, u"Text file loading.\n", 
-                                      u"Text file loading failed on exception.\n" + unicode(e))
+                                      u"Text file import failed on exception.\n" + unicode(e))
             raise
         finally:
             datasetcount = len(envmonlib.Datasets().getDatasets())
-            self._writeToStatusBar(u'Loaded datasets: ' + unicode(datasetcount))
+            self._writeToStatusBar(u'Imported datasets: ' + unicode(datasetcount))
             envmonlib.Logging().logAllAccumulatedRows()    
-            envmonlib.Logging().log(u"Loading datasets done. Number of loaded datasets: " + unicode(datasetcount))
+            envmonlib.Logging().log(u"Importing datasets done. Number of imported datasets: " + unicode(datasetcount))
 
     # ===== EXCEL FILES ======
     def _contentXlsx(self):
@@ -278,23 +283,27 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         # Active widgets and connections.
         # Intro:
         introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText("""
-        Choose the Excel-tab or the Text-tab to load one or several files with your plankton or hydrography data as text files or Excel-files. 
-        Before loading data you need to set up the import and export formats by selecting parsers. 
-        The parsers are Excel-files with information on how to interpret the data you import in txt-format or in xlsx format. 
-        Note that the xls-format in older versions of Excel is not supported.
-        """)
+        introlabel.setText(help_texts.HelpTexts().getText(u'LoadDatasetsActivity_excel_intro'))
+#         introlabel.setText("""
+#         Choose the Excel-tab or the Text-tab to load one or several files with your plankton or hydrography data as text files or Excel-files. 
+#         Before loading data you need to set up the import and export formats by selecting parsers. 
+#         The parsers are Excel-files with information on how to interpret the data you import in txt-format or in xlsx format. 
+#         Note that the xls-format in older versions of Excel is not supported.
+#         """)
         # - Select dataset parser:
         self._excel_parser_list = QtGui.QComboBox()
+        self._excel_parser_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         self._excel_parser_list.addItems(["<select>"])
         self.connect(self._excel_parser_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._excelParserSelected)                
         # - Add available dataset parsers.
         self._excel_parser_list.addItems(self._parser_list)                
         # - Select import column:
         self._excel_importcolumn_list = QtGui.QComboBox()
+        self._excel_importcolumn_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         self._excel_importcolumn_list.addItems(["<no parser selected>"])        
         # - Select export column:
         self._excel_exportcolumn_list = QtGui.QComboBox()
+        self._excel_exportcolumn_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         self._excel_exportcolumn_list.addItems(["<no parser selected>"])        
         # Load dataset.
         self._excel_getdataset_button = QtGui.QPushButton("Load dataset(s)...")
@@ -357,14 +366,14 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         """ """
         try:
             envmonlib.Logging().log(u"") # Empty line.
-            envmonlib.Logging().log(u"Loading datasets...")
+            envmonlib.Logging().log(u"Importing datasets...")
             envmonlib.Logging().startAccumulatedLogging()
-            self._writeToStatusBar(u"Loading datasets...")
+            self._writeToStatusBar(u"Importing datasets...")
             # Show select file dialog box. Multiple files can be selected.
             namefilter = 'Excel files (*.xlsx);;All files (*.*)'
             filenames = QtGui.QFileDialog.getOpenFileNames(
                                 self,
-                                'Load dataset(s)',
+                                'Import dataset(s)',
                                 self._last_used_excelfile_name,
                                 namefilter)
             # From QString to unicode.
@@ -391,21 +400,21 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                     toolbox_datasets.ToolboxDatasets().addDataset(dataset)
         #
         except Exception, e:
-            envmonlib.Logging().error(u"Excel file loading failed on exception: " + unicode(e))
+            envmonlib.Logging().error(u"Excel file import failed on exception: " + unicode(e))
             QtGui.QMessageBox.warning(self, u"Excel file loading.\n", 
-                                      u"Excel file loading failed on exception.\n" + unicode(e))
+                                      u"Excel file import failed on exception.\n" + unicode(e))
             raise
         finally:
             datasetcount = len(envmonlib.Datasets().getDatasets())
-            self._writeToStatusBar(u'Loaded datasets: ' + unicode(datasetcount))
+            self._writeToStatusBar(u'Imported datasets: ' + unicode(datasetcount))
             envmonlib.Logging().logAllAccumulatedRows()    
-            envmonlib.Logging().log(u"Loading datasets done. Number of loaded datasets: " + unicode(datasetcount))
+            envmonlib.Logging().log(u"Importing datasets done. Number of loaded datasets: " + unicode(datasetcount))
 
     # ===== LOADED DATASETS =====    
     def _contentLoadedDatasets(self):
         """ """
         # Active widgets and connections.
-        selectdatabox = QtGui.QGroupBox("Loaded datasets", self)
+        selectdatabox = QtGui.QGroupBox("Imported datasets", self)
         #
         self._datasets_table = utils_qt.ToolboxQTableView()
         self._datasets_table.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
@@ -433,8 +442,8 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                      QtCore.SIGNAL("currentRowChanged(QModelIndex, QModelIndex)"), 
                      self._selectionChanged)                
         # Buttons.
-        self._unloadalldatasets_button = QtGui.QPushButton("Unload all datasets")
-        self._unloadmarkeddatasets_button = QtGui.QPushButton("Unload marked dataset(s)")
+        self._unloadalldatasets_button = QtGui.QPushButton("Remove all datasets")
+        self._unloadmarkeddatasets_button = QtGui.QPushButton("Remove marked dataset(s)")
         # Button connections.
         self.connect(self._unloadalldatasets_button, QtCore.SIGNAL("clicked()"), self._unloadAllDatasets)                
         self.connect(self._unloadmarkeddatasets_button, QtCore.SIGNAL("clicked()"), self._unloadMarkedDatasets)                

@@ -3,7 +3,7 @@
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010-2012 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2013 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,21 +24,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import datetime
-import os
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.tools.tool_base as tool_base
 import json
 import envmonlib
-#
 import matplotlib.backends.backend_qt4agg as mpl_backend
 import matplotlib.figure as mpl_figure
-import matplotlib.dates as mpl_dates
-import matplotlib.ticker as mpl_ticker
-
-
 
 class GraphPlotterTool(tool_base.ToolBase):
     """
@@ -56,9 +49,6 @@ class GraphPlotterTool(tool_base.ToolBase):
         self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea | QtCore.Qt.BottomDockWidgetArea)
         self.setBaseSize(600,600)
         #
-#        # Add and view simple data for test:
-#        self._testData()
-#        self._drawChart()
         
     def clearPlotData(self):
         """ """
@@ -94,57 +84,6 @@ class GraphPlotterTool(tool_base.ToolBase):
         self._stacked_checkbox.setChecked(stacked)
         self._ylogscale_checkbox.setChecked(y_log_scale)
         
-    def _testData(self):
-        """ """
-        testdata = envmonlib.GraphPlotData(
-                            title = u"Three variables data object", 
-                            x_label = u'X (three variable)',
-                            y_label = u'Y (three variable)',
-                            z_label = u'Z (three variable)')
-        testdata.addPlot(plot_name = u"First plot", 
-                            x_array = [1,2,5,6,7,8], 
-                            y_array = [20,30,20,40,10,90], 
-                            z_array = [10,10,80,20,30,30], 
-                            x_label = u'X First',
-                            y_label = u'Y First',
-                            z_label = u'Z First')
-        testdata.addPlot(plot_name = u"Second plot", 
-                            x_array = [1,2,3,30,35,40], 
-                            y_array = [2,3,2,4,1,9], 
-                            z_array = [10,10,20,20,30,30], 
-                            x_label = u'X Second',
-                            y_label = u'Y Second',
-                            z_label = u'Z Second')
-        testdata.addPlot(plot_name = u"Third plot", 
-                            x_array = [6,8,9,10,15,20], 
-                            y_array = [2,3,2,4,1,9], 
-                            z_array = [10,60,20,90,30,30], 
-                            x_label = u'X Third',
-                            y_label = u'Y Third',
-                            z_label = u'Z Third')
-#        testdata = envmonlib.GraphPlotData(
-#                            x_type = u'String',
-#                            title = u"Two variables data object, string", 
-#                            x_label = u'X (two variables)',
-#                            y_label = u'Y (two variables)')
-#        testdata.addPlot(plot_name = u"Dinophysis acuta", 
-#                            x_array = [u'BY15',u'Släggö',u'cc','dd','ee'], 
-#                            y_array = [10,30,5,5,1], 
-#                            x_label = u'X First',
-#                            y_label = u'Y First')
-#        testdata.addPlot(plot_name = u"Second plot", 
-#                            x_array = ['cc','dd','ee','ff', 'gg', 'hh'], 
-#                            y_array = [2,3,2,4,1,9], 
-#                            x_label = u'X Second',
-#                            y_label = u'Y Second')
-#        testdata.addPlot(plot_name = u"Third plot", 
-#                            x_array = ['AA','BB','cc','dd','ee','ff'], 
-#                            y_array = [5,5,5,1,2,3], 
-#                            x_label = u'X Third',
-#                            y_label = u'Y Third')
-        #
-        self.setPlotData(testdata)
-
     def _createContent(self):
         """ """
         content = self._createScrollableContent()
@@ -395,19 +334,4 @@ class GraphPlotterTool(tool_base.ToolBase):
         if self._plotdata:
             # Use matplotlib.pyplot for drawing.
             self._drawChart(embedded = False)
-
-#         if self._plotdata:
-#             # Show select file dialog box.
-#             namefilter = 'Image file (*.png);;All files (*.*)'
-#             filename = QtGui.QFileDialog.getSaveFileName(
-#                             self,
-#                             'Save chart to file',
-#                             self._lastuseddirectory,
-#                             namefilter)
-#             filename = unicode(filename) # QString to unicode.
-#             # Check if user pressed ok or cancel.
-#             if filename:
-#                 self._lastuseddirectory = os.path.dirname(filename)
-#                 # Save to file.
-#                 self._figure.savefig(filename, dpi = 300)
 

@@ -3,7 +3,7 @@
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010-2012 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2013 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -95,7 +95,7 @@ class DevTestTool(tool_base.ToolBase):
             data_file_name = u'TEST_Sharkweb_PP_en.txt'
             data_file_encoding = 'windows-1252'
             
-            self._parent.showActivityByName(u'Load datasets')
+            self._parent.showActivityByName(u'Import datasets')
             
             # Set up for import file parsing.
             impMgr = envmonlib.ImportManager(import_parser_path + import_parser,
@@ -112,7 +112,7 @@ class DevTestTool(tool_base.ToolBase):
             dataset.addMetadata(u'export_column', export_column)
             toolbox_datasets.ToolboxDatasets().addDataset(dataset)
             
-            self._parent.showActivityByName(u'Analyse datasets')
+            self._parent.showActivityByName(u'Analyse data')
         except Exception as e:
             envmonlib.Logging().warning(u"Failed to run script: %s" % (e.args[0]))
             raise
@@ -132,7 +132,7 @@ class DevTestTool(tool_base.ToolBase):
             data_file_name = u'TEST_Sharkweb_PP_sv.txt'
             data_file_encoding = 'windows-1252'
             
-            self._parent.showActivityByName(u'Load datasets')
+            self._parent.showActivityByName(u'Import datasets')
             
             # Set up for import file parsing.
             impMgr = envmonlib.ImportManager(import_parser_path + import_parser,
@@ -149,7 +149,7 @@ class DevTestTool(tool_base.ToolBase):
             dataset.addMetadata(u'export_column', export_column)
             toolbox_datasets.ToolboxDatasets().addDataset(dataset)
             
-            self._parent.showActivityByName(u'Analyse datasets')
+            self._parent.showActivityByName(u'Analyse data')
         except Exception as e:
             envmonlib.Logging().warning(u"Failed to run script: %s" % (e.args[0]))
             raise
@@ -169,7 +169,7 @@ class DevTestTool(tool_base.ToolBase):
             data_file_name = u'TEST_Sharkweb_ZP_en.txt'
             data_file_encoding = 'windows-1252'
             
-            self._parent.showActivityByName(u'Load datasets')
+            self._parent.showActivityByName(u'Import datasets')
             
             # Set up for import file parsing.
             impMgr = envmonlib.ImportManager(import_parser_path + import_parser,
@@ -186,7 +186,7 @@ class DevTestTool(tool_base.ToolBase):
             dataset.addMetadata(u'export_column', export_column)
             toolbox_datasets.ToolboxDatasets().addDataset(dataset)
             
-            self._parent.showActivityByName(u'Analyse datasets')
+            self._parent.showActivityByName(u'Analyse data')
         except Exception as e:
             envmonlib.Logging().warning(u"Failed to run script: %s" % (e.args[0]))
             raise
@@ -206,7 +206,7 @@ class DevTestTool(tool_base.ToolBase):
             data_file_name = u'TEST_Sharkweb_ZP_sv.txt'
             data_file_encoding = 'windows-1252'
             
-            self._parent.showActivityByName(u'Load datasets')
+            self._parent.showActivityByName(u'Import datasets')
             
             # Set up for import file parsing.
             impMgr = envmonlib.ImportManager(import_parser_path + import_parser,
@@ -223,7 +223,7 @@ class DevTestTool(tool_base.ToolBase):
             dataset.addMetadata(u'export_column', export_column)
             toolbox_datasets.ToolboxDatasets().addDataset(dataset)
             
-            self._parent.showActivityByName(u'Analyse datasets')
+            self._parent.showActivityByName(u'Analyse data')
         except Exception as e:
             envmonlib.Logging().warning(u"Failed to run script: %s" % (e.args[0]))
             raise

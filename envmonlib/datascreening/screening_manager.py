@@ -3,7 +3,7 @@
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2011-2012 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2011-2013 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -30,7 +30,7 @@ import envmonlib
 class ScreeningManager(object):
     """ """
     def __init__(self,
-                 codelist_filenames = [u'toolbox_data/code_lists/smhi_code_list.xlsx']):
+                 codelist_filenames = [u'toolbox_data/code_lists/screening_code_list.xlsx']):
         # Parameters.
         self._codelist_filenames = codelist_filenames 
         # Local storage.
@@ -80,6 +80,8 @@ class ScreeningManager(object):
         #
         for row in tabledataset.getRows():
             codetype = row[0]
+            # Internally code types are lowercase and words are separated by underscore.
+            codetype = codetype.lower().replace(u' ', u'_')
             code = row[1]
             #
             if codetype:
@@ -89,7 +91,7 @@ class ScreeningManager(object):
 
     def codeListScreening(self, datasets):
         """ """
-        # Checked code types shoud be returned to caller.
+        # Checked code types should be returned to caller.
         checked_codetypes_set = set()
         #
         for dataset in datasets:

@@ -3,7 +3,7 @@
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010-2012 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2013 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -71,13 +71,14 @@ class DatasetViewerTool(tool_base.ToolBase):
         """ """
         # Active widgets and connections.
         self._selectdataset_list = QtGui.QComboBox()
+        self._selectdataset_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         self._selectdataset_list.addItems(["<select dataset>"])
         self.connect(self._selectdataset_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._viewDataset)                
         self._allowsync_checkbox = QtGui.QCheckBox("Allow synch")
         self._allowsync_checkbox.setChecked(False) 
         # Layout widgets.
         layout = QtGui.QHBoxLayout()
-        layout.addWidget(QtGui.QLabel("Loaded datasets:"))
+        layout.addWidget(QtGui.QLabel("Datasets:"))
         layout.addWidget(self._selectdataset_list)
         layout.addWidget(self._allowsync_checkbox)
         layout.addStretch(5)
@@ -96,7 +97,7 @@ class DatasetViewerTool(tool_base.ToolBase):
         
     def _contentSaveResult(self):
         """ """
-        saveresultbox = QtGui.QGroupBox("Save dataset", self)
+        saveresultbox = QtGui.QGroupBox("Export dataset", self)
         # Active widgets and connections.
         self._saveformat_list = QtGui.QComboBox()
         #

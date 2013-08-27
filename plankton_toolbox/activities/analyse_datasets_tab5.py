@@ -3,7 +3,7 @@
 #
 # Project: Plankton Toolbox. http://plankton-toolbox.org
 # Author: Arnold Andreasson, info@mellifica.se
-# Copyright (c) 2010-2012 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2013 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License as follows:
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -28,6 +28,7 @@ import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.toolbox.utils_qt as utils_qt
+import plankton_toolbox.toolbox.help_texts as help_texts
 import envmonlib
 
 class AnalyseDatasetsTab5(QtGui.QWidget):
@@ -50,11 +51,11 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
     def update(self):
         """ """
         self.clear()
-        currentdata = self._analysisdata.getData()
-        if currentdata:        
-            # Search for all parameters in current data.
+        analysisdata = self._analysisdata.getData()
+        if analysisdata:        
+            # Search for all parameters in analysis data.
             parameterset = set()
-            for visitnode in currentdata.getChildren():
+            for visitnode in analysisdata.getChildren():
                 for samplenode in visitnode.getChildren():
                     for variablenode in samplenode.getChildren():
                         parameterset.add(unicode(variablenode.getData(u"parameter")))
@@ -66,12 +67,14 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         """ """
         # Active widgets and connections.
         introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText("""
-        Plot your data. A number of pre-defined types of graphs are available.
-        """) 
+        introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab1_intro'))
+#         introlabel.setText("""
+#         Plot your data. A number of pre-defined types of graphs are available.
+#         """) 
                
         # - Select parameter:
         self._parameter_list = QtGui.QComboBox()        
+        self._parameter_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         #
         # Predefined graphs.
 #        self._addplot_1_button = QtGui.QPushButton("Plot 1. Value/taxa/station and date (no filter)")
@@ -109,8 +112,8 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         
     def _addPlot_1(self):
         """ """
-        currentdata = self._analysisdata.getData()
-        if not currentdata:        
+        analysisdata = self._analysisdata.getData()
+        if not analysisdata:        
             return
         #
         tool_manager.ToolManager().showToolByName(u'Graph plotter') # Show tool if hidden.
@@ -119,7 +122,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         # Step 1: Create lists of stations and taxa.
         station_set = set()
         taxon_set = set()
-        for visitnode in currentdata.getChildren():
+        for visitnode in analysisdata.getChildren():
             station_set.add(visitnode.getData(u"station_name")) # Station name
             for samplenode in visitnode.getChildren():
                 for variablenode in samplenode.getChildren():
@@ -137,7 +140,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         # Step 3. Which parameter is selected?
         selectedparameter = unicode(self._parameter_list.currentText())
         # Step 4: Fill with data.
-        for visitnode in currentdata.getChildren():
+        for visitnode in analysisdata.getChildren():
             stationname = visitnode.getData(u"station_name")
             for samplenode in visitnode.getChildren():
                 for variablenode in samplenode.getChildren():
@@ -178,18 +181,17 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
     def _addPlot_2(self):
         """ """
 
-######        selected_dict = self._analysisdata.createFilteredDataset(self._main_activity.getSelectDataDict())
-        selected_dict = self._main_activity.getSelectDataDict()
-        selected_startdate = selected_dict[u'start_date']
-        selected_enddate = selected_dict[u'end_date']
-#        selected_stations = selected_dict[u'Stations']
-        selected_visits = selected_dict[u'visits']
-        selected_minmaxdepth =  selected_dict[u'min_max_depth']
-        selected_taxon = selected_dict[u'taxon']
-        selected_trophy = selected_dict[u'trophy']
+        filter_dict = self._main_activity.getFilterDataDict()
+        selected_startdate = filter_dict[u'start_date']
+        selected_enddate = filter_dict[u'end_date']
+#        selected_stations = filter_dict[u'Stations']
+        selected_visits = filter_dict[u'visits']
+        selected_minmaxdepth =  filter_dict[u'min_max_depth']
+        selected_taxon = filter_dict[u'taxon']
+        selected_trophy = filter_dict[u'trophy']
         
-        currentdata = self._analysisdata.getData()
-        if not currentdata:        
+        analysisdata = self._analysisdata.getData()
+        if not analysisdata:        
             return
         #
         tool_manager.ToolManager().showToolByName(u'Graph plotter') # Show tool if hidden.
@@ -203,7 +205,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
 #        station_set = set()
         visit_set = set()
         taxon_set = set()
-        for visitnode in currentdata.getChildren():
+        for visitnode in analysisdata.getChildren():
 
             if selected_startdate > visitnode.getData(u'date'):
                 continue
@@ -250,7 +252,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         # Step 3. Which parameter is selected?
         selectedparameter = unicode(self._parameter_list.currentText())
         # Step 4: Fill with data.
-        for visitnode in currentdata.getChildren():
+        for visitnode in analysisdata.getChildren():
 
             if selected_startdate > visitnode.getData(u'date'):
                 continue
@@ -330,175 +332,9 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         graphtool.setPlotData(plotdata)
         
         
-        
-        
-         
-##        station_list = sorted(station_set)
-#        visit_list = sorted(visit_set)
-#        taxon_list = sorted(taxon_set)
-##        taxon_station_value_list = []
-#        taxon_visit_value_list = []
-#        for taxonindex, taxon in enumerate(taxon_list):
-##            taxon_station_value_list.append([])
-#            taxon_visit_value_list.append([])
-##            for stationindex, station in enumerate(station_list):
-#            for stationindex, station in enumerate(visit_list):
-##                taxon_station_value_list[taxonindex].append(station_taxon_dict[station][taxon])
-#                taxon_visit_value_list[taxonindex].append(visit_taxon_dict[station][taxon])
-#        # Step 6: Plot
-##        graphtool.addTestPlot(selectedparameter, station_list, taxon_list, taxon_station_value_list)
-#        graphtool.addTestPlot(selectedparameter, visit_list, taxon_list, taxon_visit_value_list)
-                
-            
-        
-        
     def _addPlot_3(self):
         """ """
         
     def _addPlot_4(self):
         """ """
         
-#     def _addPlot(self):
-#         """ """
-#         currentdata = self._analysisdata.getData()
-#         if not currentdata:
-#             return # Can't plot from empty dataset
-#         #
-#         tool_manager.ToolManager().showToolByName(u'Graph plotter') # Show tool if hidden.
-#         graphtool = tool_manager.ToolManager().getToolByName(u'Graph plotter')
-#         # Selected columns.
-#         x_column = unicode(self._x_axis_column_list.currentText())
-#         y_column = unicode(self._y_axis_column_list.currentText())
-#         # Selected parameters.
-#         x_param = None
-#         y_param = None
-#         if x_column == u"parameter:":
-#             x_param = unicode(self._x_axis_parameter_list.currentText())
-#         if y_column == u"parameter:":
-#             y_param = unicode(self._y_axis_parameter_list.currentText())
-#         # Check exports columns backwards.
-#         x_visit_key = None
-#         x_sample_key = None                      
-#         x_variable_key = None
-#         y_visit_key = None
-#         y_sample_key = None                      
-#         y_variable_key = None
-#         if x_column != u"parameter:":
-#             for export_info in currentdata.getExportTableColumns():
-#                 if export_info.get('header', u'') == x_column:
-#                     if export_info.get('node', u'') == 'visit':
-#                         x_visit_key =  export_info.get('key', None)
-#                     elif export_info.get('node', u'') == 'sample':
-#                         x_sample_key =  export_info.get('key', None)                        
-#                     elif export_info.get('node', u'') == 'variable':
-#                         x_variable_key =  export_info.get('key', None)
-#         if y_column != u"parameter:":
-#             for export_info in currentdata.getExportTableColumns():
-#                 if export_info.get('header', u'') == y_column:
-#                     if export_info.get('node', u'') == 'visit':
-#                         y_visit_key =  export_info.get('key', None)
-#                     elif export_info.get('node', u'') == 'sample':
-#                         y_sample_key =  export_info.get('key', None)                        
-#                     elif export_info.get('node', u'') == 'variable':
-#                         y_variable_key =  export_info.get('key', None)
-#         
-#         # Extract data.
-#         x_data = []
-#         y_data = []
-#         x_value = None
-#         y_value = None
-#         #
-#         
-#         
-#         selected_dict = self._analysisdata.getSelectDataDict()
-#         selected_startdate = selected_dict[u'start_date']
-#         selected_enddate = selected_dict[u'end_date']
-# #        selected_stations = selected_dict[u'Stations']
-#         selected_visits = selected_dict[u'visits']
-#         selected_minmaxdepth =  selected_dict[u'min_max_depth']
-#         selected_taxon = selected_dict[u'taxon']
-#         selected_trophy = selected_dict[u'trophy']
-#         
-#         
-#         
-#         for visitnode in currentdata.getChildren():
-#             
-#             if selected_startdate > visitnode.getData(u'date'):
-#                 continue
-#             if selected_enddate < visitnode.getData(u'date'):
-#                 continue
-# #            if visitnode.getData(u'Station name') not in selected_stations:
-# #                continue
-#             if (unicode(visitnode.getData(u'station_name')) + u' : ' + unicode(visitnode.getData(u'date'))) not in selected_visits:
-#                 continue
-# 
-#             
-#              
-#             if x_visit_key: x_value = visitnode.getData(x_visit_key) # if x_visit_key else None
-#             if y_visit_key: y_value = visitnode.getData(y_visit_key) # if y_visit_key else None
-#             for samplenode in visitnode.getChildren():
-#             
-#                 minmax = unicode(samplenode.getData(u'sample_min_depth')) + u'-' + unicode(samplenode.getData(u'sample_max_depth'))
-#                 if minmax not in selected_minmaxdepth:
-#                     continue
-#                 
-#                 
-#                 if x_sample_key: x_value = samplenode.getData(x_sample_key) # if x_sample_key else None
-#                 if y_sample_key: y_value = samplenode.getData(y_sample_key) # if y_sample_key else None
-#                 for variablenode in samplenode.getChildren():
-#                 
-#                     if variablenode.getData(u'taxon_name') not in selected_taxon:
-#                         continue
-#                     if variablenode.getData(u'trophy') not in selected_trophy:
-#                         continue
-#                     
-#                     
-#                     
-#                     #
-#                     if x_variable_key: x_value = variablenode.getData(x_variable_key) # if x_variable_key else None
-#                     if y_variable_key: y_value = variablenode.getData(y_variable_key) # if y_variable_key else None
-#                     #
-#                     if x_param or y_param:
-#                         parameter = variablenode.getData(u'parameter')
-#                         if x_param:
-#                             if parameter == x_param:
-#                                 x_value = variablenode.getData(u'value')
-#                         if y_param:
-#                             if parameter == y_param:
-#                                 y_value = variablenode.getData(u'value')
-#                     # If NOT both are parameters, add data on variable level.
-#                     if not (x_param and y_param):
-#                         # Add values to lists if both values are available.
-#                         if (x_value and y_value):
-#                             x_data.append(x_value)
-#                             y_data.append(y_value)
-#                         # Clear used values.
-#                         if x_param: x_value = None    
-#                         if y_param: y_value = None    
-#                     # Clear used values.
-#                     if x_variable_key: x_value = None    
-#                     if x_variable_key: y_value = None
-#                 # If both are parameters, add data on sample level.     
-#                 if (x_param and y_param):
-#                     # Add values to lists if both values are available.
-#                     if (x_value and y_value):
-#                         x_data.append(x_value)
-#                         y_data.append(y_value)
-#                         # Clear used values.
-#                         if x_param: x_value = None    
-#                         if y_param: y_value = None    
-#                 # Clear used values.
-#                 if x_sample_key: x_value = None    
-#                 if y_sample_key: y_value = None    
-#             # Clear used values.
-#             if x_visit_key: x_value = None    
-#             if y_visit_key: y_value = None    
-#         #
-# 
-#         # Check if this is a time series or not.
-#         selectedplotindex = self._plotindex_list.currentIndex() 
-#         if selectedplotindex in [0, 1, 2, 3]:
-#             graphtool.addTimeseriesPlot(selectedplotindex, x_data, y_data)
-#         else:
-#             graphtool.addXYPlot(selectedplotindex - 4, x_data, y_data)
-
