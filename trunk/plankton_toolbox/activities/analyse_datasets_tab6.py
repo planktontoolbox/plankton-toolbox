@@ -98,14 +98,17 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         """ """
         # Active widgets and connections.
         introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab1_intro'))
+        introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab6_intro'))
 #         introlabel.setText("""
 #         Plot almost any combination of data you like. 
 #         These graphs are in general not as nice looking as the pre-defined graphs but are more flexible.
 #         """)        
         # Select type of data object.
         self._numberofvariables_list = QtGui.QComboBox()
-        self._numberofvariables_list.addItems(["One variable (Y)", "Two variables (X and Y)", "Three variables (X, Y and Z)"])
+        self._numberofvariables_list.addItems(["One variable (Y)", 
+                                               "Two variables (X and Y)", 
+                                               "Three variables (X, Y and Z)"])
+        self._numberofvariables_list.setCurrentIndex(1)
         self.connect(self._numberofvariables_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._clearPlotData)                
         # - Select column for x-axis:
         self._x_axis_column_list = QtGui.QComboBox()
@@ -306,7 +309,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         plotdatainfo[u'z_format'] = z_selected_type
         #
         # Add plot data.
-        x_data, y_data, z_data = self._getFilteredData()
+        x_data, y_data, z_data = self._getPlotData()
         #
         if x_data and (x_selected_type == u'float'):
             for index, item in enumerate(x_data):
@@ -327,7 +330,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                 except:
                     z_data[index] = 0.0
         
-        plot_name = u''
+        plot_name = y_selected_param
 #         plot_name = y_selected_column if y_selected_column != u"parameter:" else y_selected_param + u' / ' + \
 #                     x_selected_column if x_selected_column != u"parameter:" else x_selected_param
         #
@@ -335,7 +338,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                         plot_name = plot_name, 
                          x_label = x_selected_column if x_selected_column != u"parameter:" else x_selected_param,
                          x_array = x_data,
-                         y_label = y_selected_column if y_selected_column != u"parameter:" else y_selected_param,
+#                          y_label = y_selected_column if y_selected_column != u"parameter:" else y_selected_param,
                          y_array = y_data, 
                          z_label = z_selected_column if z_selected_column != u"parameter:" else z_selected_param,
                          z_array = z_data) 
@@ -343,11 +346,12 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         graphtool.setPlotData(self._graph_plot_data)
 
     
-    def _getFilteredData(self):
+    def _getPlotData(self):
         """ """
         
         # Filtered data should be used.
-        analysisdata = self._analysisdata.createFilteredDataset(self._main_activity.getFilterDataDict())
+        self._main_activity.updateFilter() # Must be done before createFilteredDataset().
+        analysisdata = self._analysisdata.createFilteredDataset()
         if not analysisdata:
             return # Can't plot from empty dataset
         

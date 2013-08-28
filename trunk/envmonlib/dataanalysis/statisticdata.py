@@ -28,9 +28,11 @@ import envmonlib
 
 class StatisticData(object):
     """
+    Should contain table oriented data, see envmonlib.DatasetTable().
     """
-    def __init__(self, name, parentwidget):
+    def __init__(self):
         """ """
+        self._data = None
         # Initialize parent.
         super(StatisticData, self).__init__()
 

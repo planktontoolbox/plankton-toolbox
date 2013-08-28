@@ -56,22 +56,13 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
     def update(self):
         """ """
         self.clear()        
-        self._updateSelectDataAlternatives()
+        self._updateFilterAlternatives()
 
-    def getFilterDataDict(self):
-        """ """
-        filter_dict = {}        
-        # Start date and end date.
-        filter_dict[u'start_date'] = unicode(self._startdate_edit.text())
-        filter_dict[u'end_date'] = unicode(self._enddate_edit.text())
-        # Selection lists.
-#        selected_dict[u'Stations'] = self._stations_listview.getSelectedDataList()
-        filter_dict[u'visits'] = self._visits_listview.getSelectedDataList()
-        filter_dict[u'min_max_depth'] = self._minmaxdepth_listview.getSelectedDataList()
-        filter_dict[u'taxon'] = self._taxon_listview.getSelectedDataList()
-        filter_dict[u'trophy'] = self._trophy_listview.getSelectedDataList()
-        #
-        return filter_dict
+    def updateFilter(self):
+        """ Call this before filtered analysis data is created. 
+            (It is too complicated to implement automatic update on each change in the filter.)
+        """
+        self._updateFilter()
         
     # ===== TAB: Select data ===== 
     def contentSelectData(self):
@@ -123,10 +114,10 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         form1 = QtGui.QGridLayout()
         gridrow = 0
         label1 = QtGui.QLabel("Date from:")
-        label2 = QtGui.QLabel("Stations:")
+        label2 = QtGui.QLabel("Sampling events:")
         label3 = QtGui.QLabel("Min-max depth:")
         label4 = QtGui.QLabel("Taxon:")
-        label5 = QtGui.QLabel("Trophy:")
+        label5 = QtGui.QLabel("Trophic type (phytoplankton):")
         form1.addWidget(label1, gridrow, 0, 1, 1)
         form1.addWidget(label2, gridrow, 1, 1, 3)
         form1.addWidget(label3, gridrow, 4, 1, 3)
@@ -164,7 +155,7 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         return self
 
 
-    def _updateSelectDataAlternatives(self):
+    def _updateFilterAlternatives(self):
         """ """
         analysisdata = self._analysisdata.getData()
         if not analysisdata:
@@ -199,4 +190,14 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         self._taxon_listview.setList(sorted(taxonset))
         self._trophy_listview.setList(sorted(trophyset))
             
-
+    def _updateFilter(self):
+        """ """
+        self._analysisdata.clearFilter()
+        
+        self._analysisdata.setFilterItem(u'start_date', unicode(self._startdate_edit.text()))
+        self._analysisdata.setFilterItem(u'end_date', unicode(self._enddate_edit.text()))
+        self._analysisdata.setFilterItem(u'visits', self._visits_listview.getSelectedDataList())
+        self._analysisdata.setFilterItem(u'min_max_depth', self._minmaxdepth_listview.getSelectedDataList())
+        self._analysisdata.setFilterItem(u'taxon', self._taxon_listview.getSelectedDataList())
+        self._analysisdata.setFilterItem(u'trophy', self._trophy_listview.getSelectedDataList())
+        

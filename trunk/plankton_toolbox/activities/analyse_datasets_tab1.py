@@ -106,15 +106,20 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
 
     def _clearAnalysisData(self):
         """ """
-        self._analysisdata.setData(None)    
-        self._main_activity.updateAnalysisData() 
+        self._main_activity.viewAnalysisData()
+#         self._analysisdata.setData(None)    
+        self._main_activity.getAnalysisData().clearData()    
+        self._main_activity.getStatisticData().clearData()    
+        self._main_activity.getReportData().clearData()    
+        self._main_activity.updateViewedDataAndTabs() 
 
     def _copyDatasetsForAnalysis(self):
         """ """
         try:
+            self._main_activity.viewAnalysisData()
             # Clear analysis data
             self._analysisdata.clearData()
-            self._main_activity.updateAnalysisData() 
+            self._main_activity.updateViewedDataAndTabs() 
             # Create a list of selected datasets.        
             datasets = []
             for rowindex in range(self._loaded_datasets_model.rowCount()):
@@ -127,7 +132,7 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
             if (self._analysisdata.getData() == None) or (len(self._analysisdata.getData().getChildren()) == 0):
                 envmonlib.Logging().log("Selected datasets are empty.")
                 raise UserWarning("Selected datasets are empty.")
-            self._main_activity.updateAnalysisData() 
+            self._main_activity.updateViewedDataAndTabs() 
         #
         except UserWarning, e:
             QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))

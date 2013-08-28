@@ -515,7 +515,7 @@ class LineChart(ChartBase):
                                               color = self._colors[plotindex % len(self._colors)])
                         #
                         subplot.xaxis.set_major_locator(mpl_dates.MonthLocator())
-                        subplot.xaxis.set_minor_locator(mpl_dates.WeekdayLocator())
+###                        subplot.xaxis.set_minor_locator(mpl_dates.WeekdayLocator())
                         subplot.xaxis.set_major_formatter(mpl_dates.DateFormatter(u'%Y-%m-%d')) 
                         self._figure.autofmt_xdate(bottom = 0.2)   
                     #                      
@@ -593,7 +593,7 @@ class LineChart(ChartBase):
                                           c = self._colors[plotindex % len(self._colors)])
                         #
                         subplot.xaxis.set_major_locator(mpl_dates.MonthLocator())
-                        subplot.xaxis.set_minor_locator(mpl_dates.WeekdayLocator())
+###                        subplot.xaxis.set_minor_locator(mpl_dates.WeekdayLocator())
                         subplot.xaxis.set_major_formatter(mpl_dates.DateFormatter(u'%Y-%m-%d')) 
                         #
                         self._figure.autofmt_xdate(bottom = 0.2)   
@@ -840,7 +840,7 @@ class ScatterChart(ChartBase):
                                             marker = self._markers[plotindex % len(self._markers)], c = self._colors[plotindex % len(self._colors)])
                         #
                         subplot.xaxis.set_major_locator(mpl_dates.MonthLocator())
-                        subplot.xaxis.set_minor_locator(mpl_dates.WeekdayLocator())
+###                        subplot.xaxis.set_minor_locator(mpl_dates.WeekdayLocator())
                         subplot.xaxis.set_major_formatter(mpl_dates.DateFormatter(u'%Y-%m-%d')) 
                         self._figure.autofmt_xdate(bottom = 0.2)   
 
@@ -911,7 +911,7 @@ class ScatterChart(ChartBase):
                                             marker = self._markers[plotindex % len(self._markers)], c = self._colors[plotindex % len(self._colors)])
                         #
                         subplot.xaxis.set_major_locator(mpl_dates.MonthLocator())
-                        subplot.xaxis.set_minor_locator(mpl_dates.WeekdayLocator())
+###                        subplot.xaxis.set_minor_locator(mpl_dates.WeekdayLocator())
                         subplot.xaxis.set_major_formatter(mpl_dates.DateFormatter(u'%Y-%m-%d')) 
                         self._figure.autofmt_xdate(bottom = 0.2)   
 
