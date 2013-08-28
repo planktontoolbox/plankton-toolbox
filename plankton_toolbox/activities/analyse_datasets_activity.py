@@ -46,6 +46,8 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         """ """
         # Create object containing analysis data.
         self._analysisdata = envmonlib.AnalysisData()
+        self._statisticdata = envmonlib.StatisticData()
+        self._reportdata = envmonlib.ReportData()
         
         # Filename used when saving data to file.
         self._lastuseddirectory = '.'
@@ -73,6 +75,14 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
     def getAnalysisData(self):
         """ """
         return self._analysisdata 
+        
+    def getStatisticData(self):
+        """ """
+        return self._statisticdata 
+        
+    def getReportData(self):
+        """ """
+        return self._reportdata 
         
     def _createContent(self):
         """ """
@@ -116,7 +126,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
     def _contentAnalysisDataTable(self):
         """ """
         # Active widgets and connections.
-        analysisdatagroupbox = QtGui.QGroupBox("Analysis data/filtered data", self)
+        analysisdatagroupbox = QtGui.QGroupBox("Analysis data, filtered data, statistical data and report data", self)
         # Active widgets and connections.
         self._viewdata_list = QtGui.QComboBox()
         self._viewdata_list.addItems(["Analysis data",
@@ -190,13 +200,13 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         #
         return saveresultbox
         
-    def setAnalysisData(self, analysis_data):
-        """ """
-        self._analysisdata = analysis_data
-        self.updateViewedData()
-        self.updateAllTabs()    
+#     def setAnalysisData(self, analysis_data):
+#         """ """
+#         self._analysisdata = analysis_data
+#         self.updateViewedData()
+#         self.updateAllTabs()    
     
-    def updateAnalysisData(self):
+    def updateViewedDataAndTabs(self):
         """ """
         self.updateViewedData()
         self.updateAllTabs()
@@ -227,8 +237,9 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
             self._tableview.tablemodel.setModeldata(targetdataset)
             self._refreshViewedDataTable()
         elif selectedviewindex == 1:
-            # View filtered data only. 
-            filtereddataset = self._analysisdata.createFilteredDataset(self.getFilterDataDict())
+            # View filtered data only.
+            self._tab4widget.updateFilter() # Must be done before createFilteredDataset().
+            filtereddataset = self._analysisdata.createFilteredDataset()
             # Convert from tree model to table model.
             targetdataset = envmonlib.DatasetTable()
             filtereddataset.convertToTableDataset(targetdataset)
@@ -236,12 +247,12 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
             self._tableview.tablemodel.setModeldata(targetdataset)
             self._refreshViewedDataTable()
         elif selectedviewindex == 2:
-            # Analytical data.
-            self._tableview.tablemodel.setModeldata(None)
+            # Statistic data.
+            self._tableview.tablemodel.setModeldata(self._statisticdata.getData())
             self._refreshViewedDataTable()
         elif selectedviewindex == 3:
             # Report data.
-            self._tableview.tablemodel.setModeldata(None)
+            self._tableview.tablemodel.setModeldata(self._reportdata.getData())
             self._refreshViewedDataTable()
         else:
             # Hide data.
@@ -284,6 +295,8 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         self._tab4widget.clear()
         self._tab5widget.clear()
         self._tab6widget.clear()
+        self._tab7widget.clear()
+        self._tab8widget.clear()
 
     def updateAllTabs(self):
         """ """
@@ -293,8 +306,28 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         self._tab4widget.update()
         self._tab5widget.update()
         self._tab6widget.update()
+        self._tab7widget.update()
+        self._tab8widget.update()
 
-    def getFilterDataDict(self):
+    def updateFilter(self):
+        """ Must be done before calls to createFilteredDataset(). """
+        self._tab4widget.updateFilter()
+
+    def viewAnalysisData(self):
         """ """
-        return self._tab4widget.getFilterDataDict()
+        if self._viewdata_list.currentIndex() < 4: # 4 = hide.
+            self._viewdata_list.setCurrentIndex(0)
+            self.updateViewedData()
+
+    def viewStatisticData(self):
+        """ """
+        if self._viewdata_list.currentIndex() < 4: # 4 = hide.
+            self._viewdata_list.setCurrentIndex(2)
+            self.updateViewedData()
+
+    def viewReportData(self):
+        """ """
+        if self._viewdata_list.currentIndex() < 4: # 4 = hide.
+            self._viewdata_list.setCurrentIndex(3)
+            self.updateViewedData()
 

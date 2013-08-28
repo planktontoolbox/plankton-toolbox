@@ -64,7 +64,7 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
         """ """
         # Active widgets and connections.
         introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab1_intro'))
+        introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab2_intro'))
 #         introlabel.setText("""
 #         Prepare your data by removing unwanted rows from "Analysis data".
 #         This may be useful if you want to use data from one or a few stations or data from a certain depth or time period.
@@ -179,4 +179,4 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
         #
         self._analysisdata.removeData(selectedcolumn, markedcontent)
         #
-        self._main_activity.updateAnalysisData()    
+        self._main_activity.updateViewedDataAndTabs()    

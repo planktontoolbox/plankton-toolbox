@@ -59,13 +59,13 @@ class DevTestTool(tool_base.ToolBase):
     def _contentButtons(self):
         """ """
         # Active widgets and connections.
-        self._testbutton_1 = QtGui.QPushButton("Select TEST_Sharkweb_PP_en.txt")
+        self._testbutton_1 = QtGui.QPushButton("Import TEST_Sharkweb_PP_en.txt")
         self.connect(self._testbutton_1, QtCore.SIGNAL("clicked()"), self._test_1)                
-        self._testbutton_2 = QtGui.QPushButton("Select TEST_Sharkweb_PP_sv.txt")
+        self._testbutton_2 = QtGui.QPushButton("Import TEST_Sharkweb_PP_sv.txt")
         self.connect(self._testbutton_2, QtCore.SIGNAL("clicked()"), self._test_2)                
-        self._testbutton_3 = QtGui.QPushButton("Select TEST_Sharkweb_ZP_en.txt")
+        self._testbutton_3 = QtGui.QPushButton("Import TEST_Sharkweb_ZP_en.txt")
         self.connect(self._testbutton_3, QtCore.SIGNAL("clicked()"), self._test_3)                
-        self._testbutton_4 = QtGui.QPushButton("Select TEST_Sharkweb_ZP_sv.txt")
+        self._testbutton_4 = QtGui.QPushButton("Import TEST_Sharkweb_ZP_sv.txt")
         self.connect(self._testbutton_4, QtCore.SIGNAL("clicked()"), self._test_4)                
 #         self._testbutton_5 = QtGui.QPushButton("Test 5")
 #         self.connect(self._testbutton_5, QtCore.SIGNAL("clicked()"), self._test_5)                

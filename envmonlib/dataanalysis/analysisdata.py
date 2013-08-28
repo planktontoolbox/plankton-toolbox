@@ -161,7 +161,7 @@ class AnalysisData(object):
                                 samplenode.removeChild(variablenode)
                                 continue
 
-    def createFilteredDataset(self, filterdict):
+    def createFilteredDataset(self):
         """ Used filter items are:
             - 'start_date'
             - 'end_date'
@@ -179,13 +179,13 @@ class AnalysisData(object):
         # Export info needed to convert from tree to table.
         filtereddata.setExportTableColumns(analysisdata.getExportTableColumns())        
         # Get selected data info.
-        filter_startdate = filterdict[u'start_date']
-        filter_enddate = filterdict[u'end_date']
-#        filter_stations = filterdict[u'Stations']
-        filter_visits = filterdict[u'visits']
-        filter_minmaxdepth =  filterdict[u'min_max_depth']
-        filter_taxon = filterdict[u'taxon']
-        filter_trophy = filterdict[u'trophy']
+        filter_startdate = self._filter[u'start_date']
+        filter_enddate = self._filter[u'end_date']
+#        filter_stations = self._filte[u'Stations']
+        filter_visits = self._filter[u'visits']
+        filter_minmaxdepth =  self._filter[u'min_max_depth']
+        filter_taxon = self._filter[u'taxon']
+        filter_trophy = self._filter[u'trophy']
         #
         for visitnode in analysisdata.getChildren():
             if filter_startdate > visitnode.getData(u'date'):

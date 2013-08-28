@@ -143,7 +143,8 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                                 u"utf-8",
                                 u"utf-16",
                                 u"ascii",
-                                u"latin1"]
+                                u"latin1",
+                                u"macroman"]
         self._textfile_encoding_list.addItems(self._encodings_list)
         # Load dataset.
         self._textfile_getdataset_button = QtGui.QPushButton("Import dataset(s)...")

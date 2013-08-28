@@ -29,9 +29,56 @@ import envmonlib
 class AnalysisPrepare(object):
     """
     """
-    def __init__(self, name, parentwidget):
+    def __init__(self):
         """ """
         # Initialize parent.
         super(AnalysisPrepare, self).__init__()
 
 
+    def addMissingTaxa(self, analysisdata):
+        """ """
+        if not analysisdata:        
+            return
+        # Step 1: Create lists of taxa (name and trophy) and parameters (parameter and unit).
+        parameter_set = set()
+        taxon_set = set()
+        for visitnode in analysisdata.getChildren():
+            for samplenode in visitnode.getChildren():
+                for variablenode in samplenode.getChildren():
+                    parameter = variablenode.getData(u'parameter')
+                    unit = variablenode.getData(u'unit')
+                    if parameter:
+                        parameter_set.add((parameter, unit))
+                    taxonname = variablenode.getData(u'taxon_name')
+                    trophy = variablenode.getData(u'trophy')
+                    if taxonname:
+                        taxon_set.add((taxonname, trophy))
+        # Step 2: Create list with parameter-taxon pairs.
+        parameter_taxon_list = []
+        for parameterpair in parameter_set:
+            for taxonpair in taxon_set:
+                parameter_taxon_list.append((parameterpair, taxonpair))
+        # Step 3: Iterate over samples. 
+        parameter_set = set()
+        taxon_set = set()
+        #
+        for visitnode in analysisdata.getChildren():
+            #
+            for samplenode in visitnode.getChildren():
+                sample_parameter_taxon_list = []
+                for variablenode in samplenode.getChildren():
+                    parameter = variablenode.getData(u'parameter')
+                    unit = variablenode.getData(u'unit')
+                    taxon = variablenode.getData(u'taxon_name')
+                    trophy = variablenode.getData(u'trophy')
+                    sample_parameter_taxon_list.append(((parameter, unit), (taxon, trophy)))
+                # Add missing variables.
+                for itempairs in parameter_taxon_list:
+                    if itempairs not in sample_parameter_taxon_list:
+                        variable = envmonlib.VariableNode()
+                        samplenode.addChild(variable)
+                        variable.addData(u'taxon_name', itempairs[1][0])
+                        variable.addData(u'trophy', itempairs[1][1])
+                        variable.addData(u'parameter', itempairs[0][0])
+                        variable.addData(u'value', u'0.0')
+                        variable.addData(u'unit', itempairs[0][1])

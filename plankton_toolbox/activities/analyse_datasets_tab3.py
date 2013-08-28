@@ -91,7 +91,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         self._reloaddata_button = QtGui.QPushButton("Reload analysis data (no clean up)")
         self.connect(self._reloaddata_button, QtCore.SIGNAL("clicked()"), self._main_activity._tab1widget._copyDatasetsForAnalysis)
         #               
-        self._addmissingtaxa_button = QtGui.QPushButton("Add missing taxa in each sample")
+        self._addmissingtaxa_button = QtGui.QPushButton("Phytoplankton: Add missing taxa in each sample")
         self.connect(self._addmissingtaxa_button, QtCore.SIGNAL("clicked()"), self._addMissingTaxa)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
@@ -195,7 +195,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                         # Add taxon class based on taxon name.
                         newvariable.addData(u'class', envmonlib.Species().getTaxonValue(newtaxon, "Class"))
             #
-            self._main_activity.updateAnalysisData()    
+            self._main_activity.updateViewedDataAndTabs()    
         except UserWarning, e:
             QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
 
@@ -220,51 +220,10 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             analysisdata = self._analysisdata.getData()
             if not analysisdata:        
                 return
-            # Step 1: Create lists of taxa (name and trophy) and parameters (parameter and unit).
-            parameter_set = set()
-            taxon_set = set()
-            for visitnode in analysisdata.getChildren():
-                for samplenode in visitnode.getChildren():
-                    for variablenode in samplenode.getChildren():
-                        parameter = variablenode.getData(u'parameter')
-                        unit = variablenode.getData(u'unit')
-                        if parameter:
-                            parameter_set.add((parameter, unit))
-                        taxonname = variablenode.getData(u'taxon_name')
-                        trophy = variablenode.getData(u'trophy')
-                        if taxonname:
-                            taxon_set.add((taxonname, trophy))
-            # Step 2: Create list with parameter-taxon pairs.
-            parameter_taxon_list = []
-            for parameterpair in parameter_set:
-                for taxonpair in taxon_set:
-                    parameter_taxon_list.append((parameterpair, taxonpair))
-            # Step 3: Iterate over samples. 
-            parameter_set = set()
-            taxon_set = set()
+            # 
+            envmonlib.AnalysisPrepare().addMissingTaxa(analysisdata)
             #
-            for visitnode in analysisdata.getChildren():
-                #
-                for samplenode in visitnode.getChildren():
-                    sample_parameter_taxon_list = []
-                    for variablenode in samplenode.getChildren():
-                        parameter = variablenode.getData(u'parameter')
-                        unit = variablenode.getData(u'unit')
-                        taxon = variablenode.getData(u'taxon_name')
-                        trophy = variablenode.getData(u'trophy')
-                        sample_parameter_taxon_list.append(((parameter, unit), (taxon, trophy)))
-                    # Add missing variables.
-                    for itempairs in parameter_taxon_list:
-                        if itempairs not in sample_parameter_taxon_list:
-                            variable = envmonlib.VariableNode()
-                            samplenode.addChild(variable)
-                            variable.addData(u'taxon_name', itempairs[1][0])
-                            variable.addData(u'trophy', itempairs[1][1])
-                            variable.addData(u'parameter', itempairs[0][0])
-                            variable.addData(u'value', u'0.0')
-                            variable.addData(u'unit', itempairs[0][1])
-            #
-            self._main_activity.updateAnalysisData()    
+            self._main_activity.updateViewedDataAndTabs()    
         except UserWarning, e:
             QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
 
