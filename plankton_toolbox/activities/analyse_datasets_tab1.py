@@ -109,7 +109,7 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
         self._main_activity.viewAnalysisData()
 #         self._analysisdata.setData(None)    
         self._main_activity.getAnalysisData().clearData()    
-        self._main_activity.getStatisticData().clearData()    
+        self._main_activity.getStatisticalData().clearData()    
         self._main_activity.getReportData().clearData()    
         self._main_activity.updateViewedDataAndTabs() 
 

@@ -24,9 +24,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import envmonlib
+# import envmonlib
 
-class StatisticData(object):
+class StatisticalData(object):
     """
     Should contain table oriented data, see envmonlib.DatasetTable().
     """
@@ -34,7 +34,7 @@ class StatisticData(object):
         """ """
         self._data = None
         # Initialize parent.
-        super(StatisticData, self).__init__()
+        super(StatisticalData, self).__init__()
 
     def clearData(self):
         """ """
