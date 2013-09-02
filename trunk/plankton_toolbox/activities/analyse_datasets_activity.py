@@ -46,7 +46,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         """ """
         # Create object containing analysis data.
         self._analysisdata = envmonlib.AnalysisData()
-        self._statisticdata = envmonlib.StatisticData()
+        self._statisticaldata = envmonlib.StatisticalData()
         self._reportdata = envmonlib.ReportData()
         
         # Filename used when saving data to file.
@@ -76,9 +76,9 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         """ """
         return self._analysisdata 
         
-    def getStatisticData(self):
+    def getStatisticalData(self):
         """ """
-        return self._statisticdata 
+        return self._statisticaldata 
         
     def getReportData(self):
         """ """
@@ -131,7 +131,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         self._viewdata_list = QtGui.QComboBox()
         self._viewdata_list.addItems(["Analysis data",
                                       "Filtered analysis data",
-                                      "Statistic data",
+                                      "Statistical data",
                                       "Report data",
                                       "Hide data (to increase performance)"])
         self.connect(self._viewdata_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._viewDataListChanged)                
@@ -247,8 +247,8 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
             self._tableview.tablemodel.setModeldata(targetdataset)
             self._refreshViewedDataTable()
         elif selectedviewindex == 2:
-            # Statistic data.
-            self._tableview.tablemodel.setModeldata(self._statisticdata.getData())
+            # Statistical data.
+            self._tableview.tablemodel.setModeldata(self._statisticaldata.getData())
             self._refreshViewedDataTable()
         elif selectedviewindex == 3:
             # Report data.
@@ -319,7 +319,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
             self._viewdata_list.setCurrentIndex(0)
             self.updateViewedData()
 
-    def viewStatisticData(self):
+    def viewStatisticalData(self):
         """ """
         if self._viewdata_list.currentIndex() < 4: # 4 = hide.
             self._viewdata_list.setCurrentIndex(2)

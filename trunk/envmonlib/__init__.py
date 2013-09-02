@@ -97,5 +97,5 @@ from datareports.reports_manager import ReportsManager
 from dataanalysis.analysisdata import AnalysisData
 from dataanalysis.analysisprepare import AnalysisPrepare
 from dataanalysis.reportdata import ReportData
-from dataanalysis.statisticdata import StatisticData
+from dataanalysis.statisticaldata import StatisticalData
 
