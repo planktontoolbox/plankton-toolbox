@@ -144,7 +144,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         self._newgraph_button = QtGui.QPushButton("New graph")
         self.connect(self._newgraph_button, QtCore.SIGNAL("clicked()"), self._newGraphAndPlotData)                
         # Add subplot data to the Graph plotter tool.
-        self._addsubplotdata_button = QtGui.QPushButton("Add subplot to graph")
+        self._addsubplotdata_button = QtGui.QPushButton("Add plot to graph")
         self.connect(self._addsubplotdata_button, QtCore.SIGNAL("clicked()"), self._addSubplotData)                
 
         # Layout widgets.
@@ -615,38 +615,38 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
 #                         if z_param: z_value = None
 #                         continue            
 
-                # Get other data from the group.    
-                for variablenode in grouped_lifestages[group_key]:                        
-                    if x_variable_key: x_value = variablenode.getData(x_variable_key)
-                    if y_variable_key: y_value = variablenode.getData(y_variable_key)
-                    if z_variable_key: z_value = variablenode.getData(z_variable_key)
-
-                    # Check if values are finished.
-                    if (y_value is not None) and (numberofvariables == 1):
-                        y_data.append(y_value)
-                        if y_variable_key: y_value = None
-                        continue
-                    if (x_value is not None) and (y_value is not None) and (numberofvariables == 2):
-                        x_data.append(x_value)
-                        y_data.append(y_value)
-                        if x_variable_key: x_value = None
-                        if y_variable_key: y_value = None
-                        continue            
-                    if (x_value is not None) and (y_value is not None) and (z_value is not None) and (numberofvariables == 3):
-                        x_data.append(x_value)
-                        y_data.append(y_value)
-                        z_data.append(z_value)
-                        if x_variable_key: x_value = None
-                        if y_variable_key: y_value = None
-                        if z_variable_key: z_value = None
-                        continue            
-                #                    
-                if x_param: x_value = None
-                if y_param: y_value = None
-                if z_param: z_value = None
-                if x_variable_key: x_value = None
-                if y_variable_key: y_value = None
-                if z_variable_key: z_value = None
+                    # Get other data from the group.    
+                    for variablenode in grouped_lifestages[group_key]:                        
+                        if x_variable_key: x_value = variablenode.getData(x_variable_key)
+                        if y_variable_key: y_value = variablenode.getData(y_variable_key)
+                        if z_variable_key: z_value = variablenode.getData(z_variable_key)
+    
+                        # Check if values are finished.
+                        if (y_value is not None) and (numberofvariables == 1):
+                            y_data.append(y_value)
+                            if y_variable_key: y_value = None
+                            continue
+                        if (x_value is not None) and (y_value is not None) and (numberofvariables == 2):
+                            x_data.append(x_value)
+                            y_data.append(y_value)
+                            if x_variable_key: x_value = None
+                            if y_variable_key: y_value = None
+                            continue            
+                        if (x_value is not None) and (y_value is not None) and (z_value is not None) and (numberofvariables == 3):
+                            x_data.append(x_value)
+                            y_data.append(y_value)
+                            z_data.append(z_value)
+                            if x_variable_key: x_value = None
+                            if y_variable_key: y_value = None
+                            if z_variable_key: z_value = None
+                            continue            
+                    #                    
+                    if x_param: x_value = None
+                    if y_param: y_value = None
+                    if z_param: z_value = None
+                    if x_variable_key: x_value = None
+                    if y_variable_key: y_value = None
+                    if z_variable_key: z_value = None
 
         return x_data, y_data, z_data
 

@@ -169,6 +169,7 @@ class AnalysisData(object):
             - 'min_max_depth': Contains <sample_min_depth>-<sample_max_depth>
             - 'taxon'
             - 'trophy'
+            - 'life_stage'
         """
         # Create a tree dataset for filtered data.
         filtereddata = envmonlib.DatasetNode() 

@@ -39,7 +39,7 @@ class AnalysisPrepare(object):
         """ """
         if not analysisdata:        
             return
-        # Step 1: Create lists of taxa (name and trophy) and parameters (parameter and unit).
+        # Step 1: Create lists of taxa (name, trophy, stage and sex) and parameters (parameter and unit).
         parameter_set = set()
         taxon_set = set()
         for visitnode in analysisdata.getChildren():
@@ -51,8 +51,10 @@ class AnalysisPrepare(object):
                         parameter_set.add((parameter, unit))
                     taxonname = variablenode.getData(u'taxon_name')
                     trophy = variablenode.getData(u'trophy')
+                    stage = variablenode.getData(u'stage')
+                    sex = variablenode.getData(u'sex')
                     if taxonname:
-                        taxon_set.add((taxonname, trophy))
+                        taxon_set.add((taxonname, trophy, stage, sex))
         # Step 2: Create list with parameter-taxon pairs.
         parameter_taxon_list = []
         for parameterpair in parameter_set:
@@ -71,7 +73,9 @@ class AnalysisPrepare(object):
                     unit = variablenode.getData(u'unit')
                     taxon = variablenode.getData(u'taxon_name')
                     trophy = variablenode.getData(u'trophy')
-                    sample_parameter_taxon_list.append(((parameter, unit), (taxon, trophy)))
+                    stage = variablenode.getData(u'stage')
+                    sex = variablenode.getData(u'sex')
+                    sample_parameter_taxon_list.append(((parameter, unit), (taxon, trophy, stage, sex)))
                 # Add missing variables.
                 for itempairs in parameter_taxon_list:
                     if itempairs not in sample_parameter_taxon_list:
@@ -79,6 +83,8 @@ class AnalysisPrepare(object):
                         samplenode.addChild(variable)
                         variable.addData(u'taxon_name', itempairs[1][0])
                         variable.addData(u'trophy', itempairs[1][1])
+                        variable.addData(u'stage', itempairs[1][2])
+                        variable.addData(u'sex', itempairs[1][3])
                         variable.addData(u'parameter', itempairs[0][0])
                         variable.addData(u'value', u'0.0')
                         variable.addData(u'unit', itempairs[0][1])
