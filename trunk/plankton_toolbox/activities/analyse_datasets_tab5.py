@@ -58,7 +58,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
             for visitnode in analysisdata.getChildren():
                 for samplenode in visitnode.getChildren():
                     for variablenode in samplenode.getChildren():
-                        parameterset.add(unicode(variablenode.getData(u"parameter")))
+                        parameterset.add(variablenode.getData(u'parameter') + u' (' + variablenode.getData(u'unit') + u')')
             parameterlist = sorted(parameterset)
             self._parameter_list.addItems(parameterlist)
 
@@ -79,11 +79,11 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         # Predefined graphs.
         self._addplot_1_button = QtGui.QPushButton("Time series")
         self.connect(self._addplot_1_button, QtCore.SIGNAL("clicked()"), self._addPlot_1)                
-        self._addplot_1_subplot_button = QtGui.QPushButton("Add subplot")
+        self._addplot_1_subplot_button = QtGui.QPushButton("Add plot")
         self.connect(self._addplot_1_subplot_button, QtCore.SIGNAL("clicked()"), self._addSubPlot_1)                
         self._addplot_2_button = QtGui.QPushButton("Seasonal cycle")
         self.connect(self._addplot_2_button, QtCore.SIGNAL("clicked()"), self._addPlot_2)                
-        self._addplot_2_subplot_button = QtGui.QPushButton("Add subplot")
+        self._addplot_2_subplot_button = QtGui.QPushButton("Add plot")
         self.connect(self._addplot_2_subplot_button, QtCore.SIGNAL("clicked()"), self._addSubPlot_2)                
         self._addplot_3_button = QtGui.QPushButton("Values for taxa / station and date")
         self.connect(self._addplot_3_button, QtCore.SIGNAL("clicked()"), self._addPlot_3)                
@@ -244,7 +244,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
             date = visitnode.getData(u"date")
             for samplenode in visitnode.getChildren():
                 for variablenode in samplenode.getChildren():
-                    parameter = variablenode.getData(u"parameter")
+                    parameter = variablenode.getData(u"parameter") + u' (' + variablenode.getData(u'unit') + u')'
                     if parameter == selectedparameter:                        
                         value = variablenode.getData(u"value")
                         date_list.append(date)
@@ -273,7 +273,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
             #
             for samplenode in visitnode.getChildren():
                 for variablenode in samplenode.getChildren():
-                    parameter = variablenode.getData(u"parameter")
+                    parameter = variablenode.getData(u"parameter") + u' (' + variablenode.getData(u'unit') + u')'
                     if parameter == selectedparameter:                        
                         value = variablenode.getData(u"value")
                         date_list.append(date)
@@ -321,7 +321,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                     taxonname = variablenode.getData(u"taxon_name")
                     if not taxonname:
                         taxonname = u'---'
-                    parameter = variablenode.getData(u"parameter")
+                    parameter = variablenode.getData(u"parameter") + u' (' + variablenode.getData(u'unit') + u')'
                     if parameter == selectedparameter:                        
                         value = variablenode.getData(u"value")
                         try:
@@ -383,7 +383,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                     taxonname = variablenode.getData(u"taxon_name")
                     if not taxonname:
                         taxonname = u'---'
-                    parameter = variablenode.getData(u"parameter")
+                    parameter = variablenode.getData(u"parameter") + u' (' + variablenode.getData(u'unit') + u')'
                     if parameter == selectedparameter:                        
                         value = variablenode.getData(u"value")
                         try:

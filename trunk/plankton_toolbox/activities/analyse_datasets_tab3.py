@@ -95,7 +95,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         self._reloaddata_button = QtGui.QPushButton("Reload analysis data (no clean up)")
         self.connect(self._reloaddata_button, QtCore.SIGNAL("clicked()"), self._main_activity._tab1widget._copyDatasetsForAnalysis)
         #               
-        self._addmissingtaxa_button = QtGui.QPushButton("Phytoplankton: Add missing taxa in each sample")
+        self._addmissingtaxa_button = QtGui.QPushButton("Add 0 for not observed")
         self.connect(self._addmissingtaxa_button, QtCore.SIGNAL("clicked()"), self._addMissingTaxa)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()

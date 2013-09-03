@@ -114,7 +114,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         tabWidget.addTab(self._tab5widget.contentPredefinedGraphs(), "Predefined graphs")
         tabWidget.addTab(self._tab6widget.contentGenericGraphs(), "Generic graphs")
         tabWidget.addTab(self._tab7widget.contentStatistics(), "Statistics")
-        tabWidget.addTab(self._tab8widget.contentReports(), "Reports")
+        tabWidget.addTab(self._tab8widget.contentReports(), "Exports")
         # Layout widgets.
         layout = QtGui.QVBoxLayout()
         layout.addWidget(tabWidget)
