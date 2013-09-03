@@ -150,17 +150,17 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
                 
                 # Iterate over sample content. 
                 # Note: Create a level between sample and variabel.
-                grouped_organisms = {}
+                grouped_lifestages = {}
                 for variablenode in samplenode.getChildren():
                     group_key = variablenode.getData(u'taxon_name')
                     group_key += u':' + variablenode.getData(u'stage') # Specific for zooplankton.
                     group_key += u':' + variablenode.getData(u'sex') # Specific for zooplankton.
-                    if group_key not in grouped_organisms:
-                        grouped_organisms[group_key] = [] # Starts a new group.
-                    grouped_organisms[group_key].append(variablenode)
+                    if group_key not in grouped_lifestages:
+                        grouped_lifestages[group_key] = [] # Starts a new group.
+                    grouped_lifestages[group_key].append(variablenode)
                 
                 # Get variables from the new set of groups.
-                for group_key in grouped_organisms.keys():
+                for group_key in grouped_lifestages.keys():
                     # This should be available in each group.
                     taxon_name = u'-'
                     stage = u'-'
@@ -170,7 +170,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
                     length_median = u'-'
                     length_mean = u'-'
                     #
-                    for variablenode in grouped_organisms[group_key]:
+                    for variablenode in grouped_lifestages[group_key]:
                         # This should be same for all variables in the group.                       
                         taxon_name = variablenode.getData(u'taxon_name')
                         stage = variablenode.getData(u'stage')

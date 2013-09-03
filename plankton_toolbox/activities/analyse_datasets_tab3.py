@@ -72,18 +72,22 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         self._aggregate_rank_list = QtGui.QComboBox()
         self._aggregate_rank_list.addItems([
             u"Biota (all levels)",
-            u"Plankton groups",
+            u"Phytoplankton group",
             # u"Kingdom",
             u"Phylum",
             u"Class",
             u"Order",
             # u"Family",
             # u"Genus",
-            u"Species" ])
+#             u"Species", 
+            ])
         self._aggregate_rank_list.setCurrentIndex(3) # Default: Class.
         #  Aggregate over trophy.
         self._trophy_listview = utils_qt.SelectableQListView()
         self._trophy_listview.setMaximumHeight(80)
+        #  Aggregate over life stage.
+        self._lifestage_listview = utils_qt.SelectableQListView()
+        self._lifestage_listview.setMaximumHeight(80)
         # Buttons.
         self._aggregatedata_button = QtGui.QPushButton("Aggregate data")
         self.connect(self._aggregatedata_button, QtCore.SIGNAL("clicked()"), self._aggregateData)
@@ -99,20 +103,23 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         label1 = QtGui.QLabel("Aggregate over:")
         form1.addWidget(label1, gridrow, 0, 1, 4)
         label2 = QtGui.QLabel("Complement data:")
-        form1.addWidget(label2, gridrow, 6, 1, 4)
+        form1.addWidget(label2, gridrow, 9, 1, 4)
         gridrow += 1
         label1 = QtGui.QLabel("Taxon level (rank):               ")
-        label2 = QtGui.QLabel("Trophy:")
+        label2 = QtGui.QLabel("Trophic type:")
+        label3 = QtGui.QLabel("Life stage:")
         form1.addWidget(label1, gridrow, 0, 1, 1)
         form1.addWidget(label2, gridrow, 1, 1, 3)
-        form1.addWidget(QtGui.QLabel(""), gridrow, 2, 1, 6) # Stretch.
+        form1.addWidget(label3, gridrow, 4, 1, 3)
+        form1.addWidget(QtGui.QLabel(""), gridrow, 3, 1, 6) # Stretch.
         gridrow += 1
         form1.addWidget(self._aggregate_rank_list, gridrow, 0, 1, 1)
         form1.addWidget(self._trophy_listview, gridrow, 1, 4, 3)
-        form1.addWidget(self._addmissingtaxa_button, gridrow, 6, 1, 1)
+        form1.addWidget(self._lifestage_listview, gridrow, 4, 4, 3)
+        form1.addWidget(self._addmissingtaxa_button, gridrow, 9, 1, 1)
         gridrow += 4
-        form1.addWidget(self._reloaddata_button, gridrow, 2, 1, 1)
-        form1.addWidget(self._aggregatedata_button, gridrow, 3, 1, 1)
+        form1.addWidget(self._reloaddata_button, gridrow, 0, 1, 1)
+        form1.addWidget(self._aggregatedata_button, gridrow, 6, 1, 1)
         #
 #        hbox1 = QtGui.QHBoxLayout()
 #        hbox1.addStretch(5)
@@ -140,6 +147,8 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             selected_taxon_rank = unicode(self._aggregate_rank_list.currentText())
             selected_trophy_list = self._trophy_listview.getSelectedDataList()
             selected_trophy_text = u'-'.join(selected_trophy_list) 
+            selected_lifestage_list = self._lifestage_listview.getSelectedDataList()
+            selected_lifestage_text = u'-'.join(selected_lifestage_list) 
             #
             for visitnode in self._analysisdata.getData().getChildren()[:]: 
                 for samplenode in visitnode.getChildren()[:]:
@@ -153,7 +162,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                             #
                             if selected_taxon_rank == u'Biota (all levels)':
                                 newtaxon = u'Biota' # Biota is above kingdom in the taxonomic hierarchy. 
-                            elif selected_taxon_rank == u'Plankton groups':
+                            elif selected_taxon_rank == u'Phytoplankton group':
                                 newtaxon = variablenode.getData(u'plankton_group')  
                             else:
                                 rank_as_key = selected_taxon_rank.lower()
@@ -165,12 +174,23 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                             if taxontrophy in selected_trophy_list:
                                 taxontrophy = selected_trophy_text # Concatenated string of ranks.
                             else:
-                                continue # New: Use selected trophy only, don't use others.  
+                                continue # Phytoplankton only: Use selected trophy only, don't use others.  
+                            #
+                            stage = variablenode.getData(u'stage')
+                            sex = variablenode.getData(u'sex')
+                            checkstage = stage
+                            if sex:
+                                checkstage += u'/' + sex
+                            if checkstage in selected_lifestage_list:
+                                stage = selected_lifestage_text
+                                sex = u''
+#                             else:
+#                                 continue # Note: Don't skip for zooplankton.                 
                             #
                             parameter = variablenode.getData(u'parameter')
                             unit = variablenode.getData(u'unit')
                             
-                            agg_tuple = (newtaxon, taxontrophy, parameter, unit)
+                            agg_tuple = (newtaxon, taxontrophy, stage, sex, parameter, unit)
                             if agg_tuple in aggregatedvariables:
                                 aggregatedvariables[agg_tuple] = value + aggregatedvariables[agg_tuple]
                             else:
@@ -182,13 +202,15 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                     samplenode.removeAllChildren()
                     # Add the new aggregated variables instead.  
                     for variablekeytuple in aggregatedvariables:
-                        newtaxon, taxontrophy, parameter, unit = variablekeytuple
+                        newtaxon, taxontrophy, stage, sex, parameter, unit = variablekeytuple
                         #
                         newvariable = envmonlib.VariableNode()
                         samplenode.addChild(newvariable)    
                         #
                         newvariable.addData(u'taxon_name', newtaxon)
                         newvariable.addData(u'trophy', taxontrophy)
+                        newvariable.addData(u'stage', stage)
+                        newvariable.addData(u'sex', sex)
                         newvariable.addData(u'parameter', parameter)
                         newvariable.addData(u'unit', unit)
                         newvariable.addData(u'value', aggregatedvariables[variablekeytuple])
@@ -206,13 +228,20 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             return # Empty data.
         #
         trophyset = set()
-        #
+        lifestageset = set()
         for visitnode in analysisdata.getChildren():
             for samplenode in visitnode.getChildren():
                 for variablenode in samplenode.getChildren():
+                    #
                     trophyset.add(unicode(variablenode.getData(u'trophy')))
+                    #
+                    lifestage = variablenode.getData(u'stage')
+                    if variablenode.getData(u'sex'):
+                        lifestage += u'/' + variablenode.getData(u'sex')
+                    lifestageset.add(lifestage)
         # Selection lists.
         self._trophy_listview.setList(sorted(trophyset))
+        self._lifestage_listview.setList(sorted(lifestageset))
             
     def _addMissingTaxa(self):
         """ """

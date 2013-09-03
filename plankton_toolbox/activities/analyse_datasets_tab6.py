@@ -485,22 +485,22 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
             
                 # Iterate over sample content. 
                 # Note: Create a level between sample and variabel.
-                grouped_organisms = {}
+                grouped_lifestages = {}
                 for variablenode in samplenode.getChildren():
                     group_key = variablenode.getData(u'taxon_name')
                     group_key += u':' + variablenode.getData(u'size_class') # For phytoplankton 
                     group_key += u':' + variablenode.getData(u'stage') # For zooplankton
                     group_key += u':' + variablenode.getData(u'sex') # For zooplankton
                 
-                    if group_key not in grouped_organisms:
-                        grouped_organisms[group_key] = []
-                    grouped_organisms[group_key].append(variablenode)
+                    if group_key not in grouped_lifestages:
+                        grouped_lifestages[group_key] = []
+                    grouped_lifestages[group_key].append(variablenode)
                 
                 # Get parameters values from he group.
-                for group_key in grouped_organisms.keys():
+                for group_key in grouped_lifestages.keys():
                     if x_param:
                         x_value = None
-                        for variablenode in grouped_organisms[group_key]:
+                        for variablenode in grouped_lifestages[group_key]:
                             parameter = variablenode.getData(u'parameter') + u' (' + variablenode.getData(u'unit') + u')'
                             if parameter == x_param:
                                 x_value = variablenode.getData(u'value')
@@ -533,7 +533,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                     #
                     if y_param:
                         y_value = None
-                        for variablenode in grouped_organisms[group_key]:
+                        for variablenode in grouped_lifestages[group_key]:
                             parameter = variablenode.getData(u'parameter') + u' (' + variablenode.getData(u'unit') + u')'
                             if parameter == y_param:
                                 y_value = variablenode.getData(u'value')
@@ -565,7 +565,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                     #
                     if z_param:
                         z_value = None
-                        for variablenode in grouped_organisms[group_key]:
+                        for variablenode in grouped_lifestages[group_key]:
                             parameter = variablenode.getData(u'parameter') + u' (' + variablenode.getData(u'unit') + u')'
                             if parameter == z_param:
                                 z_value = variablenode.getData(u'value')
@@ -616,7 +616,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
 #                         continue            
 
                 # Get other data from the group.    
-                for variablenode in grouped_organisms[group_key]:                        
+                for variablenode in grouped_lifestages[group_key]:                        
                     if x_variable_key: x_value = variablenode.getData(x_variable_key)
                     if y_variable_key: y_value = variablenode.getData(y_variable_key)
                     if z_variable_key: z_value = variablenode.getData(z_variable_key)

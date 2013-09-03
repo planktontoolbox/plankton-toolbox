@@ -186,6 +186,7 @@ class AnalysisData(object):
         filter_minmaxdepth =  self._filter[u'min_max_depth']
         filter_taxon = self._filter[u'taxon']
         filter_trophy = self._filter[u'trophy']
+        filter_lifestage = self._filter[u'life_stage']
         #
         for visitnode in analysisdata.getChildren():
             if filter_startdate > visitnode.getData(u'date'):
@@ -214,7 +215,14 @@ class AnalysisData(object):
                 for variablenode in samplenode.getChildren():
                     if variablenode.getData(u'taxon_name') not in filter_taxon:
                         continue
+                    #
                     if variablenode.getData(u'trophy') not in filter_trophy:
+                        continue
+                    #
+                    lifestage = variablenode.getData(u'stage')
+                    if variablenode.getData(u'sex'):
+                        lifestage += u'/' + variablenode.getData(u'sex')
+                    if lifestage not in filter_lifestage:
                         continue
                     # Create node and copy node data.            
                     filteredvariable = envmonlib.VariableNode()

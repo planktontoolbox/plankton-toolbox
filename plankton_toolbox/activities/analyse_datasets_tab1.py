@@ -97,7 +97,7 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
         """ """
         self._loaded_datasets_model.clear()        
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
-            item = QtGui.QStandardItem(u"Dataset-" + unicode(rowindex) + 
+            item = QtGui.QStandardItem(u"Dataset-" + unicode(rowindex + 1) + 
                                        u".   Source: " + dataset.getMetadata(u'file_name'))
             item.setCheckState(QtCore.Qt.Checked)
 #            item.setCheckState(QtCore.Qt.Unchecked)

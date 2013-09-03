@@ -233,20 +233,20 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                 sampleminmaxdepth = sample_min_depth + u'-' + sample_max_depth   
                 # Iterate over sample content. 
                 # Note: Create a level between sample and variabel.
-                grouped_organisms = {}
+                grouped_size_lifestages = {}
                 for variablenode in samplenode.getChildren():
                     group_key = variablenode.getData(u'taxon_name')
                     group_key += u':' + variablenode.getData(u'size_class') # Specific for phytoplankton.
                     group_key += u':' + variablenode.getData(u'stage') # Specific for zooplankton.
                     group_key += u':' + variablenode.getData(u'sex') # Specific for zooplankton.
-                    if group_key not in grouped_organisms:
-                        grouped_organisms[group_key] = [] # Starts a new group.
-                    grouped_organisms[group_key].append(variablenode)
+                    if group_key not in grouped_size_lifestages:
+                        grouped_size_lifestages[group_key] = [] # Starts a new group.
+                    grouped_size_lifestages[group_key].append(variablenode)
                 
                 # Get variables from the new set of groups.
-                for group_key in grouped_organisms.keys():
+                for group_key in grouped_size_lifestages.keys():
                     #
-                    for variablenode in grouped_organisms[group_key]:
+                    for variablenode in grouped_size_lifestages[group_key]:
                         variabletaxon = variablenode.getData(u'taxon_name')
                         # Parameters.
                         parameter = variablenode.getData(u'parameter')
