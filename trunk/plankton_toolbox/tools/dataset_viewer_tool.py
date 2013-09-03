@@ -122,7 +122,7 @@ class DatasetViewerTool(tool_base.ToolBase):
         self._selectdataset_list.addItems(["<select dataset>"])
         
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
-            self._selectdataset_list.addItems([u'Dataset-' + unicode(rowindex)])
+            self._selectdataset_list.addItems([u'Dataset-' + unicode(rowindex + 1)])
 
     def _viewDataset(self, index):
         """ """
@@ -160,7 +160,7 @@ class DatasetViewerTool(tool_base.ToolBase):
                 namefilter = 'Text files (*.txt);;All files (*.*)'
             filename = QtGui.QFileDialog.getSaveFileName(
                             self,
-                            'Save dataset',
+                            'Export dataset',
                             self._lastuseddirectory,
                             namefilter)
             filename = unicode(filename) # QString to unicode.

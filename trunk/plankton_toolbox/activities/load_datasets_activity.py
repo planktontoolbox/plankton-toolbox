@@ -496,7 +496,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
 
             # Add row 
             self._datasettabledata.addRow(
-                [u'Dataset-' + unicode(rowindex),
+                [u'Dataset-' + unicode(rowindex + 1),
                  datasettype,
                  contentinfo,
                  dataset.getMetadata(u'file_name'),
