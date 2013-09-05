@@ -107,21 +107,22 @@ class StartActivity(activity_base.ActivityBase):
         label1 = QtGui.QLabel()
         label1.setTextFormat(QtCore.Qt.RichText)
         label1.setWordWrap(True)
-        label1.setText("""
-        <h4>Usage instructions</h4>
-        <p>
-        From the main menu you can select between activities and view tools. 
-        Selected activity is always shown at the center and tools can be placed to the right,
-        bottom or as floating windows. Double-click or click-and-drag in the title bar to move 
-        them around. The toolbox will remember window positions when closing down.
-        </p>        
-        <p>
-        When using the toolbox information, warnings and errors are logged to the 
-        "Toolbox logging"-tool. The same information is always written to the file 
-        "plankton_toolbox_log.txt". The log file is cleared each time you starts the 
-        Plankton Toolbox.       
-        </p>        
-        """)
+        label1.setText(help_texts.HelpTexts().getText(u'StartActivity_intro_2'))
+#         label1.setText("""
+#         <h4>Usage instructions</h4>
+#         <p>
+#         From the main menu you can select between activities and view tools. 
+#         Selected activity is always shown at the center and tools can be placed to the right,
+#         bottom or as floating windows. Double-click or click-and-drag in the title bar to move 
+#         them around. The toolbox will remember window positions when closing down.
+#         </p>        
+#         <p>
+#         When using the toolbox information, warnings and errors are logged to the 
+#         "Toolbox logging"-tool. The same information is always written to the file 
+#         "plankton_toolbox_log.txt". The log file is cleared each time you starts the 
+#         Plankton Toolbox.       
+#         </p>        
+#         """)
         # Layout.
         layout = QtGui.QGridLayout()
         gridrow = 0
@@ -136,7 +137,7 @@ class StartActivity(activity_base.ActivityBase):
         """ """
         # Active widgets and connections.
         label = utils_qt.RichTextQLabel()
-        label.setText(help_texts.HelpTexts().getText(u'StartActivity_intro_2'))
+        label.setText(help_texts.HelpTexts().getText(u'StartActivity_intro_3'))
 #         label.setText("""
 #         <h4>Preloaded data</h4>
 #         <p>
@@ -160,7 +161,7 @@ class StartActivity(activity_base.ActivityBase):
         """ """
         # Active widgets and connections.
         label = utils_qt.RichTextQLabel()
-        label.setText(help_texts.HelpTexts().getText(u'StartActivity_intro_3'))
+        label.setText(help_texts.HelpTexts().getText(u'StartActivity_intro_4'))
 #         label.setText("""
 #         <h4>Under development...</h4>
 #         <p>

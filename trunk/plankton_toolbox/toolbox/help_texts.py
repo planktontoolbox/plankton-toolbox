@@ -176,6 +176,16 @@ class HelpTexts(object):
         """
 
         self._texts[u'StartActivity_intro_3'] = """
+        <h4>Preloaded data</h4>
+        <p>
+        To run the Plankton Toolbox there should be a folder named "toolbox_data" in the 
+        same folder as the executable file. It contains species lists, parsers used when 
+        importing data files and code-lists for screening. These files can be modified 
+        by the user and new files can be added if the default set of files can't be used.
+        </p>
+        """
+
+        self._texts[u'StartActivity_intro_4'] = """
         <h4>Under development...</h4>
         <p>
         The Plankton Toolbox is under development.
