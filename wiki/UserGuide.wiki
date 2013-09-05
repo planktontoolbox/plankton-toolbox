@@ -1,0 +1,28 @@
+#summary User guide for the Plankton Toolbox.
+
+= User guide =
+
+Content:
+
+<wiki:toc max_depth="3" />
+
+= About Plankton Toolbox =
+
+== Target audience ==
+
+
+== Features ==
+
+
+
+= Download and install =
+
+
+= Using Plankton Toolbox =
+
+== User interface ==
+
+
+
+== Data files and parsers ==
+
