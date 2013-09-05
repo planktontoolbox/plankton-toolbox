@@ -22,7 +22,6 @@ Content:
 
 == User interface ==
 
-
+http://plankton-toolbox.googlecode.com/svn/wiki/plankton_toolbox_example.png
 
 == Data files and parsers ==
-
