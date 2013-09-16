@@ -255,7 +255,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
             taxon_rows.append(row)
              
         # Sort the outdata list before writing to file. 
-        taxon_rows.sort(primer_report_count_table_sort) # Sort function defined below.        
+        taxon_rows.sort(primer_report_count_table_sort) # Note: Sort function defined below.        
         #
         # Part 4: Put all parts together and add to result table.
         # 
@@ -362,8 +362,13 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
 # Sort function for the result table.
 def primer_report_count_table_sort(s1, s2):
     """ """
-    # Sort order: Class and scientific name.
-    columnsortorder = [0, 2, 5] # Class, Species and Trophy.
+    # Sort order: 
+    # - 0: taxon_name
+    # - 1: size_class
+    # - 2: trophy
+    # - 3: stage
+    # - 4: sex
+    columnsortorder = [0, 1, 2, 3, 4]
     #
     for index in columnsortorder:
         s1item = s1[index]
