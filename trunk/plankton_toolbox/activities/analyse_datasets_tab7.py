@@ -92,6 +92,9 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         self._splitby_depth_checkbox.setChecked(False) 
         self._splitby_taxon_checkbox = QtGui.QCheckBox("Taxon")
         self._splitby_taxon_checkbox.setChecked(False) 
+        # - View data.
+        self._viewdata_button = QtGui.QPushButton("View data")
+        self.connect(self._viewdata_button, QtCore.SIGNAL("clicked()"), self._viewData)                
         # - Calculate statistics.
         self._calcstatistics_button = QtGui.QPushButton("Calculate statistics")
         self.connect(self._calcstatistics_button, QtCore.SIGNAL("clicked()"), self._calcStats)                
@@ -125,6 +128,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         #
         hbox2 = QtGui.QHBoxLayout()
         hbox2.addStretch(10)
+        hbox2.addWidget(self._viewdata_button)
         hbox2.addWidget(self._calcstatistics_button)
         #
         layout = QtGui.QVBoxLayout()
@@ -202,7 +206,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         header_row.append(u'Max')
         header_row.append(u'Counted values')
         tabledata.setHeader(header_row)
-        # Extract values for the plot.
+        # Extract values.
         yearkey = u''
         monthkey = u''
         seasonkey = u''
@@ -219,13 +223,13 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
             visitmonth = unicode(visitdate[5:7])
             visitseason = u''
             if visitmonth in [u'12', u'01',u'02']:
-                visitseason = u'dec-jan-feb'
+                visitseason = u'Dec-Jan-Feb'
             elif visitmonth in [u'03', u'04',u'05']:
-                visitseason = u'mar-apr-may'
+                visitseason = u'Mar-Apr-May'
             elif visitmonth in [u'06', u'07',u'08']:
-                visitseason = u'jun-jul-aug'
+                visitseason = u'Jun-Jul-Aug'
             elif visitmonth in [u'09', u'10',u'11']:
-                visitseason = u'sep-oct-nov'
+                visitseason = u'Sep-Oct-Nov'
             #
             for samplenode in visitnode.getChildren():
                 sample_min_depth = unicode(samplenode.getData(u'sample_min_depth'))
@@ -312,3 +316,178 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
             report_row.append(countedvalues)
             #
             tabledata.appendRow(report_row)
+
+
+    def _viewData(self):
+        """ """
+        # Clear the statistical data and view the statistic area.
+        statisticaldata = self._main_activity.getStatisticalData()
+        statisticaldata.clearData()
+        self._main_activity.viewStatisticalData()
+        # Filtered data should be used.
+        self._main_activity.updateFilter() # Must be done before createFilteredDataset().
+        analysisdata = self._analysisdata.createFilteredDataset()
+        if not analysisdata:
+            return # Can't create a report from an empty dataset.
+        # Which parameter is selected?
+        selectedparameter = unicode(self._parameter_list.currentText())
+        # Split by.
+        split_on_year = self._splitby_year_checkbox.isChecked()
+        split_on_season = self._splitby_season_checkbox.isChecked()
+        split_on_month = self._splitby_month_checkbox.isChecked()
+        split_on_station = self._splitby_station_checkbox.isChecked()
+        split_on_visit = self._splitby_visit_checkbox.isChecked()
+        split_on_depth = self._splitby_depth_checkbox.isChecked()
+        split_on_taxon = self._splitby_taxon_checkbox.isChecked()
+        # Calculate the statistics.
+        self._extractValues(analysisdata, statisticaldata,
+                                  selectedparameter, 
+                                  split_on_year,
+                                  split_on_season,
+                                  split_on_month,
+                                  split_on_station,
+                                  split_on_visit,
+                                  split_on_depth,
+                                  split_on_taxon)
+        # View the result in the report area.
+        self._main_activity.viewStatisticalData()
+        
+    def _extractValues(self, dataset, reportdata,
+                        selectedparameter, 
+                        split_on_year = False,
+                        split_on_season = False,
+                        split_on_month = False,
+                        split_on_station = False,
+                        split_on_visit = False,
+                        split_on_depth = False,
+                        split_on_taxon = False):
+        """ """
+        # Target list.
+        data_dict = {}        
+        # Create a dataset (table, not tree).
+        tabledata = envmonlib.DatasetTable()
+        reportdata.setData(tabledata)
+        # Extract values.
+        yearkey = u''
+        monthkey = u''
+        seasonkey = u''
+        stationkey = u''
+        visitkey = u''
+        depthkey = u''
+        taxonkey = u''
+        #
+        for visitnode in dataset.getChildren():
+            visitdate = visitnode.getData(u'date')
+            visitstation = visitnode.getData(u'station_name')
+            visitvisit = visitstation + u' ' + visitdate 
+            visityear = unicode(visitdate[0:4])
+            visitmonth = unicode(visitdate[5:7])
+            visitseason = u''
+            if visitmonth in [u'12', u'01',u'02']:
+                visitseason = u'Dec-Jan-Feb'
+            elif visitmonth in [u'03', u'04',u'05']:
+                visitseason = u'Mar-Apr-May'
+            elif visitmonth in [u'06', u'07',u'08']:
+                visitseason = u'Jun-Jul-Aug'
+            elif visitmonth in [u'09', u'10',u'11']:
+                visitseason = u'Sep-Oct-Nov'
+            #
+            for samplenode in visitnode.getChildren():
+                sample_min_depth = unicode(samplenode.getData(u'sample_min_depth'))
+                sample_max_depth = unicode(samplenode.getData(u'sample_max_depth'))
+                sampleminmaxdepth = sample_min_depth + u'-' + sample_max_depth   
+                # Iterate over sample content. 
+                # Note: Create a level between sample and variabel.
+                grouped_size_lifestages = {}
+                for variablenode in samplenode.getChildren():
+                    group_key = variablenode.getData(u'taxon_name')
+                    group_key += u':' + variablenode.getData(u'size_class') # Specific for phytoplankton.
+                    group_key += u':' + variablenode.getData(u'stage') # Specific for zooplankton.
+                    group_key += u':' + variablenode.getData(u'sex') # Specific for zooplankton.
+                    if group_key not in grouped_size_lifestages:
+                        grouped_size_lifestages[group_key] = [] # Starts a new group.
+                    grouped_size_lifestages[group_key].append(variablenode)
+                
+                # Get variables from the new set of groups.
+                for group_key in grouped_size_lifestages.keys():
+                    #
+                    for variablenode in grouped_size_lifestages[group_key]:
+                        variabletaxon = variablenode.getData(u'taxon_name')
+                        # Parameters.
+                        parameter = variablenode.getData(u'parameter')
+                        unit = variablenode.getData(u'unit')
+                        parameternadunit = parameter + u' (' + unit + u')'
+                        if parameternadunit == selectedparameter:
+                            # Build split key.
+                            splitkey = u''
+                            if split_on_year: splitkey += visityear
+                            splitkey += u':'
+                            if split_on_season: splitkey += visitseason
+                            splitkey += u':'
+                            if split_on_month: splitkey += visitmonth
+                            splitkey += u':'
+                            if split_on_station: splitkey += visitstation
+                            splitkey += u':'
+                            if split_on_visit: splitkey += visitvisit
+                            splitkey += u':'
+                            if split_on_depth: splitkey += sampleminmaxdepth
+                            splitkey += u':'
+                            if split_on_taxon: splitkey += variabletaxon
+                            # Add data.
+                            if splitkey not in data_dict:
+                                data_dict[splitkey] = []
+                            data_dict[splitkey].append(variablenode.getData(u'value'))
+                             
+        # Create empty result table.
+        resulttable = []
+        emptyrow = [u''] * (1 + len(data_dict)) # Empty row.
+        maxlength = 0
+        for key in sorted(data_dict.keys()):
+            datalistlength = len(data_dict[key])
+            if datalistlength > maxlength:
+                maxlength = datalistlength
+        for index in range(maxlength + 9): # Header rows and data rows.    
+            resulttable.append(emptyrow[:]) # Clone.
+        # Headers, multiple rows.
+        resulttable[0][0] = u'Parameter:'
+        resulttable[1][0] = u'Year:'
+        resulttable[2][0] = u'Season:'
+        resulttable[3][0] = u'Month:'
+        resulttable[4][0] = u'Station:'
+        resulttable[5][0] = u'Sampling event:'
+        resulttable[6][0] = u'Depth:'
+        resulttable[7][0] = u'Taxon:'
+                
+        # Calculate result
+        for colindex, key in enumerate(sorted(data_dict.keys())):
+            # Keys.
+            keysplit = key.split(u':')
+            yearkey = keysplit[0]
+            seasonkey = keysplit[1]
+            monthkey = keysplit[2]
+            stationkey = keysplit[3]
+            visitkey = keysplit[4]
+            depthkey = keysplit[5]
+            taxonkey = keysplit[6]
+            #
+            resulttable[0][colindex + 1] = selectedparameter
+            resulttable[1][colindex + 1] = yearkey
+            resulttable[2][colindex + 1] = seasonkey
+            resulttable[3][colindex + 1] = monthkey
+            resulttable[4][colindex + 1] = stationkey
+            resulttable[5][colindex + 1] = visitkey
+            resulttable[6][colindex + 1] = depthkey
+            resulttable[7][colindex + 1] = taxonkey
+            # Data.
+            resulttable[8][colindex + 1] = u'Values'
+            for rowindex, value in enumerate(data_dict[key]):
+                resulttable[rowindex + 9][colindex + 1] = value
+        # Header.
+        header = emptyrow[:]
+        tabledata.setHeader(header)
+        # Rows.
+        for row in resulttable:
+            tabledata.appendRow(row)  
+            
+            
+            
