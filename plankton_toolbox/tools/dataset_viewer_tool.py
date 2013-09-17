@@ -62,10 +62,11 @@ class DatasetViewerTool(tool_base.ToolBase):
         self.connect(toolbox_datasets.ToolboxDatasets(), 
                      QtCore.SIGNAL("datasetListChanged"), 
                      self._updateDatasetList)
-        # Listen for changes in the toolbox sync.
-        self.connect(toolbox_sync.ToolboxSync(), 
-                     QtCore.SIGNAL("toolboxSyncSelectedRow"), 
-                     self._setSelectedDataset)
+# Allow synch is confusing. Activate again when used in more tools.                       
+#         # Listen for changes in the toolbox sync.
+#         self.connect(toolbox_sync.ToolboxSync(), 
+#                      QtCore.SIGNAL("toolboxSyncSelectedRow"), 
+#                      self._setSelectedDataset)
 
     def _contentSelectDataset(self):
         """ """
@@ -73,14 +74,16 @@ class DatasetViewerTool(tool_base.ToolBase):
         self._selectdataset_list = QtGui.QComboBox()
         self._selectdataset_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         self._selectdataset_list.addItems(["<select dataset>"])
-        self.connect(self._selectdataset_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._viewDataset)                
-        self._allowsync_checkbox = QtGui.QCheckBox("Allow synch")
-        self._allowsync_checkbox.setChecked(False) 
+        self.connect(self._selectdataset_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._viewDataset) 
+        
+# Allow synch is confusing. Activate again when used in more tools.                       
+#         self._allowsync_checkbox = QtGui.QCheckBox("Allow synch")
+#         self._allowsync_checkbox.setChecked(False) 
         # Layout widgets.
         layout = QtGui.QHBoxLayout()
         layout.addWidget(QtGui.QLabel("Datasets:"))
         layout.addWidget(self._selectdataset_list)
-        layout.addWidget(self._allowsync_checkbox)
+#         layout.addWidget(self._allowsync_checkbox)
         layout.addStretch(5)
         #
         return layout
@@ -177,10 +180,11 @@ class DatasetViewerTool(tool_base.ToolBase):
         self._tableview.tablemodel.reset() # Model data has changed.
         self._tableview.resizeColumnsToContents()
 
-    def _setSelectedDataset(self):
-        """ """
-        if self._allowsync_checkbox.isChecked():
-            index = toolbox_sync.ToolboxSync().getRow()
-            self._selectdataset_list.setCurrentIndex(index + 1)
-            self._viewDataset(index + 1)
+# Allow synch is confusing. Activate again when used in more tools.                       
+#     def _setSelectedDataset(self):
+#         """ """
+#         if self._allowsync_checkbox.isChecked():
+#             index = toolbox_sync.ToolboxSync().getRow()
+#             self._selectdataset_list.setCurrentIndex(index + 1)
+#             self._viewDataset(index + 1)
         
