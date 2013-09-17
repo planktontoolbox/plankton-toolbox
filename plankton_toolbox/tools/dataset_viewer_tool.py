@@ -102,14 +102,16 @@ class DatasetViewerTool(tool_base.ToolBase):
         """ """
         saveresultbox = QtGui.QGroupBox("Export dataset", self)
         # Active widgets and connections.
+        self._copytoclipboard_button = QtGui.QPushButton("Copy to clipboard")
+        self.connect(self._copytoclipboard_button, QtCore.SIGNAL("clicked()"), self._copyToClipboard)                
         self._saveformat_list = QtGui.QComboBox()
-        #
         self._saveformat_list.addItems(["Tab delimited text file (*.txt)",
                                          "Excel file (*.xlsx)"])
         self._savedataset_button = QtGui.QPushButton("Save...")
         self.connect(self._savedataset_button, QtCore.SIGNAL("clicked()"), self._saveData)                
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
+        hbox1.addWidget(self._copytoclipboard_button)
         hbox1.addStretch(5)
         hbox1.addWidget(QtGui.QLabel("File format:"))
         hbox1.addWidget(self._saveformat_list)
@@ -175,6 +177,23 @@ class DatasetViewerTool(tool_base.ToolBase):
                 elif self._saveformat_list.currentIndex() == 1: # Excel file.
                     self._tableview.tablemodel.getModeldata().saveAsExcelFile(filename)
         
+    def _copyToClipboard(self):
+        """ """
+        clipboard = QtGui.QApplication.clipboard()
+        field_separator = u'\t'
+        row_separator = u'\r\n'
+        clipboardstring = ''
+        #
+        table_dataset = self._tableview.tablemodel.getModeldata()
+        if table_dataset:
+            # Header.
+            clipboardstring = field_separator.join(map(unicode, table_dataset.getHeader())) + row_separator
+            # Rows.
+            for row in table_dataset.getRows():
+                clipboardstring += field_separator.join(map(unicode, row)) + row_separator
+        #
+        clipboard.setText(clipboardstring)
+
     def _refreshResultTable(self):
         """ """
         self._tableview.tablemodel.reset() # Model data has changed.

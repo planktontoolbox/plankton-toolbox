@@ -75,8 +75,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         selectdatabox = QtGui.QGroupBox("", self)
         tabWidget = QtGui.QTabWidget()
         tabWidget.addTab(self._contentStructureScreening(), "Structure")
-        tabWidget.addTab(self._contentCodeListScreening(), "Code lists")
-        tabWidget.addTab(self._contentSpeciesScreening(), "Species")
+        tabWidget.addTab(self._contentCodesSpeciesScreening(), "Code lists and species")
         tabWidget.addTab(self._contentCheckColumnValues(), "Column values")
         tabWidget.addTab(self._contentPlotParameters(), "Plot parameters")
         # Layout widgets.
@@ -86,6 +85,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         #
         return selectdatabox
 
+    # === Content structure ===
     def _contentStructureScreening(self):
         """ """
         widget = QtGui.QWidget()
@@ -152,7 +152,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                 #
                 row = u'   - Sampling events: ' + unicode(countvisits) + \
                       u', samples: ' + unicode(countsamples) + \
-                      u', variables: ' + unicode(countvariables) 
+                      u', variable rows: ' + unicode(countvariables) 
                 self._structureresult_list.append(row)
 
     def _checkVisits(self):
@@ -180,7 +180,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                         countvariables += len(samplenode.getChildren())
                     #
                     row = u'      - Samples: ' + unicode(countsamples) + \
-                      u', variables: ' + unicode(countvariables) 
+                      u', variable rows: ' + unicode(countvariables) 
                     self._structureresult_list.append(row)
 
     def _checkSamples(self):
@@ -204,9 +204,30 @@ class ScreeningActivity(activity_base.ActivityBase):
                         self._structureresult_list.append(row)
                         countvariables = len(samplenode.getChildren())
                         #
-                        row = u'         - Variables: ' + unicode(countvariables) 
+                        row = u'         - Variable rows: ' + unicode(countvariables) 
                         self._structureresult_list.append(row)
-
+                        #
+                        parameter_set = set()
+                        taxonname_set = set()
+                        taxonsizestagesex_set = set()
+                        for variablenode in samplenode.getChildren():
+                            parameter = variablenode.getData(u'parameter')
+                            unit = variablenode.getData(u'unit')
+                            taxonname = variablenode.getData(u'taxon_name')
+                            sizeclass = variablenode.getData(u'size_class')
+                            stage = variablenode.getData(u'stage')
+                            sex = variablenode.getData(u'sex')
+                            if parameter:
+                                parameter_set.add(parameter + u'+' + unit)
+                            if taxonname:
+                                taxonname_set.add(taxonname)
+                                taxonsizestagesex_set.add(taxonname + u'+' + sizeclass + u'+' + stage + u'+' + sex)
+                        row = u'         - Unique parameters/units: ' + unicode(len(parameter_set)) 
+                        self._structureresult_list.append(row)
+                        row = u'         - Unique taxon names: ' + unicode(len(taxonname_set)) 
+                        self._structureresult_list.append(row)
+                        row = u'         - Unique taxon-names/size-classes/stages/sex: ' + unicode(len(taxonsizestagesex_set)) 
+                        self._structureresult_list.append(row)
 
     def _scanForDuplicates(self):
         """ """
@@ -255,37 +276,59 @@ class ScreeningActivity(activity_base.ActivityBase):
                             else:
                                 check_duplicates_list.append(unique_items)
 
-    def _contentCodeListScreening(self):
+    # === Content code lists and species ===
+    def _contentCodesSpeciesScreening(self):
         """ """
         widget = QtGui.QWidget()
         # Active widgets and connections.
-        introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_intro_1'))
-#         introlabel.setText("""
-#         Screen your data for inconsistences regarding code values etc. 
-#         Used lists of codes can be found in the folder "toolbox_data/code_lists". 
-#         """)        
+        introlabel_1 = utils_qt.RichTextQLabel()
+        introlabel_1.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_intro_1'))
+        introlabel_2 = utils_qt.RichTextQLabel()
+        introlabel_2.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_intro_2'))
+        introlabel_3 = utils_qt.RichTextQLabel()
+        introlabel_3.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_species'))
+        introlabel_4 = utils_qt.RichTextQLabel()
+        introlabel_4.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_sizeclasses'))
         #
-        self._codelistscreening_button = QtGui.QPushButton("Code list screening")
-        self.connect(self._codelistscreening_button, QtCore.SIGNAL("clicked()"), self._codeListScreening)                
+        self._checkcodes_button = QtGui.QPushButton("Check\ncode lists")
+        self.connect(self._checkcodes_button, QtCore.SIGNAL("clicked()"), self._codeListScreening)                
+        self._checkspecies_button = QtGui.QPushButton("Check\nspecies")
+        self.connect(self._checkspecies_button, QtCore.SIGNAL("clicked()"), self._speciesScreening) 
+        self._checksizeclasses_button = QtGui.QPushButton("Check\nsize classes")
+        self.connect(self._checksizeclasses_button, QtCore.SIGNAL("clicked()"), self._bvolScreening) 
+
+        # Result content.
+        self._codesspeciesresult_list = QtGui.QTextEdit()
         # Layout widgets.
-        #
-        hbox1 = QtGui.QHBoxLayout()
-        hbox1.addWidget(self._codelistscreening_button)
-        hbox1.addStretch(10)
+        form1 = QtGui.QGridLayout()
+        gridrow = 0
+        label1 = QtGui.QLabel("Result:")
+        form1.addWidget(label1, gridrow, 1, 1, 1)
+        gridrow += 1
+        form1.addWidget(self._checkcodes_button, gridrow, 0, 1, 1)
+        form1.addWidget(self._codesspeciesresult_list, gridrow, 1, 30, 1)
+        gridrow += 1
+        form1.addWidget(self._checkspecies_button, gridrow, 0, 1, 1)
+        gridrow += 1
+        form1.addWidget(self._checksizeclasses_button, gridrow, 0, 1, 1)
         #
         layout = QtGui.QVBoxLayout()
-        layout.addWidget(introlabel)
-        layout.addLayout(hbox1)
-        layout.addStretch(1)
+        layout.addWidget(introlabel_1)
+        layout.addWidget(introlabel_2)
+        layout.addWidget(introlabel_3)
+        layout.addWidget(introlabel_4)
+        layout.addLayout(form1, 10)
+#         layout.addStretch(1)
         widget.setLayout(layout)                
         #
         return widget
 
     def _codeListScreening(self):
         """ """
-        # Screening results is only shown in the toolbox log.
+        # Screening results is also shown in the toolbox log.
         tool_manager.ToolManager().showToolByName(u'Toolbox logging')
+        #
+        self._codesspeciesresult_list.clear()
         #
         try:
             envmonlib.Logging().log(u"") # Empty line.
@@ -295,63 +338,36 @@ class ScreeningActivity(activity_base.ActivityBase):
             # Perform screening.
             codetypes_set = envmonlib.ScreeningManager().codeListScreening(toolbox_datasets.ToolboxDatasets().getDatasets())
         finally:
+            # Log in result window.
+            self._codesspeciesresult_list.append(u"Screening was done on these code types: " + 
+                                              unicode(sorted(codetypes_set)))
+            self._codesspeciesresult_list.append(u'')
+            #
+            inforows = envmonlib.Logging().getAllInfoRows()
+            if inforows:
+                for row in inforows:
+                    self._codesspeciesresult_list.append(u'- ' + row)                
+            warningrows = envmonlib.Logging().getAllWarnings()
+            if warningrows:
+                for row in warningrows:
+                    self._codesspeciesresult_list.append(u'- ' + row)
+            errorrows = envmonlib.Logging().getAllErrors()
+            if errorrows:
+                for row in errorrows:
+                    self._codesspeciesresult_list.append(u'- ' + row)
+            # Also add to the logging tool.
             envmonlib.Logging().logAllAccumulatedRows()    
             envmonlib.Logging().log("Screening was done on these code types: " + 
                                     unicode(sorted(codetypes_set)))
             envmonlib.Logging().log("Code list screening done.")
             self._writeToStatusBar("")
 
-    def _contentSpeciesScreening(self):
-        """ """
-        widget = QtGui.QWidget()
-        # Active widgets and connections.
-        introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_intro_2'))
-#         introlabel.setText("""
-#         Screen your data for inconsistences regarding species names etc.
-#         """)        
-        specieslabel = utils_qt.RichTextQLabel()
-        specieslabel.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_species'))
-#         specieslabel.setText("""
-#         The taxonomic hierarchy in www.nordicmicroalgae.org is used as a reference. 
-#         This is based on www.algaebase.org and the Dyntaxa database at the Swedish Species Centre.
-#         """)        
-        bvollabel = utils_qt.RichTextQLabel()
-        bvollabel.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_sizeclasses'))
-#         bvollabel.setText("""
-#         BVOL screening is for work with biovolumes of phytoplanton. 
-#         The HELCOM-PEG list of species and biovolumes is used as default. The latest version is available at www.ices.dk/
-#         """)        
-        #
-        self._speciesscreening_button = QtGui.QPushButton("Species screening")
-        self.connect(self._speciesscreening_button, QtCore.SIGNAL("clicked()"), self._speciesScreening)                
-        self._bvolscreening_button = QtGui.QPushButton("BVOL screening")
-        self.connect(self._bvolscreening_button, QtCore.SIGNAL("clicked()"), self._bvolScreening)                
-        # Layout widgets.
-        #
-        hbox1 = QtGui.QHBoxLayout()
-        hbox1.addWidget(self._speciesscreening_button)
-        hbox1.addStretch(10)
-        #
-        hbox2 = QtGui.QHBoxLayout()
-        hbox2.addWidget(self._bvolscreening_button)
-        hbox2.addStretch(10)
-        #
-        layout = QtGui.QVBoxLayout()
-        layout.addWidget(introlabel)
-        layout.addWidget(specieslabel)
-        layout.addLayout(hbox1)
-        layout.addWidget(bvollabel)
-        layout.addLayout(hbox2)
-        layout.addStretch(1)
-        widget.setLayout(layout)                
-        #
-        return widget
-
     def _speciesScreening(self):
         """ """
-        # Screening results is only shown in the toolbox log.
+        # Screening results is also shown in the toolbox log.
         tool_manager.ToolManager().showToolByName(u'Toolbox logging')
+        #
+        self._codesspeciesresult_list.clear()
         #
         try:
             envmonlib.Logging().log(u"") # Empty line.
@@ -361,14 +377,34 @@ class ScreeningActivity(activity_base.ActivityBase):
             # Perform screening.
             envmonlib.ScreeningManager().speciesScreening(toolbox_datasets.ToolboxDatasets().getDatasets())
         finally:
+            # Log in result window.
+#             self._codesspeciesresult_list.append(u"Screening was done on these code types: " + 
+#                                               unicode(sorted(codetypes_set)))
+#             self._codesspeciesresult_list.append(u'')
+            #
+            inforows = envmonlib.Logging().getAllInfoRows()
+            if inforows:
+                for row in inforows:
+                    self._codesspeciesresult_list.append(u'- ' + row)                
+            warningrows = envmonlib.Logging().getAllWarnings()
+            if warningrows:
+                for row in warningrows:
+                    self._codesspeciesresult_list.append(u'- ' + row)
+            errorrows = envmonlib.Logging().getAllErrors()
+            if errorrows:
+                for row in errorrows:
+                    self._codesspeciesresult_list.append(u'- ' + row)
+            # Also add to the logging tool.
             envmonlib.Logging().logAllAccumulatedRows()    
             envmonlib.Logging().log(u"Species screening done.")
             self._writeToStatusBar("")
 
     def _bvolScreening(self):
         """ """
-        # Screening results is only shown in the toolbox log.
+        # Screening results is also shown in the toolbox log.
         tool_manager.ToolManager().showToolByName(u'Toolbox logging')
+        #
+        self._codesspeciesresult_list.clear()
         #
         try:
             envmonlib.Logging().log(u"") # Empty line.
@@ -378,10 +414,29 @@ class ScreeningActivity(activity_base.ActivityBase):
             # Perform screening.
             envmonlib.ScreeningManager().bvolSpeciesScreening(toolbox_datasets.ToolboxDatasets().getDatasets())
         finally:
+            # Log in result window.
+#             self._codesspeciesresult_list.append(u"Screening was done on these code types: " + 
+#                                               unicode(sorted(codetypes_set)))
+#             self._codesspeciesresult_list.append(u'')
+            #
+            inforows = envmonlib.Logging().getAllInfoRows()
+            if inforows:
+                for row in inforows:
+                    self._codesspeciesresult_list.append(u'- ' + row)                
+            warningrows = envmonlib.Logging().getAllWarnings()
+            if warningrows:
+                for row in warningrows:
+                    self._codesspeciesresult_list.append(u'- ' + row)
+            errorrows = envmonlib.Logging().getAllErrors()
+            if errorrows:
+                for row in errorrows:
+                    self._codesspeciesresult_list.append(u'- ' + row)
+            # Also add to the logging tool.
             envmonlib.Logging().logAllAccumulatedRows()    
             envmonlib.Logging().log(u"BVOL Species screening done.")
             self._writeToStatusBar("")
 
+    # === Content column values ===
     def _contentCheckColumnValues(self):
         """ """
         widget = QtGui.QWidget()
@@ -495,6 +550,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         for row in sorted(columncontent_set): 
             self._content_list.append(row)
 
+    # === Content plot ===
     def _contentPlotParameters(self):
         """ """
         widget = QtGui.QWidget()
@@ -572,7 +628,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         datasets = toolbox_datasets.ToolboxDatasets().getDatasets()
         #
         yarray = []
-        unit_set = set() # In case of different units on the same parameter.
+#        unit_set = set() # In case of different units on the same parameter.
         #
         if datasets and (len(datasets) > 0):
             for dataset in toolbox_datasets.ToolboxDatasets().getDatasets():
@@ -580,12 +636,13 @@ class ScreeningActivity(activity_base.ActivityBase):
                     for samplenode in visitnode.getChildren():
                         for variablenode in samplenode.getChildren():
                             if (variablenode.getData(u"parameter") + u' (' + variablenode.getData(u'unit') + u')') == parameter:
-                                unit_set.add(variablenode.getData(u"unit"))
+#                                 unit_set.add(variablenode.getData(u"unit"))
                                 value = variablenode.getData(u"value")
                                 yarray.append(value)                  
         #
-        units = u' --- '.join(sorted(unit_set))
-        parameter_unit = parameter + u' (' + units + u')' 
+#         units = u' --- '.join(sorted(unit_set))
+#         parameter_unit = parameter + u' (' + units + u')' 
         #
-        self._graph_plot_data.addPlot(plot_name = parameter_unit, y_array = yarray)
+#         self._graph_plot_data.addPlot(plot_name = parameter_unit, y_array = yarray)
+        self._graph_plot_data.addPlot(plot_name = parameter, y_array = yarray)
 

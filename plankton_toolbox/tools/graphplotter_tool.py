@@ -190,8 +190,9 @@ class GraphPlotterTool(tool_base.ToolBase):
         self._charttype_list.addItems([u"Line chart",
                                        u"Bar chart",
                                        u"Scatter chart",
-                                       u"Pie chart",
-                                       u"Map chart"])
+                                       u"Pie chart"
+#                                        u"Map chart"  # Can't use BaseMap with PyInstaller, sorry...
+                                       ])
 #        self._charttype_list.setDisabled(True)
         self.connect(self._charttype_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._drawEmbeddedChart)
         #

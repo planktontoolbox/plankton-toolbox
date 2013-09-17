@@ -137,15 +137,36 @@ class Logging(object):
         for message in sorted(self._infoacc):
             self.log('- ' + message + '   (' + unicode(self._infoacc[message]) + ' times)')
         
+    def getAllInfoRows(self):
+        """ Returns a list of strings. """
+        result = []
+        for message in sorted(self._infoacc):
+            result.append(message + '   (' + unicode(self._infoacc[message]) + ' times)')
+        return result
+        
     def logAllWarnings(self):
         """ Log all the content in the accumulated warning list. """
         for message in sorted(self._warningacc):
             self.log('- ' + message + '   (' + unicode(self._warningacc[message]) + ' times)')
         
+    def getAllWarnings(self):
+        """ Returns a list of strings. """
+        result = []
+        for message in sorted(self._warningacc):
+            result.append(message + '   (' + unicode(self._warningacc[message]) + ' times)')
+        return result
+        
     def logAllErrors(self):
         """ Log all the content in the accumulated error list. """
         for message in sorted(self._erroracc):
             self.log('- ' + message + '   (' + unicode(self._erroracc[message]) + ' times)')
+
+    def getAllErrors(self):
+        """ Returns a list of strings. """
+        result = []
+        for message in sorted(self._erroracc):
+            result.append(message + '   (' + unicode(self._erroracc[message]) + ' times)')
+        return result
 
 
 class DefaultLogTarget(object):
