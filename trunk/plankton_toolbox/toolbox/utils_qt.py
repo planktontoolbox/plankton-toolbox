@@ -332,6 +332,8 @@ class ToolboxEditableQTableView( QtGui.QTableView):
         self.selectionModel.clear()
         # Call same method in parent class.
         super(ToolboxQTableView, self).clear()
+        self.tablemodel = None
+
         
     def setTablemodel(self, model):
         """ Use this method if the default model should be replaced. """

@@ -126,13 +126,13 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
     def _contentAnalysisDataTable(self):
         """ """
         # Active widgets and connections.
-        analysisdatagroupbox = QtGui.QGroupBox("Analysis data, filtered data, statistical data and exports data", self)
+        analysisdatagroupbox = QtGui.QGroupBox("Analysis data, filtered data, statistical data and export data", self)
         # Active widgets and connections.
         self._viewdata_list = QtGui.QComboBox()
         self._viewdata_list.addItems(["Analysis data",
                                       "Filtered analysis data",
                                       "Statistical data",
-                                      "Exports data",
+                                      "Export data",
                                       "Hide data (to increase performance)"])
         self.connect(self._viewdata_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._viewDataListChanged)                
         #
@@ -254,7 +254,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
             self._tableview.tablemodel.setModeldata(self._statisticaldata.getData())
             self._refreshViewedDataTable()
         elif selectedviewindex == 3:
-            # Exports data.
+            # Export data.
             self._tableview.tablemodel.setModeldata(self._reportdata.getData())
             self._refreshViewedDataTable()
         else:

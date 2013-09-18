@@ -644,5 +644,8 @@ class ScreeningActivity(activity_base.ActivityBase):
 #         parameter_unit = parameter + u' (' + units + u')' 
         #
 #         self._graph_plot_data.addPlot(plot_name = parameter_unit, y_array = yarray)
-        self._graph_plot_data.addPlot(plot_name = parameter, y_array = yarray)
+        try:
+            self._graph_plot_data.addPlot(plot_name = parameter, y_array = yarray)
+        except UserWarning, e:
+            QtGui.QMessageBox.warning(self, "Warning", unicode(e))
 
