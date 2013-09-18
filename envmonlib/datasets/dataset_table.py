@@ -42,6 +42,10 @@ class DatasetTable(envmonlib.DatasetBase):
         self._header = []
         self._rows = []
 
+    def clearRows(self):
+        """ """
+        self._rows = []
+
     def setHeader(self, header):
         """ """
         self._header = header

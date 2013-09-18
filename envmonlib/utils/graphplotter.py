@@ -284,7 +284,7 @@ class ChartBase(object):
             self._figure.subplots_adjust(top = 0.90, bottom = 0.14)
 #             self._figure.tight_layout()
         
-    def _formatArray(self, data_type, data_array):
+    def _formatArray(self, data_type, data_array, data_format = u''):
         """ """
         #
         if data_type == u'text':
@@ -375,7 +375,9 @@ class LineChart(ChartBase):
         """ """
         try: 
             x_type = self._data.getPlotDataInfo()[u'x_type']
+            x_format = self._data.getPlotDataInfo()[u'x_format']
             y_type = self._data.getPlotDataInfo()[u'y_type']
+            y_format = self._data.getPlotDataInfo()[u'y_format']
             # Line charts needs text (text, integer, data or datetime) for the x-axis and 
             # values (integer or float) for the y-axis.
             if not x_type in [u'', u'text', u'integer', u'float', u'date', u'datetime']:
@@ -415,10 +417,10 @@ class LineChart(ChartBase):
                         x_array = list(numpy.arange(len(y_array)))                        
                     #
                     if x_type == u'text':
-                        x_integer_array = self._formatArray(x_type, x_array)
-                        y_masked_array = self._formatArray(y_type, y_array)
+                        x_integer_array = self._formatArray(x_type, x_array, x_format)
+                        y_masked_array = self._formatArray(y_type, y_array, y_format)
                         #
-                        subplot.set_xticklabels(x_array)
+                        subplot.set_xticklabels(x_array, rotation=20.0)
                         #
                         if stacked:
                             old_y_array_acc = y_array_acc
@@ -441,8 +443,8 @@ class LineChart(ChartBase):
                                          color = self._colors[plotindex % len(self._colors)])
                     #
                     elif x_type == u'integer':
-                        x_masked_array = self._formatArray(u'integer', x_array)
-                        y_masked_array = self._formatArray(y_type, y_array)
+                        x_masked_array = self._formatArray(u'integer', x_array, x_format)
+                        y_masked_array = self._formatArray(y_type, y_array, y_format)
                         #
                         if stacked:
                             old_y_array_acc = y_array_acc
@@ -464,8 +466,8 @@ class LineChart(ChartBase):
                                          marker = self._markers[plotindex % len(self._markers)])
                     #    
                     elif x_type == u'float':
-                        x_masked_array = self._formatArray(u'float', x_array)
-                        y_masked_array = self._formatArray(y_type, y_array)
+                        x_masked_array = self._formatArray(u'float', x_array, x_format)
+                        y_masked_array = self._formatArray(y_type, y_array, y_format)
                         #
                         if stacked:
                             old_y_array_acc = y_array_acc
@@ -488,8 +490,8 @@ class LineChart(ChartBase):
                     #    
                     elif x_type in [u'date', u'datetime']:
                         """ """
-                        x_datetime_array = self._formatArray(x_type, x_array)
-                        y_masked_array = self._formatArray(y_type, y_array)
+                        x_datetime_array = self._formatArray(x_type, x_array, x_format)
+                        y_masked_array = self._formatArray(y_type, y_array, y_format)
                         #
                         # 
                         if stacked:
@@ -514,9 +516,13 @@ class LineChart(ChartBase):
 #                                               c = self._colors[plotindex % len(self._colors)],
                                               color = self._colors[plotindex % len(self._colors)])
                         #
-                        subplot.xaxis.set_major_locator(mpl_dates.MonthLocator())
+                        subplot.xaxis.set_major_locator(mpl_dates.AutoDateLocator())
+###                        subplot.xaxis.set_major_locator(mpl_dates.MonthLocator())
 ###                        subplot.xaxis.set_minor_locator(mpl_dates.WeekdayLocator())
-                        subplot.xaxis.set_major_formatter(mpl_dates.DateFormatter(u'%Y-%m-%d')) 
+                        if x_format:
+                            subplot.xaxis.set_major_formatter(mpl_dates.DateFormatter(x_format))
+                        else:
+                            subplot.xaxis.set_major_formatter(mpl_dates.DateFormatter(u'%Y-%m-%d'))
                         self._figure.autofmt_xdate(bottom = 0.2)   
                     #                      
                     else:
@@ -551,8 +557,8 @@ class LineChart(ChartBase):
                     #
                     if x_type == u'text':
                         """ """
-                        x_integer_array = self._formatArray(u'text', x_array)
-                        y_masked_array = self._formatArray(y_type, y_array)
+                        x_integer_array = self._formatArray(u'text', x_array, x_format)
+                        y_masked_array = self._formatArray(y_type, y_array, y_format)
                         #
                         subplot.set_xticklabels(x_array)
                         #
@@ -563,8 +569,8 @@ class LineChart(ChartBase):
                                      color = self._colors[plotindex % len(self._colors)])   
                     #    
                     elif x_type == u'integer':
-                        x_masked_array = self._formatArray(u'integer', x_array)
-                        y_masked_array = self._formatArray(y_type, y_array)
+                        x_masked_array = self._formatArray(u'integer', x_array, x_format)
+                        y_masked_array = self._formatArray(y_type, y_array, y_format)
                         #
                         subplot.plot(x_masked_array, 
                                      y_masked_array,
@@ -572,8 +578,8 @@ class LineChart(ChartBase):
                                      marker = self._markers[plotindex % len(self._markers)])
                     #    
                     elif x_type == u'float':
-                        x_masked_array = self._formatArray(u'float', x_array)
-                        y_masked_array = self._formatArray(y_type, y_array)
+                        x_masked_array = self._formatArray(u'float', x_array, x_format)
+                        y_masked_array = self._formatArray(y_type, y_array, y_format)
                         #
                         subplot.plot(x_masked_array, 
                                      y_masked_array,
@@ -582,8 +588,8 @@ class LineChart(ChartBase):
                     #    
                     elif x_type in [u'date', u'datetime']:
                         """ """
-                        x_datetime_array = self._formatArray(x_type, x_array)
-                        y_masked_array = self._formatArray(y_type, y_array)
+                        x_datetime_array = self._formatArray(x_type, x_array, x_format)
+                        y_masked_array = self._formatArray(y_type, y_array, y_format)
                         #
                         # 
                         subplot.plot_date(x_datetime_array, 
@@ -592,9 +598,13 @@ class LineChart(ChartBase):
                                           marker = self._markers[plotindex % len(self._markers)], 
                                           c = self._colors[plotindex % len(self._colors)])
                         #
-                        subplot.xaxis.set_major_locator(mpl_dates.MonthLocator())
+                        subplot.xaxis.set_major_locator(mpl_dates.AutoDateLocator())
+###                        subplot.xaxis.set_major_locator(mpl_dates.MonthLocator())
 ###                        subplot.xaxis.set_minor_locator(mpl_dates.WeekdayLocator())
-                        subplot.xaxis.set_major_formatter(mpl_dates.DateFormatter(u'%Y-%m-%d')) 
+                        if x_format:
+                            subplot.xaxis.set_major_formatter(mpl_dates.DateFormatter(x_format))
+                        else:
+                            subplot.xaxis.set_major_formatter(mpl_dates.DateFormatter(u'%Y-%m-%d'))
                         #
                         self._figure.autofmt_xdate(bottom = 0.2)   
                     #                      
@@ -631,7 +641,9 @@ class BarChart(ChartBase):
         #
         try:
             x_type = self._data.getPlotDataInfo()[u'x_type']
+            x_format = self._data.getPlotDataInfo()[u'x_format']
             y_type = self._data.getPlotDataInfo()[u'y_type']
+            y_format = self._data.getPlotDataInfo()[u'y_format']
             # Bar charts needs text (text, integer, date or datetime) for the x-axis and 
             # values (integer or float) for the y-axis.
             if not x_type in [u'', u'text', u'integer', u'float', u'date', u'datetime']:
@@ -764,7 +776,9 @@ class ScatterChart(ChartBase):
         #
         try: 
             x_type = self._data.getPlotDataInfo()[u'x_type']
+            x_format = self._data.getPlotDataInfo()[u'x_format']
             y_type = self._data.getPlotDataInfo()[u'y_type']
+            y_format = self._data.getPlotDataInfo()[u'y_format']
             z_type = self._data.getPlotDataInfo()[u'z_type']
             # Scatter charts needs text (text, integer, date or datetime) for the x-axis and 
             # values (integer or float) for the y-axis.
@@ -803,45 +817,56 @@ class ScatterChart(ChartBase):
 
                     if x_type == u'text':
                         """ """
-                        x_integer_array = self._formatArray(x_type, x_array)
-                        y_masked_array = self._formatArray(y_type, y_array)
+                        x_integer_array = self._formatArray(x_type, x_array, x_format)
+                        y_masked_array = self._formatArray(y_type, y_array, y_format)
                         #
-                        subplot.set_xticklabels(x_array)
+                        subplot.set_xticklabels(x_array, rotation=20.0)
                         #
                         if z_array:
                             subplot.scatter(x_integer_array, y_masked_array, s = z_array, 
+                                            label = plotdict[u'plot_name'],
                                             marker = self._markers[plotindex % len(self._markers)], c = self._colors[plotindex % len(self._colors)])
                         else:
                             subplot.scatter(x_integer_array, y_array, 
+                                            label = plotdict[u'plot_name'],
                                             marker = self._markers[plotindex % len(self._markers)], c = self._colors[plotindex % len(self._colors)])
                     #     
                     elif x_type in [u'integer', u'float']:
                         """ """
-                        x_masked_array = self._formatArray(x_type, x_array)
-                        y_masked_array = self._formatArray(y_type, y_array)
+                        x_masked_array = self._formatArray(x_type, x_array, x_format)
+                        y_masked_array = self._formatArray(y_type, y_array, y_format)
                         #
                         if z_array:
                             subplot.scatter(x_masked_array, y_masked_array, s = z_array, 
+                                            label = plotdict[u'plot_name'],
                                             marker = self._markers[plotindex % len(self._markers)], c = self._colors[plotindex % len(self._colors)])
                         else:
                             subplot.scatter(x_masked_array, y_masked_array, 
+                                            label = plotdict[u'plot_name'],
                                             marker = self._markers[plotindex % len(self._markers)], c = self._colors[plotindex % len(self._colors)])
                     #     
                     elif x_type in [u'date', u'datetime']:
                         """ """
-                        x_datetime_array = self._formatArray(x_type, x_array)
-                        y_masked_array = self._formatArray(y_type, y_array)
+                        x_datetime_array = self._formatArray(x_type, x_array, x_format)
+                        y_masked_array = self._formatArray(y_type, y_array, y_format)
                         #
                         if z_array:
                             subplot.scatter(x_datetime_array, y_masked_array, s = z_array, 
+                                            label = plotdict[u'plot_name'],
                                             marker = self._markers[plotindex % len(self._markers)], c = self._colors[plotindex % len(self._colors)])
                         else:
                             subplot.scatter(x_datetime_array, y_masked_array, 
+                                            label = plotdict[u'plot_name'],
                                             marker = self._markers[plotindex % len(self._markers)], c = self._colors[plotindex % len(self._colors)])
                         #
-                        subplot.xaxis.set_major_locator(mpl_dates.MonthLocator())
+                        subplot.xaxis.set_major_locator(mpl_dates.AutoDateLocator())
+###                        subplot.xaxis.set_major_locator(mpl_dates.MonthLocator())
 ###                        subplot.xaxis.set_minor_locator(mpl_dates.WeekdayLocator())
-                        subplot.xaxis.set_major_formatter(mpl_dates.DateFormatter(u'%Y-%m-%d')) 
+
+                        if x_format:
+                            subplot.xaxis.set_major_formatter(mpl_dates.DateFormatter(x_format))
+                        else:
+                            subplot.xaxis.set_major_formatter(mpl_dates.DateFormatter(u'%Y-%m-%d'))
                         self._figure.autofmt_xdate(bottom = 0.2)   
 
                 # Legend.
@@ -877,42 +902,52 @@ class ScatterChart(ChartBase):
                     #
                     if x_type == u'text':
                         """ """
-                        x_integer_array = self._formatArray(x_type, x_array)
-                        y_masked_array = self._formatArray(y_type, y_array)
+                        x_integer_array = self._formatArray(x_type, x_array, x_format)
+                        y_masked_array = self._formatArray(y_type, y_array, y_format)
                         #
                         subplot.set_xticklabels(x_array)
                         #
                         if z_array:
                             subplot.scatter(x_integer_array, y_masked_array, s = z_array, 
+                                            label = plotdict[u'plot_name'],
                                             marker = self._markers[plotindex % len(self._markers)], c = self._colors[plotindex % len(self._colors)])
                         else:
                             subplot.scatter(x_integer_array, y_array, 
+                                            label = plotdict[u'plot_name'],
                                             marker = self._markers[plotindex % len(self._markers)], c = self._colors[plotindex % len(self._colors)])
                          
                     elif x_type in [u'integer', u'float']:
                         """ """
                         if z_array:
                             subplot.scatter(x_array, y_array, s = z_array, 
+                                            label = plotdict[u'plot_name'],
                                             marker = self._markers[plotindex % len(self._markers)], c = self._colors[plotindex % len(self._colors)])
                         else:
                             subplot.scatter(x_array, y_array, 
+                                            label = plotdict[u'plot_name'],
                                             marker = self._markers[plotindex % len(self._markers)], c = self._colors[plotindex % len(self._colors)])
                          
                     elif x_type in [u'date', u'datetime']:
                         """ """
-                        x_datetime_array = self._formatArray(x_type, x_array)
-                        y_masked_array = self._formatArray(y_type, y_array)
+                        x_datetime_array = self._formatArray(x_type, x_array, x_format)
+                        y_masked_array = self._formatArray(y_type, y_array, y_format)
                         #
                         if z_array:
                             subplot.scatter(x_datetime_array, y_masked_array, s = z_array, 
+                                            label = plotdict[u'plot_name'],
                                             marker = self._markers[plotindex % len(self._markers)], c = self._colors[plotindex % len(self._colors)])
                         else:
                             subplot.scatter(x_datetime_array, y_masked_array, 
+                                            label = plotdict[u'plot_name'],
                                             marker = self._markers[plotindex % len(self._markers)], c = self._colors[plotindex % len(self._colors)])
                         #
-                        subplot.xaxis.set_major_locator(mpl_dates.MonthLocator())
+                        subplot.xaxis.set_major_locator(mpl_dates.AutoDateLocator())
+###                        subplot.xaxis.set_major_locator(mpl_dates.MonthLocator())
 ###                        subplot.xaxis.set_minor_locator(mpl_dates.WeekdayLocator())
-                        subplot.xaxis.set_major_formatter(mpl_dates.DateFormatter(u'%Y-%m-%d')) 
+                        if x_format:
+                            subplot.xaxis.set_major_formatter(mpl_dates.DateFormatter(x_format))
+                        else:
+                            subplot.xaxis.set_major_formatter(mpl_dates.DateFormatter(u'%Y-%m-%d'))
                         self._figure.autofmt_xdate(bottom = 0.2)   
 
                     #
@@ -946,7 +981,9 @@ class PieChart(ChartBase):
         #
         try:            
             x_type = self._data.getPlotDataInfo()[u'x_type']
+            x_format = self._data.getPlotDataInfo()[u'x_format']
             y_type = self._data.getPlotDataInfo()[u'y_type']
+            y_format = self._data.getPlotDataInfo()[u'y_format']
             # Pie charts needs text (text, integer or datetime) for the x-axis and 
             # values (integer or float) for the y-axis.
             if not x_type in [u'', u'text', u'integer', u'float', u'date', u'datetime']:
@@ -1000,6 +1037,69 @@ class PieChart(ChartBase):
             envmonlib.Logging().warning(u"GraphPlotter.PieChart: Plot skipped: %s" % (e.args[0]))
             raise
 
+class BoxPlotChart(ChartBase):
+    """ """
+    def __init__(self, plot_data = None, figure = None):
+        """ """
+        super(BoxPlotChart, self).__init__(plot_data, figure)
+        
+    def plotChart(self, 
+                  combined = False, # Not used.
+                  x_log_scale = False, # Not used.
+                  y_log_scale = False, # Not used. 
+                  stacked = None): # Not used.
+        """ """
+        #
+        try:            
+            x_type = self._data.getPlotDataInfo()[u'x_type']
+            x_format = self._data.getPlotDataInfo()[u'x_format']
+            y_type = self._data.getPlotDataInfo()[u'y_type']
+            y_format = self._data.getPlotDataInfo()[u'y_format']
+            # Pie charts needs text (text, integer or datetime) for the x-axis and 
+            # values (integer or float) for the y-axis.
+            if not y_type in [u'', u'integer', u'float']:
+                envmonlib.Logging().warning(u"GraphPlotter.BoxPlotChart: Plot skipped, Y-axis type not valid: " + y_type)
+                raise UserWarning(u"GraphPlotter.BoxPlotChart: Plot skipped, Y-axis type not valid: " + y_type)
+            # 
+            self._initPlotting()
+            #
+            plotlist = self._data.getPlotList()
+            #
+            array_list = []
+            x_items = []
+            #
+            subplot = self._figure.add_subplot(111)
+            #
+            if y_log_scale and (y_type in [u'', u'integer', u'float']):
+                subplot.set_yscale('log')
+            #
+            for plotindex, plotdict in enumerate(plotlist):
+                #
+                # Remove invalid positions in y array.
+                y_array = plotdict[u'y_array']
+                y_cleaned = []
+                for index, item in enumerate(y_array):
+                    try:
+                        if not numpy.isnan(item):
+                            y_cleaned.append(y_array[index])
+                    except:
+                        pass
+                #    
+                array_list.append(y_cleaned)
+                x_items.append(plotdict[u'plot_name'])    
+            #
+            subplot.boxplot(array_list)
+            subplot.set_xticklabels(x_items, rotation=20.0)
+            #
+#             if plotdict[u'plot_name']:
+#                 subplot.set_title(plotdict[u'plot_name'], size = 'medium')
+            #
+            self._finalizePlotting()
+        #
+        except Exception as e:
+            envmonlib.Logging().warning(u"GraphPlotter.BoxPlotChart: Plot skipped: %s" % (e.args[0]))
+            raise
+
 
 class MapChart(ChartBase):
     """ """
@@ -1015,7 +1115,9 @@ class MapChart(ChartBase):
         """ """
 #         try:                    
 #             x_type = self._data.getPlotDataInfo()[u'x_type']
+#             x_format = self._data.getPlotDataInfo()[u'x_format']
 #             y_type = self._data.getPlotDataInfo()[u'y_type']
+#             y_format = self._data.getPlotDataInfo()[u'y_format']
 #             z_type = self._data.getPlotDataInfo()[u'z_type']
 # #             # Map charts needs float values. 
 # #             if not x_type in [u'', u'float']:
@@ -1088,41 +1190,42 @@ def graphplotter_test():
     """ """
     print("Graph plotter test...")
     #
-    graph = MapChart()
-    #
-    data = GraphPlotData(
-                title = u"Map test", 
-                x_type = u'float',
-                x_label = u'x as longitude',
-                y_type = u'float',
-                y_label = u'y as latitude',
-                z_type = u'float',
-                z_label = u'z as value')
-    data.addPlot(
-                plot_name = u"First plot", 
-                x_array = [55.0, 55.2, 55.4, 55.6],
-                y_array = [15.0, 15.1, 15.2, 15.3],
-                z_array = [10.0, 100.0, 200.0, 500.0])
-    data.addPlot(
-                plot_name = u"Second plot", 
-                x_array = [58.0, 58.2, 58.4, 58.6],
-                y_array = [15.0, 15.1, 15.2, 15.3],
-                z_array = [10.0, 100.0, 200.0, 500.0])
-    data.addPlot(
-                plot_name = u"Third plot", 
-                x_array = [56.0, 56.2, 56.4, 56.6],
-                y_array = [16.0, 16.1, 16.2, 16.3],
-                z_array = [10.0, 100.0, 200.0, 500.0])
-
-    graph.setData(data)
-    graph.plotChart(combined = True, y_log_scale = False)
-
-    return
+#     graph = MapChart()
+#     #
+#     data = GraphPlotData(
+#                 title = u"Map test", 
+#                 x_type = u'float',
+#                 x_label = u'x as longitude',
+#                 y_type = u'float',
+#                 y_label = u'y as latitude',
+#                 z_type = u'float',
+#                 z_label = u'z as value')
+#     data.addPlot(
+#                 plot_name = u"First plot", 
+#                 x_array = [55.0, 55.2, 55.4, 55.6],
+#                 y_array = [15.0, 15.1, 15.2, 15.3],
+#                 z_array = [10.0, 100.0, 200.0, 500.0])
+#     data.addPlot(
+#                 plot_name = u"Second plot", 
+#                 x_array = [58.0, 58.2, 58.4, 58.6],
+#                 y_array = [15.0, 15.1, 15.2, 15.3],
+#                 z_array = [10.0, 100.0, 200.0, 500.0])
+#     data.addPlot(
+#                 plot_name = u"Third plot", 
+#                 x_array = [56.0, 56.2, 56.4, 56.6],
+#                 y_array = [16.0, 16.1, 16.2, 16.3],
+#                 z_array = [10.0, 100.0, 200.0, 500.0])
+# 
+#     graph.setData(data)
+#     graph.plotChart(combined = True, y_log_scale = False)
+# 
+#     return
 
 #    graph = LineChart()
 #    graph = BarChart()
 #    graph = ScatterChart()
-    graph = PieChart()
+#    graph = PieChart()
+    graph = BoxPlotChart()
     #
     data = GraphPlotData(
                 title = u"X as text", 

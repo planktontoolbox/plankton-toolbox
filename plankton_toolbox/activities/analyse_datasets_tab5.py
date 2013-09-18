@@ -132,10 +132,9 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         # 
         if not subplot_only:
             self._plotdata = envmonlib.GraphPlotData(
-                                    title = u'TimeSeries', 
+                                    title = u'Time series', 
                                     x_type = u'date',
                                     y_type = u'float',
-                                    x_label = u'Date',
                                     y_label = selectedparameter)
         #
         self._createPlotDataForTimeSeries(selectedparameter, analysisdata, self._plotdata)
@@ -166,9 +165,9 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
             self._plotdata = envmonlib.GraphPlotData(
                                     title = u'Seasonal cycle', 
                                     x_type = u'date',
-                                    y_type = u'float',
-                                    x_label = u'Date',
-                                    y_label = u'')
+#                                     x_format = u'%Y-%m-%d',
+                                    x_format = u'%m-%d',
+                                    y_type = u'float')
         #
         self._createPlotDataForSeasonalCycle(selectedparameter, analysisdata, self._plotdata)
         # Plot.
@@ -194,10 +193,11 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         selectedparameter = unicode(self._parameter_list.currentText())
         # 
         plotdata = envmonlib.GraphPlotData(
-                                title = u'Values for taxa / station and date', 
+#                                 title = u'Values for taxa / station and date', 
+                                title = selectedparameter, 
                                 x_type = u'text',
                                 y_type = u'float',
-                                x_label = u'Sampling occation',
+                                x_label = u'',
                                 y_label = u'')
         #
         self._addPlotAaaaaaaaa(selectedparameter, analysisdata, plotdata)
@@ -221,10 +221,10 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         selectedparameter = unicode(self._parameter_list.currentText())
         # 
         plotdata = envmonlib.GraphPlotData(
-                                title = u'Values for station and date / taxa', 
+                                title = selectedparameter, 
                                 x_type = u'text',
                                 y_type = u'float',
-                                x_label = u'Sampling occation',
+                                x_label = u'',
                                 y_label = u'')
         #
         self._addPlotBbbbbbbbb(selectedparameter, analysisdata, plotdata)
@@ -250,11 +250,15 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                         date_list.append(date)
                         value_list.append(value)               
         #                
-        plotdata.addPlot(plot_name = selectedparameter, 
-                         x_array = date_list, 
-                         y_array = value_list, 
-                         x_label = u'',
-                         y_label = u'')
+        try:
+            plotdata.addPlot(plot_name = selectedparameter, 
+                             x_array = date_list, 
+                             y_array = value_list, 
+                             x_label = u'',
+                             y_label = u'')
+        except UserWarning, e:
+            QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
+
 
     def _createPlotDataForSeasonalCycle(self, selectedparameter, dataset, plotdata):
         """ """
@@ -279,12 +283,14 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                         date_list.append(date)
                         value_list.append(value)               
         #                
-        plotdata.addPlot(plot_name = selectedparameter, 
-                         x_array = date_list, 
-                         y_array = value_list, 
-                         x_label = u'',
-                         y_label = u'')
-
+        try:
+            plotdata.addPlot(plot_name = selectedparameter, 
+                             x_array = date_list, 
+                             y_array = value_list, 
+                             x_label = u'',
+                             y_label = u'')
+        except UserWarning, e:
+            QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
     
     def _addPlotAaaaaaaaa(self, selectedparameter, dataset, plotdata):
         """ """
@@ -341,11 +347,14 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
             for stationindex, station in enumerate(visit_list):
                 taxon_visit_value_list.append(visit_taxon_dict[station][taxon])
             # 
-            plotdata.addPlot(plot_name = taxon, 
-                                x_array = visit_list, 
-                                y_array = taxon_visit_value_list, 
-                                x_label = u'',
-                                y_label = selectedparameter)
+            try:
+                plotdata.addPlot(plot_name = taxon, 
+                                    x_array = visit_list, 
+                                    y_array = taxon_visit_value_list, 
+                                    x_label = u'',
+                                    y_label = selectedparameter)
+            except UserWarning, e:
+                QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
 
     def _addPlotBbbbbbbbb(self, selectedparameter, dataset, plotdata):
         """ """
@@ -403,8 +412,12 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
             for taxonindex, taxon in enumerate(taxon_list):
                 visit_taxon_value_list.append(taxon_visit_dict[taxon][visit])
             # 
-            plotdata.addPlot(plot_name = visit, 
-                                x_array = taxon_list, 
-                                y_array = visit_taxon_value_list, 
-                                x_label = u'',
-                                y_label = selectedparameter)
+            try:
+                plotdata.addPlot(plot_name = visit, 
+                                    x_array = taxon_list, 
+                                    y_array = visit_taxon_value_list, 
+                                    x_label = u'',
+                                    y_label = selectedparameter)
+            except UserWarning, e:
+                QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
+

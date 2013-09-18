@@ -34,6 +34,7 @@ import PyQt4.QtCore as QtCore
 # import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.toolbox.help_texts as help_texts
+import plankton_toolbox.tools.tool_manager as tool_manager
 import envmonlib
 
 class AnalyseDatasetsTab7(QtGui.QWidget):
@@ -98,6 +99,9 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         # - Calculate statistics.
         self._calcstatistics_button = QtGui.QPushButton("Calculate statistics")
         self.connect(self._calcstatistics_button, QtCore.SIGNAL("clicked()"), self._calcStats)                
+        # - Plot graph.
+        self._plotgraphs_button = QtGui.QPushButton("Plot graph")
+        self.connect(self._plotgraphs_button, QtCore.SIGNAL("clicked()"), self._plotGraph)                
 
         # Layout widgets.
         form1 = QtGui.QGridLayout()
@@ -130,6 +134,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         hbox2.addStretch(10)
         hbox2.addWidget(self._viewdata_button)
         hbox2.addWidget(self._calcstatistics_button)
+        hbox2.addWidget(self._plotgraphs_button)
         #
         layout = QtGui.QVBoxLayout()
         layout.addWidget(introlabel)
@@ -488,6 +493,128 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         # Rows.
         for row in resulttable:
             tabledata.appendRow(row)  
-            
-            
-            
+           
+    def _plotGraph(self):
+        """ """
+        # Show the Graph plotter tool if hidden. 
+        tool_manager.ToolManager().showToolByName(u'Graph plotter')
+        graphtool = tool_manager.ToolManager().getToolByName(u'Graph plotter')
+        graphtool.clearPlotData()
+        # Filtered data should be used.
+        self._main_activity.updateFilter() # Must be done before createFilteredDataset().
+        analysisdata = self._analysisdata.createFilteredDataset()
+        if not analysisdata:
+            return # Can't create a report from an empty dataset.
+        # Which parameter is selected?
+        selectedparameter = unicode(self._parameter_list.currentText())
+        # Split by.
+        split_on_year = self._splitby_year_checkbox.isChecked()
+        split_on_season = self._splitby_season_checkbox.isChecked()
+        split_on_month = self._splitby_month_checkbox.isChecked()
+        split_on_station = self._splitby_station_checkbox.isChecked()
+        split_on_visit = self._splitby_visit_checkbox.isChecked()
+        split_on_depth = self._splitby_depth_checkbox.isChecked()
+        split_on_taxon = self._splitby_taxon_checkbox.isChecked()
+        # Graph data.
+        self._graph_plot_data = envmonlib.GraphPlotData(
+                                    title = selectedparameter, 
+                                    y_type = u'float',
+                                    y_label = u'')
+        # Create subplots.
+        self._extractPlotValues(analysisdata,
+                                  selectedparameter, 
+                                  split_on_year,
+                                  split_on_season,
+                                  split_on_month,
+                                  split_on_station,
+                                  split_on_visit,
+                                  split_on_depth,
+                                  split_on_taxon)
+        # View in the graph-plot tool.    
+        graphtool.setChartSelection(chart = u"Boxplot chart",
+                                    combined = True, stacked = False, y_log_scale = False)
+        graphtool.setPlotData(self._graph_plot_data)   
+        
+    def _extractPlotValues(self, dataset,
+                        selectedparameter, 
+                        split_on_year = False,
+                        split_on_season = False,
+                        split_on_month = False,
+                        split_on_station = False,
+                        split_on_visit = False,
+                        split_on_depth = False,
+                        split_on_taxon = False):
+        """ """
+        # Target list.
+        data_dict = {}        
+        #
+        for visitnode in dataset.getChildren():
+            visitdate = visitnode.getData(u'date')
+            visitstation = visitnode.getData(u'station_name')
+            visitvisit = visitstation + u' ' + visitdate 
+            visityear = unicode(visitdate[0:4])
+            visitmonth = unicode(visitdate[5:7])
+            visitseason = u''
+            if visitmonth in [u'12', u'01',u'02']:
+                visitseason = u'Dec-Jan-Feb'
+            elif visitmonth in [u'03', u'04',u'05']:
+                visitseason = u'Mar-Apr-May'
+            elif visitmonth in [u'06', u'07',u'08']:
+                visitseason = u'Jun-Jul-Aug'
+            elif visitmonth in [u'09', u'10',u'11']:
+                visitseason = u'Sep-Oct-Nov'
+            #
+            for samplenode in visitnode.getChildren():
+                sample_min_depth = unicode(samplenode.getData(u'sample_min_depth'))
+                sample_max_depth = unicode(samplenode.getData(u'sample_max_depth'))
+                sampleminmaxdepth = sample_min_depth + u'-' + sample_max_depth   
+                # Iterate over sample content. 
+                # Note: Create a level between sample and variabel.
+                grouped_size_lifestages = {}
+                for variablenode in samplenode.getChildren():
+                    group_key = variablenode.getData(u'taxon_name')
+                    group_key += u':' + variablenode.getData(u'size_class') # Specific for phytoplankton.
+                    group_key += u':' + variablenode.getData(u'stage') # Specific for zooplankton.
+                    group_key += u':' + variablenode.getData(u'sex') # Specific for zooplankton.
+                    if group_key not in grouped_size_lifestages:
+                        grouped_size_lifestages[group_key] = [] # Starts a new group.
+                    grouped_size_lifestages[group_key].append(variablenode)
+                
+                # Get variables from the new set of groups.
+                for group_key in grouped_size_lifestages.keys():
+                    #
+                    for variablenode in grouped_size_lifestages[group_key]:
+                        variabletaxon = variablenode.getData(u'taxon_name')
+                        # Parameters.
+                        parameter = variablenode.getData(u'parameter')
+                        unit = variablenode.getData(u'unit')
+                        parameternadunit = parameter + u' (' + unit + u')'
+                        if parameternadunit == selectedparameter:
+                            # Build split key.
+                            splitkey_list = []
+                            if split_on_year: 
+                                splitkey_list.append(visityear)
+                            if split_on_season: 
+                                splitkey_list.append(visitseason)
+                            if split_on_month: 
+                                splitkey_list.append(visitmonth)
+                            if split_on_station: 
+                                splitkey_list.append(visitstation)
+                            if split_on_visit: 
+                                splitkey_list.append(visitvisit)
+                            if split_on_depth: 
+                                splitkey_list.append(sampleminmaxdepth)
+                            if split_on_taxon: 
+                                splitkey_list.append(variabletaxon)
+                            #
+                            splitkey = u':'.join(splitkey_list)
+                            # Add data.
+                            if splitkey not in data_dict:
+                                data_dict[splitkey] = []
+                            data_dict[splitkey].append(variablenode.getData(u'value'))     
+        # Calculate result
+        try:
+            for key in sorted(data_dict.keys()):
+                self._graph_plot_data.addPlot(plot_name = key, y_array = data_dict[key])
+        except UserWarning, e:
+            QtGui.QMessageBox.warning(self, "Warning", unicode(e))

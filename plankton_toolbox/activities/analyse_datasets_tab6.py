@@ -298,15 +298,15 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         #
         plotdatainfo[u'x_label'] = x_selected_column if x_selected_column != u"parameter:" else x_selected_param
         plotdatainfo[u'x_type'] = x_selected_type
-        plotdatainfo[u'x_format'] = x_selected_type
+        plotdatainfo[u'x_format'] = u''
         #
         plotdatainfo[u'y_label'] = y_selected_column if y_selected_column != u"parameter:" else y_selected_param
         plotdatainfo[u'y_type'] = y_selected_type
-        plotdatainfo[u'y_format'] = y_selected_type
+        plotdatainfo[u'y_format'] = u''
         #
         plotdatainfo[u'z_label'] = z_selected_column if z_selected_column != u"parameter:" else z_selected_param
         plotdatainfo[u'z_type'] = z_selected_type
-        plotdatainfo[u'z_format'] = z_selected_type
+        plotdatainfo[u'z_format'] = u''
         #
         # Add plot data.
         x_data, y_data, z_data = self._getPlotData()
@@ -330,18 +330,22 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                 except:
                     z_data[index] = 0.0
         
-        plot_name = y_selected_param
+        plot_name = y_selected_column if y_selected_column != u"parameter:" else y_selected_param
 #         plot_name = y_selected_column if y_selected_column != u"parameter:" else y_selected_param + u' / ' + \
 #                     x_selected_column if x_selected_column != u"parameter:" else x_selected_param
         #
-        self._graph_plot_data.addPlot(
-                        plot_name = plot_name, 
-                         x_label = x_selected_column if x_selected_column != u"parameter:" else x_selected_param,
-                         x_array = x_data,
-#                          y_label = y_selected_column if y_selected_column != u"parameter:" else y_selected_param,
-                         y_array = y_data, 
-                         z_label = z_selected_column if z_selected_column != u"parameter:" else z_selected_param,
-                         z_array = z_data) 
+        try:
+            self._graph_plot_data.addPlot(
+                            plot_name = plot_name, 
+                             x_label = x_selected_column if x_selected_column != u"parameter:" else x_selected_param,
+                             x_array = x_data,
+                             y_label = y_selected_column if y_selected_column != u"parameter:" else y_selected_param,
+                             y_array = y_data, 
+                             z_label = z_selected_column if z_selected_column != u"parameter:" else z_selected_param,
+                             z_array = z_data) 
+        except UserWarning, e:
+            QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
+
         # View in Graph plotter tool.
         graphtool.setPlotData(self._graph_plot_data)
 
