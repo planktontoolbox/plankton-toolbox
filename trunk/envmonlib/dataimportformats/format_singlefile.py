@@ -49,15 +49,12 @@ class FormatSingleFile(envmonlib.ParsedFormat):
         try:
             for parserrow in datasetparserrows:
                 parsernode = parserrow.get(u'node', u'') 
-                parserkey = parserrow.get(u'key', u'') 
+                parserkey = parserrow.get(u'key', u'')
+                view_format = parserrow.get(u'view_format', u'')
                 parsercommand = parserrow.get(u'command', u'')
                 if parsercommand:         
                     #
-#                    parserkey = self.replaceMethodKeywords(parserkey, parsernode)    
-#                    parsercommand = self.replaceMethodKeywords(parsercommand, parsernode)    
-                    #
-                    parserkey = unicode(self.replaceMethodKeywords(parserkey, parsernode))    
-                    parsercommand = unicode(self.replaceMethodKeywords(parsercommand, parsernode))    
+                    parsercommand = unicode(self.replaceMethodKeywords(parsercommand, parsernode, view_format))    
                     #
                     if parsernode == u'dataset':
                         commandstring = u"dataset.addData('" + parserkey + u"', " + parsercommand + u")"
@@ -78,29 +75,17 @@ class FormatSingleFile(envmonlib.ParsedFormat):
                     elif (parsernode == u'info') and (parserkey == u'sample_key'):
                         commandstring = u"keystring = " + parsercommand
                         samplekeycommand = compile(commandstring, '', 'exec')
-#                    elif (parsernode == u'INFO') and (parserkey == u'Variable key'):
-#                        commandstring = u"keystring = " + parsercommand
-#                        variablekeycommand = compile(commandstring, '', 'exec')
                     #
                     elif parsernode == u'function_dataset':
-#                        parserkey = parserkey.replace(u'()', u'') # Remove () from function name and add later.
-#                        commandstring = u"self._" + parserkey + u"(dataset, "  + parsercommand + u")"
                         commandstring = parserkey + parsercommand
                         self.appendParserCommand(commandstring)
                     elif parsernode == u'function_visit':
-#                        parserkey = parserkey.replace(u'()', u'') # Remove () from function name and add later.
-#                        commandstring = u"self._" + parserkey + u"(currentvisit, "  + parsercommand + u")"
                         commandstring = parserkey + parsercommand
                         self.appendParserCommand(commandstring)
                     elif parsernode == u'function_sample':
-#                        parserkey = parserkey.replace(u'()', u'') # Remove () from function name and add later.
-#                        commandstring = u"self._" + parserkey + u"(currentsample, "  + parsercommand + u")"
                         commandstring = parserkey + parsercommand
                         self.appendParserCommand(commandstring)
                     elif parsernode == u'function_variable':
-                        parserkey = parserkey.replace(u'()', u'') # Remove () from function name and add later.
-#                        commandstring = u"self._" + parserkey + u"(currentvariable, "  + parsercommand + u")"
-#                        commandstring = parserkey + u"(currentvariable, "  + parsercommand + u")"
                         commandstring = parserkey + parsercommand
                         self.appendParserCommand(commandstring)
        
@@ -122,12 +107,7 @@ class FormatSingleFile(envmonlib.ParsedFormat):
                     currentvariable = None
                     # Check if visit exists. Create or reuse.
                     keystring = None
-                    
-                    
                     exec(visitkeycommand) # Command assigns keystring.
-#                     exec(visitkeycommand.encode('windows-1252')) # Command assigns keystring.
-                    
-                    
                     currentvisit = dataset.getVisitLookup(keystring)
                     if not currentvisit:
                         currentvisit = envmonlib.VisitNode()
@@ -135,12 +115,7 @@ class FormatSingleFile(envmonlib.ParsedFormat):
                         currentvisit.setIdString(keystring)
                     # Check if sample exists. Create or reuse.
                     keystring = None
-
-
                     exec(samplekeycommand) # Command assigns keystring.
-#                     exec(samplekeycommand.encode('windows-1252')) # Command assigns keystring.
-                    
-                    
                     currentsample = dataset.getSampleLookup(keystring)
                     if not currentsample:
                         currentsample = envmonlib.SampleNode()
@@ -153,15 +128,11 @@ class FormatSingleFile(envmonlib.ParsedFormat):
                     
                     for cmd in self._parsercommands:
                         try:
-
-
                             exec(cmd[u'command'])
-#                             exec(cmd[u'command'].encode('windows-1252'))
-
                         
                         except Exception as e:
                             envmonlib.Logging().warning(u"Failed to parse command: %s" % (e.args[0]) + 
-                                                        "- Command string: %s" % (cmd[u'Command string']))
+                                                        "- Command string: %s" % (cmd[u'command_string']))
         #
         except Exception as e:
             envmonlib.Logging().warning(u"Failed to parse dataset: %s" % (e.args[0]))
