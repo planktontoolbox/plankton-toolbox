@@ -35,17 +35,37 @@ class ParsedFormat(envmonlib.FormatBase):
         #
         self._parsercommands = []
     
-    def replaceMethodKeywords(self, parse_command, node_level = None):
-        """ """
+    def replaceMethodKeywords(self, parse_command, node_level = None, view_format = None):
+        """ Mapping between Excel parser code and python code."""
         command = parse_command
         #
-        command = command.replace(u'$Text(', u'self._asText(')
-        command = command.replace(u'$Integer(', u'self._asInteger(')
-        command = command.replace(u'$Float(', u'self._asFloat(')
-        command = command.replace(u'$Date(', u'self._asDate(')
-        command = command.replace(u'$Species(', u'self._speciesByKey(')
-        command = command.replace(u'$Sizeclass(', u'self._sizeclassByKey(')
-        command = command.replace(u'$PlanktonGroup(', u'self._planktonGroup(')
+        if u'Value:' in command:
+            # Don't lookup, just use the string.
+            command = u"'" + unicode(command.replace(u'Value:', u'').strip()) + u"'"
+        elif u'$' not in command:
+            # For simple column name mapping based on the format column.
+            if view_format is None:
+                command = u"self._asText(u'" + unicode(command) + u"')"
+            elif view_format == u'text':
+                command = u"self._asText(u'" + unicode(command) + u"')"
+            elif view_format == u'integer':
+                command = u"self._asInteger(u'" + unicode(command) + u"')"
+            elif view_format == u'float':
+                command = u"self._asFloat(u'" + unicode(command) + u"')"
+            elif view_format == u'date':
+                command = u"self._asDate(u'" + unicode(command) + u"')"
+            else:
+                command = u"self.$Text(" + unicode(command) + u")"
+        else:
+            # Mapping for more advanced alternatives.
+            command = command.replace(u'$Text(', u'self._asText(')
+            command = command.replace(u'$Integer(', u'self._asInteger(')
+            command = command.replace(u'$Float(', u'self._asFloat(')
+            command = command.replace(u'$Date(', u'self._asDate(')
+            command = command.replace(u'$Species(', u'self._speciesByKey(')
+            command = command.replace(u'$Sizeclass(', u'self._sizeclassByKey(')
+            command = command.replace(u'$SizeClass(', u'self._sizeclassByKey(') # Alternative spelling
+            command = command.replace(u'$PlanktonGroup(', u'self._planktonGroup(')
         #
         if node_level == u'function_sample':
             command = command.replace(u'$CreateVariable(', u'self._createVariable(currentsample, ')
@@ -70,10 +90,15 @@ class ParsedFormat(envmonlib.FormatBase):
         commanddict = {}
         commanddict[u'command_string'] = command_string
         commanddict[u'command'] = compile(command_string, '', 'exec')
+        
+        # For development:
+        print(u'Parser command: ' + command_string)
+        
         self._parsercommands.append(commanddict)
     
     def _asText(self, column_name):
-        """ """
+        """ To be called from Excel-based parser. """
+        column_name = unicode(column_name)
         if column_name in self._header:
             index = self._header.index(column_name)
             return self._row[index] if len(self._row) > index else u''
@@ -81,78 +106,88 @@ class ParsedFormat(envmonlib.FormatBase):
             return u''
 
     def _asInteger(self, column_name):
-        """ """
+        """ To be called from Excel-based parser. """
+        column_name = unicode(column_name)
         if column_name in self._header:
             index = self._header.index(column_name)
             if len(self._row) > index:
                 try:
                     value = self._row[index]
-                    value = value.replace(u' ', u'').replace(u',', u'.')
-                    return int(round(float(value)))
+                    if value:
+                        value = value.replace(u' ', u'').replace(u',', u'.')
+                        return int(round(float(value)))
                 except:
                     envmonlib.Logging().warning(u"Parser: Failed to convert to integer: " + self._row[index])
                     return self._row[index]
-#                except Exception as e:
-#                    print(u"Parser: Failed to convert to integer: %s" % (e.args[0]))                
-#                    return self._row[index]
         return u''
 
     def _asFloat(self, column_name):
-        """ """
+        """ To be called from Excel-based parser. """
+        column_name = unicode(column_name)
         if column_name in self._header:
             index = self._header.index(column_name)
             if len(self._row) > index:
                 try:
                     value = self._row[index]
-                    if value == '':
-                        return u''
-                    value = value.replace(u' ', u'').replace(u',', u'.')
-                    return float(value)
+                    if value:
+                        value = value.replace(u' ', u'').replace(u',', u'.')
+                        return float(value)
                 except:
                     envmonlib.Logging().warning(u"Parser: Failed to convert to float: " + self._row[index])
                     return self._row[index]
         return u''
 
     def _asDate(self, column_name):
-        """ Reformat to match the ISO format. (2000-01-01) """
+        """ Reformat to match the ISO format. (2000-01-01)
+        To be called from Excel-based parser. """
+        column_name = unicode(column_name)
         if column_name in self._header:
             index = self._header.index(column_name)
             if len(self._row) > index:
                 try:
                     value = dateutil.parser.parse(self._row[index])
-#                    value = value
-                    return value.strftime(u'%Y-%m-%d')
+                    if value:
+                        return value.strftime(u'%Y-%m-%d')
                 except:
-                    envmonlib.Logging().warning(u"Parser: Failed to convert to float: " + self._row[index])
+                    envmonlib.Logging().warning(u"Parser: Failed to convert to date: " + self._row[index])
                     return self._row[index]
         return u''
 
     def _speciesByKey(self, taxon_name, key):
-        """ """
+        """ To be called from Excel-based parser. """
+        taxon_name = unicode(taxon_name)
+        key = unicode(key)
         return envmonlib.Species().getTaxonValue(taxon_name, key)
 
     def _sizeclassByKey(self, taxon_name, size_class, key):
-        """ """
+        """ To be called from Excel-based parser. """
+        taxon_name = unicode(taxon_name)
+        key = unicode(key)
+        size_class = unicode(size_class)
         value = envmonlib.Species().getBvolValue(taxon_name, size_class, key)
         if value:
             return value
         return u''
 
     def _planktonGroup(self, taxon_name):
-        """ """
+        """ To be called from Excel-based parser. """
+        taxon_name = unicode(taxon_name)
         return envmonlib.Species().getPlanktonGroupFromTaxonName(taxon_name)
 
     def _toStation(self, current_node, station_name, **kwargs):
-        """ """
+        """ To be called from Excel-based parser. """
         # TODO: For test:
+        station_name = unicode(station_name)
         current_node.addData(u'station_name', station_name)
 
     def _toPosition(self, current_node, latitude, longitude, **kwargs):
-        """ """
+        """ To be called from Excel-based parser. """
+        latitude = unicode(latitude)
+        longitude = unicode(longitude)
 #        print(u'DEBUG: _toPosition: ' + latitude + u' ' + longitude)
 
     def _createVariable(self, current_node, **kwargs):
-        """ """
+        """ To be called from Excel-based parser. """
         if isinstance(current_node, envmonlib.VisitNode):
             newsample = envmonlib.SampleNode()
             current_node.addChild(newsample)
@@ -171,7 +206,7 @@ class ParsedFormat(envmonlib.FormatBase):
             variable.addData(u'unit', kwargs[u'u'])    
 
     def _copyVariable(self, current_node, **kwargs):
-        """ """
+        """ To be called from Excel-based parser. """
         if isinstance(current_node, envmonlib.VariableNode):
             variable = current_node.clone()
             variable.addData(u'parameter', kwargs[u'p'])    
@@ -180,7 +215,7 @@ class ParsedFormat(envmonlib.FormatBase):
             variable.addData(u'unit', kwargs[u'u'])    
 
     def _modifyVariable(self, current_node, **kwargs):
-        """ """
+        """ To be called from Excel-based parser. """
         if isinstance(current_node, envmonlib.VariableNode):
             current_node.addData(u'parameter', kwargs[u'p'])    
             current_node.addData(u'value', kwargs[u'v'])
