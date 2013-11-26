@@ -35,7 +35,7 @@ class Species(object):
     Filenames:
     - Species files must be in the Excel (xlsx) format.
     - Taxa files must contain the string '_species'.
-    - BVOL files must contain the string '_bvol'.
+    - BVOL files must contain the string '_bvol<year>'.
     - Harmful species files must contain the string '_harmful'.
     - Translations files must begin with 'translate_to_' as a prefix to the 
       corresponding file.
@@ -48,13 +48,15 @@ class Species(object):
     """
     def __init__(self,
                  taxa_filenames = [u'toolbox_data/species/nordicmicroalgae_species.xlsx',
-                                   u'toolbox_data/species/smhi_species.xlsx'], 
-                 bvol_filenames = [u'toolbox_data/species/peg_bvol_2011.xlsx',
-                                   u'toolbox_data/species/smhi_bvol_2011.xlsx'], 
-                 harmful_filenames = [u'toolbox_data/species/smhi_harmful.xlsx']):
+                                   u'toolbox_data/species/user_species.xlsx'], 
+                 bvol_filenames = [u'toolbox_data/species/helcom_peg_bvol<year>.xlsx',
+                                   u'toolbox_data/species/smhi_bvol<year>.xlsx',
+                                   u'toolbox_data/species/user_bvol<year>.xlsx'], 
+                 harmful_filenames = [u'toolbox_data/species/user_harmful.xlsx']):
         # Parameters.
         self._taxa_filenames = taxa_filenames 
-        self._bvol_filenames = bvol_filenames
+        self._bvol_filenames = self._findLatestFilesByYear(bvol_filenames)
+
         self._harmful_filenames = harmful_filenames
         # Local storage.
         self._taxa = {} # Main dictionary for taxa.
@@ -66,6 +68,7 @@ class Species(object):
             self._loadAllData()
         except:
             envmonlib.Logging().warning(u"Failed to load species data.")
+#             raise
 
     def getTaxaDict(self):
         """ """
@@ -108,8 +111,9 @@ class Species(object):
             envmonlib.Logging().log(u"Loading species lists (located in 'toolbox_data/species'):")
             # Load taxa.
             for excelfilename in self._taxa_filenames:
-                envmonlib.Logging().log(u"- " + os.path.basename(excelfilename) + u" (taxa)")
-                self._loadTaxa(excelfilename)                
+                if os.path.exists(excelfilename):
+                    envmonlib.Logging().log(u"- " + os.path.basename(excelfilename) + u" (taxa)")
+                    self._loadTaxa(excelfilename)                
             # Add synonyms to taxa. Note: 'translate_to_' will be added to filenames.
             for excelfilename in self._taxa_filenames:
                 dirname = os.path.dirname(excelfilename)        
@@ -123,21 +127,25 @@ class Species(object):
             
             # Load harmful species.
             for excelfilename in self._harmful_filenames:
-                envmonlib.Logging().log(u"- " + os.path.basename(excelfilename) + u" (harmful)")
-                self._loadHarmful(excelfilename)
+                if os.path.exists(excelfilename):
+                    envmonlib.Logging().log(u"- " + os.path.basename(excelfilename) + u" (harmful)")
+                    self._loadHarmful(excelfilename)
 
             # Load BVOL species data.
             for excelfilename in self._bvol_filenames:
-                envmonlib.Logging().log("- " + os.path.basename(excelfilename) + u" (BVOL)")
-                self._loadBvol(excelfilename)            
-            # Add BVOL translations.
+                if os.path.exists(excelfilename):
+                    envmonlib.Logging().log("- " + os.path.basename(excelfilename) + u" (BVOL)")
+                    self._loadBvol(excelfilename)            
+                # Add BVOL translations.
             ### TODO: ....
             
             # Perform some useful pre-calculations.
             self._precalculateData()
         #
         except Exception, e:
-            envmonlib.Logging().error(u"Failed when loading species data: " + unicode(e))
+            envmonlib.Logging().error(u"Failed when loading species data: " + unicode(e))            
+#             raise
+            
 #        # Used for DEBUG:
 #        import locale
 #        import codecs
@@ -214,7 +222,7 @@ class Species(object):
                 for synonym in taxonobject[u'Synonyms']:
                     # Add synonyms.
                     self._taxa_lookup[synonym] = taxonobject
-        
+    
     def _precalculateData(self):
         """ Calculates data from loaded datasets. I.e. phylum, class and order info. """
         for speciesobject in self._taxa.values():
@@ -228,12 +236,16 @@ class Species(object):
                 if u'Rank' in parentobject:
                     if parentobject[u'Rank'] == u'Species':
                         speciesobject[u'Species'] = parentobject[u'Scientific name']
+                    if parentobject[u'Rank'] == u'Genus':
+                        speciesobject[u'Genus'] = parentobject[u'Scientific name']
                     if parentobject[u'Rank'] == u'Order':
                         speciesobject[u'Order'] = parentobject[u'Scientific name']
                     if parentobject[u'Rank'] == u'Class':
                         speciesobject[u'Class'] = parentobject[u'Scientific name']
                     if parentobject[u'Rank'] == u'Phylum':
                         speciesobject[u'Phylum'] = parentobject[u'Scientific name']
+                    if parentobject[u'Rank'] == u'Kingdom':
+                        speciesobject[u'Kingdom'] = parentobject[u'Scientific name']
                         parentobject = None # Done. Continue with next.
                         continue
                 # One step up in hierarchy.
@@ -276,24 +288,26 @@ class Species(object):
                             sizeclassdict[header[column]] = value.strip()
                 column += 1
             # Check if exists in self._taxa
-            scientificname = taxondict[u'Species']
-            if scientificname in self._taxa_lookup:
-                speciesobject = self._taxa_lookup[scientificname]
-            else:
-                continue # Only add BVOL info if taxon exists in taxa.
-#            else:
-#                self._taxa[taxondict[u'Species']] = {}
-#                speciesobject = self._taxa[scientificname] 
-#                speciesobject[u'Scientific name'] = scientificname
-#                if u'Author' in taxondict:
-#                    speciesobject[u'Author'] = taxondict[u'Author']
-            #
-            speciesobject[u'BVOL name'] = scientificname
-            #
-            if u'Size classes' not in speciesobject:
-                speciesobject[u'Size classes'] = []
-            #
-            speciesobject[u'Size classes'].append(sizeclassdict)
+            if u'Species' in taxondict: 
+                scientificname = taxondict[u'Species']
+                if scientificname in self._taxa_lookup:
+                    speciesobject = self._taxa_lookup[scientificname]
+                else:
+                    envmonlib.Logging().warning(u": Species missing: " + scientificname + u"   (Source: " + excel_file_name + u")")
+                    continue # Only add BVOL info if taxon exists in taxa.
+    #            else:
+    #                self._taxa[taxondict[u'Species']] = {}
+    #                speciesobject = self._taxa[scientificname] 
+    #                speciesobject[u'Scientific name'] = scientificname
+    #                if u'Author' in taxondict:
+    #                    speciesobject[u'Author'] = taxondict[u'Author']
+                #
+                speciesobject[u'BVOL name'] = scientificname
+                #
+                if u'Size classes' not in speciesobject:
+                    speciesobject[u'Size classes'] = []
+                #
+                speciesobject[u'Size classes'].append(sizeclassdict)
         #
         # Trophy is set on sizeclass level. Should also be set on species level  
         # if all sizeclasses have the same trophy.
@@ -306,9 +320,42 @@ class Species(object):
                 taxon[u'Trophy'] = list(trophyset)[0]
 
         
+#     def _translateBvolHeader(self, importFileHeader):
+#         """ Used when importing BVOL data.         
+#             Converts import file column names to key names used in dictionary. """        
+#     #        if (importFileHeader == u'Division'): return u'Division'
+#     #        if (importFileHeader == u'Class'): return u'Class'
+#     #        if (importFileHeader == u'Order'): return u'Order'
+#     #        if (importFileHeader == u'Species'): return u'Species'
+#         if (importFileHeader == u'SFLAG (sp., spp., cf., complex, group)'): return u'SFLAG' # Modified
+#         if (importFileHeader == u'STAGE (cyst, naked)'): return u'Stage' # Modified
+#     #        if (importFileHeader == u'Author'): return u'Author'
+#     #        if (importFileHeader == u'Trophy'): return u'Trophy'
+#     #        if (importFileHeader == u'Geometric shape'): return u'Geometric shape'
+#         if (importFileHeader == u'FORMULA'): return u'Formula' # Modified
+#         if (importFileHeader == u'Size class No'): return u'Size class' # Modified
+#     #        if (importFileHeader == u'Unit'): return u'Unit'
+#         if (importFileHeader == u'size range,'): return u'Size range' # Modified
+#         if (importFileHeader == u'Length (l1), µm'): return u'Length(l1), µm' # Modified
+#         if (importFileHeader == u'Length (l2), µm'): return u'Length(l2), µm' # Modified
+#         if (importFileHeader == u'Width (w), µm'): return u'Width(w), µm' # Modified
+#         if (importFileHeader == u'Height (h), µm'): return u'Height(h), µm' # Modified
+#         if (importFileHeader == u'Diameter (d1), µm'): return u'Diameter(d1), µm' # Modified
+#         if (importFileHeader == u'Diameter (d2), µm'): return u'Diameter(d2), µm' # Modified
+#         if (importFileHeader == u'No. of cells/ counting unit'): return u'No. of cells/counting unit' # Modified
+#         if (importFileHeader == u'Calculated  volume, µm3'): return u'Calculated volume, µm3' # Modified
+#         if (importFileHeader == u'Comment'): return u'Comment'
+#         if (importFileHeader == u'Filament: length of cell (µm)'): return u'Filament: length of cell, µm' # Modified
+#         if (importFileHeader == u'Calculated Carbon pg/counting unit        (Menden-Deuer & Lessard 2000)'): return u'Calculated Carbon pg/counting unit' # Modified
+#     #    if (importFileHeader == u'Comment on Carbon calculation'): return u'Comment on Carbon calculation'
+#         if (importFileHeader == u'CORRECTION / ADDITION                            2009'): return u'Correction/addition 2009' # Modified
+#         if (importFileHeader == u'CORRECTION / ADDITION                            2010'): return u'Correction/addition 2010' # Modified
+#         if (importFileHeader == u'CORRECTION / ADDITION                            2011'): return u'Correction/addition 2011' # Modified
+#         if (importFileHeader == u'CORRECTION / ADDITION                            2012'): return u'Correction/addition 2012' # Modified
+#         return importFileHeader     
+            
     def _translateBvolHeader(self, importFileHeader):
-        """ Used when importing BVOL data.         
-            Converts import file column names to key names used in dictionary. """        
+        """ Convert import file column names to key names used in dictionary. """        
     #        if (importFileHeader == u'Division'): return u'Division'
     #        if (importFileHeader == u'Class'): return u'Class'
     #        if (importFileHeader == u'Order'): return u'Order'
@@ -316,30 +363,42 @@ class Species(object):
         if (importFileHeader == u'SFLAG (sp., spp., cf., complex, group)'): return u'SFLAG' # Modified
         if (importFileHeader == u'STAGE (cyst, naked)'): return u'Stage' # Modified
     #        if (importFileHeader == u'Author'): return u'Author'
+    #        if (importFileHeader == u'AphiaID'): return u'AphiaID'
     #        if (importFileHeader == u'Trophy'): return u'Trophy'
     #        if (importFileHeader == u'Geometric shape'): return u'Geometric shape'
         if (importFileHeader == u'FORMULA'): return u'Formula' # Modified
         if (importFileHeader == u'Size class No'): return u'Size class' # Modified
+        if (importFileHeader == u'SizeClassNo'): return u'Size class' # Modified
+        if (importFileHeader == u'Nonvalid_SIZCL'): return u'Nonvalid size class' # Modified
+        if (importFileHeader == u'Not_accepted'): return u'Not accepted' # Modified
     #        if (importFileHeader == u'Unit'): return u'Unit'
         if (importFileHeader == u'size range,'): return u'Size range' # Modified
         if (importFileHeader == u'Length (l1), µm'): return u'Length(l1), µm' # Modified
+        if (importFileHeader == u'Length(l1)µm'): return u'Length(l1), µm' # Modified
         if (importFileHeader == u'Length (l2), µm'): return u'Length(l2), µm' # Modified
+        if (importFileHeader == u'Length(l2)µm'): return u'Length(l2), µm' # Modified
         if (importFileHeader == u'Width (w), µm'): return u'Width(w), µm' # Modified
+        if (importFileHeader == u'Width(w)µm'): return u'Width(w), µm' # Modified
         if (importFileHeader == u'Height (h), µm'): return u'Height(h), µm' # Modified
+        if (importFileHeader == u'Height(h)µm'): return u'Height(h), µm' # Modified
         if (importFileHeader == u'Diameter (d1), µm'): return u'Diameter(d1), µm' # Modified
+        if (importFileHeader == u'Diameter(d1)µm'): return u'Diameter(d1), µm' # Modified
         if (importFileHeader == u'Diameter (d2), µm'): return u'Diameter(d2), µm' # Modified
+        if (importFileHeader == u'Diameter(d2)µm'): return u'Diameter(d2), µm' # Modified
         if (importFileHeader == u'No. of cells/ counting unit'): return u'No. of cells/counting unit' # Modified
         if (importFileHeader == u'Calculated  volume, µm3'): return u'Calculated volume, µm3' # Modified
+        if (importFileHeader == u'Calculated  volume µm3'): return u'Calculated volume, µm3' # Modified
         if (importFileHeader == u'Comment'): return u'Comment'
         if (importFileHeader == u'Filament: length of cell (µm)'): return u'Filament: length of cell, µm' # Modified
         if (importFileHeader == u'Calculated Carbon pg/counting unit        (Menden-Deuer & Lessard 2000)'): return u'Calculated Carbon pg/counting unit' # Modified
+        if (importFileHeader == u'Calculated Carbon pg/counting unit'): return u'Calculated Carbon pg/counting unit' # Modified
     #    if (importFileHeader == u'Comment on Carbon calculation'): return u'Comment on Carbon calculation'
         if (importFileHeader == u'CORRECTION / ADDITION                            2009'): return u'Correction/addition 2009' # Modified
         if (importFileHeader == u'CORRECTION / ADDITION                            2010'): return u'Correction/addition 2010' # Modified
         if (importFileHeader == u'CORRECTION / ADDITION                            2011'): return u'Correction/addition 2011' # Modified
-        if (importFileHeader == u'CORRECTION / ADDITION                            2012'): return u'Correction/addition 2012' # Modified
+        if (importFileHeader == u'Corrections/Additions 2013'): return u'Corrections/additions 2013' # Modified
         return importFileHeader     
-            
+        
     def _isBvolTaxonRelated(self, header, column):
         """ Used when importing BVOL data. """        
         if (header[column] == u'Division'): return True
@@ -423,4 +482,21 @@ class Species(object):
             return self._plankton_group_class_dict[taxonclass]
         # Return this if plankton group not found.
         return u'planton-group-not-designated'
+
+    def _findLatestFilesByYear(self, filelist):
+        """ Search for files with matching names, except for the string <year>.
+            Example: filelist = [u'toolbox_data/species/PEG_BVOL<year>.xlsx',
+                                 u'toolbox_data/species/SMHI_BVOL<year>.xlsx'] """
+        newfilelist = []
+        for fullfilename in filelist:
+            dirpath, filename = os.path.split(fullfilename)
+            parts = filename.split(u'<year>')
+            files = os.listdir(dirpath)
+            files.sort(reverse = True) # Use the latest year found.
+            for filename in files:
+                if (len(parts) >= 2) and (parts[0] in filename) and (parts[1] in filename):
+                    newfilelist.append(os.path.join(dirpath, filename))
+                    break # Break for-loop.
+        #
+        return newfilelist
 
