@@ -62,11 +62,12 @@ class DatasetViewerTool(tool_base.ToolBase):
         self.connect(toolbox_datasets.ToolboxDatasets(), 
                      QtCore.SIGNAL("datasetListChanged"), 
                      self._updateDatasetList)
-# Allow synch is confusing. Activate again when used in more tools.                       
-#         # Listen for changes in the toolbox sync.
-#         self.connect(toolbox_sync.ToolboxSync(), 
-#                      QtCore.SIGNAL("toolboxSyncSelectedRow"), 
-#                      self._setSelectedDataset)
+        # Allow synch is confusing. Activate again when used in more tools.                       
+        # (Currently used in the other way, controlled by a checkbox in load_datasets_activity.)                       
+        # Listen for changes in the toolbox sync.
+        self.connect(toolbox_sync.ToolboxSync(), 
+                     QtCore.SIGNAL("toolboxSyncSelectedRow"), 
+                     self._setSelectedDataset)
 
     def _contentSelectDataset(self):
         """ """
@@ -199,9 +200,13 @@ class DatasetViewerTool(tool_base.ToolBase):
         self._tableview.tablemodel.reset() # Model data has changed.
         self._tableview.resizeColumnsToContents()
 
-# Allow synch is confusing. Activate again when used in more tools.                       
-#     def _setSelectedDataset(self):
-#         """ """
+    # Allow synch is confusing. Activate again when used in more tools.
+    # (Currently used in the other way, controlled by a checkbox in load_datasets_activity.)                       
+    def _setSelectedDataset(self):
+        """ """
+        index = toolbox_sync.ToolboxSync().getRow()
+        self._selectdataset_list.setCurrentIndex(index + 1)
+        self._viewDataset(index + 1)
 #         if self._allowsync_checkbox.isChecked():
 #             index = toolbox_sync.ToolboxSync().getRow()
 #             self._selectdataset_list.setCurrentIndex(index + 1)

@@ -30,6 +30,7 @@ import locale
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
+import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.activities.activity_base as activity_base
 #import plankton_toolbox.core.monitoring.monitoring_files as monitoring_files
@@ -445,6 +446,10 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         # Buttons.
         self._unloadalldatasets_button = QtGui.QPushButton("Remove all datasets")
         self._unloadmarkeddatasets_button = QtGui.QPushButton("Remove marked dataset(s)")
+        # If checked the selected dataset content should be viewed in the dataset viewer tool.
+        self._viewdataset_checkbox = QtGui.QCheckBox("View marked dataset")
+        self._viewdataset_checkbox.setChecked(False) 
+
         # Button connections.
         self.connect(self._unloadalldatasets_button, QtCore.SIGNAL("clicked()"), self._unloadAllDatasets)                
         self.connect(self._unloadmarkeddatasets_button, QtCore.SIGNAL("clicked()"), self._unloadMarkedDatasets)                
@@ -452,6 +457,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         buttonlayout = QtGui.QHBoxLayout()
         buttonlayout.addWidget(self._unloadalldatasets_button)
         buttonlayout.addWidget(self._unloadmarkeddatasets_button)
+        buttonlayout.addWidget(self._viewdataset_checkbox)
         buttonlayout.addStretch(5)
         #
         widget = QtGui.QWidget()        
@@ -511,9 +517,13 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
     
     def _selectionChanged(self, modelIndex):
         """ """
-        if modelIndex.isValid():
-#            print('TEST Selected row: ' + unicode(modelIndex.row()))
-            toolbox_sync.ToolboxSync().setRow(modelIndex.row())
+        if self._viewdataset_checkbox.isChecked():
+            if modelIndex.isValid():
+                # View tool.
+                tool_manager.ToolManager().showToolByName(u'Dataset viewer') # Show tool if hidden.
+                # graphtool = tool_manager.ToolManager().getToolByName(u'Dataset viewer')
+                #
+                toolbox_sync.ToolboxSync().setRow(modelIndex.row())
 
     
 class DatasetTableData(object):
