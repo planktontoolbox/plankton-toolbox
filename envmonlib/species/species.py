@@ -293,7 +293,8 @@ class Species(object):
                 if scientificname in self._taxa_lookup:
                     speciesobject = self._taxa_lookup[scientificname]
                 else:
-                    envmonlib.Logging().warning(u": Species missing: " + scientificname + u"   (Source: " + excel_file_name + u")")
+                    size = sizeclassdict.get(u'Size class', u'')
+                    envmonlib.Logging().warning(u": Species missing: " + scientificname + u"   Size: " + size + u"   (Source: " + excel_file_name + u")")
                     continue # Only add BVOL info if taxon exists in taxa.
     #            else:
     #                self._taxa[taxondict[u'Species']] = {}
@@ -481,7 +482,7 @@ class Species(object):
         if taxonclass in self._plankton_group_class_dict:
             return self._plankton_group_class_dict[taxonclass]
         # Return this if plankton group not found.
-        return u'planton-group-not-designated'
+        return u'plankton-group-not-designated'
 
     def _findLatestFilesByYear(self, filelist):
         """ Search for files with matching names, except for the string <year>.
