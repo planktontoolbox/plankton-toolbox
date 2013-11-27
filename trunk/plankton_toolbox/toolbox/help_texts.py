@@ -121,7 +121,7 @@ class HelpTexts(object):
         """
                
         self._texts[u'ScreeningActivity_sizeclasses'] = """
-        BVOL screening is for work with biovolumes of phytoplanton. 
+        BVOL screening is for work with biovolumes of phytoplankton. 
         The HELCOM-PEG list of species and biovolumes is used as default. The latest version is available at www.ices.dk/
         """        
 
