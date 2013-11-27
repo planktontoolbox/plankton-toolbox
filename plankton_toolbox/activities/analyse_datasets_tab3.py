@@ -72,14 +72,21 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         self._aggregate_rank_list = QtGui.QComboBox()
         self._aggregate_rank_list.addItems([
             u"Biota (all levels)",
-            u"Phytoplankton group",
-            # u"Kingdom",
+            u"Kingdom",
             u"Phylum",
             u"Class",
             u"Order",
-            # u"Family",
-            # u"Genus",
-#             u"Species", 
+            u"Family",
+            u"Genus",
+            u"Species", 
+            u"Phytoplankton group (from dataset)",
+            u"Kingdom (from dataset)",
+            u"Phylum (from dataset)",
+            u"Class (from dataset)",
+            u"Order (from dataset)",
+            u"Family (from dataset)",
+            u"Genus (from dataset)",
+            u"Species (from dataset)", 
             ])
         self._aggregate_rank_list.setCurrentIndex(3) # Default: Class.
         #  Aggregate over trophy.
@@ -137,9 +144,9 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
     def _aggregateData(self):
         """ """
         try:
-#            if self._aggregate_rank_list.currentIndex() == 0:
-#                envmonlib.Logging().log("Taxon level is not selected. Please try again.")
-#                raise UserWarning("Taxon level is not selected. Please try again.")
+#             if self._aggregate_rank_list.currentIndex() == 0:
+#                 envmonlib.Logging().log("Taxon level is not selected. Please try again.")
+#                 raise UserWarning("Taxon level is not selected. Please try again.")
             if not self._analysisdata.getData():
                 envmonlib.Logging().log("No data is loaded for analysis. Please try again.")
                 raise UserWarning("No data is loaded for analysis. Please try again.")                
@@ -160,15 +167,41 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
 #                            value = value.replace(u',', u'.').replace(u' ', u'')
                             value = float(value) 
                             #
-                            if selected_taxon_rank == u'Biota (all levels)':
-                                newtaxon = u'Biota' # Biota is above kingdom in the taxonomic hierarchy. 
-                            elif selected_taxon_rank == u'Phytoplankton group':
-                                newtaxon = variablenode.getData(u'plankton_group')  
-                            else:
-                                rank_as_key = selected_taxon_rank.lower()
-                                newtaxon = variablenode.getData(rank_as_key) # Get taxon name for the selected rank.
-                                if not newtaxon:
-                                    newtaxon = selected_taxon_rank.lower() + u'-not-designated' # Use this if empty. Lower case for sort reason.
+                            if selected_taxon_rank == u"Biota (all levels)":
+                                newtaxon = u'Biota' # Biota is above kingdom in the taxonomic hierarchy.
+                            elif selected_taxon_rank == u"Kingdom":
+                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'taxon_name'), "Kingdom")
+                            elif selected_taxon_rank == u"Phylum":
+                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'taxon_name'), "Phylum")
+                            elif selected_taxon_rank == u"Class":
+                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'taxon_name'), "Class")
+                            elif selected_taxon_rank == u"Order":
+                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'taxon_name'), "Order")
+                            elif selected_taxon_rank == u"Family":
+                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'taxon_name'), "Family")
+                            elif selected_taxon_rank == u"Genus":
+                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'taxon_name'), "Genus")
+                            elif selected_taxon_rank == u"Species": 
+                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'taxon_name'), "Species")
+                            elif selected_taxon_rank == u"Phytoplankton group (from dataset)":
+                                newtaxon = variablenode.getData(u'plankton_group')
+                            elif selected_taxon_rank == u"Kingdom (from dataset)":
+                                newtaxon = variablenode.getData(u'kingdom')
+                            elif selected_taxon_rank == u"Phylum (from dataset)":
+                                newtaxon = variablenode.getData(u'phylum')
+                            elif selected_taxon_rank == u"Class (from dataset)":
+                                newtaxon = variablenode.getData(u'class')
+                            elif selected_taxon_rank == u"Order (from dataset)":
+                                newtaxon = variablenode.getData(u'order')
+                            elif selected_taxon_rank == u"Family (from dataset)":
+                                newtaxon = variablenode.getData(u'family')
+                            elif selected_taxon_rank == u"Genus (from dataset)":
+                                newtaxon = variablenode.getData(u'genus')
+                            elif selected_taxon_rank == u"Species (from dataset)": 
+                                newtaxon = variablenode.getData(u'species')
+                            # 
+                            if not newtaxon:
+                                newtaxon = u'not-designated' # Use this if empty.
                             #
                             taxontrophy = variablenode.getData(u'trophy')
                             if taxontrophy in selected_trophy_list:
@@ -189,7 +222,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                             #
                             parameter = variablenode.getData(u'parameter')
                             unit = variablenode.getData(u'unit')
-                            
+                             
                             agg_tuple = (newtaxon, taxontrophy, stage, sex, parameter, unit)
                             if agg_tuple in aggregatedvariables:
                                 aggregatedvariables[agg_tuple] = value + aggregatedvariables[agg_tuple]
@@ -214,8 +247,11 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                         newvariable.addData(u'parameter', parameter)
                         newvariable.addData(u'unit', unit)
                         newvariable.addData(u'value', aggregatedvariables[variablekeytuple])
-                        # Add taxon class based on taxon name.
+                        # Add taxon class, etc. based on taxon name.
+                        newvariable.addData(u'kingdom', envmonlib.Species().getTaxonValue(newtaxon, "Kingdom"))
+                        newvariable.addData(u'phylum', envmonlib.Species().getTaxonValue(newtaxon, "Phylum"))
                         newvariable.addData(u'class', envmonlib.Species().getTaxonValue(newtaxon, "Class"))
+                        newvariable.addData(u'order', envmonlib.Species().getTaxonValue(newtaxon, "Order"))
             #
             self._main_activity.updateViewedDataAndTabs()    
         except UserWarning, e:
