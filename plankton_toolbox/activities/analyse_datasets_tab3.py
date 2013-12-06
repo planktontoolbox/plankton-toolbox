@@ -72,6 +72,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         self._aggregate_rank_list = QtGui.QComboBox()
         self._aggregate_rank_list.addItems([
             u"Biota (all levels)",
+            u"Phytoplankton group",
             u"Kingdom",
             u"Phylum",
             u"Class",
@@ -79,7 +80,6 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             u"Family",
             u"Genus",
             u"Species", 
-            u"Phytoplankton group (from dataset)",
             u"Kingdom (from dataset)",
             u"Phylum (from dataset)",
             u"Class (from dataset)",
@@ -88,7 +88,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             u"Genus (from dataset)",
             u"Species (from dataset)", 
             ])
-        self._aggregate_rank_list.setCurrentIndex(3) # Default: Class.
+        self._aggregate_rank_list.setCurrentIndex(4) # Default: Class.
         #  Aggregate over trophy.
         self._trophy_listview = utils_qt.SelectableQListView()
         self._trophy_listview.setMaximumHeight(80)
@@ -169,6 +169,8 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                             #
                             if selected_taxon_rank == u"Biota (all levels)":
                                 newtaxon = u'Biota' # Biota is above kingdom in the taxonomic hierarchy.
+                            elif selected_taxon_rank == u"Phytoplankton group":
+                                newtaxon = envmonlib.Species().getPlanktonGroupFromTaxonName(variablenode.getData(u'taxon_name'))
                             elif selected_taxon_rank == u"Kingdom":
                                 newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'taxon_name'), "Kingdom")
                             elif selected_taxon_rank == u"Phylum":
@@ -183,8 +185,6 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                                 newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'taxon_name'), "Genus")
                             elif selected_taxon_rank == u"Species": 
                                 newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'taxon_name'), "Species")
-                            elif selected_taxon_rank == u"Phytoplankton group (from dataset)":
-                                newtaxon = variablenode.getData(u'plankton_group')
                             elif selected_taxon_rank == u"Kingdom (from dataset)":
                                 newtaxon = variablenode.getData(u'kingdom')
                             elif selected_taxon_rank == u"Phylum (from dataset)":
