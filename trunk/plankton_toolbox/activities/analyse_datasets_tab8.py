@@ -214,7 +214,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
                         stage = variable.getData(u'stage')
                         sex = variable.getData(u'sex')
                         #
-                        taxon_key = taxon_name + ':' + size_class + ':' + trophy + ':' + stage + ':' + sex
+                        taxon_key = unicode(taxon_name) + ':' + unicode(size_class) + ':' + unicode(trophy) + ':' + unicode(stage) + ':' + unicode(sex)
                         if taxon_key not in taxon_values_dict:
                             taxon_values_dict[taxon_key] = [unicode()] * (numberofsamples * numberofparameters) # Add new value list.
                         #

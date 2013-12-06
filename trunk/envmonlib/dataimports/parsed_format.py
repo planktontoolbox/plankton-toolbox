@@ -37,26 +37,26 @@ class ParsedFormat(envmonlib.FormatBase):
     
     def replaceMethodKeywords(self, parse_command, node_level = None, view_format = None):
         """ Mapping between Excel parser code and python code."""
-        command = parse_command
+        command = unicode(parse_command.strip())
         #
-        if u'Value:' in command:
-            # Don't lookup, just use the string.
-            command = u"'" + unicode(command.replace(u'Value:', u'').strip()) + u"'"
-        elif u'$' not in command:
+        if u'Column:' in command:
+            # An easier notation for "$Text('Example column')": "Column:Example column".
             # For simple column name mapping based on the format column.
+            command = unicode(command.replace(u'Column:', u'').strip())
             if view_format is None:
-                command = u"self._asText(u'" + unicode(command) + u"')"
+                command = u"self._asText(u'" + command + u"')"
             elif view_format == u'text':
-                command = u"self._asText(u'" + unicode(command) + u"')"
+                command = u"self._asText(u'" + command + u"')"
             elif view_format == u'integer':
-                command = u"self._asInteger(u'" + unicode(command) + u"')"
+                command = u"self._asInteger(u'" + command + u"')"
             elif view_format == u'float':
-                command = u"self._asFloat(u'" + unicode(command) + u"')"
+                command = u"self._asFloat(u'" + command + u"')"
             elif view_format == u'date':
-                command = u"self._asDate(u'" + unicode(command) + u"')"
+                command = u"self._asDate(u'" + command + u"')"
             else:
-                command = u"self.$Text(" + unicode(command) + u")"
-        else:
+                command = u"self._asText(" + command + u")"
+        #
+        elif u'$' in command:
             # Mapping for more advanced alternatives.
             command = command.replace(u'$Text(', u'self._asText(')
             command = command.replace(u'$Integer(', u'self._asInteger(')
@@ -66,6 +66,10 @@ class ParsedFormat(envmonlib.FormatBase):
             command = command.replace(u'$Sizeclass(', u'self._sizeclassByKey(')
             command = command.replace(u'$SizeClass(', u'self._sizeclassByKey(') # Alternative spelling
             command = command.replace(u'$PlanktonGroup(', u'self._planktonGroup(')
+#         else:
+#             # For hard-coded values.
+#             command = u"'" + unicode(command.strip()) + u"'"
+        
         #
         if node_level == u'function_sample':
             command = command.replace(u'$CreateVariable(', u'self._createVariable(currentsample, ')

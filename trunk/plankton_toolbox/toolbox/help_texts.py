@@ -39,11 +39,15 @@ class HelpTexts(object):
 
     def getText(self, key):
         """ """
-        try:          
-            return self._texts[key]
-        except:
-            print(u"DEBUG: HelpTexts.getText not available for the key: " + key)
-        return u'Note: Help text is missing.'
+        
+        # Waiting for new texts to ber written....
+        return u''
+        
+#         try:          
+#             return self._texts[key]
+#         except:
+#             print(u"DEBUG: HelpTexts.getText not available for the key: " + key)
+#         return u'Note: Help text is missing.'
 
   
     def _addTexts(self):
