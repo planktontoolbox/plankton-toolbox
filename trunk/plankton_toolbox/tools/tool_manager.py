@@ -79,7 +79,7 @@ class ToolManager(object):
 #        self._toollist.append(taxon_images_tool.TaxonImagesTool("(Taxon images)", self._parent))
 #        self._toollist.append(template_tool.TemplateTool("(Tool template)", self._parent))
 
-        self._toollist.append(dev_test_tool.DevTestTool("Development and test", self._parent))
+#        self._toollist.append(dev_test_tool.DevTestTool("Development and test", self._parent))
 
 
     def getToolByName(self, object_name):
