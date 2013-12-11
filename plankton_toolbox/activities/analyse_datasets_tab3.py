@@ -72,7 +72,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         self._aggregate_rank_list = QtGui.QComboBox()
         self._aggregate_rank_list.addItems([
             u"Biota (all levels)",
-            u"Phytoplankton group",
+            u"Plankton group",
             u"Kingdom",
             u"Phylum",
             u"Class",
@@ -135,7 +135,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         layout = QtGui.QVBoxLayout()
         layout.addWidget(introlabel)
         layout.addLayout(form1)
-#        layout.addStretch(5)
+        layout.addStretch(5)
 #        layout.addLayout(hbox1)
         self.setLayout(layout)                
         #
@@ -169,7 +169,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                             #
                             if selected_taxon_rank == u"Biota (all levels)":
                                 newtaxon = u'Biota' # Biota is above kingdom in the taxonomic hierarchy.
-                            elif selected_taxon_rank == u"Phytoplankton group":
+                            elif selected_taxon_rank == u"Plankton group":
                                 newtaxon = envmonlib.Species().getPlanktonGroupFromTaxonName(variablenode.getData(u'taxon_name'))
                             elif selected_taxon_rank == u"Kingdom":
                                 newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'taxon_name'), "Kingdom")
