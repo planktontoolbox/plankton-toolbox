@@ -58,7 +58,9 @@ class LogTool(tool_base.ToolBase):
         self._limit_edit = QtGui.QLineEdit("1000")
         self._limit_edit.setMaximumWidth(60)        
         self._clear_button = QtGui.QPushButton("Clear log")
-        self.connect(self._clear_button, QtCore.SIGNAL("clicked()"), self._clearLog)      
+        ###self.connect(self._clear_button, QtCore.SIGNAL("clicked()"), self._clearLog) 
+        self._clear_button.clicked.connect(self._clearLog) 
+             
 #        self._openlogfile_button = QtGui.QPushButton("Open log file")
 #        self.connect(self._openlogfile_button, QtCore.SIGNAL("clicked()"), self._openLogFile)      
         # Layout.

@@ -285,7 +285,11 @@ class Species(object):
                         continue
                 # One step up in hierarchy.
                 if u'Parent name' in parentobject:
-                    parentobject = self._taxa[parentobject[u'Parent name']] if parentobject[u'Parent name'] else None
+                    if parentobject[u'Parent name'] in self._taxa:
+                        parentobject = self._taxa[parentobject[u'Parent name']] if parentobject[u'Parent name'] else None
+                    else:
+                        envmonlib.Logging().warning(u": Parent taxon is missing for : " + parentobject[u'Scientific name'])
+                        parentobject = None
                 else:
                     parentobject = None
 
