@@ -86,5 +86,5 @@ class AnalysisPrepare(object):
                         variable.addData(u'stage', itempairs[1][2])
                         variable.addData(u'sex', itempairs[1][3])
                         variable.addData(u'parameter', itempairs[0][0])
-                        variable.addData(u'value', u'0.0')
+                        variable.addData(u'value', float(0.0))
                         variable.addData(u'unit', itempairs[0][1])

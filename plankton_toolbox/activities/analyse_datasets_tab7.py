@@ -293,16 +293,27 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
             visitkey = keysplit[4]
             depthkey = keysplit[5]
             taxonkey = keysplit[6]
-            # Data.
-            data_list = data_dict[key]
-            # Calculate result by use of numpy. 
-            # Use float64 since we are using both small and big unit. 
-            meanvalue = numpy.mean(data_list, dtype=numpy.float64)
-            medianvalue = numpy.median(data_list)
-            stddevvalue = numpy.std(data_list, dtype=numpy.float64)
-            minvalue = numpy.nanmin(data_list) 
-            maxvalue = numpy.nanmax(data_list)
-            countedvalues = len(data_list)        
+            #
+            try:
+                data_list = map(float, data_dict[key])
+                # Calculate result by use of numpy. 
+                # Use float64 since we are using both small and big unit.
+                meanvalue = numpy.mean(data_list, dtype=numpy.float64)
+                medianvalue = numpy.median(data_list)
+                stddevvalue = numpy.std(data_list, dtype=numpy.float64)
+                minvalue = numpy.nanmin(data_list) 
+                maxvalue = numpy.nanmax(data_list)
+                countedvalues = len(data_list)
+            except Exception, e:
+                meanvalue = u'<ERROR>'
+                medianvalue = u'<ERROR>'
+                stddevvalue = u'<ERROR>'
+                minvalue = u'<ERROR>'
+                maxvalue = u'<ERROR>'
+                countedvalues = len(data_list)
+                #
+                print(', '.join(map(unicode, data_list))) # Print data.
+                print u'Error in calc statistics: ' + e # Print exception.            
             # Create row.
             report_row = []
             report_row.append(selectedparameter)
