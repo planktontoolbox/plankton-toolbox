@@ -440,19 +440,18 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
              QtCore.SIGNAL("datasetListChanged"), 
              self._updateDatasetList)
         # Connection for selected row.
-        self.connect(self._datasets_table.selectionModel, 
-                     QtCore.SIGNAL("currentRowChanged(QModelIndex, QModelIndex)"), 
-                     self._selectionChanged)                
+        self._datasets_table.clicked.connect(self._selectionChanged)
+                        
         # Buttons.
         self._unloadalldatasets_button = QtGui.QPushButton("Remove all datasets")
         self._unloadmarkeddatasets_button = QtGui.QPushButton("Remove marked dataset(s)")
         # If checked the selected dataset content should be viewed in the dataset viewer tool.
         self._viewdataset_checkbox = QtGui.QCheckBox("View marked dataset")
-        self._viewdataset_checkbox.setChecked(False) 
-
+        self._viewdataset_checkbox.setChecked(False)
         # Button connections.
         self.connect(self._unloadalldatasets_button, QtCore.SIGNAL("clicked()"), self._unloadAllDatasets)                
         self.connect(self._unloadmarkeddatasets_button, QtCore.SIGNAL("clicked()"), self._unloadMarkedDatasets)                
+        self._viewdataset_checkbox.clicked.connect(self._selectionChanged)
         # Layout widgets.
         buttonlayout = QtGui.QHBoxLayout()
         buttonlayout.addWidget(self._unloadalldatasets_button)
@@ -515,14 +514,14 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         self._datasets_table.resizeColumnsToContents()
 
     
-    def _selectionChanged(self, modelIndex):
+    def _selectionChanged(self):
         """ """
         if self._viewdataset_checkbox.isChecked():
+            modelIndex = self._datasets_table.selectionModel.currentIndex()
             if modelIndex.isValid():
                 # View tool.
                 tool_manager.ToolManager().showToolByName(u'Dataset viewer') # Show tool if hidden.
                 # graphtool = tool_manager.ToolManager().getToolByName(u'Dataset viewer')
-                #
                 toolbox_sync.ToolboxSync().setRow(modelIndex.row())
 
     
