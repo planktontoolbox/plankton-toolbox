@@ -8,8 +8,8 @@
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
-import plankton_toolbox.toolbox.help_texts as help_texts
-import envmonlib
+# import plankton_toolbox.toolbox.help_texts as help_texts
+# import envmonlib
 
 class AnalyseDatasetsTab4(QtGui.QWidget):
     """ """
@@ -49,12 +49,8 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
     def contentSelectData(self):
         """ """
         # Active widgets and connections.
-        introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab4_intro'))
-#         introlabel.setText("""
-#         Select parts of "Analysis data".
-#         This is only a filter and the content of "Analysis data" is not changed. To view and save the filtered data select "View: Filtered data" below.
-#         """)
+#         introlabel = utils_qt.RichTextQLabel()
+#         introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab4_intro'))
         # Start date and end date.
         self._startdate_edit = QtGui.QLineEdit("")
         self._enddate_edit = QtGui.QLineEdit("")
@@ -62,19 +58,19 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
 #        self._stations_listview = utils_qt.SelectableQListView()
 #        self._stations_listview.setMaximumHeight(100)
         self._visits_listview = utils_qt.SelectableQListView()
-        self._visits_listview.setMaximumHeight(100)
+#         self._visits_listview.setMaximumHeight(100)
         # Min-max depth.
         self._minmaxdepth_listview = utils_qt.SelectableQListView()
-        self._minmaxdepth_listview.setMaximumHeight(100)
+#         self._minmaxdepth_listview.setMaximumHeight(100)
         # Taxon.
         self._taxon_listview = utils_qt.SelectableQListView()
-        self._taxon_listview.setMaximumHeight(100)
+#         self._taxon_listview.setMaximumHeight(100)
         # Trophy.
         self._trophy_listview = utils_qt.SelectableQListView()
-        self._trophy_listview.setMaximumHeight(100)
+#         self._trophy_listview.setMaximumHeight(100)
         # Life stage.
         self._lifestage_listview = utils_qt.SelectableQListView()
-        self._lifestage_listview.setMaximumHeight(100)
+#         self._lifestage_listview.setMaximumHeight(100)
         #
         clicklabel1 = utils_qt.ClickableQLabel("Clear all")
         clicklabel2 = utils_qt.ClickableQLabel("Mark all")
@@ -140,9 +136,9 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         form1.addWidget(clicklabel10, gridrow, 14, 1, 1)
         #
         layout = QtGui.QVBoxLayout()
-        layout.addWidget(introlabel)
+#         layout.addWidget(introlabel)
         layout.addLayout(form1)
-        layout.addStretch(5)
+#         layout.addStretch(5)
         self.setLayout(layout)                
         #
         return self
@@ -172,7 +168,7 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
                 depthstring = unicode(samplenode.getData(u'sample_min_depth')) + '-' + unicode(samplenode.getData(u'sample_max_depth'))
                 minmaxdepthset.add(depthstring)
                 for variablenode in samplenode.getChildren():
-                    taxonset.add(variablenode.getData(u'taxon_name'))
+                    taxonset.add(variablenode.getData(u'scientific_name'))
                     #
                     trophyset.add(variablenode.getData(u'trophy'))
                     #

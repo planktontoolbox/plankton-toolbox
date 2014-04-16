@@ -7,9 +7,9 @@
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-import plankton_toolbox.tools.tool_manager as tool_manager
+# import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.toolbox.utils_qt as utils_qt
-import plankton_toolbox.toolbox.help_texts as help_texts
+# import plankton_toolbox.toolbox.help_texts as help_texts
 import envmonlib
 
 class AnalyseDatasetsTab8(QtGui.QWidget):
@@ -47,9 +47,8 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
     def contentReports(self):
         """ """
         # Active widgets and connections.
-        introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab8_intro'))
-        
+#         introlabel = utils_qt.RichTextQLabel()
+#         introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab8_intro'))
         # Parameters.
         self._parameter_list = utils_qt.SelectableQListView()       
         clearall_label = utils_qt.ClickableQLabel("Clear all")
@@ -87,7 +86,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         hbox1.addStretch(5)
         #
         layout = QtGui.QVBoxLayout()
-        layout.addWidget(introlabel)
+#         layout.addWidget(introlabel)
 #         layout.addLayout(form1)
         layout.addLayout(hbox1)
         layout.addStretch(5)
@@ -189,13 +188,13 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
             for visit in dataset.getChildren():
                 for sample in visit.getChildren():
                     for variable in sample.getChildren():
-                        taxon_name = variable.getData('taxon_name')
+                        scientific_name = variable.getData('scientific_name')
                         size_class = variable.getData(u'size_class')
                         trophy = variable.getData(u'trophy')
                         stage = variable.getData(u'stage')
                         sex = variable.getData(u'sex')
                         #
-                        taxon_key = unicode(taxon_name) + ':' + unicode(size_class) + ':' + unicode(trophy) + ':' + unicode(stage) + ':' + unicode(sex)
+                        taxon_key = unicode(scientific_name) + ':' + unicode(size_class) + ':' + unicode(trophy) + ':' + unicode(stage) + ':' + unicode(sex)
                         if taxon_key not in taxon_values_dict:
                             taxon_values_dict[taxon_key] = [unicode()] * (numberofsamples * numberofparameters) # Add new value list.
                         #
@@ -216,14 +215,14 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         for taxon_key in taxon_values_dict.keys():
             #
             taxon_key_parts = taxon_key.split(':')
-            taxon_name = taxon_key_parts[0]
+            scientific_name = taxon_key_parts[0]
             size_class = taxon_key_parts[1]
             trophy = taxon_key_parts[2]
             stage = taxon_key_parts[3]
             sex = taxon_key_parts[4]
             #
             row = [u''] * (numberofcolumns * numberofparameters)
-            row[0] = taxon_name
+            row[0] = scientific_name
             row[1] = size_class
             row[2] = trophy
             row[3] = stage
@@ -263,7 +262,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         header_row.append('Date')
         header_row.append('Sample min depth')
         header_row.append('Sample max depth')
-        header_row.append('Taxon_name')
+        header_row.append('scientific_name')
         header_row.append('Stage')
         header_row.append('Sex')
         header_row.append('Abundance (ind/m2)')
@@ -287,7 +286,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
                 # Note: Create a level between sample and variabel.
                 grouped_lifestages = {}
                 for variablenode in samplenode.getChildren():
-                    group_key = variablenode.getData(u'taxon_name')
+                    group_key = variablenode.getData(u'scientific_name')
                     group_key += u':' + variablenode.getData(u'stage') # Specific for zooplankton.
                     group_key += u':' + variablenode.getData(u'sex') # Specific for zooplankton.
                     if group_key not in grouped_lifestages:
@@ -297,7 +296,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
                 # Get variables from the new set of groups.
                 for group_key in grouped_lifestages.keys():
                     # This should be available in each group.
-                    taxon_name = u'-'
+                    scientific_name = u'-'
                     stage = u'-'
                     sex = u'-'
                     abundance_ind_m2 = u'-'
@@ -307,7 +306,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
                     #
                     for variablenode in grouped_lifestages[group_key]:
                         # This should be same for all variables in the group.                       
-                        taxon_name = variablenode.getData(u'taxon_name')
+                        scientific_name = variablenode.getData(u'scientific_name')
                         stage = variablenode.getData(u'stage')
                         sex = variablenode.getData(u'sex')
                         # Parameters.
@@ -328,7 +327,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
                     report_row.append(date)
                     report_row.append(sample_min_depth)
                     report_row.append(sample_max_depth)
-                    report_row.append(taxon_name)
+                    report_row.append(scientific_name)
                     report_row.append(stage)
                     report_row.append(sex)
                     report_row.append(abundance_ind_m2)
@@ -344,7 +343,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
 def primer_report_count_table_sort(s1, s2):
     """ """
     # Sort order: 
-    # - 0: taxon_name
+    # - 0: scientific_name
     # - 1: size_class
     # - 2: trophy
     # - 3: stage

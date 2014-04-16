@@ -47,31 +47,6 @@ class StartActivity(activity_base.ActivityBase):
         # Active widgets and connections.
         label = utils_qt.RichTextQLabel()
         label.setText(help_texts.HelpTexts().getText(u'StartActivity_intro_1'))
-#         label.setText("""
-#         <br/>
-#         <h3>Welcome to the Plankton Toolbox</h3>
-#         <p>
-#         The Plankton Toolbox is a free tool for aquatic scientists, and others, 
-#         working with environmental monitoring related to phyto- and zooplankton.
-#         With the Plankton Toolbox you can:
-#         <ul>
-#         <li><b>Load plankton and hydrography datasets</b> from text or Excel files. 
-#         Parsers are provided for reading some predefined formats. 
-#         You can create your own parser if needed.
-#         </li>
-#         <li><b>Screen your data</b> for inconsistences regarding code values, species names, etc. The taxonomic hierarchy in 
-#         <a href="http://nordicmicroalgae.org">http://nordicmicroalgae.org</a> is used as a reference.
-#         </li>
-#         <li><b>Analyse your data.</b> Select a subset of data found in your loaded data. 
-#         Aggregate data, e.g. from species level to class level.
-#         </li>
-#         <li><b>Export data</b> for use with other software.
-#         </li>
-#         <li><b>Plot data</b> and save your plots.
-#         </li>
-#         </ul>
-#         </p>
-#         """)
         # Layout.
         layout = QtGui.QGridLayout()
         gridrow = 0

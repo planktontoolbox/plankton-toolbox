@@ -119,9 +119,9 @@ class ScreeningManager(object):
                     for variablenode in samplenode.getChildren():
                         #
                         data_dict = variablenode.getDataDict()
-                        if u'taxon_name' in data_dict:
-                            if data_dict[u'taxon_name'] not in species.getTaxaLookupDict():
-                                envmonlib.Logging().warning(u"Taxon name not in species list.  Taxon name: " + unicode(data_dict[u'taxon_name']))
+                        if u'scientific_name' in data_dict:
+                            if data_dict[u'scientific_name'] not in species.getTaxaLookupDict():
+                                envmonlib.Logging().warning(u"Taxon name not in species list.  Taxon name: " + unicode(data_dict[u'scientific_name']))
      
     def bvolSpeciesScreening(self, datasets):
         """ """
@@ -136,8 +136,8 @@ class ScreeningManager(object):
                     for variablenode in samplenode.getChildren():
                         #
                         data_dict = variablenode.getDataDict()
-                        if (u'taxon_name' in data_dict) and (u'Size class' in data_dict):
-                            taxonname = data_dict[u'taxon_name']
+                        if (u'scientific_name' in data_dict) and (u'Size class' in data_dict):
+                            taxonname = data_dict[u'scientific_name']
                             sizeclass = data_dict[u'size_class'] 
                             
                             if species.getBvolValue(taxonname, sizeclass, u'Size class') == None:

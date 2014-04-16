@@ -11,7 +11,7 @@ import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.activities.activity_base as activity_base
 import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
-import plankton_toolbox.toolbox.help_texts as help_texts
+# import plankton_toolbox.toolbox.help_texts as help_texts
 import envmonlib
 
 class ScreeningActivity(activity_base.ActivityBase):
@@ -27,7 +27,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                      QtCore.SIGNAL("datasetListChanged"), 
                      self.update)
         # Data object used for plotting.
-        self._graph_plot_data = envmonlib.GraphPlotData()
+        self._graph_plot_data = None
 
     def update(self):
         """ """
@@ -71,8 +71,8 @@ class ScreeningActivity(activity_base.ActivityBase):
         """ """
         widget = QtGui.QWidget()
         # Active widgets and connections.
-        introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_intro_0'))
+#         introlabel = utils_qt.RichTextQLabel()
+#         introlabel.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_intro_0'))
         #
         self._checkdatasets_button = QtGui.QPushButton("View\ndatasets")
         self.connect(self._checkdatasets_button, QtCore.SIGNAL("clicked()"), self._checkDatasets)                
@@ -102,9 +102,9 @@ class ScreeningActivity(activity_base.ActivityBase):
         form1.addWidget(self._checkduplicates_button, gridrow, 0, 1, 1)
         #
         layout = QtGui.QVBoxLayout()
-        layout.addWidget(introlabel)
+#         layout.addWidget(introlabel)
         layout.addLayout(form1, 10)
-#         layout.addStretch(1)
+        layout.addStretch(5)
         widget.setLayout(layout)                
         #
         return widget
@@ -194,7 +194,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                         for variablenode in samplenode.getChildren():
                             parameter = variablenode.getData(u'parameter')
                             unit = variablenode.getData(u'unit')
-                            taxonname = variablenode.getData(u'taxon_name')
+                            taxonname = variablenode.getData(u'scientific_name')
                             sizeclass = variablenode.getData(u'size_class')
                             stage = variablenode.getData(u'stage')
                             sex = variablenode.getData(u'sex')
@@ -233,21 +233,21 @@ class ScreeningActivity(activity_base.ActivityBase):
                         check_duplicates_list = [] # Duplicates can occur inside one sample.
                         sample_description = dataset_descr + u', ' + visit_descr + u', ' + sample_descr
                         for variablenode in samplenode.getChildren():
-                            taxon_name = unicode(variablenode.getData(u'taxon_name'))
+                            scientific_name = unicode(variablenode.getData(u'scientific_name'))
                             size_class = unicode(variablenode.getData(u'size_class'))
                             stage = unicode(variablenode.getData(u'stage'))
                             sex = unicode(variablenode.getData(u'sex'))
                             parameter = unicode(variablenode.getData(u"parameter"))
                             unit = unicode(variablenode.getData(u'unit'))
                             #
-                            unique_items = (taxon_name, size_class, stage, sex, parameter, unit)
+                            unique_items = (scientific_name, size_class, stage, sex, parameter, unit)
                             if unique_items in check_duplicates_list:
                                 if sample_description:
                                     # Print first time for sample.
                                     self._structureresult_list.append(sample_description)
                                     sample_description = u''
                                 row = u'   - Duplicate found: ' + \
-                                      taxon_name + u', ' + \
+                                      scientific_name + u', ' + \
                                       size_class + u', ' + \
                                       stage + u', ' + \
                                       sex + u', ' + \
@@ -262,14 +262,14 @@ class ScreeningActivity(activity_base.ActivityBase):
         """ """
         widget = QtGui.QWidget()
         # Active widgets and connections.
-        introlabel_1 = utils_qt.RichTextQLabel()
-        introlabel_1.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_intro_1'))
-        introlabel_2 = utils_qt.RichTextQLabel()
-        introlabel_2.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_intro_2'))
-        introlabel_3 = utils_qt.RichTextQLabel()
-        introlabel_3.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_species'))
-        introlabel_4 = utils_qt.RichTextQLabel()
-        introlabel_4.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_sizeclasses'))
+#         introlabel_1 = utils_qt.RichTextQLabel()
+#         introlabel_1.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_intro_1'))
+#         introlabel_2 = utils_qt.RichTextQLabel()
+#         introlabel_2.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_intro_2'))
+#         introlabel_3 = utils_qt.RichTextQLabel()
+#         introlabel_3.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_species'))
+#         introlabel_4 = utils_qt.RichTextQLabel()
+#         introlabel_4.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_sizeclasses'))
         #
         self._checkcodes_button = QtGui.QPushButton("Check\ncode lists")
         self.connect(self._checkcodes_button, QtCore.SIGNAL("clicked()"), self._codeListScreening)                
@@ -294,12 +294,12 @@ class ScreeningActivity(activity_base.ActivityBase):
         form1.addWidget(self._checksizeclasses_button, gridrow, 0, 1, 1)
         #
         layout = QtGui.QVBoxLayout()
-        layout.addWidget(introlabel_1)
-        layout.addWidget(introlabel_2)
-        layout.addWidget(introlabel_3)
-        layout.addWidget(introlabel_4)
+#         layout.addWidget(introlabel_1)
+#         layout.addWidget(introlabel_2)
+#         layout.addWidget(introlabel_3)
+#         layout.addWidget(introlabel_4)
         layout.addLayout(form1, 10)
-#         layout.addStretch(1)
+        layout.addStretch(5)
         widget.setLayout(layout)                
         #
         return widget
@@ -422,11 +422,8 @@ class ScreeningActivity(activity_base.ActivityBase):
         """ """
         widget = QtGui.QWidget()
         # Active widgets and connections.
-        introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_intro_3'))
-#         introlabel.setText("""
-#         Used for manual check of column values to find outliers or misspellings in the datasets.
-#         """)        
+#         introlabel = utils_qt.RichTextQLabel()
+#         introlabel.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_intro_3'))
         #
         self._column_list = QtGui.QComboBox()
         self._column_list.setMinimumContentsLength(30)
@@ -448,12 +445,12 @@ class ScreeningActivity(activity_base.ActivityBase):
         form1.addWidget(label2, gridrow, 1, 1, 1)
         gridrow += 1
         form1.addWidget(self._column_list, gridrow, 0, 1, 1)
-        form1.addWidget(self._content_list, gridrow, 1, 10, 1)
+        form1.addWidget(self._content_list, gridrow, 1, 30, 1)
         #
         layout = QtGui.QVBoxLayout()
-        layout.addWidget(introlabel)
+#         layout.addWidget(introlabel)
         layout.addLayout(form1, 10)
-        layout.addStretch(1)
+        layout.addStretch(5)
         widget.setLayout(layout)                
         #
         return widget
@@ -536,11 +533,8 @@ class ScreeningActivity(activity_base.ActivityBase):
         """ """
         widget = QtGui.QWidget()
         # Active widgets and connections.
-        introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_plotting'))
-#         introlabel.setText("""
-#         Plot your raw data to find outliers or errors. Select parameters to plot.
-#         """)        
+#         introlabel = utils_qt.RichTextQLabel()
+#         introlabel.setText(help_texts.HelpTexts().getText(u'ScreeningActivity_plotting'))
         #
         self._parameter_list = utils_qt.SelectableQListView()       
         #
@@ -549,26 +543,29 @@ class ScreeningActivity(activity_base.ActivityBase):
         self.connect(clearall_label, QtCore.SIGNAL("clicked()"), self._parameter_list.uncheckAll)                
         self.connect(markall_label, QtCore.SIGNAL("clicked()"), self._parameter_list.checkAll)                
         #
-        self._plotparameterscreening_button = QtGui.QPushButton("Plot selected parameters")
-        self.connect(self._plotparameterscreening_button, QtCore.SIGNAL("clicked()"), self._plotScreening)                
+        self._plotparameters_button = QtGui.QPushButton("Plot parameter values")
+        self.connect(self._plotparameters_button, QtCore.SIGNAL("clicked()"), self._plotScreening)                
+        self._plotparameterperdate_button = QtGui.QPushButton("Plot parameters values per date")
+        self.connect(self._plotparameterperdate_button, QtCore.SIGNAL("clicked()"), self._plotScreeningPerDate)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         gridrow = 0
         label1 = QtGui.QLabel("Parameters:")
         form1.addWidget(label1, gridrow, 0, 1, 2)
         gridrow += 1
-        form1.addWidget(self._parameter_list, gridrow, 0, 1, 10)
+        form1.addWidget(self._parameter_list, gridrow, 0, 1, 30)
         gridrow += 5
         form1.addWidget(clearall_label, gridrow, 0, 1, 1)
         form1.addWidget(markall_label, gridrow, 1, 1, 1)
         #
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(10)
-        hbox1.addWidget(self._plotparameterscreening_button)
+        hbox1.addWidget(self._plotparameters_button)
+        hbox1.addWidget(self._plotparameterperdate_button)
         #
         layout = QtGui.QVBoxLayout()
-        layout.addWidget(introlabel)
-        layout.addLayout(form1)
+#         layout.addWidget(introlabel)
+        layout.addLayout(form1, 10)
         layout.addLayout(hbox1)
         layout.addStretch(5)
         widget.setLayout(layout)                
@@ -594,8 +591,11 @@ class ScreeningActivity(activity_base.ActivityBase):
         tool_manager.ToolManager().showToolByName(u'Graph plotter')
         graphtool = tool_manager.ToolManager().getToolByName(u'Graph plotter')
         graphtool.clearPlotData()
-        # The same plot data object is reused.
-        self._graph_plot_data.clear()
+        # Set up plot data for this type.
+        self._graph_plot_data = envmonlib.GraphPlotData(
+                        title = u'Parameter values in sequence', 
+                        y_type = u'float',
+                        y_label = u'Value')        
         # One plot for each selected parameter.
         for parameter in self._parameter_list.getSelectedDataList():
             self._addPlot(parameter)
@@ -627,6 +627,55 @@ class ScreeningActivity(activity_base.ActivityBase):
 #         self._graph_plot_data.addPlot(plot_name = parameter_unit, y_array = yarray)
         try:
             self._graph_plot_data.addPlot(plot_name = parameter, y_array = yarray)
+        except UserWarning, e:
+            QtGui.QMessageBox.warning(self, "Warning", unicode(e))
+
+    def _plotScreeningPerDate(self):
+        """ """
+        # Show the Graph plotter tool if hidden. 
+        tool_manager.ToolManager().showToolByName(u'Graph plotter')
+        graphtool = tool_manager.ToolManager().getToolByName(u'Graph plotter')
+        graphtool.clearPlotData()
+        # Set up plot data for this type.
+        self._graph_plot_data = envmonlib.GraphPlotData(
+                        title = u'Parameter values per date', 
+                        x_type = u'date',
+                        y_type = u'float',
+                        y_label = u'Value')        
+        # One plot for each selected parameter.
+        for parameter in self._parameter_list.getSelectedDataList():
+            self._addPlotPerDate(parameter)
+        # View in the graph-plot tool.    
+        graphtool.setChartSelection(chart = u'Scatter chart',
+                                    combined = True, stacked = False, y_log_scale = True)
+        graphtool.setPlotData(self._graph_plot_data)   
+
+    def _addPlotPerDate(self, parameter):
+        """ """
+        datasets = toolbox_datasets.ToolboxDatasets().getDatasets()
+        #
+        xarray = []
+        yarray = []
+#        unit_set = set() # In case of different units on the same parameter.
+        #
+        if datasets and (len(datasets) > 0):
+            for dataset in toolbox_datasets.ToolboxDatasets().getDatasets():
+                for visitnode in dataset.getChildren():
+                    date = visitnode.getData(u'date')
+                    for samplenode in visitnode.getChildren():
+                        for variablenode in samplenode.getChildren():
+                            if (variablenode.getData(u'parameter') + u' (' + variablenode.getData(u'unit') + u')') == parameter:
+#                                 unit_set.add(variablenode.getData(u'unit'))
+                                value = variablenode.getData(u'value')
+                                xarray.append(date)                  
+                                yarray.append(value)                  
+        #
+#         units = u' --- '.join(sorted(unit_set))
+#         parameter_unit = parameter + u' (' + units + u')' 
+        #
+#         self._graph_plot_data.addPlot(plot_name = parameter_unit, y_array = yarray)
+        try:
+            self._graph_plot_data.addPlot(plot_name = parameter, x_array = xarray, y_array = yarray)
         except UserWarning, e:
             QtGui.QMessageBox.warning(self, "Warning", unicode(e))
 

@@ -17,7 +17,7 @@ import plankton_toolbox.activities.activity_base as activity_base
 #import plankton_toolbox.core.monitoring.monitoring_files as monitoring_files
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 import plankton_toolbox.toolbox.toolbox_sync as toolbox_sync
-import plankton_toolbox.toolbox.help_texts as help_texts
+# import plankton_toolbox.toolbox.help_texts as help_texts
 
 import envmonlib
 
@@ -92,16 +92,8 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         """ """
         widget = QtGui.QWidget()
         # Active widgets and connections.
-        introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText(help_texts.HelpTexts().getText(u'LoadDatasetsActivity_text_intro'))
-#         introlabel.setText("""
-#         Choose the Excel-tab or the Text-tab to load one or several files with your 
-#         plankton or hydrography data as text files or Excel-files. 
-#         Before loading data you need to set up the import and export formats by selecting parsers. 
-#         The parsers are Excel-files with information on how to interpret the data you import in 
-#         txt-format or in xlsx format. 
-#         Note that the xls-format in older versions of Excel is not supported.
-#         """)        
+#         introlabel = utils_qt.RichTextQLabel()
+#         introlabel.setText(help_texts.HelpTexts().getText(u'LoadDatasetsActivity_text_intro'))
         # - Select dataset parsers:
         self._textfile_parser_list = QtGui.QComboBox()
         self._textfile_parser_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
@@ -156,7 +148,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         hbox1.addWidget(self._textfile_getdataset_button)
         #
         layout = QtGui.QVBoxLayout()
-        layout.addWidget(introlabel)
+#         layout.addWidget(introlabel)
         layout.addLayout(form1)
         layout.addStretch(1)
         layout.addLayout(hbox1)
@@ -265,14 +257,8 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         widget = QtGui.QWidget()
         # Active widgets and connections.
         # Intro:
-        introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText(help_texts.HelpTexts().getText(u'LoadDatasetsActivity_excel_intro'))
-#         introlabel.setText("""
-#         Choose the Excel-tab or the Text-tab to load one or several files with your plankton or hydrography data as text files or Excel-files. 
-#         Before loading data you need to set up the import and export formats by selecting parsers. 
-#         The parsers are Excel-files with information on how to interpret the data you import in txt-format or in xlsx format. 
-#         Note that the xls-format in older versions of Excel is not supported.
-#         """)
+#         introlabel = utils_qt.RichTextQLabel()
+#         introlabel.setText(help_texts.HelpTexts().getText(u'LoadDatasetsActivity_excel_intro'))
         # - Select dataset parser:
         self._excel_parser_list = QtGui.QComboBox()
         self._excel_parser_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
@@ -313,7 +299,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         hbox1.addWidget(self._excel_getdataset_button)
         #
         layout = QtGui.QVBoxLayout()
-        layout.addWidget(introlabel)
+#         layout.addWidget(introlabel)
         layout.addLayout(form1)
         layout.addStretch(1)
         layout.addLayout(hbox1)

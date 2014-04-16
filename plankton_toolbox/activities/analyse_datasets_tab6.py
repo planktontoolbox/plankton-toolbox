@@ -8,8 +8,8 @@
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.tools.tool_manager as tool_manager
-import plankton_toolbox.toolbox.utils_qt as utils_qt
-import plankton_toolbox.toolbox.help_texts as help_texts
+# import plankton_toolbox.toolbox.utils_qt as utils_qt
+# import plankton_toolbox.toolbox.help_texts as help_texts
 import envmonlib
 
 class AnalyseDatasetsTab6(QtGui.QWidget):
@@ -78,12 +78,8 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
     def contentGenericGraphs(self):
         """ """
         # Active widgets and connections.
-        introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab6_intro'))
-#         introlabel.setText("""
-#         Plot almost any combination of data you like. 
-#         These graphs are in general not as nice looking as the pre-defined graphs but are more flexible.
-#         """)        
+#         introlabel = utils_qt.RichTextQLabel()
+#         introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab6_intro'))
         # Select type of data object.
         self._numberofvariables_list = QtGui.QComboBox()
         self._numberofvariables_list.addItems(["One variable (Y)", 
@@ -177,7 +173,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         hbox2.addWidget(self._addsubplotdata_button)
         #
         layout = QtGui.QVBoxLayout()
-        layout.addWidget(introlabel)
+#         layout.addWidget(introlabel)
         layout.addLayout(hbox1)
         layout.addLayout(form1)
         layout.addStretch(1)
@@ -472,7 +468,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                 # Note: Create a level between sample and variabel.
                 grouped_lifestages = {}
                 for variablenode in samplenode.getChildren():
-                    group_key = variablenode.getData(u'taxon_name')
+                    group_key = variablenode.getData(u'scientific_name')
                     group_key += u':' + variablenode.getData(u'size_class') # For phytoplankton 
                     group_key += u':' + variablenode.getData(u'stage') # For zooplankton
                     group_key += u':' + variablenode.getData(u'sex') # For zooplankton

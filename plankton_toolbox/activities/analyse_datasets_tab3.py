@@ -8,7 +8,7 @@
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
-import plankton_toolbox.toolbox.help_texts as help_texts
+# import plankton_toolbox.toolbox.help_texts as help_texts
 import envmonlib
 
 class AnalyseDatasetsTab3(QtGui.QWidget):
@@ -37,17 +37,8 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
     def contentAggregateData(self):
         """ """
         # Active widgets and connections.
-        introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab3_intro'))
-#         introlabel.setText("""
-#         You may want to aggregate abundance or biovolume data from the level of size group or 
-#         species level to a higher taxonomic level. 
-#         A common task is to aggregate to genus or class level. 
-#         Also a level termed Algal groups with fewer classes is available. 
-#         Here you can also select only autotrophs (AU), mixotrophs (MX), heterotrophs (HT) or 
-#         organisms with trophic type not specified (NS). 
-#         For phytoplankton most often a combination is used, e.g. AU + MX for all organisms with photosynthesis.
-#         """)
+#         introlabel = utils_qt.RichTextQLabel()
+#         introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab3_intro'))
         # Active widgets and connections.
         # Aggregate over taxonomic rank.
         self._aggregate_rank_list = QtGui.QComboBox()
@@ -72,10 +63,10 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         self._aggregate_rank_list.setCurrentIndex(4) # Default: Class.
         #  Aggregate over trophy.
         self._trophy_listview = utils_qt.SelectableQListView()
-        self._trophy_listview.setMaximumHeight(80)
+#         self._trophy_listview.setMaximumHeight(80)
         #  Aggregate over life stage.
         self._lifestage_listview = utils_qt.SelectableQListView()
-        self._lifestage_listview.setMaximumHeight(80)
+#         self._lifestage_listview.setMaximumHeight(80)
         # Buttons.
         self._aggregatedata_button = QtGui.QPushButton("Aggregate data")
         self.connect(self._aggregatedata_button, QtCore.SIGNAL("clicked()"), self._aggregateData)
@@ -114,9 +105,9 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
 #        hbox1.addWidget(self._aggregatedata_button)
         #
         layout = QtGui.QVBoxLayout()
-        layout.addWidget(introlabel)
+#         layout.addWidget(introlabel)
         layout.addLayout(form1)
-        layout.addStretch(5)
+#         layout.addStretch(5)
 #        layout.addLayout(hbox1)
         self.setLayout(layout)                
         #
@@ -151,21 +142,21 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                             if selected_taxon_rank == u"Biota (all levels)":
                                 newtaxon = u'Biota' # Biota is above kingdom in the taxonomic hierarchy.
                             elif selected_taxon_rank == u"Plankton group":
-                                newtaxon = envmonlib.Species().getPlanktonGroupFromTaxonName(variablenode.getData(u'taxon_name'))
+                                newtaxon = envmonlib.Species().getPlanktonGroupFromTaxonName(variablenode.getData(u'scientific_name'))
                             elif selected_taxon_rank == u"Kingdom":
-                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'taxon_name'), "Kingdom")
+                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Kingdom")
                             elif selected_taxon_rank == u"Phylum":
-                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'taxon_name'), "Phylum")
+                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Phylum")
                             elif selected_taxon_rank == u"Class":
-                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'taxon_name'), "Class")
+                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Class")
                             elif selected_taxon_rank == u"Order":
-                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'taxon_name'), "Order")
+                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Order")
                             elif selected_taxon_rank == u"Family":
-                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'taxon_name'), "Family")
+                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Family")
                             elif selected_taxon_rank == u"Genus":
-                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'taxon_name'), "Genus")
+                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Genus")
                             elif selected_taxon_rank == u"Species": 
-                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'taxon_name'), "Species")
+                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Species")
                             elif selected_taxon_rank == u"Kingdom (from dataset)":
                                 newtaxon = variablenode.getData(u'kingdom')
                             elif selected_taxon_rank == u"Phylum (from dataset)":
@@ -221,7 +212,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                         newvariable = envmonlib.VariableNode()
                         samplenode.addChild(newvariable)    
                         #
-                        newvariable.addData(u'taxon_name', newtaxon)
+                        newvariable.addData(u'scientific_name', newtaxon)
                         newvariable.addData(u'trophy', taxontrophy)
                         newvariable.addData(u'stage', stage)
                         newvariable.addData(u'sex', sex)

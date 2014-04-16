@@ -31,7 +31,7 @@ import plankton_toolbox.activities.activity_base as activity_base
 #import plankton_toolbox.core.biology.taxa_sources as taxa_sources
 import plankton_toolbox.core.monitoring.monitoring_files as monitoring_files
 import plankton_toolbox.core.monitoring.pw_reports as pw_reports
-import plankton_toolbox.toolbox.help_texts as help_texts
+# import plankton_toolbox.toolbox.help_texts as help_texts
 
 class CreateReportsActivity(activity_base.ActivityBase):
     """ """
@@ -64,13 +64,9 @@ class CreateReportsActivity(activity_base.ActivityBase):
         """ """
         widget = QtGui.QWidget()
         # Active widgets and connections.
-        introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText(help_texts.HelpTexts().getText(u'CreateReportsActivity_intro'))
-#         introlabel.setText("""
-#         Creates reports from Phytowin files (*.csv). 
-#         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod 
-#         tempor incididunt ut labore et dolore magna aliqua.
-#         """)
+#         introlabel = utils_qt.RichTextQLabel()
+#         introlabel.setText(help_texts.HelpTexts().getText(u'CreateReportsActivity_intro'))
+
         self._report_list = QtGui.QComboBox()
         self._report_list.addItems([u'<select>',
                                      u'Combine datasets',
@@ -91,7 +87,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
         hbox2.addWidget(self._createreport_button)
         #
         reportlayout = QtGui.QVBoxLayout()
-        reportlayout.addWidget(introlabel)
+#         reportlayout.addWidget(introlabel)
         reportlayout.addLayout(hbox1)
         reportlayout.addLayout(hbox2)
         #

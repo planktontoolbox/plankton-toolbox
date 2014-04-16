@@ -87,7 +87,7 @@ class AnalysisData(object):
             else:
                 # Append top node data and children. Start with a deep copy.
                 tmp_dataset = copy.deepcopy(dataset)
-                for key, value in analysis_dataset.getDataDict():
+                for key, value in analysis_dataset.getDataDict().iteritems():
                     analysis_dataset.addData(key, value)
                 for child in tmp_dataset.getChildren():
                     analysis_dataset.addChild(child)
@@ -195,7 +195,7 @@ class AnalysisData(object):
                 filteredvisit.addChild(filteredsample)    
                 #
                 for variablenode in samplenode.getChildren():
-                    if variablenode.getData(u'taxon_name') not in filter_taxon:
+                    if variablenode.getData(u'scientific_name') not in filter_taxon:
                         continue
                     #
                     if variablenode.getData(u'trophy') not in filter_trophy:

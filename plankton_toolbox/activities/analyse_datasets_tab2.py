@@ -7,10 +7,10 @@
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-import plankton_toolbox.tools.tool_manager as tool_manager
+# import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.toolbox.utils_qt as utils_qt
-import plankton_toolbox.toolbox.help_texts as help_texts
-import envmonlib
+# import plankton_toolbox.toolbox.help_texts as help_texts
+# import envmonlib
 
 class AnalyseDatasetsTab2(QtGui.QWidget):
     """ """
@@ -44,12 +44,8 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
     def contentPrepareData(self):
         """ """
         # Active widgets and connections.
-        introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab2_intro'))
-#         introlabel.setText("""
-#         Prepare your data by removing unwanted rows from "Analysis data".
-#         This may be useful if you want to use data from one or a few stations or data from a certain depth or time period.
-#         """)
+#         introlabel = utils_qt.RichTextQLabel()
+#         introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab2_intro'))
         #
         self._column_list = QtGui.QComboBox()
         self._column_list.setMinimumContentsLength(20)
@@ -59,7 +55,7 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
         self.connect(self._column_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._updateColumnContent)                
         # Column content.
         self._content_listview = utils_qt.SelectableQListView()
-        self._content_listview.setMaximumHeight(100)
+#         self._content_listview.setMaximumHeight(100)
         #
         clearall_label = utils_qt.ClickableQLabel("Clear all")
         markall_label = utils_qt.ClickableQLabel("Mark all")
@@ -88,9 +84,9 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
         form1.addWidget(markall_label, gridrow, 2, 1, 1)
         #
         layout = QtGui.QVBoxLayout()
-        layout.addWidget(introlabel)
+#         layout.addWidget(introlabel)
         layout.addLayout(form1)
-        layout.addStretch(5)
+#         layout.addStretch(5)
         self.setLayout(layout)                
         #
         return self
