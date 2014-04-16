@@ -138,26 +138,26 @@ class ParsedFormat(envmonlib.FormatBase):
                     return self._row[index]
         return u''
 
-    def _speciesByKey(self, taxon_name, key):
+    def _speciesByKey(self, scientific_name, key):
         """ To be called from Excel-based parser. """
-        taxon_name = unicode(taxon_name)
+        scientific_name = unicode(scientific_name)
         key = unicode(key)
-        return envmonlib.Species().getTaxonValue(taxon_name, key)
+        return envmonlib.Species().getTaxonValue(scientific_name, key)
 
-    def _sizeclassByKey(self, taxon_name, size_class, key):
+    def _sizeclassByKey(self, scientific_name, size_class, key):
         """ To be called from Excel-based parser. """
-        taxon_name = unicode(taxon_name)
+        scientific_name = unicode(scientific_name)
         key = unicode(key)
         size_class = unicode(size_class)
-        value = envmonlib.Species().getBvolValue(taxon_name, size_class, key)
+        value = envmonlib.Species().getBvolValue(scientific_name, size_class, key)
         if value:
             return value
         return u''
 
-    def _planktonGroup(self, taxon_name):
+    def _planktonGroup(self, scientific_name):
         """ To be called from Excel-based parser. """
-        taxon_name = unicode(taxon_name)
-        return envmonlib.Species().getPlanktonGroupFromTaxonName(taxon_name)
+        scientific_name = unicode(scientific_name)
+        return envmonlib.Species().getPlanktonGroupFromTaxonName(scientific_name)
 
     def _toStation(self, current_node, station_name, **kwargs):
         """ To be called from Excel-based parser. """

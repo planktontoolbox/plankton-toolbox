@@ -9,9 +9,9 @@ import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 #import datetime
 # import copy
-import plankton_toolbox.toolbox.utils_qt as utils_qt
+# import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
-import plankton_toolbox.toolbox.help_texts as help_texts
+# import plankton_toolbox.toolbox.help_texts as help_texts
 import envmonlib
 
 class AnalyseDatasetsTab1(QtGui.QWidget):
@@ -37,16 +37,11 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
     def contentSelectDatasets(self):
         """ """
         # Active widgets and connections.
-        introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab1_intro'))
-#         introlabel.setText("""
-#         Select dataset(s) to be analyzed. 
-#         Note that "Analysis data" contains a working copy of one or several loaded datasets. 
-#         Rows in "Analysis data" can be removed, added or aggregated during the analysis.
-#         """)
+#         introlabel = utils_qt.RichTextQLabel()
+#         introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab1_intro'))
         #
         loaded_datasets_listview = QtGui.QListView()
-        loaded_datasets_listview.setMaximumHeight(80)
+#         loaded_datasets_listview.setMaximumHeight(80)
 #        view.setMinimumWidth(500)
         self._loaded_datasets_model = QtGui.QStandardItemModel()
         loaded_datasets_listview.setModel(self._loaded_datasets_model)
@@ -66,9 +61,9 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
         hbox1.addWidget(self._copydatasets_button)
         #
         layout = QtGui.QVBoxLayout()
-        layout.addWidget(introlabel)
-        layout.addWidget(loaded_datasets_listview)
-        layout.addStretch(5)
+#         layout.addWidget(introlabel)
+        layout.addWidget(loaded_datasets_listview, 10)
+#         layout.addStretch(5)
         layout.addLayout(hbox1)
         self.setLayout(layout)                
         #

@@ -8,8 +8,8 @@
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.tools.tool_manager as tool_manager
-import plankton_toolbox.toolbox.utils_qt as utils_qt
-import plankton_toolbox.toolbox.help_texts as help_texts
+# import plankton_toolbox.toolbox.utils_qt as utils_qt
+# import plankton_toolbox.toolbox.help_texts as help_texts
 import envmonlib
 
 class AnalyseDatasetsTab5(QtGui.QWidget):
@@ -47,12 +47,8 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
     def contentPredefinedGraphs(self):
         """ """
         # Active widgets and connections.
-        introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab5_intro'))
-#         introlabel.setText("""
-#         Plot your data. A number of pre-defined types of graphs are available.
-#         """) 
-               
+#         introlabel = utils_qt.RichTextQLabel()
+#         introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab5_intro'))
         # - Select parameter:
         self._parameter_list = QtGui.QComboBox()        
         self._parameter_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
@@ -90,7 +86,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         form1.addWidget(self._addplot_4_button, gridrow, 3, 1, 1)
         #
         layout = QtGui.QVBoxLayout()
-        layout.addWidget(introlabel)
+#         layout.addWidget(introlabel)
         layout.addLayout(form1)
         layout.addStretch(1)
         self.setLayout(layout)                
@@ -286,7 +282,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                 #
                 for variablenode in samplenode.getChildren():
                     #
-                    taxonname = variablenode.getData(u"taxon_name")
+                    taxonname = variablenode.getData(u"scientific_name")
                     if taxonname:
                         taxon_set.add(taxonname)
                     else:
@@ -305,7 +301,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                 #
                 for variablenode in samplenode.getChildren():
                     #
-                    taxonname = variablenode.getData(u"taxon_name")
+                    taxonname = variablenode.getData(u"scientific_name")
                     if not taxonname:
                         taxonname = u'---'
                     parameter = variablenode.getData(u"parameter") + u' (' + variablenode.getData(u'unit') + u')'
@@ -350,7 +346,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                 #
                 for variablenode in samplenode.getChildren():
                     #
-                    taxonname = variablenode.getData(u"taxon_name")
+                    taxonname = variablenode.getData(u"scientific_name")
                     if taxonname:
                         taxon_set.add(taxonname)
                     else:
@@ -370,7 +366,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                 #
                 for variablenode in samplenode.getChildren():
                     #
-                    taxonname = variablenode.getData(u"taxon_name")
+                    taxonname = variablenode.getData(u"scientific_name")
                     if not taxonname:
                         taxonname = u'---'
                     parameter = variablenode.getData(u"parameter") + u' (' + variablenode.getData(u'unit') + u')'

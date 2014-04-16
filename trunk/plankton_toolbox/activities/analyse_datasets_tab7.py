@@ -13,8 +13,8 @@ import numpy
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 # import plankton_toolbox.tools.tool_manager as tool_manager
-import plankton_toolbox.toolbox.utils_qt as utils_qt
-import plankton_toolbox.toolbox.help_texts as help_texts
+# import plankton_toolbox.toolbox.utils_qt as utils_qt
+# import plankton_toolbox.toolbox.help_texts as help_texts
 import plankton_toolbox.tools.tool_manager as tool_manager
 import envmonlib
 
@@ -53,9 +53,8 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
     def contentStatistics(self):
         """ """
         # Active widgets and connections.
-        introlabel = utils_qt.RichTextQLabel()
-        introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab7_intro'))
-              
+#         introlabel = utils_qt.RichTextQLabel()
+#         introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab7_intro'))
         # - Select parameter.
         self._parameter_list = QtGui.QComboBox()        
         self._parameter_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
@@ -89,7 +88,6 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         label1 = QtGui.QLabel("Parameter:")
         label2 = QtGui.QLabel("Split by:")
         stretchlabel1 = QtGui.QLabel("")
-        stretchlabel2 = QtGui.QLabel("")
         gridrow = 0
         form1.addWidget(label1, gridrow, 0, 1, 1)
         form1.addWidget(stretchlabel1, gridrow, 1, 1, 2)
@@ -118,7 +116,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         hbox2.addWidget(self._plotgraphs_button)
         #
         layout = QtGui.QVBoxLayout()
-        layout.addWidget(introlabel)
+#         layout.addWidget(introlabel)
         layout.addLayout(form1)
         layout.addStretch(1)
         layout.addLayout(hbox2)
@@ -225,7 +223,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                 # Note: Create a level between sample and variabel.
                 grouped_size_lifestages = {}
                 for variablenode in samplenode.getChildren():
-                    group_key = variablenode.getData(u'taxon_name')
+                    group_key = variablenode.getData(u'scientific_name')
                     group_key += u':' + variablenode.getData(u'size_class') # Specific for phytoplankton.
                     group_key += u':' + variablenode.getData(u'stage') # Specific for zooplankton.
                     group_key += u':' + variablenode.getData(u'sex') # Specific for zooplankton.
@@ -237,7 +235,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                 for group_key in grouped_size_lifestages.keys():
                     #
                     for variablenode in grouped_size_lifestages[group_key]:
-                        variabletaxon = variablenode.getData(u'taxon_name')
+                        variabletaxon = variablenode.getData(u'scientific_name')
                         # Parameters.
                         parameter = variablenode.getData(u'parameter')
                         unit = variablenode.getData(u'unit')
@@ -397,7 +395,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                 # Note: Create a level between sample and variabel.
                 grouped_size_lifestages = {}
                 for variablenode in samplenode.getChildren():
-                    group_key = variablenode.getData(u'taxon_name')
+                    group_key = variablenode.getData(u'scientific_name')
                     group_key += u':' + variablenode.getData(u'size_class') # Specific for phytoplankton.
                     group_key += u':' + variablenode.getData(u'stage') # Specific for zooplankton.
                     group_key += u':' + variablenode.getData(u'sex') # Specific for zooplankton.
@@ -409,7 +407,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                 for group_key in grouped_size_lifestages.keys():
                     #
                     for variablenode in grouped_size_lifestages[group_key]:
-                        variabletaxon = variablenode.getData(u'taxon_name')
+                        variabletaxon = variablenode.getData(u'scientific_name')
                         # Parameters.
                         parameter = variablenode.getData(u'parameter')
                         unit = variablenode.getData(u'unit')
@@ -564,7 +562,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                 # Note: Create a level between sample and variabel.
                 grouped_size_lifestages = {}
                 for variablenode in samplenode.getChildren():
-                    group_key = variablenode.getData(u'taxon_name')
+                    group_key = variablenode.getData(u'scientific_name')
                     group_key += u':' + variablenode.getData(u'size_class') # Specific for phytoplankton.
                     group_key += u':' + variablenode.getData(u'stage') # Specific for zooplankton.
                     group_key += u':' + variablenode.getData(u'sex') # Specific for zooplankton.
@@ -576,7 +574,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                 for group_key in grouped_size_lifestages.keys():
                     #
                     for variablenode in grouped_size_lifestages[group_key]:
-                        variabletaxon = variablenode.getData(u'taxon_name')
+                        variabletaxon = variablenode.getData(u'scientific_name')
                         # Parameters.
                         parameter = variablenode.getData(u'parameter')
                         unit = variablenode.getData(u'unit')

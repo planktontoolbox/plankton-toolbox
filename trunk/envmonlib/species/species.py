@@ -64,16 +64,16 @@ class Species(object):
         """ """
         return self._taxa_lookup 
     
-    def getTaxonValue(self, taxon_name, key):
+    def getTaxonValue(self, scientific_name, key):
         """ """
-        if taxon_name in self._taxa_lookup:
-            return self._taxa_lookup[taxon_name].get(key, u'')
+        if scientific_name in self._taxa_lookup:
+            return self._taxa_lookup[scientific_name].get(key, u'')
         return u''
     
-    def getBvolValue(self, taxon_name, size_class, key):
+    def getBvolValue(self, scientific_name, size_class, key):
         """ """
-        if taxon_name in self._taxa_lookup:
-            speciesobject = self._taxa_lookup[taxon_name]
+        if scientific_name in self._taxa_lookup:
+            speciesobject = self._taxa_lookup[scientific_name]
             if u'Size classes' in speciesobject:
                 for sizeclassobject in speciesobject[u'Size classes']:
                     if sizeclassobject.get(u'Size class', u'') == unicode(size_class):
@@ -430,23 +430,23 @@ class Species(object):
 #         if (header[column] == u'Calculated Carbon pg/counting unit'): return True
 #         return False
 
-    def getPlanktonGroupFromTaxonName(self, taxon_name):
+    def getPlanktonGroupFromTaxonName(self, scientific_name):
         """ This is another way to organize organisms into groups. Other than the traditional classification. """
         #
-        if taxon_name in self._planktongroups_lookup:
+        if scientific_name in self._planktongroups_lookup:
             # Fast lookup. Don't do the heavy work more than needed.
-            return self._planktongroups_lookup[taxon_name]
+            return self._planktongroups_lookup[scientific_name]
         else:
             for rank in self._planktongroups_ranks_set:
                 #
                 if rank == u'scientific_name':
-                    taxon_on_rank = taxon_name
+                    taxon_on_rank = scientific_name
                 else:
-                    taxon_on_rank = self.getTaxonValue(taxon_name, rank)
+                    taxon_on_rank = self.getTaxonValue(scientific_name, rank)
                 #
                 if taxon_on_rank in self._planktongroups_rank_dict[rank]:
                     planktongroup = self._planktongroups_rank_dict[rank][taxon_on_rank]
-                    self._planktongroups_lookup[taxon_name] = planktongroup
+                    self._planktongroups_lookup[scientific_name] = planktongroup
                     return planktongroup
         #                            
 #        return u'plankton-group-not-designated'

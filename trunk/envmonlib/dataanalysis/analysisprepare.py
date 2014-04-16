@@ -30,7 +30,7 @@ class AnalysisPrepare(object):
                     unit = variablenode.getData(u'unit')
                     if parameter:
                         parameter_set.add((parameter, unit))
-                    taxonname = variablenode.getData(u'taxon_name')
+                    taxonname = variablenode.getData(u'scientific_name')
                     trophy = variablenode.getData(u'trophy')
                     stage = variablenode.getData(u'stage')
                     sex = variablenode.getData(u'sex')
@@ -52,7 +52,7 @@ class AnalysisPrepare(object):
                 for variablenode in samplenode.getChildren():
                     parameter = variablenode.getData(u'parameter')
                     unit = variablenode.getData(u'unit')
-                    taxon = variablenode.getData(u'taxon_name')
+                    taxon = variablenode.getData(u'scientific_name')
                     trophy = variablenode.getData(u'trophy')
                     stage = variablenode.getData(u'stage')
                     sex = variablenode.getData(u'sex')
@@ -62,7 +62,7 @@ class AnalysisPrepare(object):
                     if itempairs not in sample_parameter_taxon_list:
                         variable = envmonlib.VariableNode()
                         samplenode.addChild(variable)
-                        variable.addData(u'taxon_name', itempairs[1][0])
+                        variable.addData(u'scientific_name', itempairs[1][0])
                         variable.addData(u'trophy', itempairs[1][1])
                         variable.addData(u'stage', itempairs[1][2])
                         variable.addData(u'sex', itempairs[1][3])

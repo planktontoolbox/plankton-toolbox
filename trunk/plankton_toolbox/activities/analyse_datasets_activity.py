@@ -79,7 +79,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
             """)
         contentLayout.addWidget(self._activityheader)
         # Add content to the activity.
-        contentLayout.addWidget(self._contentAnalyseTabs())
+        contentLayout.addWidget(self._contentAnalyseTabs(), 3)
         contentLayout.addWidget(self._contentAnalysisDataTable(), 10)
         contentLayout.addWidget(self._contentSaveAnalysisData())
     
