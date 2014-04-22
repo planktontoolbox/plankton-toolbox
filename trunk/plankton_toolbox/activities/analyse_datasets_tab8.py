@@ -190,11 +190,11 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
                     for variable in sample.getChildren():
                         scientific_name = variable.getData('scientific_name')
                         size_class = variable.getData(u'size_class')
-                        trophy = variable.getData(u'trophy')
+                        trophic_level = variable.getData(u'trophic_level')
                         stage = variable.getData(u'stage')
                         sex = variable.getData(u'sex')
                         #
-                        taxon_key = unicode(scientific_name) + ':' + unicode(size_class) + ':' + unicode(trophy) + ':' + unicode(stage) + ':' + unicode(sex)
+                        taxon_key = unicode(scientific_name) + ':' + unicode(size_class) + ':' + unicode(trophic_level) + ':' + unicode(stage) + ':' + unicode(sex)
                         if taxon_key not in taxon_values_dict:
                             taxon_values_dict[taxon_key] = [unicode()] * (numberofsamples * numberofparameters) # Add new value list.
                         #
@@ -217,14 +217,14 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
             taxon_key_parts = taxon_key.split(':')
             scientific_name = taxon_key_parts[0]
             size_class = taxon_key_parts[1]
-            trophy = taxon_key_parts[2]
+            trophic_level = taxon_key_parts[2]
             stage = taxon_key_parts[3]
             sex = taxon_key_parts[4]
             #
             row = [u''] * (numberofcolumns * numberofparameters)
             row[0] = scientific_name
             row[1] = size_class
-            row[2] = trophy
+            row[2] = trophic_level
             row[3] = stage
             row[4] = sex
             for index, value in enumerate(taxon_values_dict[taxon_key]):
@@ -244,7 +244,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         tabledata.appendRow(header_row_3)
         tabledata.appendRow(header_row_4)
 
-        tabledata.appendRow([u'Taxon name', u'Size class', u'Trophy', u'Stage', u'Sex', u''] + \
+        tabledata.appendRow([u'Scientific name', u'Size class', u'Trophic level', u'Stage', u'Sex', u''] + \
                             parameters * numberofsamples) # Multiple columns per sample.
         #
         for row in taxon_rows:
@@ -345,7 +345,7 @@ def primer_report_count_table_sort(s1, s2):
     # Sort order: 
     # - 0: scientific_name
     # - 1: size_class
-    # - 2: trophy
+    # - 2: trophic_level
     # - 3: stage
     # - 4: sex
     columnsortorder = [0, 1, 2, 3, 4]
@@ -498,9 +498,9 @@ def primer_report_count_table_sort(s1, s2):
 #             taxonclass = taxa.Taxa().getTaxonValue(u'Class', pegname)
 # #            author = taxa.Taxa().getTaxonValue(u'Author', pegname)
 #             harmful = taxa.Taxa().getTaxonValue(u'Harmful', pegname)
-#             trophy = taxa.Taxa().getSizeclassValue(u'Trophy', pegname, pegsize)
-#             # If trophy not available for this sizeclass, get it from taxon.
-#             trophy = taxa.Taxa().getTaxonValue(u'Trophy', pegname)
+#             trophic_level = taxa.Taxa().getSizeclassValue(u'Trophic level', pegname, pegsize)
+#             # If trophic_level not available for this sizeclass, get it from taxon.
+#             trophic_level = taxa.Taxa().getTaxonValue(u'Trophic level', pegname)
 #             volume = taxa.Taxa().getSizeclassValue(u'Calculated volume, µm3', pegname, pegsize)
 #             #
 #             if show_debug_info:
@@ -512,7 +512,7 @@ def primer_report_count_table_sort(s1, s2):
 #             row[2] = taxonname
 #             row[3] = pegsize if pegsize else ''
 #             row[4] = sflag.lower() if sflag else '' # Lowercase.
-#             row[5] = trophy if trophy else ''
+#             row[5] = trophic_level if trophic_level else ''
 #             for index, abund in enumerate(species_sample_dict[phytowinnameandsize]):
 #                 row[6 + (index * 2)] = abund
 #                 #
@@ -532,7 +532,7 @@ def primer_report_count_table_sort(s1, s2):
 #         species_rows.sort(report_count_table_sort) # Sort function defined below.
 #         
 #         #
-#         # Aggregate values. Same species and trophy but different size classes will be aggregated.
+#         # Aggregate values. Same species and trophic_level but different size classes will be aggregated.
 #         if aggregate_rows:
 #             oldrow = None
 #             for row in species_rows:
@@ -541,7 +541,7 @@ def primer_report_count_table_sort(s1, s2):
 #                     if row[2]: # Don't aggregate if species is missing.
 #                         # Iterate over samples.
 #                         if oldrow[2] == row[2]: # Column 2: Species.
-#                             if oldrow[5] == row[5]: # Column 5: Trophy may differ for Unicells etc.
+#                             if oldrow[5] == row[5]: # Column 5: trophic_level may differ for Unicells etc.
 #                                 sampleindex = 0
 #                                 while sampleindex < numberofsamples:
 #                                     abundcol = 6 + (sampleindex * 2)
@@ -583,7 +583,7 @@ def primer_report_count_table_sort(s1, s2):
 # def report_count_table_sort(s1, s2):
 #     """ """
 #     # Sort order: Class and scientific name.
-#     columnsortorder = [0, 2, 5] # Class, Species and Trophy.
+#     columnsortorder = [0, 2, 5] # Class, Species and trophic level.
 #     #
 #     for index in columnsortorder:
 #         s1item = s1[index]
