@@ -595,6 +595,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         self._graph_plot_data = envmonlib.GraphPlotData(
                         title = u'Parameter values in sequence', 
                         y_type = u'float',
+                        x_label = u'Sequence position in dataset',
                         y_label = u'Value')        
         # One plot for each selected parameter.
         for parameter in self._parameter_list.getSelectedDataList():
