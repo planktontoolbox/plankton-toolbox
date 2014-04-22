@@ -56,7 +56,9 @@ class DatasetViewerTool(tool_base.ToolBase):
         self._selectdataset_list = QtGui.QComboBox()
         self._selectdataset_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         self._selectdataset_list.addItems(["<select dataset>"])
-        self.connect(self._selectdataset_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._viewDataset) 
+        self.connect(self._selectdataset_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._viewDataset)
+        #
+        self._numberofrows_label = QtGui.QLabel("Number of rows: 0")
         
 # Allow synch is confusing. Activate again when used in more tools.                       
 #         self._allowsync_checkbox = QtGui.QCheckBox("Allow synch")
@@ -67,6 +69,7 @@ class DatasetViewerTool(tool_base.ToolBase):
         layout.addWidget(self._selectdataset_list)
 #         layout.addWidget(self._allowsync_checkbox)
         layout.addStretch(5)
+        layout.addWidget(self._numberofrows_label)
         #
         return layout
         
@@ -135,6 +138,8 @@ class DatasetViewerTool(tool_base.ToolBase):
             else:
                 self._tableview.tablemodel.setModeldata(dataset)
                 self._refreshResultTable()
+        #
+        self._numberofrows_label.setText("Number of rows: " + unicode(self._tableview.tablemodel.rowCount()))
     
     def _saveData(self):
         """ """

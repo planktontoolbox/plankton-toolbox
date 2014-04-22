@@ -96,50 +96,84 @@ class Species(object):
         try:
             self._clear()
             envmonlib.Logging().log(u"") # Empty line.
-            envmonlib.Logging().log(u"Loading species lists (located in " +self._species_directory_path + "'):")
+            envmonlib.Logging().log(u"Loading species lists (located in '" + self._species_directory_path + "'):")
             
             # Load taxa.
             for excelfilename in self._taxa_filenames:
                 if os.path.exists(excelfilename):
                     envmonlib.Logging().log(u"- " + os.path.basename(excelfilename) + u" (Species and other taxa)")
-                    self._loadTaxa(excelfilename)
+                    try:
+                        envmonlib.Logging().startAccumulatedLogging()
+                        #
+                        self._loadTaxa(excelfilename)
+                    finally:
+                        envmonlib.Logging().logAllAccumulatedRows()    
                                     
             # Add translated scientific names to taxa.
             for excelfilename in self._taxatranslate_filenames:
                 if os.path.exists(excelfilename):
                     envmonlib.Logging().log(u"- " + os.path.basename(excelfilename) + u" (Misspellings etc.)")
-                    self._loadSynonyms(excelfilename) # Synonyms and translated names are handled the same way.                           
+                    try:
+                        envmonlib.Logging().startAccumulatedLogging()
+                        #
+                        self._loadSynonyms(excelfilename) # Synonyms and translated names are handled the same way.                           
+                    finally:
+                        envmonlib.Logging().logAllAccumulatedRows()    
             
             # Add synonyms to taxa. Note: 'translate_to_' will be added to filenames.
             for excelfilename in self._taxasynonyms_filenames:
                 if os.path.exists(excelfilename):
                     envmonlib.Logging().log(u"- " + os.path.basename(excelfilename) + u" (Synonyms for taxa)")
-                    self._loadSynonyms(excelfilename)                            
+                    try:
+                        envmonlib.Logging().startAccumulatedLogging()
+                        #
+                        self._loadSynonyms(excelfilename)                            
+                    finally:
+                        envmonlib.Logging().logAllAccumulatedRows()    
             
             # Load biovolume column mapping information.
             for excelfilename in self._bvolcolumns_filenames:
                 if os.path.exists(excelfilename):
                     envmonlib.Logging().log("- " + os.path.basename(excelfilename) + u" (Biovolume column mapping)")
-                    self._loadBvolColumns(excelfilename)        
+                    try:
+                        envmonlib.Logging().startAccumulatedLogging()
+                        #
+                        self._loadBvolColumns(excelfilename)        
+                    finally:
+                        envmonlib.Logging().logAllAccumulatedRows()    
 
             # Load BVOL species data.
             for excelfilename in self._bvol_filenames:
                 if os.path.exists(excelfilename):
                     envmonlib.Logging().log("- " + os.path.basename(excelfilename) + u" (Biovolumes etc. for sizeclasses)")
-                    self._loadBvol(excelfilename)        
+                    try:
+                        envmonlib.Logging().startAccumulatedLogging()
+                        #
+                        self._loadBvol(excelfilename)        
+                    finally:
+                        envmonlib.Logging().logAllAccumulatedRows()    
 
             # Load harmful species.
             for excelfilename in self._harmful_filenames:
                 if os.path.exists(excelfilename):
                     envmonlib.Logging().log(u"- " + os.path.basename(excelfilename) + u" (Harmful organisms)")
-                    self._loadHarmful(excelfilename)
+                    try:
+                        envmonlib.Logging().startAccumulatedLogging()
+                        #
+                        self._loadHarmful(excelfilename)
+                    finally:
+                        envmonlib.Logging().logAllAccumulatedRows()    
 
             # Load plankton group definition.
             for excelfilename in self._planktongroups_filenames:
                 if os.path.exists(excelfilename):
                     envmonlib.Logging().log(u"- " + os.path.basename(excelfilename) + u" (Plankton group definition)")
-                    self._loadPlanktonGroupDefinition(excelfilename)
-
+                    try:
+                        envmonlib.Logging().startAccumulatedLogging()
+                        #
+                        self._loadPlanktonGroupDefinition(excelfilename)
+                    finally:
+                        envmonlib.Logging().logAllAccumulatedRows()    
             
             # Perform some useful pre-calculations.
             self._precalculateData()

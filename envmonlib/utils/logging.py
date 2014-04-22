@@ -51,8 +51,7 @@ class Logging(object):
                 self._logtarget.writeToLog(u"")
             else:
                 print(u"")
-
-        
+  
     def info(self, message):
         """ Accumulates info rows. Increment counter if it already exists. """
         message = unicode(message)
@@ -96,57 +95,83 @@ class Logging(object):
         
     def logAllAccumulatedRows(self):
         """ """
-        self._accumulatedloggingactive = False
-        self.log('Accumulated log summary:')
-        self.logAllInfoRows()
-        self.logAllWarnings()
-        self.logAllErrors()        
         errorcount = sum(self._erroracc.values())
         warningcount = sum(self._warningacc.values())
-        if errorcount == 0:
-            self.log('- Errors: 0.')
-        else:
-            self.log('- ERRORS: ' + unicode(errorcount) + '.')
-        if warningcount == 0:
-            self.log('- Warnings: 0.')
-        else:
-            self.log('- WARNINGS: ' + unicode(warningcount) + '.')
-        self.clear()
+        #
+        if (errorcount > 0) or (warningcount > 0):
+            self._accumulatedloggingactive = False
+            self.log('Accumulated log summary:')
+            self.logAllInfoRows()
+            self.logAllWarnings()
+            self.logAllErrors()        
+            if errorcount == 0:
+                self.log('- Errors: 0.')
+            else:
+                self.log('- ERRORS: ' + unicode(errorcount) + '.')
+            if warningcount == 0:
+                self.log('- Warnings: 0.')
+            else:
+                self.log('- WARNINGS: ' + unicode(warningcount) + '.')
+            self.clear()
         
     def logAllInfoRows(self):
         """ Log all the content in the accumulated info row list. """
         for message in sorted(self._infoacc):
-            self.log('- ' + message + '   (' + unicode(self._infoacc[message]) + ' times)')
+            count = self._infoacc[message]
+            if count == 1:
+                self.log('- ' + message + '   (' + unicode(count) + ' time)')
+            else:
+                self.log('- ' + message + '   (' + unicode(count) + ' times)')
         
     def getAllInfoRows(self):
         """ Returns a list of strings. """
         result = []
         for message in sorted(self._infoacc):
-            result.append(message + '   (' + unicode(self._infoacc[message]) + ' times)')
+            count = self._infoacc[message]
+            if count == 1:
+                self.log('- ' + message + '   (' + unicode(count) + ' time)')
+            else:
+                self.log('- ' + message + '   (' + unicode(count) + ' times)')
         return result
         
     def logAllWarnings(self):
         """ Log all the content in the accumulated warning list. """
         for message in sorted(self._warningacc):
-            self.log('- ' + message + '   (' + unicode(self._warningacc[message]) + ' times)')
+            count = self._warningacc[message]
+            if count == 1:
+                self.log('- ' + message + '   (' + unicode(count) + ' time)')
+            else:
+                self.log('- ' + message + '   (' + unicode(count) + ' times)')
         
     def getAllWarnings(self):
         """ Returns a list of strings. """
         result = []
         for message in sorted(self._warningacc):
-            result.append(message + '   (' + unicode(self._warningacc[message]) + ' times)')
+            count = self._warningacc[message]
+            if count == 1:
+                self.log('- ' + message + '   (' + unicode(count) + ' time)')
+            else:
+                self.log('- ' + message + '   (' + unicode(count) + ' times)')
         return result
         
     def logAllErrors(self):
         """ Log all the content in the accumulated error list. """
         for message in sorted(self._erroracc):
-            self.log('- ' + message + '   (' + unicode(self._erroracc[message]) + ' times)')
+            count = self._erroracc[message]
+            if count == 1:
+                self.log('- ' + message + '   (' + unicode(count) + ' time)')
+            else:
+                self.log('- ' + message + '   (' + unicode(count) + ' times)')
 
     def getAllErrors(self):
         """ Returns a list of strings. """
         result = []
         for message in sorted(self._erroracc):
-            result.append(message + '   (' + unicode(self._erroracc[message]) + ' times)')
+            count = self._erroracc[message]
+            if count == 1:
+                self.log('- ' + message + '   (' + unicode(count) + ' time)')
+            else:
+                self.log('- ' + message + '   (' + unicode(count) + ' times)')
         return result
 
 
