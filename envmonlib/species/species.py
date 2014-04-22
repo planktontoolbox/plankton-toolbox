@@ -381,15 +381,15 @@ class Species(object):
                 #
                 speciesobject[u'Size classes'].append(sizeclassdict)
         #
-        # Trophy is set on sizeclass level. Should also be set on species level  
-        # if all sizeclasses have the same trophy.
+        # Trophic_level is set on sizeclass level. Should also be set on species level  
+        # if all sizeclasses have the same trophic_level.
         for taxon in self._taxa.values():
-            trophyset = set() 
+            trophiclevel_set = set() 
             if u'Size classes' in taxon:
                 for sizeclass in taxon[u'Size classes']:
-                    trophyset.add(sizeclass.get(u'Trophy', u''))
-            if len(trophyset) == 1:
-                taxon[u'Trophy'] = list(trophyset)[0]
+                    trophiclevel_set.add(sizeclass.get(u'Trophic level', u''))
+            if len(trophiclevel_set) == 1:
+                taxon[u'Trophic level'] = list(trophiclevel_set)[0]
 
                     
 #     def _translateBvolHeader(self, importFileHeader):

@@ -71,7 +71,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         self._splitby_visit_checkbox.setChecked(False) 
         self._splitby_depth_checkbox = QtGui.QCheckBox("Depth")
         self._splitby_depth_checkbox.setChecked(False) 
-        self._splitby_taxon_checkbox = QtGui.QCheckBox("Taxon")
+        self._splitby_taxon_checkbox = QtGui.QCheckBox("Scientific name")
         self._splitby_taxon_checkbox.setChecked(False) 
         # - View data.
         self._viewdata_button = QtGui.QPushButton("View data")
@@ -182,7 +182,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         if split_on_station: header_row.append(u'Station')
         if split_on_visit: header_row.append(u'Sampling event')
         if split_on_depth: header_row.append(u'Depth')
-        if split_on_taxon: header_row.append(u'Taxon')
+        if split_on_taxon: header_row.append(u'Scientific name')
         header_row.append(u'Mean')
         header_row.append(u'Median')
         header_row.append(u'Std. dev.')
@@ -451,7 +451,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         resulttable[4][0] = u'Station:'
         resulttable[5][0] = u'Sampling event:'
         resulttable[6][0] = u'Depth:'
-        resulttable[7][0] = u'Taxon:'
+        resulttable[7][0] = u'Scientific name:'
                 
         # Calculate result
         for colindex, key in enumerate(sorted(data_dict.keys())):

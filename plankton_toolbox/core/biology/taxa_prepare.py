@@ -387,7 +387,7 @@ TODO: Not used in current version. Should be rewritten and integrated with envmo
 #         if (importFileHeader == 'SFLAG (sp., spp., cf., complex, group)'): return 'SFLAG' # Modified
 #         if (importFileHeader == 'STAGE (cyst, naked)'): return 'Stage' # Modified
 # #        if (importFileHeader == 'Author'): return 'Author'
-# #        if (importFileHeader == 'Trophy'): return 'Trophy'
+# #        if (importFileHeader == 'Trophic level'): return 'Trophic level'
 # #        if (importFileHeader == 'Geometric shape'): return 'Geometric shape'
 #         if (importFileHeader == 'FORMULA'): return 'Formula' # Modified
 #         if (importFileHeader == 'Size class No'): return 'Size class' # Modified
@@ -418,7 +418,7 @@ TODO: Not used in current version. Should be rewritten and integrated with envmo
 #         if (self._header[column] == 'Author'): return True
 #         if (self._header[column] == 'SFLAG'): return True
 #         if (self._header[column] == 'Stage'): return True
-#         if (self._header[column] == 'Trophy'): return True
+#         if (self._header[column] == 'Trophic level'): return True
 #         if (self._header[column] == 'Geometric shape'): return True
 #         if (self._header[column] == 'Formula'): return True
 #         return False # Related to size class.     

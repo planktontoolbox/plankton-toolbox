@@ -143,7 +143,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                                     title = u'Seasonal cycle', 
                                     x_type = u'date',
 #                                     x_format = u'%Y-%m-%d',
-                                    x_format = u'%m-%d',
+                                    x_format = u'%m',
                                     y_type = u'float')
         #
         self._createPlotDataForSeasonalCycle(selectedparameter, analysisdata, self._plotdata)

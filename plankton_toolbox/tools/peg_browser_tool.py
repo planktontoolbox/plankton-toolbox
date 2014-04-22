@@ -26,7 +26,7 @@ Sample part from the resource file:
                     "Size class": 1, 
                     "Size class PW": 1, 
                     "Size range": "3-4", 
-                    "Trophy": "AU", 
+                    "Trophic level": "AU", 
                     "Unit": "cell"
                 }, 
                 ... 
@@ -106,7 +106,7 @@ class PegBrowserTool(tool_base.ToolBase):
         layout.addRow("Order:", self._order_label)
         layout.addRow("<b><u>Size class:</u></b>", None)
         layout.addRow("Size class:", self._size_class_label)
-        layout.addRow("Trophy:", self._thropy_label)
+        layout.addRow("Trophic level:", self._thropy_label)
         layout.addRow("Geometric shape:", self._shape_label)
         layout.addRow("Formula:", self._formula_label)
         layout.addRow("Calculated volume:", self._volume_label)
@@ -141,7 +141,7 @@ class PegBrowserTool(tool_base.ToolBase):
         #
         sizeclass = self._peg_object.getNameAndSizeList()[index.row()][1]
         self._size_class_label.setText('<b>' + unicode(sizeclass.get('Size class', '-')) + '</b>')
-        self._thropy_label.setText(sizeclass.get('Trophy', '-'))
+        self._thropy_label.setText(sizeclass.get('Trophic level', '-'))
         self._shape_label.setText(sizeclass.get('Geometric shape', '-'))
         self._formula_label.setText(sizeclass.get('Formula', '-'))
         self._volume_label.setText(unicode(sizeclass.get('Calculated volume, um3', '-')))
