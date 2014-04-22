@@ -163,7 +163,8 @@ class AnalysisData(object):
         # Get selected data info.
         filter_startdate = self._filter[u'start_date']
         filter_enddate = self._filter[u'end_date']
-#        filter_stations = self._filte[u'Stations']
+        filter_stations = self._filter[u'stations']
+        filter_visit_months = self._filter[u'visit_months']
         filter_visits = self._filter[u'visits']
         filter_minmaxdepth =  self._filter[u'min_max_depth']
         filter_taxon = self._filter[u'taxon']
@@ -174,6 +175,10 @@ class AnalysisData(object):
             if filter_startdate > visitnode.getData(u'date'):
                 continue
             if filter_enddate < visitnode.getData(u'date'):
+                continue
+            if visitnode.getData(u'station_name') not in filter_stations:
+                continue
+            if visitnode.getData(u'month') not in filter_visit_months:
                 continue
             if (unicode(visitnode.getData(u'station_name')) + u' : ' + 
                 unicode(visitnode.getData(u'date'))) not in filter_visits:

@@ -71,10 +71,10 @@ class GraphPlotterTool(tool_base.ToolBase):
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
         # Tab widget. 
-        tabWidget = QtGui.QTabWidget()
-        contentLayout.addWidget(tabWidget)
-        tabWidget.addTab(self._createContentChart(), "Chart")
-        tabWidget.addTab(self._createContentLabels(), "Labels")        
+        self._tabWidget = QtGui.QTabWidget()
+        contentLayout.addWidget(self._tabWidget)
+        self._tabWidget.addTab(self._createContentChart(), "Chart")
+        self._tabWidget.addTab(self._createContentLabels(), "Labels")        
 #        tabWidget.addTab(self._createContentSettings(), "Settings")        
 #        tabWidget.addTab(self._createContentEditDataJson(), "Edit data (JSON)")        
 
@@ -438,6 +438,8 @@ class GraphPlotterTool(tool_base.ToolBase):
         self. _resetLabels()
         # Update chart.
         self._drawEmbeddedChart()
+        
+        self._tabWidget.setCurrentIndex(0) # Go back to graph view.
         
 #     def _applyLabelsJson(self):
 #         """ """

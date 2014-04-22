@@ -25,16 +25,10 @@ class HelpTexts(object):
         except:
             pass
         return u''
-#         try:          
-#             return self._texts[key]
-#         except:
-#             print(u"DEBUG: HelpTexts.getText not available for the key: " + key)
-#         return u'Note: Help text is missing.'
-
   
     def _addTexts(self):
         """ """          
-        self._texts[u'StartActivity_intro_1'] = """
+        self._texts[u'StartActivity_intro'] = """
         <br/>
         <h3>Welcome to the Plankton Toolbox</h3>
         <p>
@@ -60,18 +54,13 @@ class HelpTexts(object):
             </li>
         </ul>
         </p>
-        """
- 
-        self._texts[u'StartActivity_intro_2'] = """
+        
         <h4>Usage instructions</h4>
         <p>
         A User Guide is available at: 
         <a href="http://wiki.plankton-toolbox.org">http://wiki.plankton-toolbox.org</a>.
         </p>
 
-        """
- 
-        self._texts[u'StartActivity_intro_3'] = """
         <h4>Preloaded data</h4>
         <p>
         To run the Plankton Toolbox there should be a folder named <b>toolbox_data</b> in the 
@@ -83,14 +72,13 @@ class HelpTexts(object):
         More information about the content in the toolbox_data folder is available at: 
         <a href="http://wiki.plankton-toolbox.org">http://wiki.plankton-toolbox.org</a>.
         </p>
-        """
- 
-        self._texts[u'StartActivity_intro_4'] = """
+        
         <h4>Under development</h4>
         <p>
         The Plankton Toolbox  is under development and provided free with no guarantees regarding functionality. 
         Comments, bug reports and requests for new functionality are welcome and can be sent to 
         <a href="mailto:info@nordicmicroalgae.org">info@nordicmicroalgae.org</a>
         </p>
+
         """
 

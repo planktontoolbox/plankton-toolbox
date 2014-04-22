@@ -175,7 +175,7 @@ class Species(object):
                     # Lookup dictionary.
                     self._taxa_lookup[scientificname] = self._taxa[scientificname]
                 else:
-                    envmonlib.Logging().warning(u": Scientific name added twice: " + scientificname + u"   (Source: " + excel_file_name + u")")
+                    envmonlib.Logging().warning(u"Scientific name added twice: " + scientificname + u"   (Source: " + excel_file_name + u")")
                 #    
                 speciesobject = self._taxa[scientificname]
                 speciesobject[u'Scientific name'] = scientificname
@@ -200,7 +200,7 @@ class Species(object):
                 # Lookup dictionary.
                 self._taxa_lookup[fromname] = self._taxa[toname]
             else:
-                envmonlib.Logging().warning(u": Scientific name is missing: " + toname + u"   (Source: " + excel_file_name + u")")
+                envmonlib.Logging().warning(u"Scientific name is missing: " + toname + u"   (Source: " + excel_file_name + u")")
                     
     def _loadHarmful(self, excel_file_name):
         """ Adds info about harmfulness to the species objects. """
@@ -217,7 +217,7 @@ class Species(object):
                 taxon[u'Harmful'] = True 
                 taxon[u'Aphia id'] = aphiaid
             else:
-                envmonlib.Logging().warning(u": Scientific name is missing: " + scientificname + u"   (Source: " + excel_file_name + u")")
+                envmonlib.Logging().warning(u"Scientific name is missing: " + scientificname + u"   (Source: " + excel_file_name + u")")
 
     def _loadPlanktonGroupDefinition(self, excel_file_name):
         """ """
@@ -246,8 +246,9 @@ class Species(object):
             parentobject = speciesobject
             while parentobject:
                 counter += 1
-                if counter > 10:
+                if counter > 20:
                     parentobject = None # Too many levels, or infinite loop.
+                    print(u'DEBUG: Species._precalculateData(): Too many levels, or infinite loop.')
                     continue
                 if u'Rank' in parentobject:
                     if parentobject[u'Rank'] == u'Species':
@@ -269,7 +270,8 @@ class Species(object):
                     if parentobject[u'Parent name'] in self._taxa:
                         parentobject = self._taxa[parentobject[u'Parent name']] if parentobject[u'Parent name'] else None
                     else:
-                        envmonlib.Logging().warning(u": Parent taxon is missing for : " + parentobject[u'Scientific name'])
+                        if parentobject[u'Scientific name'] != u'Biota':
+                            envmonlib.Logging().warning(u"Parent taxon is missing for : " + parentobject[u'Scientific name'])
                         parentobject = None
                 else:
                     parentobject = None
@@ -332,7 +334,7 @@ class Species(object):
                     speciesobject = self._taxa_lookup[scientificname]
                 else:
                     size = sizeclassdict.get(u'Size class', u'')
-                    envmonlib.Logging().warning(u": Scientific name is missing: " + scientificname + u"   Size: " + size + u"   (Source: " + excel_file_name + u")")
+                    envmonlib.Logging().warning(u"Scientific name is missing: " + scientificname + u"   Size: " + size + u"   (Source: " + excel_file_name + u")")
                     continue # Only add BVOL info if taxon exists in taxa.
                 #
                 speciesobject[u'BVOL name'] = scientificname
@@ -450,6 +452,8 @@ class Species(object):
                     return planktongroup
         #                            
 #        return u'plankton-group-not-designated'
+        envmonlib.Logging().warning(u"Not match for Plankton group. 'Others' assigned for: " + scientific_name)
+        #
         return u'Others'
 
     def _getFilesByPrefix(self, prefix):

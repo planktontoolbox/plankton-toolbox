@@ -123,111 +123,119 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                 envmonlib.Logging().log("No data is loaded for analysis. Please try again.")
                 raise UserWarning("No data is loaded for analysis. Please try again.")                
             #
-            selected_taxon_rank = unicode(self._aggregate_rank_list.currentText())
-            selected_trophy_list = self._trophy_listview.getSelectedDataList()
-            selected_trophy_text = u'-'.join(selected_trophy_list) 
-            selected_lifestage_list = self._lifestage_listview.getSelectedDataList()
-            selected_lifestage_text = u'-'.join(selected_lifestage_list) 
+            envmonlib.Logging().log(u"Aggregating data...")
+            envmonlib.Logging().startAccumulatedLogging()
+            try:
             #
-            for visitnode in self._analysisdata.getData().getChildren()[:]: 
-                for samplenode in visitnode.getChildren()[:]:
-                    aggregatedvariables = {}
-                    for variablenode in samplenode.getChildren()[:]:
-                        value = variablenode.getData(u'value')
-                        # Use values containing valid float data.
-                        try:
-#                            value = value.replace(u',', u'.').replace(u' ', u'')
-                            value = float(value) 
+                selected_taxon_rank = unicode(self._aggregate_rank_list.currentText())
+                selected_trophy_list = self._trophy_listview.getSelectedDataList()
+                selected_trophy_text = u'-'.join(selected_trophy_list) 
+                selected_lifestage_list = self._lifestage_listview.getSelectedDataList()
+                selected_lifestage_text = u'-'.join(selected_lifestage_list) 
+                #
+                for visitnode in self._analysisdata.getData().getChildren()[:]: 
+                    for samplenode in visitnode.getChildren()[:]:
+                        aggregatedvariables = {}
+                        for variablenode in samplenode.getChildren()[:]:
+                            value = variablenode.getData(u'value')
+                            # Use values containing valid float data.
+                            try:
+    #                            value = value.replace(u',', u'.').replace(u' ', u'')
+                                value = float(value) 
+                                #
+                                if selected_taxon_rank == u"Biota (all levels)":
+                                    newtaxon = u'Biota' # Biota is above kingdom in the taxonomic hierarchy.
+                                elif selected_taxon_rank == u"Plankton group":
+                                    newtaxon = envmonlib.Species().getPlanktonGroupFromTaxonName(variablenode.getData(u'scientific_name'))
+                                elif selected_taxon_rank == u"Kingdom":
+                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Kingdom")
+                                elif selected_taxon_rank == u"Phylum":
+                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Phylum")
+                                elif selected_taxon_rank == u"Class":
+                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Class")
+                                elif selected_taxon_rank == u"Order":
+                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Order")
+                                elif selected_taxon_rank == u"Family":
+                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Family")
+                                elif selected_taxon_rank == u"Genus":
+                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Genus")
+                                elif selected_taxon_rank == u"Species": 
+                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Species")
+                                elif selected_taxon_rank == u"Kingdom (from dataset)":
+                                    newtaxon = variablenode.getData(u'kingdom')
+                                elif selected_taxon_rank == u"Phylum (from dataset)":
+                                    newtaxon = variablenode.getData(u'phylum')
+                                elif selected_taxon_rank == u"Class (from dataset)":
+                                    newtaxon = variablenode.getData(u'class')
+                                elif selected_taxon_rank == u"Order (from dataset)":
+                                    newtaxon = variablenode.getData(u'order')
+                                elif selected_taxon_rank == u"Family (from dataset)":
+                                    newtaxon = variablenode.getData(u'family')
+                                elif selected_taxon_rank == u"Genus (from dataset)":
+                                    newtaxon = variablenode.getData(u'genus')
+                                elif selected_taxon_rank == u"Species (from dataset)": 
+                                    newtaxon = variablenode.getData(u'species')
+                                # 
+                                if not newtaxon:
+                                    envmonlib.Logging().warning(u"Not match for selected rank. 'not-designated' assigned for: " + variablenode.getData(u'scientific_name'))
+                                    newtaxon = u'not-designated' # Use this if empty.
+                                #
+                                taxontrophy = variablenode.getData(u'trophy')
+                                if taxontrophy in selected_trophy_list:
+                                    taxontrophy = selected_trophy_text # Concatenated string of ranks.
+                                else:
+                                    continue # Phytoplankton only: Use selected trophy only, don't use others.  
+                                #
+                                stage = variablenode.getData(u'stage')
+                                sex = variablenode.getData(u'sex')
+                                checkstage = stage
+                                if sex:
+                                    checkstage += u'/' + sex
+                                if checkstage in selected_lifestage_list:
+                                    stage = selected_lifestage_text
+                                    sex = u''
+    #                             else:
+    #                                 continue # Note: Don't skip for zooplankton.                 
+                                #
+                                parameter = variablenode.getData(u'parameter')
+                                unit = variablenode.getData(u'unit')
+                                 
+                                agg_tuple = (newtaxon, taxontrophy, stage, sex, parameter, unit)
+                                if agg_tuple in aggregatedvariables:
+                                    aggregatedvariables[agg_tuple] = value + aggregatedvariables[agg_tuple]
+                                else:
+                                    aggregatedvariables[agg_tuple] = value
+                            except:
+                                if variablenode.getData(u'value'):
+                                    envmonlib.Logging().warning(u"Value is not a valid float: " + unicode(variablenode.getData(u'Value')))
+                        #Remove all variables for this sample.
+                        samplenode.removeAllChildren()
+                        # Add the new aggregated variables instead.  
+                        for variablekeytuple in aggregatedvariables:
+                            newtaxon, taxontrophy, stage, sex, parameter, unit = variablekeytuple
                             #
-                            if selected_taxon_rank == u"Biota (all levels)":
-                                newtaxon = u'Biota' # Biota is above kingdom in the taxonomic hierarchy.
-                            elif selected_taxon_rank == u"Plankton group":
-                                newtaxon = envmonlib.Species().getPlanktonGroupFromTaxonName(variablenode.getData(u'scientific_name'))
-                            elif selected_taxon_rank == u"Kingdom":
-                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Kingdom")
-                            elif selected_taxon_rank == u"Phylum":
-                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Phylum")
-                            elif selected_taxon_rank == u"Class":
-                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Class")
-                            elif selected_taxon_rank == u"Order":
-                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Order")
-                            elif selected_taxon_rank == u"Family":
-                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Family")
-                            elif selected_taxon_rank == u"Genus":
-                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Genus")
-                            elif selected_taxon_rank == u"Species": 
-                                newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Species")
-                            elif selected_taxon_rank == u"Kingdom (from dataset)":
-                                newtaxon = variablenode.getData(u'kingdom')
-                            elif selected_taxon_rank == u"Phylum (from dataset)":
-                                newtaxon = variablenode.getData(u'phylum')
-                            elif selected_taxon_rank == u"Class (from dataset)":
-                                newtaxon = variablenode.getData(u'class')
-                            elif selected_taxon_rank == u"Order (from dataset)":
-                                newtaxon = variablenode.getData(u'order')
-                            elif selected_taxon_rank == u"Family (from dataset)":
-                                newtaxon = variablenode.getData(u'family')
-                            elif selected_taxon_rank == u"Genus (from dataset)":
-                                newtaxon = variablenode.getData(u'genus')
-                            elif selected_taxon_rank == u"Species (from dataset)": 
-                                newtaxon = variablenode.getData(u'species')
-                            # 
-                            if not newtaxon:
-                                newtaxon = u'not-designated' # Use this if empty.
+                            newvariable = envmonlib.VariableNode()
+                            samplenode.addChild(newvariable)    
                             #
-                            taxontrophy = variablenode.getData(u'trophy')
-                            if taxontrophy in selected_trophy_list:
-                                taxontrophy = selected_trophy_text # Concatenated string of ranks.
-                            else:
-                                continue # Phytoplankton only: Use selected trophy only, don't use others.  
-                            #
-                            stage = variablenode.getData(u'stage')
-                            sex = variablenode.getData(u'sex')
-                            checkstage = stage
-                            if sex:
-                                checkstage += u'/' + sex
-                            if checkstage in selected_lifestage_list:
-                                stage = selected_lifestage_text
-                                sex = u''
-#                             else:
-#                                 continue # Note: Don't skip for zooplankton.                 
-                            #
-                            parameter = variablenode.getData(u'parameter')
-                            unit = variablenode.getData(u'unit')
-                             
-                            agg_tuple = (newtaxon, taxontrophy, stage, sex, parameter, unit)
-                            if agg_tuple in aggregatedvariables:
-                                aggregatedvariables[agg_tuple] = value + aggregatedvariables[agg_tuple]
-                            else:
-                                aggregatedvariables[agg_tuple] = value
-                        except:
-                            if variablenode.getData(u'value'):
-                                envmonlib.Logging().warning(u"Value is not a valid float: " + unicode(variablenode.getData(u'Value')))
-                    #Remove all variables for this sample.
-                    samplenode.removeAllChildren()
-                    # Add the new aggregated variables instead.  
-                    for variablekeytuple in aggregatedvariables:
-                        newtaxon, taxontrophy, stage, sex, parameter, unit = variablekeytuple
-                        #
-                        newvariable = envmonlib.VariableNode()
-                        samplenode.addChild(newvariable)    
-                        #
-                        newvariable.addData(u'scientific_name', newtaxon)
-                        newvariable.addData(u'trophy', taxontrophy)
-                        newvariable.addData(u'stage', stage)
-                        newvariable.addData(u'sex', sex)
-                        newvariable.addData(u'parameter', parameter)
-                        newvariable.addData(u'unit', unit)
-                        newvariable.addData(u'value', aggregatedvariables[variablekeytuple])
-                        # Add taxon class, etc. based on taxon name.
-                        newvariable.addData(u'kingdom', envmonlib.Species().getTaxonValue(newtaxon, "Kingdom"))
-                        newvariable.addData(u'phylum', envmonlib.Species().getTaxonValue(newtaxon, "Phylum"))
-                        newvariable.addData(u'class', envmonlib.Species().getTaxonValue(newtaxon, "Class"))
-                        newvariable.addData(u'order', envmonlib.Species().getTaxonValue(newtaxon, "Order"))
-            #
-            self._main_activity.updateViewedDataAndTabs()    
-        except UserWarning, e:
-            QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
+                            newvariable.addData(u'scientific_name', newtaxon)
+                            newvariable.addData(u'trophy', taxontrophy)
+                            newvariable.addData(u'stage', stage)
+                            newvariable.addData(u'sex', sex)
+                            newvariable.addData(u'parameter', parameter)
+                            newvariable.addData(u'unit', unit)
+                            newvariable.addData(u'value', aggregatedvariables[variablekeytuple])
+                            # Add taxon class, etc. based on taxon name.
+                            newvariable.addData(u'kingdom', envmonlib.Species().getTaxonValue(newtaxon, "Kingdom"))
+                            newvariable.addData(u'phylum', envmonlib.Species().getTaxonValue(newtaxon, "Phylum"))
+                            newvariable.addData(u'class', envmonlib.Species().getTaxonValue(newtaxon, "Class"))
+                            newvariable.addData(u'order', envmonlib.Species().getTaxonValue(newtaxon, "Order"))
+                #
+                self._main_activity.updateViewedDataAndTabs()    
+            except UserWarning, e:
+                QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
+        finally:
+            envmonlib.Logging().logAllAccumulatedRows()
+            
 
     def _updateSelectDataAlternatives(self):
         """ """

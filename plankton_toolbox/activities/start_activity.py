@@ -37,16 +37,17 @@ class StartActivity(activity_base.ActivityBase):
         contentLayout.addWidget(self._activityheader)
         # Add content to the activity.
         contentLayout.addLayout(self._contentWelcome())
-        contentLayout.addLayout(self._contentUsage())
-        contentLayout.addLayout(self._contentPreloaded())
-        contentLayout.addLayout(self._contentUnderDevelopment())
+#         contentLayout.addLayout(self._contentUsage())
+#         contentLayout.addLayout(self._contentPreloaded())
+#         contentLayout.addLayout(self._contentUnderDevelopment())
         contentLayout.addStretch(5)
 
     def _contentWelcome(self):
         """ """
         # Active widgets and connections.
         label = utils_qt.RichTextQLabel()
-        label.setText(help_texts.HelpTexts().getText(u'StartActivity_intro_1'))
+#         label.setText(help_texts.HelpTexts().getText(u'StartActivity_intro_1'))
+        label.setText(help_texts.HelpTexts().getText(u'StartActivity_intro'))
         # Layout.
         layout = QtGui.QGridLayout()
         gridrow = 0
@@ -57,87 +58,46 @@ class StartActivity(activity_base.ActivityBase):
         #
         return layout
 
-    def _contentUsage(self):
-        """ """
-        # Active widgets and connections.
-        label1 = QtGui.QLabel()
-        label1.setTextFormat(QtCore.Qt.RichText)
-        label1.setWordWrap(True)
-        label1.setText(help_texts.HelpTexts().getText(u'StartActivity_intro_2'))
-#         label1.setText("""
-#         <h4>Usage instructions</h4>
-#         <p>
-#         From the main menu you can select between activities and view tools. 
-#         Selected activity is always shown at the center and tools can be placed to the right,
-#         bottom or as floating windows. Double-click or click-and-drag in the title bar to move 
-#         them around. The toolbox will remember window positions when closing down.
-#         </p>        
-#         <p>
-#         When using the toolbox information, warnings and errors are logged to the 
-#         "Toolbox logging"-tool. The same information is always written to the file 
-#         "plankton_toolbox_log.txt". The log file is cleared each time you starts the 
-#         Plankton Toolbox.       
-#         </p>        
-#         """)
-        # Layout.
-        layout = QtGui.QGridLayout()
-        gridrow = 0
-        layout.addWidget(QtGui.QLabel(''), gridrow, 0, 1, 1) # Add space to the left.
-        layout.addWidget(label1, gridrow, 1, 1, 20)
-        gridrow += 1
-        layout.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 20)
-        #
-        return layout
-
-    def _contentPreloaded(self):
-        """ """
-        # Active widgets and connections.
-        label = utils_qt.RichTextQLabel()
-        label.setText(help_texts.HelpTexts().getText(u'StartActivity_intro_3'))
-#         label.setText("""
-#         <h4>Preloaded data</h4>
-#         <p>
-#         To run the Plankton Toolbox there should be a folder named "toolbox_data" in the 
-#         same folder as the executable file. It contains species lists, parsers used when 
-#         importing data files and code-lists for screening. These files can be modified 
-#         by the user and new files can be added if the default set of files can't be used.
-#         </p>
-#         """)
-        # Layout.
-        layout = QtGui.QGridLayout()
-        gridrow = 0
-        layout.addWidget( QtGui.QLabel(''), gridrow, 0, 1, 1) # Add space to the left.
-        layout.addWidget(label, gridrow, 1, 1, 20)
-        gridrow += 1
-        layout.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 20)
-        #
-        return layout
-
-    def _contentUnderDevelopment(self):
-        """ """
-        # Active widgets and connections.
-        label = utils_qt.RichTextQLabel()
-        label.setText(help_texts.HelpTexts().getText(u'StartActivity_intro_4'))
-#         label.setText("""
-#         <h4>Under development...</h4>
-#         <p>
-#         The Plankton Toolbox is under development.
-#         In this release the Screening activity is added on a basic level. Feedback from users is needed. 
-#         The Graph plotter tool is in early development and contains a lot of bugs.
-#         Planned functionality for future releases include better support for zooplankton data, the inclusion 
-#         of statistical tools and a module for counting plankton at the microscope.
-#         </p>
-#         <p>
-#         Comments, bug reports and requests 
-#         for new functionality are welcome and can be sent to 
-#         <a href="mailto:info@nordicmicroalgae.org">info@nordicmicroalgae.org</a>
-#         </p>
-#         """)
-        # Layout.
-        layout = QtGui.QGridLayout()
-        gridrow = 0
-        layout.addWidget( QtGui.QLabel(''), gridrow, 0, 1, 1) # Add space to the left.
-        layout.addWidget(label, gridrow, 1, 1, 20)
-        #
-        return layout
+#     def _contentUsage(self):
+#         """ """
+#         # Active widgets and connections.
+#         label = utils_qt.RichTextQLabel()
+#         label.setText(help_texts.HelpTexts().getText(u'StartActivity_intro_2'))
+#         # Layout.
+#         layout = QtGui.QGridLayout()
+#         gridrow = 0
+#         layout.addWidget(QtGui.QLabel(''), gridrow, 0, 1, 1) # Add space to the left.
+#         layout.addWidget(label, gridrow, 1, 1, 20)
+#         gridrow += 1
+#         layout.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 20)
+#         #
+#         return layout
+# 
+#     def _contentPreloaded(self):
+#         """ """
+#         # Active widgets and connections.
+#         label = utils_qt.RichTextQLabel()
+#         label.setText(help_texts.HelpTexts().getText(u'StartActivity_intro_3'))
+#         # Layout.
+#         layout = QtGui.QGridLayout()
+#         gridrow = 0
+#         layout.addWidget( QtGui.QLabel(''), gridrow, 0, 1, 1) # Add space to the left.
+#         layout.addWidget(label, gridrow, 1, 1, 20)
+#         gridrow += 1
+#         layout.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 20)
+#         #
+#         return layout
+# 
+#     def _contentUnderDevelopment(self):
+#         """ """
+#         # Active widgets and connections.
+#         label = utils_qt.RichTextQLabel()
+#         label.setText(help_texts.HelpTexts().getText(u'StartActivity_intro_4'))
+#         # Layout.
+#         layout = QtGui.QGridLayout()
+#         gridrow = 0
+#         layout.addWidget( QtGui.QLabel(''), gridrow, 0, 1, 1) # Add space to the left.
+#         layout.addWidget(label, gridrow, 1, 1, 20)
+#         #
+#         return layout
 
