@@ -232,9 +232,11 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                 #
                 self._main_activity.updateViewedDataAndTabs()    
             except UserWarning, e:
-                QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
+                envmonlib.Logging().error("Failed to aggregate data. " + unicode(e))
+                QtGui.QMessageBox.warning(self._main_activity, "Warning", "Failed to aggregate data. " + unicode(e))
         finally:
             envmonlib.Logging().logAllAccumulatedRows()
+            envmonlib.Logging().log(u"Aggregation of data is done.")
             
 
     def _updateSelectDataAlternatives(self):
@@ -262,6 +264,9 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
     def _addMissingTaxa(self):
         """ """
         try:
+            envmonlib.Logging().log(u"Adding 0 for not observed...")
+            envmonlib.Logging().startAccumulatedLogging()
+            #
             analysisdata = self._analysisdata.getData()
             if not analysisdata:        
                 return
@@ -270,5 +275,9 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             #
             self._main_activity.updateViewedDataAndTabs()    
         except UserWarning, e:
-            QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
+            envmonlib.Logging().error("Failed to add 0 for not observed. " + unicode(e))
+            QtGui.QMessageBox.warning(self._main_activity, "Warning", "Failed to add 0 for not observed. " + unicode(e))
+        finally:
+            envmonlib.Logging().logAllAccumulatedRows()
+            envmonlib.Logging().log(u"Add 0 for not observed is done.")
 

@@ -258,9 +258,11 @@ class MainWindow(QtGui.QMainWindow):
 
     def _loadResources(self):
         """ """
-        self.statusBar().showMessage(self.tr("Loading species lists..."))
-        envmonlib.Species() # Load species files.
-        self.statusBar().showMessage(self.tr(""))
+        try:
+            self.statusBar().showMessage(self.tr("Loading species lists..."))
+            envmonlib.Species() # Load species files.
+        finally:
+            self.statusBar().showMessage(self.tr(""))            
 
     def _about(self):
         """ """

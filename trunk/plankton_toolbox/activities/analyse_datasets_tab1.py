@@ -92,6 +92,9 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
     def _copyDatasetsForAnalysis(self):
         """ """
         try:
+            envmonlib.Logging().log(u"Copy datasets for analysis...")
+            envmonlib.Logging().startAccumulatedLogging()
+            #
             self._main_activity.viewAnalysisData()
             # Clear analysis data
             self._analysisdata.clearData()
@@ -111,5 +114,9 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
             self._main_activity.updateViewedDataAndTabs() 
         #
         except UserWarning, e:
-            QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
+            envmonlib.Logging().error("Failed to copy data for analysis. " + unicode(e))
+            QtGui.QMessageBox.warning(self._main_activity, "Warning", "Failed to copy data for analysis. " + unicode(e))
+        finally:
+            envmonlib.Logging().logAllAccumulatedRows()    
+            envmonlib.Logging().log(u"Copy datasets for analysis is done.")
 

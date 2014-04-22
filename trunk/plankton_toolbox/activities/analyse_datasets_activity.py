@@ -117,6 +117,8 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
                                       "Hide data (to increase performance)"])
         self.connect(self._viewdata_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._viewDataListChanged)                
         #
+        self._numberofrows_label = QtGui.QLabel("Number of rows: 0")
+        #
 #        self._hidedata_checkbox = QtGui.QCheckBox("Hide data")
 #        self._hidedata_checkbox.setChecked(False)
 #        self.connect(self._hidedata_checkbox, QtCore.SIGNAL("clicked()"), self._viewHideDataChanged)                
@@ -135,6 +137,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
 #        hbox1.addWidget(self._hidedata_checkbox)
         hbox1.addWidget(self._refreshfiltereddata_button)
         hbox1.addStretch(5)
+        hbox1.addWidget(self._numberofrows_label)
         #
         layout.addLayout(hbox1)
         layout.addWidget(self._tableview)
@@ -207,6 +210,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         # Clear table.
         self._tableview.tablemodel.setModeldata(None)
         self._refreshViewedDataTable()
+        self._numberofrows_label.setText("Number of rows: 0")
         # 
         if not self._analysisdata.getData():
             return
@@ -242,6 +246,9 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
             # Hide data.
             self._tableview.tablemodel.setModeldata(None)
             self._refreshViewedDataTable()
+        #
+        self._numberofrows_label.setText("Number of rows: " + unicode(self._tableview.tablemodel.rowCount()))
+
         
     def _refreshViewedDataTable(self):
         """ """
