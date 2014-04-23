@@ -18,7 +18,7 @@ import plankton_toolbox.tools.log_tool as log_tool
 import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 #import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
 
-__version__ = '?? April 2014' # Plankton Toolbox version.
+__version__ = '23 April 2014' # Plankton Toolbox version.
 
 class MainWindow(QtGui.QMainWindow):
     """

@@ -262,7 +262,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         header_row.append('Date')
         header_row.append('Sample min depth')
         header_row.append('Sample max depth')
-        header_row.append('scientific_name')
+        header_row.append('Scientific name')
         header_row.append('Stage')
         header_row.append('Sex')
         header_row.append('Abundance (ind/m2)')
