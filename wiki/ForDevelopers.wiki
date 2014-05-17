@@ -2,6 +2,28 @@
 
 = Introduction =
 
+This part is for software developers who want to develop their own customized version of Plankton Toolbox, or to join the development of the standard version of Plankton Toolbox. It can also contain useful information for advanced users who want to run the latest development version of Plankton Toolbox directly from the Python code.
 
+  * Plankton Toolbox is developed in Python 2.7 and PyQt4. 
+  * All code is open source and published under the MIT license. 
+  * The code repository, and other useful information, can be found here: [http://plankton-toolbox.org]
 
-= Details =
+= Running and developing the Python code =
+
+If you want to run the latest development version directly from code you have to do this:
+
+  * Install Python 2.7
+  * Install Subversion (SVN)
+  * Install Python libraries: Pyqt4, Matplotlib, Numpy and Openpyxl.
+  * Get a copy of the code and other files: {{{ svn checkout http://plankton-toolbox.googlecode.com/svn/trunk/ plankton_toolbox }}}
+  * Go to the directory: {{{ cd plankton_toolbox }}}
+  * Start Plankton Toolbox: {{{ python plankton_toolbox_start.py }}}
+
+= Single file executables =
+PyInstaller is used to create single files executables of the Plankton Toolbox. To create an executable file for a specific platform it must be possible to run it directly from Python on that platform. It should work on Windows, MacOS and Ubuntu (and probably other with support for Qt/PyQt). 
+PyInstaller works in the same way on all these platforms. 
+
+PyInstaller should not be install, just downloaded and decompressed (unzipped). Then you have to open some command/terminal-window and navigate to the directory where the file pyinstaller.py is located. Run PyInstaller with some parameters and the produced executable file will then show up in a directory called {{{ <pyinstaller-dir>/plankton_toolbox_start/dist }}}.
+
+Known problem: The Matplotlib extension BaseMap is not easy to use together with PyInstaller. As soon as we know how to do this BaseMap will be integrated into Plankton Toolbox. Please hint us if you know something about this issue…
+
