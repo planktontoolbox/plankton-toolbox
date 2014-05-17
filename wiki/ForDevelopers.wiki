@@ -13,8 +13,8 @@ This part is for software developers who want to develop their own customized ve
 If you want to run the latest development version directly from code you have to do this:
 
   * Install Python 2.7
-  * Install Subversion (SVN)
   * Install Python libraries: Pyqt4, Matplotlib, Numpy and Openpyxl.
+  * Install Subversion (SVN)
   * Get a copy of the code and other files: {{{ svn checkout http://plankton-toolbox.googlecode.com/svn/trunk/ plankton_toolbox }}}
   * Go to the directory: {{{ cd plankton_toolbox }}}
   * Start Plankton Toolbox: {{{ python plankton_toolbox_start.py }}}
@@ -26,4 +26,3 @@ PyInstaller works in the same way on all these platforms.
 PyInstaller should not be install, just downloaded and decompressed (unzipped). Then you have to open some command/terminal-window and navigate to the directory where the file pyinstaller.py is located. Run PyInstaller with some parameters and the produced executable file will then show up in a directory called {{{ <pyinstaller-dir>/plankton_toolbox_start/dist }}}.
 
 Known problem: The Matplotlib extension BaseMap is not easy to use together with PyInstaller. As soon as we know how to do this BaseMap will be integrated into Plankton Toolbox. Please hint us if you know something about this issue…
-
