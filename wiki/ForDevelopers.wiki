@@ -31,9 +31,70 @@ Known problem: The Matplotlib extension BaseMap is not easy to use together with
 = Develop Plankton Toolbox on Windows =
 _Note: This part needs to be checked and missing steps should be added._
 
-An easy way to set up the needed environment on Windows is to use Python(x,y). It includes both PyQt and Matplotlib, and a lot of other useful stuff
+An easy way to set up the needed environment on Windows is to use Python(x,y). It includes both PyQt and Matplotlib, and a lot of other useful stuff.
 
   * Install Python(x,y) from: [http://code.google.com/p/pythonxy/]
   * Install openpyxl from PyPI. [https://pypi.python.org/pypi]
   * Install SVN, for example TortoiseSVN. [http://tortoisesvn.net]
-  * Download the code from [https://plankton-toolbox.googlecode.com/svn/trunk/]
+  * Download the code via TortoiseSVN from [https://plankton-toolbox.googlecode.com/svn/trunk/]
+
+Run Plankton Toolbox:
+  * {{{ cd <path-to-workspace-directory>/p_plankton_toolbox/src }}}
+  * {{{ python plankton_toolbox_start.py }}}
+
+== Create executables ==
+
+  * Download PyInstaller and decompress/unzip it into {{{ <path-to-some-directory>>\pyinstaller }}}
+  * {{{ cd <path-to-some-directory>\pyinstaller }}}
+  * {{{ python2.7 pyinstaller.py -F -w <path-to-development-directory>\plankton_toolbox_start.py }}}
+
+  * Get the executable from {{{ <path-to-some-directory>\pyinstaller\plankton_toolbox_start/dist }}}
+
+= Develop Plankton Toolbox on MacOS: =
+_Note: This part needs to be checked and missing steps should be added._
+
+  * Install Xcode. 
+  * Install “Command Line Tools” via the Xcode menu “preferences/downloads”.
+  * Install MacPorts from [http://www.macports.org]
+  * {{{ sudo port install cctools }}}   // This is not always needed, depends on Xcode and MacPorts versions.
+  * {{{ sudo port install py27-matplotlib }}}
+  * {{{ sudo port install py27-openpyxl }}}
+  * {{{ sudo port install py27-pyqt4 }}}
+  * {{{ cd <path-to-workspace-directory>/p_plankton_toolbox }}}
+  * {{{ svn checkout https://plankton-toolbox.googlecode.com/svn/trunk/ src }}}
+
+Run Plankton Toolbox:
+  * {{{ cd <path-to-workspace-directory>/p_plankton_toolbox/src }}}
+  * {{{ python2.7 plankton_toolbox_start.py }}}
+
+== Create executables ==
+
+  * Download PyInstaller and decompress it into {{{ <path-to-some-directory>>/pyinstaller }}}
+  * {{{ cd <path-to-some-directory>/pyinstaller }}}
+  * {{{ python2.7 pyinstaller.py -F -w <path-to-development-directory>/plankton_toolbox_start.py }}}
+
+  * Get the executable from {{{ <path-to-some-directory>/pyinstaller/plankton_toolbox_start/dist }}}
+
+= Develop Plankton Toolbox on Ubuntu =
+_Note: This part needs to be checked and missing steps should be added._
+
+  * Make sure Python 2.7 and PyQt4 are installed.
+  * {{{ sudo apt-get install python-setuptools }}}
+  * {{{ sudo apt-get install python-numpy }}}
+  * {{{ sudo apt-get install python-matplotlib }}}
+  * {{{ sudo easy_install openpyxl }}}
+  * {{{ sudo apt-get install subversion }}}
+  * {{{ cd <path-to-workspace-directory>/p_plankton_toolbox }}}
+  * {{{ svn checkout https://plankton-toolbox.googlecode.com/svn/trunk/ src }}}
+
+Run Plankton Toolbox:
+  * {{{ cd <path-to-workspace-directory>/p_plankton_toolbox/src }}}
+  * {{{ python plankton_toolbox_start.py }}}
+
+== Create executables ==
+
+  * Download PyInstaller and decompress it into {{{ <path-to-some-directory>>/pyinstaller }}}
+  * {{{ cd <path-to-some-directory>/pyinstaller }}}
+  * {{{ python pyinstaller.py -F -w <path-to-development-directory>/plankton_toolbox_start.py }}}
+
+  * Get the executable from {{{ <path-to-some-directory>/pyinstaller/plankton_toolbox_start/dist }}}
