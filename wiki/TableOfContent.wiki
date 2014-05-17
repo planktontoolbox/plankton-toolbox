@@ -2,4 +2,5 @@
 
  * [UserGuide User guide]
  * [DatasetsAndParsers Datasets and parsers]
+ * [SpeciesLists Species lists]
  * [ForDevelopers For developers]
