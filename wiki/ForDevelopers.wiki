@@ -48,7 +48,7 @@ Run Plankton Toolbox:
   * {{{ cd <path-to-workspace-directory>/p_plankton_toolbox/src }}}
   * {{{ python plankton_toolbox_start.py }}}
 
-=== Create executables ===
+=== Create executable ===
 
   * Download PyInstaller and decompress/unzip it into {{{ <path-to-some-directory>>\pyinstaller }}}
   * {{{ cd <path-to-some-directory>\pyinstaller }}}
@@ -73,7 +73,7 @@ Run Plankton Toolbox:
   * {{{ cd <path-to-workspace-directory>/p_plankton_toolbox/src }}}
   * {{{ python2.7 plankton_toolbox_start.py }}}
 
-=== Create executables ===
+=== Create executable ===
 
   * Download PyInstaller and decompress it into {{{ <path-to-some-directory>>/pyinstaller }}}
   * {{{ cd <path-to-some-directory>/pyinstaller }}}
@@ -97,7 +97,7 @@ Run Plankton Toolbox:
   * {{{ cd <path-to-workspace-directory>/p_plankton_toolbox/src }}}
   * {{{ python plankton_toolbox_start.py }}}
 
-=== Create executables ===
+=== Create executable ===
 
   * Download PyInstaller and decompress it into {{{ <path-to-some-directory>>/pyinstaller }}}
   * {{{ cd <path-to-some-directory>/pyinstaller }}}
