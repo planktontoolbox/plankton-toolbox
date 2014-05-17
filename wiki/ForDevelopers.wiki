@@ -26,3 +26,14 @@ PyInstaller works in the same way on all these platforms.
 PyInstaller should not be install, just downloaded and decompressed (unzipped). Then you have to open some command/terminal-window and navigate to the directory where the file pyinstaller.py is located. Run PyInstaller with some parameters and the produced executable file will then show up in a directory called {{{ <pyinstaller-dir>/plankton_toolbox_start/dist }}}.
 
 Known problem: The Matplotlib extension BaseMap is not easy to use together with PyInstaller. As soon as we know how to do this BaseMap will be integrated into Plankton Toolbox. Please hint us if you know something about this issue…
+
+
+= Develop Plankton Toolbox on Windows =
+_Note: This part needs to be checked and missing steps should be added._
+
+An easy way to set up the needed environment on Windows is to use Python(x,y). It includes both PyQt and Matplotlib, and a lot of other useful stuff
+
+  * Install Python(x,y) from: [http://code.google.com/p/pythonxy/]
+  * Install openpyxl from PyPI. [https://pypi.python.org/pypi]
+  * Install SVN, for example TortoiseSVN. [http://tortoisesvn.net]
+  * Download the code from [https://plankton-toolbox.googlecode.com/svn/trunk/]
