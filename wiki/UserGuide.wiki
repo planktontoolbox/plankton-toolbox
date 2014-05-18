@@ -1,4 +1,3 @@
-#summary User guide for the Plankton Toolbox.
 
 = User guide =
 
