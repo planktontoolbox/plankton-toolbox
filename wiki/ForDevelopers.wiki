@@ -14,7 +14,8 @@ This part of the documentation is for software developers who want to develop th
 
 == Running and developing the Python code ==
 
-If you want to run the latest development version directly from code you have to do this:
+If you want to run the latest development version directly from code you have to do this (more detailed 
+description for each platform is available below):
 
   * Install Python 2.7
   * Install Python libraries: Pyqt4, Matplotlib, Numpy and Openpyxl.
