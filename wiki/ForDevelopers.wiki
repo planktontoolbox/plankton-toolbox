@@ -1,4 +1,3 @@
-#summary For developers
 
 = Plankton Toolbox: For developers =
 
