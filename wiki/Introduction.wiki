@@ -22,7 +22,7 @@ The software is currently being tested by selected users. Early adopters are wel
 
 == Do we need more tools? ==
 
-There are many tools available for data analysis and statistics, for example R for statistics and Primer for ecological multivariate statistics. Especially if you are working with time series there are no needs to develop your own tool.
+There are many tools available for data analysis and statistics, for example R for statistics and Primer for ecological multivariate statistics. Especially if you are working with time series there is no needs to develop your own tool.
 
 When working with plankton samples from environmental monitoring there are some recurring problems that take a lot of time before you can use your favourite standard analysis tool. Plankton Toolbox tries to address these initial time consuming steps in your analysis work.
 
