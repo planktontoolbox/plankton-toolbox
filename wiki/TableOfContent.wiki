@@ -1,4 +1,3 @@
-#summary Table Of Content.
 
  * [Introduction Introduction]
  * [UserGuide User guide]
