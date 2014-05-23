@@ -21,13 +21,13 @@ On Windows and Ubuntu the directory named “toolbox_data” should be a directo
 
 == Files in {{{toolbox_data/species}}} ==
 
-This directory contains different files with species related data. The file format shall be Excel files with the file extension {{{.xlsx}}}. How Plankton Toolbox should handle the files is controlled by the file prefix. These prefixes used are:
-  * “{{{taxa_}}}” Is used to build taxonomic hieracies.
-  * “{{{translate_}}}” For managing translations of misspellings.
-  * “{{{synonyms_}}}” Used to handle synonym names.
-  * “{{{bvol_}}}” Adds extra information, biovolumes, etc.
-  * “{{{bvolcolumns_}}}” Handles variations in the header row of “{{{bvol_}}}” files.
-  * “{{{planktongroups_}}}” Our own grouping of organisms.
+This directory contains different files with species related data. The file format shall be Excel files with the file extension {{{.xlsx}}}. How Plankton Toolbox should handle the files is controlled by the file prefix. These prefixes are used:
+  * *{{{taxa_}}}* Is used to build taxonomic hieracies.
+  * *{{{translate_}}}* For managing translations of misspellings.
+  * *{{{synonyms_}}}* Used to handle synonym names.
+  * *{{{bvol_}}}* Adds extra information, biovolumes, etc.
+  * *{{{bvolcolumns_}}}* Handles variations in the header row of “{{{bvol_}}}” files.
+  * *{{{planktongroups_}}}* Our own grouping of organisms.
 
 All files with the prefixes described above will be loaded at start-up. It is possible to have {{{ taxa_the_big_list.xlsx }}} and {{{ taxa_my_extra_species.xlsx }}} and both will be loaded.
 
@@ -41,11 +41,18 @@ Note: Taxon-id’s are not used, only scientific names, and homonyms will be a p
 
 || *Scientific name* || *Author* || *Rank* || *Parent name* ||
 || Chromista || Caval.-Sm. || Kingdom || ||
-|| Bacillariophyta || || Phylum || Chromista ||
+|| Bacillariophyta || || Phylum || Chro This directory contains different files with species related data. The file format shall be Excel files with the file extension {{{.xlsx}}}. How Plankton Toolbox should handle the files is controlled by the file prefix. These prefixes are used:
+  * *{{{taxa_}}}* Is used to build taxonomic hieracies.
+  * “{{{translate_}}}” For managing translations of misspellings.
+  * “{{{synonyms_}}}” Used to handle synonym names.
+  * “{{{bvol_}}}” Adds extra information, biovolumes, etc.
+  * “{{{bvolcolumns_}}}” Handles variations in the header row of “{{{bvol_}}}” files.
+  * “{{{planktongroups_}}}” Our own grouping of organisms.
+mista ||
 
 === Files with prefix {{{ translate_}}} ===
 
-Some taxa files and datasets contains taxa not matching the taxonomic hierarchy loaded in Plankton Toolbox. This list is used to handle misspellings, etc.
+Some taxa files and datasets contains taxa not match the taxonomic hierarchy loaded in Plankton Toolbox. This list is used to handle misspellings, etc.
 
 || * Scientific name (translate from) * || * Scientific name (translate to) * ||
 || Actinocyclus octonarius v. crassus || Actinocyclus octonarius var. crassus ||
@@ -53,7 +60,7 @@ Some taxa files and datasets contains taxa not matching the taxonomic hierarchy 
 
 === Files with prefix {{{ synonyms _}}} ===
 
-Some taxa files and datasets contain taxa not matching the taxonomic hierarchy loaded in Plankton Toolbox. This list is used to handle synonyms.
+Some taxa files and datasets contain taxa not match the taxonomic hierarchy loaded in Plankton Toolbox. This list is used to handle synonyms.
 
 || * Synonym scientific name * || * Scientific name * ||
 || Fragilariforma virescens || Fragilaria virescens ||
@@ -82,7 +89,6 @@ In addition Plankton Toolbox also supports aggregation to a user defined level c
 || *Scientific name* || *Rank* || *Plankton group* ||
 || Bacillariophyta|| Phylum|| Diatoms||
 || Ciliophora|| Phylum || Ciliates||
-
 
 
 == Files in {{{toolbox_data/code_lists}}} ==
