@@ -1,11 +1,8 @@
-=Plankton Toolbox=
+= Plankton Toolbox =
 
 The Plankton Toolbox is a free tool for aquatic scientists, and others, working with environmental monitoring related to phyto- and zooplankton. 
 
-It will be available for Mac, Windows and Linux.
-Developed in Python 2.7 and Qt/PyQt4. Released under the MIT license. 
-
-Features include:
+== Features ==
 
   * Imports phyto- or zooplankton data in .txt and .xlsx files in different formats (configurable)
   * Work with data on abundance, biovolume and carbon content
@@ -16,8 +13,18 @@ Features include:
   * Export data in .txt or .xlsx for further analyses or plotting
   * A future update will include functionality for using Plankton Toolbox as a counting tool by the microscope
 
-The software is currently being tested by selected users. Early adopters are welcome to test the software. A test version for Windows is currently available.
+== Downloads ==
 
+Plankton Toolbox version 1.0.0 is available for MacOS and Windows at:
+
+[http://nordicmicroalgae.org/tools]
+
+== Platforms ==
+Plankton Toolbox is available for MacOS and Windows. (Ubuntu on request.)
+
+Plankton Toolbox is also possible to run directly from Python. 
+The program is developed in Python 2.7 and Qt/PyQt4. Released under the MIT license. 
+More info: [https://code.google.com/p/plankton-toolbox/wiki/ForDevelopers For developers]
 
 
 == Do we need more tools? ==
