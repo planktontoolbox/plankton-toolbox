@@ -20,7 +20,7 @@ class AnalysisPrepare(object):
         """ """
         if not analysisdata:        
             return
-        # Step 1: Create lists of taxa (name, trophic_level, stage and sex) and parameters (parameter and unit).
+        # Step 1: Create lists of taxa (name, trophic_type, stage and sex) and parameters (parameter and unit).
         parameter_set = set()
         taxon_set = set()
         for visitnode in analysisdata.getChildren():
@@ -31,11 +31,11 @@ class AnalysisPrepare(object):
                     if parameter:
                         parameter_set.add((parameter, unit))
                     taxonname = variablenode.getData(u'scientific_name')
-                    trophic_level = variablenode.getData(u'trophic_level')
+                    trophic_type = variablenode.getData(u'trophic_type')
                     stage = variablenode.getData(u'stage')
                     sex = variablenode.getData(u'sex')
                     if taxonname:
-                        taxon_set.add((taxonname, trophic_level, stage, sex))
+                        taxon_set.add((taxonname, trophic_type, stage, sex))
         # Step 2: Create list with parameter-taxon pairs.
         parameter_taxon_list = []
         for parameterpair in parameter_set:
@@ -53,17 +53,17 @@ class AnalysisPrepare(object):
                     parameter = variablenode.getData(u'parameter')
                     unit = variablenode.getData(u'unit')
                     taxon = variablenode.getData(u'scientific_name')
-                    trophic_level = variablenode.getData(u'trophic_level')
+                    trophic_type = variablenode.getData(u'trophic_type')
                     stage = variablenode.getData(u'stage')
                     sex = variablenode.getData(u'sex')
-                    sample_parameter_taxon_list.append(((parameter, unit), (taxon, trophic_level, stage, sex)))
+                    sample_parameter_taxon_list.append(((parameter, unit), (taxon, trophic_type, stage, sex)))
                 # Add missing variables.
                 for itempairs in parameter_taxon_list:
                     if itempairs not in sample_parameter_taxon_list:
                         variable = envmonlib.VariableNode()
                         samplenode.addChild(variable)
                         variable.addData(u'scientific_name', itempairs[1][0])
-                        variable.addData(u'trophic_level', itempairs[1][1])
+                        variable.addData(u'trophic_type', itempairs[1][1])
                         variable.addData(u'stage', itempairs[1][2])
                         variable.addData(u'sex', itempairs[1][3])
                         variable.addData(u'parameter', itempairs[0][0])

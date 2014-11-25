@@ -33,7 +33,7 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         self._visits_listview.clear()
         self._minmaxdepth_listview.clear()
         self._taxon_listview.clear()
-        self._trophic_level_listview.clear()
+        self._trophic_type_listview.clear()
         
     def update(self):
         """ """
@@ -68,9 +68,9 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         # Taxon.
         self._taxon_listview = utils_qt.SelectableQListView()
 #         self._taxon_listview.setMaximumHeight(100)
-        # Trophic_level.
-        self._trophic_level_listview = utils_qt.SelectableQListView()
-#         self._trophic_level_listview.setMaximumHeight(100)
+        # Trophic type.
+        self._trophic_type_listview = utils_qt.SelectableQListView()
+#         self._trophic_type_listview.setMaximumHeight(100)
         # Life stage.
         self._lifestage_listview = utils_qt.SelectableQListView()
 #         self._lifestage_listview.setMaximumHeight(100)
@@ -99,8 +99,8 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         self.connect(clicklabel8, QtCore.SIGNAL("clicked()"), self._minmaxdepth_listview.checkAll)                
         self.connect(clicklabel9, QtCore.SIGNAL("clicked()"), self._taxon_listview.uncheckAll)                
         self.connect(clicklabel10, QtCore.SIGNAL("clicked()"), self._taxon_listview.checkAll)                
-        self.connect(clicklabel11, QtCore.SIGNAL("clicked()"), self._trophic_level_listview.uncheckAll)                
-        self.connect(clicklabel12, QtCore.SIGNAL("clicked()"), self._trophic_level_listview.checkAll)                
+        self.connect(clicklabel11, QtCore.SIGNAL("clicked()"), self._trophic_type_listview.uncheckAll)                
+        self.connect(clicklabel12, QtCore.SIGNAL("clicked()"), self._trophic_type_listview.checkAll)                
         self.connect(clicklabel13, QtCore.SIGNAL("clicked()"), self._lifestage_listview.uncheckAll)                
         self.connect(clicklabel14, QtCore.SIGNAL("clicked()"), self._lifestage_listview.checkAll)                
         # Layout widgets.
@@ -112,7 +112,7 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         label4 = QtGui.QLabel("Sampling events:")
         label5 = QtGui.QLabel("Min-max depth:")
         label6 = QtGui.QLabel("Scientific name:")
-        label7 = QtGui.QLabel("Trophic level:")
+        label7 = QtGui.QLabel("Trophic type:")
         label8 = QtGui.QLabel("Life stage:")
         form1.addWidget(label1, gridrow, 0, 1, 1)
         form1.addWidget(label2, gridrow, 1, 1, 3)
@@ -129,7 +129,7 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         form1.addWidget(self._visits_listview, gridrow, 7, 10, 3)
         form1.addWidget(self._minmaxdepth_listview, gridrow, 10, 10, 3)
         form1.addWidget(self._taxon_listview, gridrow, 13, 10, 3)
-        form1.addWidget(self._trophic_level_listview, gridrow, 16, 10, 3)
+        form1.addWidget(self._trophic_type_listview, gridrow, 16, 10, 3)
         form1.addWidget(self._lifestage_listview, gridrow, 19, 10, 3)
         gridrow += 1
         label1 = QtGui.QLabel("Date to:")
@@ -173,7 +173,7 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         visit_set = set()
         minmaxdepth_set = set()
         taxon_set = set()
-        trophic_level_set = set()
+        trophic_type_set = set()
         lifestage_set = set()
         #
         for visitnode in analysisdata.getChildren():
@@ -188,7 +188,7 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
                 for variablenode in samplenode.getChildren():
                     taxon_set.add(variablenode.getData(u'scientific_name'))
                     #
-                    trophic_level_set.add(variablenode.getData(u'trophic_level'))
+                    trophic_type_set.add(variablenode.getData(u'trophic_type'))
                     #
                     lifestage = variablenode.getData(u'stage')
                     if variablenode.getData(u'sex'):
@@ -203,7 +203,7 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         self._visits_listview.setList(sorted(visit_set))
         self._minmaxdepth_listview.setList(sorted(minmaxdepth_set))
         self._taxon_listview.setList(sorted(taxon_set))
-        self._trophic_level_listview.setList(sorted(trophic_level_set))
+        self._trophic_type_listview.setList(sorted(trophic_type_set))
         self._lifestage_listview.setList(sorted(lifestage_set))
             
     def _updateFilter(self):
@@ -217,6 +217,6 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         self._analysisdata.setFilterItem(u'visits', self._visits_listview.getSelectedDataList())
         self._analysisdata.setFilterItem(u'min_max_depth', self._minmaxdepth_listview.getSelectedDataList())
         self._analysisdata.setFilterItem(u'taxon', self._taxon_listview.getSelectedDataList())
-        self._analysisdata.setFilterItem(u'trophic_level', self._trophic_level_listview.getSelectedDataList())
+        self._analysisdata.setFilterItem(u'trophic_type', self._trophic_type_listview.getSelectedDataList())
         self._analysisdata.setFilterItem(u'life_stage', self._lifestage_listview.getSelectedDataList())
         

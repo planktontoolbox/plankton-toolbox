@@ -26,7 +26,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
 
     def clear(self):
         """ """
-        self._trophic_level_listview.clear()
+        self._trophic_type_listview.clear()
         
     def update(self):
         """ """
@@ -51,7 +51,8 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             u"Order",
             u"Family",
             u"Genus",
-            u"Species", 
+            u"Species",
+            u"Scientific name", 
             u"Kingdom (from dataset)",
             u"Phylum (from dataset)",
             u"Class (from dataset)",
@@ -61,9 +62,9 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             u"Species (from dataset)", 
             ])
         self._aggregate_rank_list.setCurrentIndex(4) # Default: Class.
-        #  Aggregate over trophic_level.
-        self._trophic_level_listview = utils_qt.SelectableQListView()
-#         self._trophic_level_listview.setMaximumHeight(80)
+        #  Aggregate over trophic_type.
+        self._trophic_type_listview = utils_qt.SelectableQListView()
+#         self._trophic_type_listview.setMaximumHeight(80)
         #  Aggregate over life stage.
         self._lifestage_listview = utils_qt.SelectableQListView()
 #         self._lifestage_listview.setMaximumHeight(80)
@@ -85,7 +86,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         form1.addWidget(label2, gridrow, 9, 1, 4)
         gridrow += 1
         label1 = QtGui.QLabel("Taxon level (rank):               ")
-        label2 = QtGui.QLabel("Trophic level:")
+        label2 = QtGui.QLabel("Trophic type:")
         label3 = QtGui.QLabel("Life stage:")
         form1.addWidget(label1, gridrow, 0, 1, 1)
         form1.addWidget(label2, gridrow, 1, 1, 3)
@@ -93,7 +94,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         form1.addWidget(QtGui.QLabel(""), gridrow, 3, 1, 6) # Stretch.
         gridrow += 1
         form1.addWidget(self._aggregate_rank_list, gridrow, 0, 1, 1)
-        form1.addWidget(self._trophic_level_listview, gridrow, 1, 4, 3)
+        form1.addWidget(self._trophic_type_listview, gridrow, 1, 4, 3)
         form1.addWidget(self._lifestage_listview, gridrow, 4, 4, 3)
         form1.addWidget(self._addmissingtaxa_button, gridrow, 9, 1, 1)
         gridrow += 4
@@ -128,8 +129,8 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             try:
             #
                 selected_taxon_rank = unicode(self._aggregate_rank_list.currentText())
-                selected_trophic_level_list = self._trophic_level_listview.getSelectedDataList()
-                selected_trophic_level_text = u'-'.join(selected_trophic_level_list) 
+                selected_trophic_type_list = self._trophic_type_listview.getSelectedDataList()
+                selected_trophic_type_text = u'-'.join(selected_trophic_type_list) 
                 selected_lifestage_list = self._lifestage_listview.getSelectedDataList()
                 selected_lifestage_text = u'-'.join(selected_lifestage_list) 
                 #
@@ -137,6 +138,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                     for samplenode in visitnode.getChildren()[:]:
                         aggregatedvariables = {}
                         for variablenode in samplenode.getChildren()[:]:
+                            newtaxon = None
                             value = variablenode.getData(u'value')
                             # Use values containing valid float data.
                             try:
@@ -161,6 +163,8 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                                     newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Genus")
                                 elif selected_taxon_rank == u"Species": 
                                     newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Species")
+                                elif selected_taxon_rank == u"Scientific name": 
+                                    newtaxon = variablenode.getData(u'scientific_name')
                                 elif selected_taxon_rank == u"Kingdom (from dataset)":
                                     newtaxon = variablenode.getData(u'kingdom')
                                 elif selected_taxon_rank == u"Phylum (from dataset)":
@@ -175,16 +179,20 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                                     newtaxon = variablenode.getData(u'genus')
                                 elif selected_taxon_rank == u"Species (from dataset)": 
                                     newtaxon = variablenode.getData(u'species')
+                                # If not found in classification, then use scientific_name. 
+                                # This is valid for taxon with rank above the selected rank.  
+                                if not newtaxon:
+                                    newtaxon = variablenode.getData(u'scientific_name')
                                 # 
                                 if not newtaxon:
                                     envmonlib.Logging().warning(u"Not match for selected rank. 'not-designated' assigned for: " + variablenode.getData(u'scientific_name'))
                                     newtaxon = u'not-designated' # Use this if empty.
                                 #
-                                taxontrophic_level = variablenode.getData(u'trophic_level')
-                                if taxontrophic_level in selected_trophic_level_list:
-                                    taxontrophic_level = selected_trophic_level_text # Concatenated string of ranks.
+                                taxontrophic_type = variablenode.getData(u'trophic_type')
+                                if taxontrophic_type in selected_trophic_type_list:
+                                    taxontrophic_type = selected_trophic_type_text # Concatenated string of ranks.
                                 else:
-                                    continue # Phytoplankton only: Use selected trophic_level only, don't use others.  
+                                    continue # Phytoplankton only: Use selected trophic_type only, don't use others.  
                                 #
                                 stage = variablenode.getData(u'stage')
                                 sex = variablenode.getData(u'sex')
@@ -200,7 +208,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                                 parameter = variablenode.getData(u'parameter')
                                 unit = variablenode.getData(u'unit')
                                  
-                                agg_tuple = (newtaxon, taxontrophic_level, stage, sex, parameter, unit)
+                                agg_tuple = (newtaxon, taxontrophic_type, stage, sex, parameter, unit)
                                 if agg_tuple in aggregatedvariables:
                                     aggregatedvariables[agg_tuple] = value + aggregatedvariables[agg_tuple]
                                 else:
@@ -212,13 +220,13 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                         samplenode.removeAllChildren()
                         # Add the new aggregated variables instead.  
                         for variablekeytuple in aggregatedvariables:
-                            newtaxon, taxontrophic_level, stage, sex, parameter, unit = variablekeytuple
+                            newtaxon, taxontrophic_type, stage, sex, parameter, unit = variablekeytuple
                             #
                             newvariable = envmonlib.VariableNode()
                             samplenode.addChild(newvariable)    
                             #
                             newvariable.addData(u'scientific_name', newtaxon)
-                            newvariable.addData(u'trophic_level', taxontrophic_level)
+                            newvariable.addData(u'trophic_type', taxontrophic_type)
                             newvariable.addData(u'stage', stage)
                             newvariable.addData(u'sex', sex)
                             newvariable.addData(u'parameter', parameter)
@@ -245,20 +253,20 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         if not analysisdata:
             return # Empty data.
         #
-        trophic_level_set = set()
+        trophic_type_set = set()
         lifestageset = set()
         for visitnode in analysisdata.getChildren():
             for samplenode in visitnode.getChildren():
                 for variablenode in samplenode.getChildren():
                     #
-                    trophic_level_set.add(unicode(variablenode.getData(u'trophic_level')))
+                    trophic_type_set.add(unicode(variablenode.getData(u'trophic_type')))
                     #
                     lifestage = variablenode.getData(u'stage')
                     if variablenode.getData(u'sex'):
                         lifestage += u'/' + variablenode.getData(u'sex')
                     lifestageset.add(lifestage)
         # Selection lists.
-        self._trophic_level_listview.setList(sorted(trophic_level_set))
+        self._trophic_type_listview.setList(sorted(trophic_type_set))
         self._lifestage_listview.setList(sorted(lifestageset))
             
     def _addMissingTaxa(self):

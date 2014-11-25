@@ -151,7 +151,7 @@ class AnalysisData(object):
             - 'visits': Contains <station_name> : <date>
             - 'min_max_depth': Contains <sample_min_depth>-<sample_max_depth>
             - 'taxon'
-            - 'trophic_level'
+            - 'trophic_type'
             - 'life_stage'
         """
         # Create a tree dataset for filtered data.
@@ -170,7 +170,7 @@ class AnalysisData(object):
         filter_visits = self._filter[u'visits']
         filter_minmaxdepth =  self._filter[u'min_max_depth']
         filter_taxon = self._filter[u'taxon']
-        filter_trophic_level = self._filter[u'trophic_level']
+        filter_trophic_type = self._filter[u'trophic_type']
         filter_lifestage = self._filter[u'life_stage']
         #
         for visitnode in analysisdata.getChildren():
@@ -205,7 +205,7 @@ class AnalysisData(object):
                     if variablenode.getData(u'scientific_name') not in filter_taxon:
                         continue
                     #
-                    if variablenode.getData(u'trophic_level') not in filter_trophic_level:
+                    if variablenode.getData(u'trophic_type') not in filter_trophic_type:
                         continue
                     #
                     lifestage = variablenode.getData(u'stage')
