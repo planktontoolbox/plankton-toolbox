@@ -61,9 +61,9 @@ class TaxonFactsTool(tool_base.ToolBase):
         </p></td>
     </tr>
     <tr>
-        <th>Trophic level</th>
+        <th>Trophic type</th>
         <td>
-            <span id="data_trophic_level">A/H</span>
+            <span id="data_trophic_type">A/H</span>
 
         </td>
     </tr>

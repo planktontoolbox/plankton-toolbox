@@ -390,7 +390,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         
         self._datasettabledata.clear()
         self._datasettabledata.setHeader([u'Dataset      ', 
-                                          u'Type         ', 
+#                                           u'Type         ', 
                                           u'Content      ', 
                                           u'File         ', 
                                           u'File path    ',
@@ -452,24 +452,24 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         self._datasettabledata.clearRows()
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
             # Get content info depending on dataset type.
-            datasettype = u'',
+#             datasettype = u'',
             contentinfo = u''
             if isinstance(dataset, envmonlib.DatasetTable):
-                datasettype = u'Table dataset'
+#                 datasettype = u'Table dataset'
                 contentinfo = u'Rows: ' + unicode(len(dataset.getRows())) + u'. '
             elif isinstance(dataset, envmonlib.DatasetNode):
-                datasettype = u'Tree dataset'
+#                 datasettype = u'Tree dataset'
                 visitcount, samplecound, variablecount = dataset.getCounters()
                 contentinfo = u'Visits: ' + unicode(visitcount) + u', ' + \
                               u'samples: ' + unicode(samplecound) + u', ' + \
                               u'variables: ' + unicode(variablecount) + u'. '
-            else:
-                datasettype = u'Unspecified'
+#             else:
+#                 datasettype = u'Unspecified'
 
             # Add row 
             self._datasettabledata.addRow(
                 [u'Dataset-' + unicode(rowindex + 1),
-                 datasettype,
+#                  datasettype,
                  contentinfo,
                  dataset.getMetadata(u'file_name'),
                  dataset.getMetadata(u'file_path'),
