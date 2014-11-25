@@ -237,6 +237,9 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                             newvariable.addData(u'phylum', envmonlib.Species().getTaxonValue(newtaxon, "Phylum"))
                             newvariable.addData(u'class', envmonlib.Species().getTaxonValue(newtaxon, "Class"))
                             newvariable.addData(u'order', envmonlib.Species().getTaxonValue(newtaxon, "Order"))
+                            newvariable.addData(u'family', envmonlib.Species().getTaxonValue(newtaxon, "Family"))
+                            newvariable.addData(u'genus', envmonlib.Species().getTaxonValue(newtaxon, "Genus"))
+                            newvariable.addData(u'species', envmonlib.Species().getTaxonValue(newtaxon, "Species"))
                 #
                 self._main_activity.updateViewedDataAndTabs()    
             except UserWarning, e:

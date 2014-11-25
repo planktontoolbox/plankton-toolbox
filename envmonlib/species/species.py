@@ -314,6 +314,8 @@ class Species(object):
                             speciesobject[u'Species'] = parentobject[u'Scientific name']
                         if parentobject[u'Rank'] == u'Genus':
                             speciesobject[u'Genus'] = parentobject[u'Scientific name']
+                        if parentobject[u'Rank'] == u'Family':
+                            speciesobject[u'Family'] = parentobject[u'Scientific name']
                         if parentobject[u'Rank'] == u'Order':
                             speciesobject[u'Order'] = parentobject[u'Scientific name']
                         if parentobject[u'Rank'] == u'Class':
