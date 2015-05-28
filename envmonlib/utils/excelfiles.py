@@ -53,7 +53,8 @@ class ExcelFiles():
                     break # Break loop if data_row_to is defined and exceeded.
                 elif rowindex == header_row:
                     for cell in row:
-                        value = cell.internal_value
+###                         value = cell.internal_value
+                        value = cell.value
                         if value == None:
                             header.append(u'')
                         else:
@@ -63,7 +64,8 @@ class ExcelFiles():
                 elif rowindex >= data_rows_from:
                     newrow = []
                     for cell in row: ### BIG.
-                        value = cell.internal_value
+###                        value = cell.internal_value
+                        value = cell.value
                         if value == None:
                             newrow.append(u'')
                         else:
