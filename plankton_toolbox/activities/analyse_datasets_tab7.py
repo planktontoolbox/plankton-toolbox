@@ -4,6 +4,7 @@
 # Copyright (c) 2010-2015 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 #
+from __future__ import unicode_literals
 
 # import math
 import numpy
@@ -283,7 +284,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                 minvalue = numpy.nanmin(data_list) 
                 maxvalue = numpy.nanmax(data_list)
                 countedvalues = len(data_list)
-            except Exception, e:
+            except Exception as e:
                 meanvalue = u'<ERROR>'
                 medianvalue = u'<ERROR>'
                 stddevvalue = u'<ERROR>'
@@ -606,5 +607,5 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         try:
             for key in sorted(data_dict.keys()):
                 self._graph_plot_data.addPlot(plot_name = key, y_array = data_dict[key])
-        except UserWarning, e:
+        except UserWarning as e:
             QtGui.QMessageBox.warning(self, "Warning", unicode(e))

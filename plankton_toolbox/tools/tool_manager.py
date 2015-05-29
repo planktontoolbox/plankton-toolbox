@@ -4,6 +4,7 @@
 # Copyright (c) 2010-2015 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 #
+from __future__ import unicode_literals
 
 import plankton_toolbox.tools.dev_test_tool as dev_test_tool
 import plankton_toolbox.tools.toolbox_settings_tool as toolbox_settings_tool
@@ -60,7 +61,7 @@ class ToolManager(object):
 #        self._toollist.append(taxon_images_tool.TaxonImagesTool("(Taxon images)", self._parent))
 #        self._toollist.append(template_tool.TemplateTool("(Tool template)", self._parent))
 
-#         self._toollist.append(dev_test_tool.DevTestTool("Development and test", self._parent))
+        self._toollist.append(dev_test_tool.DevTestTool("Development and test", self._parent))
 
 
     def getToolByName(self, object_name):

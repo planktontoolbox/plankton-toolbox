@@ -4,6 +4,7 @@
 # Copyright (c) 2010-2015 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 #
+from __future__ import unicode_literals
 
 import envmonlib
 import os.path
@@ -52,7 +53,7 @@ class Species(object):
         try:
             # Only done once since the class is declared as singleton.
             self._loadAllData()
-        except Exception, e:
+        except Exception as e:
             envmonlib.Logging().error(u"Failed when loading species related files: " + unicode(e))            
             raise
 
@@ -182,7 +183,7 @@ class Species(object):
             # Perform some useful pre-calculations.
             self._precalculateData()
         #
-        except Exception, e:
+        except Exception as e:
             envmonlib.Logging().error(u"Failed when loading species data: " + unicode(e))            
             raise
             

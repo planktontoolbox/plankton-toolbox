@@ -4,6 +4,7 @@
 # Copyright (c) 2010-2015 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 #
+from __future__ import unicode_literals
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
@@ -320,7 +321,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                              y_array = y_data, 
                              z_label = z_selected_column if z_selected_column != u"parameter:" else z_selected_param,
                              z_array = z_data) 
-        except UserWarning, e:
+        except UserWarning as e:
             QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
 
         # View in Graph plotter tool.

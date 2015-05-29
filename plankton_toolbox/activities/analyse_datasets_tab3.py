@@ -4,6 +4,7 @@
 # Copyright (c) 2010-2015 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 #
+from __future__ import unicode_literals
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
@@ -242,7 +243,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                             newvariable.addData(u'species', envmonlib.Species().getTaxonValue(newtaxon, "Species"))
                 #
                 self._main_activity.updateViewedDataAndTabs()    
-            except UserWarning, e:
+            except UserWarning as e:
                 envmonlib.Logging().error("Failed to aggregate data. " + unicode(e))
                 QtGui.QMessageBox.warning(self._main_activity, "Warning", "Failed to aggregate data. " + unicode(e))
         finally:
@@ -285,7 +286,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             envmonlib.AnalysisPrepare().addMissingTaxa(analysisdata)
             #
             self._main_activity.updateViewedDataAndTabs()    
-        except UserWarning, e:
+        except UserWarning as e:
             envmonlib.Logging().error("Failed to add 0 for not observed. " + unicode(e))
             QtGui.QMessageBox.warning(self._main_activity, "Warning", "Failed to add 0 for not observed. " + unicode(e))
         finally:

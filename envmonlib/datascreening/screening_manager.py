@@ -4,6 +4,7 @@
 # Copyright (c) 2010-2015 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 #
+from __future__ import unicode_literals
 
 import envmonlib
 
@@ -41,7 +42,7 @@ class ScreeningManager(object):
             for excelfilename in self._codelist_filenames:
                 self._loadCodeLists(excelfilename)                
         #
-        except Exception, e:
+        except Exception as e:
             envmonlib.Logging().error(u"Failed when loading code lists. Exception: " + unicode(e))
 #        # Used for DEBUG:
 #        import locale

@@ -4,6 +4,7 @@
 # Copyright (c) 2010-2015 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 #
+from __future__ import unicode_literals
 
 # import PyQt4.QtGui as QtGui
 # import PyQt4.QtCore as QtCore
@@ -291,13 +292,13 @@
 #                 exporter.exportTaxa(file = unicode(self._dyntaxatofile_edit.text()))
 #             else:
 #                 raise UserWarning('The selected data source type is not implemented.')
-#         except UserWarning, e:
+#         except UserWarning as e:
 #             envmonlib.Logging().error("UserWarning: " + unicode(e))
 #             QtGui.QMessageBox.warning(self, "Warning", unicode(e))
 #         except (IOError, OSError), e:
 #             envmonlib.Logging().error("Error: " + unicode(e))
 #             QtGui.QMessageBox.warning(self, "Error", unicode(e))
-#         except Exception, e:
+#         except Exception as e:
 #             envmonlib.Logging().error("Failed on exception: " + unicode(e))
 #             QtGui.QMessageBox.warning(self, "Exception", unicode(e))
 #             raise
@@ -336,13 +337,13 @@
 #             envmonlib.Logging().log('Number of PEG taxa: ' + str(len(peg.getTaxonList())))                
 #             exporter = taxa_sources.JsonFile(taxaObject = peg)
 #             exporter.exportTaxa(file = unicode(self._pegtofile_edit.text()))
-#         except UserWarning, e:
+#         except UserWarning as e:
 #             envmonlib.Logging().error("UserWarning: " + unicode(e))
 #             QtGui.QMessageBox.warning(self, "Warning", unicode(e))
 #         except (IOError, OSError), e:
 #             envmonlib.Logging().error("Error: " + unicode(e))
 #             QtGui.QMessageBox.warning(self, "Error", unicode(e))
-#         except Exception, e:
+#         except Exception as e:
 #             envmonlib.Logging().error("Failed on exception: " + unicode(e))
 #             QtGui.QMessageBox.warning(self, "Exception", unicode(e))
 #             raise
@@ -387,13 +388,13 @@
 #             envmonlib.Logging().log('Number of Harmful plankton taxa: ' + str(len(harmful.getTaxonList())))                
 #             exporter = taxa_sources.JsonFile(taxaObject = harmful)
 #             exporter.exportTaxa(file = unicode(self._harmfultofile_edit.text()))
-#         except UserWarning, e:
+#         except UserWarning as e:
 #             envmonlib.Logging().error("UserWarning: " + unicode(e))
 #             QtGui.QMessageBox.warning(self, "Warning", unicode(e))
 #         except (IOError, OSError), e:
 #             envmonlib.Logging().error("Error: " + unicode(e))
 #             QtGui.QMessageBox.warning(self, "Error", unicode(e))
-#         except Exception, e:
+#         except Exception as e:
 #             envmonlib.Logging().error("Failed on exception: " + unicode(e))
 #             QtGui.QMessageBox.warning(self, "Exception", unicode(e))
 #             raise

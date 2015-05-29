@@ -4,6 +4,7 @@
 # Copyright (c) 2010-2015 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 #
+from __future__ import unicode_literals
 
 import os.path
 import glob
@@ -240,7 +241,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                     # Add to dataset list. (Note:ToolboxDatasets is a wrapper containing the 'datasetListChanged'-signal).
                     toolbox_datasets.ToolboxDatasets().addDataset(dataset)
             #
-        except Exception, e:
+        except Exception as e:
             envmonlib.Logging().error(u"Text file import failed on exception: " + unicode(e))
             QtGui.QMessageBox.warning(self, u"Text file loading.\n", 
                                       u"Text file import failed on exception.\n" + unicode(e))
@@ -368,7 +369,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                     # Add to dataset list. (Note:ToolboxDatasets is a wrapper containing the 'datasetListChanged'-signal).
                     toolbox_datasets.ToolboxDatasets().addDataset(dataset)
         #
-        except Exception, e:
+        except Exception as e:
             envmonlib.Logging().error(u"Excel file import failed on exception: " + unicode(e))
             QtGui.QMessageBox.warning(self, u"Excel file loading.\n", 
                                       u"Excel file import failed on exception.\n" + unicode(e))

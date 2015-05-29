@@ -4,6 +4,7 @@
 # Copyright (c) 2010-2015 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 #
+from __future__ import unicode_literals
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
@@ -266,7 +267,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                              y_array = value_list, 
                              x_label = u'',
                              y_label = u'')
-        except UserWarning, e:
+        except UserWarning as e:
             QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
     
     def _addPlotAaaaaaaaa(self, selectedparameter, dataset, plotdata):
@@ -330,7 +331,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                                     y_array = taxon_visit_value_list, 
                                     x_label = u'',
                                     y_label = selectedparameter)
-            except UserWarning, e:
+            except UserWarning as e:
                 QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
 
     def _addPlotBbbbbbbbb(self, selectedparameter, dataset, plotdata):
@@ -395,6 +396,6 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                                     y_array = visit_taxon_value_list, 
                                     x_label = u'',
                                     y_label = selectedparameter)
-            except UserWarning, e:
+            except UserWarning as e:
                 QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
 

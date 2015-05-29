@@ -4,6 +4,7 @@
 # Copyright (c) 2010-2015 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 #
+from __future__ import unicode_literals
 
 """
 
@@ -12,7 +13,6 @@ TODO: Not used in current version. Should be rewritten and integrated with envmo
 
 
 """
-
 
 # """
 # This module is used for preparation of resource files. Resource files are 

@@ -4,6 +4,7 @@
 # Copyright (c) 2010-2015 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 #
+from __future__ import unicode_literals
 
 import plankton_toolbox.activities.start_activity as start_activity
 #import plankton_toolbox.activities.create_dataset_activity as create_dataset_activity

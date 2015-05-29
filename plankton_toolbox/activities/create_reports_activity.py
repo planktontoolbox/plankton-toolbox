@@ -4,6 +4,7 @@
 # Copyright (c) 2010-2015 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 #
+from __future__ import unicode_literals
 
 """
 
@@ -167,13 +168,13 @@ class CreateReportsActivity(activity_base.ActivityBase):
                 self._refreshResultTable()
             else:
                 raise UserWarning('The selected report type is not implemented.')
-        except UserWarning, e:
+        except UserWarning as e:
             envmonlib.Logging().error("UserWarning: " + unicode(e))
             QtGui.QMessageBox.warning(self, "Warning", unicode(e))
-        except (IOError, OSError), e:
+        except (IOError, OSError) as e:
             envmonlib.Logging().error("Error: " + unicode(e))
             QtGui.QMessageBox.warning(self, "Error", unicode(e))
-        except Exception, e:
+        except Exception as e:
             envmonlib.Logging().error("Failed on exception: " + unicode(e))
             QtGui.QMessageBox.warning(self, "Exception", unicode(e))
             raise
