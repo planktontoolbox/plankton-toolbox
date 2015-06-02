@@ -10,8 +10,9 @@ from __future__ import unicode_literals
 
 """
 
-from toolbox_utils.textfileutil import TextFiles
-from toolbox_utils.excelfileutil import ExcelFiles
+from toolbox_utils.textfileutil import TextFileUtil
+from toolbox_utils.excelfileutil import ExcelFileUtil
+from toolbox_utils.zipfileutil import ZipFileUtil
 
 # # Module utils:
 # from utils.patterns import singleton

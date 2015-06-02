@@ -6,70 +6,102 @@
 #
 from __future__ import unicode_literals
 
-"""
-
-TODO: Under development. Not used.
-
-"""
-
 import zipfile
+import locale
 
-class ZipFileReader(object):
-    """
-    This class ...  
-    """
-    def __init__(self, zip_file_name):
+class ZipFileUtil():
+    """ """
+    def __init__(self, 
+                 zip_file_name): 
         """ """
-        super(ZipFileReader, self).__init__()
-        #
+        self._filepathname = zip_file_name
         self._zip = None
-        if not zipfile.is_zipfile(zip_file_name):
-            raise UserWarning('Selected file is not a valid zip file: ' + zip_file_name)
-        #
-        self._zip = zipfile.ZipFile(zip_file_name, 'r')
+        if not zipfile.is_zipfile(self._filepathname):
+            raise UserWarning('Selected file is not a valid zip file: ' + self._filepathname)
 
-    def __del__(self):
+    def open(self):
         """ """
-        self.close()
+        self._zip = zipfile.ZipFile(self._filepathname, 'r')
 
     def close(self):
         """ """
-        if self._zip:
-            self._zip.close()
+        self._zip.close()
         self._zip = None
 
     def listContent(self):
         """ """
+        if self._zip is None:
+            self.open()    
         if self._zip:
             return self._zip.namelist()
         else:
             return {}
 
-    def readEntryToTableDataset(self, 
-                                target_dataset, 
-                                zip_entry,
-                                encoding = None):
+    def getZipEntry(self,
+                    zip_entry_name):
         """ """
-    
-    
-#    def openZipEntry(self, entry_name):
-#        """ """
-#        if self._zip:
-#            return self._zip.open(entry_name, 'r')
-#        else:
-#            return None
+        if self._zip is None:
+            self.open()    
+        if zip_entry_name not in self._zip.namelist():
+            raise UserWarning('The entry ' + zip_entry_name + ' is missing in ' + self._filepathname)
+        #    
+        return self._zip.open(zip_entry_name).read()
 
-    def getMetadataAsDict(self):
-        """ """
-        # TODO:
-        return {}
+    def getZipEntryAsTable(self,
+                           zip_entry_name, 
+                           encoding = None):
+        
+#                         field_separator = '\t',
+#                           row_separator = '\r\n'):
 
-class ZipFileWriter(object):
-    """
-    This class ...  
-    """
-    def __init__(self, zip_file_name):
+        
+        
         """ """
-        super(ZipFileWriter, self).__init__()
+        if self._zip is None:
+            self.open()    
+        if zip_entry_name not in self._zip.namelist():
+            raise UserWarning('The entry ' + zip_entry_name + ' is missing in ' + self._filepathname)
+        # Get encoding.
+        if encoding is None:
+            encoding = locale.getpreferredencoding()
         #
+        target_header = [] 
+        target_rows = []
+        #
+        try:
+            zipfiledata = self._zip.open(zip_entry_name).read()
+            #
+            fieldseparator = None
+            # Iterate over rows in file.            
+#             for rowindex, row in enumerate(zipfiledata.split('\r\n')):
+            for rowindex, row in enumerate(zipfiledata.split('\n')):
+#             for rowindex, row in enumerate(zipfiledata.split('\r\n')):
+                # Convert to unicode.
+#                 row = unicode(row, encoding, 'strict')
+                if rowindex == 0:
+                    # Header.
+                    fieldseparator = self.getSeparator(row)
+                    row = [item.strip() for item in row.split(fieldseparator)]
+                    target_header = row
+                else:
+                    # Row.
+                    if len(row.strip()) == 0: 
+                        continue # Don't add empty rows.
+                    row = [item.strip() for item in row.split(fieldseparator)]
+                    target_rows.append(row)             
+        #
+        except Exception as e:
+            msg = 'Can\'t read zip file. Entry name: ' + zip_entry_name + '. Exception: ' + unicode(e)
+            print(msg)
+            raise UserWarning(msg)
+        #
+        return (target_header, target_rows)
 
+    def getSeparator(self, row):
+        """ """
+        if '\t' in row: # First alternative.
+            return '\t'
+        elif ';' in row: # Second alternative. 
+            return ';'
+        else:
+            return '\t' # Default alternative.

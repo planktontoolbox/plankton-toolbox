@@ -15,7 +15,6 @@ class TableFileReader():
                  file_path = None, # Used for text and excel files. 
                  text_file_name = None, # Used for text files.
                  excel_file_name = None, # Used for excel files.
-                 zip_file_path = None, # Used for zip files.
                  zip_file_name = None, # Used for zip files.
                  zip_file_entry = None, # Used for text files in zip files.
                  select_columns_by_name = None,
@@ -28,7 +27,6 @@ class TableFileReader():
         self._file_path = file_path
         self._text_file_name = text_file_name
         self._excel_file_name = excel_file_name
-        self._zip_file_path = zip_file_path
         self._zip_file_name = zip_file_name
         self._zip_file_entry = zip_file_entry
         self._select_columns_by_name = select_columns_by_name
@@ -51,7 +49,7 @@ class TableFileReader():
         return self._rows
     
     def clear(self):
-        """ """
+        """ Call this to free memory. """
         self._header = []
         self._rows = []
         
@@ -106,32 +104,35 @@ class TableFileReader():
         return dictionary
         
     def reload_file(self):
-        """ """
-        
+        """ Read files in different formats depending on parameter values
+            defined in constructor. """
         # Text file.                
         if self._text_file_name is not None:
             filepathname = os.path.join(self._file_path, self._text_file_name)
-            textfiles = toolbox_utils.TextFiles()            
-            (self._header, self._rows) = textfiles.readToTableDataset(
+            textfile = toolbox_utils.TextFileUtil()            
+            (self._header, self._rows) = textfile.readToTableDataset(
                                                     filepathname, 
                                                     encoding = self._encoding,
+#                                                     field_delimiter = self._field_delimiter,
+#                                                     row_delimiter = self._row_delimiter,
                                                     )
         # Excel.    
         elif self._excel_file_name is not None:
             filepathname = os.path.join(self._file_path, self._excel_file_name)
-            excelfiles = toolbox_utils.ExcelFiles()           
-            (self._header, self._rows) = excelfiles.readToTableDataset(
+            excelfile = toolbox_utils.ExcelFileUtil()           
+            (self._header, self._rows) = excelfile.readToTableDataset(
                                                     filepathname, 
                                                     )
-#         # Text file in zip.    
-#         elif self._zip_file_name:
-#              self._zip_file_path
-#             self._zip_file_name
-#             self._zip_file_entry
-#             
-#             self._encoding
-#             self._field_delimiter
-#             self._row_delimiter
+        # Text file in zip.    
+        elif self._zip_file_name:
+            filepathname = os.path.join(self._file_path, self._zip_file_name)
+            zipfile = toolbox_utils.ZipFileUtil(filepathname)            
+            (self._header, self._rows) = zipfile.getZipEntryAsTable(self._zip_file_entry, 
+                                                                    encoding = self._encoding,
+#                                                                     field_delimiter = self._field_delimiter,
+#                                                                     row_delimiter = self._row_delimiter,
+                                                                    )
+            zipfile.close()
         else:
             raise UserWarning('File name is missing.')
 
@@ -139,49 +140,40 @@ class TableFileReader():
 if __name__ == "__main__":
     """ Used for testing of this utility. """    
     
-#     print('\n=== TEST: Text files. ===')
-#     tablefilereader = TableFileReader(
-#                  file_path = 'test_data',
-#                  text_file_name = 'test.txt',
-#                  )
-#     #
-#     print('Header: ' + unicode(tablefilereader.header()))
-#     print('Rows:   ' + unicode(tablefilereader.rows()))
-#     #
-#     testdict = tablefilereader.create_dictionary(key_column_by_name = 'bbb', value_column_by_name = 'ccc')
-#     print('Dict by name: ' + unicode(testdict))
-#     #
-#     testdict = tablefilereader.create_dictionary(key_column_by_index = 0, value_column_by_index = 2)
-#     print('Dict by index: ' + unicode(testdict))
-    
+    print('\n=== TEST: Text files. ===')
+    tablefilereader = TableFileReader(
+                 file_path = 'test_data',
+                 text_file_name = 'test.txt',
+                 )
+    print('Header: ' + unicode(tablefilereader.header()))
+    print('Rows:   ' + unicode(tablefilereader.rows()))
+    testdict = tablefilereader.create_dictionary(key_column_by_name = 'aaa', value_column_by_name = 'bbb')
+    print('Dict by name: ' + unicode(testdict))
+    testdict = tablefilereader.create_dictionary(key_column_by_index = 0, value_column_by_index = 1)
+    print('Dict by index: ' + unicode(testdict))
+     
     print('\n=== TEST: Excel files. ===')
     tablefilereader = TableFileReader(
                  file_path = 'test_data',
                  excel_file_name = 'test.xlsx',
                  )
-    #
     print('Header: ' + unicode(tablefilereader.header()))
     print('Rows:   ' + unicode(tablefilereader.rows()))
-    #
     testdict = tablefilereader.create_dictionary(key_column_by_name = 'bbb', value_column_by_name = 'ccc')
-    print('Dict by name: ' + unicode(testdict))
-    #
-    testdict = tablefilereader.create_dictionary(key_column_by_index = 0, value_column_by_index = 2)
+    print('Dict by name: ' + unicode(testdict))    #
+    testdict = tablefilereader.create_dictionary(key_column_by_index = 1, value_column_by_index = 2)
     print('Dict by index: ' + unicode(testdict))
     
-#     print('\n=== TEST: Zip files. ===')
-#     tablefilereader = TableFileReader(
-#                  file_path = 'test_data',
-#                  zip_file_name = 'test.zip', 
-#                  zip_file_entry = 'test.txt',
-#                  )
-#     #
-#     print('Header: ' + unicode(tablefilereader.header()))
-#     print('Rows:   ' + unicode(tablefilereader.rows()))
-#     #
-#     testdict = tablefilereader.create_dictionary(key_column_by_name = 'bbb', value_column_by_name = 'ccc')
-#     print('Dict by name: ' + unicode(testdict))
-#     #
-#     testdict = tablefilereader.create_dictionary(key_column_by_index = 0, value_column_by_index = 2)
-#     print('Dict by index: ' + unicode(testdict))
-    
+    print('\n=== TEST: Zip files. ===')
+    tablefilereader = TableFileReader(
+                 file_path = 'test_data',
+                 zip_file_name = 'test.zip', 
+                 zip_file_entry = 'test.txt',
+                 )
+    print('Header: ' + unicode(tablefilereader.header()))
+    print('Rows:   ' + unicode(tablefilereader.rows()))
+    testdict = tablefilereader.create_dictionary(key_column_by_name = 'ccc', value_column_by_name = 'aaa')
+    print('Dict by name: ' + unicode(testdict))
+    testdict = tablefilereader.create_dictionary(key_column_by_index = 2, value_column_by_index = 0)
+    print('Dict by index: ' + unicode(testdict))
+

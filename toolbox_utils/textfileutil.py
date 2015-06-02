@@ -9,7 +9,7 @@ from __future__ import unicode_literals
 import locale
 import codecs
 
-class TextFiles():
+class TextFileUtil():
     """ """
     def __init__(self):
         """ """
@@ -24,10 +24,10 @@ class TextFiles():
         target_header = [] 
         target_rows = []
         #
-        if file_name == None:
+        if file_name is None:
             raise UserWarning('File name is missing.')
         # Get encoding.
-        if not encoding:
+        if encoding is None:
             encoding = locale.getpreferredencoding()
         # Read file.
         infile = open(file_name, 'r')
@@ -65,8 +65,6 @@ class TextFiles():
         """ """
         if file_name == None:
             raise UserWarning('File name is missing.')
-        if not isinstance(table_dataset, envmonlib.DatasetTable):
-            raise UserWarning('Dataset is not of a valid type.')
         #
         if not encoding:
             encoding = locale.getpreferredencoding()
