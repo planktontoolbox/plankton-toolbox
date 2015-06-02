@@ -1,0 +1,15 @@
+
+*.pyc
+*.pyo
+
+.project
+.pydevproject
+
+toolbox_data/parsers/*.xlsx
+
+.*~
+
+.settings/*
+
+
+
