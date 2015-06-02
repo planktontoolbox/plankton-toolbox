@@ -6,6 +6,7 @@
 .pydevproject
 
 toolbox_data/parsers/*.xlsx
+plankton_toolbox_log.txt
 
 .*~
 
