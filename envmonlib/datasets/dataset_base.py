@@ -20,7 +20,7 @@ class DatasetBase(object):
 
     def getMetadata(self, key):
         """ """
-        return self._metadata.get(key, u'')
+        return self._metadata.get(key, '')
 
     def addMetadata(self, key, value):
         """ """

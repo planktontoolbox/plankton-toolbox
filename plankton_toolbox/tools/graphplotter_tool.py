@@ -54,7 +54,7 @@ class GraphPlotterTool(tool_base.ToolBase):
         self._drawEmbeddedChart()
 
     def setChartSelection(self, 
-                          chart = u"Line chart", # Line chart, Bar chart, Scatter chart, Pie chart, Map chart.
+                          chart = 'Line chart', # Line chart, Bar chart, Scatter chart, Pie chart, Map chart.
                           combined = False,
                           stacked = False,
                           y_log_scale = False):
@@ -74,10 +74,10 @@ class GraphPlotterTool(tool_base.ToolBase):
         # Tab widget. 
         self._tabWidget = QtGui.QTabWidget()
         contentLayout.addWidget(self._tabWidget)
-        self._tabWidget.addTab(self._createContentChart(), "Chart")
-        self._tabWidget.addTab(self._createContentLabels(), "Labels")        
-#        tabWidget.addTab(self._createContentSettings(), "Settings")        
-#        tabWidget.addTab(self._createContentEditDataJson(), "Edit data (JSON)")        
+        self._tabWidget.addTab(self._createContentChart(), 'Chart')
+        self._tabWidget.addTab(self._createContentLabels(), 'Labels')        
+#        tabWidget.addTab(self._createContentSettings(), "Settings')        
+#        tabWidget.addTab(self._createContentEditDataJson(), "Edit data (JSON)')        
 
     def _createContentChart(self):
         """ """
@@ -99,23 +99,23 @@ class GraphPlotterTool(tool_base.ToolBase):
         #
         self._editable_listview = utils_qt.ToolboxEditableQTableView()
         data = envmonlib.DatasetTable()
-        data.setHeader([u'X label     ', u'Y label     ', u'Z label     '])
-        data.appendRow([u'a', u'b', u'c'])
-        data.appendRow([u'1', u'2', u'3'])
+        data.setHeader(['X label     ', 'Y label     ', 'Z label     '])
+        data.appendRow(['a', 'b', 'c'])
+        data.appendRow(['1', '2', '3'])
         self._editable_listview.tablemodel.setModeldata(data)
         self._editable_listview.tablemodel.reset() # Model data has changed.
         self._editable_listview.resizeColumnsToContents()
         #                
-        self._resetsettings_button = QtGui.QPushButton("Reset")
-#        self.connect(self._resetsettings_button, QtCore.SIGNAL("clicked()"), self._resetSettings)                
+        self._resetsettings_button = QtGui.QPushButton('Reset')
+#        self.connect(self._resetsettings_button, QtCore.SIGNAL('clicked()'), self._resetSettings)                
         #                
-        self._applysettings_button = QtGui.QPushButton("Apply")
-#        self.connect(self._applysettings_button, QtCore.SIGNAL("clicked()"), self._applySettings)                
+        self._applysettings_button = QtGui.QPushButton('Apply')
+#        self.connect(self._applysettings_button, QtCore.SIGNAL('clicked()'), self._applySettings)                
         # Layout.
         form = QtGui.QFormLayout()
-        form.addRow("Test 1:", self._timeseriesforat_edit)
-        form.addRow("Test 2", self._xyplotformat_edit)
-        form.addRow("'Plot labels", self._editable_listview)
+        form.addRow('Test 1:', self._timeseriesforat_edit)
+        form.addRow('Test 2', self._xyplotformat_edit)
+        form.addRow('Plot labels', self._editable_listview)
         #
         hbox = QtGui.QHBoxLayout()
         hbox.addStretch(5)
@@ -154,29 +154,29 @@ class GraphPlotterTool(tool_base.ToolBase):
         # 
         self._plotlabels_editable = utils_qt.ToolboxEditableQTableView()
         self._plotlabels_table = envmonlib.DatasetTable()
-        self._plotlabels_table.setHeader([u'Plot name     ', u'X-label     ', u'Y-label     ', u'Z-label     '])
-        self._plotlabels_table.appendRow([u'', u'', u'', u''])
+        self._plotlabels_table.setHeader(['Plot name     ', 'X-label     ', 'Y-label     ', 'Z-label     '])
+        self._plotlabels_table.appendRow(['', '', '', ''])
         self._plotlabels_editable.tablemodel.setModeldata(self._plotlabels_table)
         #                
-        self._labelsreset_button = QtGui.QPushButton("Reset")
-        self.connect(self._labelsreset_button, QtCore.SIGNAL("clicked()"), self._resetLabels)                
-        self._labelsapply_button = QtGui.QPushButton("Apply")
-        self.connect(self._labelsapply_button, QtCore.SIGNAL("clicked()"), self._applyLabels)                
+        self._labelsreset_button = QtGui.QPushButton('Reset')
+        self.connect(self._labelsreset_button, QtCore.SIGNAL('clicked()'), self._resetLabels)                
+        self._labelsapply_button = QtGui.QPushButton('Apply')
+        self.connect(self._labelsapply_button, QtCore.SIGNAL('clicked()'), self._applyLabels)                
         # Layout.
         form0 = QtGui.QFormLayout()
-        form0.addRow("Title:    ", self._title_edit)
+        form0.addRow('Title:    ', self._title_edit)
         form1 = QtGui.QFormLayout()
-        form1.addRow("X-label:", self._xlabel_edit)
-        form1.addRow("Y-label:", self._ylabel_edit)
-        form1.addRow("Z-label:", self._zlabel_edit)
+        form1.addRow('X-label:', self._xlabel_edit)
+        form1.addRow('Y-label:', self._ylabel_edit)
+        form1.addRow('Z-label:', self._zlabel_edit)
         form2 = QtGui.QFormLayout()
-        form2.addRow("X-type:", self._xtype_edit)
-        form2.addRow("Y-type:", self._ytype_edit)
-        form2.addRow("Z-type:", self._ztype_edit)
+        form2.addRow('X-type:', self._xtype_edit)
+        form2.addRow('Y-type:', self._ytype_edit)
+        form2.addRow('Z-type:', self._ztype_edit)
         form3 = QtGui.QFormLayout()
-        form3.addRow("X-format:", self._xformat_edit)
-        form3.addRow("Y-format:", self._yformat_edit)
-        form3.addRow("Z-format:", self._zformat_edit)
+        form3.addRow('X-format:', self._xformat_edit)
+        form3.addRow('Y-format:', self._yformat_edit)
+        form3.addRow('Z-format:', self._zformat_edit)
         #
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addLayout(form0)
@@ -189,7 +189,7 @@ class GraphPlotterTool(tool_base.ToolBase):
         hbox2.addStretch()
         #
         hbox3 = QtGui.QHBoxLayout()
-        hbox3.addWidget(QtGui.QLabel("          "))
+        hbox3.addWidget(QtGui.QLabel('          '))
         hbox3.addWidget(self._plotlabels_editable)
         hbox3.addStretch()
         #
@@ -199,10 +199,10 @@ class GraphPlotterTool(tool_base.ToolBase):
         hbox4.addWidget(self._labelsapply_button)
         #
         layout = QtGui.QVBoxLayout()
-        layout.addWidget(QtGui.QLabel("Graph:"))
+        layout.addWidget(QtGui.QLabel('Graph:'))
         layout.addLayout(hbox1)
         layout.addLayout(hbox2)
-        layout.addWidget(QtGui.QLabel("Plots:"))
+        layout.addWidget(QtGui.QLabel('Plots:'))
         layout.addLayout(hbox3, 10)
         layout.addLayout(hbox4)
         #
@@ -216,11 +216,11 @@ class GraphPlotterTool(tool_base.ToolBase):
 #         # Active widgets and connections.
 #         self.plotdatainfo_textedit = QtGui.QTextEdit()
 #         self.plotdatalist_textedit = QtGui.QTextEdit()
-#         self._resetplotdata_button = QtGui.QPushButton("Reset")
-#         self.connect(self._resetplotdata_button, QtCore.SIGNAL("clicked()"), self._resetLabels)                
+#         self._resetplotdata_button = QtGui.QPushButton('Reset')
+#         self.connect(self._resetplotdata_button, QtCore.SIGNAL('clicked()'), self._resetLabels)                
 #         #                
-#         self._applyplotdata_button = QtGui.QPushButton("Apply")
-#         self.connect(self._applyplotdata_button, QtCore.SIGNAL("clicked()"), self._applyLabelsJson)                
+#         self._applyplotdata_button = QtGui.QPushButton('Apply')
+#         self.connect(self._applyplotdata_button, QtCore.SIGNAL('clicked()'), self._applyLabelsJson)                
 #         # Layout.
 #         hbox = QtGui.QHBoxLayout()
 #         hbox.addStretch(5)
@@ -240,39 +240,39 @@ class GraphPlotterTool(tool_base.ToolBase):
         """ """
         # Active widgets and connections.
         self._charttype_list = QtGui.QComboBox()
-        self._charttype_list.addItems([u"Line chart",
-                                       u"Bar chart",
-                                       u"Scatter chart",
-                                       u"Pie chart",
-                                       u"Boxplot chart"
-#                                        u"Map chart"  # Can't use BaseMap with PyInstaller, sorry...
+        self._charttype_list.addItems(['Line chart',
+                                       'Bar chart',
+                                       'Scatter chart',
+                                       'Pie chart',
+                                       'Boxplot chart'
+#                                        'Map chart"  # Can't use BaseMap with PyInstaller, sorry...
                                        ])
 #        self._charttype_list.setDisabled(True)
-        self.connect(self._charttype_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._drawEmbeddedChart)
+        self.connect(self._charttype_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._drawEmbeddedChart)
         #
-        self._combined_checkbox = QtGui.QCheckBox("Combined")
+        self._combined_checkbox = QtGui.QCheckBox('Combined')
         self._combined_checkbox.setChecked(False) 
 #        self._combined_checkbox.setDisabled(True)
-        self.connect(self._combined_checkbox, QtCore.SIGNAL("stateChanged(int)"), self._drawEmbeddedChart)
+        self.connect(self._combined_checkbox, QtCore.SIGNAL('stateChanged(int)'), self._drawEmbeddedChart)
         #
-        self._stacked_checkbox = QtGui.QCheckBox("Stacked")
+        self._stacked_checkbox = QtGui.QCheckBox('Stacked')
         self._stacked_checkbox.setChecked(False) 
 #        self._stacked_checkbox.setDisabled(True)
-        self.connect(self._stacked_checkbox, QtCore.SIGNAL("stateChanged(int)"), self._drawEmbeddedChart)
+        self.connect(self._stacked_checkbox, QtCore.SIGNAL('stateChanged(int)'), self._drawEmbeddedChart)
         #
-        self._ylogscale_checkbox = QtGui.QCheckBox("Y log scale")
+        self._ylogscale_checkbox = QtGui.QCheckBox('Y log scale')
         self._ylogscale_checkbox.setChecked(False) 
 #        self._ylogscale_checkbox.setDisabled(True)
-        self.connect(self._ylogscale_checkbox, QtCore.SIGNAL("stateChanged(int)"), self._drawEmbeddedChart)
+        self.connect(self._ylogscale_checkbox, QtCore.SIGNAL('stateChanged(int)'), self._drawEmbeddedChart)
         #                
-        self._clear_button = QtGui.QPushButton("Clear")
-        self.connect(self._clear_button, QtCore.SIGNAL("clicked()"), self.clearPlotData)                
+        self._clear_button = QtGui.QPushButton('Clear')
+        self.connect(self._clear_button, QtCore.SIGNAL('clicked()'), self.clearPlotData)                
         #                
-        self._savecharttofile_button = QtGui.QPushButton("Edit and save...")
-        self.connect(self._savecharttofile_button, QtCore.SIGNAL("clicked()"), self._saveChartToFile)                
+        self._savecharttofile_button = QtGui.QPushButton('Edit and save...')
+        self.connect(self._savecharttofile_button, QtCore.SIGNAL('clicked()'), self._saveChartToFile)                
         # Layout widgets.
         layout = QtGui.QHBoxLayout()
-        layout.addWidget(QtGui.QLabel("Chart type:"))
+        layout.addWidget(QtGui.QLabel('Chart type:'))
         layout.addWidget(self._charttype_list)
         layout.addWidget(self._combined_checkbox)
         layout.addWidget(self._stacked_checkbox)
@@ -332,32 +332,32 @@ class GraphPlotterTool(tool_base.ToolBase):
             if not self._plotdata:
                 return
             # Draw selected chart.
-            if selectedchart == u'Line chart':
+            if selectedchart == 'Line chart':
                 self._current_chart = envmonlib.LineChart(self._plotdata, figure = figure)
                 self._current_chart.plotChart(combined = combined, stacked = stacked, y_log_scale = ylogscale)        
                 self._canvas.draw()
             #
-            if selectedchart == u'Bar chart':
+            if selectedchart == 'Bar chart':
                 self._current_chart = envmonlib.BarChart(self._plotdata, figure = figure)
                 self._current_chart.plotChart(combined = combined, stacked = stacked, y_log_scale = ylogscale)                
                 self._canvas.draw()
             #
-            if selectedchart == u'Scatter chart':
+            if selectedchart == 'Scatter chart':
                 self._current_chart = envmonlib.ScatterChart(self._plotdata, figure = figure)
                 self._current_chart.plotChart(combined = combined, y_log_scale = ylogscale)                
                 self._canvas.draw()
             #
-            if selectedchart == u'Pie chart':
+            if selectedchart == 'Pie chart':
                 self._current_chart = envmonlib.PieChart(self._plotdata, figure = figure)
                 self._current_chart.plotChart()        
                 self._canvas.draw()
             #
-            if selectedchart == u'Boxplot chart':
+            if selectedchart == 'Boxplot chart':
                 self._current_chart = envmonlib.BoxPlotChart(self._plotdata, figure = figure)
                 self._current_chart.plotChart(y_log_scale = ylogscale)        
                 self._canvas.draw()
             #
-            if selectedchart == u'Map chart':
+            if selectedchart == 'Map chart':
                 self._current_chart = envmonlib.MapChart(self._plotdata, figure = figure)
                 self._current_chart.plotChart()        
                 self._canvas.draw()
@@ -376,23 +376,23 @@ class GraphPlotterTool(tool_base.ToolBase):
         if self._plotdata:
             # The graph part.
             plotdatainfo = self._plotdata.getPlotDataInfo()
-            self._title_edit.setText(plotdatainfo[u'title'])
-            self._xlabel_edit.setText(plotdatainfo[u'x_label'])
-            self._xtype_edit.setText(plotdatainfo[u'x_type'])
-            self._xformat_edit.setText(plotdatainfo[u'x_format'])
-            self._ylabel_edit.setText(plotdatainfo[u'y_label'])
-            self._ytype_edit.setText(plotdatainfo[u'y_type'])
-            self._yformat_edit.setText(plotdatainfo[u'y_format'])
-            self._zlabel_edit.setText(plotdatainfo[u'z_label'])
-            self._ztype_edit.setText(plotdatainfo[u'z_type'])
-            self._zformat_edit.setText(plotdatainfo[u'z_format'])
+            self._title_edit.setText(plotdatainfo['title'])
+            self._xlabel_edit.setText(plotdatainfo['x_label'])
+            self._xtype_edit.setText(plotdatainfo['x_type'])
+            self._xformat_edit.setText(plotdatainfo['x_format'])
+            self._ylabel_edit.setText(plotdatainfo['y_label'])
+            self._ytype_edit.setText(plotdatainfo['y_type'])
+            self._yformat_edit.setText(plotdatainfo['y_format'])
+            self._zlabel_edit.setText(plotdatainfo['z_label'])
+            self._ztype_edit.setText(plotdatainfo['z_type'])
+            self._zformat_edit.setText(plotdatainfo['z_format'])
             # Plots.             
             for plot in self._plotdata.getPlotList():
                 row = []
-                row.append(plot[u'plot_name'])
-                row.append(plot[u'x_label'])
-                row.append(plot[u'y_label'])
-                row.append(plot[u'z_label'])
+                row.append(plot['plot_name'])
+                row.append(plot['x_label'])
+                row.append(plot['y_label'])
+                row.append(plot['z_label'])
                 self._plotlabels_table.appendRow(row)
 
 #         self._plotlabels_editable.tablemodel.setModeldata(self._plotlabels_table)
@@ -403,38 +403,38 @@ class GraphPlotterTool(tool_base.ToolBase):
 #             # Tab: Edit data (JSON). For development.
 #             self.plotdatainfo_textedit.setText(
 #                        json.dumps(self._plotdata.getPlotDataInfo(), 
-#                                   encoding = u'utf8', 
+#                                   encoding = 'utf8', 
 #                                   sort_keys=True, indent=4))
 #             self.plotdatalist_textedit.setText(
 #                        json.dumps(self._plotdata.getPlotList(), 
-#                                   encoding = u'utf8', 
+#                                   encoding = 'utf8', 
 #                                   sort_keys=True, indent=4))
 #         else:
 #             # Tab: Edit data (JSON). For development. 
-#             self.plotdatainfo_textedit.setText(u'')
-#             self.plotdatalist_textedit.setText(u'')
+#             self.plotdatainfo_textedit.setText('')
+#             self.plotdatalist_textedit.setText('')
             
     def _applyLabels(self):
         """ """
         # The graph part.
         plotdatainfo = self._plotdata.getPlotDataInfo()
-        plotdatainfo[u'title'] = unicode(self._title_edit.text())  
-        plotdatainfo[u'x_label'] = unicode(self._xlabel_edit.text())
-        plotdatainfo[u'x_type'] = unicode(self._xtype_edit.text())
-        plotdatainfo[u'x_format'] = unicode(self._xformat_edit.text())
-        plotdatainfo[u'y_label'] = unicode(self._ylabel_edit.text())
-        plotdatainfo[u'y_type'] = unicode(self._ytype_edit.text())
-        plotdatainfo[u'y_format'] = unicode(self._yformat_edit.text())
-        plotdatainfo[u'z_label'] = unicode(self._zlabel_edit.text())
-        plotdatainfo[u'z_type'] = unicode(self._ztype_edit.text())
-        plotdatainfo[u'z_format'] = unicode(self._zformat_edit.text())
+        plotdatainfo['title'] = unicode(self._title_edit.text())  
+        plotdatainfo['x_label'] = unicode(self._xlabel_edit.text())
+        plotdatainfo['x_type'] = unicode(self._xtype_edit.text())
+        plotdatainfo['x_format'] = unicode(self._xformat_edit.text())
+        plotdatainfo['y_label'] = unicode(self._ylabel_edit.text())
+        plotdatainfo['y_type'] = unicode(self._ytype_edit.text())
+        plotdatainfo['y_format'] = unicode(self._yformat_edit.text())
+        plotdatainfo['z_label'] = unicode(self._zlabel_edit.text())
+        plotdatainfo['z_type'] = unicode(self._ztype_edit.text())
+        plotdatainfo['z_format'] = unicode(self._zformat_edit.text())
         # Plots.
         plotlist = self._plotdata.getPlotList()
         for index, row in enumerate(self._plotlabels_table.getRows()):
-            plotlist[index][u'plot_name'] = unicode(row[0])
-            plotlist[index][u'x_label'] = unicode(row[1])
-            plotlist[index][u'y_label'] = unicode(row[2])
-            plotlist[index][u'z_label'] = unicode(row[3])
+            plotlist[index]['plot_name'] = unicode(row[0])
+            plotlist[index]['x_label'] = unicode(row[1])
+            plotlist[index]['y_label'] = unicode(row[2])
+            plotlist[index]['z_label'] = unicode(row[3])
         #
         self. _resetLabels()
         # Update chart.
@@ -448,11 +448,11 @@ class GraphPlotterTool(tool_base.ToolBase):
 #         if self._plotdata:
 #             self._plotdata.setPlotDataInfo(
 #                                 json.loads(unicode(self.plotdatainfo_textedit.toPlainText()), 
-#                                            encoding = u'utf8'))
+#                                            encoding = 'utf8'))
 #             #
 #             self._plotdata.setPlotList(
 #                                 json.loads(unicode(self.plotdatalist_textedit.toPlainText()), 
-#                                            encoding = u'utf8'))
+#                                            encoding = 'utf8'))
 #         #
 #         self. _resetLabels()
 #         # Update chart.

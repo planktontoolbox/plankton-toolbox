@@ -22,13 +22,13 @@ class ActivityBase(QtGui.QWidget):
         self._parent = parentwidget
         self._mainmenubutton = None
         #
-        self._writeToStatusBar("Loading " + name + "...")
+        self._writeToStatusBar('Loading ' + name + '...')
         #
         self.setObjectName(name)
         # Add specific content. Abstract, implemented by subclasses.
         self._createContent()
         #
-        self._writeToStatusBar("")
+        self._writeToStatusBar('')
 
     def setMainMenuButton(self, button):
         """ """

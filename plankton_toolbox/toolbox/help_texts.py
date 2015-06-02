@@ -25,11 +25,11 @@ class HelpTexts(object):
             return self._texts[key]
         except:
             pass
-        return u''
+        return ''
   
     def _addTexts(self):
         """ """          
-        self._texts[u'StartActivity_intro'] = """
+        self._texts['StartActivity_intro'] = """
         <br/>
         <h3>Welcome to the Plankton Toolbox</h3>
         <p>

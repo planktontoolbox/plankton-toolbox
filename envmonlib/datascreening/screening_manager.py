@@ -12,7 +12,7 @@ import envmonlib
 class ScreeningManager(object):
     """ """
     def __init__(self,
-                 codelist_filenames = [u'toolbox_data/code_lists/screening_code_list.xlsx']):
+                 codelist_filenames = ['toolbox_data/code_lists/screening_code_list.xlsx']):
         # Parameters.
         self._codelist_filenames = codelist_filenames 
         # Local storage.
@@ -43,13 +43,13 @@ class ScreeningManager(object):
                 self._loadCodeLists(excelfilename)                
         #
         except Exception as e:
-            envmonlib.Logging().error(u"Failed when loading code lists. Exception: " + unicode(e))
+            envmonlib.Logging().error('Failed when loading code lists. Exception: ' + unicode(e))
 #        # Used for DEBUG:
 #        import locale
 #        import codecs
 #        import json
 #        fileencoding = locale.getpreferredencoding()
-#        out = codecs.open(u'DEBUG_codelist.txt', mode = 'w', encoding = fileencoding)
+#        out = codecs.open('DEBUG_codelist.txt', mode = 'w', encoding = fileencoding)
 #        out.write(json.dumps(self._codelist, encoding = 'utf8', sort_keys=True, indent=4))
 #        out.close()
 #        # end DEBUG.
@@ -63,7 +63,7 @@ class ScreeningManager(object):
         for row in tabledataset.getRows():
             codetype = row[0]
             # Internally code types are lowercase and words are separated by underscore.
-            codetype = codetype.lower().replace(u' ', u'_')
+            codetype = codetype.lower().replace(' ', '_')
             code = row[1]
             #
             if codetype:
@@ -85,7 +85,7 @@ class ScreeningManager(object):
                     if key in self.getCodeTypes():
                         checked_codetypes_set.add(key)
                         if data_dict[key] not in self.getCodes(key):
-                            envmonlib.Logging().warning(u"Visit level. Code is not valid.  Code type: " + unicode(key) + u"  Code: " + unicode(data_dict[key]))
+                            envmonlib.Logging().warning('Visit level. Code is not valid.  Code type: ' + unicode(key) + '  Code: ' + unicode(data_dict[key]))
                 #
                 for samplenode in visitnode.getChildren():
                     #
@@ -94,7 +94,7 @@ class ScreeningManager(object):
                         if key in self.getCodeTypes():
                             checked_codetypes_set.add(key)
                             if data_dict[key] not in self.getCodes(key):
-                                envmonlib.Logging().warning(u"Sample level. Code is not valid.  Code type: " + unicode(key) + u"  Code: " + unicode(data_dict[key]))
+                                envmonlib.Logging().warning('Sample level. Code is not valid.  Code type: ' + unicode(key) + '  Code: ' + unicode(data_dict[key]))
                     #                        
                     for variablenode in samplenode.getChildren():
                         #
@@ -103,7 +103,7 @@ class ScreeningManager(object):
                             if key in self.getCodeTypes():
                                 checked_codetypes_set.add(key)
                                 if data_dict[key] not in self.getCodes(key):
-                                    envmonlib.Logging().warning(u"Variable level. Code is not valid.  Code type: " + unicode(key) + u"  Code: " + unicode(data_dict[key]))
+                                    envmonlib.Logging().warning('Variable level. Code is not valid.  Code type: ' + unicode(key) + '  Code: ' + unicode(data_dict[key]))
         # Returns set of checked code types.
         return checked_codetypes_set
 
@@ -120,9 +120,9 @@ class ScreeningManager(object):
                     for variablenode in samplenode.getChildren():
                         #
                         data_dict = variablenode.getDataDict()
-                        if u'scientific_name' in data_dict:
-                            if data_dict[u'scientific_name'] not in species.getTaxaLookupDict():
-                                envmonlib.Logging().warning(u"Taxon name not in species list.  Taxon name: " + unicode(data_dict[u'scientific_name']))
+                        if 'scientific_name' in data_dict:
+                            if data_dict['scientific_name'] not in species.getTaxaLookupDict():
+                                envmonlib.Logging().warning('Taxon name not in species list.  Taxon name: ' + unicode(data_dict['scientific_name']))
      
     def bvolSpeciesScreening(self, datasets):
         """ """
@@ -137,11 +137,11 @@ class ScreeningManager(object):
                     for variablenode in samplenode.getChildren():
                         #
                         data_dict = variablenode.getDataDict()
-                        if (u'scientific_name' in data_dict) and (u'Size class' in data_dict):
-                            taxonname = data_dict[u'scientific_name']
-                            sizeclass = data_dict[u'size_class'] 
+                        if ('scientific_name' in data_dict) and ('Size class' in data_dict):
+                            taxonname = data_dict['scientific_name']
+                            sizeclass = data_dict['size_class'] 
                             
-                            if species.getBvolValue(taxonname, sizeclass, u'Size class') == None:
-                                envmonlib.Logging().warning(u"Taxon name/size clas not in BVOL list.  Taxon name: " + unicode(taxonname) + u"  Size class: " + unicode(sizeclass))
+                            if species.getBvolValue(taxonname, sizeclass, 'Size class') == None:
+                                envmonlib.Logging().warning('Taxon name/size clas not in BVOL list.  Taxon name: ' + unicode(taxonname) + '  Size class: ' + unicode(sizeclass))
      
 

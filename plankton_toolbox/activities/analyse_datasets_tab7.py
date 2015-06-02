@@ -46,7 +46,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
             for visitnode in analysisdata.getChildren():
                 for samplenode in visitnode.getChildren():
                     for variablenode in samplenode.getChildren():
-                        parameterset.add(variablenode.getData(u'parameter') + u' (' + variablenode.getData(u'unit') + u')')
+                        parameterset.add(variablenode.getData('parameter') + ' (' + variablenode.getData('unit') + ')')
             parameterlist = sorted(parameterset)
             self._parameter_list.addItems(parameterlist)
 
@@ -55,40 +55,40 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         """ """
         # Active widgets and connections.
 #         introlabel = utils_qt.RichTextQLabel()
-#         introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab7_intro'))
+#         introlabel.setText(help_texts.HelpTexts().getText('AnalyseDatasetsTab7_intro'))
         # - Select parameter.
         self._parameter_list = QtGui.QComboBox()        
         self._parameter_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         # - Split by.
-        self._splitby_year_checkbox = QtGui.QCheckBox("Year")
+        self._splitby_year_checkbox = QtGui.QCheckBox('Year')
         self._splitby_year_checkbox.setChecked(False) 
-        self._splitby_season_checkbox = QtGui.QCheckBox("Season")
+        self._splitby_season_checkbox = QtGui.QCheckBox('Season')
         self._splitby_season_checkbox.setChecked(False) 
-        self._splitby_month_checkbox = QtGui.QCheckBox("Month")
+        self._splitby_month_checkbox = QtGui.QCheckBox('Month')
         self._splitby_month_checkbox.setChecked(False) 
-        self._splitby_station_checkbox = QtGui.QCheckBox("Station")
+        self._splitby_station_checkbox = QtGui.QCheckBox('Station')
         self._splitby_station_checkbox.setChecked(False) 
-        self._splitby_visit_checkbox = QtGui.QCheckBox("Sampling event")
+        self._splitby_visit_checkbox = QtGui.QCheckBox('Sampling event')
         self._splitby_visit_checkbox.setChecked(False) 
-        self._splitby_depth_checkbox = QtGui.QCheckBox("Depth")
+        self._splitby_depth_checkbox = QtGui.QCheckBox('Depth')
         self._splitby_depth_checkbox.setChecked(False) 
-        self._splitby_taxon_checkbox = QtGui.QCheckBox("Scientific name")
+        self._splitby_taxon_checkbox = QtGui.QCheckBox('Scientific name')
         self._splitby_taxon_checkbox.setChecked(False) 
         # - View data.
-        self._viewdata_button = QtGui.QPushButton("View data")
-        self.connect(self._viewdata_button, QtCore.SIGNAL("clicked()"), self._viewData)                
+        self._viewdata_button = QtGui.QPushButton('View data')
+        self.connect(self._viewdata_button, QtCore.SIGNAL('clicked()'), self._viewData)                
         # - Calculate statistics.
-        self._calcstatistics_button = QtGui.QPushButton("Calculate statistics")
-        self.connect(self._calcstatistics_button, QtCore.SIGNAL("clicked()"), self._calcStats)                
+        self._calcstatistics_button = QtGui.QPushButton('Calculate statistics')
+        self.connect(self._calcstatistics_button, QtCore.SIGNAL('clicked()'), self._calcStats)                
         # - Plot graph.
-        self._plotgraphs_button = QtGui.QPushButton("Plot graph")
-        self.connect(self._plotgraphs_button, QtCore.SIGNAL("clicked()"), self._plotGraph)                
+        self._plotgraphs_button = QtGui.QPushButton('Plot graph')
+        self.connect(self._plotgraphs_button, QtCore.SIGNAL('clicked()'), self._plotGraph)                
 
         # Layout widgets.
         form1 = QtGui.QGridLayout()
-        label1 = QtGui.QLabel("Parameter:")
-        label2 = QtGui.QLabel("Split by:")
-        stretchlabel1 = QtGui.QLabel("")
+        label1 = QtGui.QLabel('Parameter:')
+        label2 = QtGui.QLabel('Split by:')
+        stretchlabel1 = QtGui.QLabel('')
         gridrow = 0
         form1.addWidget(label1, gridrow, 0, 1, 1)
         form1.addWidget(stretchlabel1, gridrow, 1, 1, 2)
@@ -176,58 +176,58 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         reportdata.setData(tabledata)
         # Header for result table.
         header_row = []
-        header_row.append(u'Parameter')
-        if split_on_year: header_row.append(u'Year')
-        if split_on_season: header_row.append(u'Season')
-        if split_on_month: header_row.append(u'Month')
-        if split_on_station: header_row.append(u'Station')
-        if split_on_visit: header_row.append(u'Sampling event')
-        if split_on_depth: header_row.append(u'Depth')
-        if split_on_taxon: header_row.append(u'Scientific name')
-        header_row.append(u'Mean')
-        header_row.append(u'Median')
-        header_row.append(u'Std. dev.')
-        header_row.append(u'Min')
-        header_row.append(u'Max')
-        header_row.append(u'Counted values')
+        header_row.append('Parameter')
+        if split_on_year: header_row.append('Year')
+        if split_on_season: header_row.append('Season')
+        if split_on_month: header_row.append('Month')
+        if split_on_station: header_row.append('Station')
+        if split_on_visit: header_row.append('Sampling event')
+        if split_on_depth: header_row.append('Depth')
+        if split_on_taxon: header_row.append('Scientific name')
+        header_row.append('Mean')
+        header_row.append('Median')
+        header_row.append('Std. dev.')
+        header_row.append('Min')
+        header_row.append('Max')
+        header_row.append('Counted values')
         tabledata.setHeader(header_row)
         # Extract values.
-        yearkey = u''
-        monthkey = u''
-        seasonkey = u''
-        stationkey = u''
-        visitkey = u''
-        depthkey = u''
-        taxonkey = u''
+        yearkey = ''
+        monthkey = ''
+        seasonkey = ''
+        stationkey = ''
+        visitkey = ''
+        depthkey = ''
+        taxonkey = ''
         #
         for visitnode in dataset.getChildren():
-            visitdate = visitnode.getData(u'date')
-            visitstation = visitnode.getData(u'station_name')
-            visitvisit = visitstation + u' ' + visitdate 
+            visitdate = visitnode.getData('date')
+            visitstation = visitnode.getData('station_name')
+            visitvisit = visitstation + ' ' + visitdate 
             visityear = unicode(visitdate[0:4])
             visitmonth = unicode(visitdate[5:7])
-            visitseason = u''
-            if visitmonth in [u'12', u'01',u'02']:
-                visitseason = u'Dec-Jan-Feb'
-            elif visitmonth in [u'03', u'04',u'05']:
-                visitseason = u'Mar-Apr-May'
-            elif visitmonth in [u'06', u'07',u'08']:
-                visitseason = u'Jun-Jul-Aug'
-            elif visitmonth in [u'09', u'10',u'11']:
-                visitseason = u'Sep-Oct-Nov'
+            visitseason = ''
+            if visitmonth in ['12', '01','02']:
+                visitseason = 'Dec-Jan-Feb'
+            elif visitmonth in ['03', '04','05']:
+                visitseason = 'Mar-Apr-May'
+            elif visitmonth in ['06', '07','08']:
+                visitseason = 'Jun-Jul-Aug'
+            elif visitmonth in ['09', '10','11']:
+                visitseason = 'Sep-Oct-Nov'
             #
             for samplenode in visitnode.getChildren():
-                sample_min_depth = unicode(samplenode.getData(u'sample_min_depth'))
-                sample_max_depth = unicode(samplenode.getData(u'sample_max_depth'))
-                sampleminmaxdepth = sample_min_depth + u'-' + sample_max_depth   
+                sample_min_depth = unicode(samplenode.getData('sample_min_depth'))
+                sample_max_depth = unicode(samplenode.getData('sample_max_depth'))
+                sampleminmaxdepth = sample_min_depth + '-' + sample_max_depth   
                 # Iterate over sample content. 
                 # Note: Create a level between sample and variabel.
                 grouped_size_lifestages = {}
                 for variablenode in samplenode.getChildren():
-                    group_key = variablenode.getData(u'scientific_name')
-                    group_key += u':' + variablenode.getData(u'size_class') # Specific for phytoplankton.
-                    group_key += u':' + variablenode.getData(u'stage') # Specific for zooplankton.
-                    group_key += u':' + variablenode.getData(u'sex') # Specific for zooplankton.
+                    group_key = variablenode.getData('scientific_name')
+                    group_key += ':' + variablenode.getData('size_class') # Specific for phytoplankton.
+                    group_key += ':' + variablenode.getData('stage') # Specific for zooplankton.
+                    group_key += ':' + variablenode.getData('sex') # Specific for zooplankton.
                     if group_key not in grouped_size_lifestages:
                         grouped_size_lifestages[group_key] = [] # Starts a new group.
                     grouped_size_lifestages[group_key].append(variablenode)
@@ -236,36 +236,36 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                 for group_key in grouped_size_lifestages.keys():
                     #
                     for variablenode in grouped_size_lifestages[group_key]:
-                        variabletaxon = variablenode.getData(u'scientific_name')
+                        variabletaxon = variablenode.getData('scientific_name')
                         # Parameters.
-                        parameter = variablenode.getData(u'parameter')
-                        unit = variablenode.getData(u'unit')
-                        parameternadunit = parameter + u' (' + unit + u')'
+                        parameter = variablenode.getData('parameter')
+                        unit = variablenode.getData('unit')
+                        parameternadunit = parameter + ' (' + unit + ')'
                         if parameternadunit == selectedparameter:
                             # Build split key.
-                            splitkey = u''
+                            splitkey = ''
                             if split_on_year: splitkey += visityear
-                            splitkey += u':'
+                            splitkey += ':'
                             if split_on_season: splitkey += visitseason
-                            splitkey += u':'
+                            splitkey += ':'
                             if split_on_month: splitkey += visitmonth
-                            splitkey += u':'
+                            splitkey += ':'
                             if split_on_station: splitkey += visitstation
-                            splitkey += u':'
+                            splitkey += ':'
                             if split_on_visit: splitkey += visitvisit
-                            splitkey += u':'
+                            splitkey += ':'
                             if split_on_depth: splitkey += sampleminmaxdepth
-                            splitkey += u':'
+                            splitkey += ':'
                             if split_on_taxon: splitkey += variabletaxon
                             # Add data.
                             if splitkey not in data_dict:
                                 data_dict[splitkey] = []
-                            data_dict[splitkey].append(variablenode.getData(u'value'))
+                            data_dict[splitkey].append(variablenode.getData('value'))
                              
         # Calculate result
         for key in sorted(data_dict.keys()):
             # Keys.
-            keysplit = key.split(u':')
+            keysplit = key.split(':')
             yearkey = keysplit[0]
             seasonkey = keysplit[1]
             monthkey = keysplit[2]
@@ -285,15 +285,15 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                 maxvalue = numpy.nanmax(data_list)
                 countedvalues = len(data_list)
             except Exception as e:
-                meanvalue = u'<ERROR>'
-                medianvalue = u'<ERROR>'
-                stddevvalue = u'<ERROR>'
-                minvalue = u'<ERROR>'
-                maxvalue = u'<ERROR>'
+                meanvalue = '<ERROR>'
+                medianvalue = '<ERROR>'
+                stddevvalue = '<ERROR>'
+                minvalue = '<ERROR>'
+                maxvalue = '<ERROR>'
                 countedvalues = len(data_list)
                 #
                 print(', '.join(map(unicode, data_list))) # Print data.
-                print u'Error in calc statistics: ' + e # Print exception.            
+                print 'Error in calc statistics: ' + e # Print exception.            
             # Create row.
             report_row = []
             report_row.append(selectedparameter)
@@ -364,42 +364,42 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         tabledata = envmonlib.DatasetTable()
         reportdata.setData(tabledata)
         # Extract values.
-        yearkey = u''
-        monthkey = u''
-        seasonkey = u''
-        stationkey = u''
-        visitkey = u''
-        depthkey = u''
-        taxonkey = u''
+        yearkey = ''
+        monthkey = ''
+        seasonkey = ''
+        stationkey = ''
+        visitkey = ''
+        depthkey = ''
+        taxonkey = ''
         #
         for visitnode in dataset.getChildren():
-            visitdate = visitnode.getData(u'date')
-            visitstation = visitnode.getData(u'station_name')
-            visitvisit = visitstation + u' ' + visitdate 
+            visitdate = visitnode.getData('date')
+            visitstation = visitnode.getData('station_name')
+            visitvisit = visitstation + ' ' + visitdate 
             visityear = unicode(visitdate[0:4])
             visitmonth = unicode(visitdate[5:7])
-            visitseason = u''
-            if visitmonth in [u'12', u'01',u'02']:
-                visitseason = u'Dec-Jan-Feb'
-            elif visitmonth in [u'03', u'04',u'05']:
-                visitseason = u'Mar-Apr-May'
-            elif visitmonth in [u'06', u'07',u'08']:
-                visitseason = u'Jun-Jul-Aug'
-            elif visitmonth in [u'09', u'10',u'11']:
-                visitseason = u'Sep-Oct-Nov'
+            visitseason = ''
+            if visitmonth in ['12', '01','02']:
+                visitseason = 'Dec-Jan-Feb'
+            elif visitmonth in ['03', '04','05']:
+                visitseason = 'Mar-Apr-May'
+            elif visitmonth in ['06', '07','08']:
+                visitseason = 'Jun-Jul-Aug'
+            elif visitmonth in ['09', '10','11']:
+                visitseason = 'Sep-Oct-Nov'
             #
             for samplenode in visitnode.getChildren():
-                sample_min_depth = unicode(samplenode.getData(u'sample_min_depth'))
-                sample_max_depth = unicode(samplenode.getData(u'sample_max_depth'))
-                sampleminmaxdepth = sample_min_depth + u'-' + sample_max_depth   
+                sample_min_depth = unicode(samplenode.getData('sample_min_depth'))
+                sample_max_depth = unicode(samplenode.getData('sample_max_depth'))
+                sampleminmaxdepth = sample_min_depth + '-' + sample_max_depth   
                 # Iterate over sample content. 
                 # Note: Create a level between sample and variabel.
                 grouped_size_lifestages = {}
                 for variablenode in samplenode.getChildren():
-                    group_key = variablenode.getData(u'scientific_name')
-                    group_key += u':' + variablenode.getData(u'size_class') # Specific for phytoplankton.
-                    group_key += u':' + variablenode.getData(u'stage') # Specific for zooplankton.
-                    group_key += u':' + variablenode.getData(u'sex') # Specific for zooplankton.
+                    group_key = variablenode.getData('scientific_name')
+                    group_key += ':' + variablenode.getData('size_class') # Specific for phytoplankton.
+                    group_key += ':' + variablenode.getData('stage') # Specific for zooplankton.
+                    group_key += ':' + variablenode.getData('sex') # Specific for zooplankton.
                     if group_key not in grouped_size_lifestages:
                         grouped_size_lifestages[group_key] = [] # Starts a new group.
                     grouped_size_lifestages[group_key].append(variablenode)
@@ -408,35 +408,35 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                 for group_key in grouped_size_lifestages.keys():
                     #
                     for variablenode in grouped_size_lifestages[group_key]:
-                        variabletaxon = variablenode.getData(u'scientific_name')
+                        variabletaxon = variablenode.getData('scientific_name')
                         # Parameters.
-                        parameter = variablenode.getData(u'parameter')
-                        unit = variablenode.getData(u'unit')
-                        parameternadunit = parameter + u' (' + unit + u')'
+                        parameter = variablenode.getData('parameter')
+                        unit = variablenode.getData('unit')
+                        parameternadunit = parameter + ' (' + unit + ')'
                         if parameternadunit == selectedparameter:
                             # Build split key.
-                            splitkey = u''
+                            splitkey = ''
                             if split_on_year: splitkey += visityear
-                            splitkey += u':'
+                            splitkey += ':'
                             if split_on_season: splitkey += visitseason
-                            splitkey += u':'
+                            splitkey += ':'
                             if split_on_month: splitkey += visitmonth
-                            splitkey += u':'
+                            splitkey += ':'
                             if split_on_station: splitkey += visitstation
-                            splitkey += u':'
+                            splitkey += ':'
                             if split_on_visit: splitkey += visitvisit
-                            splitkey += u':'
+                            splitkey += ':'
                             if split_on_depth: splitkey += sampleminmaxdepth
-                            splitkey += u':'
+                            splitkey += ':'
                             if split_on_taxon: splitkey += variabletaxon
                             # Add data.
                             if splitkey not in data_dict:
                                 data_dict[splitkey] = []
-                            data_dict[splitkey].append(variablenode.getData(u'value'))
+                            data_dict[splitkey].append(variablenode.getData('value'))
                              
         # Create empty result table.
         resulttable = []
-        emptyrow = [u''] * (1 + len(data_dict)) # Empty row.
+        emptyrow = [''] * (1 + len(data_dict)) # Empty row.
         maxlength = 0
         for key in sorted(data_dict.keys()):
             datalistlength = len(data_dict[key])
@@ -445,19 +445,19 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         for index in range(maxlength + 9): # Header rows and data rows.    
             resulttable.append(emptyrow[:]) # Clone.
         # Headers, multiple rows.
-        resulttable[0][0] = u'Parameter:'
-        resulttable[1][0] = u'Year:'
-        resulttable[2][0] = u'Season:'
-        resulttable[3][0] = u'Month:'
-        resulttable[4][0] = u'Station:'
-        resulttable[5][0] = u'Sampling event:'
-        resulttable[6][0] = u'Depth:'
-        resulttable[7][0] = u'Scientific name:'
+        resulttable[0][0] = 'Parameter:'
+        resulttable[1][0] = 'Year:'
+        resulttable[2][0] = 'Season:'
+        resulttable[3][0] = 'Month:'
+        resulttable[4][0] = 'Station:'
+        resulttable[5][0] = 'Sampling event:'
+        resulttable[6][0] = 'Depth:'
+        resulttable[7][0] = 'Scientific name:'
                 
         # Calculate result
         for colindex, key in enumerate(sorted(data_dict.keys())):
             # Keys.
-            keysplit = key.split(u':')
+            keysplit = key.split(':')
             yearkey = keysplit[0]
             seasonkey = keysplit[1]
             monthkey = keysplit[2]
@@ -475,7 +475,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
             resulttable[6][colindex + 1] = depthkey
             resulttable[7][colindex + 1] = taxonkey
             # Data.
-            resulttable[8][colindex + 1] = u'Values'
+            resulttable[8][colindex + 1] = 'Values'
             for rowindex, value in enumerate(data_dict[key]):
                 resulttable[rowindex + 9][colindex + 1] = value
         # Header.
@@ -488,8 +488,8 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
     def _plotGraph(self):
         """ """
         # Show the Graph plotter tool if hidden. 
-        tool_manager.ToolManager().showToolByName(u'Graph plotter')
-        graphtool = tool_manager.ToolManager().getToolByName(u'Graph plotter')
+        tool_manager.ToolManager().showToolByName('Graph plotter')
+        graphtool = tool_manager.ToolManager().getToolByName('Graph plotter')
         graphtool.clearPlotData()
         # Filtered data should be used.
         self._main_activity.updateFilter() # Must be done before createFilteredDataset().
@@ -509,8 +509,8 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         # Graph data.
         self._graph_plot_data = envmonlib.GraphPlotData(
                                     title = selectedparameter, 
-                                    y_type = u'float',
-                                    y_label = u'')
+                                    y_type = 'float',
+                                    y_label = '')
         # Create subplots.
         self._extractPlotValues(analysisdata,
                                   selectedparameter, 
@@ -522,7 +522,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                                   split_on_depth,
                                   split_on_taxon)
         # View in the graph-plot tool.    
-        graphtool.setChartSelection(chart = u"Boxplot chart",
+        graphtool.setChartSelection(chart = 'Boxplot chart',
                                     combined = True, stacked = False, y_log_scale = False)
         graphtool.setPlotData(self._graph_plot_data)   
         
@@ -540,33 +540,33 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         data_dict = {}        
         #
         for visitnode in dataset.getChildren():
-            visitdate = visitnode.getData(u'date')
-            visitstation = visitnode.getData(u'station_name')
-            visitvisit = visitstation + u' ' + visitdate 
+            visitdate = visitnode.getData('date')
+            visitstation = visitnode.getData('station_name')
+            visitvisit = visitstation + ' ' + visitdate 
             visityear = unicode(visitdate[0:4])
             visitmonth = unicode(visitdate[5:7])
-            visitseason = u''
-            if visitmonth in [u'12', u'01',u'02']:
-                visitseason = u'Dec-Jan-Feb'
-            elif visitmonth in [u'03', u'04',u'05']:
-                visitseason = u'Mar-Apr-May'
-            elif visitmonth in [u'06', u'07',u'08']:
-                visitseason = u'Jun-Jul-Aug'
-            elif visitmonth in [u'09', u'10',u'11']:
-                visitseason = u'Sep-Oct-Nov'
+            visitseason = ''
+            if visitmonth in ['12', '01','02']:
+                visitseason = 'Dec-Jan-Feb'
+            elif visitmonth in ['03', '04','05']:
+                visitseason = 'Mar-Apr-May'
+            elif visitmonth in ['06', '07','08']:
+                visitseason = 'Jun-Jul-Aug'
+            elif visitmonth in ['09', '10','11']:
+                visitseason = 'Sep-Oct-Nov'
             #
             for samplenode in visitnode.getChildren():
-                sample_min_depth = unicode(samplenode.getData(u'sample_min_depth'))
-                sample_max_depth = unicode(samplenode.getData(u'sample_max_depth'))
-                sampleminmaxdepth = sample_min_depth + u'-' + sample_max_depth   
+                sample_min_depth = unicode(samplenode.getData('sample_min_depth'))
+                sample_max_depth = unicode(samplenode.getData('sample_max_depth'))
+                sampleminmaxdepth = sample_min_depth + '-' + sample_max_depth   
                 # Iterate over sample content. 
                 # Note: Create a level between sample and variabel.
                 grouped_size_lifestages = {}
                 for variablenode in samplenode.getChildren():
-                    group_key = variablenode.getData(u'scientific_name')
-                    group_key += u':' + variablenode.getData(u'size_class') # Specific for phytoplankton.
-                    group_key += u':' + variablenode.getData(u'stage') # Specific for zooplankton.
-                    group_key += u':' + variablenode.getData(u'sex') # Specific for zooplankton.
+                    group_key = variablenode.getData('scientific_name')
+                    group_key += ':' + variablenode.getData('size_class') # Specific for phytoplankton.
+                    group_key += ':' + variablenode.getData('stage') # Specific for zooplankton.
+                    group_key += ':' + variablenode.getData('sex') # Specific for zooplankton.
                     if group_key not in grouped_size_lifestages:
                         grouped_size_lifestages[group_key] = [] # Starts a new group.
                     grouped_size_lifestages[group_key].append(variablenode)
@@ -575,11 +575,11 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                 for group_key in grouped_size_lifestages.keys():
                     #
                     for variablenode in grouped_size_lifestages[group_key]:
-                        variabletaxon = variablenode.getData(u'scientific_name')
+                        variabletaxon = variablenode.getData('scientific_name')
                         # Parameters.
-                        parameter = variablenode.getData(u'parameter')
-                        unit = variablenode.getData(u'unit')
-                        parameternadunit = parameter + u' (' + unit + u')'
+                        parameter = variablenode.getData('parameter')
+                        unit = variablenode.getData('unit')
+                        parameternadunit = parameter + ' (' + unit + ')'
                         if parameternadunit == selectedparameter:
                             # Build split key.
                             splitkey_list = []
@@ -598,14 +598,14 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                             if split_on_taxon: 
                                 splitkey_list.append(variabletaxon)
                             #
-                            splitkey = u':'.join(splitkey_list)
+                            splitkey = ':'.join(splitkey_list)
                             # Add data.
                             if splitkey not in data_dict:
                                 data_dict[splitkey] = []
-                            data_dict[splitkey].append(variablenode.getData(u'value'))     
+                            data_dict[splitkey].append(variablenode.getData('value'))     
         # Calculate result
         try:
             for key in sorted(data_dict.keys()):
                 self._graph_plot_data.addPlot(plot_name = key, y_array = data_dict[key])
         except UserWarning as e:
-            QtGui.QMessageBox.warning(self, "Warning", unicode(e))
+            QtGui.QMessageBox.warning(self, 'Warning', unicode(e))

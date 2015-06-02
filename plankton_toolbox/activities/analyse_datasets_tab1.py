@@ -39,7 +39,7 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
         """ """
         # Active widgets and connections.
 #         introlabel = utils_qt.RichTextQLabel()
-#         introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab1_intro'))
+#         introlabel.setText(help_texts.HelpTexts().getText('AnalyseDatasetsTab1_intro'))
         #
         loaded_datasets_listview = QtGui.QListView()
 #         loaded_datasets_listview.setMaximumHeight(80)
@@ -48,13 +48,13 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
         loaded_datasets_listview.setModel(self._loaded_datasets_model)
         # Listen for changes in the toolbox dataset list.
         self.connect(toolbox_datasets.ToolboxDatasets(), 
-                     QtCore.SIGNAL("datasetListChanged"), 
+                     QtCore.SIGNAL('datasetListChanged'), 
                      self._updateImportedDatasetList)
         #
-        self._clearanalysisdata_button = QtGui.QPushButton("Clear analysis data")
-        self.connect(self._clearanalysisdata_button, QtCore.SIGNAL("clicked()"), self._clearAnalysisData)                
-        self._copydatasets_button = QtGui.QPushButton("Load marked dataset(s) for analysis")
-        self.connect(self._copydatasets_button, QtCore.SIGNAL("clicked()"), self._copyDatasetsForAnalysis)                
+        self._clearanalysisdata_button = QtGui.QPushButton('Clear analysis data')
+        self.connect(self._clearanalysisdata_button, QtCore.SIGNAL('clicked()'), self._clearAnalysisData)                
+        self._copydatasets_button = QtGui.QPushButton('Load marked dataset(s) for analysis')
+        self.connect(self._copydatasets_button, QtCore.SIGNAL('clicked()'), self._copyDatasetsForAnalysis)                
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addWidget(self._clearanalysisdata_button)
@@ -74,8 +74,8 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
         """ """
         self._loaded_datasets_model.clear()        
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
-            item = QtGui.QStandardItem(u"Dataset-" + unicode(rowindex + 1) + 
-                                       u".   Source: " + dataset.getMetadata(u'file_name'))
+            item = QtGui.QStandardItem('Dataset-' + unicode(rowindex + 1) + 
+                                       '.   Source: ' + dataset.getMetadata('file_name'))
             item.setCheckState(QtCore.Qt.Checked)
 #            item.setCheckState(QtCore.Qt.Unchecked)
             item.setCheckable(True)
@@ -93,7 +93,7 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
     def _copyDatasetsForAnalysis(self):
         """ """
         try:
-            envmonlib.Logging().log(u"Copy datasets for analysis...")
+            envmonlib.Logging().log('Copy datasets for analysis...')
             envmonlib.Logging().startAccumulatedLogging()
             #
             self._main_activity.viewAnalysisData()
@@ -110,14 +110,14 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
             self._analysisdata.copyDatasetsToAnalysisData(datasets)  
             # Check.
             if (self._analysisdata.getData() == None) or (len(self._analysisdata.getData().getChildren()) == 0):
-                envmonlib.Logging().log("Selected datasets are empty.")
-                raise UserWarning("Selected datasets are empty.")
+                envmonlib.Logging().log('Selected datasets are empty.')
+                raise UserWarning('Selected datasets are empty.')
             self._main_activity.updateViewedDataAndTabs() 
         #
         except UserWarning as e:
-            envmonlib.Logging().error("Failed to copy data for analysis. " + unicode(e))
-            QtGui.QMessageBox.warning(self._main_activity, "Warning", "Failed to copy data for analysis. " + unicode(e))
+            envmonlib.Logging().error('Failed to copy data for analysis. ' + unicode(e))
+            QtGui.QMessageBox.warning(self._main_activity, 'Warning', 'Failed to copy data for analysis. ' + unicode(e))
         finally:
             envmonlib.Logging().logAllAccumulatedRows()    
-            envmonlib.Logging().log(u"Copy datasets for analysis is done.")
+            envmonlib.Logging().log('Copy datasets for analysis is done.')
 

@@ -27,7 +27,7 @@ Sample part from the resource file:
                     "Size class": 1, 
                     "Size class PW": 1, 
                     "Size range": "3-4", 
-                    "Trophic type": "AU", 
+                    "Trophic type": "A', 
                     "Unit": "cell"
                 }, 
                 ... 
@@ -67,7 +67,7 @@ class PegBrowserTool(tool_base.ToolBase):
         contentLayout.addLayout(self._contentPegItem())
         contentLayout.addLayout(self._contentDyntaxaControl())
         # Used when toolbox resource has changed.        
-        self.connect(toolbox_resources.ToolboxResources(), QtCore.SIGNAL("pegResourceLoaded"), self._pegRefresh)
+        self.connect(toolbox_resources.ToolboxResources(), QtCore.SIGNAL('pegResourceLoaded'), self._pegRefresh)
 
     def _contentTaxonList(self):
         """ """
@@ -78,8 +78,8 @@ class PegBrowserTool(tool_base.ToolBase):
         self._model = PegTableModel(self._peg_object)
         self._tableView.setTablemodel(self._model)
         #
-        self.connect(self._tableView.selectionModel, QtCore.SIGNAL("currentChanged(QModelIndex, QModelIndex)"), self._showItemInfo)
-        self.connect(self._tableView.selectionModel, QtCore.SIGNAL("selectionChanged(QModelIndex, QModelIndex)"), self._showItemInfo)
+        self.connect(self._tableView.selectionModel, QtCore.SIGNAL('currentChanged(QModelIndex, QModelIndex)'), self._showItemInfo)
+        self.connect(self._tableView.selectionModel, QtCore.SIGNAL('selectionChanged(QModelIndex, QModelIndex)'), self._showItemInfo)
         #
         return layout
     
@@ -100,26 +100,26 @@ class PegBrowserTool(tool_base.ToolBase):
         self._carbon_label = QtGui.QLabel('-')
         # Layout widgets.
         layout = QtGui.QFormLayout()
-        layout.addRow("<b><u>Species:</u></b>", None)
-        layout.addRow("Scientific name:", self._scientificname_label)
-        layout.addRow("Class:", self._class_label)
-        layout.addRow("Division:", self._division_label)
-        layout.addRow("Order:", self._order_label)
-        layout.addRow("<b><u>Size class:</u></b>", None)
-        layout.addRow("Size class:", self._size_class_label)
-        layout.addRow("Trophic type:", self._trophic_type_label)
-        layout.addRow("Geometric shape:", self._shape_label)
-        layout.addRow("Formula:", self._formula_label)
-        layout.addRow("Calculated volume:", self._volume_label)
-        layout.addRow("Calculated carbon:", self._carbon_label)
+        layout.addRow('<b><u>Species:</u></b>', None)
+        layout.addRow('Scientific name:', self._scientificname_label)
+        layout.addRow('Class:', self._class_label)
+        layout.addRow('Division:', self._division_label)
+        layout.addRow('Order:', self._order_label)
+        layout.addRow('<b><u>Size class:</u></b>', None)
+        layout.addRow('Size class:', self._size_class_label)
+        layout.addRow('Trophic type:', self._trophic_type_label)
+        layout.addRow('Geometric shape:', self._shape_label)
+        layout.addRow('Formula:', self._formula_label)
+        layout.addRow('Calculated volume:', self._volume_label)
+        layout.addRow('Calculated carbon:', self._carbon_label)
         #
         return layout
 
     def _contentDyntaxaControl(self):
         """ """
         # Active widgets and connections.
-        self._loadresource_button = QtGui.QPushButton("Load PEG resource")
-        self.connect(self._loadresource_button, QtCore.SIGNAL("clicked()"), self._loadResource)                
+        self._loadresource_button = QtGui.QPushButton('Load PEG resource')
+        self.connect(self._loadresource_button, QtCore.SIGNAL('clicked()'), self._loadResource)                
         # Layout widgets.
         layout = QtGui.QHBoxLayout()
         layout.addStretch(5)
@@ -151,12 +151,12 @@ class PegBrowserTool(tool_base.ToolBase):
     def _loadResource(self):
         """ """
         # Dyntaxa is needed to load PEG.
-        self._writeToStatusBar("Loading PEG resource...")
+        self._writeToStatusBar('Loading PEG resource...')
         try:
             toolbox_resources.ToolboxResources().loadUnloadedResourceDyntaxa()
             toolbox_resources.ToolboxResources().loadResourcePeg()
         finally:
-            self._writeToStatusBar("")
+            self._writeToStatusBar('')
 
     def _pegRefresh(self):
         """ """

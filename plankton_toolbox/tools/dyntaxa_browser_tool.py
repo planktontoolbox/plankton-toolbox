@@ -37,7 +37,7 @@ class DyntaxaBrowserTool(tool_base.ToolBase):
         contentLayout.addLayout(self._contentDyntaxaItem())
         contentLayout.addLayout(self._contentDyntaxaControl())
         # Used when toolbox resource has changed.        
-        self.connect(toolbox_resources.ToolboxResources(), QtCore.SIGNAL("dyntaxaResourceLoaded"), self._dyntaxaRefresh)
+        self.connect(toolbox_resources.ToolboxResources(), QtCore.SIGNAL('dyntaxaResourceLoaded'), self._dyntaxaRefresh)
 
     def _contentTaxonList(self):
         """ """
@@ -48,8 +48,8 @@ class DyntaxaBrowserTool(tool_base.ToolBase):
         self._model = DyntaxaTableModel(self._dyntaxa_object)
         self._tableView.setTablemodel(self._model)
         #
-        self.connect(self._tableView.selectionModel, QtCore.SIGNAL("currentChanged(QModelIndex, QModelIndex)"), self._showItemInfo)
-        self.connect(self._tableView.selectionModel, QtCore.SIGNAL("selectionChanged(QModelIndex, QModelIndex)"), self._showItemInfo)
+        self.connect(self._tableView.selectionModel, QtCore.SIGNAL('currentChanged(QModelIndex, QModelIndex)'), self._showItemInfo)
+        self.connect(self._tableView.selectionModel, QtCore.SIGNAL('selectionChanged(QModelIndex, QModelIndex)'), self._showItemInfo)
         #
         return layout
     
@@ -73,29 +73,29 @@ class DyntaxaBrowserTool(tool_base.ToolBase):
 #        self._carbon_label = QtGui.QLabel('-')
         # Layout widgets.
         layout = QtGui.QFormLayout()
-#        layout.addRow("<b><u>Species:</u></b>", None)
-        layout.addRow("Scientific name:", self._scientificname_label)
-#        layout.addRow("Author:", self._author_label)
-        layout.addRow("Classification:", self._classification_label)
-#        layout.addRow("Author:", self._author_label)
-#        layout.addRow("Class:", self._class_label)
-#        layout.addRow("Division:", self._division_label)
-#        layout.addRow("Order:", self._order_label)
-#        layout.addRow("<b><u>Size class:</u></b>", None)
-#        layout.addRow("Size class:", self._size_class_label)
-#        layout.addRow("Trophic type:", self._trophic_type_label)
-#        layout.addRow("Geometric shape:", self._shape_label)
-#        layout.addRow("Formula:", self._formula_label)
-#        layout.addRow("Calculated volume:", self._volume_label)
-#        layout.addRow("Calculated carbon:", self._carbon_label)
+#        layout.addRow('<b><u>Species:</u></b>", None)
+        layout.addRow('Scientific name:', self._scientificname_label)
+#        layout.addRow('Author:", self._author_label)
+        layout.addRow('Classification:', self._classification_label)
+#        layout.addRow('Author:", self._author_label)
+#        layout.addRow('Class:", self._class_label)
+#        layout.addRow('Division:", self._division_label)
+#        layout.addRow('Order:", self._order_label)
+#        layout.addRow('<b><u>Size class:</u></b>", None)
+#        layout.addRow('Size class:", self._size_class_label)
+#        layout.addRow('Trophic type:", self._trophic_type_label)
+#        layout.addRow('Geometric shape:", self._shape_label)
+#        layout.addRow('Formula:", self._formula_label)
+#        layout.addRow('Calculated volume:", self._volume_label)
+#        layout.addRow('Calculated carbon:", self._carbon_label)
         #
         return layout
 
     def _contentDyntaxaControl(self):
         """ """
         # Active widgets and connections.
-        self._loadresource_button = QtGui.QPushButton("Load Dyntaxa resource")
-        self.connect(self._loadresource_button, QtCore.SIGNAL("clicked()"), self._loadResource)                
+        self._loadresource_button = QtGui.QPushButton('Load Dyntaxa resource')
+        self.connect(self._loadresource_button, QtCore.SIGNAL('clicked()'), self._loadResource)                
         # Layout widgets.
         layout = QtGui.QHBoxLayout()
         layout.addStretch(5)

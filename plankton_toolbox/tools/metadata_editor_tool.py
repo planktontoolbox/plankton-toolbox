@@ -36,22 +36,22 @@ class MetadataEditorTool(tool_base.ToolBase):
     def _contentTest1(self):
         """ """
         # Active widgets and connections.
-        self._nameedit = QtGui.QLineEdit("<Name>")
-        self._emailedit = QtGui.QLineEdit("<Email>")
+        self._nameedit = QtGui.QLineEdit('<Name>')
+        self._emailedit = QtGui.QLineEdit('<Email>')
         self._customerlist = QtGui.QListWidget()        
         # Layout widgets.
         layout = QtGui.QFormLayout()
-        layout.addRow("&Name:", self._nameedit)
-        layout.addRow("&Email:", self._emailedit)
-        layout.addRow("&Projects:", self._customerlist)
+        layout.addRow('&Name:', self._nameedit)
+        layout.addRow('&Email:', self._emailedit)
+        layout.addRow('&Projects:', self._customerlist)
         #
         return layout
 
     def _contentTest2(self):
         """ """
         # Active widgets and connections.
-        self._testbutton = QtGui.QPushButton("Write name to log")
-        self.connect(self._testbutton, QtCore.SIGNAL("clicked()"), self._test)   
+        self._testbutton = QtGui.QPushButton('Write name to log')
+        self.connect(self._testbutton, QtCore.SIGNAL('clicked()'), self._test)   
         # Active widgets and connections.
         layout = QtGui.QHBoxLayout()
         layout.addStretch(5)
@@ -61,4 +61,4 @@ class MetadataEditorTool(tool_base.ToolBase):
 
     def _test(self):
         """ """
-        self._writeToLog("Name: " + unicode(self._nameedit.text()))
+        self._writeToLog('Name: ' + unicode(self._nameedit.text()))

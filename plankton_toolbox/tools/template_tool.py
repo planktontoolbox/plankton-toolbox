@@ -39,26 +39,26 @@ class TemplateTool(tool_base.ToolBase):
     def _contentPersonInfo(self):
         """ """
         # Active widgets and connections.
-        self._nameedit = QtGui.QLineEdit("<Name>")
-        self._emailedit = QtGui.QLineEdit("<Email>")
+        self._nameedit = QtGui.QLineEdit('<Name>')
+        self._emailedit = QtGui.QLineEdit('<Email>')
         self._customerlist = QtGui.QListWidget()
         # Layout.
         layout = QtGui.QFormLayout()
-        layout.addRow("&Name:", self._nameedit)
-        layout.addRow("&Email:", self._emailedit)
-        layout.addRow("&Projects:", self._customerlist)
+        layout.addRow('&Name:", self._nameedit)
+        layout.addRow('&Email:", self._emailedit)
+        layout.addRow('&Projects:", self._customerlist)
         # Test data.
         self._customerlist.addItems(QtCore.QStringList()
             << "<First project.>"
-            << "<Second project.>")
+            << "<Second project.>')
         #
         return layout
 
     def _contentButtons(self):
         """ """
         # Active widgets and connections.
-        self._testbutton = QtGui.QPushButton("Write name to log")
-        self.connect(self._testbutton, QtCore.SIGNAL("clicked()"), self._test)                
+        self._testbutton = QtGui.QPushButton('Write name to log')
+        self.connect(self._testbutton, QtCore.SIGNAL('clicked()'), self._test)                
         # Layout.
         layout = QtGui.QHBoxLayout()
         layout.addStretch(5)
@@ -68,4 +68,4 @@ class TemplateTool(tool_base.ToolBase):
 
     def _test(self):
         """ """
-        envmonlib.Logging().log("Name: " + unicode(self._emailedit.text()))
+        envmonlib.Logging().log('Name: ' + unicode(self._emailedit.text()))

@@ -42,17 +42,17 @@ class ActivityManager(object):
 
     def initActivities(self):
         """ Activity activator. """
-        self._activitylist.append(start_activity.StartActivity("Introduction", self._parent))
-#        self._activitylist.append(create_dataset_activity.CreateDatasetActivity("(Create dataset)", self._parent))
-        self._activitylist.append(load_datasets_activity.LoadDatasetsActivity("Import datasets", self._parent))
-        self._activitylist.append(screening_activity.ScreeningActivity("Screening", self._parent))
-        self._activitylist.append(analyse_datasets_activity.AnalyseDatasetsActivity("Analyse data", self._parent))
-#        self._activitylist.append(create_reports_activity.CreateReportsActivity("(Create reports)", self._parent))
-#        self._activitylist.append(manage_species_lists_activity.ManageSpeciesListsActivity("Manage species lists", self._parent))
+        self._activitylist.append(start_activity.StartActivity('Introduction', self._parent))
+#        self._activitylist.append(create_dataset_activity.CreateDatasetActivity('(Create dataset)', self._parent))
+        self._activitylist.append(load_datasets_activity.LoadDatasetsActivity('Import datasets', self._parent))
+        self._activitylist.append(screening_activity.ScreeningActivity('Screening', self._parent))
+        self._activitylist.append(analyse_datasets_activity.AnalyseDatasetsActivity('Analyse data', self._parent))
+#        self._activitylist.append(create_reports_activity.CreateReportsActivity('(Create reports)", self._parent))
+#        self._activitylist.append(manage_species_lists_activity.ManageSpeciesListsActivity('Manage species lists", self._parent))
 
-#        self._activitylist.append(load_datasets_OLD_activity.LoadDatasetsActivity("Load datasets (OLD)", self._parent))
-#        self._activitylist.append(create_reports_OLD_activity.CreateReportsActivity("Create reports (OLD)", self._parent))
-#        self._activitylist.append(template_activity.TemplateActivity("(Activity template)", self._parent))
+#        self._activitylist.append(load_datasets_OLD_activity.LoadDatasetsActivity('Load datasets (OLD)", self._parent))
+#        self._activitylist.append(create_reports_OLD_activity.CreateReportsActivity('Create reports (OLD)", self._parent))
+#        self._activitylist.append(template_activity.TemplateActivity('(Activity template)", self._parent))
         
     def getActivityByName(self, object_name):
         """ Returns the activity. """

@@ -42,8 +42,8 @@ class CreateDatasetActivity(activity_base.ActivityBase):
         # Add content to the activity.
         tabWidget = QtGui.QTabWidget()
         contentLayout.addWidget(tabWidget)
-        tabWidget.addTab(self._contentPW(), "(PW)")
-        tabWidget.addTab(self._contentNewFormat(), "(New format...)")
+        tabWidget.addTab(self._contentPW(), "(PW)')
+        tabWidget.addTab(self._contentNewFormat(), "(New format...)')
 
     def _contentPW(self):
         """ """

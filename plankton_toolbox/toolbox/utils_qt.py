@@ -7,7 +7,7 @@
 from __future__ import unicode_literals
 
 """
-This module contains GUI-related tootbox_utils for the Plankton Toolbox project.
+This module contains GUI-related toolbox_utils for the Plankton Toolbox project.
 """
 
 import PyQt4.QtGui as QtGui
@@ -43,7 +43,7 @@ class ClickableQLabel(QtGui.QLabel):
     def __init__(self, parent = None):  
         QtGui.QLabel.__init__(self, parent)  
         # Set style.
-        self.setProperty("ActivityStatus", "Unselected")  ### TODO: Remove this when stylesheet fixed.
+        self.setProperty('ActivityStatus', 'Unselected')  ### TODO: Remove this when stylesheet fixed.
         self.updateStyleSheet()
   
     def mouseReleaseEvent(self, ev):  
@@ -89,7 +89,6 @@ class ClickableLinkQLabel(QtGui.QLabel):
     def enterEvent(self, ev):
         self.setStyleSheet(""" 
             * { color: #d1581c; }
-
             """)
   
     def leaveEvent(self, ev):  
@@ -115,12 +114,12 @@ class ActivityMenuQLabel(ClickableQLabel):
         for label in self.activityitems:
             label.markAsUnselected() 
         # Mark this as selected.
-        self.setProperty("ActivityStatus", "Selected")
+        self.setProperty('ActivityStatus', 'Selected')
         self.updateStyleSheet()
           
     def markAsUnselected(self):
         """ """
-        self.setProperty("ActivityStatus", "Unselected")
+        self.setProperty('ActivityStatus', 'Unselected')
         self.updateStyleSheet()
 
 

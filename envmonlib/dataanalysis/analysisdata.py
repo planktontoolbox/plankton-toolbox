@@ -52,7 +52,7 @@ class AnalysisData(object):
 
     def getFilterItem(self, key):
         """ """
-        return self._filter.get(key, u'')        
+        return self._filter.get(key, '')        
 
     def getFilterDict(self):
         """ """
@@ -77,8 +77,8 @@ class AnalysisData(object):
                    all(compareheaders[i] == newheader[i] for i in range(len(compareheaders))):
                     pass # OK since export columns are equal.
                 else:
-                    envmonlib.Logging().log("Can't analyse datasets with different column names.")
-                    raise UserWarning("Can't analyse datasets with different export column names.")
+                    envmonlib.Logging().log('Can\'t analyse datasets with different column names.')
+                    raise UserWarning('Can\'t analyse datasets with different export column names.')
         # Concatenate selected datasets.        
         analysis_dataset = None
         for dataset in datasets:
@@ -94,8 +94,8 @@ class AnalysisData(object):
                     analysis_dataset.addChild(child)
         # Check.
         if (analysis_dataset == None) or (len(analysis_dataset.getChildren()) == 0):
-            envmonlib.Logging().log("Selected datasets are empty.")
-            raise UserWarning("Selected datasets are empty.")
+            envmonlib.Logging().log('Selected datasets are empty.')
+            raise UserWarning('Selected datasets are empty.')
         # Use the concatenated dataset for analysis.
         self.setData(analysis_dataset)    
     
@@ -103,43 +103,43 @@ class AnalysisData(object):
         """ """        
         # Search for export column corresponding model element.
         for info_dict in self._data.getExportTableColumns():
-            if info_dict[u'header'] == selectedcolumn:
-                nodelevel = info_dict[u'node']
-                key = info_dict[u'key']
+            if info_dict['header'] == selectedcolumn:
+                nodelevel = info_dict['node']
+                key = info_dict['key']
                 break # Break loop.
         #
         for visitnode in self._data.getChildren()[:]:
-            if nodelevel == u'visit':
+            if nodelevel == 'visit':
                 if key in visitnode.getDataDict().keys():
                     if unicode(visitnode.getData(key)) in selectedcontent:
                         self._data.removeChild(visitnode)
                         continue
                 else:
                     # Handle empty keys.
-                    if u'' in selectedcontent:
+                    if '' in selectedcontent:
                         self._data.removeChild(visitnode)
                         continue
             #
             for samplenode in visitnode.getChildren()[:]:
-                if nodelevel == u'sample':
+                if nodelevel == 'sample':
                     if key in samplenode.getDataDict().keys():
                         if unicode(samplenode.getData(key)) in selectedcontent:
                             visitnode.removeChild(samplenode)
                             continue
                     else:
                         # Handle empty keys.
-                        if u'' in selectedcontent:
+                        if '' in selectedcontent:
                             visitnode.removeChild(samplenode)
                             continue
                 #
                 for variablenode in samplenode.getChildren()[:]:
-                    if nodelevel == u'variable':
+                    if nodelevel == 'variable':
                         if key in variablenode.getDataDict().keys():
                             if unicode(variablenode.getData(key)) in selectedcontent:
                                 samplenode.removeChild(variablenode)
                         else:
                             # Handle empty values.
-                            if u'' in selectedcontent:
+                            if '' in selectedcontent:
                                 samplenode.removeChild(variablenode)
                                 continue
 
@@ -164,27 +164,27 @@ class AnalysisData(object):
         # Export info needed to convert from tree to table.
         filtereddata.setExportTableColumns(analysisdata.getExportTableColumns())        
         # Get selected data info.
-        filter_startdate = self._filter[u'start_date']
-        filter_enddate = self._filter[u'end_date']
-        filter_stations = self._filter[u'stations']
-        filter_visit_months = self._filter[u'visit_months']
-        filter_visits = self._filter[u'visits']
-        filter_minmaxdepth =  self._filter[u'min_max_depth']
-        filter_taxon = self._filter[u'taxon']
-        filter_trophic_type = self._filter[u'trophic_type']
-        filter_lifestage = self._filter[u'life_stage']
+        filter_startdate = self._filter['start_date']
+        filter_enddate = self._filter['end_date']
+        filter_stations = self._filter['stations']
+        filter_visit_months = self._filter['visit_months']
+        filter_visits = self._filter['visits']
+        filter_minmaxdepth =  self._filter['min_max_depth']
+        filter_taxon = self._filter['taxon']
+        filter_trophic_type = self._filter['trophic_type']
+        filter_lifestage = self._filter['life_stage']
         #
         for visitnode in analysisdata.getChildren():
-            if filter_startdate > visitnode.getData(u'date'):
+            if filter_startdate > visitnode.getData('date'):
                 continue
-            if filter_enddate < visitnode.getData(u'date'):
+            if filter_enddate < visitnode.getData('date'):
                 continue
-            if visitnode.getData(u'station_name') not in filter_stations:
+            if visitnode.getData('station_name') not in filter_stations:
                 continue
-            if visitnode.getData(u'month') not in filter_visit_months:
+            if visitnode.getData('month') not in filter_visit_months:
                 continue
-            if (unicode(visitnode.getData(u'station_name')) + u' : ' + 
-                unicode(visitnode.getData(u'date'))) not in filter_visits:
+            if (unicode(visitnode.getData('station_name')) + ' : ' + 
+                unicode(visitnode.getData('date'))) not in filter_visits:
                 continue
             # Create node and copy node data.            
             filteredvisit = envmonlib.VisitNode()
@@ -192,8 +192,8 @@ class AnalysisData(object):
             filtereddata.addChild(filteredvisit)    
             #
             for samplenode in visitnode.getChildren():
-                minmax = unicode(samplenode.getData(u'sample_min_depth')) +  u'-' + \
-                         unicode(samplenode.getData(u'sample_max_depth'))
+                minmax = unicode(samplenode.getData('sample_min_depth')) +  '-' + \
+                         unicode(samplenode.getData('sample_max_depth'))
                 if minmax not in filter_minmaxdepth:
                     continue
                 #
@@ -203,15 +203,15 @@ class AnalysisData(object):
                 filteredvisit.addChild(filteredsample)    
                 #
                 for variablenode in samplenode.getChildren():
-                    if variablenode.getData(u'scientific_name') not in filter_taxon:
+                    if variablenode.getData('scientific_name') not in filter_taxon:
                         continue
                     #
-                    if variablenode.getData(u'trophic_type') not in filter_trophic_type:
+                    if variablenode.getData('trophic_type') not in filter_trophic_type:
                         continue
                     #
-                    lifestage = variablenode.getData(u'stage')
-                    if variablenode.getData(u'sex'):
-                        lifestage += u'/' + variablenode.getData(u'sex')
+                    lifestage = variablenode.getData('stage')
+                    if variablenode.getData('sex'):
+                        lifestage += '/' + variablenode.getData('sex')
                     if lifestage not in filter_lifestage:
                         continue
                     # Create node and copy node data.            

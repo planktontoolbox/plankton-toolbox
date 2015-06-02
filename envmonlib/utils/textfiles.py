@@ -24,14 +24,14 @@ class TextFiles():
                            data_rows_to = None): # None = read all.):
         """ """
         if file_name == None:
-            raise UserWarning("File name is missing.")
+            raise UserWarning('File name is missing.')
         if not isinstance(target_dataset, envmonlib.DatasetTable):
-            raise UserWarning("Target dataset is not of valid type.")
+            raise UserWarning('Target dataset is not of valid type.')
         # Get encoding.
         if not encoding:
             encoding = locale.getpreferredencoding()
         # Read file.
-        infile = open(file_name, u'r')
+        infile = open(file_name, 'r')
         try:
             fieldseparator = None
             # Iterate over rows in file.            
@@ -59,13 +59,13 @@ class TextFiles():
                           table_dataset, 
                           file_name,
                           encoding = None,
-                          field_separator = u'\t',
-                          row_separator = u'\r\n'):
+                          field_separator = '\t',
+                          row_separator = '\r\n'):
         """ """
         if file_name == None:
-            raise UserWarning("File name is missing.")
+            raise UserWarning('File name is missing.')
         if not isinstance(table_dataset, envmonlib.DatasetTable):
-            raise UserWarning("Dataset is not of a valid type.")
+            raise UserWarning('Dataset is not of a valid type.')
         #
         if not encoding:
             encoding = locale.getpreferredencoding()
@@ -78,18 +78,18 @@ class TextFiles():
             for row in table_dataset.getRows():
                 out.write(field_separator.join(map(unicode, row)) + '\r\n')
         except (IOError, OSError):
-            envmonlib.Logging().log("Failed to write to text file: " + file_name)
-            raise UserWarning("Failed to write to text file: " + file_name)
+            envmonlib.Logging().log('Failed to write to text file: ' + file_name)
+            raise UserWarning('Failed to write to text file: ' + file_name)
         finally:
             if out: out.close()
 
     def getSeparator(self, row):
         """ """
-        if u'\t' in row: # First alternative.
-            return u'\t'
-        elif u';' in row: # Second alternative. 
-            return u';'
+        if '\t' in row: # First alternative.
+            return '\t'
+        elif ';' in row: # Second alternative. 
+            return ';'
         else:
-            return u'\t' # Default alternative.
+            return '\t' # Default alternative.
              
 

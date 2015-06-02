@@ -33,19 +33,19 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         """ """
         self._x_axis_column_list.clear()
         self._x_axis_parameter_list.clear()
-        self._x_axis_column_list.addItems([u"parameter:"])
+        self._x_axis_column_list.addItems(['parameter:'])
         self._x_axis_column_list.setEnabled(False)
         self._x_axis_parameter_list.setEnabled(False)
         #
         self._y_axis_column_list.clear()
         self._y_axis_parameter_list.clear()
-        self._y_axis_column_list.addItems([u"parameter:"])
+        self._y_axis_column_list.addItems(['parameter:'])
         self._y_axis_column_list.setEnabled(False)
         self._y_axis_parameter_list.setEnabled(False)
         #
         self._z_axis_column_list.clear()
         self._z_axis_parameter_list.clear()
-        self._z_axis_column_list.addItems([u"parameter:"])
+        self._z_axis_column_list.addItems(['parameter:'])
         self._z_axis_column_list.setEnabled(False)
         self._z_axis_parameter_list.setEnabled(False)
         #
@@ -57,7 +57,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         analysisdata = self._analysisdata.getData()
         if analysisdata:        
             # For tab "Generic graphs".
-            items = [item[u'header'] for item in analysisdata.getExportTableColumns()]        
+            items = [item['header'] for item in analysisdata.getExportTableColumns()]        
             self._x_axis_column_list.addItems(items)
             self._y_axis_column_list.addItems(items)
             self._z_axis_column_list.addItems(items)
@@ -66,7 +66,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
             for visitnode in analysisdata.getChildren():
                 for samplenode in visitnode.getChildren():
                     for variablenode in samplenode.getChildren():
-                        parameterset.add(variablenode.getData(u'parameter') + u' (' + variablenode.getData(u'unit') + u')')
+                        parameterset.add(variablenode.getData('parameter') + ' (' + variablenode.getData('unit') + ')')
             parameterlist = sorted(parameterset)
             #
             self._x_axis_parameter_list.addItems(parameterlist)
@@ -80,14 +80,14 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         """ """
         # Active widgets and connections.
 #         introlabel = utils_qt.RichTextQLabel()
-#         introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab6_intro'))
+#         introlabel.setText(help_texts.HelpTexts().getText('AnalyseDatasetsTab6_intro'))
         # Select type of data object.
         self._numberofvariables_list = QtGui.QComboBox()
         self._numberofvariables_list.addItems(["One variable (Y)", 
                                                "Two variables (X and Y)", 
                                                "Three variables (X, Y and Z)"])
         self._numberofvariables_list.setCurrentIndex(1)
-        self.connect(self._numberofvariables_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._clearPlotData)                
+        self.connect(self._numberofvariables_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._clearPlotData)                
         # - Select column for x-axis:
         self._x_axis_column_list = QtGui.QComboBox()
         self._x_axis_column_list.setMinimumContentsLength(20)
@@ -97,7 +97,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         self._x_axis_parameter_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         self._x_axistype_list = QtGui.QComboBox()
         self._x_axistype_list.addItems(self._type_list_values)
-        self.connect(self._x_axis_column_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._updateEnabledDisabledAndTypes)                
+        self.connect(self._x_axis_column_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._updateEnabledDisabledAndTypes)                
         # - Select column for y-axis:
         self._y_axis_column_list = QtGui.QComboBox()
         self._y_axis_column_list.setMinimumContentsLength(20)
@@ -107,7 +107,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         self._y_axis_parameter_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         self._y_axistype_list = QtGui.QComboBox()
         self._y_axistype_list.addItems(self._type_list_values)
-        self.connect(self._y_axis_column_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._updateEnabledDisabledAndTypes)                
+        self.connect(self._y_axis_column_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._updateEnabledDisabledAndTypes)                
         # - Select column for z-axis:
         self._z_axis_column_list = QtGui.QComboBox()
         self._z_axis_column_list.setMinimumContentsLength(20)
@@ -117,27 +117,27 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         self._z_axis_parameter_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         self._z_axistype_list = QtGui.QComboBox()
         self._z_axistype_list.addItems(self._type_list_values)
-        self.connect(self._z_axis_column_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._updateEnabledDisabledAndTypes)                
+        self.connect(self._z_axis_column_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._updateEnabledDisabledAndTypes)                
         # Clear data object.
-        self._newgraph_button = QtGui.QPushButton("New graph")
-        self.connect(self._newgraph_button, QtCore.SIGNAL("clicked()"), self._newGraphAndPlotData)                
+        self._newgraph_button = QtGui.QPushButton('New graph')
+        self.connect(self._newgraph_button, QtCore.SIGNAL('clicked()'), self._newGraphAndPlotData)                
         # Add subplot data to the Graph plotter tool.
-        self._addsubplotdata_button = QtGui.QPushButton("Add plot to graph")
-        self.connect(self._addsubplotdata_button, QtCore.SIGNAL("clicked()"), self._addSubplotData)                
+        self._addsubplotdata_button = QtGui.QPushButton('Add plot to graph')
+        self.connect(self._addsubplotdata_button, QtCore.SIGNAL('clicked()'), self._addSubplotData)                
 
         # Layout widgets.
         #
         hbox1 = QtGui.QHBoxLayout()
-        hbox1.addWidget(QtGui.QLabel("Select number of variables in each plot:"))
+        hbox1.addWidget(QtGui.QLabel('Select number of variables in each plot:'))
         hbox1.addWidget(self._numberofvariables_list)
         hbox1.addStretch(10)
         #
         form1 = QtGui.QGridLayout()
         gridrow = 0
-        label1 = QtGui.QLabel("Select x-axis:")
-        label2 = QtGui.QLabel("Parameter:")
-        label3 = QtGui.QLabel("Type:")
-        stretchlabel = QtGui.QLabel("")
+        label1 = QtGui.QLabel('Select x-axis:')
+        label2 = QtGui.QLabel('Parameter:')
+        label3 = QtGui.QLabel('Type:')
+        stretchlabel = QtGui.QLabel('')
         form1.addWidget(label1, gridrow, 0, 1, 1)
         form1.addWidget(self._x_axis_column_list, gridrow, 1, 1, 1)
         form1.addWidget(label2, gridrow, 2, 1, 1)
@@ -146,9 +146,9 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         form1.addWidget(self._x_axistype_list, gridrow, 5, 1, 1)
         form1.addWidget(stretchlabel, gridrow,6, 1, 20)
         gridrow += 1
-        label1 = QtGui.QLabel("Select y-axis:")
-        label2 = QtGui.QLabel("Parameter:")
-        label3 = QtGui.QLabel("Type:")
+        label1 = QtGui.QLabel('Select y-axis:')
+        label2 = QtGui.QLabel('Parameter:')
+        label3 = QtGui.QLabel('Type:')
         form1.addWidget(label1, gridrow, 0, 1, 1)
         form1.addWidget(self._y_axis_column_list, gridrow, 1, 1, 1)
         form1.addWidget(label2, gridrow, 2, 1, 1)
@@ -157,9 +157,9 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         form1.addWidget(self._y_axistype_list, gridrow, 5, 1, 1)
         form1.addWidget(stretchlabel, gridrow,6, 1, 20)
         gridrow += 1
-        label1 = QtGui.QLabel("Select z-axis:")
-        label2 = QtGui.QLabel("Parameter:")
-        label3 = QtGui.QLabel("Type:")
+        label1 = QtGui.QLabel('Select z-axis:')
+        label2 = QtGui.QLabel('Parameter:')
+        label3 = QtGui.QLabel('Type:')
         form1.addWidget(label1, gridrow, 0, 1, 1)
         form1.addWidget(self._z_axis_column_list, gridrow, 1, 1, 1)
         form1.addWidget(label2, gridrow, 2, 1, 1)
@@ -227,26 +227,26 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
             y_selected_column = unicode(self._y_axis_column_list.currentText())
             z_selected_column = unicode(self._z_axis_column_list.currentText())
             #
-            if x_selected_column == u'parameter:':
+            if x_selected_column == 'parameter:':
                 self._x_axistype_list.setCurrentIndex(0)
             else:
                 for item in self._analysisdata.getData().getExportTableColumns():
-                        if item[u'header'] == x_selected_column:
-                            self._x_axistype_list.setCurrentIndex(self._type_list_values.index(item[u'view_format']))
+                        if item['header'] == x_selected_column:
+                            self._x_axistype_list.setCurrentIndex(self._type_list_values.index(item['view_format']))
             #
-            if y_selected_column == u'parameter:':
+            if y_selected_column == 'parameter:':
                 self._y_axistype_list.setCurrentIndex(0)
             else:
                 for item in self._analysisdata.getData().getExportTableColumns():
-                    if item[u'header'] == y_selected_column:
-                        self._y_axistype_list.setCurrentIndex(self._type_list_values.index(item[u'view_format']))
+                    if item['header'] == y_selected_column:
+                        self._y_axistype_list.setCurrentIndex(self._type_list_values.index(item['view_format']))
             #
-            if z_selected_column == u'parameter:':
+            if z_selected_column == 'parameter:':
                 self._z_axistype_list.setCurrentIndex(0)
             else:
                 for item in self._analysisdata.getData().getExportTableColumns():
-                    if item[u'header'] == z_selected_column:
-                        self._z_axistype_list.setCurrentIndex(self._type_list_values.index(item[u'view_format']))
+                    if item['header'] == z_selected_column:
+                        self._z_axistype_list.setCurrentIndex(self._type_list_values.index(item['view_format']))
             
     def _newGraphAndPlotData(self):
         """ """
@@ -256,8 +256,8 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
     def _addSubplotData(self):
         """ """
         # Show the Graph plotter tool if hidden. 
-        tool_manager.ToolManager().showToolByName(u'Graph plotter')
-        graphtool = tool_manager.ToolManager().getToolByName(u'Graph plotter')
+        tool_manager.ToolManager().showToolByName('Graph plotter')
+        graphtool = tool_manager.ToolManager().getToolByName('Graph plotter')
         #
         # Selected columns.
         x_selected_column = unicode(self._x_axis_column_list.currentText())
@@ -274,55 +274,55 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         #
         plotdatainfo = self._graph_plot_data.getPlotDataInfo()
         #
-        plotdatainfo[u'x_label'] = x_selected_column if x_selected_column != u"parameter:" else x_selected_param
-        plotdatainfo[u'x_type'] = x_selected_type
-        plotdatainfo[u'x_format'] = u''
+        plotdatainfo['x_label'] = x_selected_column if x_selected_column != 'parameter:' else x_selected_param
+        plotdatainfo['x_type'] = x_selected_type
+        plotdatainfo['x_format'] = ''
         #
-        plotdatainfo[u'y_label'] = y_selected_column if y_selected_column != u"parameter:" else y_selected_param
-        plotdatainfo[u'y_type'] = y_selected_type
-        plotdatainfo[u'y_format'] = u''
+        plotdatainfo['y_label'] = y_selected_column if y_selected_column != 'parameter:' else y_selected_param
+        plotdatainfo['y_type'] = y_selected_type
+        plotdatainfo['y_format'] = ''
         #
-        plotdatainfo[u'z_label'] = z_selected_column if z_selected_column != u"parameter:" else z_selected_param
-        plotdatainfo[u'z_type'] = z_selected_type
-        plotdatainfo[u'z_format'] = u''
+        plotdatainfo['z_label'] = z_selected_column if z_selected_column != 'parameter:' else z_selected_param
+        plotdatainfo['z_type'] = z_selected_type
+        plotdatainfo['z_format'] = ''
         #
         # Add plot data.
         x_data, y_data, z_data = self._getPlotData()
         #
-        if x_data and (x_selected_type == u'float'):
+        if x_data and (x_selected_type == 'float'):
             for index, item in enumerate(x_data):
                 try:
                     x_data[index] = float(item)
                 except:
                     x_data[index] = 0.0
-        if y_data and (y_selected_type == u'float'):
+        if y_data and (y_selected_type == 'float'):
             for index, item in enumerate(y_data):
                 try:
                     y_data[index] = float(item)
                 except:
                     y_data[index] = 0.0
-        if z_data and (z_selected_type == u'float'):
+        if z_data and (z_selected_type == 'float'):
             for index, item in enumerate(z_data):
                 try:
                     z_data[index] = float(item)
                 except:
                     z_data[index] = 0.0
         
-        plot_name = y_selected_column if y_selected_column != u"parameter:" else y_selected_param
-#         plot_name = y_selected_column if y_selected_column != u"parameter:" else y_selected_param + u' / ' + \
-#                     x_selected_column if x_selected_column != u"parameter:" else x_selected_param
+        plot_name = y_selected_column if y_selected_column != 'parameter:' else y_selected_param
+#         plot_name = y_selected_column if y_selected_column != 'parameter:' else y_selected_param + ' / ' + \
+#                     x_selected_column if x_selected_column != 'parameter:' else x_selected_param
         #
         try:
             self._graph_plot_data.addPlot(
                             plot_name = plot_name, 
-                             x_label = x_selected_column if x_selected_column != u"parameter:" else x_selected_param,
+                             x_label = x_selected_column if x_selected_column != 'parameter:' else x_selected_param,
                              x_array = x_data,
-                             y_label = y_selected_column if y_selected_column != u"parameter:" else y_selected_param,
+                             y_label = y_selected_column if y_selected_column != 'parameter:' else y_selected_param,
                              y_array = y_data, 
-                             z_label = z_selected_column if z_selected_column != u"parameter:" else z_selected_param,
+                             z_label = z_selected_column if z_selected_column != 'parameter:' else z_selected_param,
                              z_array = z_data) 
         except UserWarning as e:
-            QtGui.QMessageBox.warning(self._main_activity, "Warning", unicode(e))
+            QtGui.QMessageBox.warning(self._main_activity, 'Warning', unicode(e))
 
         # View in Graph plotter tool.
         graphtool.setPlotData(self._graph_plot_data)
@@ -345,11 +345,11 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         x_param = None
         y_param = None
         z_param = None
-        if x_column == u"parameter:":
+        if x_column == 'parameter:':
             x_param = unicode(self._x_axis_parameter_list.currentText())
-        if y_column == u"parameter:":
+        if y_column == 'parameter:':
             y_param = unicode(self._y_axis_parameter_list.currentText())
-        if z_column == u"parameter:":
+        if z_column == 'parameter:':
             z_param = unicode(self._z_axis_parameter_list.currentText())
             
         # Check exports columns backwards. Export columns are declared in the dataset import parser files.
@@ -362,32 +362,32 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         z_visit_key = None
         z_sample_key = None                      
         z_variable_key = None
-        if x_column != u"parameter:":
+        if x_column != 'parameter:':
             for export_info in analysisdata.getExportTableColumns():
-                if export_info.get('header', u'') == x_column:
-                    if export_info.get('node', u'') == 'visit':
+                if export_info.get('header', '') == x_column:
+                    if export_info.get('node', '') == 'visit':
                         x_visit_key =  export_info.get('key', None)
-                    elif export_info.get('node', u'') == 'sample':
+                    elif export_info.get('node', '') == 'sample':
                         x_sample_key =  export_info.get('key', None)                        
-                    elif export_info.get('node', u'') == 'variable':
+                    elif export_info.get('node', '') == 'variable':
                         x_variable_key =  export_info.get('key', None)
-        if y_column != u"parameter:":
+        if y_column != 'parameter:':
             for export_info in analysisdata.getExportTableColumns():
-                if export_info.get('header', u'') == y_column:
-                    if export_info.get('node', u'') == 'visit':
+                if export_info.get('header', '') == y_column:
+                    if export_info.get('node', '') == 'visit':
                         y_visit_key =  export_info.get('key', None)
-                    elif export_info.get('node', u'') == 'sample':
+                    elif export_info.get('node', '') == 'sample':
                         y_sample_key =  export_info.get('key', None)                        
-                    elif export_info.get('node', u'') == 'variable':
+                    elif export_info.get('node', '') == 'variable':
                         y_variable_key =  export_info.get('key', None)
-        if z_column != u"parameter:":
+        if z_column != 'parameter:':
             for export_info in analysisdata.getExportTableColumns():
-                if export_info.get('header', u'') == z_column:
-                    if export_info.get('node', u'') == 'visit':
+                if export_info.get('header', '') == z_column:
+                    if export_info.get('node', '') == 'visit':
                         z_visit_key =  export_info.get('key', None)
-                    elif export_info.get('node', u'') == 'sample':
+                    elif export_info.get('node', '') == 'sample':
                         z_sample_key =  export_info.get('key', None)                        
-                    elif export_info.get('node', u'') == 'variable':
+                    elif export_info.get('node', '') == 'variable':
                         z_variable_key =  export_info.get('key', None)
                         
                         
@@ -469,10 +469,10 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                 # Note: Create a level between sample and variabel.
                 grouped_lifestages = {}
                 for variablenode in samplenode.getChildren():
-                    group_key = variablenode.getData(u'scientific_name')
-                    group_key += u':' + variablenode.getData(u'size_class') # For phytoplankton 
-                    group_key += u':' + variablenode.getData(u'stage') # For zooplankton
-                    group_key += u':' + variablenode.getData(u'sex') # For zooplankton
+                    group_key = variablenode.getData('scientific_name')
+                    group_key += ':' + variablenode.getData('size_class') # For phytoplankton 
+                    group_key += ':' + variablenode.getData('stage') # For zooplankton
+                    group_key += ':' + variablenode.getData('sex') # For zooplankton
                 
                     if group_key not in grouped_lifestages:
                         grouped_lifestages[group_key] = []
@@ -483,9 +483,9 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                     if x_param:
                         x_value = None
                         for variablenode in grouped_lifestages[group_key]:
-                            parameter = variablenode.getData(u'parameter') + u' (' + variablenode.getData(u'unit') + u')'
+                            parameter = variablenode.getData('parameter') + ' (' + variablenode.getData('unit') + ')'
                             if parameter == x_param:
-                                x_value = variablenode.getData(u'value')
+                                x_value = variablenode.getData('value')
 #                                 break                    
 
 
@@ -516,9 +516,9 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                     if y_param:
                         y_value = None
                         for variablenode in grouped_lifestages[group_key]:
-                            parameter = variablenode.getData(u'parameter') + u' (' + variablenode.getData(u'unit') + u')'
+                            parameter = variablenode.getData('parameter') + ' (' + variablenode.getData('unit') + ')'
                             if parameter == y_param:
-                                y_value = variablenode.getData(u'value')
+                                y_value = variablenode.getData('value')
 
 
                                                         
@@ -548,9 +548,9 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                     if z_param:
                         z_value = None
                         for variablenode in grouped_lifestages[group_key]:
-                            parameter = variablenode.getData(u'parameter') + u' (' + variablenode.getData(u'unit') + u')'
+                            parameter = variablenode.getData('parameter') + ' (' + variablenode.getData('unit') + ')'
                             if parameter == z_param:
-                                z_value = variablenode.getData(u'value')
+                                z_value = variablenode.getData('value')
 #                                 break
 
 

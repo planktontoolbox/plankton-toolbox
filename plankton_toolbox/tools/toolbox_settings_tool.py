@@ -35,7 +35,7 @@ class ToolboxSettingsTool(tool_base.ToolBase):
         contentLayout.addLayout(self._contentButtons())
         contentLayout.addStretch(5)
         # Used when toolbox settings has changed.        
-        self.connect(toolbox_settings.ToolboxSettings(), QtCore.SIGNAL("settingsChanged"), self._update)
+        self.connect(toolbox_settings.ToolboxSettings(), QtCore.SIGNAL('settingsChanged'), self._update)
         #
         self._update()
 
@@ -44,12 +44,12 @@ class ToolboxSettingsTool(tool_base.ToolBase):
         # Active widgets and connections.
         self._delimiter_edit = QtGui.QLineEdit('')
         # Layout.
-        box = QtGui.QGroupBox("General", self)
+        box = QtGui.QGroupBox('General', self)
         layout = QtGui.QVBoxLayout()
         layout.addWidget(box)
         layout2 = QtGui.QFormLayout()
         box.setLayout(layout2)
-        layout2.addRow("Decimal delimiter:", self._delimiter_edit)
+        layout2.addRow('Decimal delimiter:', self._delimiter_edit)
         #
         return layout
     
@@ -60,19 +60,19 @@ class ToolboxSettingsTool(tool_base.ToolBase):
         self._pegfilepath_edit = QtGui.QLineEdit('')
         self._iocfilepath_edit = QtGui.QLineEdit('')
         self._loadresources_checkbox = QtGui.QCheckBox('Load resources at startup.')
-#        self.connect(self._loadresources_checkbox, QtCore.SIGNAL("stateChanged(int)"), self._toogleLoadResources)                
+#        self.connect(self._loadresources_checkbox, QtCore.SIGNAL('stateChanged(int)'), self._toogleLoadResources)                
         # Layout.
-        box = QtGui.QGroupBox("Resources", self)
+        box = QtGui.QGroupBox('Resources', self)
         layout = QtGui.QVBoxLayout()
         layout.addWidget(box)
         layout2 = QtGui.QFormLayout()
         box.setLayout(layout2)
-        layout2.addRow("<b>Dyntaxa</b>", None)
-        layout2.addRow("Filepath (.json):", self._dyntaxafilepath_edit)
-        layout2.addRow("<b>PEG</b>", None)
-        layout2.addRow("Filepath (.json):", self._pegfilepath_edit)
-        layout2.addRow("<b>Harmful plankton</b>", None)
-        layout2.addRow("Filepath (.json):", self._iocfilepath_edit)
+        layout2.addRow('<b>Dyntaxa</b>', None)
+        layout2.addRow('Filepath (.json):', self._dyntaxafilepath_edit)
+        layout2.addRow('<b>PEG</b>', None)
+        layout2.addRow('Filepath (.json):', self._pegfilepath_edit)
+        layout2.addRow('<b>Harmful plankton</b>', None)
+        layout2.addRow('Filepath (.json):', self._iocfilepath_edit)
         layout2.addRow(None, self._loadresources_checkbox)
         #
         return layout
@@ -80,12 +80,12 @@ class ToolboxSettingsTool(tool_base.ToolBase):
     def _contentButtons(self):
         """ """
         # Active widgets and connections.
-        self._restoredefault_button = QtGui.QPushButton("Restore defaults")
-        self._restore_button = QtGui.QPushButton("Restore")
-        self._save_button = QtGui.QPushButton("Save")
-        self.connect(self._restoredefault_button, QtCore.SIGNAL("clicked()"), self._restoreDefault)                
-        self.connect(self._restore_button, QtCore.SIGNAL("clicked()"), self._cancel)                
-        self.connect(self._save_button, QtCore.SIGNAL("clicked()"), self._save)                
+        self._restoredefault_button = QtGui.QPushButton('Restore defaults')
+        self._restore_button = QtGui.QPushButton('Restore')
+        self._save_button = QtGui.QPushButton('Save')
+        self.connect(self._restoredefault_button, QtCore.SIGNAL('clicked()'), self._restoreDefault)                
+        self.connect(self._restore_button, QtCore.SIGNAL('clicked()'), self._cancel)                
+        self.connect(self._save_button, QtCore.SIGNAL('clicked()'), self._save)                
         # Layout widgets.
         layout = QtGui.QHBoxLayout()
         layout.addStretch()

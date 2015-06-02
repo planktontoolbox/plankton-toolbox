@@ -47,8 +47,8 @@ class StartActivity(activity_base.ActivityBase):
         """ """
         # Active widgets and connections.
         label = utils_qt.RichTextQLabel()
-#         label.setText(help_texts.HelpTexts().getText(u'StartActivity_intro_1'))
-        label.setText(help_texts.HelpTexts().getText(u'StartActivity_intro'))
+#         label.setText(help_texts.HelpTexts().getText('StartActivity_intro_1'))
+        label.setText(help_texts.HelpTexts().getText('StartActivity_intro'))
         # Layout.
         layout = QtGui.QGridLayout()
         gridrow = 0
@@ -63,7 +63,7 @@ class StartActivity(activity_base.ActivityBase):
 #         """ """
 #         # Active widgets and connections.
 #         label = utils_qt.RichTextQLabel()
-#         label.setText(help_texts.HelpTexts().getText(u'StartActivity_intro_2'))
+#         label.setText(help_texts.HelpTexts().getText('StartActivity_intro_2'))
 #         # Layout.
 #         layout = QtGui.QGridLayout()
 #         gridrow = 0
@@ -78,7 +78,7 @@ class StartActivity(activity_base.ActivityBase):
 #         """ """
 #         # Active widgets and connections.
 #         label = utils_qt.RichTextQLabel()
-#         label.setText(help_texts.HelpTexts().getText(u'StartActivity_intro_3'))
+#         label.setText(help_texts.HelpTexts().getText('StartActivity_intro_3'))
 #         # Layout.
 #         layout = QtGui.QGridLayout()
 #         gridrow = 0
@@ -93,7 +93,7 @@ class StartActivity(activity_base.ActivityBase):
 #         """ """
 #         # Active widgets and connections.
 #         label = utils_qt.RichTextQLabel()
-#         label.setText(help_texts.HelpTexts().getText(u'StartActivity_intro_4'))
+#         label.setText(help_texts.HelpTexts().getText('StartActivity_intro_4'))
 #         # Layout.
 #         layout = QtGui.QGridLayout()
 #         gridrow = 0

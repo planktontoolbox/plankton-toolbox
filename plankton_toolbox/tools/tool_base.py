@@ -21,7 +21,7 @@ class ToolBase(QtGui.QDockWidget):
         super(ToolBase, self).__init__(name, parentwidget)
         self._parent = parentwidget
         #
-        self._writeToStatusBar("Loading " + name + "...")
+        self._writeToStatusBar('Loading ' + name + '...')
         #        
         self.setObjectName(name)
         #
@@ -36,7 +36,7 @@ class ToolBase(QtGui.QDockWidget):
         #  Toggles show/hide from the Tools menu in the main window.
         self._parent.toolsmenu.addAction(self.toggleViewAction())
         #
-        self._writeToStatusBar("")
+        self._writeToStatusBar('')
 
     @abstractmethod
     def _createContent(self):

@@ -29,23 +29,23 @@ class Species(object):
     
     """
     def __init__(self,
-                 species_directory_path = u'toolbox_data/species/'):
+                 species_directory_path = 'toolbox_data/species/'):
         # Parameters.
         self._species_directory_path = species_directory_path
         # Taxa files.
-        self._taxa_filenames = self._getFilesByPrefix(u'taxa_')
+        self._taxa_filenames = self._getFilesByPrefix('taxa_')
         # Translate files.
-        self._taxatranslate_filenames = self._getFilesByPrefix(u'translate_')
+        self._taxatranslate_filenames = self._getFilesByPrefix('translate_')
         # Synonyms files.
-        self._taxasynonyms_filenames = self._getFilesByPrefix(u'synonyms_')
+        self._taxasynonyms_filenames = self._getFilesByPrefix('synonyms_')
         # Biovolume, mapping information for used columns.
-        self._bvolcolumns_filenames = self._getFilesByPrefix(u'bvolcolumns_')
+        self._bvolcolumns_filenames = self._getFilesByPrefix('bvolcolumns_')
         # Biovolume files.
-        self._bvol_filenames = self._getFilesByPrefix(u'bvol_')
+        self._bvol_filenames = self._getFilesByPrefix('bvol_')
         # Plankton groups definition. Useful grouping that differ from 
-        self._planktongroups_filenames = self._getFilesByPrefix(u'planktongroups_')
+        self._planktongroups_filenames = self._getFilesByPrefix('planktongroups_')
         # Harmful algae files.
-        self._harmful_filenames = self._getFilesByPrefix(u'harmful_')
+        self._harmful_filenames = self._getFilesByPrefix('harmful_')
 
         # Defines local storage by calling clear().
         self._clear()
@@ -54,7 +54,7 @@ class Species(object):
             # Only done once since the class is declared as singleton.
             self._loadAllData()
         except Exception as e:
-            envmonlib.Logging().error(u"Failed when loading species related files: " + unicode(e))            
+            envmonlib.Logging().error('Failed when loading species related files: ' + unicode(e))            
             raise
 
     def getTaxaDict(self):
@@ -69,20 +69,20 @@ class Species(object):
         """ """
         if scientific_name in self._taxa_lookup:
             
-#             print(u'DEBUG: '+ scientific_name + u' - ' + key + u' - ' + self._taxa_lookup[scientific_name].get(key, u''))
+#             print('DEBUG: '+ scientific_name + ' - ' + key + ' - ' + self._taxa_lookup[scientific_name].get(key, ''))
             
             
-            return self._taxa_lookup[scientific_name].get(key, u'')
-        return u''
+            return self._taxa_lookup[scientific_name].get(key, '')
+        return ''
     
     def getBvolValue(self, scientific_name, size_class, key):
         """ """
         if scientific_name in self._taxa_lookup:
             speciesobject = self._taxa_lookup[scientific_name]
-            if u'Size classes' in speciesobject:
-                for sizeclassobject in speciesobject[u'Size classes']:
-                    if sizeclassobject.get(u'Size class', u'') == unicode(size_class):
-                        return sizeclassobject.get(key, u'')
+            if 'Size classes' in speciesobject:
+                for sizeclassobject in speciesobject['Size classes']:
+                    if sizeclassobject.get('Size class', '') == unicode(size_class):
+                        return sizeclassobject.get(key, '')
         return None 
     
     def _clear(self):
@@ -100,13 +100,13 @@ class Species(object):
         """ """
         try:
             self._clear()
-            envmonlib.Logging().log(u"") # Empty line.
-            envmonlib.Logging().log(u"Loading species lists (located in '" + self._species_directory_path + "'):")
+            envmonlib.Logging().log('') # Empty line.
+            envmonlib.Logging().log('Loading species lists (located in "' + self._species_directory_path + '"):')
             
             # Load taxa.
             for excelfilename in self._taxa_filenames:
                 if os.path.exists(excelfilename):
-                    envmonlib.Logging().log(u"- " + os.path.basename(excelfilename) + u" (Species and other taxa)")
+                    envmonlib.Logging().log('- ' + os.path.basename(excelfilename) + ' (Species and other taxa)')
                     try:
                         envmonlib.Logging().startAccumulatedLogging()
                         #
@@ -117,7 +117,7 @@ class Species(object):
             # Add translated scientific names to taxa.
             for excelfilename in self._taxatranslate_filenames:
                 if os.path.exists(excelfilename):
-                    envmonlib.Logging().log(u"- " + os.path.basename(excelfilename) + u" (Misspellings etc.)")
+                    envmonlib.Logging().log('- ' + os.path.basename(excelfilename) + ' (Misspellings etc.)')
                     try:
                         envmonlib.Logging().startAccumulatedLogging()
                         #
@@ -128,7 +128,7 @@ class Species(object):
             # Add synonyms to taxa. Note: 'translate_to_' will be added to filenames.
             for excelfilename in self._taxasynonyms_filenames:
                 if os.path.exists(excelfilename):
-                    envmonlib.Logging().log(u"- " + os.path.basename(excelfilename) + u" (Synonyms for taxa)")
+                    envmonlib.Logging().log('- ' + os.path.basename(excelfilename) + ' (Synonyms for taxa)')
                     try:
                         envmonlib.Logging().startAccumulatedLogging()
                         #
@@ -139,7 +139,7 @@ class Species(object):
             # Load biovolume column mapping information.
             for excelfilename in self._bvolcolumns_filenames:
                 if os.path.exists(excelfilename):
-                    envmonlib.Logging().log("- " + os.path.basename(excelfilename) + u" (Biovolume column mapping)")
+                    envmonlib.Logging().log('- ' + os.path.basename(excelfilename) + ' (Biovolume column mapping)')
                     try:
                         envmonlib.Logging().startAccumulatedLogging()
                         #
@@ -150,7 +150,7 @@ class Species(object):
             # Load BVOL species data.
             for excelfilename in self._bvol_filenames:
                 if os.path.exists(excelfilename):
-                    envmonlib.Logging().log("- " + os.path.basename(excelfilename) + u" (Biovolumes etc. for sizeclasses)")
+                    envmonlib.Logging().log('- ' + os.path.basename(excelfilename) + ' (Biovolumes etc. for sizeclasses)')
                     try:
                         envmonlib.Logging().startAccumulatedLogging()
                         #
@@ -161,7 +161,7 @@ class Species(object):
             # Load harmful species.
             for excelfilename in self._harmful_filenames:
                 if os.path.exists(excelfilename):
-                    envmonlib.Logging().log(u"- " + os.path.basename(excelfilename) + u" (Harmful organisms)")
+                    envmonlib.Logging().log('- ' + os.path.basename(excelfilename) + ' (Harmful organisms)')
                     try:
                         envmonlib.Logging().startAccumulatedLogging()
                         #
@@ -172,7 +172,7 @@ class Species(object):
             # Load plankton group definition.
             for excelfilename in self._planktongroups_filenames:
                 if os.path.exists(excelfilename):
-                    envmonlib.Logging().log(u"- " + os.path.basename(excelfilename) + u" (Plankton group definition)")
+                    envmonlib.Logging().log('- ' + os.path.basename(excelfilename) + ' (Plankton group definition)')
                     try:
                         envmonlib.Logging().startAccumulatedLogging()
                         #
@@ -184,7 +184,7 @@ class Species(object):
             self._precalculateData()
         #
         except Exception as e:
-            envmonlib.Logging().error(u"Failed when loading species data: " + unicode(e))            
+            envmonlib.Logging().error('Failed when loading species data: ' + unicode(e))            
             raise
             
 #        # Used for DEBUG:
@@ -192,7 +192,7 @@ class Species(object):
 #        import codecs
 #        import json
 #        fileencoding = locale.getpreferredencoding()
-#        out = codecs.open(u'DEBUG_species_list.txt', mode = 'w', encoding = fileencoding)
+#        out = codecs.open('DEBUG_species_list.txt', mode = 'w', encoding = fileencoding)
 #        out.write(json.dumps(self._taxa, encoding = 'utf8', sort_keys=True, indent=4))
 #        out.close()
 #        # DEBUG end.
@@ -203,7 +203,7 @@ class Species(object):
         envmonlib.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
         #
         for row in tabledataset.getRows():
-            scientificname = u''
+            scientificname = ''
             try:
                 scientificname = row[0].strip() # ScientificName.
                 author = row[1].strip() if row[1].strip() != 'NULL' else '' # Author.
@@ -216,15 +216,15 @@ class Species(object):
                         # Lookup dictionary.
                         self._taxa_lookup[scientificname] = self._taxa[scientificname]
                     else:
-                        envmonlib.Logging().warning(u"Scientific name added twice: " + scientificname + u"   (Source: " + excel_file_name + u")")
+                        envmonlib.Logging().warning('Scientific name added twice: ' + scientificname + '   (Source: ' + excel_file_name + ')')
                     #    
                     speciesobject = self._taxa[scientificname]
-                    speciesobject[u'Scientific name'] = scientificname
-                    speciesobject[u'Author'] = author
-                    speciesobject[u'Rank'] = rank
-                    speciesobject[u'Parent name'] = parentname
+                    speciesobject['Scientific name'] = scientificname
+                    speciesobject['Author'] = author
+                    speciesobject['Rank'] = rank
+                    speciesobject['Parent name'] = parentname
             except:
-                envmonlib.Logging().warning(u"Failed when loading taxa. File:" + excel_file_name + u"  Taxon: " + scientificname)
+                envmonlib.Logging().warning('Failed when loading taxa. File:' + excel_file_name + '  Taxon: ' + scientificname)
                 
 
     def _loadSynonyms(self, excel_file_name):
@@ -233,23 +233,23 @@ class Species(object):
         envmonlib.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
         #
         for row in tabledataset.getRows():
-            toname = u''
-            fromname = u''
+            toname = ''
+            fromname = ''
             try:
                 toname = row[1].strip()
                 fromname = row[0].strip()
                 #
                 if toname in self._taxa_lookup:
                     taxon = self._taxa_lookup[toname]
-                    if not u'Synonyms' in self._taxa[toname]:
-                        taxon[u'Synonyms'] = []
-                    taxon[u'Synonyms'].append(fromname)
+                    if not 'Synonyms' in self._taxa[toname]:
+                        taxon['Synonyms'] = []
+                    taxon['Synonyms'].append(fromname)
                     # Lookup dictionary.
                     self._taxa_lookup[fromname] = self._taxa[toname]
                 else:
-                    envmonlib.Logging().warning(u"Scientific name is missing: " + toname + u"   (Source: " + excel_file_name + u")")
+                    envmonlib.Logging().warning('Scientific name is missing: ' + toname + '   (Source: ' + excel_file_name + ')')
             except:
-                envmonlib.Logging().warning(u"Failed when loading synonym. File:" + excel_file_name + u"  From taxon: " + toname)
+                envmonlib.Logging().warning('Failed when loading synonym. File:' + excel_file_name + '  From taxon: ' + toname)
                     
     def _loadHarmful(self, excel_file_name):
         """ Adds info about harmfulness to the species objects. """
@@ -257,20 +257,20 @@ class Species(object):
         envmonlib.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
         #
         for row in tabledataset.getRows():
-            scientificname = u''
+            scientificname = ''
             try:
                 scientificname = row[0].strip() # Scientific name.
                 aphiaid = row[1] if row[1].strip() != 'NULL' else '' # Aphia id.
                 #
                 if scientificname in self._taxa_lookup:
                     taxon = self._taxa_lookup[scientificname]
-                    taxon[u'Harmful name'] = scientificname
-                    taxon[u'Harmful'] = True 
-                    taxon[u'Aphia id'] = aphiaid
+                    taxon['Harmful name'] = scientificname
+                    taxon['Harmful'] = True 
+                    taxon['Aphia id'] = aphiaid
                 else:
-                    envmonlib.Logging().warning(u"Scientific name is missing: " + scientificname + u"   (Source: " + excel_file_name + u")")
+                    envmonlib.Logging().warning('Scientific name is missing: ' + scientificname + '   (Source: ' + excel_file_name + ')')
             except:
-                envmonlib.Logging().warning(u"Failed when loading harmful algae. File:" + excel_file_name + u"  Taxon: " + scientificname)
+                envmonlib.Logging().warning('Failed when loading harmful algae. File:' + excel_file_name + '  Taxon: ' + scientificname)
 
     def _loadPlanktonGroupDefinition(self, excel_file_name):
         """ """
@@ -278,7 +278,7 @@ class Species(object):
         envmonlib.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
         #
         for row in tabledataset.getRows():
-            scientificname = u''
+            scientificname = ''
             try:
                 scientificname = row[0].strip() # Scientific name.
                 rank = row[1].strip() # Rank.
@@ -287,58 +287,58 @@ class Species(object):
                 if scientificname and planktongroup:
                     used_rank = rank
                     if not used_rank:
-                        used_rank = u'scientific_name'
+                        used_rank = 'scientific_name'
                     self._planktongroups_ranks_set.add(used_rank)
                     #
                     if used_rank not in self._planktongroups_rank_dict:
                         self._planktongroups_rank_dict[used_rank] = {}
                     self._planktongroups_rank_dict[used_rank][scientificname] = planktongroup
             except:
-                envmonlib.Logging().warning(u"Failed when loading plankton group def. File:" + excel_file_name + u"  Taxon: " + scientificname)
+                envmonlib.Logging().warning('Failed when loading plankton group def. File:' + excel_file_name + '  Taxon: ' + scientificname)
     
     def _precalculateData(self):
         """ Calculates data from loaded datasets. I.e. phylum, class and order info. """
         for speciesobject in self._taxa.values():
-            scientificname = u''
+            scientificname = ''
             try:
-                scientificname = speciesobject[u'Scientific name']
+                scientificname = speciesobject['Scientific name']
                 counter = 0
                 parentobject = speciesobject
                 while parentobject:
                     counter += 1
                     if counter > 20:
                         parentobject = None # Too many levels, or infinite loop.
-                        print(u'DEBUG: Species._precalculateData(): Too many levels, or infinite loop.')
+                        print('DEBUG: Species._precalculateData(): Too many levels, or infinite loop.')
                         continue
-                    if u'Rank' in parentobject:
-                        if parentobject[u'Rank'] == u'Species':
-                            speciesobject[u'Species'] = parentobject[u'Scientific name']
-                        if parentobject[u'Rank'] == u'Genus':
-                            speciesobject[u'Genus'] = parentobject[u'Scientific name']
-                        if parentobject[u'Rank'] == u'Family':
-                            speciesobject[u'Family'] = parentobject[u'Scientific name']
-                        if parentobject[u'Rank'] == u'Order':
-                            speciesobject[u'Order'] = parentobject[u'Scientific name']
-                        if parentobject[u'Rank'] == u'Class':
-                            speciesobject[u'Class'] = parentobject[u'Scientific name']
-                        if parentobject[u'Rank'] == u'Phylum':
-                            speciesobject[u'Phylum'] = parentobject[u'Scientific name']
-                        if parentobject[u'Rank'] == u'Kingdom':
-                            speciesobject[u'Kingdom'] = parentobject[u'Scientific name']
+                    if 'Rank' in parentobject:
+                        if parentobject['Rank'] == 'Species':
+                            speciesobject['Species'] = parentobject['Scientific name']
+                        if parentobject['Rank'] == 'Genus':
+                            speciesobject['Genus'] = parentobject['Scientific name']
+                        if parentobject['Rank'] == 'Family':
+                            speciesobject['Family'] = parentobject['Scientific name']
+                        if parentobject['Rank'] == 'Order':
+                            speciesobject['Order'] = parentobject['Scientific name']
+                        if parentobject['Rank'] == 'Class':
+                            speciesobject['Class'] = parentobject['Scientific name']
+                        if parentobject['Rank'] == 'Phylum':
+                            speciesobject['Phylum'] = parentobject['Scientific name']
+                        if parentobject['Rank'] == 'Kingdom':
+                            speciesobject['Kingdom'] = parentobject['Scientific name']
                             parentobject = None # Done. Continue with next.
                             continue
                     # One step up in hierarchy.
-                    if u'Parent name' in parentobject:
-                        if parentobject[u'Parent name'] in self._taxa:
-                            parentobject = self._taxa[parentobject[u'Parent name']] if parentobject[u'Parent name'] else None
+                    if 'Parent name' in parentobject:
+                        if parentobject['Parent name'] in self._taxa:
+                            parentobject = self._taxa[parentobject['Parent name']] if parentobject['Parent name'] else None
                         else:
-                            if parentobject[u'Scientific name'] != u'Biota':
-                                envmonlib.Logging().warning(u"Parent taxon is missing for : " + parentobject[u'Scientific name'])
+                            if parentobject['Scientific name'] != 'Biota':
+                                envmonlib.Logging().warning('Parent taxon is missing for : ' + parentobject['Scientific name'])
                             parentobject = None
                     else:
                         parentobject = None
             except:
-                envmonlib.Logging().warning(u"Failed when creating classification. Taxon: " + scientificname)
+                envmonlib.Logging().warning('Failed when creating classification. Taxon: ' + scientificname)
 
     def _loadBvolColumns(self, excel_file_name):
         """ """
@@ -346,7 +346,7 @@ class Species(object):
         envmonlib.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
         #
         for row in tabledataset.getRows():
-            columnname = u''
+            columnname = ''
             try:
                 # Header: Column name, Used on level, Numeric, Internal toolbox name.
                 columnname = row[0].strip()
@@ -357,7 +357,7 @@ class Species(object):
                 if columnname and level and internalname:
                     self._bvolcolumns_dict[columnname] = (level, numeric, internalname) 
             except:
-                envmonlib.Logging().warning(u"Failed when loading BVOL columns. Column name: " + columnname)
+                envmonlib.Logging().warning('Failed when loading BVOL columns. Column name: ' + columnname)
         
     def _loadBvol(self, excel_file_name):
         """ Adds BVOL data to species objects. Creates additional species objects if missing 
@@ -383,127 +383,127 @@ class Species(object):
                     
                     if len(value) > 0:
                         # Separate columns contains taxon and size-class related info.                
-                        if level == u'Taxon':
+                        if level == 'Taxon':
                             taxondict[internalname] = value
                         else:
-                            if (internalname == u'Size class'):
+                            if (internalname == 'Size class'):
                                 try:
                                     # Convert from float to integer and back to unicode. Excel related problem.
                                     sizeclassdict[internalname] = unicode(int(float(value)))
                                 except:
-                                    sizeclassdict[internalname] = u''
-                            elif numeric == u'Numeric':
+                                    sizeclassdict[internalname] = ''
+                            elif numeric == 'Numeric':
                                 sizeclassdict[internalname] = value.replace(',', '.')
                             else:
                                 sizeclassdict[internalname] = value
                 # Check if exists in self._taxa
-                if u'BVOL Species' in taxondict: 
-                    scientificname = taxondict[u'BVOL Species']
+                if 'BVOL Species' in taxondict: 
+                    scientificname = taxondict['BVOL Species']
                     if scientificname in self._taxa_lookup:
                         speciesobject = self._taxa_lookup[scientificname]
                     else:
-                        size = sizeclassdict.get(u'Size class', u'')
-                        envmonlib.Logging().warning(u"Scientific name is missing: " + scientificname + u"   Size: " + size + u"   (Source: " + excel_file_name + u")")
+                        size = sizeclassdict.get('Size class', '')
+                        envmonlib.Logging().warning('Scientific name is missing: ' + scientificname + '   Size: ' + size + '   (Source: ' + excel_file_name + ')')
                         continue # Only add BVOL info if taxon exists in taxa.
                     #
-                    speciesobject[u'BVOL name'] = scientificname
+                    speciesobject['BVOL name'] = scientificname
                     #
-                    if u'Size classes' not in speciesobject:
-                        speciesobject[u'Size classes'] = []
+                    if 'Size classes' not in speciesobject:
+                        speciesobject['Size classes'] = []
                         # Add other bvol data to taxon.
                         for key in taxondict.keys():
                             speciesobject[key] = taxondict[key]
                     #
-                    speciesobject[u'Size classes'].append(sizeclassdict)
+                    speciesobject['Size classes'].append(sizeclassdict)
             except:
-                envmonlib.Logging().warning(u"Failed when loading BVOL data.")
+                envmonlib.Logging().warning('Failed when loading BVOL data.')
         #
         # Trophic_type is set on sizeclass level. Should also be set on species level  
         # if all sizeclasses have the same trophic_type.
         for taxon in self._taxa.values():
             try:
                 trophic_type_set = set() 
-                if u'Size classes' in taxon:
-                    for sizeclass in taxon[u'Size classes']:
-                        trophic_type_set.add(sizeclass.get(u'Trophic type', u''))
+                if 'Size classes' in taxon:
+                    for sizeclass in taxon['Size classes']:
+                        trophic_type_set.add(sizeclass.get('Trophic type', ''))
                 if len(trophic_type_set) == 1:
-                    taxon[u'Trophic type'] = list(trophic_type_set)[0]
+                    taxon['Trophic type'] = list(trophic_type_set)[0]
 
             except:
-                envmonlib.Logging().warning(u"Failed when loading BVOL data (the trophic type part).")
+                envmonlib.Logging().warning('Failed when loading BVOL data (the trophic type part).')
                     
 #     def _translateBvolHeader(self, importFileHeader):
 #         """ Convert import file column names to key names used in dictionary. """        
-#     #        if (importFileHeader == u'Division'): return u'Division'
-#     #        if (importFileHeader == u'Class'): return u'Class'
-#     #        if (importFileHeader == u'Order'): return u'Order'
-#     #        if (importFileHeader == u'Species'): return u'Species'
-#         if (importFileHeader == u'SFLAG (sp., spp., cf., complex, group)'): return u'SFLAG' # Modified
-#         if (importFileHeader == u'STAGE (cyst, naked)'): return u'Stage' # Modified
-#     #        if (importFileHeader == u'Author'): return u'Author'
-#     #        if (importFileHeader == u'AphiaID'): return u'AphiaID'
-#     #        if (importFileHeader == u'Trophic type'): return u'Trophic type'
-#     #        if (importFileHeader == u'Geometric shape'): return u'Geometric shape'
-#         if (importFileHeader == u'FORMULA'): return u'Formula' # Modified
-#         if (importFileHeader == u'Size class No'): return u'Size class' # Modified
-#         if (importFileHeader == u'SizeClassNo'): return u'Size class' # Modified
-#         if (importFileHeader == u'Nonvalid_SIZCL'): return u'Nonvalid size class' # Modified
-#         if (importFileHeader == u'Not_accepted'): return u'Not accepted' # Modified
-#     #        if (importFileHeader == u'Unit'): return u'Unit'
-#         if (importFileHeader == u'size range,'): return u'Size range' # Modified
-#         if (importFileHeader == u'Length (l1), µm'): return u'Length(l1), µm' # Modified
-#         if (importFileHeader == u'Length(l1)µm'): return u'Length(l1), µm' # Modified
-#         if (importFileHeader == u'Length (l2), µm'): return u'Length(l2), µm' # Modified
-#         if (importFileHeader == u'Length(l2)µm'): return u'Length(l2), µm' # Modified
-#         if (importFileHeader == u'Width (w), µm'): return u'Width(w), µm' # Modified
-#         if (importFileHeader == u'Width(w)µm'): return u'Width(w), µm' # Modified
-#         if (importFileHeader == u'Height (h), µm'): return u'Height(h), µm' # Modified
-#         if (importFileHeader == u'Height(h)µm'): return u'Height(h), µm' # Modified
-#         if (importFileHeader == u'Diameter (d1), µm'): return u'Diameter(d1), µm' # Modified
-#         if (importFileHeader == u'Diameter(d1)µm'): return u'Diameter(d1), µm' # Modified
-#         if (importFileHeader == u'Diameter (d2), µm'): return u'Diameter(d2), µm' # Modified
-#         if (importFileHeader == u'Diameter(d2)µm'): return u'Diameter(d2), µm' # Modified
-#         if (importFileHeader == u'No. of cells/ counting unit'): return u'No. of cells/counting unit' # Modified
-#         if (importFileHeader == u'Calculated  volume, µm3'): return u'Calculated volume, µm3' # Modified
-#         if (importFileHeader == u'Calculated  volume µm3'): return u'Calculated volume, µm3' # Modified
-#         if (importFileHeader == u'Comment'): return u'Comment'
-#         if (importFileHeader == u'Filament: length of cell (µm)'): return u'Filament: length of cell, µm' # Modified
-#         if (importFileHeader == u'Calculated Carbon pg/counting unit        (Menden-Deuer & Lessard 2000)'): return u'Calculated Carbon pg/counting unit' # Modified
-#         if (importFileHeader == u'Calculated Carbon pg/counting unit'): return u'Calculated Carbon pg/counting unit' # Modified
-#     #    if (importFileHeader == u'Comment on Carbon calculation'): return u'Comment on Carbon calculation'
-#         if (importFileHeader == u'CORRECTION / ADDITION                            2009'): return u'Correction/addition 2009' # Modified
-#         if (importFileHeader == u'CORRECTION / ADDITION                            2010'): return u'Correction/addition 2010' # Modified
-#         if (importFileHeader == u'CORRECTION / ADDITION                            2011'): return u'Correction/addition 2011' # Modified
-#         if (importFileHeader == u'Corrections/Additions 2013'): return u'Corrections/additions 2013' # Modified
+#     #        if (importFileHeader == 'Division'): return 'Division'
+#     #        if (importFileHeader == 'Class'): return 'Class'
+#     #        if (importFileHeader == 'Order'): return 'Order'
+#     #        if (importFileHeader == 'Species'): return 'Species'
+#         if (importFileHeader == 'SFLAG (sp., spp., cf., complex, group)'): return 'SFLAG' # Modified
+#         if (importFileHeader == 'STAGE (cyst, naked)'): return 'Stage' # Modified
+#     #        if (importFileHeader == 'Author'): return 'Author'
+#     #        if (importFileHeader == 'AphiaID'): return 'AphiaID'
+#     #        if (importFileHeader == 'Trophic type'): return 'Trophic type'
+#     #        if (importFileHeader == 'Geometric shape'): return 'Geometric shape'
+#         if (importFileHeader == 'FORMULA'): return 'Formula' # Modified
+#         if (importFileHeader == 'Size class No'): return 'Size class' # Modified
+#         if (importFileHeader == 'SizeClassNo'): return 'Size class' # Modified
+#         if (importFileHeader == 'Nonvalid_SIZCL'): return 'Nonvalid size class' # Modified
+#         if (importFileHeader == 'Not_accepted'): return 'Not accepted' # Modified
+#     #        if (importFileHeader == 'Unit'): return 'Unit'
+#         if (importFileHeader == 'size range,'): return 'Size range' # Modified
+#         if (importFileHeader == 'Length (l1), µm'): return 'Length(l1), µm' # Modified
+#         if (importFileHeader == 'Length(l1)µm'): return 'Length(l1), µm' # Modified
+#         if (importFileHeader == 'Length (l2), µm'): return 'Length(l2), µm' # Modified
+#         if (importFileHeader == 'Length(l2)µm'): return 'Length(l2), µm' # Modified
+#         if (importFileHeader == 'Width (w), µm'): return 'Width(w), µm' # Modified
+#         if (importFileHeader == 'Width(w)µm'): return 'Width(w), µm' # Modified
+#         if (importFileHeader == 'Height (h), µm'): return 'Height(h), µm' # Modified
+#         if (importFileHeader == 'Height(h)µm'): return 'Height(h), µm' # Modified
+#         if (importFileHeader == 'Diameter (d1), µm'): return 'Diameter(d1), µm' # Modified
+#         if (importFileHeader == 'Diameter(d1)µm'): return 'Diameter(d1), µm' # Modified
+#         if (importFileHeader == 'Diameter (d2), µm'): return 'Diameter(d2), µm' # Modified
+#         if (importFileHeader == 'Diameter(d2)µm'): return 'Diameter(d2), µm' # Modified
+#         if (importFileHeader == 'No. of cells/ counting unit'): return 'No. of cells/counting unit' # Modified
+#         if (importFileHeader == 'Calculated  volume, µm3'): return 'Calculated volume, µm3' # Modified
+#         if (importFileHeader == 'Calculated  volume µm3'): return 'Calculated volume, µm3' # Modified
+#         if (importFileHeader == 'Comment'): return 'Comment'
+#         if (importFileHeader == 'Filament: length of cell (µm)'): return 'Filament: length of cell, µm' # Modified
+#         if (importFileHeader == 'Calculated Carbon pg/counting unit        (Menden-Deuer & Lessard 2000)'): return 'Calculated Carbon pg/counting unit' # Modified
+#         if (importFileHeader == 'Calculated Carbon pg/counting unit'): return 'Calculated Carbon pg/counting unit' # Modified
+#     #    if (importFileHeader == 'Comment on Carbon calculation'): return 'Comment on Carbon calculation'
+#         if (importFileHeader == 'CORRECTION / ADDITION                            2009'): return 'Correction/addition 2009' # Modified
+#         if (importFileHeader == 'CORRECTION / ADDITION                            2010'): return 'Correction/addition 2010' # Modified
+#         if (importFileHeader == 'CORRECTION / ADDITION                            2011'): return 'Correction/addition 2011' # Modified
+#         if (importFileHeader == 'Corrections/Additions 2013'): return 'Corrections/additions 2013' # Modified
 #         return importFileHeader     
 #         
 #     def _isBvolTaxonRelated(self, header, column):
 #         """ Used when importing BVOL data. """        
-#         if (header[column] == u'Division'): return True
-#         if (header[column] == u'Class'): return True
-#         if (header[column] == u'Order'): return True
-#         if (header[column] == u'Species'): return True
-#         if (header[column] == u'Author'): return True
-#         if (header[column] == u'SFLAG'): return True
-#         if (header[column] == u'Stage'): return True
-#         ###if (header[column] == u'Trophic type'): return True
-#         if (header[column] == u'Geometric shape'): return True
-#         if (header[column] == u'Formula'): return True
+#         if (header[column] == 'Division'): return True
+#         if (header[column] == 'Class'): return True
+#         if (header[column] == 'Order'): return True
+#         if (header[column] == 'Species'): return True
+#         if (header[column] == 'Author'): return True
+#         if (header[column] == 'SFLAG'): return True
+#         if (header[column] == 'Stage'): return True
+#         ###if (header[column] == 'Trophic type'): return True
+#         if (header[column] == 'Geometric shape'): return True
+#         if (header[column] == 'Formula'): return True
 #         return False # Related to size class.     
 #         
 #     def _isBvolColumnNumeric(self, header, column):
 #         """ Used when importing BVOL data. """        
-#         if (header[column] == u'Size class'): return False # Note: Should be handled as unicode. Could be empty string.
-#         if (header[column] == u'Length(l1), µm'): return True
-#         if (header[column] == u'Length(l2), µm'): return True
-#         if (header[column] == u'Width(w), µm'): return True
-#         if (header[column] == u'Height(h), µm'): return True
-#         if (header[column] == u'Diameter(d1), µm'): return True
-#         if (header[column] == u'Diameter(d2), µm'): return True
-#         if (header[column] == u'No. of cells/counting unit'): return True
-#         if (header[column] == u'Calculated volume, µm3'): return True
-#         if (header[column] == u'Filament: length of cell, µm'): return True
-#         if (header[column] == u'Calculated Carbon pg/counting unit'): return True
+#         if (header[column] == 'Size class'): return False # Note: Should be handled as unicode. Could be empty string.
+#         if (header[column] == 'Length(l1), µm'): return True
+#         if (header[column] == 'Length(l2), µm'): return True
+#         if (header[column] == 'Width(w), µm'): return True
+#         if (header[column] == 'Height(h), µm'): return True
+#         if (header[column] == 'Diameter(d1), µm'): return True
+#         if (header[column] == 'Diameter(d2), µm'): return True
+#         if (header[column] == 'No. of cells/counting unit'): return True
+#         if (header[column] == 'Calculated volume, µm3'): return True
+#         if (header[column] == 'Filament: length of cell, µm'): return True
+#         if (header[column] == 'Calculated Carbon pg/counting unit'): return True
 #         return False
 
     def getPlanktonGroupFromTaxonName(self, scientific_name):
@@ -515,7 +515,7 @@ class Species(object):
         else:
             for rank in self._planktongroups_ranks_set:
                 #
-                if rank == u'scientific_name':
+                if rank == 'scientific_name':
                     taxon_on_rank = scientific_name
                 else:
                     taxon_on_rank = self.getTaxonValue(scientific_name, rank)
@@ -525,10 +525,10 @@ class Species(object):
                     self._planktongroups_lookup[scientific_name] = planktongroup
                     return planktongroup
         #                            
-#        return u'plankton-group-not-designated'
-        envmonlib.Logging().warning(u"Not match for Plankton group. 'Others' assigned for: " + scientific_name)
+#        return 'plankton-group-not-designated'
+        envmonlib.Logging().warning('Not match for Plankton group. "Others" assigned for: ' + scientific_name)
         #
-        return u'Others'
+        return 'Others'
 
     def _getFilesByPrefix(self, prefix):
         """ """
@@ -537,8 +537,8 @@ class Species(object):
         for root, dirs, files in os.walk(self._species_directory_path):
             for filename in files:
                 if filename.startswith(prefix) and \
-                   filename.endswith(u'.xlsx'):
-#                     print (u'DEBUG: ' + os.path.join(root, filename))
+                   filename.endswith('.xlsx'):
+#                     print ('DEBUG: ' + os.path.join(root, filename))
                     xslx_files[filename] = os.path.join(root, filename)
         # If versions of files is used, only get the latest one.
         latest_files = {}
@@ -552,9 +552,9 @@ class Species(object):
     def _splitFilenameOnVersion(self, file_name):
         """ """
         filename = os.path.splitext(file_name)[0]
-        parts = filename.split(u'version')
-        name = parts[0].strip(u'_').strip()
-        version = parts[1].strip(u'_').strip() if len(parts) > 1 else u''
+        parts = filename.split('version')
+        name = parts[0].strip('_').strip()
+        version = parts[1].strip('_').strip() if len(parts) > 1 else ''
         #
         return name, version
 

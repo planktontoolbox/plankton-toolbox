@@ -46,12 +46,12 @@ class ImportManager(object):
         datarowsfrom = 2
         #
         for rowdict in self._importrows:
-            if rowdict[u'node'] == u'info':
-                if rowdict[u'key'] == u'header_row':
-                    headerrow = int(float(rowdict.get(u'command', u'1')))
+            if rowdict['node'] == 'info':
+                if rowdict['key'] == 'header_row':
+                    headerrow = int(float(rowdict.get('command', '1')))
                     if headerrow: headerrow -= 1
-                if rowdict[u'key'] == u'first_data_row':
-                    datarowsfrom = int(float(rowdict.get(u'command', u'2')))
+                if rowdict['key'] == 'first_data_row':
+                    datarowsfrom = int(float(rowdict.get('command', '2')))
                     if datarowsfrom: datarowsfrom -= 1
 
         tabledataset = envmonlib.DatasetTable()
@@ -60,7 +60,7 @@ class ImportManager(object):
                                                  header_row = headerrow,
                                                  data_rows_from = datarowsfrom)
         #
-        envmonlib.Logging().info(u"Loading file. Header content: " +  
+        envmonlib.Logging().info('Loading file. Header content: ' +  
                                  unicode(tabledataset.getHeader()))
         
         # Phase 2: Parse the table and create a corresponding tree structure.
@@ -90,24 +90,24 @@ class ImportManager(object):
         datarowsfrom = 2
         #
         for rowdict in self._importrows:
-            if rowdict[u'node'] == u'info':
-                if rowdict[u'key'] == u'excel_sheet_name':
-                    sheetname = rowdict.get(u'Command', None)
-                if rowdict[u'key'] == u'header_row':
-                    headerrow = int(float(rowdict.get(u'Command', u'1')))
+            if rowdict['node'] == 'info':
+                if rowdict['key'] == 'excel_sheet_name':
+                    sheetname = rowdict.get('Command', None)
+                if rowdict['key'] == 'header_row':
+                    headerrow = int(float(rowdict.get('Command', '1')))
                     if headerrow: headerrow -= 1
-                if rowdict[u'key'] == u'first_data_row':
-                    datarowsfrom = int(float(rowdict.get(u'Command', u'2')))
+                if rowdict['key'] == 'first_data_row':
+                    datarowsfrom = int(float(rowdict.get('Command', '2')))
                     if datarowsfrom: datarowsfrom -= 1
 #        for rowdict in self._importrows:
-#            if rowdict[u'Node'] == u'INFO':
-#                if rowdict[u'Key'] == u'Excel sheet name':
-#                    sheetname = rowdict.get(u'Command', None)
-#                if rowdict[u'Key'] == u'Header row':
-#                    headerrow = envmonlib.ViewFormats().format(rowdict.get(u'Command', u'1'), u'Integer')
+#            if rowdict['Node'] == 'INFO':
+#                if rowdict['Key'] == 'Excel sheet name':
+#                    sheetname = rowdict.get('Command', None)
+#                if rowdict['Key'] == 'Header row':
+#                    headerrow = envmonlib.ViewFormats().format(rowdict.get('Command', '1'), 'Integer')
 #                    if headerrow: headerrow -= 1
-#                if rowdict[u'Key'] == u'First data row':
-#                    datarowsfrom = envmonlib.ViewFormats().format(rowdict.get(u'Command', u'2'), u'Integer')
+#                if rowdict['Key'] == 'First data row':
+#                    datarowsfrom = envmonlib.ViewFormats().format(rowdict.get('Command', '2'), 'Integer')
 #                    if datarowsfrom: datarowsfrom -= 1
         
         tabledataset = envmonlib.DatasetTable()
@@ -116,7 +116,7 @@ class ImportManager(object):
                                                   header_row = headerrow,
                                                   data_rows_from = datarowsfrom)
         #
-        envmonlib.Logging().info(u"Loading file. Header content: " +  
+        envmonlib.Logging().info('Loading file. Header content: ' +  
                                  unicode(tabledataset.getHeader()))
 
         # Phase 2: Parse the table and create a corresponding tree structure.
@@ -146,7 +146,7 @@ class ImportManager(object):
 #            
 #            formatparser = envmonlib.FormatSingleFile()
 #                   
-#    #        parsercolumn = self.metadata.getField(u'Dataset format')
+#    #        parsercolumn = self.metadata.getField('Dataset format')
 #            
 #            # Phase 1: Parse file and import to memory model.
 #            formatparser.importDataset(dataset, zipfile)
@@ -169,7 +169,7 @@ class ImportManager(object):
         envmonlib.ExcelFiles().readToTableDataset(tabledata, file_name = self._parser_file_path)
         # Create import info.
         if self._import_column:
-#            self.addMetadata(u'Import column', self._import_column)
+#            self.addMetadata('Import column', self._import_column)
             self._importrows = []
             for rowindex in xrange(0, tabledata.getRowCount()):
                 importcolumndata = tabledata.getDataItemByColumnName(rowindex, self._import_column)
@@ -177,18 +177,18 @@ class ImportManager(object):
                     nodelevel = tabledata.getDataItem(rowindex, 0)
                     key = tabledata.getDataItem(rowindex, 1)
                     viewformat = tabledata.getDataItem(rowindex, 2)
-                    self._importrows.append({u'node': nodelevel, u'key': key, u'view_format': viewformat, u'command': importcolumndata}) 
+                    self._importrows.append({'node': nodelevel, 'key': key, 'view_format': viewformat, 'command': importcolumndata}) 
 #            self.setDatasetParserRows(self._importrows)
         # Create export info.
         if self._export_column:
-#            self.addMetadata(u'Export column', self._export_column)
+#            self.addMetadata('Export column', self._export_column)
             self._columnsinfo = []
             for rowindex in xrange(0, tabledata.getRowCount()):
                 exportcolumndata = tabledata.getDataItemByColumnName(rowindex, self._export_column)
                 if exportcolumndata:
                     nodelevel = tabledata.getDataItem(rowindex, 0)
-                    if nodelevel != u'info':
+                    if nodelevel != 'info':
                         key = tabledata.getDataItem(rowindex, 1)
                         viewformat = tabledata.getDataItem(rowindex, 2)
-                        self._columnsinfo.append({u'header': exportcolumndata, u'node': nodelevel, u'key': key, u'view_format': viewformat}) 
+                        self._columnsinfo.append({'header': exportcolumndata, 'node': nodelevel, 'key': key, 'view_format': viewformat}) 
 #            self.setExportTableColumns(self._columnsinfo)

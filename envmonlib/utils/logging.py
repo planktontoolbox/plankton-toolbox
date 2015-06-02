@@ -42,16 +42,16 @@ class Logging(object):
         message = unicode(message)
         if message:
             if self._logtarget:
-                self._logtarget.writeToLog(time.strftime("%Y-%m-%d %H:%M:%S") + ': ' + message)
+                self._logtarget.writeToLog(time.strftime('%Y-%m-%d %H:%M:%S') + ': ' + message)
             else:
                 # Use console if no target is defined.
-                print(time.strftime("%Y-%m-%d %H:%M:%S") + ': ' + message)
+                print(time.strftime('%Y-%m-%d %H:%M:%S') + ': ' + message)
         else:
             # Don't write time info if row is empty.
             if self._logtarget:
-                self._logtarget.writeToLog(u"")
+                self._logtarget.writeToLog('')
             else:
-                print(u"")
+                print('')
   
     def info(self, message):
         """ Accumulates info rows. Increment counter if it already exists. """

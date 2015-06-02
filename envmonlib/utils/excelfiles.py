@@ -10,8 +10,8 @@ import envmonlib
 try: 
     import openpyxl
 except ImportError: 
-    print("Python package openpyxl missing. Please use openpyxl version 1.5.8 or later. Download from http://pypi.python.org/pypi/openpyxl.")
-    raise UserWarning("Python package openpyxl missing. Please use openpyxl version 1.5.8 or later. Download from http://pypi.python.org/pypi/openpyxl.")
+    print('Python package openpyxl missing. Please use openpyxl version 1.5.8 or later. Download from http://pypi.python.org/pypi/openpyxl.')
+    raise UserWarning('Python package openpyxl missing. Please use openpyxl version 1.5.8 or later. Download from http://pypi.python.org/pypi/openpyxl.')
 
 class ExcelFiles():
     """ """
@@ -30,20 +30,20 @@ class ExcelFiles():
                            data_rows_to = None): # None = read all.
         """ """
         if file_name == None:
-            raise UserWarning("File name is missing.")
+            raise UserWarning('File name is missing.')
         if not isinstance(target_dataset, envmonlib.DatasetTable):
-            raise UserWarning("Target dataset is not of valid type.")
+            raise UserWarning('Target dataset is not of valid type.')
         try:
             workbook = openpyxl.load_workbook(file_name, use_iterators = True) # Supports big files.
             if workbook == None:
-                raise UserWarning("Can't read Excel (.xlsx) file.")
+                raise UserWarning('Can\'t read Excel (.xlsx) file.')
             worksheet = None
             if sheet_name:
                 # 
                 if sheet_name in workbook.get_sheet_names():
                     worksheet = workbook.get_sheet_by_name(name = sheet_name)
                 else:
-                    raise UserWarning("Excel sheet " + sheet_name + " not available.")      
+                    raise UserWarning('Excel sheet ' + sheet_name + ' not available.')      
             else:
                 # Use the first sheet if not specified.
                 worksheet = workbook.get_sheet_by_name(name = workbook.get_sheet_names()[0])
@@ -57,7 +57,7 @@ class ExcelFiles():
 ###                         value = cell.internal_value
                         value = cell.value
                         if value == None:
-                            header.append(u'')
+                            header.append('')
                         else:
                             header.append(unicode(value).strip())
                     #
@@ -68,14 +68,14 @@ class ExcelFiles():
 ###                        value = cell.internal_value
                         value = cell.value
                         if value == None:
-                            newrow.append(u'')
+                            newrow.append('')
                         else:
                             newrow.append(unicode(value).strip())
                     target_dataset.appendRow(newrow)
         #  
         except Exception:
-            print("Can't read Excel file. File name: " + file_name )
-            raise UserWarning("Can't read Excel file. File name: " + file_name)
+            print('Can\'t read Excel file. File name: ' + file_name )
+            raise UserWarning('Can\'t read Excel file. File name: ' + file_name)
 
 #    def readToTableDataset(self, 
 #                           target_dataset, 
@@ -88,20 +88,20 @@ class ExcelFiles():
 #                           used_columns_to = None): # None = read all.
 #        """ """
 #        if file_name == None:
-#            raise UserWarning("File name is missing.")
+#            raise UserWarning('File name is missing.')
 #        if not isinstance(target_dataset, envmonlib.DatasetTable):
-#            raise UserWarning("Target dataset is not of valid type.")
+#            raise UserWarning('Target dataset is not of valid type.')
 #        try:
 #            workbook = excelreader.load_workbook(file_name)
 #            if workbook == None:
-#                raise UserWarning("Can't read Excel (.xlsx) file.")
+#                raise UserWarning('Can\'t read Excel (.xlsx) file.')
 #            worksheet = None
 #            if sheet_name:
 #                # 
 #                if sheet_name in workbook.get_sheet_names():
 #                    worksheet = workbook.get_sheet_by_name(sheet_name)
 #                else:
-#                    raise UserWarning("Excel sheet " + sheet_name + " not available.")      
+#                    raise UserWarning('Excel sheet ' + sheet_name + " not available.')      
 #            else:
 #                # Use the first sheet if not specified.
 #                worksheet = workbook.get_sheet_by_name(workbook.get_sheet_names()[0])
@@ -121,7 +121,7 @@ class ExcelFiles():
 #                if value:
 #                    header.append(unicode(value).strip())
 #                else:
-#                    header.append(u'')
+#                    header.append('')
 #            target_dataset.setHeader(header)
 #            # Read data rows.
 #            for row in xrange(data_rows_from, data_rows_to): 
@@ -131,19 +131,19 @@ class ExcelFiles():
 #                    if value:
 #                        newrow.append(unicode(value).strip())
 #                    else:
-#                        newrow.append(u'')
+#                        newrow.append('')
 #                target_dataset.appendRow(newrow)
 #        #  
 #        except Exception:
-#            print("Can't read Excel file. File name: " + file_name )
-#            raise UserWarning("Can't read Excel file. File name: " + file_name)
+#            print('Can\'t read Excel file. File name: ' + file_name )
+#            raise UserWarning('Can\'t read Excel file. File name: ' + file_name)
 
     def writeTableDataset(self, table_dataset, file_name):
         """ """
         if file_name == None:
-            raise UserWarning("File name is missing.")
+            raise UserWarning('File name is missing.')
         if not isinstance(table_dataset, envmonlib.DatasetTable):
-            raise UserWarning("Dataset is not of a valid type.")
+            raise UserWarning('Dataset is not of a valid type.')
         try:
             workbook =  openpyxl.Workbook(optimized_write = True)  # Supports big files.
             worksheet = workbook.create_sheet()
@@ -156,15 +156,15 @@ class ExcelFiles():
             workbook.save(file_name)
         #
         except (IOError, OSError):
-            envmonlib.Logging().log("Failed to write to file: " + file_name)
-            raise UserWarning("Failed to write to file: " + file_name)
+            envmonlib.Logging().log('Failed to write to file: ' + file_name)
+            raise UserWarning('Failed to write to file: ' + file_name)
 
 #    def writeTableDataset(self, table_dataset, file_name):
 #        """ """
 #        if file_name == None:
-#            raise UserWarning("File name is missing.")
+#            raise UserWarning('File name is missing.')
 #        if not isinstance(table_dataset, envmonlib.DatasetTable):
-#            raise UserWarning("Dataset is not of a valid type.")
+#            raise UserWarning('Dataset is not of a valid type.')
 #        try:
 #            workbook = excelworkbook.Workbook() # Create workbook.
 #            worksheet = workbook.get_active_sheet() # Workbooks contains at least one worksheet.
@@ -182,6 +182,6 @@ class ExcelFiles():
 #            # Close.
 #            # TODO: Not needed?        
 #        except (IOError, OSError):
-#            envmonlib.Logging().log("Failed to write to file: " + file_name)
-#            raise UserWarning("Failed to write to file: " + file_name)
+#            envmonlib.Logging().log('Failed to write to file: ' + file_name)
+#            raise UserWarning('Failed to write to file: ' + file_name)
 

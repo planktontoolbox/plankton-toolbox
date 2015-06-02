@@ -39,28 +39,28 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         """ """
         # Active widgets and connections.
 #         introlabel = utils_qt.RichTextQLabel()
-#         introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab3_intro'))
+#         introlabel.setText(help_texts.HelpTexts().getText('AnalyseDatasetsTab3_intro'))
         # Active widgets and connections.
         # Aggregate over taxonomic rank.
         self._aggregate_rank_list = QtGui.QComboBox()
         self._aggregate_rank_list.addItems([
-            u"Biota (all levels)",
-            u"Plankton group",
-            u"Kingdom",
-            u"Phylum",
-            u"Class",
-            u"Order",
-            u"Family",
-            u"Genus",
-            u"Species",
-            u"Scientific name", 
-            u"Kingdom (from dataset)",
-            u"Phylum (from dataset)",
-            u"Class (from dataset)",
-            u"Order (from dataset)",
-            u"Family (from dataset)",
-            u"Genus (from dataset)",
-            u"Species (from dataset)", 
+            'Biota (all levels)',
+            'Plankton group',
+            'Kingdom',
+            'Phylum',
+            'Class',
+            'Order',
+            'Family',
+            'Genus',
+            'Species',
+            'Scientific name', 
+            'Kingdom (from dataset)',
+            'Phylum (from dataset)',
+            'Class (from dataset)',
+            'Order (from dataset)',
+            'Family (from dataset)',
+            'Genus (from dataset)',
+            'Species (from dataset)', 
             ])
         self._aggregate_rank_list.setCurrentIndex(4) # Default: Class.
         #  Aggregate over trophic_type.
@@ -70,29 +70,29 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         self._lifestage_listview = utils_qt.SelectableQListView()
 #         self._lifestage_listview.setMaximumHeight(80)
         # Buttons.
-        self._aggregatedata_button = QtGui.QPushButton("Aggregate data")
-        self.connect(self._aggregatedata_button, QtCore.SIGNAL("clicked()"), self._aggregateData)
+        self._aggregatedata_button = QtGui.QPushButton('Aggregate data')
+        self.connect(self._aggregatedata_button, QtCore.SIGNAL('clicked()'), self._aggregateData)
         #
-        self._reloaddata_button = QtGui.QPushButton("Reload analysis data (no clean up)")
-        self.connect(self._reloaddata_button, QtCore.SIGNAL("clicked()"), self._main_activity._tab1widget._copyDatasetsForAnalysis)
+        self._reloaddata_button = QtGui.QPushButton('Reload analysis data (no clean up)')
+        self.connect(self._reloaddata_button, QtCore.SIGNAL('clicked()'), self._main_activity._tab1widget._copyDatasetsForAnalysis)
         #               
-        self._addmissingtaxa_button = QtGui.QPushButton("Add 0 for not observed")
-        self.connect(self._addmissingtaxa_button, QtCore.SIGNAL("clicked()"), self._addMissingTaxa)                
+        self._addmissingtaxa_button = QtGui.QPushButton('Add 0 for not observed')
+        self.connect(self._addmissingtaxa_button, QtCore.SIGNAL('clicked()'), self._addMissingTaxa)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         gridrow = 0
-        label1 = QtGui.QLabel("Aggregate over:")
+        label1 = QtGui.QLabel('Aggregate over:')
         form1.addWidget(label1, gridrow, 0, 1, 4)
-        label2 = QtGui.QLabel("Complement data:")
+        label2 = QtGui.QLabel('Complement data:')
         form1.addWidget(label2, gridrow, 9, 1, 4)
         gridrow += 1
-        label1 = QtGui.QLabel("Taxon level (rank):               ")
-        label2 = QtGui.QLabel("Trophic type:")
-        label3 = QtGui.QLabel("Life stage:")
+        label1 = QtGui.QLabel('Taxon level (rank):               ')
+        label2 = QtGui.QLabel('Trophic type:')
+        label3 = QtGui.QLabel('Life stage:')
         form1.addWidget(label1, gridrow, 0, 1, 1)
         form1.addWidget(label2, gridrow, 1, 1, 3)
         form1.addWidget(label3, gridrow, 4, 1, 3)
-        form1.addWidget(QtGui.QLabel(""), gridrow, 3, 1, 6) # Stretch.
+        form1.addWidget(QtGui.QLabel(''), gridrow, 3, 1, 6) # Stretch.
         gridrow += 1
         form1.addWidget(self._aggregate_rank_list, gridrow, 0, 1, 1)
         form1.addWidget(self._trophic_type_listview, gridrow, 1, 4, 3)
@@ -119,95 +119,95 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         """ """
         try:
 #             if self._aggregate_rank_list.currentIndex() == 0:
-#                 envmonlib.Logging().log("Taxon level is not selected. Please try again.")
-#                 raise UserWarning("Taxon level is not selected. Please try again.")
+#                 envmonlib.Logging().log('Taxon level is not selected. Please try again.')
+#                 raise UserWarning('Taxon level is not selected. Please try again.')
             if not self._analysisdata.getData():
-                envmonlib.Logging().log("No data is loaded for analysis. Please try again.")
-                raise UserWarning("No data is loaded for analysis. Please try again.")                
+                envmonlib.Logging().log('No data is loaded for analysis. Please try again.')
+                raise UserWarning('No data is loaded for analysis. Please try again.')                
             #
-            envmonlib.Logging().log(u"Aggregating data...")
+            envmonlib.Logging().log('Aggregating data...')
             envmonlib.Logging().startAccumulatedLogging()
             try:
             #
                 selected_taxon_rank = unicode(self._aggregate_rank_list.currentText())
                 selected_trophic_type_list = self._trophic_type_listview.getSelectedDataList()
-                selected_trophic_type_text = u'-'.join(selected_trophic_type_list) 
+                selected_trophic_type_text = '-'.join(selected_trophic_type_list) 
                 selected_lifestage_list = self._lifestage_listview.getSelectedDataList()
-                selected_lifestage_text = u'-'.join(selected_lifestage_list) 
+                selected_lifestage_text = '-'.join(selected_lifestage_list) 
                 #
                 for visitnode in self._analysisdata.getData().getChildren()[:]: 
                     for samplenode in visitnode.getChildren()[:]:
                         aggregatedvariables = {}
                         for variablenode in samplenode.getChildren()[:]:
                             newtaxon = None
-                            value = variablenode.getData(u'value')
+                            value = variablenode.getData('value')
                             # Use values containing valid float data.
                             try:
-    #                            value = value.replace(u',', u'.').replace(u' ', u'')
+    #                            value = value.replace(',', '.').replace(' ', '')
                                 value = float(value) 
                                 #
-                                if selected_taxon_rank == u"Biota (all levels)":
-                                    newtaxon = u'Biota' # Biota is above kingdom in the taxonomic hierarchy.
-                                elif selected_taxon_rank == u"Plankton group":
-                                    newtaxon = envmonlib.Species().getPlanktonGroupFromTaxonName(variablenode.getData(u'scientific_name'))
-                                elif selected_taxon_rank == u"Kingdom":
-                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Kingdom")
-                                elif selected_taxon_rank == u"Phylum":
-                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Phylum")
-                                elif selected_taxon_rank == u"Class":
-                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Class")
-                                elif selected_taxon_rank == u"Order":
-                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Order")
-                                elif selected_taxon_rank == u"Family":
-                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Family")
-                                elif selected_taxon_rank == u"Genus":
-                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Genus")
-                                elif selected_taxon_rank == u"Species": 
-                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData(u'scientific_name'), "Species")
-                                elif selected_taxon_rank == u"Scientific name": 
-                                    newtaxon = variablenode.getData(u'scientific_name')
-                                elif selected_taxon_rank == u"Kingdom (from dataset)":
-                                    newtaxon = variablenode.getData(u'kingdom')
-                                elif selected_taxon_rank == u"Phylum (from dataset)":
-                                    newtaxon = variablenode.getData(u'phylum')
-                                elif selected_taxon_rank == u"Class (from dataset)":
-                                    newtaxon = variablenode.getData(u'class')
-                                elif selected_taxon_rank == u"Order (from dataset)":
-                                    newtaxon = variablenode.getData(u'order')
-                                elif selected_taxon_rank == u"Family (from dataset)":
-                                    newtaxon = variablenode.getData(u'family')
-                                elif selected_taxon_rank == u"Genus (from dataset)":
-                                    newtaxon = variablenode.getData(u'genus')
-                                elif selected_taxon_rank == u"Species (from dataset)": 
-                                    newtaxon = variablenode.getData(u'species')
+                                if selected_taxon_rank == 'Biota (all levels)':
+                                    newtaxon = 'Biota' # Biota is above kingdom in the taxonomic hierarchy.
+                                elif selected_taxon_rank == 'Plankton group':
+                                    newtaxon = envmonlib.Species().getPlanktonGroupFromTaxonName(variablenode.getData('scientific_name'))
+                                elif selected_taxon_rank == 'Kingdom':
+                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData('scientific_name'), 'Kingdom')
+                                elif selected_taxon_rank == 'Phylum':
+                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData('scientific_name'), 'Phylum')
+                                elif selected_taxon_rank == 'Class':
+                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData('scientific_name'), 'Class')
+                                elif selected_taxon_rank == 'Order':
+                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData('scientific_name'), 'Order')
+                                elif selected_taxon_rank == 'Family':
+                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData('scientific_name'), 'Family')
+                                elif selected_taxon_rank == 'Genus':
+                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData('scientific_name'), 'Genus')
+                                elif selected_taxon_rank == 'Species': 
+                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData('scientific_name'), 'Species')
+                                elif selected_taxon_rank == 'Scientific name': 
+                                    newtaxon = variablenode.getData('scientific_name')
+                                elif selected_taxon_rank == 'Kingdom (from dataset)':
+                                    newtaxon = variablenode.getData('kingdom')
+                                elif selected_taxon_rank == 'Phylum (from dataset)':
+                                    newtaxon = variablenode.getData('phylum')
+                                elif selected_taxon_rank == 'Class (from dataset)':
+                                    newtaxon = variablenode.getData('class')
+                                elif selected_taxon_rank == 'Order (from dataset)':
+                                    newtaxon = variablenode.getData('order')
+                                elif selected_taxon_rank == 'Family (from dataset)':
+                                    newtaxon = variablenode.getData('family')
+                                elif selected_taxon_rank == 'Genus (from dataset)':
+                                    newtaxon = variablenode.getData('genus')
+                                elif selected_taxon_rank == 'Species (from dataset)': 
+                                    newtaxon = variablenode.getData('species')
                                 # If not found in classification, then use scientific_name. 
                                 # This is valid for taxon with rank above the selected rank.  
                                 if not newtaxon:
-                                    newtaxon = variablenode.getData(u'scientific_name')
+                                    newtaxon = variablenode.getData('scientific_name')
                                 # 
                                 if not newtaxon:
-                                    envmonlib.Logging().warning(u"Not match for selected rank. 'not-designated' assigned for: " + variablenode.getData(u'scientific_name'))
-                                    newtaxon = u'not-designated' # Use this if empty.
+                                    envmonlib.Logging().warning('Not match for selected rank. "not-designated" assigned for: ' + variablenode.getData('scientific_name'))
+                                    newtaxon = 'not-designated' # Use this if empty.
                                 #
-                                taxontrophic_type = variablenode.getData(u'trophic_type')
+                                taxontrophic_type = variablenode.getData('trophic_type')
                                 if taxontrophic_type in selected_trophic_type_list:
                                     taxontrophic_type = selected_trophic_type_text # Concatenated string of ranks.
                                 else:
                                     continue # Phytoplankton only: Use selected trophic_type only, don't use others.  
                                 #
-                                stage = variablenode.getData(u'stage')
-                                sex = variablenode.getData(u'sex')
+                                stage = variablenode.getData('stage')
+                                sex = variablenode.getData('sex')
                                 checkstage = stage
                                 if sex:
-                                    checkstage += u'/' + sex
+                                    checkstage += '/' + sex
                                 if checkstage in selected_lifestage_list:
                                     stage = selected_lifestage_text
-                                    sex = u''
+                                    sex = ''
     #                             else:
     #                                 continue # Note: Don't skip for zooplankton.                 
                                 #
-                                parameter = variablenode.getData(u'parameter')
-                                unit = variablenode.getData(u'unit')
+                                parameter = variablenode.getData('parameter')
+                                unit = variablenode.getData('unit')
                                  
                                 agg_tuple = (newtaxon, taxontrophic_type, stage, sex, parameter, unit)
                                 if agg_tuple in aggregatedvariables:
@@ -215,8 +215,8 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                                 else:
                                     aggregatedvariables[agg_tuple] = value
                             except:
-                                if variablenode.getData(u'value'):
-                                    envmonlib.Logging().warning(u"Value is not a valid float: " + unicode(variablenode.getData(u'Value')))
+                                if variablenode.getData('value'):
+                                    envmonlib.Logging().warning('Value is not a valid float: ' + unicode(variablenode.getData('Value')))
                         #Remove all variables for this sample.
                         samplenode.removeAllChildren()
                         # Add the new aggregated variables instead.  
@@ -226,29 +226,29 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                             newvariable = envmonlib.VariableNode()
                             samplenode.addChild(newvariable)    
                             #
-                            newvariable.addData(u'scientific_name', newtaxon)
-                            newvariable.addData(u'trophic_type', taxontrophic_type)
-                            newvariable.addData(u'stage', stage)
-                            newvariable.addData(u'sex', sex)
-                            newvariable.addData(u'parameter', parameter)
-                            newvariable.addData(u'unit', unit)
-                            newvariable.addData(u'value', aggregatedvariables[variablekeytuple])
+                            newvariable.addData('scientific_name', newtaxon)
+                            newvariable.addData('trophic_type', taxontrophic_type)
+                            newvariable.addData('stage', stage)
+                            newvariable.addData('sex', sex)
+                            newvariable.addData('parameter', parameter)
+                            newvariable.addData('unit', unit)
+                            newvariable.addData('value', aggregatedvariables[variablekeytuple])
                             # Add taxon class, etc. based on taxon name.
-                            newvariable.addData(u'kingdom', envmonlib.Species().getTaxonValue(newtaxon, "Kingdom"))
-                            newvariable.addData(u'phylum', envmonlib.Species().getTaxonValue(newtaxon, "Phylum"))
-                            newvariable.addData(u'class', envmonlib.Species().getTaxonValue(newtaxon, "Class"))
-                            newvariable.addData(u'order', envmonlib.Species().getTaxonValue(newtaxon, "Order"))
-                            newvariable.addData(u'family', envmonlib.Species().getTaxonValue(newtaxon, "Family"))
-                            newvariable.addData(u'genus', envmonlib.Species().getTaxonValue(newtaxon, "Genus"))
-                            newvariable.addData(u'species', envmonlib.Species().getTaxonValue(newtaxon, "Species"))
+                            newvariable.addData('kingdom', envmonlib.Species().getTaxonValue(newtaxon, 'Kingdom'))
+                            newvariable.addData('phylum', envmonlib.Species().getTaxonValue(newtaxon, 'Phylum'))
+                            newvariable.addData('class', envmonlib.Species().getTaxonValue(newtaxon, 'Class'))
+                            newvariable.addData('order', envmonlib.Species().getTaxonValue(newtaxon, 'Order'))
+                            newvariable.addData('family', envmonlib.Species().getTaxonValue(newtaxon, 'Family'))
+                            newvariable.addData('genus', envmonlib.Species().getTaxonValue(newtaxon, 'Genus'))
+                            newvariable.addData('species', envmonlib.Species().getTaxonValue(newtaxon, 'Species'))
                 #
                 self._main_activity.updateViewedDataAndTabs()    
             except UserWarning as e:
-                envmonlib.Logging().error("Failed to aggregate data. " + unicode(e))
-                QtGui.QMessageBox.warning(self._main_activity, "Warning", "Failed to aggregate data. " + unicode(e))
+                envmonlib.Logging().error('Failed to aggregate data. ' + unicode(e))
+                QtGui.QMessageBox.warning(self._main_activity, 'Warning', 'Failed to aggregate data. ' + unicode(e))
         finally:
             envmonlib.Logging().logAllAccumulatedRows()
-            envmonlib.Logging().log(u"Aggregation of data is done.")
+            envmonlib.Logging().log('Aggregation of data is done.')
             
 
     def _updateSelectDataAlternatives(self):
@@ -263,11 +263,11 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             for samplenode in visitnode.getChildren():
                 for variablenode in samplenode.getChildren():
                     #
-                    trophic_type_set.add(unicode(variablenode.getData(u'trophic_type')))
+                    trophic_type_set.add(unicode(variablenode.getData('trophic_type')))
                     #
-                    lifestage = variablenode.getData(u'stage')
-                    if variablenode.getData(u'sex'):
-                        lifestage += u'/' + variablenode.getData(u'sex')
+                    lifestage = variablenode.getData('stage')
+                    if variablenode.getData('sex'):
+                        lifestage += '/' + variablenode.getData('sex')
                     lifestageset.add(lifestage)
         # Selection lists.
         self._trophic_type_listview.setList(sorted(trophic_type_set))
@@ -276,7 +276,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
     def _addMissingTaxa(self):
         """ """
         try:
-            envmonlib.Logging().log(u"Adding 0 for not observed...")
+            envmonlib.Logging().log('Adding 0 for not observed...')
             envmonlib.Logging().startAccumulatedLogging()
             #
             analysisdata = self._analysisdata.getData()
@@ -287,9 +287,9 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             #
             self._main_activity.updateViewedDataAndTabs()    
         except UserWarning as e:
-            envmonlib.Logging().error("Failed to add 0 for not observed. " + unicode(e))
-            QtGui.QMessageBox.warning(self._main_activity, "Warning", "Failed to add 0 for not observed. " + unicode(e))
+            envmonlib.Logging().error('Failed to add 0 for not observed. ' + unicode(e))
+            QtGui.QMessageBox.warning(self._main_activity, 'Warning', 'Failed to add 0 for not observed. ' + unicode(e))
         finally:
             envmonlib.Logging().logAllAccumulatedRows()
-            envmonlib.Logging().log(u"Add 0 for not observed is done.")
+            envmonlib.Logging().log('Add 0 for not observed is done.')
 

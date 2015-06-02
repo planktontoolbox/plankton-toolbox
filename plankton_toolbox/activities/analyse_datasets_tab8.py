@@ -40,7 +40,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
             for visitnode in analysisdata.getChildren():
                 for samplenode in visitnode.getChildren():
                     for variablenode in samplenode.getChildren():
-                        parameterset.add(variablenode.getData(u'parameter') + u' (' + variablenode.getData(u'unit') + u')')
+                        parameterset.add(variablenode.getData('parameter') + ' (' + variablenode.getData('unit') + ')')
             parameterlist = sorted(parameterset)
             self._parameter_list.setList(parameterlist)
 
@@ -49,23 +49,23 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         """ """
         # Active widgets and connections.
 #         introlabel = utils_qt.RichTextQLabel()
-#         introlabel.setText(help_texts.HelpTexts().getText(u'AnalyseDatasetsTab8_intro'))
+#         introlabel.setText(help_texts.HelpTexts().getText('AnalyseDatasetsTab8_intro'))
         # Parameters.
         self._parameter_list = utils_qt.SelectableQListView()       
-        clearall_label = utils_qt.ClickableQLabel("Clear all")
-        markall_label = utils_qt.ClickableQLabel("Mark all")
-        self.connect(clearall_label, QtCore.SIGNAL("clicked()"), self._parameter_list.uncheckAll)                
-        self.connect(markall_label, QtCore.SIGNAL("clicked()"), self._parameter_list.checkAll)                
+        clearall_label = utils_qt.ClickableQLabel('Clear all')
+        markall_label = utils_qt.ClickableQLabel('Mark all')
+        self.connect(clearall_label, QtCore.SIGNAL('clicked()'), self._parameter_list.uncheckAll)                
+        self.connect(markall_label, QtCore.SIGNAL('clicked()'), self._parameter_list.checkAll)                
         # Predefined reports.
-        self._report_1_button = QtGui.QPushButton("PRIMER")
-        self.connect(self._report_1_button, QtCore.SIGNAL("clicked()"), self._createReport_1)                
-        self._report_2_button = QtGui.QPushButton("Zooplankton: Abundance m2 and m3, length median and mean")
-        self.connect(self._report_2_button, QtCore.SIGNAL("clicked()"), self._createReport_2)                
+        self._report_1_button = QtGui.QPushButton('PRIMER')
+        self.connect(self._report_1_button, QtCore.SIGNAL('clicked()'), self._createReport_1)                
+        self._report_2_button = QtGui.QPushButton('Zooplankton: Abundance m2 and m3, length median and mean')
+        self.connect(self._report_2_button, QtCore.SIGNAL('clicked()'), self._createReport_2)                
 
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         gridrow = 0
-        label1 = QtGui.QLabel("Parameters (for PRIMER):")
+        label1 = QtGui.QLabel('Parameters (for PRIMER):')
         form1.addWidget(label1, gridrow, 0, 1, 2)
         gridrow += 1
         form1.addWidget(self._parameter_list, gridrow, 0, 1, 2)
@@ -154,7 +154,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         numberofparameters = len(parameters)
         numberofcolumns = 6 + (numberofsamples * numberofparameters)
         # Set header. Note: Normal header is not used.
-        tabledata.setHeader([u''] * numberofcolumns)
+        tabledata.setHeader([''] * numberofcolumns)
         #
         # Part 1: Create header rows with columns for sample related data.
         #
@@ -162,10 +162,10 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         header_row_2 = [unicode()] * numberofcolumns 
         header_row_3 = [unicode()] * numberofcolumns 
         header_row_4 = [unicode()] * numberofcolumns 
-        header_row_1[5] = u'Station name:'
-        header_row_2[5] = u'Date:'
-        header_row_3[5] = u'Sample min depth:'
-        header_row_4[5] = u'Sample max depth:'
+        header_row_1[5] = 'Station name:'
+        header_row_2[5] = 'Date:'
+        header_row_3[5] = 'Sample min depth:'
+        header_row_4[5] = 'Sample max depth:'
         #
         # Iterate over file to create column headers.
         sampleindex = 0
@@ -190,10 +190,10 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
                 for sample in visit.getChildren():
                     for variable in sample.getChildren():
                         scientific_name = variable.getData('scientific_name')
-                        size_class = variable.getData(u'size_class')
-                        trophic_type = variable.getData(u'trophic_type')
-                        stage = variable.getData(u'stage')
-                        sex = variable.getData(u'sex')
+                        size_class = variable.getData('size_class')
+                        trophic_type = variable.getData('trophic_type')
+                        stage = variable.getData('stage')
+                        sex = variable.getData('sex')
                         #
                         taxon_key = unicode(scientific_name) + ':' + unicode(size_class) + ':' + unicode(trophic_type) + ':' + unicode(stage) + ':' + unicode(sex)
                         if taxon_key not in taxon_values_dict:
@@ -204,7 +204,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
                             unit = variable.getData('unit')
                             value = variable.getData('value')
                             #
-                            if param == (parameter + u' (' + unit + u')'):
+                            if param == (parameter + ' (' + unit + ')'):
                                 taxon_values_dict[taxon_key][sampleindex * numberofparameters + paramindex] = value
                     #
                     sampleindex += 1
@@ -222,7 +222,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
             stage = taxon_key_parts[3]
             sex = taxon_key_parts[4]
             #
-            row = [u''] * (numberofcolumns * numberofparameters)
+            row = [''] * (numberofcolumns * numberofparameters)
             row[0] = scientific_name
             row[1] = size_class
             row[2] = trophic_type
@@ -245,7 +245,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         tabledata.appendRow(header_row_3)
         tabledata.appendRow(header_row_4)
 
-        tabledata.appendRow([u'Scientific name', u'Size class', u'Trophic type', u'Stage', u'Sex', u''] + \
+        tabledata.appendRow(['Scientific name', 'Size class', 'Trophic type', 'Stage', 'Sex', ''] + \
                             parameters * numberofsamples) # Multiple columns per sample.
         #
         for row in taxon_rows:
@@ -272,24 +272,24 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         header_row.append('Length (mean)')
         tabledata.setHeader(header_row)
         # Extract values for the plot.
-        date = u'-'
-        station_name = u'-'
-        sample_min_depth = u'-'
-        sample_max_depth = u'-'
+        date = '-'
+        station_name = '-'
+        sample_min_depth = '-'
+        sample_max_depth = '-'
         for visitnode in dataset.getChildren():
-            station_name = visitnode.getData(u"station_name")
-            date = visitnode.getData(u"date")
+            station_name = visitnode.getData('station_name')
+            date = visitnode.getData('date')
             for samplenode in visitnode.getChildren():
-                sample_min_depth = samplenode.getData(u"sample_min_depth")
-                sample_max_depth = samplenode.getData(u"sample_max_depth")
+                sample_min_depth = samplenode.getData('sample_min_depth')
+                sample_max_depth = samplenode.getData('sample_max_depth')
                 
                 # Iterate over sample content. 
                 # Note: Create a level between sample and variabel.
                 grouped_lifestages = {}
                 for variablenode in samplenode.getChildren():
-                    group_key = variablenode.getData(u'scientific_name')
-                    group_key += u':' + variablenode.getData(u'stage') # Specific for zooplankton.
-                    group_key += u':' + variablenode.getData(u'sex') # Specific for zooplankton.
+                    group_key = variablenode.getData('scientific_name')
+                    group_key += ':' + variablenode.getData('stage') # Specific for zooplankton.
+                    group_key += ':' + variablenode.getData('sex') # Specific for zooplankton.
                     if group_key not in grouped_lifestages:
                         grouped_lifestages[group_key] = [] # Starts a new group.
                     grouped_lifestages[group_key].append(variablenode)
@@ -297,30 +297,30 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
                 # Get variables from the new set of groups.
                 for group_key in grouped_lifestages.keys():
                     # This should be available in each group.
-                    scientific_name = u'-'
-                    stage = u'-'
-                    sex = u'-'
-                    abundance_ind_m2 = u'-'
-                    abundance_ind_m3 = u'-'
-                    length_median = u'-'
-                    length_mean = u'-'
+                    scientific_name = '-'
+                    stage = '-'
+                    sex = '-'
+                    abundance_ind_m2 = '-'
+                    abundance_ind_m3 = '-'
+                    length_median = '-'
+                    length_mean = '-'
                     #
                     for variablenode in grouped_lifestages[group_key]:
                         # This should be same for all variables in the group.                       
-                        scientific_name = variablenode.getData(u'scientific_name')
-                        stage = variablenode.getData(u'stage')
-                        sex = variablenode.getData(u'sex')
+                        scientific_name = variablenode.getData('scientific_name')
+                        stage = variablenode.getData('stage')
+                        sex = variablenode.getData('sex')
                         # Parameters.
-                        parameter = variablenode.getData(u'parameter')
-                        unit = variablenode.getData(u'unit')
-                        if (parameter == u'Abundance') and (unit == u'ind/m2'):
-                            abundance_ind_m2 = variablenode.getData(u'value')
-                        if (parameter == u'Abundance') and (unit == u'ind/m3'):
-                            abundance_ind_m3 = variablenode.getData(u'value')
-                        if parameter == u'Length (median)':
-                            length_median = variablenode.getData(u'value')
-                        if parameter == u'Length (mean)':
-                            length_mean = variablenode.getData(u'value')
+                        parameter = variablenode.getData('parameter')
+                        unit = variablenode.getData('unit')
+                        if (parameter == 'Abundance') and (unit == 'ind/m2'):
+                            abundance_ind_m2 = variablenode.getData('value')
+                        if (parameter == 'Abundance') and (unit == 'ind/m3'):
+                            abundance_ind_m3 = variablenode.getData('value')
+                        if parameter == 'Length (median)':
+                            length_median = variablenode.getData('value')
+                        if parameter == 'Length (mean)':
+                            length_mean = variablenode.getData('value')
                     
                     # Organism group is finished. Add row to report.
                     report_row = []
@@ -399,7 +399,7 @@ def primer_report_count_table_sort(s1, s2):
 #         # Set header.
 #         numberofsamples = len(datasets)
 #         numberofcolumns = 6 + (numberofsamples * 2) # Two columns per sample.
-#         report_table.setHeader([u''] * numberofcolumns) # Note: Header is not used.
+#         report_table.setHeader([''] * numberofcolumns) # Note: Header is not used.
 #         #
 #         # Part 1: Create header rows with columns for sample related data.
 #         #
@@ -409,12 +409,12 @@ def primer_report_count_table_sort(s1, s2):
 #         header_row_4 = [unicode()] * numberofcolumns 
 #         header_row_5 = [unicode()] * numberofcolumns 
 #         header_row_6 = [unicode()] * numberofcolumns 
-#         header_row_1[5] = u'Station:'
-#         header_row_2[5] = u'Provtagningsdatum:'
-#         header_row_3[5] = u'Min. djup:'
-#         header_row_4[5] = u'Max. djup:'
-#         header_row_5[5] = u'Datum för analys:'
-#         header_row_6[5] = u'Analys utförd av:'
+#         header_row_1[5] = 'Station:'
+#         header_row_2[5] = 'Provtagningsdatum:'
+#         header_row_3[5] = 'Min. djup:'
+#         header_row_4[5] = 'Max. djup:'
+#         header_row_5[5] = 'Datum för analys:'
+#         header_row_6[5] = 'Analys utförd av:'
 #         #
 #         # Iterate over file to create columns.
 #         for datasetindex, datasetnode in enumerate(datasets):
@@ -439,15 +439,15 @@ def primer_report_count_table_sort(s1, s2):
 #             samplenode = visitnode.getChildren()[0] # Only one child.
 #             for variablenode in samplenode.getChildren():
 #                 # "Species","Abundance (scale 1 to 5)" 
-#                 phytowinnameandsize = variablenode.getData('Species') + ':' + variablenode.getData(u'Size')
+#                 phytowinnameandsize = variablenode.getData('Species') + ':' + variablenode.getData('Size')
 #                 #
 #                 countedunits = variablenode.getData('Units')
 #                 coeff = variablenode.getData('Coeff')
 #                 try:
 #                     abundance = int(countedunits) * int(coeff)                    
 #                 except:
-#                     abundance = u'ERROR' + u' [' + countedunits + u' * ' + coeff + u']'
-#                     mmfw.Logging().error(u"Calculation error. Units * coeff: " + countedunits + u' * ' + coeff)
+#                     abundance = 'ERROR' + ' [' + countedunits + ' * ' + coeff + ']'
+#                     mmfw.Logging().error('Calculation error. Units * coeff: ' + countedunits + ' * ' + coeff)
 #                 #
 #                 if species_sample_dict.has_key(phytowinnameandsize):
 #                     species_sample_dict[phytowinnameandsize][datasetindex] = abundance
@@ -463,13 +463,13 @@ def primer_report_count_table_sort(s1, s2):
 #             # NET samples:            
 #             ## Extract useful part from Species-column.
 #             ## Example: "Protoperidinium steinii HET 32 (cell: 32-37µm)"
-#             #parts = phytowinname.split(u' ')
-#             #speciesname = u''
+#             #parts = phytowinname.split(' ')
+#             #speciesname = ''
 #             #for part in parts:
-#             #    if part not in [u'cf.', u'HET', u'32', u'(cell:', u'(width:', u'(no']:
-#             #        speciesname += part + u' '
+#             #    if part not in ['cf.', 'HET', '32', '(cell:', '(width:', '(no']:
+#             #        speciesname += part + ' '
 #             #    else:
-#             #        if part not in [u'cf.']:
+#             #        if part not in ['cf.']:
 #             #            break # Break loop.
 #             #speciesname = speciesname.strip()
 #             #
@@ -477,39 +477,39 @@ def primer_report_count_table_sort(s1, s2):
 #             namesize = phytowinnameandsize.split(':')
 #             phytowinname = namesize[0]
 #             # Remove 'cf.'
-#             if u'cf.' in phytowinname:  
-#                 parts = phytowinname.split(u' ')
-#                 speciesname = u''
+#             if 'cf.' in phytowinname:  
+#                 parts = phytowinname.split(' ')
+#                 speciesname = ''
 #                 for part in parts:
-#                     if part not in [u'cf.']:
-#                         speciesname += part + u' '
+#                     if part not in ['cf.']:
+#                         speciesname += part + ' '
 #                 phytowinname = speciesname.strip()
 #             #
 #             sizeclass = namesize[1]
 #             #
 #             pegname, pegsize, sflag = taxa_phytowin.TaxaPhytowin().convertFromPhytowinToPeg(phytowinname, phytowin_size_class = sizeclass)
 #             # Check if 'cf.' was included in name. Add to Sflag.
-#             if u'cf.' in variablenode.getData('Species'):
+#             if 'cf.' in variablenode.getData('Species'):
 #                 if sflag:
 #                     sflag = 'cf., ' + sflag
 #                 else:
 #                     sflag = 'cf.'
 #             
-#             taxonname = taxa.Taxa().getTaxonValue(u'Scientific name', pegname)
-#             taxonclass = taxa.Taxa().getTaxonValue(u'Class', pegname)
-# #            author = taxa.Taxa().getTaxonValue(u'Author', pegname)
-#             harmful = taxa.Taxa().getTaxonValue(u'Harmful', pegname)
-#             trophic_type = taxa.Taxa().getSizeclassValue(u'Trophic type', pegname, pegsize)
+#             taxonname = taxa.Taxa().getTaxonValue('Scientific name', pegname)
+#             taxonclass = taxa.Taxa().getTaxonValue('Class', pegname)
+# #            author = taxa.Taxa().getTaxonValue('Author', pegname)
+#             harmful = taxa.Taxa().getTaxonValue('Harmful', pegname)
+#             trophic_type = taxa.Taxa().getSizeclassValue('Trophic type', pegname, pegsize)
 #             # If trophic_type not available for this sizeclass, get it from taxon.
-#             trophic_type = taxa.Taxa().getTaxonValue(u'Trophic type', pegname)
-#             volume = taxa.Taxa().getSizeclassValue(u'Calculated volume, µm3', pegname, pegsize)
+#             trophic_type = taxa.Taxa().getTaxonValue('Trophic type', pegname)
+#             volume = taxa.Taxa().getSizeclassValue('Calculated volume, µm3', pegname, pegsize)
 #             #
 #             if show_debug_info:
-#                 taxonname = taxonname + u' [' + phytowinnameandsize + u']'
+#                 taxonname = taxonname + ' [' + phytowinnameandsize + ']'
 #             # Put the row together.
 #             row = [unicode()] * (numberofcolumns * 2)
 #             row[0] = taxonclass
-#             row[1] = u'X' if harmful else u''
+#             row[1] = 'X' if harmful else ''
 #             row[2] = taxonname
 #             row[3] = pegsize if pegsize else ''
 #             row[4] = sflag.lower() if sflag else '' # Lowercase.
@@ -517,14 +517,14 @@ def primer_report_count_table_sort(s1, s2):
 #             for index, abund in enumerate(species_sample_dict[phytowinnameandsize]):
 #                 row[6 + (index * 2)] = abund
 #                 #
-#                 volumestring = u''
+#                 volumestring = ''
 #                 if (volume != None) and (abund):
 #                     try:
 #                         # calculatedvolume = int(countedunits) * int(coeff) * float(volume)
 #                         calculatedvolume = float(volume) * float(abund) / 1000000000. # Should be mm3/l (2012-12-12) 
-#                         volumestring = format(calculatedvolume, '.8f').replace(u'.', u',')
+#                         volumestring = format(calculatedvolume, '.8f').replace('.', ',')
 #                     except:
-#                         volumestring = u'ERROR' + u' [' + unicode(abund) + u' * ' + unicode(volume) + u' / 1000000000]'
+#                         volumestring = 'ERROR' + ' [' + unicode(abund) + ' * ' + unicode(volume) + ' / 1000000000]'
 #                 row[6 + (index * 2) + 1] = volumestring
 #             # Add the row the report.
 #             species_rows.append(row)
@@ -537,7 +537,7 @@ def primer_report_count_table_sort(s1, s2):
 #         if aggregate_rows:
 #             oldrow = None
 #             for row in species_rows:
-#                 row[3] = u'' # Size classes should be removed. 
+#                 row[3] = '' # Size classes should be removed. 
 #                 if oldrow:
 #                     if row[2]: # Don't aggregate if species is missing.
 #                         # Iterate over samples.
@@ -549,10 +549,10 @@ def primer_report_count_table_sort(s1, s2):
 #                                     volumecol = abundcol + 1
 #                                     if row[abundcol] and oldrow[abundcol]:
 #                                         row[abundcol] = unicode(int(row[abundcol]) + int(oldrow[abundcol]))
-#                                         oldrow[0] = u'REMOVE AGGREGATED' #
+#                                         oldrow[0] = 'REMOVE AGGREGATED' #
 #                                     if row[volumecol] and oldrow[volumecol]:
-#                                         row[volumecol] = unicode(float(row[volumecol].replace(u',', u'.')) + float(oldrow[volumecol].replace(u',', u'.'))).replace(u'.', u',')
-#                                         oldrow[0] = u'REMOVE AGGREGATED' #
+#                                         row[volumecol] = unicode(float(row[volumecol].replace(',', '.')) + float(oldrow[volumecol].replace(',', '.'))).replace('.', ',')
+#                                         oldrow[0] = 'REMOVE AGGREGATED' #
 #                                     #
 #                                     sampleindex += 1     
 #                 #
@@ -568,15 +568,15 @@ def primer_report_count_table_sort(s1, s2):
 #         report_table.appendRow(header_row_5)
 #         report_table.appendRow(header_row_6)
 #         # NET samples:
-#         #report_table.appendRow([u'Klass', u'Pot. giftig', u'Art', u'Sflag'] + [u'Förekomst'] * numberofsamples) 
+#         #report_table.appendRow(['Klass', 'Pot. giftig', 'Art', 'Sflag'] + ['Förekomst'] * numberofsamples) 
 #         # Counted samples:
 #         if aggregate_rows:
-#             report_table.appendRow([u'Klass', u'Pot. giftig', u'Art', u'', u'Sflag', u'Trofigrad'] + [u'Celler/l', u'Biovolym (mm3/l)'] * numberofsamples) # Two columns per sample.
+#             report_table.appendRow(['Klass', 'Pot. giftig', 'Art', '', 'Sflag', 'Trofigrad'] + ['Celler/l', 'Biovolym (mm3/l)'] * numberofsamples) # Two columns per sample.
 #         else:
-#             report_table.appendRow([u'Klass', u'Pot. giftig', u'Art', u'Storleksklass (PEG)', u'Sflag', u'Trofigrad'] + [u'Celler/l', u'Biovolym (mm3/l)'] * numberofsamples) # Two columns per sample.
+#             report_table.appendRow(['Klass', 'Pot. giftig', 'Art', 'Storleksklass (PEG)', 'Sflag', 'Trofigrad'] + ['Celler/l', 'Biovolym (mm3/l)'] * numberofsamples) # Two columns per sample.
 #         #
 #         for row in species_rows:
-#             if row[0] != u'REMOVE AGGREGATED':
+#             if row[0] != 'REMOVE AGGREGATED':
 #                 report_table.appendRow(row)
 # 
 # 

@@ -73,7 +73,7 @@ TODO: Not used in current version. Should be rewritten and integrated with envmo
 #         self._createNameTypeDict() # Maps from name type id to name type.
 #         
 #         # === TAXON file ===
-#         envmonlib.Logging().log("Reading: " + dir + '/dyntaxa_taxon.txt')
+#         envmonlib.Logging().log('Reading: ' + dir + '/dyntaxa_taxon.txt')
 #         txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
 #         taxonFile = codecs.open(dir + '/dyntaxa_taxon.txt', mode = 'r', encoding = txtencode)
 #         separator = '\t' # Tab as separator.
@@ -118,11 +118,11 @@ TODO: Not used in current version. Should be rewritten and integrated with envmo
 #                 if not(taxonid in self._idToTaxon):
 #                     self._idToTaxon[taxonid] = taxonDict # Updates Taxa object.
 #                 else:
-#                     envmonlib.Logging().log("Duplicate taxon id: " + str(taxonid) )
+#                     envmonlib.Logging().log('Duplicate taxon id: ' + str(taxonid) )
 #         taxonFile.close()
 #         
 #         # === HIER file ===
-#         envmonlib.Logging().log("Reading: " + dir + '/dyntaxa_hier.txt')
+#         envmonlib.Logging().log('Reading: ' + dir + '/dyntaxa_hier.txt')
 #         txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
 #         hierFile = codecs.open(dir + '/dyntaxa_hier.txt', mode = 'r', encoding = txtencode)
 #         separator = '\t' # Tab as separator.
@@ -168,7 +168,7 @@ TODO: Not used in current version. Should be rewritten and integrated with envmo
 #         hierFile.close()
 #         
 #         # === NAMES file ===
-#         envmonlib.Logging().log("Reading: " + dir + '/dyntaxa_names.txt')
+#         envmonlib.Logging().log('Reading: ' + dir + '/dyntaxa_names.txt')
 #         txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
 #         namesFile = codecs.open(dir + '/dyntaxa_names.txt', mode = 'r', encoding = txtencode)
 #         separator = '\t' # Tab as separator.
@@ -301,7 +301,7 @@ TODO: Not used in current version. Should be rewritten and integrated with envmo
 #         self._header = []
 #         self._taxa = self._taxaObject.getTaxonList()
 #         
-#         envmonlib.Logging().log("Reading: " + file)
+#         envmonlib.Logging().log('Reading: ' + file)
 #         txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
 # 
 #         
@@ -486,7 +486,7 @@ TODO: Not used in current version. Should be rewritten and integrated with envmo
 #                 pw_sizeclass_dict[pegname + ':' + pegsize] = pwname + ':' + pwsize
 # #                print('DEBUG: pw_sizeclass_dict: ' + pegname + ':' + pegsize + ' = ' + pwname + ':' + pwsize)           
 #             else:
-#                 print("DEBUG: TranslateFile, row to short: " + unicode(row))
+#                 print('DEBUG: TranslateFile, row to short: ' + unicode(row))
 #         translateFile.close()
 #         #
 #         print('DEBUG: PW add to PEG.')
@@ -584,7 +584,7 @@ TODO: Not used in current version. Should be rewritten and integrated with envmo
 #         toolbox_resources.ToolboxResources().loadUnloadedResourceDyntaxa()
 #         dyntaxa = toolbox_resources.ToolboxResources().getResourceDyntaxa()
 #         #
-#         envmonlib.Logging().log("Reading: " + file)
+#         envmonlib.Logging().log('Reading: ' + file)
 #         txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
 #         harmfulFile = codecs.open(file, mode = 'r', encoding = txtencode)
 #         separator = '\t' # Tab as separator.

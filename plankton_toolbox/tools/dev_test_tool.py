@@ -24,40 +24,40 @@ class DevTestTool(tool_base.ToolBase):
         """ """
         # Settings for the DevTestTool. NOTE: Max 4 is supported.
         self._dev_settings = [
-            {   u'button_text': u'SHARKweb_ZP_2010-2012_en_SHORT',
-                u'import_parser_path': u'toolbox_data/parsers/',
-                u'import_parser': u'SHARKweb_Zooplankton_parser.xlsx',
-                u'import_column': u'SHARKweb english',
-                u'export_column': u'Export english',
-                u'data_file_path': u'',
-                u'data_file_name': u'SHARKweb_ZP_2010-2012_en_SHORT.txt',
-                u'data_file_encoding': u'windows-1252',
-#                 u'show_activity_after': u'Import datasets'
-                u'show_activity_after': u'Analyse data'
+            {   'button_text': 'SHARKweb_ZP_2010-2012_en_SHORT',
+                'import_parser_path': 'toolbox_data/parsers/',
+                'import_parser': 'SHARKweb_Zooplankton_parser.xlsx',
+                'import_column': 'SHARKweb english',
+                'export_column': 'Export english',
+                'data_file_path': '',
+                'data_file_name': 'SHARKweb_ZP_2010-2012_en_SHORT.txt',
+                'data_file_encoding': 'windows-1252',
+#                 'show_activity_after': 'Import datasets'
+                'show_activity_after': 'Analyse data'
 
             },
-            {   u'button_text': u'SHARKweb_ZP_2010-2012_sv_SHORT',
-                u'import_parser_path': u'toolbox_data/parsers/',
-                u'import_parser': u'SHARKweb_Zooplankton_parser.xlsx',
-                u'import_column': u'SHARKweb swedish',
-                u'export_column': u'Export swedish',
-                u'data_file_path': u'',
-                u'data_file_name': u'SHARKweb_ZP_2010-2012_sv_SHORT.txt',
-                u'data_file_encoding': u'windows-1252',
-#                 u'show_activity_after': u'Import datasets'
-                u'show_activity_after': u'Analyse data'
+            {   'button_text': 'SHARKweb_ZP_2010-2012_sv_SHORT',
+                'import_parser_path': 'toolbox_data/parsers/',
+                'import_parser': 'SHARKweb_Zooplankton_parser.xlsx',
+                'import_column': 'SHARKweb swedish',
+                'export_column': 'Export swedish',
+                'data_file_path': '',
+                'data_file_name': 'SHARKweb_ZP_2010-2012_sv_SHORT.txt',
+                'data_file_encoding': 'windows-1252',
+#                 'show_activity_after': 'Import datasets'
+                'show_activity_after': 'Analyse data'
 
             },
-            {   u'button_text': u'PTBX_testdata',
-                u'import_parser_path': u'toolbox_data/parsers/',
-                u'import_parser': u'PTBX_testdata_parser.xlsx',
-                u'import_column': u'Import format',
-                u'export_column': u'Export format',
-                u'data_file_path': u'',
-                u'data_file_name': u'PTBX_testdata.txt',
-                u'data_file_encoding': u'windows-1252',
-#                 u'show_activity_after': u'Import datasets'
-                u'show_activity_after': u'Screening'
+            {   'button_text': 'PTBX_testdata',
+                'import_parser_path': 'toolbox_data/parsers/',
+                'import_parser': 'PTBX_testdata_parser.xlsx',
+                'import_column': 'Import format',
+                'export_column': 'Export format',
+                'data_file_path': '',
+                'data_file_name': 'PTBX_testdata.txt',
+                'data_file_encoding': 'windows-1252',
+#                 'show_activity_after': 'Import datasets'
+                'show_activity_after': 'Screening'
 
             },
         ]
@@ -83,15 +83,15 @@ class DevTestTool(tool_base.ToolBase):
         # Active widgets and connections.
         layout = QtGui.QVBoxLayout()
         for index, settings_item in enumerate(self._dev_settings):
-            self._testbutton = QtGui.QPushButton(settings_item[u'button_text'])
+            self._testbutton = QtGui.QPushButton(settings_item['button_text'])
             if index == 0:
-                self.connect(self._testbutton, QtCore.SIGNAL("clicked()"), self._test_0)   
+                self.connect(self._testbutton, QtCore.SIGNAL('clicked()'), self._test_0)   
             if index == 1:
-                self.connect(self._testbutton, QtCore.SIGNAL("clicked()"), self._test_1)   
+                self.connect(self._testbutton, QtCore.SIGNAL('clicked()'), self._test_1)   
             if index == 2:
-                self.connect(self._testbutton, QtCore.SIGNAL("clicked()"), self._test_2)   
+                self.connect(self._testbutton, QtCore.SIGNAL('clicked()'), self._test_2)   
             if index == 3:
-                self.connect(self._testbutton, QtCore.SIGNAL("clicked()"), self._test_3)   
+                self.connect(self._testbutton, QtCore.SIGNAL('clicked()'), self._test_3)   
             layout.addWidget(self._testbutton)
         #
         layout.addStretch(5)
@@ -117,36 +117,36 @@ class DevTestTool(tool_base.ToolBase):
     def _test(self, settings):
         """ """
         try:
-            envmonlib.Logging().log(u"Dev. tool: " + settings[u'button_text'])
+            envmonlib.Logging().log('Dev. tool: ' + settings['button_text'])
             #
-            import_parser_path = settings[u'import_parser_path']
-            import_parser = settings[u'import_parser']
-            import_column = settings[u'import_column']
-            export_column = settings[u'export_column']
+            import_parser_path = settings['import_parser_path']
+            import_parser = settings['import_parser']
+            import_column = settings['import_column']
+            export_column = settings['export_column']
             #
-            self._parent.showActivityByName(settings[u'show_activity_after'])
+            self._parent.showActivityByName(settings['show_activity_after'])
             #
             # Set up for import file parsing.
             impMgr = envmonlib.ImportManager(import_parser_path + import_parser,
                                              import_column,
                                              export_column)
             # Import and parse file.
-            data_file_path = settings[u'data_file_path']
-            data_file_name = settings[u'data_file_name']
-            data_file_encoding = settings[u'data_file_encoding']
+            data_file_path = settings['data_file_path']
+            data_file_name = settings['data_file_name']
+            data_file_encoding = settings['data_file_encoding']
             #
             dataset = impMgr.importTextFile(data_file_path + data_file_name,
                                             data_file_encoding)
             # Add metadata related to imported file.
-            dataset.addMetadata(u'parser', import_parser)
-            dataset.addMetadata(u'file_name', data_file_name)
-            dataset.addMetadata(u'file_path', data_file_path)
-            dataset.addMetadata(u'import_column', import_column)
-            dataset.addMetadata(u'export_column', export_column)
+            dataset.addMetadata('parser', import_parser)
+            dataset.addMetadata('file_name', data_file_name)
+            dataset.addMetadata('file_path', data_file_path)
+            dataset.addMetadata('import_column', import_column)
+            dataset.addMetadata('export_column', export_column)
             toolbox_datasets.ToolboxDatasets().addDataset(dataset)
             
-            self._parent.showActivityByName(settings[u'show_activity_after'])
+            self._parent.showActivityByName(settings['show_activity_after'])
         except Exception as e:
-            envmonlib.Logging().warning(u"Failed to run script: %s" % (e))
+            envmonlib.Logging().warning('Failed to run script: %s' % (e))
             raise
         

@@ -12,7 +12,7 @@ Main module of the application Plankton Toolbox.
 
 Organization name, domain and application name are used by QSettings. Settings
 are stored in the register on Windows (path: "HKEY_CURRENT_USER/Software/
-Plankton Toolbox/Plankton Toolbox"), in $HOME/.config on Linux and in 
+Plankton Toolbox/Plankton Toolbox'), in $HOME/.config on Linux and in 
 $HOME/Library/Preferences on Mac OS X.
 """
 
@@ -34,9 +34,9 @@ def plankton_toolbox_application():
     """
 
     app = QtGui.QApplication(sys.argv)
-    app.setOrganizationName("Plankton Toolbox")
-    app.setOrganizationDomain("plankton-toolbox.org")
-    app.setApplicationName("Plankton Toolbox")
+    app.setOrganizationName('Plankton Toolbox')
+    app.setOrganizationDomain('plankton-toolbox.org')
+    app.setApplicationName('Plankton Toolbox')
     
     # Windows only (needed for application icon):
     try:
@@ -47,7 +47,7 @@ def plankton_toolbox_application():
     except:
         pass
 
-#     app.setWindowIcon(QtGui.QIcon(u'toolbox_data/img/plankton_toolbox_icon.ico'))
+#     app.setWindowIcon(QtGui.QIcon('toolbox_data/img/plankton_toolbox_icon.ico'))
     app.setWindowIcon(QtGui.QIcon('toolbox_data/img/plankton_toolbox_icon.png'))
     
     utils_qt.setAppStyleSheet(app)

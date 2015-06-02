@@ -66,7 +66,7 @@ class DataNode(object):
         if child_object in self._children: 
             self._children.remove(child_object)
         else:
-            print(u"DEBUG: Can't remove child.")
+            print('DEBUG: Can\'t remove child.')
         
     def addData(self, key, value):
         """ """
@@ -78,7 +78,7 @@ class DataNode(object):
         
     def getData(self, key):
         """ """
-        return self._datadict.get(key, u'')
+        return self._datadict.get(key, '')
 
     def getDataDict(self):
         """ """
@@ -128,7 +128,7 @@ class DatasetNode(envmonlib.DatasetBase, DataNode):
     def addChild(self, child):
         """ """
         if not isinstance(child, envmonlib.VisitNode):
-            raise UserWarning("AddChild failed. Dataset children must be of visit type")
+            raise UserWarning('AddChild failed. Dataset children must be of visit type')
         #
         self._visit_count += 1
         super(DatasetNode, self).addChild(child)
@@ -153,32 +153,32 @@ class DatasetNode(envmonlib.DatasetBase, DataNode):
 #    def loadParserInfo(self, parser_file, import_column = None, export_column = None):
 #        """ """
 #        # Add metadata
-#        self.addMetadata(u'Parser', parser_file)
+#        self.addMetadata('Parser', parser_file)
 #        # Read dataset parser.
 #        tabledata = envmonlib.DatasetTable()
 #        envmonlib.ExcelFiles().readToTableDataset(tabledata, file_name = parser_file)
 #        # Create import info.
 #        if import_column:
-#            self.addMetadata(u'Import column', import_column)
+#            self.addMetadata('Import column', import_column)
 #            importrows = []
 #            for rowindex in xrange(0, tabledata.getRowCount()):
 #                importcolumndata = tabledata.getDataItemByColumnName(rowindex, import_column)
 #                if importcolumndata:
 #                    nodelevel = tabledata.getDataItem(rowindex, 0)
 #                    key = tabledata.getDataItem(rowindex, 1)
-#                    importrows.append({u'Node': nodelevel, u'Key': key, u'Command': importcolumndata}) 
+#                    importrows.append({'Node': nodelevel, 'Key': key, 'Command': importcolumndata}) 
 #            self.setDatasetParserRows(importrows)
 #        # Create export info.
 #        if export_column:
-#            self.addMetadata(u'Export column', export_column)
+#            self.addMetadata('Export column', export_column)
 #            columnsinfo = []
 #            for rowindex in xrange(0, tabledata.getRowCount()):
 #                exportcolumndata = tabledata.getDataItemByColumnName(rowindex, export_column)
 #                if exportcolumndata:
 #                    nodelevel = tabledata.getDataItem(rowindex, 0)
-#                    if nodelevel != u'INFO':
+#                    if nodelevel != 'INFO':
 #                        key = tabledata.getDataItem(rowindex, 1)
-#                        columnsinfo.append({u'Header': exportcolumndata, u'Node': nodelevel, u'Key': key}) 
+#                        columnsinfo.append({'Header': exportcolumndata, 'Node': nodelevel, 'Key': key}) 
 #            self.setExportTableColumns(columnsinfo)
 
     def setDatasetParserRows(self, dataset_parser_rows):
@@ -225,7 +225,7 @@ class DatasetNode(envmonlib.DatasetBase, DataNode):
         # Header.
         header = []
         for item in self._exporttablecolumns:
-            header.append(item.get('header', u'---'))
+            header.append(item.get('header', '---'))
         target_dataset.setHeader(header)
         # Rows.
         for visitnode in self.getChildren():
@@ -234,16 +234,16 @@ class DatasetNode(envmonlib.DatasetBase, DataNode):
                     #  Create row based on column_info from self._exporttablecolumns.
                     row = []
                     for column_info in self._exporttablecolumns:
-                        if column_info.get('node', u'') == 'dataset':
-                            row.append(self.getData(column_info.get('key', u'---')))
-                        elif column_info.get('node', u'') == 'visit':
-                            row.append(visitnode.getData(column_info.get('key', u'---')))
-                        elif column_info.get('node', u'') == 'sample':
-                            row.append(samplenode.getData(column_info.get('key', u'---')))
-                        elif column_info.get('node', u'') == 'variable':
-                            row.append(variablenode.getData(column_info.get('key', u'---')))
+                        if column_info.get('node', '') == 'dataset':
+                            row.append(self.getData(column_info.get('key', '---')))
+                        elif column_info.get('node', '') == 'visit':
+                            row.append(visitnode.getData(column_info.get('key', '---')))
+                        elif column_info.get('node', '') == 'sample':
+                            row.append(samplenode.getData(column_info.get('key', '---')))
+                        elif column_info.get('node', '') == 'variable':
+                            row.append(variablenode.getData(column_info.get('key', '---')))
                         else:
-                            row.append(u'')
+                            row.append('')
                     # To target.
                     target_dataset.appendRow(row)
 
@@ -261,7 +261,7 @@ class VisitNode(DataNode):
     def addChild(self, child):
         """ """
         if not isinstance(child, envmonlib.SampleNode):
-            raise UserWarning("AddChild failed. Visit children must be of sample type")
+            raise UserWarning('AddChild failed. Visit children must be of sample type')
         #
         self.getParent()._sample_count += 1
         super(VisitNode, self).addChild(child)
@@ -278,7 +278,7 @@ class VisitNode(DataNode):
         try:
             self.getParent()._visit_lookup[idstring] = self
         except:
-            raise UserWarning("SetIdString failed. Check if parent is assigned.")
+            raise UserWarning('SetIdString failed. Check if parent is assigned.')
         
         
 class SampleNode(DataNode):
@@ -294,7 +294,7 @@ class SampleNode(DataNode):
     def addChild(self, child):
         """ """
         if not isinstance(child, envmonlib.VariableNode):
-            raise UserWarning("AddChild failed. Sample children must be of variable type")
+            raise UserWarning('AddChild failed. Sample children must be of variable type')
         #
         self.getParent().getParent()._variable_count += 1
         super(SampleNode, self).addChild(child)
@@ -311,7 +311,7 @@ class SampleNode(DataNode):
         try:
             self.getParent().getParent()._sample_lookup[idstring] = self
         except:
-            raise UserWarning("SetIdString failed. Check if parent is assigned.")
+            raise UserWarning('SetIdString failed. Check if parent is assigned.')
         
 
 class VariableNode(DataNode):
@@ -335,11 +335,11 @@ class VariableNode(DataNode):
         
     def addChild(self, child):
         """ """
-        raise UserWarning("VariableNode.addChild() failed. Variables can't contain children.")
+        raise UserWarning('VariableNode.addChild() failed. Variables can\'t contain children.')
 
     def removeAllChildren(self):
         """ """
-        raise UserWarning("VariableNode.removeAllChildren() failed. Variables can't contain children.")
+        raise UserWarning('VariableNode.removeAllChildren() failed. Variables can\'t contain children.')
         
     def setIdString(self, idstring):
         """ """
@@ -348,5 +348,5 @@ class VariableNode(DataNode):
         try:
             self.getParent().getParent().getParent()._variable_lookup[idstring] = self
         except:
-            raise UserWarning("SetIdString failed. Check if parent is assigned.")
+            raise UserWarning('SetIdString failed. Check if parent is assigned.')
 

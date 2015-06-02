@@ -20,58 +20,58 @@ class ViewFormats(object):
         """  Formats are Text, Date, Time, Datetime, Integer and Float. """
         #
         if not value:
-            return u''
+            return ''
         #
         viewformat = None
-        if u':' in fieldtype:
-            formatparts = fieldtype.split(u':')
+        if ':' in fieldtype:
+            formatparts = fieldtype.split(':')
             fieldtype = formatparts[0]
             viewformat = formatparts[1] if len(formatparts) > 1 else None
         #
         value = value.trim()
         #
-        if fieldtype == u'Text':
+        if fieldtype == 'Text':
             return value 
         #
-        elif fieldtype == u'Date':
+        elif fieldtype == 'Date':
             try:
                 return value
             except:
-                envmonlib.Logging().warning(u"Failed to parse integer value: ")
-            return u''
+                envmonlib.Logging().warning('Failed to parse integer value: ')
+            return ''
         #
-        elif fieldtype == u'Time':
+        elif fieldtype == 'Time':
             try:
                 return value
             except:
-                envmonlib.Logging().warning(u"Failed to parse integer value: ")
-            return u''
+                envmonlib.Logging().warning('Failed to parse integer value: ')
+            return ''
         #
-        elif fieldtype == u'Datetime':
+        elif fieldtype == 'Datetime':
             try:
                 return value
             except:
-                envmonlib.Logging().warning(u"Failed to parse integer value: ")
-            return u''
+                envmonlib.Logging().warning('Failed to parse integer value: ')
+            return ''
         #
-        elif fieldtype == u'Integer':
+        elif fieldtype == 'Integer':
             try:
-                value = value.replace(u' ', u'').replace(u',', u'.')
+                value = value.replace(' ', '').replace(',', '.')
                 return unicode(int(round(value)))
             except:
-                envmonlib.Logging().warning(u"Failed to parse integer value: ")
-            return u''
+                envmonlib.Logging().warning('Failed to parse integer value: ')
+            return ''
         #
-        elif fieldtype == u'Float':
+        elif fieldtype == 'Float':
             try:
-                cleanedvalue = value.replace(u' ', u'').replace(u',', u'.')
+                cleanedvalue = value.replace(' ', '').replace(',', '.')
                 return unicode(float(cleanedvalue))
             except:
-                envmonlib.Logging().warning(u"Failed to parse float value: ")
-            return u''
+                envmonlib.Logging().warning('Failed to parse float value: ')
+            return ''
         #
         else:
-            envmonlib.Logging().warning(u"Invalid import format: " + fieldtype)
+            envmonlib.Logging().warning('Invalid import format: ' + fieldtype)
             return value
 
 

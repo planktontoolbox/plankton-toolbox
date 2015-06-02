@@ -61,7 +61,7 @@ TODO: Not used in current version. Should be rewritten and integrated with envmo
 # 
 #     def exportTaxa(self, file = None):
 #         """ """
-#         envmonlib.Logging().log("Writes taxa to: " + file)
+#         envmonlib.Logging().log('Writes taxa to: ' + file)
 #         if file == None:
 #             raise UserWarning('File name is missing.')
 #         jsonencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, json-files', 'cp1252')

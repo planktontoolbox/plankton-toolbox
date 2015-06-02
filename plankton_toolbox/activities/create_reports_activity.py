@@ -55,8 +55,8 @@ class CreateReportsActivity(activity_base.ActivityBase):
         # Add content to the activity.
         tabWidget = QtGui.QTabWidget()
         contentLayout.addWidget(tabWidget)
-        tabWidget.addTab(self._contentPwReport(), "Phytowin")
-        tabWidget.setTabToolTip(0, "Creates report from Phytowin files (*.csv).")
+        tabWidget.addTab(self._contentPwReport(), "Phytowin')
+        tabWidget.setTabToolTip(0, "Creates report from Phytowin files (*.csv).')
         contentLayout.addWidget(self._contentPreview(), 10) # Stretch.
         contentLayout.addWidget(self._contentSaveResult())
 ###        contentLayout.addStretch(5)
@@ -66,20 +66,20 @@ class CreateReportsActivity(activity_base.ActivityBase):
         widget = QtGui.QWidget()
         # Active widgets and connections.
 #         introlabel = utils_qt.RichTextQLabel()
-#         introlabel.setText(help_texts.HelpTexts().getText(u'CreateReportsActivity_intro'))
+#         introlabel.setText(help_texts.HelpTexts().getText('CreateReportsActivity_intro'))
 
         self._report_list = QtGui.QComboBox()
-        self._report_list.addItems([u'<select>',
-                                     u'Combine datasets',
-                                     u'Prepare for data delivery',
-                                     u'MJ Report 1 (Håvprover inom 24 timmar)',
-                                     u'MJ Report 2',
-                                     u'ATS Report 1'])
-        self._createreport_button = QtGui.QPushButton("Create report")
-        self.connect(self._createreport_button, QtCore.SIGNAL("clicked()"), self._createPwReport)                
+        self._report_list.addItems(['<select>',
+                                     'Combine datasets',
+                                     'Prepare for data delivery',
+                                     'MJ Report 1 (Håvprover inom 24 timmar)',
+                                     'MJ Report 2',
+                                     'ATS Report 1'])
+        self._createreport_button = QtGui.QPushButton('Create report')
+        self.connect(self._createreport_button, QtCore.SIGNAL('clicked()'), self._createPwReport)                
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
-        hbox1.addWidget(QtGui.QLabel("Report type:"))
+        hbox1.addWidget(QtGui.QLabel('Report type:'))
         hbox1.addWidget(self._report_list)
         hbox1.addStretch(5)
         #
@@ -99,7 +99,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
     def _contentPreview(self):
         """ """
         # === GroupBox: reportbox === 
-        previewbox = QtGui.QGroupBox("Preview", self)        
+        previewbox = QtGui.QGroupBox('Preview", self)        
         # Active widgets and connections.
         self._tableview = utils_qt.ToolboxQTableView()
         # Layout widgets.
@@ -111,18 +111,18 @@ class CreateReportsActivity(activity_base.ActivityBase):
 
     def _contentSaveResult(self):
         """ """
-        saveresultbox = QtGui.QGroupBox("Save report", self)
+        saveresultbox = QtGui.QGroupBox('Save report", self)
         # Active widgets and connections.
         self._saveformat_list = QtGui.QComboBox()
         #
         self._saveformat_list.addItems(["Tab delimited text file (*.txt)",
                                          "Excel file (*.xlsx)"])
-        self._savedataset_button = QtGui.QPushButton("Save...")
-###        self.connect(self._savedataset_button, QtCore.SIGNAL("clicked()"), self._saveData)                
+        self._savedataset_button = QtGui.QPushButton('Save...')
+###        self.connect(self._savedataset_button, QtCore.SIGNAL('clicked()'), self._saveData)                
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(5)
-        hbox1.addWidget(QtGui.QLabel("File format:"))
+        hbox1.addWidget(QtGui.QLabel('File format:'))
         hbox1.addWidget(self._saveformat_list)
         hbox1.addWidget(self._savedataset_button)
         #
@@ -135,16 +135,16 @@ class CreateReportsActivity(activity_base.ActivityBase):
         if self._report_list.currentIndex() == 0:
             QtGui.QMessageBox.information(self, "Info", 'Report type must be selected.')
             return        
-        envmonlib.Logging().log(u"") # Empty line.
-        envmonlib.Logging().log("PW reports started...")
+        envmonlib.Logging().log('') # Empty line.
+        envmonlib.Logging().log('PW reports started...')
         envmonlib.Logging().startAccumulatedLogging()
-        self._writeToStatusBar("Generating PW report...")
+        self._writeToStatusBar('Generating PW report...')
         try:
             self._reportdata.clear()
             # Check which report to generate.
             if self._report_list.currentIndex() == 3: # Report: MJ1
                 # === Report: MJ1 ===
-                envmonlib.Logging().log("Selected report: MJ1")
+                envmonlib.Logging().log('Selected report: MJ1')
                 report = pw_reports.PwReportMJ1()
                 report.createReport(self._reportdata)
                 # Preview result.
@@ -152,7 +152,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
                 self._refreshResultTable()
             elif self._report_list.currentIndex() == 4: # Report: MJ2
                 # === Report: MJ1 ===
-                envmonlib.Logging().log("Selected report: MJ2")
+                envmonlib.Logging().log('Selected report: MJ2')
                 report = pw_reports.PwReportMJ2()
                 report.createReport(self._reportdata)
                 # Preview result.
@@ -160,7 +160,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
                 self._refreshResultTable()
             elif self._report_list.currentIndex() == 5: # Report: ATS1
                 # === Report: MJ1 ===
-                envmonlib.Logging().log("Selected report: ATS1")
+                envmonlib.Logging().log('Selected report: ATS1')
                 report = pw_reports.PwReportATS1()
                 report.createReport(self._reportdata)
                 # Preview result.
@@ -169,17 +169,17 @@ class CreateReportsActivity(activity_base.ActivityBase):
             else:
                 raise UserWarning('The selected report type is not implemented.')
         except UserWarning as e:
-            envmonlib.Logging().error("UserWarning: " + unicode(e))
+            envmonlib.Logging().error('UserWarning: ' + unicode(e))
             QtGui.QMessageBox.warning(self, "Warning", unicode(e))
         except (IOError, OSError) as e:
-            envmonlib.Logging().error("Error: " + unicode(e))
+            envmonlib.Logging().error('Error: ' + unicode(e))
             QtGui.QMessageBox.warning(self, "Error", unicode(e))
         except Exception as e:
-            envmonlib.Logging().error("Failed on exception: " + unicode(e))
+            envmonlib.Logging().error('Failed on exception: ' + unicode(e))
             QtGui.QMessageBox.warning(self, "Exception", unicode(e))
             raise
         finally:
             envmonlib.Logging().logAllAccumulatedRows()    
-            envmonlib.Logging().log("PW reports finished.\r\n")
-            self._writeToStatusBar("")
+            envmonlib.Logging().log('PW reports finished.\r\n')
+            self._writeToStatusBar('')
 

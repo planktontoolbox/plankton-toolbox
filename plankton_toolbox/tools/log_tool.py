@@ -37,17 +37,17 @@ class LogTool(tool_base.ToolBase):
     def _contentButtons(self):
         """ """
         # Active widgets and connections.
-        self._limit_edit = QtGui.QLineEdit("1000")
+        self._limit_edit = QtGui.QLineEdit('1000')
         self._limit_edit.setMaximumWidth(60)        
-        self._clear_button = QtGui.QPushButton("Clear log")
-        ###self.connect(self._clear_button, QtCore.SIGNAL("clicked()"), self._clearLog) 
+        self._clear_button = QtGui.QPushButton('Clear log')
+        ###self.connect(self._clear_button, QtCore.SIGNAL('clicked()'), self._clearLog) 
         self._clear_button.clicked.connect(self._clearLog) 
              
-#        self._openlogfile_button = QtGui.QPushButton("Open log file")
-#        self.connect(self._openlogfile_button, QtCore.SIGNAL("clicked()"), self._openLogFile)      
+#        self._openlogfile_button = QtGui.QPushButton('Open log file')
+#        self.connect(self._openlogfile_button, QtCore.SIGNAL('clicked()'), self._openLogFile)      
         # Layout.
         layout = QtGui.QHBoxLayout()
-        limit_label = QtGui.QLabel("Row limit: ")
+        limit_label = QtGui.QLabel('Row limit: ')
         layout.addStretch(5)
         layout.addWidget(limit_label)
         layout.addWidget(self._limit_edit)
@@ -94,5 +94,5 @@ class LogTool(tool_base.ToolBase):
 #        import subprocess
 #        if sys.platform.startswith('win'):           
 #            subprocess.Popen('plankton_toolbox_log.txt')
-#            subprocess.call(u'plankton_toolbox_log.txt')
+#            subprocess.call('plankton_toolbox_log.txt')
 

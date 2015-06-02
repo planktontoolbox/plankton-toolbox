@@ -87,16 +87,16 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
     def _contentAnalyseTabs(self):
         """ """
         # Active widgets and connections.
-        selectdatabox = QtGui.QGroupBox("", self)
+        selectdatabox = QtGui.QGroupBox('', self)
         tabWidget = QtGui.QTabWidget()
-        tabWidget.addTab(self._tab1widget.contentSelectDatasets(), "Select dataset(s)")
-        tabWidget.addTab(self._tab2widget.contentPrepareData(), "Clean up")
-        tabWidget.addTab(self._tab3widget.contentAggregateData(), "Aggregate/complement data")
-        tabWidget.addTab(self._tab4widget.contentSelectData(), "Filter")
-        tabWidget.addTab(self._tab5widget.contentPredefinedGraphs(), "Predefined graphs")
-        tabWidget.addTab(self._tab6widget.contentGenericGraphs(), "Generic graphs")
-        tabWidget.addTab(self._tab7widget.contentStatistics(), "Statistics")
-        tabWidget.addTab(self._tab8widget.contentReports(), "Exports")
+        tabWidget.addTab(self._tab1widget.contentSelectDatasets(), 'Select dataset(s)')
+        tabWidget.addTab(self._tab2widget.contentPrepareData(), 'Clean up')
+        tabWidget.addTab(self._tab3widget.contentAggregateData(), 'Aggregate/complement data')
+        tabWidget.addTab(self._tab4widget.contentSelectData(), 'Filter')
+        tabWidget.addTab(self._tab5widget.contentPredefinedGraphs(), 'Predefined graphs')
+        tabWidget.addTab(self._tab6widget.contentGenericGraphs(), 'Generic graphs')
+        tabWidget.addTab(self._tab7widget.contentStatistics(), 'Statistics')
+        tabWidget.addTab(self._tab8widget.contentReports(), 'Exports')
         # Layout widgets.
         layout = QtGui.QVBoxLayout()
         layout.addWidget(tabWidget)
@@ -108,7 +108,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
     def _contentAnalysisDataTable(self):
         """ """
         # Active widgets and connections.
-        analysisdatagroupbox = QtGui.QGroupBox("Analysis data, filtered data, statistical data and export data", self)
+        analysisdatagroupbox = QtGui.QGroupBox('Analysis data, filtered data, statistical data and export data', self)
         # Active widgets and connections.
         self._viewdata_list = QtGui.QComboBox()
         self._viewdata_list.addItems(["Analysis data",
@@ -116,24 +116,24 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
                                       "Statistical data",
                                       "Export data",
                                       "Hide data (to increase performance)"])
-        self.connect(self._viewdata_list, QtCore.SIGNAL("currentIndexChanged(int)"), self._viewDataListChanged)                
+        self.connect(self._viewdata_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._viewDataListChanged)                
         #
-        self._numberofrows_label = QtGui.QLabel("Number of rows: 0")
+        self._numberofrows_label = QtGui.QLabel('Number of rows: 0')
         #
-#        self._hidedata_checkbox = QtGui.QCheckBox("Hide data")
+#        self._hidedata_checkbox = QtGui.QCheckBox('Hide data')
 #        self._hidedata_checkbox.setChecked(False)
-#        self.connect(self._hidedata_checkbox, QtCore.SIGNAL("clicked()"), self._viewHideDataChanged)                
+#        self.connect(self._hidedata_checkbox, QtCore.SIGNAL('clicked()'), self._viewHideDataChanged)                
         #
-        self._refreshfiltereddata_button = QtGui.QPushButton("Refresh filtered data") # TODO:
+        self._refreshfiltereddata_button = QtGui.QPushButton('Refresh filtered data') # TODO:
         self._refreshfiltereddata_button.hide()
-        self.connect(self._refreshfiltereddata_button, QtCore.SIGNAL("clicked()"), self._refreshFilteredData)                
+        self.connect(self._refreshfiltereddata_button, QtCore.SIGNAL('clicked()'), self._refreshFilteredData)                
         #
         self._tableview = utils_qt.ToolboxQTableView()
         # Layout widgets.
         layout = QtGui.QVBoxLayout()
         #
         hbox1 = QtGui.QHBoxLayout()
-        hbox1.addWidget(QtGui.QLabel("View:"))
+        hbox1.addWidget(QtGui.QLabel('View:'))
         hbox1.addWidget(self._viewdata_list)
 #        hbox1.addWidget(self._hidedata_checkbox)
         hbox1.addWidget(self._refreshfiltereddata_button)
@@ -167,20 +167,20 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         
     def _contentSaveAnalysisData(self):
         """ """
-        saveresultbox = QtGui.QGroupBox("Export data", self)
+        saveresultbox = QtGui.QGroupBox('Export data', self)
         # Active widgets and connections.
-        self._copytoclipboard_button = QtGui.QPushButton("Copy to clipboard")
-        self.connect(self._copytoclipboard_button, QtCore.SIGNAL("clicked()"), self._copyToClipboard)                
+        self._copytoclipboard_button = QtGui.QPushButton('Copy to clipboard')
+        self.connect(self._copytoclipboard_button, QtCore.SIGNAL('clicked()'), self._copyToClipboard)                
         self._saveformat_list = QtGui.QComboBox()
         self._saveformat_list.addItems(["Tab delimited text file (*.txt)",
                                          "Excel file (*.xlsx)"])
-        self._savedataset_button = QtGui.QPushButton("Save...")
-        self.connect(self._savedataset_button, QtCore.SIGNAL("clicked()"), self._saveAnalysisData)                
+        self._savedataset_button = QtGui.QPushButton('Save...')
+        self.connect(self._savedataset_button, QtCore.SIGNAL('clicked()'), self._saveAnalysisData)                
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addWidget(self._copytoclipboard_button)
         hbox1.addStretch(5)
-        hbox1.addWidget(QtGui.QLabel("File format:"))
+        hbox1.addWidget(QtGui.QLabel('File format:'))
         hbox1.addWidget(self._saveformat_list)
         hbox1.addWidget(self._savedataset_button)
         #
@@ -211,7 +211,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         # Clear table.
         self._tableview.tablemodel.setModeldata(None)
         self._refreshViewedDataTable()
-        self._numberofrows_label.setText("Number of rows: 0")
+        self._numberofrows_label.setText('Number of rows: 0')
         # 
         if not self._analysisdata.getData():
             return
@@ -248,7 +248,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
             self._tableview.tablemodel.setModeldata(None)
             self._refreshViewedDataTable()
         #
-        self._numberofrows_label.setText("Number of rows: " + unicode(self._tableview.tablemodel.rowCount()))
+        self._numberofrows_label.setText('Number of rows: ' + unicode(self._tableview.tablemodel.rowCount()))
 
         
     def _refreshViewedDataTable(self):
@@ -282,8 +282,8 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
     def _copyToClipboard(self):
         """ """
         clipboard = QtGui.QApplication.clipboard()
-        field_separator = u'\t'
-        row_separator = u'\r\n'
+        field_separator = '\t'
+        row_separator = '\r\n'
         clipboardstring = ''
         #
         table_dataset = self._tableview.tablemodel.getModeldata()
