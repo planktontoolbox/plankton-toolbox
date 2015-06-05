@@ -28,7 +28,7 @@ class ZipFileUtil():
         self._zip.close()
         self._zip = None
 
-    def listContent(self):
+    def list_content(self):
         """ """
         if self._zip is None:
             self.open()    
@@ -37,7 +37,7 @@ class ZipFileUtil():
         else:
             return {}
 
-    def getZipEntry(self,
+    def get_zip_entry(self,
                     zip_entry_name):
         """ """
         if self._zip is None:
@@ -47,9 +47,9 @@ class ZipFileUtil():
         #    
         return self._zip.open(zip_entry_name).read()
 
-    def getZipEntryAsTable(self,
-                           zip_entry_name, 
-                           encoding = None):
+    def get_zip_entry_as_table(self,
+                               zip_entry_name, 
+                               encoding = None):
         
 #                         field_separator = '\t',
 #                           row_separator = '\r\n'):
@@ -80,8 +80,8 @@ class ZipFileUtil():
 #                 row = unicode(row, encoding, 'strict')
                 if rowindex == 0:
                     # Header.
-                    fieldseparator = self.getSeparator(row)
-                    row = [item.strip() for item in row.split(fieldseparator)]
+                    fielddelimiter = self.get_field_delimiter(row)
+                    row = [item.strip() for item in row.split(fielddelimiter)]
                     target_header = row
                 else:
                     # Row.
@@ -97,11 +97,10 @@ class ZipFileUtil():
         #
         return (target_header, target_rows)
 
-    def getSeparator(self, row):
+
+    def get_field_delimiter(self, row):
         """ """
-        if '\t' in row: # First alternative.
-            return '\t'
-        elif ';' in row: # Second alternative. 
-            return ';'
+        if '\t' in row: return '\t'
+        elif ';' in row: return ';'
         else:
-            return '\t' # Default alternative.
+            return '\t' # Default.

@@ -6,12 +6,14 @@
 #
 from __future__ import unicode_literals
 
+import os 
+
 try: 
     openpyxl_installed = False
     import openpyxl
     openpyxl_installed = True
 except ImportError:
-    print('Python package openpyxl is missing. Please install.')
+    print('Python package "openpyxl" is missing. Please install.')
 
 class ExcelFileUtil():
     """ """
@@ -21,22 +23,37 @@ class ExcelFileUtil():
         self._header = [] # 
         self._rows = []
         
-    def readToTableDataset(self, 
-                           file_name,
-                           sheet_name = None, 
-                           header_row = 0, # If header not the first row. 
-                           data_rows_from = 1, # If data not starts at second row. 
-                           data_rows_to = None): # None = read all.
+    def read_table_data(self, 
+                        file_path,
+                        file_name, # May contain both path and name if 'file_path' is empty.
+                        sheet_name = None, 
+                        header_row = 0, # If header not the first row. 
+                        data_rows_from = 1, # If data not starts at second row. 
+                        data_rows_to = None, # None = read all.
+                        select_columns_by_name = [], # To reduce the number of columns.
+                        select_columns_by_index = [], # To reduce the number of columns.
+                        ):
         """ """
         table_header = [] 
         table_rows = []
         #
         if openpyxl_installed == False:
-            raise UserWarning('The python package "openpyxl" is not installed. Can\'t read .xlsx files.')
-        if file_name == None:
+            raise UserWarning('Can\'t read .xlsx files ("openpyxl" is not installed).')
+        # File path and name.
+        filename = file_name
+        if file_path and file_name:
+            filename = os.path.join(file_path, file_name)
+        if filename is None:
             raise UserWarning('File name is missing.')
+        if not os.path.exists(filename):
+            raise UserWarning('File is not found.  File: ' + filename)
+        # 
+        columnsbyindex = None
+        if select_columns_by_index:
+            columnsbyindex = select_columns_by_index
+        #
         try:
-            workbook = openpyxl.load_workbook(file_name, use_iterators = True) # Supports big files.
+            workbook = openpyxl.load_workbook(filename, use_iterators = True) # Supports big files.
             if workbook == None:
                 raise UserWarning('Can\'t read Excel (.xlsx) file.')
             worksheet = None
@@ -77,19 +94,31 @@ class ExcelFileUtil():
             return (table_header, table_rows)
         #  
         except Exception as e:
-            msg = 'Can\'t read Excel file. File name: ' + file_name + '. Exception: ' + unicode(e)
+            msg = 'Failed to read from file. File name: ' + filename + '. Exception: ' + unicode(e)
             print(msg)
-            raise UserWarning(msg)
+            raise
 
-    def writeTableDataset(self, 
-                          file_name, 
-                          table_header,
-                          table_rows):
+    def write_table_data(self, 
+                         file_path,
+                         file_name, # May contain both path and name if 'file_path' is empty.
+                         table_header,
+                         table_rows
+                         ):
         """ """
         if openpyxl_installed == False:
-            raise UserWarning('The python package "openpyxl" is not installed. Can\'t read .xlsx files.')
-        if file_name == None:
+            raise UserWarning('Can\'t write to .xlsx files ("openpyxl" is not installed).')
+        # File path and name.
+        filename = file_name
+        if file_path and file_name:
+            filename = os.path.join(file_path, file_name)
+        if filename is None:
             raise UserWarning('File name is missing.')
+        if (file_path) and (not os.path.exists(file_path)):
+            try:
+                os.makedirs(file_path)
+                print('Directories created for this path: ' + file_path)
+            except Exception as e:
+                raise UserWarning('Can\'t create directories in path. Path: ' + file_path + '. Exception: ' + e)
         try:
             workbook = openpyxl.Workbook(optimized_write = True)  # Supports big files.
             worksheet = workbook.create_sheet()
@@ -104,4 +133,4 @@ class ExcelFileUtil():
         except Exception as e:
             msg = 'Failed to write to file: ' + file_name + '. Exception: ' + unicode(e)
             print(msg)
-            raise UserWarning(msg)
+            raise
