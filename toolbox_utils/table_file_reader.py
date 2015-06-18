@@ -54,6 +54,7 @@ class TableFileReader():
         self._select_columns_by_index = select_columns_by_index
         self._field_delimiter = field_delimiter
         self._encoding = encoding
+        self._encoding_error_handling = encoding_error_handling
         self._header_row = header_row
         self._data_rows_from = data_rows_from
         self._data_rows_to = data_rows_to
@@ -61,7 +62,7 @@ class TableFileReader():
         self._header = []
         self._rows = []
         # Read data from file.
-        self.reload_file()
+        self.read_file()
     
     def header(self):
         """ Header as list. """
@@ -76,7 +77,7 @@ class TableFileReader():
         self._header = []
         self._rows = []
         
-    def reload_file(self):
+    def read_file(self):
         """ Read files in different formats depending on parameter values
             defined in constructor. """
         # Text file.                
@@ -151,7 +152,7 @@ class TableFileReader():
         """ TODO: """
         
     def _read_text_file(self):
-        """ """
+        """ Private method. Use read_file() above. """
         table_header = [] 
         table_rows = []
         # File path and name.
@@ -175,7 +176,7 @@ class TableFileReader():
                 if (self._data_rows_to is not None) and (rowindex > self._data_rows_to):
                     break # Break loop if data_row_to is defined and exceeded.
                 # Convert to unicode.
-                row = unicode(row, self._encoding, 'strict')
+                row = unicode(row, self._encoding, self._encoding_error_handling)
                 if rowindex == self._header_row:
                     # Header.
                     fielddelimiter = self._get_field_delimiter(row)
@@ -192,7 +193,7 @@ class TableFileReader():
         return (table_header, table_rows)
     
     def _prepare_columnsbyindex(self, header_row):
-        """ """
+        """ Private method. """
         columnsbyindex = None
         if self._select_columns_by_index:
             columnsbyindex = self._select_columns_by_index
@@ -210,7 +211,7 @@ class TableFileReader():
         return columnsbyindex       
 
     def _get_row_based_on_columnsbyindex(self, row, columns_by_index):
-        """ """
+        """ Private method. """
         new_row = []
         if columns_by_index is None:
             return row
@@ -225,7 +226,7 @@ class TableFileReader():
         return new_row
 
     def _read_excel_file(self):
-        """ """
+        """ Private method. Use read_file() above. """
         table_header = [] 
         table_rows = []
         #
@@ -295,7 +296,7 @@ class TableFileReader():
             raise
 
     def _read_zip_entry(self):
-        """ """
+        """ Private method. Use read_file() above. """
         table_header = [] 
         table_rows = []
         #
@@ -321,7 +322,7 @@ class TableFileReader():
                         if (self._data_rows_to is not None) and (rowindex > self._data_rows_to):
                             break # Break loop if data_row_to is defined and exceeded.
                         # Convert to unicode.
-                        row = unicode(row, self._encoding, 'strict')
+                        row = unicode(row, self._encoding, self._encoding_error_handling)
                         if rowindex == self._header_row:
                             # Header.
                             fielddelimiter = self._get_field_delimiter(row)
@@ -344,7 +345,7 @@ class TableFileReader():
         return (table_header, table_rows)
 
     def _get_field_delimiter(self, header_row):
-        """ """
+        """ Private method. """
         if (self._field_delimiter is not None):
             return self._field_delimiter
         # Autodetect. 
@@ -358,13 +359,15 @@ class TableFileReader():
 # ===== TEST =====
 
 if __name__ == "__main__":
-    """ Used for testing of this utility. """
+    """ Used for testing. 
+        Run table_file_writer to create test files.
+    """
     
     print('\n=== TEST: Text files. ===')
     try:
         tablefilereader = TableFileReader(
                     file_path = '../test_data',
-                    text_file_name = 'test.txt',                 
+                    text_file_name = 'test_text_writer.txt',                 
     #                 select_columns_by_index = [1, 0],
                     select_columns_by_name = ['bbb', 'aaa'],
                      )
@@ -376,13 +379,12 @@ if __name__ == "__main__":
         print('Dict by index: ' + unicode(testdict))
     except Exception as e:
         print('Test failed: ' + unicode(e))
-    
-      
+
     print('\n=== TEST: Excel files. ===')
     try:
         tablefilereader = TableFileReader(
                     file_path = '../test_data',
-                    excel_file_name = 'test.xlsx',
+                    excel_file_name = 'test_text_writer.xlsx',
                     select_columns_by_index = [1, 0],
     #                 select_columns_by_name = ['bbb', 'aaa'],
                     )
@@ -394,13 +396,13 @@ if __name__ == "__main__":
         print('Dict by index: ' + unicode(testdict))
     except Exception as e:
         print('Test failed: ' + unicode(e))
-    
+
     print('\n=== TEST: Zip files. ===')
     try:
         tablefilereader = TableFileReader(
                     file_path = '../test_data',
-                    zip_file_name = 'test.zip', 
-                    zip_file_entry = 'test.txt',
+                    zip_file_name = 'test_text_writer.zip', 
+                    zip_file_entry = 'test_text_writer.txt',
     #                 select_columns_by_index = [1, 0],
                     select_columns_by_name = ['aaa', 'bbb', 'eee', 'ccc'], # Column 'eee' not in file.
                     )
