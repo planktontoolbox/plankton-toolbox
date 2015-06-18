@@ -9,6 +9,7 @@ from __future__ import unicode_literals
 """
 
 """
+from shark_archive import SharkArchive
 
 # # Module utils:
 # from utils.patterns import singleton

@@ -13,7 +13,9 @@ import zipfile
 # This utility should work even if openpyxl is not installed, but with no Excel support.
 openpyxl_installed = True
 try: import openpyxl
-except ImportError: openpyxl_installed = False
+except ImportError: 
+    openpyxl_installed = False
+    print('Excel files not suported since openpyxl is not installed.')
 
 class TableFileReader():
     """ 
@@ -87,7 +89,8 @@ class TableFileReader():
         elif self._zip_file_name:
             (self._header, self._rows) = self._read_zip_entry()
         else:
-            raise UserWarning('File name is missing.')
+#             raise UserWarning('File name is missing.')
+            print('Warning: TableFileReader.reload_file: File name is missing.')
 
     def create_dictionary(self,
                         # By name. One item.
@@ -140,6 +143,12 @@ class TableFileReader():
                    unicode(keyindex) + '/' + unicode(valueindex))            
         #
         return dictionary
+        
+    def translate_header(self, from_to_dict):
+        """ TODO: """
+        
+    def translate_rows(self, from_to_dict):
+        """ TODO: """
         
     def _read_text_file(self):
         """ """
@@ -349,48 +358,58 @@ class TableFileReader():
 # ===== TEST =====
 
 if __name__ == "__main__":
-    """ Used for testing of this utility. """    
+    """ Used for testing of this utility. """
     
     print('\n=== TEST: Text files. ===')
-    tablefilereader = TableFileReader(
-                file_path = 'test_data',
-                text_file_name = 'test.txt',                 
-#                 select_columns_by_index = [1, 0],
-                select_columns_by_name = ['bbb', 'aaa'],
-                 )
-    print('Header: ' + unicode(tablefilereader.header()))
-    print('Rows:   ' + unicode(tablefilereader.rows()))
-    testdict = tablefilereader.create_dictionary(key_column_by_name = 'aaa', value_column_by_name = 'bbb')
-    print('Dict by name: ' + unicode(testdict))
-    testdict = tablefilereader.create_dictionary(key_column_by_index = 1, value_column_by_index = 0)
-    print('Dict by index: ' + unicode(testdict))
+    try:
+        tablefilereader = TableFileReader(
+                    file_path = '../test_data',
+                    text_file_name = 'test.txt',                 
+    #                 select_columns_by_index = [1, 0],
+                    select_columns_by_name = ['bbb', 'aaa'],
+                     )
+        print('Header: ' + unicode(tablefilereader.header()))
+        print('Rows:   ' + unicode(tablefilereader.rows()))
+        testdict = tablefilereader.create_dictionary(key_column_by_name = 'aaa', value_column_by_name = 'bbb')
+        print('Dict by name: ' + unicode(testdict))
+        testdict = tablefilereader.create_dictionary(key_column_by_index = 1, value_column_by_index = 0)
+        print('Dict by index: ' + unicode(testdict))
+    except Exception as e:
+        print('Test failed: ' + unicode(e))
+    
       
     print('\n=== TEST: Excel files. ===')
-    tablefilereader = TableFileReader(
-                file_path = 'test_data',
-                excel_file_name = 'test.xlsx',
-                select_columns_by_index = [1, 0],
-#                 select_columns_by_name = ['bbb', 'aaa'],
-                )
-    print('Header: ' + unicode(tablefilereader.header()))
-    print('Rows:   ' + unicode(tablefilereader.rows()))
-    testdict = tablefilereader.create_dictionary(key_column_by_name = 'aaa', value_column_by_name = 'bbb')
-    print('Dict by name: ' + unicode(testdict))    #
-    testdict = tablefilereader.create_dictionary(key_column_by_index = 1, value_column_by_index = 0)
-    print('Dict by index: ' + unicode(testdict))
+    try:
+        tablefilereader = TableFileReader(
+                    file_path = '../test_data',
+                    excel_file_name = 'test.xlsx',
+                    select_columns_by_index = [1, 0],
+    #                 select_columns_by_name = ['bbb', 'aaa'],
+                    )
+        print('Header: ' + unicode(tablefilereader.header()))
+        print('Rows:   ' + unicode(tablefilereader.rows()))
+        testdict = tablefilereader.create_dictionary(key_column_by_name = 'aaa', value_column_by_name = 'bbb')
+        print('Dict by name: ' + unicode(testdict))    #
+        testdict = tablefilereader.create_dictionary(key_column_by_index = 1, value_column_by_index = 0)
+        print('Dict by index: ' + unicode(testdict))
+    except Exception as e:
+        print('Test failed: ' + unicode(e))
     
     print('\n=== TEST: Zip files. ===')
-    tablefilereader = TableFileReader(
-                file_path = 'test_data',
-                zip_file_name = 'test.zip', 
-                zip_file_entry = 'test.txt',
-#                 select_columns_by_index = [1, 0],
-                select_columns_by_name = ['aaa', 'bbb', 'eee', 'ccc'], # Column 'eee' not in file.
-                )
-    print('Header: ' + unicode(tablefilereader.header()))
-    print('Rows:   ' + unicode(tablefilereader.rows()))
-    testdict = tablefilereader.create_dictionary(key_column_by_name = 'aaa', value_column_by_name = 'eee') # Result: UserWarning.
-    print('Dict by name:  ' + unicode(testdict))
-    testdict = tablefilereader.create_dictionary(key_column_by_index = 0, value_column_by_index = 2) # Result: Empty values.
-    print('Dict by index: ' + unicode(testdict))
+    try:
+        tablefilereader = TableFileReader(
+                    file_path = '../test_data',
+                    zip_file_name = 'test.zip', 
+                    zip_file_entry = 'test.txt',
+    #                 select_columns_by_index = [1, 0],
+                    select_columns_by_name = ['aaa', 'bbb', 'eee', 'ccc'], # Column 'eee' not in file.
+                    )
+        print('Header: ' + unicode(tablefilereader.header()))
+        print('Rows:   ' + unicode(tablefilereader.rows()))
+        testdict = tablefilereader.create_dictionary(key_column_by_name = 'aaa', value_column_by_name = 'ccc')
+        print('Dict by name:  ' + unicode(testdict))
+        testdict = tablefilereader.create_dictionary(key_column_by_index = 0, value_column_by_index = 2)
+        print('Dict by index: ' + unicode(testdict))
+    except Exception as e:
+        print('Test failed: ' + unicode(e))
 
