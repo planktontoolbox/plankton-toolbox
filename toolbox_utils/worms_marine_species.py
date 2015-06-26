@@ -7,17 +7,20 @@
 from __future__ import unicode_literals
 
 from SOAPpy import WSDL
-
 import table_file_reader
 
 class WormsMarineSpecies(object):
-    """ """
+    """ Utility for WoRMS access. 
+        WoRMS, World Register of Marine Species. http://marinespecies.org """
+        
     def __init__(self):
         """ """
+        self._worms_ws = WormsWebservice()
+        
     def find_valid_taxon(self, scientific_name):
         """ """
-        taxa = self.get_aphia_records(scientific_name, 
-                                      param_like='false', 
+        taxa = self._worms_ws.get_aphia_records(scientific_name, 
+                                      like='false', 
                                       fuzzy='false',
                                       marine_only='false', 
                                       offset = 1,
@@ -96,7 +99,7 @@ class WormsMarineSpecies(object):
 
 
 class WormsWebservice(object):
-    """ Calls to the web service at WoRMS, World Register of Marine Species.
+    """ SOAP calls to the web service at WoRMS, World Register of Marine Species.
         More info at: http://www.marinespecies.org/aphia.php?p=webservice. 
     """
     def __init__(self):
@@ -110,8 +113,8 @@ class WormsWebservice(object):
                 marine_only: limit to marine taxa. Default=true.
         """
         aphia_id = self._wsdl_object.getAphiaID(scientific_name, 
-                                         marine_only)
-        return aphia_id # Integer.
+                                                marine_only)
+        return aphia_id # Integer or None.
 
     def get_aphia_records(self, scientific_name, 
                                 like = 'false', # Exact match by default.
@@ -125,22 +128,16 @@ class WormsWebservice(object):
                 marine_only: limit to marine taxa. Default=true.
                 offset: starting recordnumber, when retrieving next chunck of (50) records. Default=1.
         """
-        aphia_records = self._wsdl_object.getAphiaRecords(scientific_name, 
+        worms_records = self._wsdl_object.getAphiaRecords(scientific_name, 
                                               like, fuzzy, marine_only, offset)
-        
-        
-        
-        
-        
-        
-        #### struct_as_a_dict = dict((key, getattr(struct, key)) for key in struct._keys())
-        
-        
-        
-        
-        
-        
-        return aphia_records # AphiaRecords
+        # Convert from SOAPs structType to Python.
+        records = []
+        if worms_records:
+            for aphia_record in worms_records:
+                record = dict((key, getattr(aphia_record, key)) for key in aphia_record._keys())
+                records.append(record)
+        #
+        return records
         
     def get_aphia_name_by_id(self, aphia_id):
         """ Get the correct name for a given AphiaID. """
@@ -149,13 +146,33 @@ class WormsWebservice(object):
 
     def get_aphia_record_by_id(self, aphia_id):
         """ Get the complete Aphia Record for a given AphiaID. """
-        aphia_record = self._wsdl_object.getAphiaRecordByID(aphia_id)
-        return aphia_record # AphiaRecord
+        worms_record = self._wsdl_object.getAphiaRecordByID(aphia_id)
+        # Convert from SOAPs structType to Python.
+        record = None
+        if worms_record:
+            record = dict((key, getattr(worms_record, key)) for key in worms_record._keys())
+        #
+        return record
         
-    def get_aphia_record_by_tsn(self, tns_id):
-        """ Get the Aphia Record for a given TSN (ITIS Taxonomic Serial Number). """
-        aphia_record = self._wsdl_object.getAphiaRecordByTSN(tns_id)
-        return aphia_record # AphiaRecord.
+    def get_aphia_record_by_ext_id(self, ext_id, ext_type = 'tsn'):
+        """ Get the Aphia Record for a given external identifier. 
+            type: Should have one of the following values:
+                'bold': Barcode of Life Database (BOLD) TaxID
+                'dyntaxa': Dyntaxa ID
+                'eol': Encyclopedia of Life (EoL) page identifier
+                'fishbase': FishBase species ID
+                'iucn': IUCN Red List Identifier
+                'lsid': Life Science Identifier
+                'ncbi': NCBI Taxonomy ID (Genbank)
+                'tsn': ITIS Taxonomic Serial Number
+        """
+        worms_record = self._wsdl_object.getAphiaRecordByExtID(ext_id, ext_type)
+        # Convert from SOAPs structType to Python.
+        record = None
+        if worms_record:
+            record = dict((key, getattr(worms_record, key)) for key in worms_record._keys())
+        #
+        return record
 
     def get_aphia_records_by_names(self, scientific_names, 
                                          like = 'true', 
@@ -168,13 +185,23 @@ class WormsWebservice(object):
                 fuzzy: fuzzy matching. Default=true.
                 marine_only: limit to marine taxa. Default=true.
         """
-        aphia_records = self._wsdl_object.getAphiaRecordsByNames(
+        worms_records = self._wsdl_object.getAphiaRecordsByNames(
                                                     scientific_names,
                                                     like = 'false', # Exact match by default.
                                                     fuzzy= 'false', # Exact match by default.
                                                     marine_only= 'false', # Brackish species wanted.
                                                     )
-        return aphia_records # Aphia matches.
+        # Convert from SOAPs structType to Python.
+        name_records = []
+        if worms_records:
+            for name_record in worms_records:
+                records = []
+                for worms_record in name_record:
+                    record = dict((key, getattr(worms_record, key)) for key in worms_record._keys())
+                    records.append(record)
+                name_records.append(records)
+        #
+        return name_records
         
     def get_aphia_records_by_vernacular(self, vernacular, 
                                               like = 'true', 
@@ -184,28 +211,68 @@ class WormsWebservice(object):
                 like: add a '%'-sign before and after the input (SQL LIKE '%vernacular%' function). Default=false.
                 offset: starting record number, when retrieving next chunck of (50) records. Default=1.
         """
-        aphia_records = self._wsdl_object.getAphiaRecordsByVernacular(vernacular, like, offset)
-        return aphia_records # AphiaRecords
+        worms_records = self._wsdl_object.getAphiaRecordsByVernacular(vernacular, like, offset)
+        # Convert from SOAPs structType to Python.
+        records = []
+        if worms_records:
+            for worms_record in worms_records:
+                record = dict((key, getattr(worms_record, key)) for key in worms_record._keys())
+                records.append(record)
+        #
+        return records
         
     def get_aphia_classification_by_id(self, aphia_id):
         """ Get the complete classification for one taxon. This also includes any sub or super ranks. """
-        classification = self._wsdl_object.getAphiaClassificationByID(aphia_id)
-        return classification # Classification.
+        worms_classification = self._wsdl_object.getAphiaClassificationByID(aphia_id)
+        # Convert from SOAPs structType to Python. List instead of hierarchy.
+        records = []
+        if worms_classification:
+            child_record = worms_classification
+            while child_record['child'] != '':
+                record = {}
+                for key in child_record._keys():
+                    if key != 'child':
+                        record[key] = getattr(child_record, key)
+                records.append(record)
+                child_record = child_record['child']
+        #        
+        return records # Classification as list of records.
 
     def get_sources_by_aphia_id(self, aphia_id):
         """ Get one or more sources/references including links, for one AphiaID. """
-        sources = self._wsdl_object.getSourcesByAphiaID(aphia_id)
-        return sources # Sources.
+        worms_sources = self._wsdl_object.getSourcesByAphiaID(aphia_id)
+        # Convert from SOAPs structType to Python.
+        records = []
+        if worms_sources:
+            for worms_record in worms_sources:
+                record = dict((key, getattr(worms_record, key)) for key in worms_record._keys())
+                records.append(record)
+        #
+        return records
 
     def get_aphia_synonyms_by_id(self, aphia_id):
         """ Get all synonyms for a given AphiaID. """
-        aphia_records = self._wsdl_object.getAphiaSynonymsByID(aphia_id)
-        return aphia_records # AphiaRecords.
+        worms_records = self._wsdl_object.getAphiaSynonymsByID(aphia_id)
+        # Convert from SOAPs structType to Python.
+        records = []
+        if worms_records:
+            for worms_record in worms_records:
+                record = dict((key, getattr(worms_record, key)) for key in worms_record._keys())
+                records.append(record)
+        #
+        return records
 
     def get_aphia_vernaculars_by_id(self, aphia_id):
         """ Get all vernaculars for a given AphiaID. """
         vernaculars = self._wsdl_object.getAphiaVernacularsByID(aphia_id)
-        return vernaculars # Vernaculars.
+        # Convert from SOAPs structType to Python.
+        records = []
+        if vernaculars:
+            for worms_record in vernaculars:
+                record = dict((key, getattr(worms_record, key)) for key in worms_record._keys())
+                records.append(record)
+        #
+        return records
 
     def get_aphia_children_by_id(self, aphia_id, 
                                        offset = 1, 
@@ -215,8 +282,15 @@ class WormsWebservice(object):
                 offset: starting record number, when retrieving next chunck of (50) records. Default=1.
                 marine_only: limit to marine taxa. Default=true.
         """
-        records = self._wsdl_object.getAphiaChildrenByID(aphia_id, offset, marine_only)
-        return records # Aphia records.
+        worms_records = self._wsdl_object.getAphiaChildrenByID(aphia_id, offset, marine_only)
+        # Convert from SOAPs structType to Python.
+        records = []
+        if worms_records:
+            for worms_record in worms_records:
+                record = dict((key, getattr(worms_record, key)) for key in worms_record._keys())
+                records.append(record)
+        #
+        return records
        
     def get_value(self, worms_dict, key):
         """ Clean values by removing unwanted characters. """
@@ -233,70 +307,82 @@ class WormsWebservice(object):
 if __name__ == "__main__":
     """ Used for testing. """
     
-    # Test WormsWebservice.
+    # === Test WormsWebservice. ===
     worms_ws = WormsWebservice()
     
 #     worms_result = worms_ws.get_aphia_id('Nitzschia frustulum')
 #     print('\nget_aphia_id: ' + unicode(worms_result))
-# 
+#    
 #     worms_result = worms_ws.get_aphia_records('Ctenophora')
 #     print('\nget_aphia_records: ' + unicode(worms_result))
 #     for record in worms_result:
 #         print('---')
-#         for key in record._keys(): # Note: '_keys' for SOAPs structType.
+#         for key in record.keys():
 #             print(key + ':' + unicode(record[key]))
-# 
+#    
 #     worms_result = worms_ws.get_aphia_name_by_id(145422)
 #     print('\nget_aphia_name_by_id: ' + worms_result)
-# 
+#    
 #     worms_result = worms_ws.get_aphia_record_by_id(145422)
 #     print('\nget_aphia_record_by_id: ' + unicode(worms_result))
-#     for key in worms_result._keys(): # Note: '_keys' for SOAPs structType.
+#     for key in worms_result.keys():
 #         print(key + ':' + unicode(worms_result[key]))
-# 
-# #     worms_result = worms_ws.get_aphia_record_by_tsn('tns_id')
-# #     print('\nget_aphia_record_by_tsn: ' + unicode(worms_result))
-# 
+#     
+#     worms_result = worms_ws.get_aphia_record_by_ext_id('85257', ext_type = 'tsn')
+#     print('\nget_aphia_record_by_tsn: ' + unicode(worms_result))
+#    
 #     worms_result = worms_ws.get_aphia_records_by_names(['Nitzschia frustulum'])
 #     print('\nget_aphia_records_by_names: ' + unicode(worms_result))
+#     for name_record in worms_result:
+#         for record in name_record:
+#             print('---')
+#             for key in record.keys():
+#                 print(key + ':' + unicode(record[key]))
+#  
+#     worms_result = worms_ws.get_aphia_classification_by_id(145422)
+#     print('\nget_aphia_classification_by_id: ' + unicode(worms_result))
 #     for record in worms_result:
-#         for key in record._keys(): # Note: '_keys' for SOAPs structType.
+#             print(unicode(record))
+#     
+#     worms_result = worms_ws.get_sources_by_aphia_id(145422)
+#     print('\nget_sources_by_aphia_id: ' + unicode(worms_result))
+#     for record in worms_result:
+#             print(unicode(record))
+#   
+#     worms_result = worms_ws.get_aphia_synonyms_by_id(145422)
+#     print('\nget_aphia_synonyms_by_id: ' + unicode(worms_result))
+#     for record in worms_result:
+#         print('---')
+#         for key in record.keys():
+#             print(key + ':' + unicode(record[key]))
+#    
+#     worms_result = worms_ws.get_aphia_children_by_id(144101)
+#     print('\nget_aphia_children_by_id: ' + unicode(worms_result))
+#     for record in worms_result:
+#         print('---')
+#         for key in record.keys():
+#             print(key + ':' + unicode(record[key]))
+#           
+#     worms_result = worms_ws.get_aphia_records_by_vernacular('copepods') 
+#     print('\nget_aphia_records_by_vernacular: ' + unicode(worms_result))
+#     for record in worms_result:
+#         print('---')
+#         for key in record.keys():
+#             print(key + ':' + unicode(record[key]))
+#    
+#     worms_result = worms_ws.get_aphia_vernaculars_by_id(1080)
+#     print('\nget_aphia_vernaculars_by_id: ' + unicode(worms_result))
+#     for record in worms_result:
+#         print('---')
+#         for key in record.keys():
 #             print(key + ':' + unicode(record[key]))
 
-#     worms_result = worms_ws.get_aphia_records_by_vernacular('vernacular') 
-#     print('\nget_aphia_records_by_vernacular: ' + unicode(worms_result))
 
-    worms_result = worms_ws.get_aphia_classification_by_id(145422)
-    print('\nget_aphia_classification_by_id: ' + unicode(worms_result))
-    for record in worms_result:
-        for key in record._keys(): # Note: '_keys' for SOAPs structType.
-            print(key + ':' + unicode(record[key]))
-
-    worms_result = worms_ws.get_sources_by_aphia_id(145422)
-    print('\nget_sources_by_aphia_id: ' + unicode(worms_result))
-
-    worms_result = worms_ws.get_aphia_synonyms_by_id(145422)
-    print('\nget_aphia_synonyms_by_id: ' + unicode(worms_result))
-    for record in worms_result:
-        for key in record._keys(): # Note: '_keys' for SOAPs structType.
-            print(key + ':' + unicode(record[key]))
-
-    worms_result = worms_ws.get_aphia_vernaculars_by_id(145422)
-    print('\nget_aphia_vernaculars_by_id: ' + unicode(worms_result))
-    for record in worms_result:
-        for key in record._keys(): # Note: '_keys' for SOAPs structType.
-            print(key + ':' + unicode(record[key]))
-
-    worms_result = worms_ws.get_aphia_children_by_id(145422)
-    print('\nget_aphia_children_by_id: ' + unicode(worms_result))
-    for record in worms_result:
-        for key in record._keys(): # Note: '_keys' for SOAPs structType.
-            print(key + ':' + unicode(record[key]))
-        
-    # Test WormsMarineSpecies.
+    # === Test WormsMarineSpecies. ===
     
-    marinespecies = WormsMarineSpecies
+    marinespecies = WormsMarineSpecies()
     marinespecies.find_valid_taxon('Ctenophora')
+    
 #    worms_dict = worms_ws.createWormsDictByScientificName('Nitzschia frustulum')
 #    worms_dict = worms_ws.createWormsDictByScientificName('Nitzschia frustulum var. bulnheimiana')    
 #     worms_dict = worms_ws.create_worms_dict('Herponema desmarestiae')
