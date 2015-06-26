@@ -182,14 +182,14 @@ class ParsedFormat(envmonlib.FormatBase):
             variable.addData('parameter', kwargs['p'])    
             variable.addData('value', kwargs['v'])
             #variable.addData('value_float', kwargs['v'])    
-            variable.addData('unit', kwargs[''])    
+            variable.addData('unit', kwargs['u'])    
         if isinstance(current_node, envmonlib.SampleNode):
             variable = envmonlib.VariableNode()
             current_node.addChild(variable)
             variable.addData('parameter', kwargs['p'])    
             variable.addData('value', kwargs['v'])    
             #variable.addData('value_float', kwargs['v'])    
-            variable.addData('unit', kwargs[''])    
+            variable.addData('unit', kwargs['u'])    
 
     def _copyVariable(self, current_node, **kwargs):
         """ To be called from Excel-based parser. """
@@ -198,7 +198,7 @@ class ParsedFormat(envmonlib.FormatBase):
             variable.addData('parameter', kwargs['p'])    
             variable.addData('value', kwargs['v'])    
             #variable.addData('value_float', kwargs['v'])    
-            variable.addData('unit', kwargs[''])    
+            variable.addData('unit', kwargs['u'])    
 
     def _modifyVariable(self, current_node, **kwargs):
         """ To be called from Excel-based parser. """
@@ -206,6 +206,6 @@ class ParsedFormat(envmonlib.FormatBase):
             current_node.addData('parameter', kwargs['p'])    
             current_node.addData('value', kwargs['v'])
             #current_node.addData('value_float', kwargs['v'])    
-            current_node.addData('unit', kwargs[''])    
+            current_node.addData('unit', kwargs['u'])    
 
 
