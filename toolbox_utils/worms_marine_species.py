@@ -8,6 +8,7 @@ from __future__ import unicode_literals
 
 from SOAPpy import WSDL
 import table_file_reader
+import table_file_writer
 
 class WormsMarineSpecies(object):
     """ Utility for WoRMS access. 
@@ -17,85 +18,164 @@ class WormsMarineSpecies(object):
         """ """
         self._worms_ws = WormsWebservice()
         
-    def find_valid_taxon(self, scientific_name):
+    def create_hierarchy_from_species_list(self,
+                                           in_file_path = '/home/parallels/Desktop/develop/git/plankton-toolbox/toolbox_utils/test_data',
+                                           in_file_name = 'worms_indata.txt',
+                                           out_file_path = '/home/parallels/Desktop/develop/git/plankton-toolbox/toolbox_utils/test_data',
+                                           out_file_name = 'worms_outdata.txt',
+                                           in_scientific_name_column = 'NOMAC Scientific name',
+                                           in_rank_column = 'NOMAC Rank',
+                                           in_aphia_id_column = 'NOMAC aphia_id', # To be used for homonym problems.
+                                           ):
         """ """
-        taxa = self._worms_ws.get_aphia_records(scientific_name, 
-                                      like='false', 
-                                      fuzzy='false',
-                                      marine_only='false', 
-                                      offset = 1,
-                                            )
+        tablefilereader = table_file_reader.TableFileReader(
+            file_path = in_file_path,
+            text_file_name = in_file_name,
+            select_columns_by_name = [in_scientific_name_column, in_rank_column, in_aphia_id_column]                 
+            )
+
+        tablefilewriter = table_file_writer.TableFileWriter(
+            file_path = out_file_path,
+            text_file_name = out_file_name,
+            )
+        
+        taxa_tree = {} # aphia_id: {aphia_id: '', scientific_name: '', rank: '', parent_id: ''}
+
+        for row in tablefilereader.rows():
+            scientific_name = row[0]
+            rank = row[1]
+            
+            if rank == 'Species':
+                
+                try:
+                    species_dict = self.find_valid_taxon(scientific_name, rank)
+                except Exception as e:
+                    print('Exception: ' + unicode(e))
+                
+                aphia_id = species_dict['AphiaID']
+                
+                parent_list = self._worms_ws.get_aphia_classification_by_id(aphia_id)
+                
+                parent_id = None
+                
+                for taxon in parent_list:
+                    taxon_id = taxon['AphiaID']
+                    if taxon_id not in taxa_tree:
+                        taxa_tree[taxon_id] = taxon
+                        if parent_id:
+                            taxa_tree[taxon_id]['parent_id'] = parent_id
+                    #
+                    parent_id = taxon['AphiaID']
+                #
+                taxa_tree[species_dict['AphiaID']] = species_dict
+                taxa_tree[species_dict['AphiaID']]['parent_id'] = parent_id
+                
+        classification_list = []
+        for taxon in taxa_tree.values():
+            classification_string = ''
+            parent_id = taxon.get('parent_id', None)
+            classification_string = '[' + taxon['rank'] +'] ' + taxon['scientificname']
+            while parent_id:
+                parent_taxon = taxa_tree[parent_id]
+                classification_string = '[' + parent_taxon['rank'] +'] ' + parent_taxon['scientificname'] + ' - ' + classification_string
+                parent_id = parent_taxon.get('parent_id', None)
+            #    
+            classification_list.append(classification_string)
+        #
+        for row in sorted(classification_list):
+            print(row)
+        
+
+    def find_valid_taxon(self, 
+                         scientific_name, 
+                         rank = None): # Used to reduce some homonym problems.
+        """ """
+        worms_records = self._worms_ws.get_aphia_records(scientific_name, 
+                                                        like='false', 
+                                                        fuzzy='false', 
+                                                        marine_only='false', 
+                                                        offset = 1, 
+                                                        )
+        number_of_matches = 0
         accepted_taxon = None
-        for taxon in taxa:
-            print(taxon['scientificname'])
-#             if self._get_value(taxon, 'status') == 'accepted':
-#                 accepted_taxon = taxon
-#                 
-#                 break
-#         
+        for taxon in worms_records:
+            if taxon.get('status', '') == 'accepted':
+                if rank:
+                    if taxon.get('rank', '') == rank:
+                        accepted_taxon = taxon
+                        number_of_matches += 1
+                else:
+                    accepted_taxon = taxon
+                    number_of_matches += 1
+        #
+        if number_of_matches == 0:
+            raise UserWarning('No taxa matched. Scientific name: ' + scientific_name)
+        if number_of_matches > 1:
+            raise UserWarning('Multiple taxa matched. Scientific name: ' + scientific_name)
+        #
         return accepted_taxon
 
-    def create_worms_dict(self, scientific_name, 
-                                aphia_id = None):
-        """ """
-        worms_dict = {}        
-        # GetAphia ID.
-        if aphia_id is None:
-            aphia_id = self.get_aphia_id(scientific_name, marine_only = 'false')
-        #
-        if not aphia_id:
-            return worms_dict
-        #          
-        # Aphia record.
-        aphia_dict = self.get_aphia_record_by_id(aphia_id)
-        if not aphia_dict:
-            return worms_dict           
-        #
-        worms_dict['worms_status'] = self._get_value(aphia_dict, 'status')
-        worms_dict['worms_unaccept_reason'] = self._get_value(aphia_dict, 'unacceptreason')
-
-        worms_dict['worms_valid name'] = self._get_value(aphia_dict, 'valid_name')
-        worms_dict['worms_valid authority'] = self._get_value(aphia_dict, 'valid_authority')
-
-        worms_dict['worms_rank'] = self._get_value(aphia_dict, 'rank')
-
-        worms_dict['worms_kingdom'] = self._get_value(aphia_dict, 'kingdom')
-        worms_dict['worms_phylum'] = self._get_value(aphia_dict, 'phylum')
-        worms_dict['worms_class'] = self._get_value(aphia_dict, 'class')
-        worms_dict['worms_order'] = self._get_value(aphia_dict, 'order')
-        worms_dict['worms_family'] = self._get_value(aphia_dict, 'family')
-        worms_dict['worms_genus'] = self._get_value(aphia_dict, 'genus')
-        worms_dict['worms_sscientific name'] = self._get_value(aphia_dict, 'scientificname')
-        worms_dict['worms_authority'] = self._get_value(aphia_dict, 'authority')
-
-        worms_dict['worms_url'] = self._get_value(aphia_dict, 'url')
-        worms_dict['worms_lsid'] = self._get_value(aphia_dict, 'lsid')
-        worms_dict['worms_aphia_id'] = self._get_value(aphia_dict, 'AphiaID')
-        worms_dict['worms_valid_aphia_id'] = self._get_value(aphia_dict, 'valid_AphiaID')
-        
-        worms_dict['worms_citation'] = self._get_value(aphia_dict, 'citation')
-        
-        # Classification.
-        classification_string = ''
-        classification = self.get_aphia_classification_by_id(aphia_id)
-        if classification:    
-            classification_string = unicode(classification.rank) + ': ' + unicode(classification.scientificname)
-            while classification.child:
-                classification = classification.child
-                if (classification.rank and classification.scientificname):
-                    classification_string += ' - ' + unicode(classification.rank) + ': ' + unicode(classification.scientificname)        
-        worms_dict['worms_classification'] = classification_string
-        
-        # Synonyms.
-        synonym_list = []
-        synonyms = self.get_aphia_synonyms_by_id(aphia_id)
-        if synonyms:
-            for synonym in synonyms:
-                if (synonym.scientificname and synonym.authority):
-                    synonym_list.append(unicode(synonym.scientificname) + ' ' + unicode(synonym.authority))
-        worms_dict['worms_synonym_list'] = synonym_list
-        #        
-        return worms_dict
+#     def create_worms_dict(self, scientific_name, 
+#                                 aphia_id = None):
+#         """ """
+#         worms_dict = {}        
+#         # GetAphia ID.
+#         if aphia_id is None:
+#             aphia_id = self.get_aphia_id(scientific_name, marine_only = 'false')
+#         #
+#         if not aphia_id:
+#             return worms_dict
+#         #          
+#         # Aphia record.
+#         aphia_dict = self.get_aphia_record_by_id(aphia_id)
+#         if not aphia_dict:
+#             return worms_dict           
+#         #
+#         worms_dict['worms_status'] = self._get_value(aphia_dict, 'status')
+#         worms_dict['worms_unaccept_reason'] = self._get_value(aphia_dict, 'unacceptreason')
+# 
+#         worms_dict['worms_valid name'] = self._get_value(aphia_dict, 'valid_name')
+#         worms_dict['worms_valid authority'] = self._get_value(aphia_dict, 'valid_authority')
+# 
+#         worms_dict['worms_rank'] = self._get_value(aphia_dict, 'rank')
+# 
+#         worms_dict['worms_kingdom'] = self._get_value(aphia_dict, 'kingdom')
+#         worms_dict['worms_phylum'] = self._get_value(aphia_dict, 'phylum')
+#         worms_dict['worms_class'] = self._get_value(aphia_dict, 'class')
+#         worms_dict['worms_order'] = self._get_value(aphia_dict, 'order')
+#         worms_dict['worms_family'] = self._get_value(aphia_dict, 'family')
+#         worms_dict['worms_genus'] = self._get_value(aphia_dict, 'genus')
+#         worms_dict['worms_sscientific name'] = self._get_value(aphia_dict, 'scientificname')
+#         worms_dict['worms_authority'] = self._get_value(aphia_dict, 'authority')
+# 
+#         worms_dict['worms_url'] = self._get_value(aphia_dict, 'url')
+#         worms_dict['worms_lsid'] = self._get_value(aphia_dict, 'lsid')
+#         worms_dict['worms_aphia_id'] = self._get_value(aphia_dict, 'AphiaID')
+#         worms_dict['worms_valid_aphia_id'] = self._get_value(aphia_dict, 'valid_AphiaID')
+#         
+#         worms_dict['worms_citation'] = self._get_value(aphia_dict, 'citation')
+#         
+#         # Classification.
+#         classification_string = ''
+#         classification = self.get_aphia_classification_by_id(aphia_id)
+#         if classification:    
+#             classification_string = unicode(classification.rank) + ': ' + unicode(classification.scientificname)
+#             while classification.child:
+#                 classification = classification.child
+#                 if (classification.rank and classification.scientificname):
+#                     classification_string += ' - ' + unicode(classification.rank) + ': ' + unicode(classification.scientificname)        
+#         worms_dict['worms_classification'] = classification_string
+#         
+#         # Synonyms.
+#         synonym_list = []
+#         synonyms = self.get_aphia_synonyms_by_id(aphia_id)
+#         if synonyms:
+#             for synonym in synonyms:
+#                 if (synonym.scientificname and synonym.authority):
+#                     synonym_list.append(unicode(synonym.scientificname) + ' ' + unicode(synonym.authority))
+#         worms_dict['worms_synonym_list'] = synonym_list
+#         #        
+#         return worms_dict
 
 
 class WormsWebservice(object):
@@ -308,6 +388,8 @@ if __name__ == "__main__":
     """ Used for testing. """
     
     # === Test WormsWebservice. ===
+    print('\n=== Test WormsWebservice ===')
+    
     worms_ws = WormsWebservice()
     
 #     worms_result = worms_ws.get_aphia_id('Nitzschia frustulum')
@@ -380,14 +462,30 @@ if __name__ == "__main__":
 
     # === Test WormsMarineSpecies. ===
     
+    print('\n=== Test WormsMarineSpecies ===')
+
     marinespecies = WormsMarineSpecies()
-    marinespecies.find_valid_taxon('Ctenophora')
     
-#    worms_dict = worms_ws.createWormsDictByScientificName('Nitzschia frustulum')
-#    worms_dict = worms_ws.createWormsDictByScientificName('Nitzschia frustulum var. bulnheimiana')    
-#     worms_dict = worms_ws.create_worms_dict('Herponema desmarestiae')
-#     worms_dict = worms_ws.create_worms_dict('', aphia_id = 145422)
-#     print('worms_dict: ')
-#     for key in worms_dict.keys():
-#         print(key + ':' + unicode(worms_dict[key]))
+#     try:
+#         print('\nTest. WormsMarineSpecies: find_valid_taxon:')
+#         worms_result = marinespecies.find_valid_taxon('Ctenophora')
+#         for key in worms_result.keys():
+#             print(key + ':' + unicode(worms_result[key]))
+#     except Exception as e:
+#         print('Test failed: ' + unicode(e))
+# 
+#     try:
+#         print('\nTest. WormsMarineSpecies: find_valid_taxon:')
+#         worms_result = marinespecies.find_valid_taxon('Ctenophora', rank = 'Phylum')
+#         for key in worms_result.keys():
+#             print(key + ':' + unicode(worms_result[key]))
+#     except Exception as e:
+#         print('Test failed: ' + unicode(e))
+
+    try:
+        print('\nTest. WormsMarineSpecies: create_hierarchy_from_species_list:')
+        worms_result = marinespecies.create_hierarchy_from_species_list()
+    except Exception as e:
+        print('Test failed: ' + unicode(e))
+        raise
 
