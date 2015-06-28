@@ -18,73 +18,99 @@ class WormsMarineSpecies(object):
         """ """
         self._worms_ws = WormsWebservice()
         
-    def create_hierarchy_from_species_list(self,
-                                           in_file_path = '/home/parallels/Desktop/develop/git/plankton-toolbox/toolbox_utils/test_data',
-                                           in_file_name = 'worms_indata.txt',
-                                           out_file_path = '/home/parallels/Desktop/develop/git/plankton-toolbox/toolbox_utils/test_data',
-                                           out_file_name = 'worms_outdata.txt',
-                                           in_scientific_name_column = 'NOMAC Scientific name',
-                                           in_rank_column = 'NOMAC Rank',
-                                           in_aphia_id_column = 'NOMAC aphia_id', # To be used for homonym problems.
-                                           ):
+    def generate_tree_from_species_list(self,
+                                       in_file_path = 'test_data',
+                                       in_file_name = 'worms_indata.txt',
+                                       out_file_path = 'test_data',
+                                       out_file_name = 'worms_outdata.txt',
+                                       in_scientific_name_column = 'NOMAC Scientific name',
+                                       in_rank_column = 'NOMAC Rank',
+                                       in_taxon_id_column = 'NOMAC AphiaID', # To be used for homonym problems.
+                                       ):
         """ """
+        # Indata file.
         tablefilereader = table_file_reader.TableFileReader(
             file_path = in_file_path,
             text_file_name = in_file_name,
-            select_columns_by_name = [in_scientific_name_column, in_rank_column, in_aphia_id_column]                 
+            select_columns_by_name = [in_scientific_name_column, in_rank_column, in_taxon_id_column]                 
             )
-
+        # Outdata file.
         tablefilewriter = table_file_writer.TableFileWriter(
             file_path = out_file_path,
             text_file_name = out_file_name,
             )
-        
-        taxa_tree = {} # aphia_id: {aphia_id: '', scientific_name: '', rank: '', parent_id: ''}
-
+        #
+        taxa_dict = {} # taxon_id: {taxon_id: '', scientific_name: '', rank: '', parent_id: '', etc.}
+        #
         for row in tablefilereader.rows():
             scientific_name = row[0]
             rank = row[1]
-            
+            taxon_id = row[2]
+            #
             if rank == 'Species':
-                
+                #
+                species_dict = None
                 try:
                     species_dict = self.find_valid_taxon(scientific_name, rank)
                 except Exception as e:
                     print('Exception: ' + unicode(e))
-                
-                aphia_id = species_dict['AphiaID']
-                
-                parent_list = self._worms_ws.get_aphia_classification_by_id(aphia_id)
-                
-                parent_id = None
-                
-                for taxon in parent_list:
-                    taxon_id = taxon['AphiaID']
-                    if taxon_id not in taxa_tree:
-                        taxa_tree[taxon_id] = taxon
-                        if parent_id:
-                            taxa_tree[taxon_id]['parent_id'] = parent_id
-                    #
-                    parent_id = taxon['AphiaID']
                 #
-                taxa_tree[species_dict['AphiaID']] = species_dict
-                taxa_tree[species_dict['AphiaID']]['parent_id'] = parent_id
-                
-        classification_list = []
-        for taxon in taxa_tree.values():
-            classification_string = ''
-            parent_id = taxon.get('parent_id', None)
-            classification_string = '[' + taxon['rank'] +'] ' + taxon['scientificname']
+                if species_dict is None:
+                    if taxon_id:
+                        species_dict = self.get_aphia_name_by_id(taxon_id.replace('AphiaID:', '').strip())
+                #
+                if species_dict is None:
+                    print('Species not in WoRMS: ' + scientific_name)
+                    
+                else:
+                    species_id = species_dict['AphiaID']
+                    taxa_dict[species_id] = species_dict
+                    # Iterate over classification. Create taxa and classification info string.
+                    worms_classification_list = self._worms_ws.get_aphia_classification_by_id(species_id)
+                    parent_id = None
+                    classification_strings = []
+                    for taxon in worms_classification_list:
+                        taxon_id = taxon['AphiaID']
+                        classification_strings.append('[' + taxon['rank'] +'] ' + taxon['scientificname'])
+                        if taxon_id not in taxa_dict:
+                            taxa_dict[taxon_id] = taxon
+                            taxa_dict[taxon_id]['classification'] = ' - '.join(classification_strings)
+                            if parent_id:
+                                taxa_dict[taxon_id]['parent_id'] = parent_id
+                        parent_id = taxon['AphiaID']
+                    # The last one is the species parent.
+                    taxa_dict[species_id]['parent_id'] = parent_id
+                    # Note: This is not a part of the classification, but useful.
+                    classification_strings.append('[' + species_dict['rank'] +'] ' + species_dict['scientificname'])
+                    taxa_dict[species_id]['classification'] = ' - '.join(classification_strings)
+
+        # Add info.
+        for taxon in taxa_dict.values():
+            taxon_class = None
+            taxon_class_id = ''
+            parent_id = taxon.get('AphiaID', None)
             while parent_id:
-                parent_taxon = taxa_tree[parent_id]
-                classification_string = '[' + parent_taxon['rank'] +'] ' + parent_taxon['scientificname'] + ' - ' + classification_string
+                parent_taxon = taxa_dict[parent_id]
+                if parent_taxon.get('rank', '') == 'Class':
+                    taxon_class = parent_taxon['scientificname']
+                    taxon_class_id = 'AphiaID:' + unicode(parent_taxon['AphiaID'])
+                #
                 parent_id = parent_taxon.get('parent_id', None)
-            #    
-            classification_list.append(classification_string)
+            #
+            if taxon_class:
+                taxon['class'] =  taxon_class
+                taxon['class_id'] =  taxon_class_id
         #
-        for row in sorted(classification_list):
-            print(row)
-        
+        table_header = ['scientific_name', 'rank', 'taxon_id', 'parent_id', 'class', 'class_id', 'classification']
+        table_rows = []
+        for row in taxa_dict.values():
+            outrow = []
+            for item in ['scientificname', 'rank', 'AphiaID', 'parent_id', 'class', 'class_id', 'classification']:
+                outrow.append(unicode(row.get(item, '')))
+            table_rows.append(outrow)
+        #
+        tablefilewriter.write_file(table_header, table_rows)
+
 
     def find_valid_taxon(self, 
                          scientific_name, 
@@ -483,8 +509,8 @@ if __name__ == "__main__":
 #         print('Test failed: ' + unicode(e))
 
     try:
-        print('\nTest. WormsMarineSpecies: create_hierarchy_from_species_list:')
-        worms_result = marinespecies.create_hierarchy_from_species_list()
+        print('\nTest. WormsMarineSpecies: generate_tree_from_species_list:')
+        worms_result = marinespecies.generate_tree_from_species_list()
     except Exception as e:
         print('Test failed: ' + unicode(e))
         raise
