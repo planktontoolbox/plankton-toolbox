@@ -11,7 +11,9 @@ import codecs
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.activities.activity_manager as activity_manager
@@ -48,7 +50,7 @@ class MainWindow(QtGui.QMainWindow):
                              time.strftime('%Y-%m-%d %H:%M:%S') )
         self._logfile.write('')
         self._logtool = None # Should be initiated later.
-        envmonlib.Logging().setLogTarget(self)
+        toolbox_utils.Logging().set_log_target(self)
         # Setup main window.
         self._createActions()
         self._createMenu()
@@ -73,8 +75,8 @@ class MainWindow(QtGui.QMainWindow):
         self.move(position)        
         # Tell the user.
         tool_manager.ToolManager().showToolByName('Toolbox logging') # Show the log tool if hidden.
-        envmonlib.Logging().log('Welcome to the Plankton Toolbox.')
-        envmonlib.Logging().log('Note: Log rows are both sent to the "Toolbox logging" tool and written to the text file "plankton_toolbox_log.txt".')
+        toolbox_utils.Logging().log('Welcome to the Plankton Toolbox.')
+        toolbox_utils.Logging().log('Note: Log rows are both sent to the "Toolbox logging" tool and written to the text file "plankton_toolbox_log.txt".')
         # Load resources when the main event loop has started.
 #        if toolbox_settings.ToolboxSettings().getValue('Resources:Load at startup'):
 #            QtCore.QTimer.singleShot(10, toolbox_resources.ToolboxResources().loadAllResources)
@@ -261,7 +263,7 @@ class MainWindow(QtGui.QMainWindow):
         """ """
         try:
             self.statusBar().showMessage(self.tr('Loading species lists...'))
-            envmonlib.Species() # Load species files.
+            toolbox_utils.Species() # Load species files.
         finally:
             self.statusBar().showMessage(self.tr(''))            
 

@@ -7,40 +7,42 @@
 from __future__ import unicode_literals
 
 import PyQt4.QtCore as QtCore
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
-@envmonlib.singleton
+@toolbox_utils.singleton
 class ToolboxDatasets(QtCore.QObject):
-    """ Toolbox wrapper for envmonlib.Datasets. Emitted signals for change notifications are added. """
+    """ Toolbox wrapper for toolbox_utils.Datasets. Emitted signals for change notifications are added. """
     def __init__(self):
         """ """
-        envmonlib.Datasets()
+        toolbox_utils.Datasets()
         # 
         QtCore.QObject.__init__(self)
 
     def clear(self):
         """ """
-        envmonlib.Datasets().clear()
+        toolbox_utils.Datasets().clear()
         # Emit signal after short delay.
         QtCore.QTimer.singleShot(100, self._emitChangeNotification)
         
     def getDatasets(self):
         """ """
-        return envmonlib.Datasets().getDatasets()
+        return toolbox_utils.Datasets().getDatasets()
         
     def getDatasetByIndex(self, index):
         """ """
-        return envmonlib.Datasets().getDatasetByIndex(index)
+        return toolbox_utils.Datasets().getDatasetByIndex(index)
         
     def addDataset(self, dataset):
         """ """
-        envmonlib.Datasets().addDataset(dataset)
+        toolbox_utils.Datasets().addDataset(dataset)
         # Emit signal after short delay.
         QtCore.QTimer.singleShot(100, self._emitChangeNotification)
         
     def removeDatasetByIndex(self, index):
         """ """
-        envmonlib.Datasets().removeDatasetByIndex(index)
+        toolbox_utils.Datasets().removeDatasetByIndex(index)
         # Emit signal after short delay.
         QtCore.QTimer.singleShot(100, self._emitChangeNotification)
 

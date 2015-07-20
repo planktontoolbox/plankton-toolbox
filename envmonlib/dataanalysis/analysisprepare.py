@@ -6,7 +6,9 @@
 #
 from __future__ import unicode_literals
 
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
 class AnalysisPrepare(object):
     """
@@ -61,7 +63,7 @@ class AnalysisPrepare(object):
                 # Add missing variables.
                 for itempairs in parameter_taxon_list:
                     if itempairs not in sample_parameter_taxon_list:
-                        variable = envmonlib.VariableNode()
+                        variable = toolbox_utils.VariableNode()
                         samplenode.addChild(variable)
                         variable.addData('scientific_name', itempairs[1][0])
                         variable.addData('trophic_type', itempairs[1][1])

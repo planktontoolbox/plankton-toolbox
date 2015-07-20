@@ -6,10 +6,12 @@
 #
 from __future__ import unicode_literals
 
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 import os.path
 
-@envmonlib.singleton
+@toolbox_utils.singleton
 class Species(object):
     """ 
     Loads all species related files used in the toolbox.
@@ -54,7 +56,7 @@ class Species(object):
             # Only done once since the class is declared as singleton.
             self._loadAllData()
         except Exception as e:
-            envmonlib.Logging().error('Failed when loading species related files: ' + unicode(e))            
+            toolbox_utils.Logging().error('Failed when loading species related files: ' + unicode(e))            
             raise
 
     def getTaxaDict(self):
@@ -100,91 +102,91 @@ class Species(object):
         """ """
         try:
             self._clear()
-            envmonlib.Logging().log('') # Empty line.
-            envmonlib.Logging().log('Loading species lists (located in "' + self._species_directory_path + '"):')
+            toolbox_utils.Logging().log('') # Empty line.
+            toolbox_utils.Logging().log('Loading species lists (located in "' + self._species_directory_path + '"):')
             
             # Load taxa.
             for excelfilename in self._taxa_filenames:
                 if os.path.exists(excelfilename):
-                    envmonlib.Logging().log('- ' + os.path.basename(excelfilename) + ' (Species and other taxa)')
+                    toolbox_utils.Logging().log('- ' + os.path.basename(excelfilename) + ' (Species and other taxa)')
                     try:
-                        envmonlib.Logging().startAccumulatedLogging()
+                        toolbox_utils.Logging().start_accumulated_logging()
                         #
                         self._loadTaxa(excelfilename)
                     finally:
-                        envmonlib.Logging().logAllAccumulatedRows()    
+                        toolbox_utils.Logging().log_all_accumulated_rows()    
                                     
             # Add translated scientific names to taxa.
             for excelfilename in self._taxatranslate_filenames:
                 if os.path.exists(excelfilename):
-                    envmonlib.Logging().log('- ' + os.path.basename(excelfilename) + ' (Misspellings etc.)')
+                    toolbox_utils.Logging().log('- ' + os.path.basename(excelfilename) + ' (Misspellings etc.)')
                     try:
-                        envmonlib.Logging().startAccumulatedLogging()
+                        toolbox_utils.Logging().start_accumulated_logging()
                         #
                         self._loadSynonyms(excelfilename) # Synonyms and translated names are handled the same way.                           
                     finally:
-                        envmonlib.Logging().logAllAccumulatedRows()    
+                        toolbox_utils.Logging().log_all_accumulated_rows()    
             
             # Add synonyms to taxa. Note: 'translate_to_' will be added to filenames.
             for excelfilename in self._taxasynonyms_filenames:
                 if os.path.exists(excelfilename):
-                    envmonlib.Logging().log('- ' + os.path.basename(excelfilename) + ' (Synonyms for taxa)')
+                    toolbox_utils.Logging().log('- ' + os.path.basename(excelfilename) + ' (Synonyms for taxa)')
                     try:
-                        envmonlib.Logging().startAccumulatedLogging()
+                        toolbox_utils.Logging().start_accumulated_logging()
                         #
                         self._loadSynonyms(excelfilename)                            
                     finally:
-                        envmonlib.Logging().logAllAccumulatedRows()    
+                        toolbox_utils.Logging().log_all_accumulated_rows()    
             
             # Load biovolume column mapping information.
             for excelfilename in self._bvolcolumns_filenames:
                 if os.path.exists(excelfilename):
-                    envmonlib.Logging().log('- ' + os.path.basename(excelfilename) + ' (Biovolume column mapping)')
+                    toolbox_utils.Logging().log('- ' + os.path.basename(excelfilename) + ' (Biovolume column mapping)')
                     try:
-                        envmonlib.Logging().startAccumulatedLogging()
+                        toolbox_utils.Logging().start_accumulated_logging()
                         #
                         self._loadBvolColumns(excelfilename)        
                     finally:
-                        envmonlib.Logging().logAllAccumulatedRows()    
+                        toolbox_utils.Logging().log_all_accumulated_rows()    
 
             # Load BVOL species data.
             for excelfilename in self._bvol_filenames:
                 if os.path.exists(excelfilename):
-                    envmonlib.Logging().log('- ' + os.path.basename(excelfilename) + ' (Biovolumes etc. for sizeclasses)')
+                    toolbox_utils.Logging().log('- ' + os.path.basename(excelfilename) + ' (Biovolumes etc. for sizeclasses)')
                     try:
-                        envmonlib.Logging().startAccumulatedLogging()
+                        toolbox_utils.Logging().start_accumulated_logging()
                         #
                         self._loadBvol(excelfilename)        
                     finally:
-                        envmonlib.Logging().logAllAccumulatedRows()    
+                        toolbox_utils.Logging().log_all_accumulated_rows()    
 
             # Load harmful species.
             for excelfilename in self._harmful_filenames:
                 if os.path.exists(excelfilename):
-                    envmonlib.Logging().log('- ' + os.path.basename(excelfilename) + ' (Harmful organisms)')
+                    toolbox_utils.Logging().log('- ' + os.path.basename(excelfilename) + ' (Harmful organisms)')
                     try:
-                        envmonlib.Logging().startAccumulatedLogging()
+                        toolbox_utils.Logging().startAccumulatedLogging()
                         #
                         self._loadHarmful(excelfilename)
                     finally:
-                        envmonlib.Logging().logAllAccumulatedRows()    
+                        toolbox_utils.Logging().log_all_accumulated_rows()    
 
             # Load plankton group definition.
             for excelfilename in self._planktongroups_filenames:
                 if os.path.exists(excelfilename):
-                    envmonlib.Logging().log('- ' + os.path.basename(excelfilename) + ' (Plankton group definition)')
+                    toolbox_utils.Logging().log('- ' + os.path.basename(excelfilename) + ' (Plankton group definition)')
                     try:
-                        envmonlib.Logging().startAccumulatedLogging()
+                        toolbox_utils.Logging().start_accumulated_logging()
                         #
                         self._loadPlanktonGroupDefinition(excelfilename)
                     finally:
-                        envmonlib.Logging().logAllAccumulatedRows()    
+                        toolbox_utils.Logging().log_all_accumulated_rows() 
             
             # Perform some useful pre-calculations.
             self._precalculateData()
         #
         except Exception as e:
-            envmonlib.Logging().error('Failed when loading species data: ' + unicode(e))            
+            toolbox_utils.Logging().error('Failed when loading species data: ' + unicode(e))            
             raise
             
 #        # Used for DEBUG:
@@ -199,8 +201,8 @@ class Species(object):
 
     def _loadTaxa(self, excel_file_name):
         """ Creates one data object for each taxon. """
-        tabledataset = envmonlib.DatasetTable()
-        envmonlib.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
+        tabledataset = toolbox_utils.DatasetTable()
+        toolbox_utils.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
         #
         for row in tabledataset.getRows():
             scientificname = ''
@@ -216,7 +218,7 @@ class Species(object):
                         # Lookup dictionary.
                         self._taxa_lookup[scientificname] = self._taxa[scientificname]
                     else:
-                        envmonlib.Logging().warning('Scientific name added twice: ' + scientificname + '   (Source: ' + excel_file_name + ')')
+                        toolbox_utils.Logging().warning('Scientific name added twice: ' + scientificname + '   (Source: ' + excel_file_name + ')')
                     #    
                     speciesobject = self._taxa[scientificname]
                     speciesobject['Scientific name'] = scientificname
@@ -224,13 +226,13 @@ class Species(object):
                     speciesobject['Rank'] = rank
                     speciesobject['Parent name'] = parentname
             except:
-                envmonlib.Logging().warning('Failed when loading taxa. File:' + excel_file_name + '  Taxon: ' + scientificname)
+                toolbox_utils.Logging().warning('Failed when loading taxa. File:' + excel_file_name + '  Taxon: ' + scientificname)
                 
 
     def _loadSynonyms(self, excel_file_name):
         """ Add synonyms from 'translate_' or 'synonyms_' files. """
-        tabledataset = envmonlib.DatasetTable()
-        envmonlib.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
+        tabledataset = toolbox_utils.DatasetTable()
+        toolbox_utils.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
         #
         for row in tabledataset.getRows():
             toname = ''
@@ -247,14 +249,14 @@ class Species(object):
                     # Lookup dictionary.
                     self._taxa_lookup[fromname] = self._taxa[toname]
                 else:
-                    envmonlib.Logging().warning('Scientific name is missing: ' + toname + '   (Source: ' + excel_file_name + ')')
+                    toolbox_utils.Logging().warning('Scientific name is missing: ' + toname + '   (Source: ' + excel_file_name + ')')
             except:
-                envmonlib.Logging().warning('Failed when loading synonym. File:' + excel_file_name + '  From taxon: ' + toname)
+                toolbox_utils.Logging().warning('Failed when loading synonym. File:' + excel_file_name + '  From taxon: ' + toname)
                     
     def _loadHarmful(self, excel_file_name):
         """ Adds info about harmfulness to the species objects. """
-        tabledataset = envmonlib.DatasetTable()
-        envmonlib.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
+        tabledataset = toolbox_utils.DatasetTable()
+        toolbox_utils.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
         #
         for row in tabledataset.getRows():
             scientificname = ''
@@ -268,14 +270,14 @@ class Species(object):
                     taxon['Harmful'] = True 
                     taxon['Aphia id'] = aphiaid
                 else:
-                    envmonlib.Logging().warning('Scientific name is missing: ' + scientificname + '   (Source: ' + excel_file_name + ')')
+                    toolbox_utils.Logging().warning('Scientific name is missing: ' + scientificname + '   (Source: ' + excel_file_name + ')')
             except:
-                envmonlib.Logging().warning('Failed when loading harmful algae. File:' + excel_file_name + '  Taxon: ' + scientificname)
+                toolbox_utils.Logging().warning('Failed when loading harmful algae. File:' + excel_file_name + '  Taxon: ' + scientificname)
 
     def _loadPlanktonGroupDefinition(self, excel_file_name):
         """ """
-        tabledataset = envmonlib.DatasetTable()
-        envmonlib.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
+        tabledataset = toolbox_utils.DatasetTable()
+        toolbox_utils.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
         #
         for row in tabledataset.getRows():
             scientificname = ''
@@ -294,7 +296,7 @@ class Species(object):
                         self._planktongroups_rank_dict[used_rank] = {}
                     self._planktongroups_rank_dict[used_rank][scientificname] = planktongroup
             except:
-                envmonlib.Logging().warning('Failed when loading plankton group def. File:' + excel_file_name + '  Taxon: ' + scientificname)
+                toolbox_utils.Logging().warning('Failed when loading plankton group def. File:' + excel_file_name + '  Taxon: ' + scientificname)
     
     def _precalculateData(self):
         """ Calculates data from loaded datasets. I.e. phylum, class and order info. """
@@ -333,17 +335,17 @@ class Species(object):
                             parentobject = self._taxa[parentobject['Parent name']] if parentobject['Parent name'] else None
                         else:
                             if parentobject['Scientific name'] != 'Biota':
-                                envmonlib.Logging().warning('Parent taxon is missing for : ' + parentobject['Scientific name'])
+                                toolbox_utils.Logging().warning('Parent taxon is missing for : ' + parentobject['Scientific name'])
                             parentobject = None
                     else:
                         parentobject = None
             except:
-                envmonlib.Logging().warning('Failed when creating classification. Taxon: ' + scientificname)
+                toolbox_utils.Logging().warning('Failed when creating classification. Taxon: ' + scientificname)
 
     def _loadBvolColumns(self, excel_file_name):
         """ """
-        tabledataset = envmonlib.DatasetTable()
-        envmonlib.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
+        tabledataset = toolbox_utils.DatasetTable()
+        toolbox_utils.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
         #
         for row in tabledataset.getRows():
             columnname = ''
@@ -357,14 +359,14 @@ class Species(object):
                 if columnname and level and internalname:
                     self._bvolcolumns_dict[columnname] = (level, numeric, internalname) 
             except:
-                envmonlib.Logging().warning('Failed when loading BVOL columns. Column name: ' + columnname)
+                toolbox_utils.Logging().warning('Failed when loading BVOL columns. Column name: ' + columnname)
         
     def _loadBvol(self, excel_file_name):
         """ Adds BVOL data to species objects. Creates additional species objects if missing 
             (i.e. for Unicell, Flagellates). """
         # Import size class data.
-        tabledataset = envmonlib.DatasetTable()
-        envmonlib.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
+        tabledataset = toolbox_utils.DatasetTable()
+        toolbox_utils.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
         # Create header list for mapping and translations.
         headerinfo = [] # Contains used columns only.
         for columnindex, columnname in enumerate(tabledataset.getHeader()): 
@@ -403,7 +405,7 @@ class Species(object):
                         speciesobject = self._taxa_lookup[scientificname]
                     else:
                         size = sizeclassdict.get('Size class', '')
-                        envmonlib.Logging().warning('Scientific name is missing: ' + scientificname + '   Size: ' + size + '   (Source: ' + excel_file_name + ')')
+                        toolbox_utils.Logging().warning('Scientific name is missing: ' + scientificname + '   Size: ' + size + '   (Source: ' + excel_file_name + ')')
                         continue # Only add BVOL info if taxon exists in taxa.
                     #
                     speciesobject['BVOL name'] = scientificname
@@ -416,7 +418,7 @@ class Species(object):
                     #
                     speciesobject['Size classes'].append(sizeclassdict)
             except:
-                envmonlib.Logging().warning('Failed when loading BVOL data.')
+                toolbox_utils.Logging().warning('Failed when loading BVOL data.')
         #
         # Trophic_type is set on sizeclass level. Should also be set on species level  
         # if all sizeclasses have the same trophic_type.
@@ -430,7 +432,7 @@ class Species(object):
                     taxon['Trophic type'] = list(trophic_type_set)[0]
 
             except:
-                envmonlib.Logging().warning('Failed when loading BVOL data (the trophic type part).')
+                toolbox_utils.Logging().warning('Failed when loading BVOL data (the trophic type part).')
                     
 #     def _translateBvolHeader(self, importFileHeader):
 #         """ Convert import file column names to key names used in dictionary. """        
@@ -526,7 +528,7 @@ class Species(object):
                     return planktongroup
         #                            
 #        return 'plankton-group-not-designated'
-        envmonlib.Logging().warning('Not match for Plankton group. "Others" assigned for: ' + scientific_name)
+        toolbox_utils.Logging().warning('Not match for Plankton group. "Others" assigned for: ' + scientific_name)
         #
         return 'Others'
 

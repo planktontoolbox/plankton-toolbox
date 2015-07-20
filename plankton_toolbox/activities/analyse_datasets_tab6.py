@@ -11,7 +11,9 @@ import PyQt4.QtCore as QtCore
 import plankton_toolbox.tools.tool_manager as tool_manager
 # import plankton_toolbox.toolbox.utils_qt as utils_qt
 # import plankton_toolbox.toolbox.help_texts as help_texts
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
 class AnalyseDatasetsTab6(QtGui.QWidget):
     """ """
@@ -21,7 +23,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         self._analysisdata = None
         super(AnalyseDatasetsTab6, self).__init__()
         #
-        self._graph_plot_data = envmonlib.GraphPlotData()
+        self._graph_plot_data = toolbox_utils.GraphPlotData()
         self._type_list_values = ["float", "integer", "text", "date", "datetime"]
 
     def setMainActivity(self, main_activity):

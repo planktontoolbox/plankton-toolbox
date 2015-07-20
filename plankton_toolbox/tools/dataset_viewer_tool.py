@@ -14,7 +14,9 @@ import plankton_toolbox.tools.tool_base as tool_base
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 import plankton_toolbox.toolbox.toolbox_sync as toolbox_sync
 
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
 class DatasetViewerTool(tool_base.ToolBase):
     """
@@ -124,18 +126,18 @@ class DatasetViewerTool(tool_base.ToolBase):
         else:
             # envmonlib:
             dataset = toolbox_datasets.ToolboxDatasets().getDatasetByIndex(index - 1)
-            if isinstance(dataset, envmonlib.DatasetTable):
+            if isinstance(dataset, toolbox_utils.DatasetTable):
                 self._tableview.tablemodel.setModeldata(dataset)
                 self._refreshResultTable()
-            elif isinstance(dataset, envmonlib.DatasetNode):
+            elif isinstance(dataset, toolbox_utils.DatasetNode):
                 # Tree dataset must be converted to table dataset before viewing.
-                targetdataset = envmonlib.DatasetTable()
+                targetdataset = toolbox_utils.DatasetTable()
                 dataset.convertToTableDataset(targetdataset)
                 #
                 self._tableview.tablemodel.setModeldata(targetdataset)
                 self._refreshResultTable()
             #
-            # TODO: Remove later. Default alternative used for non envmonlib.
+            # TODO: Remove later. Default alternative used for non toolbox_utils.
             else:
                 self._tableview.tablemodel.setModeldata(dataset)
                 self._refreshResultTable()

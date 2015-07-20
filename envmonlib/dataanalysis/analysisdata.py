@@ -8,7 +8,9 @@ from __future__ import unicode_literals
 
 import copy
 
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
 class AnalysisData(object):
     """
@@ -77,7 +79,7 @@ class AnalysisData(object):
                    all(compareheaders[i] == newheader[i] for i in range(len(compareheaders))):
                     pass # OK since export columns are equal.
                 else:
-                    envmonlib.Logging().log('Can\'t analyse datasets with different column names.')
+                    toolbox_utils.Logging().log('Can\'t analyse datasets with different column names.')
                     raise UserWarning('Can\'t analyse datasets with different export column names.')
         # Concatenate selected datasets.        
         analysis_dataset = None
@@ -94,7 +96,7 @@ class AnalysisData(object):
                     analysis_dataset.addChild(child)
         # Check.
         if (analysis_dataset == None) or (len(analysis_dataset.getChildren()) == 0):
-            envmonlib.Logging().log('Selected datasets are empty.')
+            toolbox_utils.Logging().log('Selected datasets are empty.')
             raise UserWarning('Selected datasets are empty.')
         # Use the concatenated dataset for analysis.
         self.setData(analysis_dataset)    
@@ -156,7 +158,7 @@ class AnalysisData(object):
             - 'life_stage'
         """
         # Create a tree dataset for filtered data.
-        filtereddata = envmonlib.DatasetNode() 
+        filtereddata = toolbox_utils.DatasetNode() 
         #
         analysisdata = self.getData()
         if not analysisdata:        
@@ -187,7 +189,7 @@ class AnalysisData(object):
                 unicode(visitnode.getData('date'))) not in filter_visits:
                 continue
             # Create node and copy node data.            
-            filteredvisit = envmonlib.VisitNode()
+            filteredvisit = toolbox_utils.VisitNode()
             filteredvisit.setDataDict(visitnode.getDataDict())
             filtereddata.addChild(filteredvisit)    
             #
@@ -198,7 +200,7 @@ class AnalysisData(object):
                     continue
                 #
                 # Create node and copy node data.            
-                filteredsample = envmonlib.SampleNode()
+                filteredsample = toolbox_utils.SampleNode()
                 filteredsample.setDataDict(samplenode.getDataDict())
                 filteredvisit.addChild(filteredsample)    
                 #
@@ -215,7 +217,7 @@ class AnalysisData(object):
                     if lifestage not in filter_lifestage:
                         continue
                     # Create node and copy node data.            
-                    filteredvariable = envmonlib.VariableNode()
+                    filteredvariable = toolbox_utils.VariableNode()
                     filteredvariable.setDataDict(variablenode.getDataDict())
                     filteredsample.addChild(filteredvariable)
         #

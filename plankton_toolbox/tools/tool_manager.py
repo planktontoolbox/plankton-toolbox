@@ -19,11 +19,13 @@ import plankton_toolbox.tools.taxon_images_tool as taxon_images_tool
 
 import plankton_toolbox.tools.graphplotter_tool as graphplotter_tool
 
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
 #import tools.template_tool as template_tool
 
-@envmonlib.singleton
+@toolbox_utils.singleton
 class ToolManager(object):
     """
     The tool manager is used to set up available tools. 

@@ -13,7 +13,9 @@ import plankton_toolbox.activities.activity_base as activity_base
 import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 # import plankton_toolbox.toolbox.help_texts as help_texts
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
 class ScreeningActivity(activity_base.ActivityBase):
     """ Used for screening of content of loaded datasets. """
@@ -313,35 +315,35 @@ class ScreeningActivity(activity_base.ActivityBase):
         self._codesspeciesresult_list.clear()
         #
         try:
-            envmonlib.Logging().log('') # Empty line.
-            envmonlib.Logging().log('Code list screening started...')
-            envmonlib.Logging().startAccumulatedLogging()
+            toolbox_utils.Logging().log('') # Empty line.
+            toolbox_utils.Logging().log('Code list screening started...')
+            toolbox_utils.Logging().start_accumulated_logging()
             self._writeToStatusBar('Code list screening in progress...')
             # Perform screening.
-            codetypes_set = envmonlib.ScreeningManager().codeListScreening(toolbox_datasets.ToolboxDatasets().getDatasets())
+            codetypes_set = toolbox_utils.ScreeningManager().codeListScreening(toolbox_datasets.ToolboxDatasets().getDatasets())
         finally:
             # Log in result window.
             self._codesspeciesresult_list.append('Screening was done on these code types: ' + 
                                               unicode(sorted(codetypes_set)))
             self._codesspeciesresult_list.append('')
             #
-            inforows = envmonlib.Logging().getAllInfoRows()
+            inforows = toolbox_utils.Logging().get_all_info_rows()
             if inforows:
                 for row in inforows:
                     self._codesspeciesresult_list.append('- ' + row)                
-            warningrows = envmonlib.Logging().getAllWarnings()
+            warningrows = toolbox_utils.Logging().getAllWarnings()
             if warningrows:
                 for row in warningrows:
                     self._codesspeciesresult_list.append('- ' + row)
-            errorrows = envmonlib.Logging().getAllErrors()
+            errorrows = toolbox_utils.Logging().get_all_errors()
             if errorrows:
                 for row in errorrows:
                     self._codesspeciesresult_list.append('- ' + row)
             # Also add to the logging tool.
-            envmonlib.Logging().logAllAccumulatedRows()    
-            envmonlib.Logging().log('Screening was done on these code types: ' + 
+            toolbox_utils.Logging().log_all_accumulated_rows()
+            toolbox_utils.Logging().log('Screening was done on these code types: ' + 
                                     unicode(sorted(codetypes_set)))
-            envmonlib.Logging().log('Code list screening done.')
+            toolbox_utils.Logging().log('Code list screening done.')
             self._writeToStatusBar('')
 
     def _speciesScreening(self):
@@ -352,33 +354,33 @@ class ScreeningActivity(activity_base.ActivityBase):
         self._codesspeciesresult_list.clear()
         #
         try:
-            envmonlib.Logging().log('') # Empty line.
-            envmonlib.Logging().log('Species screening started...')
-            envmonlib.Logging().startAccumulatedLogging()
+            toolbox_utils.Logging().log('') # Empty line.
+            toolbox_utils.Logging().log('Species screening started...')
+            toolbox_utils.Logging().start_accumulated_logging()
             self._writeToStatusBar('Species screening in progress...')
             # Perform screening.
-            envmonlib.ScreeningManager().speciesScreening(toolbox_datasets.ToolboxDatasets().getDatasets())
+            toolbox_utils.ScreeningManager().speciesScreening(toolbox_datasets.ToolboxDatasets().getDatasets())
         finally:
             # Log in result window.
 #             self._codesspeciesresult_list.append('Screening was done on these code types: ' + 
 #                                               unicode(sorted(codetypes_set)))
 #             self._codesspeciesresult_list.append('')
             #
-            inforows = envmonlib.Logging().getAllInfoRows()
+            inforows = toolbox_utils.Logging().get_all_info_rows()
             if inforows:
                 for row in inforows:
                     self._codesspeciesresult_list.append('- ' + row)                
-            warningrows = envmonlib.Logging().getAllWarnings()
+            warningrows = toolbox_utils.Logging().get_all_warnings()
             if warningrows:
                 for row in warningrows:
                     self._codesspeciesresult_list.append('- ' + row)
-            errorrows = envmonlib.Logging().getAllErrors()
+            errorrows = toolbox_utils.Logging().get_all_errors()
             if errorrows:
                 for row in errorrows:
                     self._codesspeciesresult_list.append('- ' + row)
             # Also add to the logging tool.
-            envmonlib.Logging().logAllAccumulatedRows()    
-            envmonlib.Logging().log('Species screening done.')
+            toolbox_utils.Logging().log_all_accumulated_rows()
+            toolbox_utils.Logging().log('Species screening done.')
             self._writeToStatusBar('')
 
     def _bvolScreening(self):
@@ -389,33 +391,33 @@ class ScreeningActivity(activity_base.ActivityBase):
         self._codesspeciesresult_list.clear()
         #
         try:
-            envmonlib.Logging().log('') # Empty line.
-            envmonlib.Logging().log('BVOL Species screening started...')
-            envmonlib.Logging().startAccumulatedLogging()
+            toolbox_utils.Logging().log('') # Empty line.
+            toolbox_utils.Logging().log('BVOL Species screening started...')
+            toolbox_utils.Logging().start_accumulated_logging()
             self._writeToStatusBar('BVOL Species screening in progress...')
             # Perform screening.
-            envmonlib.ScreeningManager().bvolSpeciesScreening(toolbox_datasets.ToolboxDatasets().getDatasets())
+            toolbox_utils.ScreeningManager().bvolSpeciesScreening(toolbox_datasets.ToolboxDatasets().getDatasets())
         finally:
             # Log in result window.
 #             self._codesspeciesresult_list.append('Screening was done on these code types: ' + 
 #                                               unicode(sorted(codetypes_set)))
 #             self._codesspeciesresult_list.append('')
             #
-            inforows = envmonlib.Logging().getAllInfoRows()
+            inforows = toolbox_utils.Logging().get_all_info_rows()
             if inforows:
                 for row in inforows:
                     self._codesspeciesresult_list.append('- ' + row)                
-            warningrows = envmonlib.Logging().getAllWarnings()
+            warningrows = toolbox_utils.Logging().get_all_warnings()
             if warningrows:
                 for row in warningrows:
                     self._codesspeciesresult_list.append('- ' + row)
-            errorrows = envmonlib.Logging().getAllErrors()
+            errorrows = toolbox_utils.Logging().get_all_errors()
             if errorrows:
                 for row in errorrows:
                     self._codesspeciesresult_list.append('- ' + row)
             # Also add to the logging tool.
-            envmonlib.Logging().logAllAccumulatedRows()    
-            envmonlib.Logging().log('BVOL Species screening done.')
+            toolbox_utils.Logging().log_all_accumulated_rows()
+            toolbox_utils.Logging().log('BVOL Species screening done.')
             self._writeToStatusBar('')
 
     # === Content column values ===
@@ -593,7 +595,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         graphtool = tool_manager.ToolManager().getToolByName('Graph plotter')
         graphtool.clearPlotData()
         # Set up plot data for this type.
-        self._graph_plot_data = envmonlib.GraphPlotData(
+        self._graph_plot_data = toolbox_utils.GraphPlotData(
                         title = 'Parameter values in sequence', 
                         y_type = 'float',
                         x_label = 'Sequence position in dataset',
@@ -639,7 +641,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         graphtool = tool_manager.ToolManager().getToolByName('Graph plotter')
         graphtool.clearPlotData()
         # Set up plot data for this type.
-        self._graph_plot_data = envmonlib.GraphPlotData(
+        self._graph_plot_data = toolbox_utils.GraphPlotData(
                         title = 'Parameter values per date', 
                         x_type = 'date',
                         y_type = 'float',

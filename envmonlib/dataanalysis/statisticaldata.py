@@ -7,10 +7,12 @@
 from __future__ import unicode_literals
 
 # import envmonlib
+import toolbox_utils
+import toolbox_core
 
 class StatisticalData(object):
     """
-    Should contain table oriented data, see envmonlib.DatasetTable().
+    Should contain table oriented data, see toolbox_utils.DatasetTable().
     """
     def __init__(self):
         """ """

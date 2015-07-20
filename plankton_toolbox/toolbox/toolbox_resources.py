@@ -9,19 +9,21 @@ from __future__ import unicode_literals
 """
 
 
-TODO: Not used in current version. Should be rewritten and integrated with envmonlib.
+TODO: Not used in current version. Should be rewritten and integrated with toolbox_utils.
 
 
 """
 
 #import plankton_toolbox.PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 import plankton_toolbox.core.biology.taxa as taxa
 import plankton_toolbox.core.biology.taxa_sources as taxa_sources
 
-@envmonlib.singleton
+@toolbox_utils.singleton
 class ToolboxResources(QtCore.QObject):
     """
     Resources are datasets that are commonly used in the Plankton Toolbox.
@@ -71,7 +73,7 @@ class ToolboxResources(QtCore.QObject):
         # Emit signal.
         self._dyntaxaloaded = True 
         self.emit(QtCore.SIGNAL('dyntaxaResourceLoaded'))
-        envmonlib.Logging().log('Toolbox resources: Dyntaxa loaded (' +  
+        toolbox_utils.Logging().log('Toolbox resources: Dyntaxa loaded (' +  
                             unicode(len(self._dyntaxa.getTaxonList())) + ' taxon).')
         
     def loadUnloadedResourcePeg(self):
@@ -89,7 +91,7 @@ class ToolboxResources(QtCore.QObject):
         # Emit signal.
         self._pegloaded = True
         self.emit(QtCore.SIGNAL('pegResourceLoaded'))
-        envmonlib.Logging().log('Toolbox resources: PEG loaded (' +  
+        toolbox_utils.Logging().log('Toolbox resources: PEG loaded (' +  
                             unicode(len(self._peg.getNameAndSizeList())) + ' sizeclasses).')
 
     def loadUnloadedResourceHarmfulPlankton(self):
@@ -107,7 +109,7 @@ class ToolboxResources(QtCore.QObject):
         # Emit signal.
         self._harmfulplanktonloaded = True
         self.emit(QtCore.SIGNAL('harmfulPlanktonResourceLoaded'))
-        envmonlib.Logging().log('Toolbox resources: Harmful plankton loaded (' +  
+        toolbox_utils.Logging().log('Toolbox resources: Harmful plankton loaded (' +  
                             unicode(len(self._harmfulplankton.getTaxonList())) + ' taxon).')
         
     def getResourceDyntaxa(self):

@@ -9,7 +9,9 @@ from __future__ import unicode_literals
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.tools.tool_base as tool_base
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 #import plankton_toolbox.toolbox.toolbox_main_window as toolbox_main_window
@@ -117,7 +119,7 @@ class DevTestTool(tool_base.ToolBase):
     def _test(self, settings):
         """ """
         try:
-            envmonlib.Logging().log('Dev. tool: ' + settings['button_text'])
+            toolbox_utils.Logging().log('Dev. tool: ' + settings['button_text'])
             #
             import_parser_path = settings['import_parser_path']
             import_parser = settings['import_parser']
@@ -127,7 +129,7 @@ class DevTestTool(tool_base.ToolBase):
             self._parent.showActivityByName(settings['show_activity_after'])
             #
             # Set up for import file parsing.
-            impMgr = envmonlib.ImportManager(import_parser_path + import_parser,
+            impMgr = toolbox_utils.ImportManager(import_parser_path + import_parser,
                                              import_column,
                                              export_column)
             # Import and parse file.
@@ -147,6 +149,6 @@ class DevTestTool(tool_base.ToolBase):
             
             self._parent.showActivityByName(settings['show_activity_after'])
         except Exception as e:
-            envmonlib.Logging().warning('Failed to run script: %s' % (e))
+            toolbox_utils.Logging().warning('Failed to run script: %s' % (e))
             raise
         

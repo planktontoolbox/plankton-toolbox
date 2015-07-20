@@ -17,7 +17,9 @@ import PyQt4.QtCore as QtCore
 # import plankton_toolbox.toolbox.utils_qt as utils_qt
 # import plankton_toolbox.toolbox.help_texts as help_texts
 import plankton_toolbox.tools.tool_manager as tool_manager
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
 class AnalyseDatasetsTab7(QtGui.QWidget):
     """ """
@@ -172,7 +174,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         # Target list.
         data_dict = {}        
         # Create a dataset (table, not tree).
-        tabledata = envmonlib.DatasetTable()
+        tabledata = toolbox_utils.DatasetTable()
         reportdata.setData(tabledata)
         # Header for result table.
         header_row = []
@@ -361,7 +363,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         # Target list.
         data_dict = {}        
         # Create a dataset (table, not tree).
-        tabledata = envmonlib.DatasetTable()
+        tabledata = toolbox_utils.DatasetTable()
         reportdata.setData(tabledata)
         # Extract values.
         yearkey = ''
@@ -507,7 +509,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         split_on_depth = self._splitby_depth_checkbox.isChecked()
         split_on_taxon = self._splitby_taxon_checkbox.isChecked()
         # Graph data.
-        self._graph_plot_data = envmonlib.GraphPlotData(
+        self._graph_plot_data = toolbox_utils.GraphPlotData(
                                     title = selectedparameter, 
                                     y_type = 'float',
                                     y_label = '')

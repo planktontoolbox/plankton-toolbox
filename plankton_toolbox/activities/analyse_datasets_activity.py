@@ -19,7 +19,9 @@ import plankton_toolbox.activities.analyse_datasets_tab5 as tab5
 import plankton_toolbox.activities.analyse_datasets_tab6 as tab6
 import plankton_toolbox.activities.analyse_datasets_tab7 as tab7
 import plankton_toolbox.activities.analyse_datasets_tab8 as tab8
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
 class AnalyseDatasetsActivity(activity_base.ActivityBase):
     """
@@ -27,9 +29,9 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
     def __init__(self, name, parentwidget):
         """ """
         # Create object containing analysis data.
-        self._analysisdata = envmonlib.AnalysisData()
-        self._statisticaldata = envmonlib.StatisticalData()
-        self._reportdata = envmonlib.ReportData()
+        self._analysisdata = toolbox_utils.AnalysisData()
+        self._statisticaldata = toolbox_utils.StatisticalData()
+        self._reportdata = toolbox_utils.ReportData()
         
         # Filename used when saving data to file.
         self._lastuseddirectory = '.'
@@ -220,7 +222,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         if selectedviewindex == 0:
             # View analysis data.
             # Convert from tree model to table model.
-            targetdataset = envmonlib.DatasetTable()
+            targetdataset = toolbox_utils.DatasetTable()
             self._analysisdata.getData().convertToTableDataset(targetdataset)
             # View model.
             self._tableview.tablemodel.setModeldata(targetdataset)
@@ -230,7 +232,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
             self._tab4widget.updateFilter() # Must be done before createFilteredDataset().
             filtereddataset = self._analysisdata.createFilteredDataset()
             # Convert from tree model to table model.
-            targetdataset = envmonlib.DatasetTable()
+            targetdataset = toolbox_utils.DatasetTable()
             filtereddataset.convertToTableDataset(targetdataset)
             # View model.
             self._tableview.tablemodel.setModeldata(targetdataset)

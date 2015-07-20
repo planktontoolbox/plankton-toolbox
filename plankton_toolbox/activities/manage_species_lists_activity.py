@@ -9,6 +9,8 @@ from __future__ import unicode_literals
 # import PyQt4.QtGui as QtGui
 # import PyQt4.QtCore as QtCore
 # import envmonlib
+# import toolbox_utils
+# import toolbox_core
 # import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 # import plankton_toolbox.activities.activity_base as activity_base
 # import plankton_toolbox.core.biology.taxa as taxa
@@ -279,33 +281,33 @@ from __future__ import unicode_literals
 # 
 #     def _prepareDyntaxa(self):
 #         """ """
-#         envmonlib.Logging().log('Prepare dyntaxa. Started.')
-#         envmonlib.Logging().clear()
+#         toolbox_utils.Logging().log('Prepare dyntaxa. Started.')
+#         toolbox_utils.Logging().clear()
 #         self._writeToStatusBar('Prepare dyntaxa.')
 #         try:
 #             if self._dyntaxasource_list.currentIndex() == 3:
 #                 dt = taxa.Dyntaxa()
 #                 importer = taxa_prepare.PrepareDyntaxaDbTablesAsTextFiles(taxaObject = dt)
 #                 importer.importTaxa(unicode(self._dyntaxafromdirectory_edit.text()))
-#                 envmonlib.Logging().log('Number of dyntaxa taxa: ' + str(len(dt.getTaxonList())))
+#                 toolbox_utils.Logging().log('Number of dyntaxa taxa: ' + str(len(dt.getTaxonList())))
 #                 exporter = taxa_sources.JsonFile(taxaObject = dt)                
 #                 exporter.exportTaxa(file = unicode(self._dyntaxatofile_edit.text()))
 #             else:
 #                 raise UserWarning('The selected data source type is not implemented.')
 #         except UserWarning as e:
-#             envmonlib.Logging().error('UserWarning: ' + unicode(e))
+#             toolbox_utils.Logging().error('UserWarning: ' + unicode(e))
 #             QtGui.QMessageBox.warning(self, "Warning", unicode(e))
 #         except (IOError, OSError), e:
-#             envmonlib.Logging().error('Error: ' + unicode(e))
+#             toolbox_utils.Logging().error('Error: ' + unicode(e))
 #             QtGui.QMessageBox.warning(self, "Error", unicode(e))
 #         except Exception as e:
-#             envmonlib.Logging().error('Failed on exception: ' + unicode(e))
+#             toolbox_utils.Logging().error('Failed on exception: ' + unicode(e))
 #             QtGui.QMessageBox.warning(self, "Exception", unicode(e))
 #             raise
 #         finally:
-#             envmonlib.Logging().logAllWarnings()    
-#             envmonlib.Logging().logAllErrors()    
-#             envmonlib.Logging().info('Prepare dyntaxa. Ended.')
+#             toolbox_utils.Logging().logAllWarnings()    
+#             toolbox_utils.Logging().logAllErrors()    
+#             toolbox_utils.Logging().info('Prepare dyntaxa. Ended.')
 #             self._writeToStatusBar('')
 #         # Reload resources.
 #         toolbox_resources.ToolboxResources().loadResourceDyntaxa()
@@ -316,8 +318,8 @@ from __future__ import unicode_literals
 # 
 #     def _preparePeg(self):
 #         """ """
-#         envmonlib.Logging().log('Prepare PEG. Started.')
-#         envmonlib.Logging().clear()
+#         toolbox_utils.Logging().log('Prepare PEG. Started.')
+#         toolbox_utils.Logging().clear()
 #         self._writeToStatusBar('Prepare PEG.')
 #         try:
 #             peg = taxa.Peg()
@@ -334,23 +336,23 @@ from __future__ import unicode_literals
 #             
 #             importer.addDyntaxaToPeg(file = unicode(self._pegtodyntaxafile_edit.text()))
 #             #
-#             envmonlib.Logging().log('Number of PEG taxa: ' + str(len(peg.getTaxonList())))                
+#             toolbox_utils.Logging().log('Number of PEG taxa: ' + str(len(peg.getTaxonList())))                
 #             exporter = taxa_sources.JsonFile(taxaObject = peg)
 #             exporter.exportTaxa(file = unicode(self._pegtofile_edit.text()))
 #         except UserWarning as e:
-#             envmonlib.Logging().error('UserWarning: ' + unicode(e))
+#             toolbox_utils.Logging().error('UserWarning: ' + unicode(e))
 #             QtGui.QMessageBox.warning(self, "Warning", unicode(e))
 #         except (IOError, OSError), e:
-#             envmonlib.Logging().error('Error: ' + unicode(e))
+#             toolbox_utils.Logging().error('Error: ' + unicode(e))
 #             QtGui.QMessageBox.warning(self, "Error", unicode(e))
 #         except Exception as e:
-#             envmonlib.Logging().error('Failed on exception: ' + unicode(e))
+#             toolbox_utils.Logging().error('Failed on exception: ' + unicode(e))
 #             QtGui.QMessageBox.warning(self, "Exception", unicode(e))
 #             raise
 #         finally:
-#             envmonlib.Logging().logAllWarnings()    
-#             envmonlib.Logging().logAllErrors()    
-#             envmonlib.Logging().log('Prepare PEG. Ended.')
+#             toolbox_utils.Logging().logAllWarnings()    
+#             toolbox_utils.Logging().logAllErrors()    
+#             toolbox_utils.Logging().log('Prepare PEG. Ended.')
 #             self._writeToStatusBar('')
 #         # Reload resources.
 #         toolbox_resources.ToolboxResources().loadResourcePeg()
@@ -377,31 +379,31 @@ from __future__ import unicode_literals
 # 
 #     def _prepareHarmful(self):
 #         """ """
-#         envmonlib.Logging().log('Prepare Harmful plankton. Started.')
-#         envmonlib.Logging().clear()
+#         toolbox_utils.Logging().log('Prepare Harmful plankton. Started.')
+#         toolbox_utils.Logging().clear()
 #         self._writeToStatusBar('Prepare Harmful plankton.')
 #         try:
 #             harmful = taxa.HarmfulPlankton()
 #             importer = taxa_prepare.PrepareHarmfulMicroAlgae(taxaObject = harmful)
 #             importer.importTaxa(file = unicode(self._harmfulfromfile_edit.text()))
 #             #
-#             envmonlib.Logging().log('Number of Harmful plankton taxa: ' + str(len(harmful.getTaxonList())))                
+#             toolbox_utils.Logging().log('Number of Harmful plankton taxa: ' + str(len(harmful.getTaxonList())))                
 #             exporter = taxa_sources.JsonFile(taxaObject = harmful)
 #             exporter.exportTaxa(file = unicode(self._harmfultofile_edit.text()))
 #         except UserWarning as e:
-#             envmonlib.Logging().error('UserWarning: ' + unicode(e))
+#             toolbox_utils.Logging().error('UserWarning: ' + unicode(e))
 #             QtGui.QMessageBox.warning(self, "Warning", unicode(e))
 #         except (IOError, OSError), e:
-#             envmonlib.Logging().error('Error: ' + unicode(e))
+#             toolbox_utils.Logging().error('Error: ' + unicode(e))
 #             QtGui.QMessageBox.warning(self, "Error", unicode(e))
 #         except Exception as e:
-#             envmonlib.Logging().error('Failed on exception: ' + unicode(e))
+#             toolbox_utils.Logging().error('Failed on exception: ' + unicode(e))
 #             QtGui.QMessageBox.warning(self, "Exception", unicode(e))
 #             raise
 #         finally:
-#             envmonlib.Logging().logAllWarnings()    
-#             envmonlib.Logging().logAllErrors()    
-#             envmonlib.Logging().log('Prepare Harmful plankton. Ended.')
+#             toolbox_utils.Logging().logAllWarnings()    
+#             toolbox_utils.Logging().logAllErrors()    
+#             toolbox_utils.Logging().log('Prepare Harmful plankton. Ended.')
 #             self._writeToStatusBar('')
 #         # Reload resources.
 #         toolbox_resources.ToolboxResources().loadResourceHarmfulPlankton()

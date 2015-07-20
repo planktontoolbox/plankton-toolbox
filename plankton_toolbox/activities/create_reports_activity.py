@@ -25,7 +25,7 @@ reports based on datasets content. Implemented datsets/reports are:
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-import envmonlib
+# import envmonlib
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.activities.activity_base as activity_base
 #import plankton_toolbox.core.biology.taxa as taxa
@@ -33,6 +33,8 @@ import plankton_toolbox.activities.activity_base as activity_base
 import plankton_toolbox.core.monitoring.monitoring_files as monitoring_files
 import plankton_toolbox.core.monitoring.pw_reports as pw_reports
 # import plankton_toolbox.toolbox.help_texts as help_texts
+import toolbox_utils
+import toolbox_core
 
 class CreateReportsActivity(activity_base.ActivityBase):
     """ """
@@ -135,16 +137,16 @@ class CreateReportsActivity(activity_base.ActivityBase):
         if self._report_list.currentIndex() == 0:
             QtGui.QMessageBox.information(self, "Info", 'Report type must be selected.')
             return        
-        envmonlib.Logging().log('') # Empty line.
-        envmonlib.Logging().log('PW reports started...')
-        envmonlib.Logging().startAccumulatedLogging()
+        toolbox_utils.Logging().log('') # Empty line.
+        toolbox_utils.Logging().log('PW reports started...')
+        toolbox_utils.Logging().start_accumulated_logging()
         self._writeToStatusBar('Generating PW report...')
         try:
             self._reportdata.clear()
             # Check which report to generate.
             if self._report_list.currentIndex() == 3: # Report: MJ1
                 # === Report: MJ1 ===
-                envmonlib.Logging().log('Selected report: MJ1')
+                toolbox_utils.Logging().log('Selected report: MJ1')
                 report = pw_reports.PwReportMJ1()
                 report.createReport(self._reportdata)
                 # Preview result.
@@ -152,7 +154,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
                 self._refreshResultTable()
             elif self._report_list.currentIndex() == 4: # Report: MJ2
                 # === Report: MJ1 ===
-                envmonlib.Logging().log('Selected report: MJ2')
+                toolbox_utils.Logging().log('Selected report: MJ2')
                 report = pw_reports.PwReportMJ2()
                 report.createReport(self._reportdata)
                 # Preview result.
@@ -160,7 +162,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
                 self._refreshResultTable()
             elif self._report_list.currentIndex() == 5: # Report: ATS1
                 # === Report: MJ1 ===
-                envmonlib.Logging().log('Selected report: ATS1')
+                toolbox_utils.Logging().log('Selected report: ATS1')
                 report = pw_reports.PwReportATS1()
                 report.createReport(self._reportdata)
                 # Preview result.
@@ -169,17 +171,17 @@ class CreateReportsActivity(activity_base.ActivityBase):
             else:
                 raise UserWarning('The selected report type is not implemented.')
         except UserWarning as e:
-            envmonlib.Logging().error('UserWarning: ' + unicode(e))
+            toolbox_utils.Logging().error('UserWarning: ' + unicode(e))
             QtGui.QMessageBox.warning(self, "Warning", unicode(e))
         except (IOError, OSError) as e:
-            envmonlib.Logging().error('Error: ' + unicode(e))
+            toolbox_utils.Logging().error('Error: ' + unicode(e))
             QtGui.QMessageBox.warning(self, "Error", unicode(e))
         except Exception as e:
-            envmonlib.Logging().error('Failed on exception: ' + unicode(e))
+            toolbox_utils.Logging().error('Failed on exception: ' + unicode(e))
             QtGui.QMessageBox.warning(self, "Exception", unicode(e))
             raise
         finally:
-            envmonlib.Logging().logAllAccumulatedRows()    
-            envmonlib.Logging().log('PW reports finished.\r\n')
+            toolbox_utils.Logging().log_all_accumulated_rows()
+            toolbox_utils.Logging().log('PW reports finished.\r\n')
             self._writeToStatusBar('')
 

@@ -11,7 +11,9 @@ import PyQt4.QtCore as QtCore
 # import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 # import plankton_toolbox.toolbox.help_texts as help_texts
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
 class AnalyseDatasetsTab8(QtGui.QWidget):
     """ """
@@ -138,7 +140,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
                            reportdata):
         """  """
         # Create a dataset (table, not tree).
-        tabledata = envmonlib.DatasetTable()
+        tabledata = toolbox_utils.DatasetTable()
         reportdata.setData(tabledata)
         # Check indata.
         if parameters == None:
@@ -255,7 +257,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
     def _createReportZooplanktonAbundanceLengthMedianAndMean(self, dataset, reportdata):
         """ """
         # Create a dataset (table, not tree).
-        tabledata = envmonlib.DatasetTable()
+        tabledata = toolbox_utils.DatasetTable()
         reportdata.setData(tabledata)
         # Header.
         header_row = []

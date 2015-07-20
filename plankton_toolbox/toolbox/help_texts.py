@@ -6,9 +6,11 @@
 #
 from __future__ import unicode_literals
 
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
-@envmonlib.singleton
+@toolbox_utils.singleton
 class HelpTexts(object):  
     """ Help texts for the toolbox. 
         Mostly displayed in util_qt.RichTextQLabel labels, basic HTML tags can be used. 

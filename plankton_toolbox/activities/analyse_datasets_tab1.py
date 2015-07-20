@@ -13,7 +13,9 @@ import PyQt4.QtCore as QtCore
 # import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 # import plankton_toolbox.toolbox.help_texts as help_texts
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
 class AnalyseDatasetsTab1(QtGui.QWidget):
     """ """
@@ -93,8 +95,8 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
     def _copyDatasetsForAnalysis(self):
         """ """
         try:
-            envmonlib.Logging().log('Copy datasets for analysis...')
-            envmonlib.Logging().startAccumulatedLogging()
+            toolbox_utils.Logging().log('Copy datasets for analysis...')
+            toolbox_utils.Logging().start_accumulated_logging()
             #
             self._main_activity.viewAnalysisData()
             # Clear analysis data
@@ -105,19 +107,19 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
             for rowindex in range(self._loaded_datasets_model.rowCount()):
                 item = self._loaded_datasets_model.item(rowindex, 0)
                 if item.checkState() == QtCore.Qt.Checked:        
-                    datasets.append(envmonlib.Datasets().getDatasets()[rowindex])
+                    datasets.append(toolbox_utils.Datasets().getDatasets()[rowindex])
             # Use the datasets for analysis.
             self._analysisdata.copyDatasetsToAnalysisData(datasets)  
             # Check.
             if (self._analysisdata.getData() == None) or (len(self._analysisdata.getData().getChildren()) == 0):
-                envmonlib.Logging().log('Selected datasets are empty.')
+                toolbox_utils.Logging().log('Selected datasets are empty.')
                 raise UserWarning('Selected datasets are empty.')
             self._main_activity.updateViewedDataAndTabs() 
         #
         except UserWarning as e:
-            envmonlib.Logging().error('Failed to copy data for analysis. ' + unicode(e))
+            toolbox_utils.Logging().error('Failed to copy data for analysis. ' + unicode(e))
             QtGui.QMessageBox.warning(self._main_activity, 'Warning', 'Failed to copy data for analysis. ' + unicode(e))
         finally:
-            envmonlib.Logging().logAllAccumulatedRows()    
-            envmonlib.Logging().log('Copy datasets for analysis is done.')
+            toolbox_utils.Logging().log_all_accumulated_rows()
+            toolbox_utils.Logging().log('Copy datasets for analysis is done.')
 

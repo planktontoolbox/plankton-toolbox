@@ -6,7 +6,9 @@
 #
 from __future__ import unicode_literals
 
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
 class DatasetBase(object):
     def __init__(self):
@@ -28,9 +30,9 @@ class DatasetBase(object):
 
     def saveAsTextFile(self, file_name):
         """ """
-        envmonlib.TextFiles().writeTableDataset(self, file_name)
+        toolbox_utils.TextFiles().writeTableDataset(self, file_name)
 
     def saveAsExcelFile(self, file_name):
         """ """
-        envmonlib.ExcelFiles().writeTableDataset(self, file_name)
+        toolbox_utils.ExcelFiles().writeTableDataset(self, file_name)
 

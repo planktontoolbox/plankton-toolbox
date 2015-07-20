@@ -18,9 +18,11 @@ import plankton_toolbox.activities.analyse_datasets_activity as analyse_datasets
 #import plankton_toolbox.activities.create_reports_OLD_activity as create_reports_OLD_activity
 #import plankton_toolbox.activities.template_activity as template_activity
 
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
-@envmonlib.singleton
+@toolbox_utils.singleton
 class ActivityManager(object):
     """ 
     The activity manager is used to set up available activites. 

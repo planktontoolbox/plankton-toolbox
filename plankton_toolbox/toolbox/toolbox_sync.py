@@ -7,9 +7,11 @@
 from __future__ import unicode_literals
 
 import PyQt4.QtCore as QtCore
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
-@envmonlib.singleton
+@toolbox_utils.singleton
 class ToolboxSync(QtCore.QObject):
     """ """
     def __init__(self):

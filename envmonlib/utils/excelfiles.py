@@ -6,7 +6,9 @@
 #
 from __future__ import unicode_literals
 
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 try: 
     import openpyxl
 except ImportError: 
@@ -31,7 +33,7 @@ class ExcelFiles():
         """ """
         if file_name == None:
             raise UserWarning('File name is missing.')
-        if not isinstance(target_dataset, envmonlib.DatasetTable):
+        if not isinstance(target_dataset, toolbox_utils.DatasetTable):
             raise UserWarning('Target dataset is not of valid type.')
         try:
             workbook = openpyxl.load_workbook(file_name, use_iterators = True) # Supports big files.
@@ -89,7 +91,7 @@ class ExcelFiles():
 #        """ """
 #        if file_name == None:
 #            raise UserWarning('File name is missing.')
-#        if not isinstance(target_dataset, envmonlib.DatasetTable):
+#        if not isinstance(target_dataset, toolbox_utils.DatasetTable):
 #            raise UserWarning('Target dataset is not of valid type.')
 #        try:
 #            workbook = excelreader.load_workbook(file_name)
@@ -142,7 +144,7 @@ class ExcelFiles():
         """ """
         if file_name == None:
             raise UserWarning('File name is missing.')
-        if not isinstance(table_dataset, envmonlib.DatasetTable):
+        if not isinstance(table_dataset, toolbox_utils.DatasetTable):
             raise UserWarning('Dataset is not of a valid type.')
         try:
             workbook =  openpyxl.Workbook(optimized_write = True)  # Supports big files.
@@ -156,14 +158,14 @@ class ExcelFiles():
             workbook.save(file_name)
         #
         except (IOError, OSError):
-            envmonlib.Logging().log('Failed to write to file: ' + file_name)
+            toolbox_utils.Logging().log('Failed to write to file: ' + file_name)
             raise UserWarning('Failed to write to file: ' + file_name)
 
 #    def writeTableDataset(self, table_dataset, file_name):
 #        """ """
 #        if file_name == None:
 #            raise UserWarning('File name is missing.')
-#        if not isinstance(table_dataset, envmonlib.DatasetTable):
+#        if not isinstance(table_dataset, toolbox_utils.DatasetTable):
 #            raise UserWarning('Dataset is not of a valid type.')
 #        try:
 #            workbook = excelworkbook.Workbook() # Create workbook.
@@ -182,6 +184,6 @@ class ExcelFiles():
 #            # Close.
 #            # TODO: Not needed?        
 #        except (IOError, OSError):
-#            envmonlib.Logging().log('Failed to write to file: ' + file_name)
+#            toolbox_utils.Logging().log('Failed to write to file: ' + file_name)
 #            raise UserWarning('Failed to write to file: ' + file_name)
 

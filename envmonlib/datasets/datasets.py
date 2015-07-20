@@ -6,9 +6,11 @@
 #
 from __future__ import unicode_literals
 
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
-@envmonlib.singleton
+@toolbox_utils.singleton
 class Datasets(object):
     """ Singleton object used to hold a list of datasets. """
     
@@ -38,4 +40,3 @@ class Datasets(object):
         """ """
         if (index >= 0) or (len(self._datasets) > index):
             del self._datasets[index]
-

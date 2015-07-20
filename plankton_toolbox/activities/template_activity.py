@@ -9,7 +9,9 @@ from __future__ import unicode_literals
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.activities.activity_base as activity_base
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
 class TemplateActivity(activity_base.ActivityBase):
     """
@@ -72,5 +74,5 @@ class TemplateActivity(activity_base.ActivityBase):
 
     def _test(self):
         """ """
-        envmonlib.Logging().log('Name: ' + unicode(self._emailedit.text()))
+        toolbox_utils.Logging().log('Name: ' + unicode(self._emailedit.text()))
         

@@ -8,7 +8,9 @@ from __future__ import unicode_literals
 
 import locale
 import codecs
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
 class TextFiles():
     """ """
@@ -25,7 +27,7 @@ class TextFiles():
         """ """
         if file_name == None:
             raise UserWarning('File name is missing.')
-        if not isinstance(target_dataset, envmonlib.DatasetTable):
+        if not isinstance(target_dataset, toolbox_utils.DatasetTable):
             raise UserWarning('Target dataset is not of valid type.')
         # Get encoding.
         if not encoding:
@@ -64,7 +66,7 @@ class TextFiles():
         """ """
         if file_name == None:
             raise UserWarning('File name is missing.')
-        if not isinstance(table_dataset, envmonlib.DatasetTable):
+        if not isinstance(table_dataset, toolbox_utils.DatasetTable):
             raise UserWarning('Dataset is not of a valid type.')
         #
         if not encoding:
@@ -78,7 +80,7 @@ class TextFiles():
             for row in table_dataset.getRows():
                 out.write(field_separator.join(map(unicode, row)) + '\r\n')
         except (IOError, OSError):
-            envmonlib.Logging().log('Failed to write to text file: ' + file_name)
+            toolbox_utils.Logging().log('Failed to write to text file: ' + file_name)
             raise UserWarning('Failed to write to text file: ' + file_name)
         finally:
             if out: out.close()

@@ -9,7 +9,7 @@ from __future__ import unicode_literals
 import numpy.ma
 import datetime
 import copy
-import matplotlib as mpl
+# import matplotlib as mpl
 import matplotlib.dates as mpl_dates
 import matplotlib.font_manager as mpl_font_manager
 # import matplotlib.figure as mpl_figure
@@ -17,7 +17,9 @@ import pylab # Usedfor color maps.
 import matplotlib.pyplot as pyplot # Used when not embedded plotting.
 ###import mpl_toolkits.basemap as basemap
 
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
 class GraphPlotData(object):
     """ Class containing data needed when plotting. 
@@ -65,7 +67,7 @@ class GraphPlotData(object):
                 z_array = None):
         """ """
         if (not y_array) or (len(y_array) == 0):
-            envmonlib.Logging().warning('GraphPlotData.addPlot() must contain at least an y-array. Plot not added.')
+            toolbox_utils.Logging().warning('GraphPlotData.addPlot() must contain at least an y-array. Plot not added.')
             raise UserWarning('GraphPlotData.addPlot() must contain at least an y-array. Plot not added.')
             return
         #
@@ -185,7 +187,7 @@ class ChartBase(object):
         #
         if plot_data:
             if not isinstance(plot_data, GraphPlotData):
-                envmonlib.Logging().error('Chart data object is not an instance of the class GraphPlotData. Plotting terminated.')
+                toolbox_utils.Logging().error('Chart data object is not an instance of the class GraphPlotData. Plotting terminated.')
                 raise UserWarning('Chart data object is not an instance of the class GraphPlotData. Plotting terminated.')
             
         self._data = plot_data
@@ -225,7 +227,7 @@ class ChartBase(object):
     def setData(self, plot_data):
         """ """
         if not isinstance(plot_data, GraphPlotData):
-            envmonlib.Logging().error('Chart data object is not an instance of the class GraphPlotData. Plotting terminated.')
+            toolbox_utils.Logging().error('Chart data object is not an instance of the class GraphPlotData. Plotting terminated.')
             raise UserWarning('Chart data object is not an instance of the class GraphPlotData. Plotting terminated.')
         #
         self._data = plot_data
@@ -289,7 +291,7 @@ class ChartBase(object):
                     integer_array.append(int('nan'))
             #
             if len(failedconversions_set) > 0:
-                envmonlib.Logging().warning('GraphPlotter.ChartBase: These values could not be converted to integer: "' + 
+                toolbox_utils.Logging().warning('GraphPlotter.ChartBase: These values could not be converted to integer: "' + 
                                             '", "'.join(sorted(failedconversions_set)) + '"')
             # Masked arrays are needed for proper handling of missing values when plotting.
             return numpy.ma.masked_array(integer_array, numpy.isnan(integer_array))
@@ -307,7 +309,7 @@ class ChartBase(object):
                     float_array.append(float('nan'))
             #
             if len(failedconversions_set) > 0:
-                envmonlib.Logging().warning('GraphPlotter.ChartBase: These values could not be converted to float: "' + 
+                toolbox_utils.Logging().warning('GraphPlotter.ChartBase: These values could not be converted to float: "' + 
                                             '", "'.join(sorted(failedconversions_set)) + '"')
             # Masked arrays are needed for proper handling of missing values when plotting.
             return numpy.ma.masked_array(float_array, numpy.isnan(float_array))
@@ -328,7 +330,7 @@ class ChartBase(object):
                     failedconversions_set.add(unicode(timestring))
             #
             if len(failedconversions_set) > 0:
-                envmonlib.Logging().warning('GraphPlotter.ChartBase: These values could not be converted to date or datetime: "' + 
+                toolbox_utils.Logging().warning('GraphPlotter.ChartBase: These values could not be converted to date or datetime: "' + 
                                             '", "'.join(sorted(failedconversions_set)) + '"')
             return datetime_array
         
@@ -363,10 +365,10 @@ class LineChart(ChartBase):
             # Line charts needs text (text, integer, data or datetime) for the x-axis and 
             # values (integer or float) for the y-axis.
             if not x_type in ['', 'text', 'integer', 'float', 'date', 'datetime']:
-                envmonlib.Logging().warning('GraphPlotter.LineChart: Plot skipped, X-axis type not valid: ' + x_type)
+                toolbox_utils.Logging().warning('GraphPlotter.LineChart: Plot skipped, X-axis type not valid: ' + x_type)
                 raise UserWarning('GraphPlotter.LineChart: Plot skipped, X-axis type not valid: ' + x_type)
             if not y_type in ['', 'integer', 'float']:
-                envmonlib.Logging().warning('GraphPlotter.LineChart: Plot skipped, Y-axis type not valid: ' + y_type)
+                toolbox_utils.Logging().warning('GraphPlotter.LineChart: Plot skipped, Y-axis type not valid: ' + y_type)
                 raise UserWarning('GraphPlotter.LineChart: Plot skipped, Y-axis type not valid: ' + y_type)
             #
             self._initPlotting()
@@ -508,7 +510,7 @@ class LineChart(ChartBase):
                         self._figure.autofmt_xdate(bottom = 0.2)   
                     #                      
                     else:
-                        envmonlib.Logging().warning('GraphPlotter.LineChart: Not a valid type for the x axis: ' + x_type)
+                        toolbox_utils.Logging().warning('GraphPlotter.LineChart: Not a valid type for the x axis: ' + x_type)
                         return
                 # Legend.
                 self._addLegend(subplot)                
@@ -591,7 +593,7 @@ class LineChart(ChartBase):
                         self._figure.autofmt_xdate(bottom = 0.2)   
                     #                      
                     else:
-                        envmonlib.Logging().warning('GraphPlotter.LineChart: Not a valid type for the x axis. Type ' + x_type)
+                        toolbox_utils.Logging().warning('GraphPlotter.LineChart: Not a valid type for the x axis. Type ' + x_type)
                     #
                     subplot.set_title(plotdict['plot_name'], size = 'medium')
                     subplot.set_ylabel(plotdict['y_label'])
@@ -604,7 +606,7 @@ class LineChart(ChartBase):
             self._finalizePlotting()
         #
         except Exception as e:
-            envmonlib.Logging().warning('GraphPlotter.LineChart: Plot skipped: %s' % (e.args[0]))
+            toolbox_utils.Logging().warning('GraphPlotter.LineChart: Plot skipped: %s' % (e.args[0]))
             raise
 
 
@@ -629,10 +631,10 @@ class BarChart(ChartBase):
             # Bar charts needs text (text, integer, date or datetime) for the x-axis and 
             # values (integer or float) for the y-axis.
             if not x_type in ['', 'text', 'integer', 'float', 'date', 'datetime']:
-                envmonlib.Logging().warning('GraphPlotter.BarChart: Plot skipped, X-axis type not valid: ' + x_type)
+                toolbox_utils.Logging().warning('GraphPlotter.BarChart: Plot skipped, X-axis type not valid: ' + x_type)
                 raise UserWarning('GraphPlotter.BarChart: Plot skipped, X-axis type not valid: ' + x_type)
             if not y_type in ['', 'integer', 'float']:
-                envmonlib.Logging().warning('GraphPlotter.BarChart: Plot skipped, Y-axis type not valid: ' + y_type)
+                toolbox_utils.Logging().warning('GraphPlotter.BarChart: Plot skipped, Y-axis type not valid: ' + y_type)
                 raise UserWarning('GraphPlotter.BarChart: Plot skipped, Y-axis type not valid: ' + y_type)
             #
             self._initPlotting()
@@ -640,7 +642,7 @@ class BarChart(ChartBase):
             plotlist = self._data.getPlotList()
 #             # Bar plots should have values in the x array.
 #             if not plotlist[0]['x_array']:
-#                 envmonlib.Logging().warning('GraphPlotter.BarChart: Plot skipped, X values are missing.')
+#                 toolbox_utils.Logging().warning('GraphPlotter.BarChart: Plot skipped, X values are missing.')
 #                 return
             # 
             # All plots should have the same x axis items. 
@@ -739,7 +741,7 @@ class BarChart(ChartBase):
             self._finalizePlotting()
         #
         except Exception as e:
-            envmonlib.Logging().warning('GraphPlotter.BarChart: Plot skipped: %s' % (e.args[0]))
+            toolbox_utils.Logging().warning('GraphPlotter.BarChart: Plot skipped: %s' % (e.args[0]))
             raise
 
 
@@ -765,13 +767,13 @@ class ScatterChart(ChartBase):
             # Scatter charts needs text (text, integer, date or datetime) for the x-axis and 
             # values (integer or float) for the y-axis.
             if not x_type in ['', 'text', 'integer', 'float', 'date', 'datetime']:
-                envmonlib.Logging().warning('GraphPlotter.PieChart: Plot skipped, X-axis type not valid: ' + x_type)
+                toolbox_utils.Logging().warning('GraphPlotter.PieChart: Plot skipped, X-axis type not valid: ' + x_type)
                 raise UserWarning('GraphPlotter.PieChart: Plot skipped, X-axis type not valid: ' + x_type)
             if not y_type in ['', 'integer', 'float']:
-                envmonlib.Logging().warning('GraphPlotter.PieChart: Plot skipped, Y-axis type not valid: ' + y_type)
+                toolbox_utils.Logging().warning('GraphPlotter.PieChart: Plot skipped, Y-axis type not valid: ' + y_type)
                 raise UserWarning('GraphPlotter.PieChart: Plot skipped, Y-axis type not valid: ' + y_type)
             if not z_type in ['', 'integer', 'float']:
-                envmonlib.Logging().warning('GraphPlotter.PieChart: Plot skipped, Z-axis type not valid: ' + z_type)
+                toolbox_utils.Logging().warning('GraphPlotter.PieChart: Plot skipped, Z-axis type not valid: ' + z_type)
                 raise UserWarning('GraphPlotter.PieChart: Plot skipped, Z-axis type not valid: ' + z_type)
             # 
             self._initPlotting()
@@ -779,7 +781,7 @@ class ScatterChart(ChartBase):
             plotlist = self._data.getPlotList()
             # Scatter plots should have values in the x array.
             if not plotlist[0]['x_array']:
-                envmonlib.Logging().warning('GraphPlotter.ScatterChart: Plot skipped, X values are missing.')
+                toolbox_utils.Logging().warning('GraphPlotter.ScatterChart: Plot skipped, X values are missing.')
                 return
             #
             if combined:
@@ -944,7 +946,7 @@ class ScatterChart(ChartBase):
             self._finalizePlotting()
         #
         except Exception as e:
-            envmonlib.Logging().warning('GraphPlotter.ScatterChart: Plot skipped: %s' % (e.args[0]))
+            toolbox_utils.Logging().warning('GraphPlotter.ScatterChart: Plot skipped: %s' % (e.args[0]))
             raise
 
                 
@@ -969,10 +971,10 @@ class PieChart(ChartBase):
             # Pie charts needs text (text, integer or datetime) for the x-axis and 
             # values (integer or float) for the y-axis.
             if not x_type in ['', 'text', 'integer', 'float', 'date', 'datetime']:
-                envmonlib.Logging().warning('GraphPlotter.PieChart: Plot skipped, X-axis type not valid: ' + x_type)
+                toolbox_utils.Logging().warning('GraphPlotter.PieChart: Plot skipped, X-axis type not valid: ' + x_type)
                 raise UserWarning('GraphPlotter.PieChart: Plot skipped, X-axis type not valid: ' + x_type)
             if not y_type in ['', 'integer', 'float']:
-                envmonlib.Logging().warning('GraphPlotter.PieChart: Plot skipped, Y-axis type not valid: ' + y_type)
+                toolbox_utils.Logging().warning('GraphPlotter.PieChart: Plot skipped, Y-axis type not valid: ' + y_type)
                 raise UserWarning('GraphPlotter.PieChart: Plot skipped, Y-axis type not valid: ' + y_type)
             # 
             self._initPlotting()
@@ -1016,7 +1018,7 @@ class PieChart(ChartBase):
             self._finalizePlotting()
         #
         except Exception as e:
-            envmonlib.Logging().warning('GraphPlotter.PieChart: Plot skipped: %s' % (e.args[0]))
+            toolbox_utils.Logging().warning('GraphPlotter.PieChart: Plot skipped: %s' % (e.args[0]))
             raise
 
 class BoxPlotChart(ChartBase):
@@ -1040,7 +1042,7 @@ class BoxPlotChart(ChartBase):
             # Pie charts needs text (text, integer or datetime) for the x-axis and 
             # values (integer or float) for the y-axis.
             if not y_type in ['', 'integer', 'float']:
-                envmonlib.Logging().warning('GraphPlotter.BoxPlotChart: Plot skipped, Y-axis type not valid: ' + y_type)
+                toolbox_utils.Logging().warning('GraphPlotter.BoxPlotChart: Plot skipped, Y-axis type not valid: ' + y_type)
                 raise UserWarning('GraphPlotter.BoxPlotChart: Plot skipped, Y-axis type not valid: ' + y_type)
             # 
             self._initPlotting()
@@ -1079,7 +1081,7 @@ class BoxPlotChart(ChartBase):
             self._finalizePlotting()
         #
         except Exception as e:
-            envmonlib.Logging().warning('GraphPlotter.BoxPlotChart: Plot skipped: %s' % (e.args[0]))
+            toolbox_utils.Logging().warning('GraphPlotter.BoxPlotChart: Plot skipped: %s' % (e.args[0]))
             raise
 
 
@@ -1103,13 +1105,13 @@ class MapChart(ChartBase):
 #             z_type = self._data.getPlotDataInfo()['z_type']
 # #             # Map charts needs float values. 
 # #             if not x_type in ['', 'float']:
-# #                 envmonlib.Logging().warning('GraphPlotter.MapChart: Plot skipped, X-axis type not valid: ' + x_type)
+# #                 toolbox_utils.Logging().warning('GraphPlotter.MapChart: Plot skipped, X-axis type not valid: ' + x_type)
 # #                 raise UserWarning('GraphPlotter.MapChart: Plot skipped, X-axis type not valid: ' + x_type)
 # #             if not y_type in ['', 'float']:
-# #                 envmonlib.Logging().warning('GraphPlotter.MapChart: Plot skipped, Y-axis type not valid: ' + y_type)
+# #                 toolbox_utils.Logging().warning('GraphPlotter.MapChart: Plot skipped, Y-axis type not valid: ' + y_type)
 # #                 raise UserWarning('GraphPlotter.MapChart: Plot skipped, Y-axis type not valid: ' + y_type)
 # #             if not z_type in ['', 'integer', 'float']:
-# #                 envmonlib.Logging().warning('GraphPlotter.MapChart: Plot skipped, Z-axis type not valid: ' + z_type)
+# #                 toolbox_utils.Logging().warning('GraphPlotter.MapChart: Plot skipped, Z-axis type not valid: ' + z_type)
 # #                 raise UserWarning('GraphPlotter.MapChart: Plot skipped, Z-axis type not valid: ' + z_type)
 #             # 
 #             self._initPlotting()
@@ -1161,7 +1163,7 @@ class MapChart(ChartBase):
 #             self._finalizePlotting()
 #         #
 #         except Exception as e:
-#             envmonlib.Logging().warning('GraphPlotter.MapChart: Plot skipped: %s" % (e.args[0]))
+#             toolbox_utils.Logging().warning('GraphPlotter.MapChart: Plot skipped: %s" % (e.args[0]))
 #             raise
 
 

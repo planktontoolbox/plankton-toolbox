@@ -9,7 +9,7 @@ from __future__ import unicode_literals
 """
 
 
-TODO: Not used in current version. Should be rewritten and integrated with envmonlib.
+TODO: Not used in current version. Should be rewritten and integrated with toolbox_utils.
 
 
 """
@@ -20,6 +20,8 @@ TODO: Not used in current version. Should be rewritten and integrated with envmo
 # import codecs
 # import json
 # import envmonlib
+import toolbox_utils
+import toolbox_core
 # import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 # 
 # class DataSources(object):
@@ -61,7 +63,7 @@ TODO: Not used in current version. Should be rewritten and integrated with envmo
 # 
 #     def exportTaxa(self, file = None):
 #         """ """
-#         envmonlib.Logging().log('Writes taxa to: ' + file)
+#         toolbox_utils.Logging().log('Writes taxa to: ' + file)
 #         if file == None:
 #             raise UserWarning('File name is missing.')
 #         jsonencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, json-files', 'cp1252')

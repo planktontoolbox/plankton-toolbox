@@ -10,7 +10,9 @@ import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 # import plankton_toolbox.toolbox.help_texts as help_texts
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
 class AnalyseDatasetsTab3(QtGui.QWidget):
     """ """
@@ -119,14 +121,14 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         """ """
         try:
 #             if self._aggregate_rank_list.currentIndex() == 0:
-#                 envmonlib.Logging().log('Taxon level is not selected. Please try again.')
+#                 toolbox_utils.Logging().log('Taxon level is not selected. Please try again.')
 #                 raise UserWarning('Taxon level is not selected. Please try again.')
             if not self._analysisdata.getData():
-                envmonlib.Logging().log('No data is loaded for analysis. Please try again.')
+                toolbox_utils.Logging().log('No data is loaded for analysis. Please try again.')
                 raise UserWarning('No data is loaded for analysis. Please try again.')                
             #
-            envmonlib.Logging().log('Aggregating data...')
-            envmonlib.Logging().startAccumulatedLogging()
+            toolbox_utils.Logging().log('Aggregating data...')
+            toolbox_utils.Logging().start_accumulated_logging()
             try:
             #
                 selected_taxon_rank = unicode(self._aggregate_rank_list.currentText())
@@ -149,21 +151,21 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                                 if selected_taxon_rank == 'Biota (all levels)':
                                     newtaxon = 'Biota' # Biota is above kingdom in the taxonomic hierarchy.
                                 elif selected_taxon_rank == 'Plankton group':
-                                    newtaxon = envmonlib.Species().getPlanktonGroupFromTaxonName(variablenode.getData('scientific_name'))
+                                    newtaxon = toolbox_utils.Species().getPlanktonGroupFromTaxonName(variablenode.getData('scientific_name'))
                                 elif selected_taxon_rank == 'Kingdom':
-                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData('scientific_name'), 'Kingdom')
+                                    newtaxon = toolbox_utils.Species().getTaxonValue(variablenode.getData('scientific_name'), 'Kingdom')
                                 elif selected_taxon_rank == 'Phylum':
-                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData('scientific_name'), 'Phylum')
+                                    newtaxon = toolbox_utils.Species().getTaxonValue(variablenode.getData('scientific_name'), 'Phylum')
                                 elif selected_taxon_rank == 'Class':
-                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData('scientific_name'), 'Class')
+                                    newtaxon = toolbox_utils.Species().getTaxonValue(variablenode.getData('scientific_name'), 'Class')
                                 elif selected_taxon_rank == 'Order':
-                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData('scientific_name'), 'Order')
+                                    newtaxon = toolbox_utils.Species().getTaxonValue(variablenode.getData('scientific_name'), 'Order')
                                 elif selected_taxon_rank == 'Family':
-                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData('scientific_name'), 'Family')
+                                    newtaxon = toolbox_utils.Species().getTaxonValue(variablenode.getData('scientific_name'), 'Family')
                                 elif selected_taxon_rank == 'Genus':
-                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData('scientific_name'), 'Genus')
+                                    newtaxon = toolbox_utils.Species().getTaxonValue(variablenode.getData('scientific_name'), 'Genus')
                                 elif selected_taxon_rank == 'Species': 
-                                    newtaxon = envmonlib.Species().getTaxonValue(variablenode.getData('scientific_name'), 'Species')
+                                    newtaxon = toolbox_utils.Species().getTaxonValue(variablenode.getData('scientific_name'), 'Species')
                                 elif selected_taxon_rank == 'Scientific name': 
                                     newtaxon = variablenode.getData('scientific_name')
                                 elif selected_taxon_rank == 'Kingdom (from dataset)':
@@ -186,7 +188,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                                     newtaxon = variablenode.getData('scientific_name')
                                 # 
                                 if not newtaxon:
-                                    envmonlib.Logging().warning('Not match for selected rank. "not-designated" assigned for: ' + variablenode.getData('scientific_name'))
+                                    toolbox_utils.Logging().warning('Not match for selected rank. "not-designated" assigned for: ' + variablenode.getData('scientific_name'))
                                     newtaxon = 'not-designated' # Use this if empty.
                                 #
                                 taxontrophic_type = variablenode.getData('trophic_type')
@@ -216,14 +218,14 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                                     aggregatedvariables[agg_tuple] = value
                             except:
                                 if variablenode.getData('value'):
-                                    envmonlib.Logging().warning('Value is not a valid float: ' + unicode(variablenode.getData('Value')))
+                                    toolbox_utils.Logging().warning('Value is not a valid float: ' + unicode(variablenode.getData('Value')))
                         #Remove all variables for this sample.
                         samplenode.removeAllChildren()
                         # Add the new aggregated variables instead.  
                         for variablekeytuple in aggregatedvariables:
                             newtaxon, taxontrophic_type, stage, sex, parameter, unit = variablekeytuple
                             #
-                            newvariable = envmonlib.VariableNode()
+                            newvariable = toolbox_utils.VariableNode()
                             samplenode.addChild(newvariable)    
                             #
                             newvariable.addData('scientific_name', newtaxon)
@@ -234,21 +236,21 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                             newvariable.addData('unit', unit)
                             newvariable.addData('value', aggregatedvariables[variablekeytuple])
                             # Add taxon class, etc. based on taxon name.
-                            newvariable.addData('kingdom', envmonlib.Species().getTaxonValue(newtaxon, 'Kingdom'))
-                            newvariable.addData('phylum', envmonlib.Species().getTaxonValue(newtaxon, 'Phylum'))
-                            newvariable.addData('class', envmonlib.Species().getTaxonValue(newtaxon, 'Class'))
-                            newvariable.addData('order', envmonlib.Species().getTaxonValue(newtaxon, 'Order'))
-                            newvariable.addData('family', envmonlib.Species().getTaxonValue(newtaxon, 'Family'))
-                            newvariable.addData('genus', envmonlib.Species().getTaxonValue(newtaxon, 'Genus'))
-                            newvariable.addData('species', envmonlib.Species().getTaxonValue(newtaxon, 'Species'))
+                            newvariable.addData('kingdom', toolbox_utils.Species().getTaxonValue(newtaxon, 'Kingdom'))
+                            newvariable.addData('phylum', toolbox_utils.Species().getTaxonValue(newtaxon, 'Phylum'))
+                            newvariable.addData('class', toolbox_utils.Species().getTaxonValue(newtaxon, 'Class'))
+                            newvariable.addData('order', toolbox_utils.Species().getTaxonValue(newtaxon, 'Order'))
+                            newvariable.addData('family', toolbox_utils.Species().getTaxonValue(newtaxon, 'Family'))
+                            newvariable.addData('genus', toolbox_utils.Species().getTaxonValue(newtaxon, 'Genus'))
+                            newvariable.addData('species', toolbox_utils.Species().getTaxonValue(newtaxon, 'Species'))
                 #
                 self._main_activity.updateViewedDataAndTabs()    
             except UserWarning as e:
-                envmonlib.Logging().error('Failed to aggregate data. ' + unicode(e))
+                toolbox_utils.Logging().error('Failed to aggregate data. ' + unicode(e))
                 QtGui.QMessageBox.warning(self._main_activity, 'Warning', 'Failed to aggregate data. ' + unicode(e))
         finally:
-            envmonlib.Logging().logAllAccumulatedRows()
-            envmonlib.Logging().log('Aggregation of data is done.')
+            toolbox_utils.Logging().log_all_accumulated_rows()
+            toolbox_utils.Logging().log('Aggregation of data is done.')
             
 
     def _updateSelectDataAlternatives(self):
@@ -276,20 +278,20 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
     def _addMissingTaxa(self):
         """ """
         try:
-            envmonlib.Logging().log('Adding 0 for not observed...')
-            envmonlib.Logging().startAccumulatedLogging()
+            toolbox_utils.Logging().log('Adding 0 for not observed...')
+            toolbox_utils.Logging().start_accumulated_logging()
             #
             analysisdata = self._analysisdata.getData()
             if not analysisdata:        
                 return
             # 
-            envmonlib.AnalysisPrepare().addMissingTaxa(analysisdata)
+            toolbox_utils.AnalysisPrepare().addMissingTaxa(analysisdata)
             #
             self._main_activity.updateViewedDataAndTabs()    
         except UserWarning as e:
-            envmonlib.Logging().error('Failed to add 0 for not observed. ' + unicode(e))
+            toolbox_utils.Logging().error('Failed to add 0 for not observed. ' + unicode(e))
             QtGui.QMessageBox.warning(self._main_activity, 'Warning', 'Failed to add 0 for not observed. ' + unicode(e))
         finally:
-            envmonlib.Logging().logAllAccumulatedRows()
-            envmonlib.Logging().log('Add 0 for not observed is done.')
+            toolbox_utils.Logging().log_all_accumulated_rows()
+            toolbox_utils.Logging().log('Add 0 for not observed is done.')
 

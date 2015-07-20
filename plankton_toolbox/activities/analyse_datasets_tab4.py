@@ -11,6 +11,8 @@ import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 # import plankton_toolbox.toolbox.help_texts as help_texts
 # import envmonlib
+import toolbox_utils
+import toolbox_core
 
 class AnalyseDatasetsTab4(QtGui.QWidget):
     """ """

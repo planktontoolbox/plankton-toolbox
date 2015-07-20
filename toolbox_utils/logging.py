@@ -7,9 +7,10 @@
 from __future__ import unicode_literals
 
 import time
-import envmonlib
+import toolbox_utils
+import toolbox_core
 
-@envmonlib.singleton
+@toolbox_utils.singleton
 class Logging(object):
     """
     Utility class for logging.
@@ -25,9 +26,9 @@ class Logging(object):
         self._warningacc = {} # Contains accumulated warnings and counter.
         self._erroracc = {} # Contains accumulated errors and counter.
         #
-        self.setLogTarget(DefaultLogTarget())
+        self.set_log_target(DefaultLogTarget())
         
-    def setLogTarget(self, target):
+    def set_log_target(self, target):
         """ Target must be an object containing a method named writeToLog(message). """
         self._logtarget = target
 
@@ -89,12 +90,12 @@ class Logging(object):
         else:
             self.log(message)
             
-    def startAccumulatedLogging(self):
+    def start_accumulated_logging(self):
         """ """
         self.clear()
         self._accumulatedloggingactive = True
         
-    def logAllAccumulatedRows(self):
+    def log_all_accumulated_rows(self):
         """ """
         errorcount = sum(self._erroracc.values())
         warningcount = sum(self._warningacc.values())
@@ -102,9 +103,9 @@ class Logging(object):
         if (errorcount > 0) or (warningcount > 0):
             self._accumulatedloggingactive = False
             self.log('Accumulated log summary:')
-            self.logAllInfoRows()
-            self.logAllWarnings()
-            self.logAllErrors()        
+            self.log_all_info_rows()
+            self.log_all_warnings()
+            self.log_all_errors()       
             if errorcount == 0:
                 self.log('- Errors: 0.')
             else:
@@ -115,7 +116,7 @@ class Logging(object):
                 self.log('- WARNINGS: ' + unicode(warningcount) + '.')
             self.clear()
         
-    def logAllInfoRows(self):
+    def log_all_info_rows(self):
         """ Log all the content in the accumulated info row list. """
         for message in sorted(self._infoacc):
             count = self._infoacc[message]
@@ -124,7 +125,7 @@ class Logging(object):
             else:
                 self.log('- ' + message + '   (' + unicode(count) + ' times)')
         
-    def getAllInfoRows(self):
+    def get_all_info_rows(self):
         """ Returns a list of strings. """
         result = []
         for message in sorted(self._infoacc):
@@ -135,7 +136,7 @@ class Logging(object):
                 self.log('- ' + message + '   (' + unicode(count) + ' times)')
         return result
         
-    def logAllWarnings(self):
+    def log_all_warnings(self):
         """ Log all the content in the accumulated warning list. """
         for message in sorted(self._warningacc):
             count = self._warningacc[message]
@@ -144,7 +145,7 @@ class Logging(object):
             else:
                 self.log('- ' + message + '   (' + unicode(count) + ' times)')
         
-    def getAllWarnings(self):
+    def get_all_warnings(self):
         """ Returns a list of strings. """
         result = []
         for message in sorted(self._warningacc):
@@ -155,7 +156,7 @@ class Logging(object):
                 self.log('- ' + message + '   (' + unicode(count) + ' times)')
         return result
         
-    def logAllErrors(self):
+    def log_all_errors(self):
         """ Log all the content in the accumulated error list. """
         for message in sorted(self._erroracc):
             count = self._erroracc[message]
@@ -164,7 +165,7 @@ class Logging(object):
             else:
                 self.log('- ' + message + '   (' + unicode(count) + ' times)')
 
-    def getAllErrors(self):
+    def get_all_errors(self):
         """ Returns a list of strings. """
         result = []
         for message in sorted(self._erroracc):

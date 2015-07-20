@@ -11,6 +11,7 @@ import zipfile
 import shutil
 import tempfile
 import toolbox_utils
+import toolbox_core
 
 class SharkArchive():
     """ """
@@ -203,18 +204,18 @@ class SharkArchive():
 
     def update_archive_file(self):
         """ """
-        zip_entries = []
+        entries_to_remove = []
         if self._data_tableobject is not None:
-            zip_entries.append('shark_data.txt')
+            entries_to_remove.append('shark_data.txt')
         if self._metadata_text is not None:
-            zip_entries.append('shark_metadata.txt')
+            entries_to_remove.append('shark_metadata.txt')
         if self._metadataauto_text is not None:
-            zip_entries.append('shark_metadata_auto.txt')
+            entries_to_remove.append('shark_metadata_auto.txt')
         #
-        if len(zip_entries) > 0:
+        if len(entries_to_remove) > 0:
             self._remove_entries_from_zip(self._file_path, 
                                           self._archive_filename, 
-                                          zip_entries)
+                                          entries_to_remove)
             #
             zip_namepath = os.path.join(self._file_path, self._archive_filename)
             zip_write = zipfile.ZipFile(zip_namepath, 'a', zipfile.ZIP_DEFLATED) # Append to zip.
@@ -255,7 +256,7 @@ class SharkArchive():
         #
         return datasetname, datatype, version
 
-    def _remove_entries_from_zip(self, zip_file_path, zip_file_name, entries):
+    def _remove_entries_from_zip(self, zip_file_path, zip_file_name, entries_to_remove):
         """ There is no method in Python for this. 
             Copy everything else to a temporary zip file and rename when finished. """
         tmpdir = tempfile.mkdtemp()
@@ -265,7 +266,7 @@ class SharkArchive():
             zip_read = zipfile.ZipFile(zip_file, 'r')
             zip_write = zipfile.ZipFile(new_tmp_file, 'w', zipfile.ZIP_DEFLATED)
             for item in zip_read.infolist():
-                if item.filename not in entries:
+                if item.filename not in entries_to_remove:
                     data = zip_read.read(item.filename)
                     zip_write.writestr(item, data)
             #

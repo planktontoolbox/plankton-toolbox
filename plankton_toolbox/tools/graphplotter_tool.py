@@ -11,7 +11,9 @@ import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.tools.tool_base as tool_base
 import json
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 import matplotlib.backends.backend_qt4agg as mpl_backend
 import matplotlib.figure as mpl_figure
 
@@ -42,7 +44,7 @@ class GraphPlotterTool(tool_base.ToolBase):
         self._canvas.draw()
         #
         if plot_data:
-            if isinstance(plot_data, envmonlib.GraphPlotData):
+            if isinstance(plot_data, toolbox_utils.GraphPlotData):
                 self._plotdata = plot_data
             else:
                 # Invalid type. 
@@ -98,7 +100,7 @@ class GraphPlotterTool(tool_base.ToolBase):
         self._xyplotformat_edit = QtGui.QLineEdit(""" bo, ro, g^, ys""")
         #
         self._editable_listview = utils_qt.ToolboxEditableQTableView()
-        data = envmonlib.DatasetTable()
+        data = toolbox_utils.DatasetTable()
         data.setHeader(['X label     ', 'Y label     ', 'Z label     '])
         data.appendRow(['a', 'b', 'c'])
         data.appendRow(['1', '2', '3'])
@@ -153,7 +155,7 @@ class GraphPlotterTool(tool_base.ToolBase):
         self._zformat_edit = QtGui.QLineEdit()
         # 
         self._plotlabels_editable = utils_qt.ToolboxEditableQTableView()
-        self._plotlabels_table = envmonlib.DatasetTable()
+        self._plotlabels_table = toolbox_utils.DatasetTable()
         self._plotlabels_table.setHeader(['Plot name     ', 'X-label     ', 'Y-label     ', 'Z-label     '])
         self._plotlabels_table.appendRow(['', '', '', ''])
         self._plotlabels_editable.tablemodel.setModeldata(self._plotlabels_table)
@@ -333,41 +335,41 @@ class GraphPlotterTool(tool_base.ToolBase):
                 return
             # Draw selected chart.
             if selectedchart == 'Line chart':
-                self._current_chart = envmonlib.LineChart(self._plotdata, figure = figure)
+                self._current_chart = toolbox_utils.LineChart(self._plotdata, figure = figure)
                 self._current_chart.plotChart(combined = combined, stacked = stacked, y_log_scale = ylogscale)        
                 self._canvas.draw()
             #
             if selectedchart == 'Bar chart':
-                self._current_chart = envmonlib.BarChart(self._plotdata, figure = figure)
+                self._current_chart = toolbox_utils.BarChart(self._plotdata, figure = figure)
                 self._current_chart.plotChart(combined = combined, stacked = stacked, y_log_scale = ylogscale)                
                 self._canvas.draw()
             #
             if selectedchart == 'Scatter chart':
-                self._current_chart = envmonlib.ScatterChart(self._plotdata, figure = figure)
+                self._current_chart = toolbox_utils.ScatterChart(self._plotdata, figure = figure)
                 self._current_chart.plotChart(combined = combined, y_log_scale = ylogscale)                
                 self._canvas.draw()
             #
             if selectedchart == 'Pie chart':
-                self._current_chart = envmonlib.PieChart(self._plotdata, figure = figure)
+                self._current_chart = toolbox_utils.PieChart(self._plotdata, figure = figure)
                 self._current_chart.plotChart()        
                 self._canvas.draw()
             #
             if selectedchart == 'Boxplot chart':
-                self._current_chart = envmonlib.BoxPlotChart(self._plotdata, figure = figure)
+                self._current_chart = toolbox_utils.BoxPlotChart(self._plotdata, figure = figure)
                 self._current_chart.plotChart(y_log_scale = ylogscale)        
                 self._canvas.draw()
             #
             if selectedchart == 'Map chart':
-                self._current_chart = envmonlib.MapChart(self._plotdata, figure = figure)
+                self._current_chart = toolbox_utils.MapChart(self._plotdata, figure = figure)
                 self._current_chart.plotChart()        
                 self._canvas.draw()
         #    
         except UserWarning, e:
             QtGui.QMessageBox.warning(self, "Warning", unicode(e))
-            envmonlib.Logging().warning(unicode(e))
+            toolbox_utils.Logging().warning(unicode(e))
         except Exception, e:
             QtGui.QMessageBox.warning(self, "Error", unicode(e))
-            envmonlib.Logging().error(unicode(e))
+            toolbox_utils.Logging().error(unicode(e))
             raise
 
     def _resetLabels(self):

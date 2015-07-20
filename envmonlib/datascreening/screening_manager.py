@@ -6,9 +6,11 @@
 #
 from __future__ import unicode_literals
 
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
-@envmonlib.singleton
+@toolbox_utils.singleton
 class ScreeningManager(object):
     """ """
     def __init__(self,
@@ -43,7 +45,7 @@ class ScreeningManager(object):
                 self._loadCodeLists(excelfilename)                
         #
         except Exception as e:
-            envmonlib.Logging().error('Failed when loading code lists. Exception: ' + unicode(e))
+            toolbox_utils.Logging().error('Failed when loading code lists. Exception: ' + unicode(e))
 #        # Used for DEBUG:
 #        import locale
 #        import codecs
@@ -57,8 +59,8 @@ class ScreeningManager(object):
     def _loadCodeLists(self, excel_file_name):
         """ """
         # Get data from Excel file.
-        tabledataset = envmonlib.DatasetTable()
-        envmonlib.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
+        tabledataset = toolbox_utils.DatasetTable()
+        toolbox_utils.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
         #
         for row in tabledataset.getRows():
             codetype = row[0]
@@ -85,7 +87,7 @@ class ScreeningManager(object):
                     if key in self.getCodeTypes():
                         checked_codetypes_set.add(key)
                         if data_dict[key] not in self.getCodes(key):
-                            envmonlib.Logging().warning('Visit level. Code is not valid.  Code type: ' + unicode(key) + '  Code: ' + unicode(data_dict[key]))
+                            toolbox_utils.Logging().warning('Visit level. Code is not valid.  Code type: ' + unicode(key) + '  Code: ' + unicode(data_dict[key]))
                 #
                 for samplenode in visitnode.getChildren():
                     #
@@ -94,7 +96,7 @@ class ScreeningManager(object):
                         if key in self.getCodeTypes():
                             checked_codetypes_set.add(key)
                             if data_dict[key] not in self.getCodes(key):
-                                envmonlib.Logging().warning('Sample level. Code is not valid.  Code type: ' + unicode(key) + '  Code: ' + unicode(data_dict[key]))
+                                toolbox_utils.Logging().warning('Sample level. Code is not valid.  Code type: ' + unicode(key) + '  Code: ' + unicode(data_dict[key]))
                     #                        
                     for variablenode in samplenode.getChildren():
                         #
@@ -103,13 +105,13 @@ class ScreeningManager(object):
                             if key in self.getCodeTypes():
                                 checked_codetypes_set.add(key)
                                 if data_dict[key] not in self.getCodes(key):
-                                    envmonlib.Logging().warning('Variable level. Code is not valid.  Code type: ' + unicode(key) + '  Code: ' + unicode(data_dict[key]))
+                                    toolbox_utils.Logging().warning('Variable level. Code is not valid.  Code type: ' + unicode(key) + '  Code: ' + unicode(data_dict[key]))
         # Returns set of checked code types.
         return checked_codetypes_set
 
     def speciesScreening(self, datasets):
         """ """
-        species = envmonlib.Species()
+        species = toolbox_utils.Species()
         #
         for dataset in datasets:
             #
@@ -122,11 +124,11 @@ class ScreeningManager(object):
                         data_dict = variablenode.getDataDict()
                         if 'scientific_name' in data_dict:
                             if data_dict['scientific_name'] not in species.getTaxaLookupDict():
-                                envmonlib.Logging().warning('Taxon name not in species list.  Taxon name: ' + unicode(data_dict['scientific_name']))
+                                toolbox_utils.Logging().warning('Taxon name not in species list.  Taxon name: ' + unicode(data_dict['scientific_name']))
      
     def bvolSpeciesScreening(self, datasets):
         """ """
-        species = envmonlib.Species()
+        species = toolbox_utils.Species()
         #
         for dataset in datasets:
             #
@@ -142,6 +144,6 @@ class ScreeningManager(object):
                             sizeclass = data_dict['size_class'] 
                             
                             if species.getBvolValue(taxonname, sizeclass, 'Size class') == None:
-                                envmonlib.Logging().warning('Taxon name/size clas not in BVOL list.  Taxon name: ' + unicode(taxonname) + '  Size class: ' + unicode(sizeclass))
+                                toolbox_utils.Logging().warning('Taxon name/size clas not in BVOL list.  Taxon name: ' + unicode(taxonname) + '  Size class: ' + unicode(sizeclass))
      
 

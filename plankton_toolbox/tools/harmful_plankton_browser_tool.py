@@ -9,7 +9,9 @@ from __future__ import unicode_literals
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import webbrowser
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.tools.tool_base as tool_base
 import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
@@ -105,7 +107,7 @@ class HarmfulPlanktonBrowserTool(tool_base.ToolBase):
     def _openMarineSpecies(self):
         """ Launch web browser and use show marked species at marinespecies.org. """
         if not self._marinespecies_url:
-            envmonlib.Logging().log('Failed to open www.marinespecies.org. No row selected.')
+            toolbox_utils.Logging().log('Failed to open www.marinespecies.org. No row selected.')
             return
         webbrowser.open(self._marinespecies_url)
 

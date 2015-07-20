@@ -29,21 +29,21 @@ Main modules:
 """
 
 # Module utils:
-from utils.patterns import singleton
-from utils.logging import Logging
+from toolbox_utils.patterns import singleton
+from toolbox_utils.logging import Logging
 from utils.viewformats import ViewFormats
 from utils.excelfiles import ExcelFiles
 from utils.textfiles import TextFiles
 from utils.zipfiles import ZipFileReader
 from utils.zipfiles import ZipFileWriter
-from utils.graphplotter import GraphPlotData
-from utils.graphplotter import ChartBase
-from utils.graphplotter import LineChart
-from utils.graphplotter import BarChart
-from utils.graphplotter import ScatterChart
-from utils.graphplotter import PieChart
-from utils.graphplotter import BoxPlotChart
-from utils.graphplotter import MapChart
+# from toolbox_utils.graphplotter import GraphPlotData
+# from toolbox_utils.graphplotter import ChartBase
+# from toolbox_utils.graphplotter import LineChart
+# from toolbox_utils.graphplotter import BarChart
+# from toolbox_utils.graphplotter import ScatterChart
+# from toolbox_utils.graphplotter import PieChart
+# from toolbox_utils.graphplotter import BoxPlotChart
+# from toolbox_utils.graphplotter import MapChart
 
 # Module species:
 from species.species import Species

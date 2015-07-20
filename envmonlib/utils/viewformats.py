@@ -6,9 +6,11 @@
 #
 from __future__ import unicode_literals
 
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
-@envmonlib.singleton
+@toolbox_utils.singleton
 class ViewFormats(object):
     """
     Utility class for formatting field content for viewing.
@@ -37,21 +39,21 @@ class ViewFormats(object):
             try:
                 return value
             except:
-                envmonlib.Logging().warning('Failed to parse integer value: ')
+                toolbox_utils.Logging().warning('Failed to parse integer value: ')
             return ''
         #
         elif fieldtype == 'Time':
             try:
                 return value
             except:
-                envmonlib.Logging().warning('Failed to parse integer value: ')
+                toolbox_utils.Logging().warning('Failed to parse integer value: ')
             return ''
         #
         elif fieldtype == 'Datetime':
             try:
                 return value
             except:
-                envmonlib.Logging().warning('Failed to parse integer value: ')
+                toolbox_utils.Logging().warning('Failed to parse integer value: ')
             return ''
         #
         elif fieldtype == 'Integer':
@@ -59,7 +61,7 @@ class ViewFormats(object):
                 value = value.replace(' ', '').replace(',', '.')
                 return unicode(int(round(value)))
             except:
-                envmonlib.Logging().warning('Failed to parse integer value: ')
+                toolbox_utils.Logging().warning('Failed to parse integer value: ')
             return ''
         #
         elif fieldtype == 'Float':
@@ -67,11 +69,11 @@ class ViewFormats(object):
                 cleanedvalue = value.replace(' ', '').replace(',', '.')
                 return unicode(float(cleanedvalue))
             except:
-                envmonlib.Logging().warning('Failed to parse float value: ')
+                toolbox_utils.Logging().warning('Failed to parse float value: ')
             return ''
         #
         else:
-            envmonlib.Logging().warning('Invalid import format: ' + fieldtype)
+            toolbox_utils.Logging().warning('Invalid import format: ' + fieldtype)
             return value
 
 

@@ -6,7 +6,9 @@
 #
 from __future__ import unicode_literals
 
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
 class ImportManager(object):
     """ 
@@ -38,7 +40,7 @@ class ImportManager(object):
     def importTextFile(self, filename, textfile_encoding):
         """ """
         # Select import format.
-        formatparser = envmonlib.FormatSingleFile()
+        formatparser = toolbox_utils.FormatSingleFile()
         # Phase 1: Read file into a temporary table.
                 
         sheetname = None
@@ -54,17 +56,17 @@ class ImportManager(object):
                     datarowsfrom = int(float(rowdict.get('command', '2')))
                     if datarowsfrom: datarowsfrom -= 1
 
-        tabledataset = envmonlib.DatasetTable()
-        envmonlib.TextFiles().readToTableDataset(tabledataset, filename, 
+        tabledataset = toolbox_utils.DatasetTable()
+        toolbox_utils.TextFiles().readToTableDataset(tabledataset, filename, 
                                                  encoding = textfile_encoding,
                                                  header_row = headerrow,
                                                  data_rows_from = datarowsfrom)
         #
-        envmonlib.Logging().info('Loading file. Header content: ' +  
+        toolbox_utils.Logging().info('Loading file. Header content: ' +  
                                  unicode(tabledataset.getHeader()))
         
         # Phase 2: Parse the table and create a corresponding tree structure.
-        targetdataset = envmonlib.DatasetNode()
+        targetdataset = toolbox_utils.DatasetNode()
         #
         targetdataset.setDatasetParserRows(self._importrows)
         targetdataset.setExportTableColumns(self._columnsinfo)
@@ -82,7 +84,7 @@ class ImportManager(object):
     def importExcelFile(self, filename):
         """ """
         # Select import format.
-        formatparser = envmonlib.FormatSingleFile()
+        formatparser = toolbox_utils.FormatSingleFile()
         # Phase 1: Read file into a temporary table.
                 
         sheetname = None
@@ -104,23 +106,23 @@ class ImportManager(object):
 #                if rowdict['Key'] == 'Excel sheet name':
 #                    sheetname = rowdict.get('Command', None)
 #                if rowdict['Key'] == 'Header row':
-#                    headerrow = envmonlib.ViewFormats().format(rowdict.get('Command', '1'), 'Integer')
+#                    headerrow = toolbox_utils.ViewFormats().format(rowdict.get('Command', '1'), 'Integer')
 #                    if headerrow: headerrow -= 1
 #                if rowdict['Key'] == 'First data row':
-#                    datarowsfrom = envmonlib.ViewFormats().format(rowdict.get('Command', '2'), 'Integer')
+#                    datarowsfrom = toolbox_utils.ViewFormats().format(rowdict.get('Command', '2'), 'Integer')
 #                    if datarowsfrom: datarowsfrom -= 1
         
-        tabledataset = envmonlib.DatasetTable()
-        envmonlib.ExcelFiles().readToTableDataset(tabledataset, filename,
+        tabledataset = toolbox_utils.DatasetTable()
+        toolbox_utils.ExcelFiles().readToTableDataset(tabledataset, filename,
                                                   sheet_name = sheetname,
                                                   header_row = headerrow,
                                                   data_rows_from = datarowsfrom)
         #
-        envmonlib.Logging().info('Loading file. Header content: ' +  
+        toolbox_utils.Logging().info('Loading file. Header content: ' +  
                                  unicode(tabledataset.getHeader()))
 
         # Phase 2: Parse the table and create a corresponding tree structure.
-        targetdataset = envmonlib.DatasetNode()
+        targetdataset = toolbox_utils.DatasetNode()
         #
         targetdataset.setDatasetParserRows(self._importrows)
         targetdataset.setExportTableColumns(self._columnsinfo)
@@ -139,12 +141,12 @@ class ImportManager(object):
 #        """ """
 #        #
 #        try:
-#    #        zipfile = envmonlib.ZipPackageReader(zipfilename)
-#            zipfile = envmonlib.ZipFileReader(self._zipfilepath) # TODO:
+#    #        zipfile = toolbox_utils.ZipPackageReader(zipfilename)
+#            zipfile = toolbox_utils.ZipFileReader(self._zipfilepath) # TODO:
 #            print(zipfile.listContent())
 #            
 #            
-#            formatparser = envmonlib.FormatSingleFile()
+#            formatparser = toolbox_utils.FormatSingleFile()
 #                   
 #    #        parsercolumn = self.metadata.getField('Dataset format')
 #            
@@ -165,8 +167,8 @@ class ImportManager(object):
     def _loadParserInfo(self):
         """ """
         # Read dataset parser.
-        tabledata = envmonlib.DatasetTable()
-        envmonlib.ExcelFiles().readToTableDataset(tabledata, file_name = self._parser_file_path)
+        tabledata = toolbox_utils.DatasetTable()
+        toolbox_utils.ExcelFiles().readToTableDataset(tabledata, file_name = self._parser_file_path)
         # Create import info.
         if self._import_column:
 #            self.addMetadata('Import column', self._import_column)

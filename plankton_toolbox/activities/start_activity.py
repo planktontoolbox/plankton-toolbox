@@ -8,10 +8,12 @@ from __future__ import unicode_literals
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-import envmonlib
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.activities.activity_base as activity_base
 import plankton_toolbox.toolbox.help_texts as help_texts
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
 class StartActivity(activity_base.ActivityBase):
     """

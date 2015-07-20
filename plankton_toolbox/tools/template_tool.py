@@ -9,7 +9,9 @@ from __future__ import unicode_literals
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.tools.tool_base as tool_base
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
 
 class TemplateTool(tool_base.ToolBase):
@@ -68,4 +70,4 @@ class TemplateTool(tool_base.ToolBase):
 
     def _test(self):
         """ """
-        envmonlib.Logging().log('Name: ' + unicode(self._emailedit.text()))
+        toolbox_utils.Logging().log('Name: ' + unicode(self._emailedit.text()))

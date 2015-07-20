@@ -6,9 +6,11 @@
 #
 from __future__ import unicode_literals
 
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
-class FormatSingleFile(envmonlib.ParsedFormat):
+class FormatSingleFile(toolbox_utils.ParsedFormat):
     """ Import format for single file. """
     def __init__(self):
         """ Import format for single file. """
@@ -68,7 +70,7 @@ class FormatSingleFile(envmonlib.ParsedFormat):
                         self.appendParserCommand(commandstring)
        
         except Exception as e:
-            envmonlib.Logging().warning('Failed to parse dataset: %s' % (e.args[0]) + 
+            toolbox_utils.Logging().warning('Failed to parse dataset: %s' % (e.args[0]) + 
                                         "- Command string: %s" % (commandstring))
             raise
         #
@@ -88,7 +90,7 @@ class FormatSingleFile(envmonlib.ParsedFormat):
                     exec(visitkeycommand) # Command assigns keystring.
                     currentvisit = dataset.getVisitLookup(keystring)
                     if not currentvisit:
-                        currentvisit = envmonlib.VisitNode()
+                        currentvisit = toolbox_utils.VisitNode()
                         dataset.addChild(currentvisit)    
                         currentvisit.setIdString(keystring)
                     # Check if sample exists. Create or reuse.
@@ -96,11 +98,11 @@ class FormatSingleFile(envmonlib.ParsedFormat):
                     exec(samplekeycommand) # Command assigns keystring.
                     currentsample = dataset.getSampleLookup(keystring)
                     if not currentsample:
-                        currentsample = envmonlib.SampleNode()
+                        currentsample = toolbox_utils.SampleNode()
                         currentvisit.addChild(currentsample)    
                         currentsample.setIdString(keystring)    
                     # Add all variables in row.
-                    currentvariable = envmonlib.VariableNode()
+                    currentvariable = toolbox_utils.VariableNode()
                     currentsample.addChild(currentvariable)    
                     # === Parse row and add fields on nodes. ===
                     
@@ -109,9 +111,9 @@ class FormatSingleFile(envmonlib.ParsedFormat):
                             exec(cmd['command'])
                         
                         except Exception as e:
-                            envmonlib.Logging().warning('Failed to parse command: %s' % (e.args[0]) + 
+                            toolbox_utils.Logging().warning('Failed to parse command: %s' % (e.args[0]) + 
                                                         "- Command string: %s" % (cmd['command_string']))
         #
         except Exception as e:
-            envmonlib.Logging().warning('Failed to parse dataset: %s' % (e.args[0]))
+            toolbox_utils.Logging().warning('Failed to parse dataset: %s' % (e.args[0]))
 

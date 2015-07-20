@@ -9,7 +9,7 @@ from __future__ import unicode_literals
 """
 
 
-TODO: Not used in current version. Should be rewritten and integrated with envmonlib.
+TODO: Not used in current version. Should be rewritten and integrated with toolbox_utils.
 
 
 """
@@ -27,6 +27,8 @@ TODO: Not used in current version. Should be rewritten and integrated with envmo
 # #import json
 # import string
 # import envmonlib
+import toolbox_utils
+import toolbox_core
 # import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 # import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
 # 
@@ -73,7 +75,7 @@ TODO: Not used in current version. Should be rewritten and integrated with envmo
 #         self._createNameTypeDict() # Maps from name type id to name type.
 #         
 #         # === TAXON file ===
-#         envmonlib.Logging().log('Reading: ' + dir + '/dyntaxa_taxon.txt')
+#         toolbox_utils.Logging().log('Reading: ' + dir + '/dyntaxa_taxon.txt')
 #         txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
 #         taxonFile = codecs.open(dir + '/dyntaxa_taxon.txt', mode = 'r', encoding = txtencode)
 #         separator = '\t' # Tab as separator.
@@ -118,11 +120,11 @@ TODO: Not used in current version. Should be rewritten and integrated with envmo
 #                 if not(taxonid in self._idToTaxon):
 #                     self._idToTaxon[taxonid] = taxonDict # Updates Taxa object.
 #                 else:
-#                     envmonlib.Logging().log('Duplicate taxon id: ' + str(taxonid) )
+#                     toolbox_utils.Logging().log('Duplicate taxon id: ' + str(taxonid) )
 #         taxonFile.close()
 #         
 #         # === HIER file ===
-#         envmonlib.Logging().log('Reading: ' + dir + '/dyntaxa_hier.txt')
+#         toolbox_utils.Logging().log('Reading: ' + dir + '/dyntaxa_hier.txt')
 #         txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
 #         hierFile = codecs.open(dir + '/dyntaxa_hier.txt', mode = 'r', encoding = txtencode)
 #         separator = '\t' # Tab as separator.
@@ -164,11 +166,11 @@ TODO: Not used in current version. Should be rewritten and integrated with envmo
 #                         elif relationid == 2:
 #                             taxon['Parent id'] = agarid
 #                     else:
-#                         envmonlib.Logging().info('Can not find Taxon id(hier): ' + underid)
+#                         toolbox_utils.Logging().info('Can not find Taxon id(hier): ' + underid)
 #         hierFile.close()
 #         
 #         # === NAMES file ===
-#         envmonlib.Logging().log('Reading: ' + dir + '/dyntaxa_names.txt')
+#         toolbox_utils.Logging().log('Reading: ' + dir + '/dyntaxa_names.txt')
 #         txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
 #         namesFile = codecs.open(dir + '/dyntaxa_names.txt', mode = 'r', encoding = txtencode)
 #         separator = '\t' # Tab as separator.
@@ -222,7 +224,7 @@ TODO: Not used in current version. Should be rewritten and integrated with envmo
 #                             taxon['Scientific name'] = namn
 #                             taxon['Scientific name author'] = auktor
 #                     else:
-#                         envmonlib.Logging().info('Can not find Taxon id(name): ' + str(underid))                
+#                         toolbox_utils.Logging().info('Can not find Taxon id(name): ' + str(underid))                
 #         namesFile.close()
 #         
 #     def _cleanUpString(self,value):
@@ -301,7 +303,7 @@ TODO: Not used in current version. Should be rewritten and integrated with envmo
 #         self._header = []
 #         self._taxa = self._taxaObject.getTaxonList()
 #         
-#         envmonlib.Logging().log('Reading: ' + file)
+#         toolbox_utils.Logging().log('Reading: ' + file)
 #         txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
 # 
 #         
@@ -357,7 +359,7 @@ TODO: Not used in current version. Should be rewritten and integrated with envmo
 #                                     # Use string format if not valid numeric. 
 #                                     sizeClassDict[self._header[column]] = value.strip()
 #                                     
-# #                                    envmonlib.Logging().info('ERROR float:' + value + '     ' + value.strip().replace(',', '.').replace(' ', ''))
+# #                                    toolbox_utils.Logging().info('ERROR float:' + value + '     ' + value.strip().replace(',', '.').replace(' ', ''))
 #                                     
 #                             else:
 #                                 sizeClassDict[self._header[column]] = value.strip()
@@ -562,7 +564,7 @@ TODO: Not used in current version. Should be rewritten and integrated with envmo
 #             taxon = dyntaxa.getTaxonByName(translate_dict.get(pegname, ''))
 #             if taxon:
 #                 pegtaxon['Dyntaxa id'] = taxon['Taxon id']
-#                 envmonlib.Logging().log('PEG to Dyntaxa translation file used. PEG name: ' + pegname)                           
+#                 toolbox_utils.Logging().log('PEG to Dyntaxa translation file used. PEG name: ' + pegname)                           
 #             
 #         print('DEBUG: Dyntaxa added to PEG.')
 #        
@@ -584,7 +586,7 @@ TODO: Not used in current version. Should be rewritten and integrated with envmo
 #         toolbox_resources.ToolboxResources().loadUnloadedResourceDyntaxa()
 #         dyntaxa = toolbox_resources.ToolboxResources().getResourceDyntaxa()
 #         #
-#         envmonlib.Logging().log('Reading: ' + file)
+#         toolbox_utils.Logging().log('Reading: ' + file)
 #         txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
 #         harmfulFile = codecs.open(file, mode = 'r', encoding = txtencode)
 #         separator = '\t' # Tab as separator.

@@ -11,7 +11,9 @@ import PyQt4.QtCore as QtCore
 import plankton_toolbox.tools.tool_manager as tool_manager
 # import plankton_toolbox.toolbox.utils_qt as utils_qt
 # import plankton_toolbox.toolbox.help_texts as help_texts
-import envmonlib
+# import envmonlib
+import toolbox_utils
+import toolbox_core
 
 class AnalyseDatasetsTab5(QtGui.QWidget):
     """ """
@@ -109,7 +111,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         selectedparameter = unicode(self._parameter_list.currentText())
         # 
         if not subplot_only:
-            self._plotdata = envmonlib.GraphPlotData(
+            self._plotdata = toolbox_utils.GraphPlotData(
                                     title = 'Time series', 
                                     x_type = 'date',
                                     y_type = 'float',
@@ -140,7 +142,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         selectedparameter = unicode(self._parameter_list.currentText())
         # 
         if not subplot_only:
-            self._plotdata = envmonlib.GraphPlotData(
+            self._plotdata = toolbox_utils.GraphPlotData(
                                     title = 'Seasonal cycle', 
                                     x_type = 'date',
 #                                     x_format = '%Y-%m-%d',
@@ -170,7 +172,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         # Which parameter is selected?
         selectedparameter = unicode(self._parameter_list.currentText())
         # 
-        plotdata = envmonlib.GraphPlotData(
+        plotdata = toolbox_utils.GraphPlotData(
 #                                 title = 'Values for taxa / station and date', 
                                 title = selectedparameter, 
                                 x_type = 'text',
@@ -198,7 +200,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         # Which parameter is selected?
         selectedparameter = unicode(self._parameter_list.currentText())
         # 
-        plotdata = envmonlib.GraphPlotData(
+        plotdata = toolbox_utils.GraphPlotData(
                                 title = selectedparameter, 
                                 x_type = 'text',
                                 y_type = 'float',
@@ -311,7 +313,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                         try:
                             visit_taxon_dict[visit][taxonname] += float(value)
                         except:
-                            envmonlib.Logging().warning('Float conversion (2) failed: Station: ' + visit + 
+                            toolbox_utils.Logging().warning('Float conversion (2) failed: Station: ' + visit + 
                                    ' Taxon name: ' + taxonname + 
                                    ' Parameter: ' + selectedparameter + 
                                    ' Value: ' + unicode(variablenode.getData('value')))
@@ -376,7 +378,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                         try:
                             taxon_visit_dict[taxonname][visit] += float(value)
                         except:
-                            envmonlib.Logging().warning('Float conversion failed: Visit: ' + visit + 
+                            toolbox_utils.Logging().warning('Float conversion failed: Visit: ' + visit + 
                                    ' Taxon name: ' + taxonname + 
                                    ' Parameter: ' + selectedparameter + 
                                    ' Value: ' + unicode(variablenode.getData('value')))
