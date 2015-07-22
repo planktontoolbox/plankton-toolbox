@@ -11,6 +11,22 @@ from __future__ import unicode_literals
 """
 from shark_archive import SharkArchive
 
+# Module datasets:
+from dataset_manager import Datasets
+from dataset_manager import DatasetBase
+from dataset_manager import DatasetTable
+from dataset_manager import DataNode
+from dataset_manager import DatasetNode
+from dataset_manager import VisitNode
+from dataset_manager import SampleNode
+from dataset_manager import VariableNode
+
+# Module dataanalysis: 
+from analysis_manager import AnalysisData
+from analysis_manager import AnalysisPrepare
+from analysis_manager import ReportData
+from analysis_manager import StatisticalData
+
 # # Module utils:
 # from utils.patterns import singleton
 # from utils.logging import Logging

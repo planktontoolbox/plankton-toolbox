@@ -87,9 +87,9 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
         """ """
         self._main_activity.viewAnalysisData()
 #         self._analysisdata.setData(None)    
-        self._main_activity.getAnalysisData().clearData()    
-        self._main_activity.getStatisticalData().clearData()    
-        self._main_activity.getReportData().clearData()    
+        self._main_activity.getAnalysisData().clear_data()    
+        self._main_activity.getStatisticalData().clear_data()    
+        self._main_activity.getReportData().clear_data()    
         self._main_activity.updateViewedDataAndTabs() 
 
     def _copyDatasetsForAnalysis(self):
@@ -100,18 +100,18 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
             #
             self._main_activity.viewAnalysisData()
             # Clear analysis data
-            self._analysisdata.clearData()
+            self._analysisdata.clear_data()
             self._main_activity.updateViewedDataAndTabs() 
             # Create a list of selected datasets.        
             datasets = []
             for rowindex in range(self._loaded_datasets_model.rowCount()):
                 item = self._loaded_datasets_model.item(rowindex, 0)
                 if item.checkState() == QtCore.Qt.Checked:        
-                    datasets.append(toolbox_utils.Datasets().getDatasets()[rowindex])
+                    datasets.append(toolbox_core.Datasets().getDatasets()[rowindex])
             # Use the datasets for analysis.
-            self._analysisdata.copyDatasetsToAnalysisData(datasets)  
+            self._analysisdata.copy_datasets_to_analysis_data(datasets)  
             # Check.
-            if (self._analysisdata.getData() == None) or (len(self._analysisdata.getData().getChildren()) == 0):
+            if (self._analysisdata.get_data() == None) or (len(self._analysisdata.get_data().getChildren()) == 0):
                 toolbox_utils.Logging().log('Selected datasets are empty.')
                 raise UserWarning('Selected datasets are empty.')
             self._main_activity.updateViewedDataAndTabs() 

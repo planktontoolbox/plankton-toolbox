@@ -35,14 +35,14 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
     def update(self):
         """ """
         self.clear()
-        analysisdata = self._analysisdata.getData()
+        analysisdata = self._analysisdata.get_data()
         if analysisdata:        
             # Search for all parameters in analysis data.
             parameterset = set()
             for visitnode in analysisdata.getChildren():
                 for samplenode in visitnode.getChildren():
                     for variablenode in samplenode.getChildren():
-                        parameterset.add(variablenode.getData('parameter') + ' (' + variablenode.getData('unit') + ')')
+                        parameterset.add(variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')')
             parameterlist = sorted(parameterset)
             self._parameter_list.addItems(parameterlist)
 
@@ -103,8 +103,8 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         if not subplot_only:
             graphtool.clearPlotData()
         # Filtered data should be used.
-        self._main_activity.updateFilter() # Must be done before createFilteredDataset().
-        analysisdata = self._analysisdata.createFilteredDataset()
+        self._main_activity.updateFilter() # Must be done before create_filtered_dataset().
+        analysisdata = self._analysisdata.create_filtered_dataset()
         if not analysisdata:
             return # Can't plot from empty dataset
         # Which parameter is selected?
@@ -134,8 +134,8 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         if not subplot_only:
             graphtool.clearPlotData()
         # Filtered data should be used.
-        self._main_activity.updateFilter() # Must be done before createFilteredDataset().
-        analysisdata = self._analysisdata.createFilteredDataset()
+        self._main_activity.updateFilter() # Must be done before create_filtered_dataset().
+        analysisdata = self._analysisdata.create_filtered_dataset()
         if not analysisdata:
             return # Can't plot from empty dataset
         # Which parameter is selected?
@@ -165,8 +165,8 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         graphtool = tool_manager.ToolManager().getToolByName('Graph plotter')
         graphtool.clearPlotData()
         # Filtered data should be used.
-        self._main_activity.updateFilter() # Must be done before createFilteredDataset().
-        analysisdata = self._analysisdata.createFilteredDataset()
+        self._main_activity.updateFilter() # Must be done before create_filtered_dataset().
+        analysisdata = self._analysisdata.create_filtered_dataset()
         if not analysisdata:
             return # Can't plot from empty dataset
         # Which parameter is selected?
@@ -193,8 +193,8 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         graphtool = tool_manager.ToolManager().getToolByName('Graph plotter')
         graphtool.clearPlotData()
         # Filtered data should be used.
-        self._main_activity.updateFilter() # Must be done before createFilteredDataset().
-        analysisdata = self._analysisdata.createFilteredDataset()
+        self._main_activity.updateFilter() # Must be done before create_filtered_dataset().
+        analysisdata = self._analysisdata.create_filtered_dataset()
         if not analysisdata:
             return # Can't plot from empty dataset
         # Which parameter is selected?
@@ -221,12 +221,12 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         date_list = []
         value_list = [] 
         for visitnode in dataset.getChildren():
-            date = visitnode.getData('date')
+            date = visitnode.get_data('date')
             for samplenode in visitnode.getChildren():
                 for variablenode in samplenode.getChildren():
-                    parameter = variablenode.getData('parameter') + ' (' + variablenode.getData('unit') + ')'
+                    parameter = variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')'
                     if parameter == selectedparameter:                        
-                        value = variablenode.getData('value')
+                        value = variablenode.get_data('value')
                         date_list.append(date)
                         value_list.append(value)               
         #                
@@ -249,7 +249,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         value_list = [] 
         for visitnode in dataset.getChildren():
             # Replace year with '0000' seasonal cycle.
-            date = visitnode.getData('date')
+            date = visitnode.get_data('date')
             try: 
                 date = unicode('2000' + date[4:])
             except:
@@ -257,9 +257,9 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
             #
             for samplenode in visitnode.getChildren():
                 for variablenode in samplenode.getChildren():
-                    parameter = variablenode.getData('parameter') + ' (' + variablenode.getData('unit') + ')'
+                    parameter = variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')'
                     if parameter == selectedparameter:                        
-                        value = variablenode.getData('value')
+                        value = variablenode.get_data('value')
                         date_list.append(date)
                         value_list.append(value)               
         #                
@@ -279,13 +279,13 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         taxon_set = set()
         for visitnode in dataset.getChildren():
             #
-            visit_set.add(unicode(visitnode.getData('station_name')) + ' : ' + unicode(visitnode.getData('date'))) # Station name
+            visit_set.add(unicode(visitnode.get_data('station_name')) + ' : ' + unicode(visitnode.get_data('date'))) # Station name
             #
             for samplenode in visitnode.getChildren():
                 #
                 for variablenode in samplenode.getChildren():
                     #
-                    taxonname = variablenode.getData('scientific_name')
+                    taxonname = variablenode.get_data('scientific_name')
                     if taxonname:
                         taxon_set.add(taxonname)
                     else:
@@ -299,24 +299,24 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         # Step 3: Fill with data.
         for visitnode in dataset.getChildren():
             #
-            visit = (unicode(visitnode.getData('station_name')) + ' : ' + unicode(visitnode.getData('date')))
+            visit = (unicode(visitnode.get_data('station_name')) + ' : ' + unicode(visitnode.get_data('date')))
             for samplenode in visitnode.getChildren():
                 #
                 for variablenode in samplenode.getChildren():
                     #
-                    taxonname = variablenode.getData('scientific_name')
+                    taxonname = variablenode.get_data('scientific_name')
                     if not taxonname:
                         taxonname = '---'
-                    parameter = variablenode.getData('parameter') + ' (' + variablenode.getData('unit') + ')'
+                    parameter = variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')'
                     if parameter == selectedparameter:                        
-                        value = variablenode.getData('value')
+                        value = variablenode.get_data('value')
                         try:
                             visit_taxon_dict[visit][taxonname] += float(value)
                         except:
                             toolbox_utils.Logging().warning('Float conversion (2) failed: Station: ' + visit + 
                                    ' Taxon name: ' + taxonname + 
                                    ' Parameter: ' + selectedparameter + 
-                                   ' Value: ' + unicode(variablenode.getData('value')))
+                                   ' Value: ' + unicode(variablenode.get_data('value')))
                             ###raise        
         # Step 4: Reorganize.
         visit_list = sorted(visit_set)
@@ -343,13 +343,13 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         taxon_set = set()
         for visitnode in dataset.getChildren():
             #
-            visit_set.add(unicode(visitnode.getData('station_name')) + ' : ' + unicode(visitnode.getData('date'))) # Station name
+            visit_set.add(unicode(visitnode.get_data('station_name')) + ' : ' + unicode(visitnode.get_data('date'))) # Station name
             #
             for samplenode in visitnode.getChildren():
                 #
                 for variablenode in samplenode.getChildren():
                     #
-                    taxonname = variablenode.getData('scientific_name')
+                    taxonname = variablenode.get_data('scientific_name')
                     if taxonname:
                         taxon_set.add(taxonname)
                     else:
@@ -364,24 +364,24 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         # Step 3: Fill with data.
         for visitnode in dataset.getChildren():
             #
-            visit = (unicode(visitnode.getData('station_name')) + ' : ' + unicode(visitnode.getData('date')))
+            visit = (unicode(visitnode.get_data('station_name')) + ' : ' + unicode(visitnode.get_data('date')))
             for samplenode in visitnode.getChildren():
                 #
                 for variablenode in samplenode.getChildren():
                     #
-                    taxonname = variablenode.getData('scientific_name')
+                    taxonname = variablenode.get_data('scientific_name')
                     if not taxonname:
                         taxonname = '---'
-                    parameter = variablenode.getData('parameter') + ' (' + variablenode.getData('unit') + ')'
+                    parameter = variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')'
                     if parameter == selectedparameter:                        
-                        value = variablenode.getData('value')
+                        value = variablenode.get_data('value')
                         try:
                             taxon_visit_dict[taxonname][visit] += float(value)
                         except:
                             toolbox_utils.Logging().warning('Float conversion failed: Visit: ' + visit + 
                                    ' Taxon name: ' + taxonname + 
                                    ' Parameter: ' + selectedparameter + 
-                                   ' Value: ' + unicode(variablenode.getData('value')))
+                                   ' Value: ' + unicode(variablenode.get_data('value')))
                             ###raise        
         # Step 4: Reorganize.
         visit_list = sorted(visit_set)

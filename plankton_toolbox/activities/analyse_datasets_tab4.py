@@ -165,7 +165,7 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
 
     def _updateFilterAlternatives(self):
         """ """
-        analysisdata = self._analysisdata.getData()
+        analysisdata = self._analysisdata.get_data()
         if not analysisdata:
             return # Empty data.
         #
@@ -180,22 +180,22 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         lifestage_set = set()
         #
         for visitnode in analysisdata.getChildren():
-            station_set.add(visitnode.getData('station_name'))
-            visitmonth_set.add(visitnode.getData('month'))
-            visit_set.add(unicode(visitnode.getData('station_name')) + ' : ' + unicode(visitnode.getData('date')))
-            startdate = min(startdate, visitnode.getData('date'))
-            enddate = max(enddate, visitnode.getData('date'))
+            station_set.add(visitnode.get_data('station_name'))
+            visitmonth_set.add(visitnode.get_data('month'))
+            visit_set.add(unicode(visitnode.get_data('station_name')) + ' : ' + unicode(visitnode.get_data('date')))
+            startdate = min(startdate, visitnode.get_data('date'))
+            enddate = max(enddate, visitnode.get_data('date'))
             for samplenode in visitnode.getChildren():
-                depthstring = unicode(samplenode.getData('sample_min_depth')) + '-' + unicode(samplenode.getData('sample_max_depth'))
+                depthstring = unicode(samplenode.get_data('sample_min_depth')) + '-' + unicode(samplenode.get_data('sample_max_depth'))
                 minmaxdepth_set.add(depthstring)
                 for variablenode in samplenode.getChildren():
-                    taxon_set.add(variablenode.getData('scientific_name'))
+                    taxon_set.add(variablenode.get_data('scientific_name'))
                     #
-                    trophic_type_set.add(variablenode.getData('trophic_type'))
+                    trophic_type_set.add(variablenode.get_data('trophic_type'))
                     #
-                    lifestage = variablenode.getData('stage')
-                    if variablenode.getData('sex'):
-                        lifestage += '/' + variablenode.getData('sex')
+                    lifestage = variablenode.get_data('stage')
+                    if variablenode.get_data('sex'):
+                        lifestage += '/' + variablenode.get_data('sex')
                     lifestage_set.add(lifestage)
         # Start date and end date.
         self._startdate_edit.setText(startdate)
@@ -211,15 +211,15 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
             
     def _updateFilter(self):
         """ """
-        self._analysisdata.clearFilter()
+        self._analysisdata.clear_filter()
         
-        self._analysisdata.setFilterItem('start_date', unicode(self._startdate_edit.text()))
-        self._analysisdata.setFilterItem('end_date', unicode(self._enddate_edit.text()))
-        self._analysisdata.setFilterItem('stations', self._stations_listview.getSelectedDataList())
-        self._analysisdata.setFilterItem('visit_months', self._months_listview.getSelectedDataList())
-        self._analysisdata.setFilterItem('visits', self._visits_listview.getSelectedDataList())
-        self._analysisdata.setFilterItem('min_max_depth', self._minmaxdepth_listview.getSelectedDataList())
-        self._analysisdata.setFilterItem('taxon', self._taxon_listview.getSelectedDataList())
-        self._analysisdata.setFilterItem('trophic_type', self._trophic_type_listview.getSelectedDataList())
-        self._analysisdata.setFilterItem('life_stage', self._lifestage_listview.getSelectedDataList())
+        self._analysisdata.set_filter_item('start_date', unicode(self._startdate_edit.text()))
+        self._analysisdata.set_filter_item('end_date', unicode(self._enddate_edit.text()))
+        self._analysisdata.set_filter_item('stations', self._stations_listview.getSelectedDataList())
+        self._analysisdata.set_filter_item('visit_months', self._months_listview.getSelectedDataList())
+        self._analysisdata.set_filter_item('visits', self._visits_listview.getSelectedDataList())
+        self._analysisdata.set_filter_item('min_max_depth', self._minmaxdepth_listview.getSelectedDataList())
+        self._analysisdata.set_filter_item('taxon', self._taxon_listview.getSelectedDataList())
+        self._analysisdata.set_filter_item('trophic_type', self._trophic_type_listview.getSelectedDataList())
+        self._analysisdata.set_filter_item('life_stage', self._lifestage_listview.getSelectedDataList())
         

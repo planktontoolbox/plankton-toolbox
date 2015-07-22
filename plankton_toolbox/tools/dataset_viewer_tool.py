@@ -126,12 +126,12 @@ class DatasetViewerTool(tool_base.ToolBase):
         else:
             # envmonlib:
             dataset = toolbox_datasets.ToolboxDatasets().getDatasetByIndex(index - 1)
-            if isinstance(dataset, toolbox_utils.DatasetTable):
+            if isinstance(dataset, toolbox_core.DatasetTable):
                 self._tableview.tablemodel.setModeldata(dataset)
                 self._refreshResultTable()
-            elif isinstance(dataset, toolbox_utils.DatasetNode):
+            elif isinstance(dataset, toolbox_core.DatasetNode):
                 # Tree dataset must be converted to table dataset before viewing.
-                targetdataset = toolbox_utils.DatasetTable()
+                targetdataset = toolbox_core.DatasetTable()
                 dataset.convertToTableDataset(targetdataset)
                 #
                 self._tableview.tablemodel.setModeldata(targetdataset)

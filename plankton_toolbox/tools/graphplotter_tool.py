@@ -100,7 +100,7 @@ class GraphPlotterTool(tool_base.ToolBase):
         self._xyplotformat_edit = QtGui.QLineEdit(""" bo, ro, g^, ys""")
         #
         self._editable_listview = utils_qt.ToolboxEditableQTableView()
-        data = toolbox_utils.DatasetTable()
+        data = toolbox_core.DatasetTable()
         data.setHeader(['X label     ', 'Y label     ', 'Z label     '])
         data.appendRow(['a', 'b', 'c'])
         data.appendRow(['1', '2', '3'])
@@ -155,7 +155,7 @@ class GraphPlotterTool(tool_base.ToolBase):
         self._zformat_edit = QtGui.QLineEdit()
         # 
         self._plotlabels_editable = utils_qt.ToolboxEditableQTableView()
-        self._plotlabels_table = toolbox_utils.DatasetTable()
+        self._plotlabels_table = toolbox_core.DatasetTable()
         self._plotlabels_table.setHeader(['Plot name     ', 'X-label     ', 'Y-label     ', 'Z-label     '])
         self._plotlabels_table.appendRow(['', '', '', ''])
         self._plotlabels_editable.tablemodel.setModeldata(self._plotlabels_table)

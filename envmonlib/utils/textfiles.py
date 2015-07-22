@@ -27,7 +27,7 @@ class TextFiles():
         """ """
         if file_name == None:
             raise UserWarning('File name is missing.')
-        if not isinstance(target_dataset, toolbox_utils.DatasetTable):
+        if not isinstance(target_dataset, toolbox_core.DatasetTable):
             raise UserWarning('Target dataset is not of valid type.')
         # Get encoding.
         if not encoding:
@@ -66,7 +66,7 @@ class TextFiles():
         """ """
         if file_name == None:
             raise UserWarning('File name is missing.')
-        if not isinstance(table_dataset, toolbox_utils.DatasetTable):
+        if not isinstance(table_dataset, toolbox_core.DatasetTable):
             raise UserWarning('Dataset is not of a valid type.')
         #
         if not encoding:

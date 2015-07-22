@@ -36,7 +36,7 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
     def update(self):
         """ """
         self.clear()
-        analysisdata = self._analysisdata.getData()
+        analysisdata = self._analysisdata.get_data()
         if analysisdata:        
             # For tab "Generic graphs".        
             self._column_list.addItems([item['header'] for item in analysisdata.getExportTableColumns()])
@@ -96,7 +96,7 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
 
     def _updateColumnContent(self, selected_row):
         """ """
-        analysisdata = self._analysisdata.getData()
+        analysisdata = self._analysisdata.get_data()
         if not analysisdata:
             self._content_listview.clear()
             return # Empty data.
@@ -114,14 +114,14 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
         #
         if nodelevel == 'dataset':
             if key in analysisdata.getDataDict().keys():
-                columncontent_set.add(unicode(analysisdata.getData(key)))
+                columncontent_set.add(unicode(analysisdata.get_data(key)))
             else:
                 columncontent_set.add('') # Add empty field.
         #    
         for visitnode in analysisdata.getChildren():
             if nodelevel == 'visit':
                 if key in visitnode.getDataDict().keys():
-                    columncontent_set.add(unicode(visitnode.getData(key)))
+                    columncontent_set.add(unicode(visitnode.get_data(key)))
                 else:
                     columncontent_set.add('') # Add empty field.
                 continue    
@@ -129,7 +129,7 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
             for samplenode in visitnode.getChildren():
                 if nodelevel == 'sample':
                     if key in samplenode.getDataDict().keys():
-                        columncontent_set.add(unicode(samplenode.getData(key)))
+                        columncontent_set.add(unicode(samplenode.get_data(key)))
                     else:
                         columncontent_set.add('') # Add empty field.
                     continue    
@@ -137,7 +137,7 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
                 for variablenode in samplenode.getChildren():
                     if nodelevel == 'variable':
                         if key in variablenode.getDataDict().keys():
-                            columncontent_set.add(unicode(variablenode.getData(key)))
+                            columncontent_set.add(unicode(variablenode.get_data(key)))
                         else:
                             columncontent_set.add('') # Add empty field.
                         continue    
@@ -157,6 +157,6 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
         else:
             markedcontent = self._content_listview.getNotSelectedDataList() # Note: "Not-selected" list.       
         #
-        self._analysisdata.removeData(selectedcolumn, markedcontent)
+        self._analysisdata.remove_data(selectedcolumn, markedcontent)
         #
         self._main_activity.updateViewedDataAndTabs()    

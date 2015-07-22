@@ -7,11 +7,11 @@
 from __future__ import unicode_literals
 
 import dateutil.parser
-# import envmonlib
+import envmonlib
 import toolbox_utils
 import toolbox_core
 
-class ParsedFormat(toolbox_utils.FormatBase):
+class ParsedFormat(envmonlib.FormatBase):
     """ """
     def __init__(self):
         """ Abstract class for parsed import formats. """
@@ -145,14 +145,14 @@ class ParsedFormat(toolbox_utils.FormatBase):
         """ To be called from Excel-based parser. """
         scientific_name = unicode(scientific_name)
         key = unicode(key)
-        return toolbox_utils.Species().getTaxonValue(scientific_name, key)
+        return envmonlib.Species().getTaxonValue(scientific_name, key)
 
     def _sizeclassByKey(self, scientific_name, size_class, key):
         """ To be called from Excel-based parser. """
         scientific_name = unicode(scientific_name)
         key = unicode(key)
         size_class = unicode(size_class)
-        value = toolbox_utils.Species().getBvolValue(scientific_name, size_class, key)
+        value = envmonlib.Species().getBvolValue(scientific_name, size_class, key)
         if value:
             return value
         return ''
@@ -160,7 +160,7 @@ class ParsedFormat(toolbox_utils.FormatBase):
     def _planktonGroup(self, scientific_name):
         """ To be called from Excel-based parser. """
         scientific_name = unicode(scientific_name)
-        return toolbox_utils.Species().getPlanktonGroupFromTaxonName(scientific_name)
+        return envmonlib.Species().getPlanktonGroupFromTaxonName(scientific_name)
 
     def _toStation(self, current_node, station_name, **kwargs):
         """ To be called from Excel-based parser. """
@@ -176,17 +176,17 @@ class ParsedFormat(toolbox_utils.FormatBase):
 
     def _createVariable(self, current_node, **kwargs):
         """ To be called from Excel-based parser. """
-        if isinstance(current_node, toolbox_utils.VisitNode):
-            newsample = toolbox_utils.SampleNode()
+        if isinstance(current_node, toolbox_core.VisitNode):
+            newsample = toolbox_core.SampleNode()
             current_node.addChild(newsample)
-            variable = toolbox_utils.VariableNode()
+            variable = toolbox_core.VariableNode()
             newsample.addChild(variable)
             variable.addData('parameter', kwargs['p'])    
             variable.addData('value', kwargs['v'])
             #variable.addData('value_float', kwargs['v'])    
             variable.addData('unit', kwargs['u'])    
-        if isinstance(current_node, toolbox_utils.SampleNode):
-            variable = toolbox_utils.VariableNode()
+        if isinstance(current_node, toolbox_core.SampleNode):
+            variable = toolbox_core.VariableNode()
             current_node.addChild(variable)
             variable.addData('parameter', kwargs['p'])    
             variable.addData('value', kwargs['v'])    
@@ -195,7 +195,7 @@ class ParsedFormat(toolbox_utils.FormatBase):
 
     def _copyVariable(self, current_node, **kwargs):
         """ To be called from Excel-based parser. """
-        if isinstance(current_node, toolbox_utils.VariableNode):
+        if isinstance(current_node, toolbox_core.VariableNode):
             variable = current_node.clone()
             variable.addData('parameter', kwargs['p'])    
             variable.addData('value', kwargs['v'])    
@@ -204,7 +204,7 @@ class ParsedFormat(toolbox_utils.FormatBase):
 
     def _modifyVariable(self, current_node, **kwargs):
         """ To be called from Excel-based parser. """
-        if isinstance(current_node, toolbox_utils.VariableNode):
+        if isinstance(current_node, toolbox_core.VariableNode):
             current_node.addData('parameter', kwargs['p'])    
             current_node.addData('value', kwargs['v'])
             #current_node.addData('value_float', kwargs['v'])    

@@ -78,7 +78,7 @@ class DataNode(object):
         if key:
             self._datadict[key] = value
         
-    def getData(self, key):
+    def get_data(self, key):
         """ """
         return self._datadict.get(key, '')
 
@@ -99,7 +99,7 @@ class DataNode(object):
         return self._idstring
         
         
-class DatasetNode(toolbox_utils.DatasetBase, DataNode):
+class DatasetNode(toolbox_core.DatasetBase, DataNode):
     """ This it the top node for tree datasets. 
     Note: Multiple inheritance. DataNode for data and tree structure. DatasetBase for metadata. 
     """
@@ -157,7 +157,7 @@ class DatasetNode(toolbox_utils.DatasetBase, DataNode):
 #        # Add metadata
 #        self.addMetadata('Parser', parser_file)
 #        # Read dataset parser.
-#        tabledata = toolbox_utils.DatasetTable()
+#        tabledata = toolbox_core.DatasetTable()
 #        toolbox_utils.ExcelFiles().readToTableDataset(tabledata, file_name = parser_file)
 #        # Create import info.
 #        if import_column:
@@ -201,13 +201,13 @@ class DatasetNode(toolbox_utils.DatasetBase, DataNode):
 
     def saveAsTextFile(self, file_name):
         """ """
-        targetdataset = toolbox_utils.DatasetTable()
+        targetdataset = toolbox_core.DatasetTable()
         self.convertToTableDataset(targetdataset)
         toolbox_utils.TextFiles().writeTableDataset(targetdataset, file_name)
 
     def saveAsExcelFile(self, file_name):
         """ """
-        targetdataset = toolbox_utils.DatasetTable()
+        targetdataset = toolbox_core.DatasetTable()
         self.convertToTableDataset(targetdataset)
         toolbox_utils.ExcelFiles().writeTableDataset(targetdataset, file_name)       
         
@@ -220,7 +220,7 @@ class DatasetNode(toolbox_utils.DatasetBase, DataNode):
         #
         if not target_dataset:
             raise UserWarning('Target dataset is missing.')
-        if not isinstance(target_dataset, toolbox_utils.DatasetTable):
+        if not isinstance(target_dataset, toolbox_core.DatasetTable):
             raise UserWarning('Target dataset is not of valid type.')
         if not self._exporttablecolumns:
             raise UserWarning('Info for converting from tree to table dataset is missing.')
@@ -237,13 +237,13 @@ class DatasetNode(toolbox_utils.DatasetBase, DataNode):
                     row = []
                     for column_info in self._exporttablecolumns:
                         if column_info.get('node', '') == 'dataset':
-                            row.append(self.getData(column_info.get('key', '---')))
+                            row.append(self.get_data(column_info.get('key', '---')))
                         elif column_info.get('node', '') == 'visit':
-                            row.append(visitnode.getData(column_info.get('key', '---')))
+                            row.append(visitnode.get_data(column_info.get('key', '---')))
                         elif column_info.get('node', '') == 'sample':
-                            row.append(samplenode.getData(column_info.get('key', '---')))
+                            row.append(samplenode.get_data(column_info.get('key', '---')))
                         elif column_info.get('node', '') == 'variable':
-                            row.append(variablenode.getData(column_info.get('key', '---')))
+                            row.append(variablenode.get_data(column_info.get('key', '---')))
                         else:
                             row.append('')
                     # To target.

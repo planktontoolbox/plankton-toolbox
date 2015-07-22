@@ -59,7 +59,7 @@ class ScreeningManager(object):
     def _loadCodeLists(self, excel_file_name):
         """ """
         # Get data from Excel file.
-        tabledataset = toolbox_utils.DatasetTable()
+        tabledataset = toolbox_core.DatasetTable()
         toolbox_utils.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
         #
         for row in tabledataset.getRows():

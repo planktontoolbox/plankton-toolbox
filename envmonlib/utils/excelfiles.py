@@ -33,7 +33,7 @@ class ExcelFiles():
         """ """
         if file_name == None:
             raise UserWarning('File name is missing.')
-        if not isinstance(target_dataset, toolbox_utils.DatasetTable):
+        if not isinstance(target_dataset, toolbox_core.DatasetTable):
             raise UserWarning('Target dataset is not of valid type.')
         try:
             workbook = openpyxl.load_workbook(file_name, use_iterators = True) # Supports big files.
@@ -91,7 +91,7 @@ class ExcelFiles():
 #        """ """
 #        if file_name == None:
 #            raise UserWarning('File name is missing.')
-#        if not isinstance(target_dataset, toolbox_utils.DatasetTable):
+#        if not isinstance(target_dataset, toolbox_core.DatasetTable):
 #            raise UserWarning('Target dataset is not of valid type.')
 #        try:
 #            workbook = excelreader.load_workbook(file_name)
@@ -144,7 +144,7 @@ class ExcelFiles():
         """ """
         if file_name == None:
             raise UserWarning('File name is missing.')
-        if not isinstance(table_dataset, toolbox_utils.DatasetTable):
+        if not isinstance(table_dataset, toolbox_core.DatasetTable):
             raise UserWarning('Dataset is not of a valid type.')
         try:
             workbook =  openpyxl.Workbook(optimized_write = True)  # Supports big files.
@@ -165,7 +165,7 @@ class ExcelFiles():
 #        """ """
 #        if file_name == None:
 #            raise UserWarning('File name is missing.')
-#        if not isinstance(table_dataset, toolbox_utils.DatasetTable):
+#        if not isinstance(table_dataset, toolbox_core.DatasetTable):
 #            raise UserWarning('Dataset is not of a valid type.')
 #        try:
 #            workbook = excelworkbook.Workbook() # Create workbook.

@@ -41,14 +41,14 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
     def update(self):
         """ """
         self.clear()
-        analysisdata = self._analysisdata.getData()
+        analysisdata = self._analysisdata.get_data()
         if analysisdata:        
             # Search for all parameters in analysis data.
             parameterset = set()
             for visitnode in analysisdata.getChildren():
                 for samplenode in visitnode.getChildren():
                     for variablenode in samplenode.getChildren():
-                        parameterset.add(variablenode.getData('parameter') + ' (' + variablenode.getData('unit') + ')')
+                        parameterset.add(variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')')
             parameterlist = sorted(parameterset)
             self._parameter_list.addItems(parameterlist)
 
@@ -131,11 +131,11 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         """ """
         # Clear the statistical data and view the statistic area.
         statisticaldata = self._main_activity.getStatisticalData()
-        statisticaldata.clearData()
+        statisticaldata.clear_data()
         self._main_activity.viewStatisticalData()
         # Filtered data should be used.
-        self._main_activity.updateFilter() # Must be done before createFilteredDataset().
-        analysisdata = self._analysisdata.createFilteredDataset()
+        self._main_activity.updateFilter() # Must be done before create_filtered_dataset().
+        analysisdata = self._analysisdata.create_filtered_dataset()
         if not analysisdata:
             return # Can't create a report from an empty dataset.
         # Which parameter is selected?
@@ -174,8 +174,8 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         # Target list.
         data_dict = {}        
         # Create a dataset (table, not tree).
-        tabledata = toolbox_utils.DatasetTable()
-        reportdata.setData(tabledata)
+        tabledata = toolbox_core.DatasetTable()
+        reportdata.set_data(tabledata)
         # Header for result table.
         header_row = []
         header_row.append('Parameter')
@@ -203,8 +203,8 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         taxonkey = ''
         #
         for visitnode in dataset.getChildren():
-            visitdate = visitnode.getData('date')
-            visitstation = visitnode.getData('station_name')
+            visitdate = visitnode.get_data('date')
+            visitstation = visitnode.get_data('station_name')
             visitvisit = visitstation + ' ' + visitdate 
             visityear = unicode(visitdate[0:4])
             visitmonth = unicode(visitdate[5:7])
@@ -219,17 +219,17 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                 visitseason = 'Sep-Oct-Nov'
             #
             for samplenode in visitnode.getChildren():
-                sample_min_depth = unicode(samplenode.getData('sample_min_depth'))
-                sample_max_depth = unicode(samplenode.getData('sample_max_depth'))
+                sample_min_depth = unicode(samplenode.get_data('sample_min_depth'))
+                sample_max_depth = unicode(samplenode.get_data('sample_max_depth'))
                 sampleminmaxdepth = sample_min_depth + '-' + sample_max_depth   
                 # Iterate over sample content. 
                 # Note: Create a level between sample and variabel.
                 grouped_size_lifestages = {}
                 for variablenode in samplenode.getChildren():
-                    group_key = variablenode.getData('scientific_name')
-                    group_key += ':' + variablenode.getData('size_class') # Specific for phytoplankton.
-                    group_key += ':' + variablenode.getData('stage') # Specific for zooplankton.
-                    group_key += ':' + variablenode.getData('sex') # Specific for zooplankton.
+                    group_key = variablenode.get_data('scientific_name')
+                    group_key += ':' + variablenode.get_data('size_class') # Specific for phytoplankton.
+                    group_key += ':' + variablenode.get_data('stage') # Specific for zooplankton.
+                    group_key += ':' + variablenode.get_data('sex') # Specific for zooplankton.
                     if group_key not in grouped_size_lifestages:
                         grouped_size_lifestages[group_key] = [] # Starts a new group.
                     grouped_size_lifestages[group_key].append(variablenode)
@@ -238,10 +238,10 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                 for group_key in grouped_size_lifestages.keys():
                     #
                     for variablenode in grouped_size_lifestages[group_key]:
-                        variabletaxon = variablenode.getData('scientific_name')
+                        variabletaxon = variablenode.get_data('scientific_name')
                         # Parameters.
-                        parameter = variablenode.getData('parameter')
-                        unit = variablenode.getData('unit')
+                        parameter = variablenode.get_data('parameter')
+                        unit = variablenode.get_data('unit')
                         parameternadunit = parameter + ' (' + unit + ')'
                         if parameternadunit == selectedparameter:
                             # Build split key.
@@ -262,7 +262,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                             # Add data.
                             if splitkey not in data_dict:
                                 data_dict[splitkey] = []
-                            data_dict[splitkey].append(variablenode.getData('value'))
+                            data_dict[splitkey].append(variablenode.get_data('value'))
                              
         # Calculate result
         for key in sorted(data_dict.keys()):
@@ -320,11 +320,11 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         """ """
         # Clear the statistical data and view the statistic area.
         statisticaldata = self._main_activity.getStatisticalData()
-        statisticaldata.clearData()
+        statisticaldata.clear_data()
         self._main_activity.viewStatisticalData()
         # Filtered data should be used.
-        self._main_activity.updateFilter() # Must be done before createFilteredDataset().
-        analysisdata = self._analysisdata.createFilteredDataset()
+        self._main_activity.updateFilter() # Must be done before create_filtered_dataset().
+        analysisdata = self._analysisdata.create_filtered_dataset()
         if not analysisdata:
             return # Can't create a report from an empty dataset.
         # Which parameter is selected?
@@ -363,8 +363,8 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         # Target list.
         data_dict = {}        
         # Create a dataset (table, not tree).
-        tabledata = toolbox_utils.DatasetTable()
-        reportdata.setData(tabledata)
+        tabledata = toolbox_core.DatasetTable()
+        reportdata.set_data(tabledata)
         # Extract values.
         yearkey = ''
         monthkey = ''
@@ -375,8 +375,8 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         taxonkey = ''
         #
         for visitnode in dataset.getChildren():
-            visitdate = visitnode.getData('date')
-            visitstation = visitnode.getData('station_name')
+            visitdate = visitnode.get_data('date')
+            visitstation = visitnode.get_data('station_name')
             visitvisit = visitstation + ' ' + visitdate 
             visityear = unicode(visitdate[0:4])
             visitmonth = unicode(visitdate[5:7])
@@ -391,17 +391,17 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                 visitseason = 'Sep-Oct-Nov'
             #
             for samplenode in visitnode.getChildren():
-                sample_min_depth = unicode(samplenode.getData('sample_min_depth'))
-                sample_max_depth = unicode(samplenode.getData('sample_max_depth'))
+                sample_min_depth = unicode(samplenode.get_data('sample_min_depth'))
+                sample_max_depth = unicode(samplenode.get_data('sample_max_depth'))
                 sampleminmaxdepth = sample_min_depth + '-' + sample_max_depth   
                 # Iterate over sample content. 
                 # Note: Create a level between sample and variabel.
                 grouped_size_lifestages = {}
                 for variablenode in samplenode.getChildren():
-                    group_key = variablenode.getData('scientific_name')
-                    group_key += ':' + variablenode.getData('size_class') # Specific for phytoplankton.
-                    group_key += ':' + variablenode.getData('stage') # Specific for zooplankton.
-                    group_key += ':' + variablenode.getData('sex') # Specific for zooplankton.
+                    group_key = variablenode.get_data('scientific_name')
+                    group_key += ':' + variablenode.get_data('size_class') # Specific for phytoplankton.
+                    group_key += ':' + variablenode.get_data('stage') # Specific for zooplankton.
+                    group_key += ':' + variablenode.get_data('sex') # Specific for zooplankton.
                     if group_key not in grouped_size_lifestages:
                         grouped_size_lifestages[group_key] = [] # Starts a new group.
                     grouped_size_lifestages[group_key].append(variablenode)
@@ -410,10 +410,10 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                 for group_key in grouped_size_lifestages.keys():
                     #
                     for variablenode in grouped_size_lifestages[group_key]:
-                        variabletaxon = variablenode.getData('scientific_name')
+                        variabletaxon = variablenode.get_data('scientific_name')
                         # Parameters.
-                        parameter = variablenode.getData('parameter')
-                        unit = variablenode.getData('unit')
+                        parameter = variablenode.get_data('parameter')
+                        unit = variablenode.get_data('unit')
                         parameternadunit = parameter + ' (' + unit + ')'
                         if parameternadunit == selectedparameter:
                             # Build split key.
@@ -434,7 +434,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                             # Add data.
                             if splitkey not in data_dict:
                                 data_dict[splitkey] = []
-                            data_dict[splitkey].append(variablenode.getData('value'))
+                            data_dict[splitkey].append(variablenode.get_data('value'))
                              
         # Create empty result table.
         resulttable = []
@@ -494,8 +494,8 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         graphtool = tool_manager.ToolManager().getToolByName('Graph plotter')
         graphtool.clearPlotData()
         # Filtered data should be used.
-        self._main_activity.updateFilter() # Must be done before createFilteredDataset().
-        analysisdata = self._analysisdata.createFilteredDataset()
+        self._main_activity.updateFilter() # Must be done before create_filtered_dataset().
+        analysisdata = self._analysisdata.create_filtered_dataset()
         if not analysisdata:
             return # Can't create a report from an empty dataset.
         # Which parameter is selected?
@@ -542,8 +542,8 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         data_dict = {}        
         #
         for visitnode in dataset.getChildren():
-            visitdate = visitnode.getData('date')
-            visitstation = visitnode.getData('station_name')
+            visitdate = visitnode.get_data('date')
+            visitstation = visitnode.get_data('station_name')
             visitvisit = visitstation + ' ' + visitdate 
             visityear = unicode(visitdate[0:4])
             visitmonth = unicode(visitdate[5:7])
@@ -558,17 +558,17 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                 visitseason = 'Sep-Oct-Nov'
             #
             for samplenode in visitnode.getChildren():
-                sample_min_depth = unicode(samplenode.getData('sample_min_depth'))
-                sample_max_depth = unicode(samplenode.getData('sample_max_depth'))
+                sample_min_depth = unicode(samplenode.get_data('sample_min_depth'))
+                sample_max_depth = unicode(samplenode.get_data('sample_max_depth'))
                 sampleminmaxdepth = sample_min_depth + '-' + sample_max_depth   
                 # Iterate over sample content. 
                 # Note: Create a level between sample and variabel.
                 grouped_size_lifestages = {}
                 for variablenode in samplenode.getChildren():
-                    group_key = variablenode.getData('scientific_name')
-                    group_key += ':' + variablenode.getData('size_class') # Specific for phytoplankton.
-                    group_key += ':' + variablenode.getData('stage') # Specific for zooplankton.
-                    group_key += ':' + variablenode.getData('sex') # Specific for zooplankton.
+                    group_key = variablenode.get_data('scientific_name')
+                    group_key += ':' + variablenode.get_data('size_class') # Specific for phytoplankton.
+                    group_key += ':' + variablenode.get_data('stage') # Specific for zooplankton.
+                    group_key += ':' + variablenode.get_data('sex') # Specific for zooplankton.
                     if group_key not in grouped_size_lifestages:
                         grouped_size_lifestages[group_key] = [] # Starts a new group.
                     grouped_size_lifestages[group_key].append(variablenode)
@@ -577,10 +577,10 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                 for group_key in grouped_size_lifestages.keys():
                     #
                     for variablenode in grouped_size_lifestages[group_key]:
-                        variabletaxon = variablenode.getData('scientific_name')
+                        variabletaxon = variablenode.get_data('scientific_name')
                         # Parameters.
-                        parameter = variablenode.getData('parameter')
-                        unit = variablenode.getData('unit')
+                        parameter = variablenode.get_data('parameter')
+                        unit = variablenode.get_data('unit')
                         parameternadunit = parameter + ' (' + unit + ')'
                         if parameternadunit == selectedparameter:
                             # Build split key.
@@ -604,7 +604,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                             # Add data.
                             if splitkey not in data_dict:
                                 data_dict[splitkey] = []
-                            data_dict[splitkey].append(variablenode.getData('value'))     
+                            data_dict[splitkey].append(variablenode.get_data('value'))     
         # Calculate result
         try:
             for key in sorted(data_dict.keys()):

@@ -373,7 +373,7 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
         return QtCore.QVariant()
 
     # For editing:
-    def setData(self, index, value, role):
+    def set_data(self, index, value, role):
         """ """
         try:        
             self._modeldata.setDataItem(index.row(), index.column(), unicode(value.toString()))

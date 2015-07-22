@@ -35,14 +35,14 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
     def update(self):
         """ """
         self.clear()
-        analysisdata = self._analysisdata.getData()
+        analysisdata = self._analysisdata.get_data()
         if analysisdata:        
             # Search for all parameters in analysis data.
             parameterset = set()
             for visitnode in analysisdata.getChildren():
                 for samplenode in visitnode.getChildren():
                     for variablenode in samplenode.getChildren():
-                        parameterset.add(variablenode.getData('parameter') + ' (' + variablenode.getData('unit') + ')')
+                        parameterset.add(variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')')
             parameterlist = sorted(parameterset)
             self._parameter_list.setList(parameterlist)
 
@@ -101,11 +101,11 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         """ """
         # Clear the report and view the report area.
         reportdata = self._main_activity.getReportData()
-        reportdata.clearData()
+        reportdata.clear_data()
         self._main_activity.viewReportData()
         # Filtered data should be used.
-        self._main_activity.updateFilter() # Must be done before createFilteredDataset().
-        analysisdata = self._analysisdata.createFilteredDataset()
+        self._main_activity.updateFilter() # Must be done before create_filtered_dataset().
+        analysisdata = self._analysisdata.create_filtered_dataset()
         if not analysisdata:
             return # Can't create a report from an empty dataset.
         # Create the report.
@@ -120,11 +120,11 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         """ """
         # Clear the report and view the report area.
         reportdata = self._main_activity.getReportData()
-        reportdata.clearData()
+        reportdata.clear_data()
         self._main_activity.viewReportData()
         # Filtered data should be used.
-        self._main_activity.updateFilter() # Must be done before createFilteredDataset().
-        analysisdata = self._analysisdata.createFilteredDataset()
+        self._main_activity.updateFilter() # Must be done before create_filtered_dataset().
+        analysisdata = self._analysisdata.create_filtered_dataset()
         if not analysisdata:
             return # Can't create a report from an empty dataset.
         # Create the report.
@@ -140,8 +140,8 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
                            reportdata):
         """  """
         # Create a dataset (table, not tree).
-        tabledata = toolbox_utils.DatasetTable()
-        reportdata.setData(tabledata)
+        tabledata = toolbox_core.DatasetTable()
+        reportdata.set_data(tabledata)
         # Check indata.
         if parameters == None:
             raise UserWarning('Parameters are missing.')
@@ -174,10 +174,10 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         for dataset in datasets:
             for visit in dataset.getChildren():
                 for sample in visit.getChildren():
-                    header_row_1[6 + (sampleindex * numberofparameters)] = visit.getData('station_name')
-                    header_row_2[6 + (sampleindex * numberofparameters)] = visit.getData('date')
-                    header_row_3[6 + (sampleindex * numberofparameters)] = sample.getData('sample_min_depth')
-                    header_row_4[6 + (sampleindex * numberofparameters)] = sample.getData('sample_max_depth')
+                    header_row_1[6 + (sampleindex * numberofparameters)] = visit.get_data('station_name')
+                    header_row_2[6 + (sampleindex * numberofparameters)] = visit.get_data('date')
+                    header_row_3[6 + (sampleindex * numberofparameters)] = sample.get_data('sample_min_depth')
+                    header_row_4[6 + (sampleindex * numberofparameters)] = sample.get_data('sample_max_depth')
                     sampleindex += 1
         #
         # Part 2: Iterate over all rows in all samples. Create a dictionary with 
@@ -191,20 +191,20 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
             for visit in dataset.getChildren():
                 for sample in visit.getChildren():
                     for variable in sample.getChildren():
-                        scientific_name = variable.getData('scientific_name')
-                        size_class = variable.getData('size_class')
-                        trophic_type = variable.getData('trophic_type')
-                        stage = variable.getData('stage')
-                        sex = variable.getData('sex')
+                        scientific_name = variable.get_data('scientific_name')
+                        size_class = variable.get_data('size_class')
+                        trophic_type = variable.get_data('trophic_type')
+                        stage = variable.get_data('stage')
+                        sex = variable.get_data('sex')
                         #
                         taxon_key = unicode(scientific_name) + ':' + unicode(size_class) + ':' + unicode(trophic_type) + ':' + unicode(stage) + ':' + unicode(sex)
                         if taxon_key not in taxon_values_dict:
                             taxon_values_dict[taxon_key] = [unicode()] * (numberofsamples * numberofparameters) # Add new value list.
                         #
                         for paramindex, param in enumerate(parameters):
-                            parameter = variable.getData('parameter')
-                            unit = variable.getData('unit')
-                            value = variable.getData('value')
+                            parameter = variable.get_data('parameter')
+                            unit = variable.get_data('unit')
+                            value = variable.get_data('value')
                             #
                             if param == (parameter + ' (' + unit + ')'):
                                 taxon_values_dict[taxon_key][sampleindex * numberofparameters + paramindex] = value
@@ -257,8 +257,8 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
     def _createReportZooplanktonAbundanceLengthMedianAndMean(self, dataset, reportdata):
         """ """
         # Create a dataset (table, not tree).
-        tabledata = toolbox_utils.DatasetTable()
-        reportdata.setData(tabledata)
+        tabledata = toolbox_core.DatasetTable()
+        reportdata.set_data(tabledata)
         # Header.
         header_row = []
         header_row.append('Station name')
@@ -279,19 +279,19 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         sample_min_depth = '-'
         sample_max_depth = '-'
         for visitnode in dataset.getChildren():
-            station_name = visitnode.getData('station_name')
-            date = visitnode.getData('date')
+            station_name = visitnode.get_data('station_name')
+            date = visitnode.get_data('date')
             for samplenode in visitnode.getChildren():
-                sample_min_depth = samplenode.getData('sample_min_depth')
-                sample_max_depth = samplenode.getData('sample_max_depth')
+                sample_min_depth = samplenode.get_data('sample_min_depth')
+                sample_max_depth = samplenode.get_data('sample_max_depth')
                 
                 # Iterate over sample content. 
                 # Note: Create a level between sample and variabel.
                 grouped_lifestages = {}
                 for variablenode in samplenode.getChildren():
-                    group_key = variablenode.getData('scientific_name')
-                    group_key += ':' + variablenode.getData('stage') # Specific for zooplankton.
-                    group_key += ':' + variablenode.getData('sex') # Specific for zooplankton.
+                    group_key = variablenode.get_data('scientific_name')
+                    group_key += ':' + variablenode.get_data('stage') # Specific for zooplankton.
+                    group_key += ':' + variablenode.get_data('sex') # Specific for zooplankton.
                     if group_key not in grouped_lifestages:
                         grouped_lifestages[group_key] = [] # Starts a new group.
                     grouped_lifestages[group_key].append(variablenode)
@@ -309,20 +309,20 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
                     #
                     for variablenode in grouped_lifestages[group_key]:
                         # This should be same for all variables in the group.                       
-                        scientific_name = variablenode.getData('scientific_name')
-                        stage = variablenode.getData('stage')
-                        sex = variablenode.getData('sex')
+                        scientific_name = variablenode.get_data('scientific_name')
+                        stage = variablenode.get_data('stage')
+                        sex = variablenode.get_data('sex')
                         # Parameters.
-                        parameter = variablenode.getData('parameter')
-                        unit = variablenode.getData('unit')
+                        parameter = variablenode.get_data('parameter')
+                        unit = variablenode.get_data('unit')
                         if (parameter == 'Abundance') and (unit == 'ind/m2'):
-                            abundance_ind_m2 = variablenode.getData('value')
+                            abundance_ind_m2 = variablenode.get_data('value')
                         if (parameter == 'Abundance') and (unit == 'ind/m3'):
-                            abundance_ind_m3 = variablenode.getData('value')
+                            abundance_ind_m3 = variablenode.get_data('value')
                         if parameter == 'Length (median)':
-                            length_median = variablenode.getData('value')
+                            length_median = variablenode.get_data('value')
                         if parameter == 'Length (mean)':
-                            length_mean = variablenode.getData('value')
+                            length_mean = variablenode.get_data('value')
                     
                     # Organism group is finished. Add row to report.
                     report_row = []
@@ -423,12 +423,12 @@ def primer_report_count_table_sort(s1, s2):
 #             visitnode = datasetnode.getChildren()[0] # Only one child.
 #             samplenode = visitnode.getChildren()[0] # Only one child.
 #             #
-#             header_row_1[6 + (datasetindex * 2)] = visitnode.getData('Stat name')
-#             header_row_2[6 + (datasetindex * 2)] = visitnode.getData('Date')
-#             header_row_3[6 + (datasetindex * 2)] = samplenode.getData('Min. depth')
-#             header_row_4[6 + (datasetindex * 2)] = samplenode.getData('Max. depth')
-#             header_row_5[6 + (datasetindex * 2)] = samplenode.getData('Counted on')
-#             header_row_6[6 + (datasetindex * 2)] = samplenode.getData('Counted by')
+#             header_row_1[6 + (datasetindex * 2)] = visitnode.get_data('Stat name')
+#             header_row_2[6 + (datasetindex * 2)] = visitnode.get_data('Date')
+#             header_row_3[6 + (datasetindex * 2)] = samplenode.get_data('Min. depth')
+#             header_row_4[6 + (datasetindex * 2)] = samplenode.get_data('Max. depth')
+#             header_row_5[6 + (datasetindex * 2)] = samplenode.get_data('Counted on')
+#             header_row_6[6 + (datasetindex * 2)] = samplenode.get_data('Counted by')
 #         #
 #         # Part 2: Iterate over all rows in all samples. Create a dictionary with 
 #         #         species as keys and lists of abundances for each sample.
@@ -441,10 +441,10 @@ def primer_report_count_table_sort(s1, s2):
 #             samplenode = visitnode.getChildren()[0] # Only one child.
 #             for variablenode in samplenode.getChildren():
 #                 # "Species","Abundance (scale 1 to 5)" 
-#                 phytowinnameandsize = variablenode.getData('Species') + ':' + variablenode.getData('Size')
+#                 phytowinnameandsize = variablenode.get_data('Species') + ':' + variablenode.get_data('Size')
 #                 #
-#                 countedunits = variablenode.getData('Units')
-#                 coeff = variablenode.getData('Coeff')
+#                 countedunits = variablenode.get_data('Units')
+#                 coeff = variablenode.get_data('Coeff')
 #                 try:
 #                     abundance = int(countedunits) * int(coeff)                    
 #                 except:
@@ -491,7 +491,7 @@ def primer_report_count_table_sort(s1, s2):
 #             #
 #             pegname, pegsize, sflag = taxa_phytowin.TaxaPhytowin().convertFromPhytowinToPeg(phytowinname, phytowin_size_class = sizeclass)
 #             # Check if 'cf.' was included in name. Add to Sflag.
-#             if 'cf.' in variablenode.getData('Species'):
+#             if 'cf.' in variablenode.get_data('Species'):
 #                 if sflag:
 #                     sflag = 'cf., ' + sflag
 #                 else:

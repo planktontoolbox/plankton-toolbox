@@ -29,14 +29,14 @@ class AnalysisPrepare(object):
         for visitnode in analysisdata.getChildren():
             for samplenode in visitnode.getChildren():
                 for variablenode in samplenode.getChildren():
-                    parameter = variablenode.getData('parameter')
-                    unit = variablenode.getData('unit')
+                    parameter = variablenode.get_data('parameter')
+                    unit = variablenode.get_data('unit')
                     if parameter:
                         parameter_set.add((parameter, unit))
-                    taxonname = variablenode.getData('scientific_name')
-                    trophic_type = variablenode.getData('trophic_type')
-                    stage = variablenode.getData('stage')
-                    sex = variablenode.getData('sex')
+                    taxonname = variablenode.get_data('scientific_name')
+                    trophic_type = variablenode.get_data('trophic_type')
+                    stage = variablenode.get_data('stage')
+                    sex = variablenode.get_data('sex')
                     if taxonname:
                         taxon_set.add((taxonname, trophic_type, stage, sex))
         # Step 2: Create list with parameter-taxon pairs.
@@ -53,12 +53,12 @@ class AnalysisPrepare(object):
             for samplenode in visitnode.getChildren():
                 sample_parameter_taxon_list = []
                 for variablenode in samplenode.getChildren():
-                    parameter = variablenode.getData('parameter')
-                    unit = variablenode.getData('unit')
-                    taxon = variablenode.getData('scientific_name')
-                    trophic_type = variablenode.getData('trophic_type')
-                    stage = variablenode.getData('stage')
-                    sex = variablenode.getData('sex')
+                    parameter = variablenode.get_data('parameter')
+                    unit = variablenode.get_data('unit')
+                    taxon = variablenode.get_data('scientific_name')
+                    trophic_type = variablenode.get_data('trophic_type')
+                    stage = variablenode.get_data('stage')
+                    sex = variablenode.get_data('sex')
                     sample_parameter_taxon_list.append(((parameter, unit), (taxon, trophic_type, stage, sex)))
                 # Add missing variables.
                 for itempairs in parameter_taxon_list:

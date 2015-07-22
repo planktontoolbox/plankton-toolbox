@@ -32,31 +32,31 @@ class AnalysisData(object):
         super(AnalysisData, self).__init__()
 
 
-    def clearData(self):
+    def clear_data(self):
         """ """
         self._data = None
         
-    def setData(self, analysisdata):
+    def set_data(self, analysisdata):
         """ """
         self._data = analysisdata
         
-    def getData(self):
+    def get_data(self):
         """ """
         return self._data
 
-    def clearFilter(self):
+    def clear_filter(self):
         """ """
         self._filter ={}
         
-    def setFilterItem(self, key, value):
+    def set_filter_item(self, key, value):
         """ """
         self._filter[key] = value        
 
-    def getFilterItem(self, key):
+    def get_filter_item(self, key):
         """ """
         return self._filter.get(key, '')        
 
-    def getFilterDict(self):
+    def get_filter_dict(self):
         """ """
         return self._filter
 
@@ -64,10 +64,10 @@ class AnalysisData(object):
 #         """ """
 #         return self._analysisdata
     
-    def copyDatasetsToAnalysisData(self, datasets):
+    def copy_datasets_to_analysis_data(self, datasets):
         """ """
         # Clear analysis data.
-        self.clearData()    
+        self.clear_data()    
         # Check if all the selected datasets contains the same columns.
         compareheaders = None
         for dataset in datasets:
@@ -99,9 +99,9 @@ class AnalysisData(object):
             toolbox_utils.Logging().log('Selected datasets are empty.')
             raise UserWarning('Selected datasets are empty.')
         # Use the concatenated dataset for analysis.
-        self.setData(analysis_dataset)    
+        self.set_data(analysis_dataset)    
     
-    def removeData(self, selectedcolumn, selectedcontent):
+    def remove_data(self, selectedcolumn, selectedcontent):
         """ """        
         # Search for export column corresponding model element.
         for info_dict in self._data.getExportTableColumns():
@@ -113,7 +113,7 @@ class AnalysisData(object):
         for visitnode in self._data.getChildren()[:]:
             if nodelevel == 'visit':
                 if key in visitnode.getDataDict().keys():
-                    if unicode(visitnode.getData(key)) in selectedcontent:
+                    if unicode(visitnode.get_data(key)) in selectedcontent:
                         self._data.removeChild(visitnode)
                         continue
                 else:
@@ -125,7 +125,7 @@ class AnalysisData(object):
             for samplenode in visitnode.getChildren()[:]:
                 if nodelevel == 'sample':
                     if key in samplenode.getDataDict().keys():
-                        if unicode(samplenode.getData(key)) in selectedcontent:
+                        if unicode(samplenode.get_data(key)) in selectedcontent:
                             visitnode.removeChild(samplenode)
                             continue
                     else:
@@ -137,7 +137,7 @@ class AnalysisData(object):
                 for variablenode in samplenode.getChildren()[:]:
                     if nodelevel == 'variable':
                         if key in variablenode.getDataDict().keys():
-                            if unicode(variablenode.getData(key)) in selectedcontent:
+                            if unicode(variablenode.get_data(key)) in selectedcontent:
                                 samplenode.removeChild(variablenode)
                         else:
                             # Handle empty values.
@@ -145,7 +145,7 @@ class AnalysisData(object):
                                 samplenode.removeChild(variablenode)
                                 continue
 
-    def createFilteredDataset(self):
+    def create_filtered_dataset(self):
         """ Used filter items are:
             - 'start_date'
             - 'end_date'
@@ -158,9 +158,9 @@ class AnalysisData(object):
             - 'life_stage'
         """
         # Create a tree dataset for filtered data.
-        filtereddata = toolbox_utils.DatasetNode() 
+        filtereddata = toolbox_core.DatasetNode() 
         #
-        analysisdata = self.getData()
+        analysisdata = self.get_data()
         if not analysisdata:        
             return filtereddata
         # Export info needed to convert from tree to table.
@@ -177,47 +177,47 @@ class AnalysisData(object):
         filter_lifestage = self._filter['life_stage']
         #
         for visitnode in analysisdata.getChildren():
-            if filter_startdate > visitnode.getData('date'):
+            if filter_startdate > visitnode.get_data('date'):
                 continue
-            if filter_enddate < visitnode.getData('date'):
+            if filter_enddate < visitnode.get_data('date'):
                 continue
-            if visitnode.getData('station_name') not in filter_stations:
+            if visitnode.get_data('station_name') not in filter_stations:
                 continue
-            if visitnode.getData('month') not in filter_visit_months:
+            if visitnode.get_data('month') not in filter_visit_months:
                 continue
-            if (unicode(visitnode.getData('station_name')) + ' : ' + 
-                unicode(visitnode.getData('date'))) not in filter_visits:
+            if (unicode(visitnode.get_data('station_name')) + ' : ' + 
+                unicode(visitnode.get_data('date'))) not in filter_visits:
                 continue
             # Create node and copy node data.            
-            filteredvisit = toolbox_utils.VisitNode()
+            filteredvisit = toolbox_core.VisitNode()
             filteredvisit.setDataDict(visitnode.getDataDict())
             filtereddata.addChild(filteredvisit)    
             #
             for samplenode in visitnode.getChildren():
-                minmax = unicode(samplenode.getData('sample_min_depth')) +  '-' + \
-                         unicode(samplenode.getData('sample_max_depth'))
+                minmax = unicode(samplenode.get_data('sample_min_depth')) +  '-' + \
+                         unicode(samplenode.get_data('sample_max_depth'))
                 if minmax not in filter_minmaxdepth:
                     continue
                 #
                 # Create node and copy node data.            
-                filteredsample = toolbox_utils.SampleNode()
+                filteredsample = toolbox_core.SampleNode()
                 filteredsample.setDataDict(samplenode.getDataDict())
                 filteredvisit.addChild(filteredsample)    
                 #
                 for variablenode in samplenode.getChildren():
-                    if variablenode.getData('scientific_name') not in filter_taxon:
+                    if variablenode.get_data('scientific_name') not in filter_taxon:
                         continue
                     #
-                    if variablenode.getData('trophic_type') not in filter_trophic_type:
+                    if variablenode.get_data('trophic_type') not in filter_trophic_type:
                         continue
                     #
-                    lifestage = variablenode.getData('stage')
-                    if variablenode.getData('sex'):
-                        lifestage += '/' + variablenode.getData('sex')
+                    lifestage = variablenode.get_data('stage')
+                    if variablenode.get_data('sex'):
+                        lifestage += '/' + variablenode.get_data('sex')
                     if lifestage not in filter_lifestage:
                         continue
                     # Create node and copy node data.            
-                    filteredvariable = toolbox_utils.VariableNode()
+                    filteredvariable = toolbox_core.VariableNode()
                     filteredvariable.setDataDict(variablenode.getDataDict())
                     filteredsample.addChild(filteredvariable)
         #

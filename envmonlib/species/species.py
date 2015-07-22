@@ -201,10 +201,9 @@ class Species(object):
 
     def _loadTaxa(self, excel_file_name):
         """ Creates one data object for each taxon. """
-        tabledataset = toolbox_utils.DatasetTable()
-        toolbox_utils.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
+        tablefilereader = toolbox_utils.TableFileReader(excel_file_name = excel_file_name)
         #
-        for row in tabledataset.getRows():
+        for row in tablefilereader.rows():
             scientificname = ''
             try:
                 scientificname = row[0].strip() # ScientificName.
@@ -231,10 +230,9 @@ class Species(object):
 
     def _loadSynonyms(self, excel_file_name):
         """ Add synonyms from 'translate_' or 'synonyms_' files. """
-        tabledataset = toolbox_utils.DatasetTable()
-        toolbox_utils.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
+        tablefilereader = toolbox_utils.TableFileReader(excel_file_name = excel_file_name)
         #
-        for row in tabledataset.getRows():
+        for row in tablefilereader.rows():
             toname = ''
             fromname = ''
             try:
@@ -255,10 +253,9 @@ class Species(object):
                     
     def _loadHarmful(self, excel_file_name):
         """ Adds info about harmfulness to the species objects. """
-        tabledataset = toolbox_utils.DatasetTable()
-        toolbox_utils.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
+        tablefilereader = toolbox_utils.TableFileReader(excel_file_name = excel_file_name)
         #
-        for row in tabledataset.getRows():
+        for row in tablefilereader.rows():
             scientificname = ''
             try:
                 scientificname = row[0].strip() # Scientific name.
@@ -276,10 +273,9 @@ class Species(object):
 
     def _loadPlanktonGroupDefinition(self, excel_file_name):
         """ """
-        tabledataset = toolbox_utils.DatasetTable()
-        toolbox_utils.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
+        tablefilereader = toolbox_utils.TableFileReader(excel_file_name = excel_file_name)
         #
-        for row in tabledataset.getRows():
+        for row in tablefilereader.rows():
             scientificname = ''
             try:
                 scientificname = row[0].strip() # Scientific name.
@@ -344,10 +340,9 @@ class Species(object):
 
     def _loadBvolColumns(self, excel_file_name):
         """ """
-        tabledataset = toolbox_utils.DatasetTable()
-        toolbox_utils.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
+        tablefilereader = toolbox_utils.TableFileReader(excel_file_name = excel_file_name)
         #
-        for row in tabledataset.getRows():
+        for row in tablefilereader.rows():
             columnname = ''
             try:
                 # Header: Column name, Used on level, Numeric, Internal toolbox name.
@@ -365,17 +360,17 @@ class Species(object):
         """ Adds BVOL data to species objects. Creates additional species objects if missing 
             (i.e. for Unicell, Flagellates). """
         # Import size class data.
-        tabledataset = toolbox_utils.DatasetTable()
-        toolbox_utils.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
+        tablefilereader = toolbox_utils.TableFileReader(excel_file_name = excel_file_name)
+        #
         # Create header list for mapping and translations.
         headerinfo = [] # Contains used columns only.
-        for columnindex, columnname in enumerate(tabledataset.getHeader()): 
+        for columnindex, columnname in enumerate(tablefilereader.header()): 
             # Use loaded information on used columns.
             if columnname in self._bvolcolumns_dict:
                 level, numeric, internalname = self._bvolcolumns_dict[columnname]
                 headerinfo.append((columnindex, columnname, level, numeric, internalname))
         #
-        for row in tabledataset.getRows():
+        for row in tablefilereader.rows():
             taxondict = {}
             sizeclassdict = {}
             try:

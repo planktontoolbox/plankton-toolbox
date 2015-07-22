@@ -12,7 +12,7 @@ import toolbox_core
 
 class StatisticalData(object):
     """
-    Should contain table oriented data, see toolbox_utils.DatasetTable().
+    Should contain table oriented data, see toolbox_core.DatasetTable().
     """
     def __init__(self):
         """ """
@@ -20,15 +20,15 @@ class StatisticalData(object):
         # Initialize parent.
         super(StatisticalData, self).__init__()
 
-    def clearData(self):
+    def clear_data(self):
         """ """
         self._data = None
         
-    def setData(self, analysisdata):
+    def set_data(self, analysisdata):
         """ """
         self._data = analysisdata
         
-    def getData(self):
+    def get_data(self):
         """ """
         return self._data
     

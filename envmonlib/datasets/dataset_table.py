@@ -11,7 +11,7 @@ import toolbox_utils
 import toolbox_core
 #from envmonlib import DatasetBase
 
-class DatasetTable(toolbox_utils.DatasetBase):
+class DatasetTable(toolbox_core.DatasetBase):
     def __init__(self):
         """ This class should be used for datasets organized as a table with header and rows. 
         It is prepared to be displayed via QAbstractTableModel in Qt, but Qt is not required here.

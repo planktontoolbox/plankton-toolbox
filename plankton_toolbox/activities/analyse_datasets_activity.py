@@ -29,9 +29,9 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
     def __init__(self, name, parentwidget):
         """ """
         # Create object containing analysis data.
-        self._analysisdata = toolbox_utils.AnalysisData()
-        self._statisticaldata = toolbox_utils.StatisticalData()
-        self._reportdata = toolbox_utils.ReportData()
+        self._analysisdata = toolbox_core.AnalysisData()
+        self._statisticaldata = toolbox_core.StatisticalData()
+        self._reportdata = toolbox_core.ReportData()
         
         # Filename used when saving data to file.
         self._lastuseddirectory = '.'
@@ -215,35 +215,35 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         self._refreshViewedDataTable()
         self._numberofrows_label.setText('Number of rows: 0')
         # 
-        if not self._analysisdata.getData():
+        if not self._analysisdata.get_data():
             return
         #
         selectedviewindex = self._viewdata_list.currentIndex()
         if selectedviewindex == 0:
             # View analysis data.
             # Convert from tree model to table model.
-            targetdataset = toolbox_utils.DatasetTable()
-            self._analysisdata.getData().convertToTableDataset(targetdataset)
+            targetdataset = toolbox_core.DatasetTable()
+            self._analysisdata.get_data().convertToTableDataset(targetdataset)
             # View model.
             self._tableview.tablemodel.setModeldata(targetdataset)
             self._refreshViewedDataTable()
         elif selectedviewindex == 1:
             # View filtered data only.
-            self._tab4widget.updateFilter() # Must be done before createFilteredDataset().
-            filtereddataset = self._analysisdata.createFilteredDataset()
+            self._tab4widget.updateFilter() # Must be done before create_filtered_dataset().
+            filtereddataset = self._analysisdata.create_filtered_dataset()
             # Convert from tree model to table model.
-            targetdataset = toolbox_utils.DatasetTable()
+            targetdataset = toolbox_core.DatasetTable()
             filtereddataset.convertToTableDataset(targetdataset)
             # View model.
             self._tableview.tablemodel.setModeldata(targetdataset)
             self._refreshViewedDataTable()
         elif selectedviewindex == 2:
             # Statistical data.
-            self._tableview.tablemodel.setModeldata(self._statisticaldata.getData())
+            self._tableview.tablemodel.setModeldata(self._statisticaldata.get_data())
             self._refreshViewedDataTable()
         elif selectedviewindex == 3:
             # Export data.
-            self._tableview.tablemodel.setModeldata(self._reportdata.getData())
+            self._tableview.tablemodel.setModeldata(self._reportdata.get_data())
             self._refreshViewedDataTable()
         else:
             # Hide data.
@@ -321,7 +321,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         self._tab8widget.update()
 
     def updateFilter(self):
-        """ Must be done before calls to createFilteredDataset(). """
+        """ Must be done before calls to create_filtered_dataset(). """
         self._tab4widget.updateFilter()
 
     def viewAnalysisData(self):

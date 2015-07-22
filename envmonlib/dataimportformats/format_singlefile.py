@@ -6,11 +6,11 @@
 #
 from __future__ import unicode_literals
 
-# import envmonlib
+import envmonlib
 import toolbox_utils
 import toolbox_core
 
-class FormatSingleFile(toolbox_utils.ParsedFormat):
+class FormatSingleFile(envmonlib.ParsedFormat):
     """ Import format for single file. """
     def __init__(self):
         """ Import format for single file. """
@@ -90,7 +90,7 @@ class FormatSingleFile(toolbox_utils.ParsedFormat):
                     exec(visitkeycommand) # Command assigns keystring.
                     currentvisit = dataset.getVisitLookup(keystring)
                     if not currentvisit:
-                        currentvisit = toolbox_utils.VisitNode()
+                        currentvisit = toolbox_core.VisitNode()
                         dataset.addChild(currentvisit)    
                         currentvisit.setIdString(keystring)
                     # Check if sample exists. Create or reuse.
@@ -98,11 +98,11 @@ class FormatSingleFile(toolbox_utils.ParsedFormat):
                     exec(samplekeycommand) # Command assigns keystring.
                     currentsample = dataset.getSampleLookup(keystring)
                     if not currentsample:
-                        currentsample = toolbox_utils.SampleNode()
+                        currentsample = toolbox_core.SampleNode()
                         currentvisit.addChild(currentsample)    
                         currentsample.setIdString(keystring)    
                     # Add all variables in row.
-                    currentvariable = toolbox_utils.VariableNode()
+                    currentvariable = toolbox_core.VariableNode()
                     currentsample.addChild(currentvariable)    
                     # === Parse row and add fields on nodes. ===
                     

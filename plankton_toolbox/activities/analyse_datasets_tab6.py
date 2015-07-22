@@ -56,7 +56,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
     def update(self):
         """ """
         self.clear()
-        analysisdata = self._analysisdata.getData()
+        analysisdata = self._analysisdata.get_data()
         if analysisdata:        
             # For tab "Generic graphs".
             items = [item['header'] for item in analysisdata.getExportTableColumns()]        
@@ -68,7 +68,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
             for visitnode in analysisdata.getChildren():
                 for samplenode in visitnode.getChildren():
                     for variablenode in samplenode.getChildren():
-                        parameterset.add(variablenode.getData('parameter') + ' (' + variablenode.getData('unit') + ')')
+                        parameterset.add(variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')')
             parameterlist = sorted(parameterset)
             #
             self._x_axis_parameter_list.addItems(parameterlist)
@@ -224,7 +224,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         if self._z_axis_column_list.currentIndex() != 0:
             self._z_axis_parameter_list.setEnabled(False)
         # Autoselect types.
-        if self._analysisdata.getData():
+        if self._analysisdata.get_data():
             x_selected_column = unicode(self._x_axis_column_list.currentText())
             y_selected_column = unicode(self._y_axis_column_list.currentText())
             z_selected_column = unicode(self._z_axis_column_list.currentText())
@@ -232,21 +232,21 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
             if x_selected_column == 'parameter:':
                 self._x_axistype_list.setCurrentIndex(0)
             else:
-                for item in self._analysisdata.getData().getExportTableColumns():
+                for item in self._analysisdata.get_data().getExportTableColumns():
                         if item['header'] == x_selected_column:
                             self._x_axistype_list.setCurrentIndex(self._type_list_values.index(item['view_format']))
             #
             if y_selected_column == 'parameter:':
                 self._y_axistype_list.setCurrentIndex(0)
             else:
-                for item in self._analysisdata.getData().getExportTableColumns():
+                for item in self._analysisdata.get_data().getExportTableColumns():
                     if item['header'] == y_selected_column:
                         self._y_axistype_list.setCurrentIndex(self._type_list_values.index(item['view_format']))
             #
             if z_selected_column == 'parameter:':
                 self._z_axistype_list.setCurrentIndex(0)
             else:
-                for item in self._analysisdata.getData().getExportTableColumns():
+                for item in self._analysisdata.get_data().getExportTableColumns():
                     if item['header'] == z_selected_column:
                         self._z_axistype_list.setCurrentIndex(self._type_list_values.index(item['view_format']))
             
@@ -334,8 +334,8 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         """ """
         
         # Filtered data should be used.
-        self._main_activity.updateFilter() # Must be done before createFilteredDataset().
-        analysisdata = self._analysisdata.createFilteredDataset()
+        self._main_activity.updateFilter() # Must be done before create_filtered_dataset().
+        analysisdata = self._analysisdata.create_filtered_dataset()
         if not analysisdata:
             return # Can't plot from empty dataset
         
@@ -418,9 +418,9 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         # Iterate over visits. 
         for visitnode in analysisdata.getChildren():
             # Get data.
-            if x_visit_key: x_value = visitnode.getData(x_visit_key)
-            if y_visit_key: y_value = visitnode.getData(y_visit_key)
-            if z_visit_key: z_value = visitnode.getData(z_visit_key)
+            if x_visit_key: x_value = visitnode.get_data(x_visit_key)
+            if y_visit_key: y_value = visitnode.get_data(y_visit_key)
+            if z_visit_key: z_value = visitnode.get_data(z_visit_key)
             # Check if finished.
             if (y_value is not None) and (numberofvariables == 1):
                 y_data.append(y_value)
@@ -443,9 +443,9 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
             # Iterate over samples.
             for samplenode in visitnode.getChildren():
                 # Get data.
-                if x_sample_key: x_value = samplenode.getData(x_sample_key)
-                if y_sample_key: y_value = samplenode.getData(y_sample_key)
-                if z_sample_key: z_value = samplenode.getData(z_sample_key)
+                if x_sample_key: x_value = samplenode.get_data(x_sample_key)
+                if y_sample_key: y_value = samplenode.get_data(y_sample_key)
+                if z_sample_key: z_value = samplenode.get_data(z_sample_key)
                 # Check if finished.
                 if (y_value is not None) and (numberofvariables == 1):
                     y_data.append(y_value)
@@ -471,10 +471,10 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                 # Note: Create a level between sample and variabel.
                 grouped_lifestages = {}
                 for variablenode in samplenode.getChildren():
-                    group_key = variablenode.getData('scientific_name')
-                    group_key += ':' + variablenode.getData('size_class') # For phytoplankton 
-                    group_key += ':' + variablenode.getData('stage') # For zooplankton
-                    group_key += ':' + variablenode.getData('sex') # For zooplankton
+                    group_key = variablenode.get_data('scientific_name')
+                    group_key += ':' + variablenode.get_data('size_class') # For phytoplankton 
+                    group_key += ':' + variablenode.get_data('stage') # For zooplankton
+                    group_key += ':' + variablenode.get_data('sex') # For zooplankton
                 
                     if group_key not in grouped_lifestages:
                         grouped_lifestages[group_key] = []
@@ -485,9 +485,9 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                     if x_param:
                         x_value = None
                         for variablenode in grouped_lifestages[group_key]:
-                            parameter = variablenode.getData('parameter') + ' (' + variablenode.getData('unit') + ')'
+                            parameter = variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')'
                             if parameter == x_param:
-                                x_value = variablenode.getData('value')
+                                x_value = variablenode.get_data('value')
 #                                 break                    
 
 
@@ -518,9 +518,9 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                     if y_param:
                         y_value = None
                         for variablenode in grouped_lifestages[group_key]:
-                            parameter = variablenode.getData('parameter') + ' (' + variablenode.getData('unit') + ')'
+                            parameter = variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')'
                             if parameter == y_param:
-                                y_value = variablenode.getData('value')
+                                y_value = variablenode.get_data('value')
 
 
                                                         
@@ -550,9 +550,9 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                     if z_param:
                         z_value = None
                         for variablenode in grouped_lifestages[group_key]:
-                            parameter = variablenode.getData('parameter') + ' (' + variablenode.getData('unit') + ')'
+                            parameter = variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')'
                             if parameter == z_param:
-                                z_value = variablenode.getData('value')
+                                z_value = variablenode.get_data('value')
 #                                 break
 
 
@@ -601,9 +601,9 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
 
                     # Get other data from the group.    
                     for variablenode in grouped_lifestages[group_key]:                        
-                        if x_variable_key: x_value = variablenode.getData(x_variable_key)
-                        if y_variable_key: y_value = variablenode.getData(y_variable_key)
-                        if z_variable_key: z_value = variablenode.getData(z_variable_key)
+                        if x_variable_key: x_value = variablenode.get_data(x_variable_key)
+                        if y_variable_key: y_value = variablenode.get_data(y_variable_key)
+                        if z_variable_key: z_value = variablenode.get_data(z_variable_key)
     
                         # Check if values are finished.
                         if (y_value is not None) and (numberofvariables == 1):

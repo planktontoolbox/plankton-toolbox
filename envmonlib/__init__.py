@@ -48,16 +48,16 @@ from utils.zipfiles import ZipFileWriter
 # Module species:
 from species.species import Species
 
-# Module datasets:
-from datasets.dataset_base import DatasetBase
-from datasets.dataset_table import DatasetTable
-from datasets.dataset_tree import (
-                                   DataNode,
-                                   DatasetNode,     
-                                   VisitNode,   
-                                   SampleNode,
-                                   VariableNode)
-from datasets.datasets import Datasets
+# # Module datasets:
+# from datasets.dataset_base import DatasetBase
+# from datasets.dataset_table import DatasetTable
+# from datasets.dataset_tree import (
+#                                    DataNode,
+#                                    DatasetNode,     
+#                                    VisitNode,   
+#                                    SampleNode,
+#                                    VariableNode)
+# from datasets.datasets import Datasets
 
 # Module dataimports:
 from dataimports.format_base import FormatBase
@@ -76,9 +76,9 @@ from datascreening.screening_manager import ScreeningManager
 # Module datareports: 
 from datareports.reports_manager import ReportsManager
  
-# Module dataanalysis: 
-from dataanalysis.analysisdata import AnalysisData
-from dataanalysis.analysisprepare import AnalysisPrepare
-from dataanalysis.reportdata import ReportData
-from dataanalysis.statisticaldata import StatisticalData
+# # Module dataanalysis: 
+# from dataanalysis.analysisdata import AnalysisData
+# from dataanalysis.analysisprepare import AnalysisPrepare
+# from dataanalysis.reportdata import ReportData
+# from dataanalysis.statisticaldata import StatisticalData
 

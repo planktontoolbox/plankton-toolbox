@@ -11,7 +11,7 @@ import codecs
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 
-# import envmonlib
+import envmonlib
 import toolbox_utils
 import toolbox_core
 import plankton_toolbox.toolbox.utils_qt as utils_qt
@@ -263,7 +263,7 @@ class MainWindow(QtGui.QMainWindow):
         """ """
         try:
             self.statusBar().showMessage(self.tr('Loading species lists...'))
-            toolbox_utils.Species() # Load species files.
+            envmonlib.Species() # Load species files.
         finally:
             self.statusBar().showMessage(self.tr(''))            
 

@@ -20,7 +20,7 @@ import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 import plankton_toolbox.toolbox.toolbox_sync as toolbox_sync
 # import plankton_toolbox.toolbox.help_texts as help_texts
 
-# import envmonlib
+import envmonlib
 import toolbox_utils
 import toolbox_core
 
@@ -163,14 +163,15 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         """ """
         if (selected_row > 0) and (selected_row <= len(self._parser_list)):
             toolbox_utils.Logging().log('Selected parser: ' + unicode(self._parser_list[selected_row - 1]))
-            
-            tabledata = toolbox_utils.DatasetTable()
-            toolbox_utils.ExcelFiles().readToTableDataset(tabledata, 
-                                                 file_name = self._parser_path + self._parser_list[selected_row - 1])
+#            tabledata = toolbox_core.DatasetTable()
+#             toolbox_utils.ExcelFiles().readToTableDataset(tabledata, 
+#                                                  file_name = self._parser_path + self._parser_list[selected_row - 1])            
+            tablereader = toolbox_utils.TableFileReader(file_path = self._parser_path, 
+                                                        excel_file_name = self._parser_list[selected_row - 1])
             self._textfile_importcolumn_list.clear()
             self._textfile_exportcolumn_list.clear()
-            header = tabledata.getHeader()
-            for row in tabledata.getRows():
+            header = tablereader.header()
+            for row in tablereader.rows():
                 if (row[0] == 'info') and (row[1] == 'column_type'):
                     for index, item in enumerate(row):
                         if item == 'import':
@@ -190,13 +191,15 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         #
         selectedimportcolumn = unicode(self._textfile_importcolumn_list.currentText())
         # Read parser file.
-        tabledata = toolbox_utils.DatasetTable()
-        toolbox_utils.ExcelFiles().readToTableDataset(tabledata, 
-                                file_name = self._parser_path + self._parser_list[self._textfile_parser_list.currentIndex() - 1])
-        header = tabledata.getHeader()
+#         tabledata = toolbox_core.DatasetTable()
+#         toolbox_utils.ExcelFiles().readToTableDataset(tabledata, 
+#                                 file_name = self._parser_path + self._parser_list[self._textfile_parser_list.currentIndex() - 1])
+        tablereader = toolbox_utils.TableFileReader(file_path = self._parser_path, 
+                                                    excel_file_name = self._parser_list[self._textfile_parser_list.currentIndex() - 1])
+        header = tablereader.header()
         for index, headeritem in enumerate(header):
             if headeritem == selectedimportcolumn:
-                for row in tabledata.getRows():
+                for row in tablereader.rows():
                     if (row[0] == 'info') and (row[1] == 'character_encoding'):
                         if row[index] and (row[index] in self._encodings_list):
                             self._textfile_encoding_list.setCurrentIndex(self._encodings_list.index(row[index]))
@@ -218,7 +221,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             # From QString to unicode.
             filenames = map(unicode, filenames)
             # Check if user pressed ok or cancel.
-            self._tabledataset = toolbox_utils.DatasetTable()
+            self._tabledataset = toolbox_core.DatasetTable()
             if filenames:
                 for filename in filenames:
                     # Store selected path. Will be used as default next time.
@@ -229,11 +232,11 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                     else:
                         textfileencoding = unicode(self._textfile_encoding_list.currentText())                        
                     # Set up for import file parsing.
-                    impMgr = toolbox_utils.ImportManager(self._parser_path + unicode(self._textfile_parser_list.currentText()),
+                    importmanager = envmonlib.ImportManager(self._parser_path + unicode(self._textfile_parser_list.currentText()),
                                                      unicode(self._textfile_importcolumn_list.currentText()),
                                                      unicode(self._textfile_exportcolumn_list.currentText()))
                     # Import and parse file.
-                    dataset = impMgr.importTextFile(filename, textfileencoding)
+                    dataset = importmanager.importTextFile(filename, textfileencoding)
                     # Add metadata related to imported file.
                     dataset.addMetadata('parser', self._parser_path + unicode(self._textfile_parser_list.currentText()))
                     dataset.addMetadata('file_name', os.path.basename(filename))
@@ -249,7 +252,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                                       'Text file import failed on exception.\n' + unicode(e))
             raise
         finally:
-            datasetcount = len(toolbox_utils.Datasets().getDatasets())
+            datasetcount = len(toolbox_core.Datasets().getDatasets())
             self._writeToStatusBar('Imported datasets: ' + unicode(datasetcount))
             toolbox_utils.Logging().log_all_accumulated_rows()
             toolbox_utils.Logging().log('Importing datasets done. Number of imported datasets: ' + unicode(datasetcount))
@@ -315,13 +318,15 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         if (selected_row > 0) and (selected_row <= len(self._parser_list)):
             toolbox_utils.Logging().log('Selected parser: ' + unicode(self._parser_list[selected_row - 1]))
             
-            tabledata = toolbox_utils.DatasetTable()
-            toolbox_utils.ExcelFiles().readToTableDataset(tabledata, 
-                                                 file_name = self._parser_path + self._parser_list[selected_row - 1])
+#             tabledata = toolbox_core.DatasetTable()
+#             toolbox_utils.ExcelFiles().readToTableDataset(tabledata, 
+#                                                  file_name = self._parser_path + self._parser_list[selected_row - 1])
+            tablereader = toolbox_utils.TableFileReader(file_path = self._parser_path, 
+                                                        excel_file_name = self._parser_list[selected_row - 1])
             self._excel_importcolumn_list.clear()
             self._excel_exportcolumn_list.clear()
-            header = tabledata.getHeader()
-            for row in tabledata.getRows():
+            header = tablereader.header()
+            for row in tablereader.rows():
                 if (row[0] == 'info') and (row[1] == 'column_type'):
                     for index, item in enumerate(row):
                         if item == 'import':
@@ -351,17 +356,17 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             # From QString to unicode.
             filenames = map(unicode, filenames)
             # Check if user pressed ok or cancel.
-            self._tabledataset = toolbox_utils.DatasetTable()
+            self._tabledataset = toolbox_core.DatasetTable()
             if filenames:
                 for filename in filenames:
                     # Store selected path. Will be used as default next time.
                     self._last_used_excelfile_name = filename
                     # Set up for import file parsing.
-                    impMgr = toolbox_utils.ImportManager(self._parser_path + unicode(self._excel_parser_list.currentText()),
+                    importmanager = envmonlib.ImportManager(self._parser_path + unicode(self._excel_parser_list.currentText()),
                                                      unicode(self._excel_importcolumn_list.currentText()),
                                                      unicode(self._excel_exportcolumn_list.currentText()))
                     # Import and parse file.
-                    dataset = impMgr.importExcelFile(filename)
+                    dataset = importmanager.importExcelFile(filename)
                     # Add metadata related to imported file.
                     dataset.addMetadata('parser', self._parser_path + unicode(self._excel_parser_list.currentText()))
                     dataset.addMetadata('file_name', os.path.basename(filename))
@@ -377,7 +382,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                                       'Excel file import failed on exception.\n' + unicode(e))
             raise
         finally:
-            datasetcount = len(toolbox_utils.Datasets().getDatasets())
+            datasetcount = len(toolbox_core.Datasets().getDatasets())
             self._writeToStatusBar('Imported datasets: ' + unicode(datasetcount))
             toolbox_utils.Logging().log_all_accumulated_rows()  
             toolbox_utils.Logging().log('Importing datasets done. Number of loaded datasets: ' + unicode(datasetcount))
@@ -457,10 +462,10 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             # Get content info depending on dataset type.
 #             datasettype = '',
             contentinfo = ''
-            if isinstance(dataset, toolbox_utils.DatasetTable):
+            if isinstance(dataset, toolbox_core.DatasetTable):
 #                 datasettype = 'Table dataset'
                 contentinfo = 'Rows: ' + unicode(len(dataset.getRows())) + '. '
-            elif isinstance(dataset, toolbox_utils.DatasetNode):
+            elif isinstance(dataset, toolbox_core.DatasetNode):
 #                 datasettype = 'Tree dataset'
                 visitcount, samplecound, variablecount = dataset.getCounters()
                 contentinfo = 'Visits: ' + unicode(visitcount) + ', ' + \

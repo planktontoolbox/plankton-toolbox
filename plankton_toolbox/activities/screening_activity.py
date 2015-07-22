@@ -154,8 +154,8 @@ class ScreeningActivity(activity_base.ActivityBase):
                 countsamples = 0
                 countvariables = 0
                 for visitnode in dataset.getChildren():
-                    row = '   - Sampling event: ' + visitnode.getData('station_name') + \
-                          ', ' + visitnode.getData('date')
+                    row = '   - Sampling event: ' + visitnode.get_data('station_name') + \
+                          ', ' + visitnode.get_data('date')
                     self._structureresult_list.append(row)
                     countsamples = 0
                     countvariables = 0
@@ -178,13 +178,13 @@ class ScreeningActivity(activity_base.ActivityBase):
                 self._structureresult_list.append(row)
                 for visitnode in dataset.getChildren():
                     row = '   - Sampling event: ' + \
-                          unicode(visitnode.getData('station_name')) + ' ' + \
-                          unicode(visitnode.getData('date'))
+                          unicode(visitnode.get_data('station_name')) + ' ' + \
+                          unicode(visitnode.get_data('date'))
                     self._structureresult_list.append(row)
                     for samplenode in visitnode.getChildren():
                         row = '      - Sample: ' + \
-                              unicode(samplenode.getData('sample_min_depth')) + '-' + \
-                              unicode(samplenode.getData('sample_max_depth'))
+                              unicode(samplenode.get_data('sample_min_depth')) + '-' + \
+                              unicode(samplenode.get_data('sample_max_depth'))
                         self._structureresult_list.append(row)
                         countvariables = len(samplenode.getChildren())
                         #
@@ -195,12 +195,12 @@ class ScreeningActivity(activity_base.ActivityBase):
                         taxonname_set = set()
                         taxonsizestagesex_set = set()
                         for variablenode in samplenode.getChildren():
-                            parameter = variablenode.getData('parameter')
-                            unit = variablenode.getData('unit')
-                            taxonname = variablenode.getData('scientific_name')
-                            sizeclass = variablenode.getData('size_class')
-                            stage = variablenode.getData('stage')
-                            sex = variablenode.getData('sex')
+                            parameter = variablenode.get_data('parameter')
+                            unit = variablenode.get_data('unit')
+                            taxonname = variablenode.get_data('scientific_name')
+                            sizeclass = variablenode.get_data('size_class')
+                            stage = variablenode.get_data('stage')
+                            sex = variablenode.get_data('sex')
                             if parameter:
                                 parameter_set.add(parameter + '+' + unit)
                             if taxonname:
@@ -228,20 +228,20 @@ class ScreeningActivity(activity_base.ActivityBase):
             for dataset in toolbox_datasets.ToolboxDatasets().getDatasets():
                 dataset_descr = dataset.getMetadata('file_name')
                 for visitnode in dataset.getChildren():
-                    visit_descr = unicode(visitnode.getData('station_name')) + ', ' + \
-                                  unicode(visitnode.getData('date'))
+                    visit_descr = unicode(visitnode.get_data('station_name')) + ', ' + \
+                                  unicode(visitnode.get_data('date'))
                     for samplenode in visitnode.getChildren():
-                        sample_descr = unicode(samplenode.getData('sample_min_depth')) + '-' + \
-                                       unicode(samplenode.getData('sample_max_depth'))
+                        sample_descr = unicode(samplenode.get_data('sample_min_depth')) + '-' + \
+                                       unicode(samplenode.get_data('sample_max_depth'))
                         check_duplicates_list = [] # Duplicates can occur inside one sample.
                         sample_description = dataset_descr + ', ' + visit_descr + ', ' + sample_descr
                         for variablenode in samplenode.getChildren():
-                            scientific_name = unicode(variablenode.getData('scientific_name'))
-                            size_class = unicode(variablenode.getData('size_class'))
-                            stage = unicode(variablenode.getData('stage'))
-                            sex = unicode(variablenode.getData('sex'))
-                            parameter = unicode(variablenode.getData('parameter'))
-                            unit = unicode(variablenode.getData('unit'))
+                            scientific_name = unicode(variablenode.get_data('scientific_name'))
+                            size_class = unicode(variablenode.get_data('size_class'))
+                            stage = unicode(variablenode.get_data('stage'))
+                            sex = unicode(variablenode.get_data('sex'))
+                            parameter = unicode(variablenode.get_data('parameter'))
+                            unit = unicode(variablenode.get_data('unit'))
                             #
                             unique_items = (scientific_name, size_class, stage, sex, parameter, unit)
                             if unique_items in check_duplicates_list:
@@ -499,14 +499,14 @@ class ScreeningActivity(activity_base.ActivityBase):
         for dataset in datasets:
             if nodelevel == 'dataset':
                 if key in dataset.getDataDict().keys():
-                    columncontent_set.add(unicode(dataset.getData(key)))
+                    columncontent_set.add(unicode(dataset.get_data(key)))
                 else:
                     columncontent_set.add('') # Add empty field.
             #
             for visitnode in dataset.getChildren():
                 if nodelevel == 'visit':
                     if key in visitnode.getDataDict().keys():
-                        columncontent_set.add(unicode(visitnode.getData(key)))
+                        columncontent_set.add(unicode(visitnode.get_data(key)))
                     else:
                         columncontent_set.add('') # Add empty field.
                     continue    
@@ -514,7 +514,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                 for samplenode in visitnode.getChildren():
                     if nodelevel == 'sample':
                         if key in samplenode.getDataDict().keys():
-                            columncontent_set.add(unicode(samplenode.getData(key)))
+                            columncontent_set.add(unicode(samplenode.get_data(key)))
                         else:
                             columncontent_set.add('') # Add empty field.
                         continue    
@@ -522,7 +522,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                     for variablenode in samplenode.getChildren():
                         if nodelevel == 'variable':
                             if key in variablenode.getDataDict().keys():
-                                columncontent_set.add(unicode(variablenode.getData(key)))
+                                columncontent_set.add(unicode(variablenode.get_data(key)))
                             else:
                                 columncontent_set.add('') # Add empty field.
                             continue    
@@ -585,7 +585,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                 for visitnode in dataset.getChildren():
                     for samplenode in visitnode.getChildren():
                         for variablenode in samplenode.getChildren():
-                            parameter_set.add(variablenode.getData('parameter') + ' (' + variablenode.getData('unit') + ')')
+                            parameter_set.add(variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')')
             self._parameter_list.setList(sorted(parameter_set))
 
     def _plotScreening(self):
@@ -620,9 +620,9 @@ class ScreeningActivity(activity_base.ActivityBase):
                 for visitnode in dataset.getChildren():
                     for samplenode in visitnode.getChildren():
                         for variablenode in samplenode.getChildren():
-                            if (variablenode.getData('parameter') + ' (' + variablenode.getData('unit') + ')') == parameter:
-#                                 unit_set.add(variablenode.getData('unit'))
-                                value = variablenode.getData('value')
+                            if (variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')') == parameter:
+#                                 unit_set.add(variablenode.get_data('unit'))
+                                value = variablenode.get_data('value')
                                 yarray.append(value)                  
         #
 #         units = ' --- '.join(sorted(unit_set))
@@ -665,12 +665,12 @@ class ScreeningActivity(activity_base.ActivityBase):
         if datasets and (len(datasets) > 0):
             for dataset in toolbox_datasets.ToolboxDatasets().getDatasets():
                 for visitnode in dataset.getChildren():
-                    date = visitnode.getData('date')
+                    date = visitnode.get_data('date')
                     for samplenode in visitnode.getChildren():
                         for variablenode in samplenode.getChildren():
-                            if (variablenode.getData('parameter') + ' (' + variablenode.getData('unit') + ')') == parameter:
-#                                 unit_set.add(variablenode.getData('unit'))
-                                value = variablenode.getData('value')
+                            if (variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')') == parameter:
+#                                 unit_set.add(variablenode.get_data('unit'))
+                                value = variablenode.get_data('value')
                                 xarray.append(date)                  
                                 yarray.append(value)                  
         #
