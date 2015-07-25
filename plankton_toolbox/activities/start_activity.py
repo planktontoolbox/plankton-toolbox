@@ -39,18 +39,15 @@ class StartActivity(activity_base.ActivityBase):
             """)
         contentLayout.addWidget(self._activityheader)
         # Add content to the activity.
-        contentLayout.addLayout(self._contentWelcome())
-#         contentLayout.addLayout(self._contentUsage())
-#         contentLayout.addLayout(self._contentPreloaded())
-#         contentLayout.addLayout(self._contentUnderDevelopment())
+        contentLayout.addLayout(self._content_welcome())
         contentLayout.addStretch(5)
 
-    def _contentWelcome(self):
+    def _content_welcome(self):
         """ """
         # Active widgets and connections.
         label = utils_qt.RichTextQLabel()
 #         label.setText(help_texts.HelpTexts().getText('StartActivity_intro_1'))
-        label.setText(help_texts.HelpTexts().getText('StartActivity_intro'))
+        label.setText(help_texts.HelpTexts().getText('start_activity_intro'))
         # Layout.
         layout = QtGui.QGridLayout()
         gridrow = 0
@@ -60,47 +57,4 @@ class StartActivity(activity_base.ActivityBase):
         layout.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 20)
         #
         return layout
-
-#     def _contentUsage(self):
-#         """ """
-#         # Active widgets and connections.
-#         label = utils_qt.RichTextQLabel()
-#         label.setText(help_texts.HelpTexts().getText('StartActivity_intro_2'))
-#         # Layout.
-#         layout = QtGui.QGridLayout()
-#         gridrow = 0
-#         layout.addWidget(QtGui.QLabel(''), gridrow, 0, 1, 1) # Add space to the left.
-#         layout.addWidget(label, gridrow, 1, 1, 20)
-#         gridrow += 1
-#         layout.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 20)
-#         #
-#         return layout
-# 
-#     def _contentPreloaded(self):
-#         """ """
-#         # Active widgets and connections.
-#         label = utils_qt.RichTextQLabel()
-#         label.setText(help_texts.HelpTexts().getText('StartActivity_intro_3'))
-#         # Layout.
-#         layout = QtGui.QGridLayout()
-#         gridrow = 0
-#         layout.addWidget( QtGui.QLabel(''), gridrow, 0, 1, 1) # Add space to the left.
-#         layout.addWidget(label, gridrow, 1, 1, 20)
-#         gridrow += 1
-#         layout.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 20)
-#         #
-#         return layout
-# 
-#     def _contentUnderDevelopment(self):
-#         """ """
-#         # Active widgets and connections.
-#         label = utils_qt.RichTextQLabel()
-#         label.setText(help_texts.HelpTexts().getText('StartActivity_intro_4'))
-#         # Layout.
-#         layout = QtGui.QGridLayout()
-#         gridrow = 0
-#         layout.addWidget( QtGui.QLabel(''), gridrow, 0, 1, 1) # Add space to the left.
-#         layout.addWidget(label, gridrow, 1, 1, 20)
-#         #
-#         return layout
 

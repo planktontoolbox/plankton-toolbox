@@ -126,7 +126,7 @@ class DevTestTool(tool_base.ToolBase):
             import_column = settings['import_column']
             export_column = settings['export_column']
             #
-            self._parent.showActivityByName(settings['show_activity_after'])
+            self._parent.show_activity_by_name(settings['show_activity_after'])
             #
             # Set up for import file parsing.
             impMgr = toolbox_utils.ImportManager(import_parser_path + import_parser,
@@ -147,7 +147,7 @@ class DevTestTool(tool_base.ToolBase):
             dataset.addMetadata('export_column', export_column)
             toolbox_datasets.ToolboxDatasets().add_dataset(dataset)
             
-            self._parent.showActivityByName(settings['show_activity_after'])
+            self._parent.show_activity_by_name(settings['show_activity_after'])
         except Exception as e:
             toolbox_utils.Logging().warning('Failed to run script: %s' % (e))
             raise

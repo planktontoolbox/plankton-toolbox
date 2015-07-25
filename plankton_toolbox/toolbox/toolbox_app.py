@@ -57,7 +57,7 @@ def plankton_toolbox_application():
     window.show()
     sys.exit(app.exec_())
 
-def setVersion(version):
+def set_version(version):
         """ """
         global __version__
         __version__ = version

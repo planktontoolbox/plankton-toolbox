@@ -42,7 +42,7 @@ class ActivityManager(object):
         """ """
         self._parent = parentwidget
 
-    def initActivities(self):
+    def init_activities(self):
         """ Activity activator. """
         self._activitylist.append(start_activity.StartActivity('Introduction', self._parent))
 #        self._activitylist.append(create_dataset_activity.CreateDatasetActivity('(Create dataset)', self._parent))
@@ -56,25 +56,25 @@ class ActivityManager(object):
 #        self._activitylist.append(create_reports_OLD_activity.CreateReportsActivity('Create reports (OLD)", self._parent))
 #        self._activitylist.append(template_activity.TemplateActivity('(Activity template)", self._parent))
         
-    def getActivityByName(self, object_name):
-        """ Returns the activity. """
-        for activity in self._activitylist:
-            if activity.objectName() == object_name: 
-                return activity
-        return None
-        
-    def showActivityByIndex(self, index):
-        """ Makes an activity visible. """
-        self._activitylist[index]._parent.showActivity(self._activitylist[index])
+#     def get_activity_by_name(self, object_name):
+#         """ Returns the activity. """
+#         for activity in self._activitylist:
+#             if activity.objectName() == object_name: 
+#                 return activity
+#         return None
+#         
+#     def show_activity_by_index(self, index):
+#         """ Makes an activity visible. """
+#         self._activitylist[index]._parent.showActivity(self._activitylist[index])
 
         
-    def showActivityByName(self, object_name):
+    def show_activity_by_name(self, object_name):
         """ Makes an activity visible. """
         for activity in self._activitylist:
             if activity.objectName() == object_name: 
                 activity._parent.showActivity(activity)
                 return
         
-    def getActivityList(self):
+    def get_activity_list(self):
         """ """
         return self._activitylist

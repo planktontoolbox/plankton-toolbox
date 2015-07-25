@@ -55,7 +55,7 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
         self._column_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         self._column_list.setEnabled(False)
         #
-        self.connect(self._column_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._updateColumnContent)                
+        self.connect(self._column_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._update_column_content)                
         # Column content.
         self._content_listview = utils_qt.SelectableQListView()
 #         self._content_listview.setMaximumHeight(100)
@@ -94,7 +94,7 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
         #
         return self
 
-    def _updateColumnContent(self, selected_row):
+    def _update_column_content(self, selected_row):
         """ """
         analysisdata = self._analysisdata.get_data()
         if not analysisdata:

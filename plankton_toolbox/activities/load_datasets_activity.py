@@ -33,21 +33,21 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         self._last_used_excelfile_name = ''
         # Load available dataset parsers.
         self._parser_list = []
-        self._loadAvailableParsers()
+        self._load_available_parsers()
         # Initialize parent (self._create_content will be called).
         super(LoadDatasetsActivity, self).__init__(name, parentwidget)
         # Log available parsers when GUI setup has finished.
-        QtCore.QTimer.singleShot(10, self._logAvailableParsers)
+        QtCore.QTimer.singleShot(10, self._log_available_parsers)
         
 
-    def _loadAvailableParsers(self):
+    def _load_available_parsers(self):
         """ """
         self._parser_path = 'toolbox_data/parsers/'
         self._parser_list = []
         for parserpath in glob.glob(self._parser_path + '*.xlsx'):
             self._parser_list.append(os.path.basename(parserpath))
 
-    def _logAvailableParsers(self):
+    def _log_available_parsers(self):
         """ """
         if len(self._parser_list) > 0:
             toolbox_utils.Logging().log('') # Empty line.
@@ -68,21 +68,21 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         self._activityheader.setAlignment(QtCore.Qt.AlignHCenter)
         contentLayout.addWidget(self._activityheader)
         # Add content to the activity.
-        contentLayout.addWidget(self._contentLoadDataset())
-        contentLayout.addWidget(self._contentLoadedDatasets(), 10)
+        contentLayout.addWidget(self._content_load_dataset())
+        contentLayout.addWidget(self._content_loaded_datasets(), 10)
 #        contentLayout.addStretch(5)
         # Style.
         self._activityheader.setStyleSheet(""" 
             * { color: white; background-color: #00677f; }
             """)
     
-    def _contentLoadDataset(self):
+    def _content_load_dataset(self):
         """ """
         # Active widgets and connections.
         selectdatabox = QtGui.QGroupBox('Import', self)
         tabWidget = QtGui.QTabWidget()
-        tabWidget.addTab(self._contentTextfile(), 'Text files (*.txt)')
-        tabWidget.addTab(self._contentXlsx(), 'Excel files (*.xlsx)')
+        tabWidget.addTab(self._content_textfile(), 'Text files (*.txt)')
+        tabWidget.addTab(self._content_xlsx(), 'Excel files (*.xlsx)')
         # Layout widgets.
         layout = QtGui.QVBoxLayout()
         layout.addWidget(tabWidget)
@@ -91,7 +91,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         return selectdatabox
 
     # ===== TEXT FILES ======
-    def _contentTextfile(self):
+    def _content_textfile(self):
         """ """
         widget = QtGui.QWidget()
         # Active widgets and connections.
@@ -101,14 +101,14 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         self._textfile_parser_list = QtGui.QComboBox()
         self._textfile_parser_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         self._textfile_parser_list.addItems(["<select>"])
-        self.connect(self._textfile_parser_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._textfileParserSelected)                
+        self.connect(self._textfile_parser_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._textfile_parser_selected)                
         # - Add available dataset parsers.
         self._textfile_parser_list.addItems(self._parser_list)                
         # - Select import column:
         self._textfile_importcolumn_list = QtGui.QComboBox()
         self._textfile_importcolumn_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         self._textfile_importcolumn_list.addItems(["<no parser selected>"])        
-        self.connect(self._textfile_importcolumn_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._textfileImportColumnSelected)                
+        self.connect(self._textfile_importcolumn_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._textfile_import_column_selected)                
         # - Select export column:
         self._textfile_exportcolumn_list = QtGui.QComboBox()
         self._textfile_exportcolumn_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
@@ -125,7 +125,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         self._textfile_encoding_list.addItems(self._encodings_list)
         # Load dataset.
         self._textfile_getdataset_button = QtGui.QPushButton('Import dataset(s)...')
-        self.connect(self._textfile_getdataset_button, QtCore.SIGNAL('clicked()'), self._loadTextFiles)                
+        self.connect(self._textfile_getdataset_button, QtCore.SIGNAL('clicked()'), self._load_text_files)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         gridrow = 0
@@ -159,7 +159,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         #
         return widget
         
-    def _textfileParserSelected(self, selected_row):
+    def _textfile_parser_selected(self, selected_row):
         """ """
         if (selected_row > 0) and (selected_row <= len(self._parser_list)):
             toolbox_utils.Logging().log('Selected parser: ' + unicode(self._parser_list[selected_row - 1]))
@@ -184,7 +184,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             self._textfile_exportcolumn_list.clear()
             self._textfile_exportcolumn_list.addItems(['no parser selected'])
 
-    def _textfileImportColumnSelected(self, selected_row):
+    def _textfile_import_column_selected(self, selected_row):
         """ """
         # Reset. 
         self._textfile_encoding_list.setCurrentIndex(0)
@@ -204,7 +204,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                         if row[index] and (row[index] in self._encodings_list):
                             self._textfile_encoding_list.setCurrentIndex(self._encodings_list.index(row[index]))
 
-    def _loadTextFiles(self):
+    def _load_text_files(self):
         """ """
         try:
             toolbox_utils.Logging().log('') # Empty line.
@@ -258,7 +258,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             toolbox_utils.Logging().log('Importing datasets done. Number of imported datasets: ' + unicode(datasetcount))
 
     # ===== EXCEL FILES ======
-    def _contentXlsx(self):
+    def _content_xlsx(self):
         """ """
         widget = QtGui.QWidget()
         # Active widgets and connections.
@@ -269,7 +269,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         self._excel_parser_list = QtGui.QComboBox()
         self._excel_parser_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         self._excel_parser_list.addItems(["<select>"])
-        self.connect(self._excel_parser_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._excelParserSelected)                
+        self.connect(self._excel_parser_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._excel_parser_selected)                
         # - Add available dataset parsers.
         self._excel_parser_list.addItems(self._parser_list)                
         # - Select import column:
@@ -282,7 +282,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         self._excel_exportcolumn_list.addItems(["<no parser selected>"])        
         # Load dataset.
         self._excel_getdataset_button = QtGui.QPushButton('Load dataset(s)...')
-        self.connect(self._excel_getdataset_button, QtCore.SIGNAL('clicked()'), self._loadExcelFile)                
+        self.connect(self._excel_getdataset_button, QtCore.SIGNAL('clicked()'), self._load_excel_file)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         gridrow = 0
@@ -313,7 +313,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         #
         return widget
 
-    def _excelParserSelected(self, selected_row):
+    def _excel_parser_selected(self, selected_row):
         """ """
         if (selected_row > 0) and (selected_row <= len(self._parser_list)):
             toolbox_utils.Logging().log('Selected parser: ' + unicode(self._parser_list[selected_row - 1]))
@@ -339,7 +339,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             self._excel_exportcolumn_list.clear()
             self._excel_exportcolumn_list.addItems(['no parser selected'])
 
-    def _loadExcelFile(self):
+    def _load_excel_file(self):
         """ """
         try:
             toolbox_utils.Logging().log('') # Empty line.
@@ -388,7 +388,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             toolbox_utils.Logging().log('Importing datasets done. Number of loaded datasets: ' + unicode(datasetcount))
 
     # ===== LOADED DATASETS =====    
-    def _contentLoadedDatasets(self):
+    def _content_loaded_datasets(self):
         """ """
         # Active widgets and connections.
         selectdatabox = QtGui.QGroupBox('Imported datasets', self)
@@ -415,7 +415,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
              QtCore.SIGNAL('datasetListChanged'), 
              self._update_dataset_list)
         # Connection for selected row.
-        self._datasets_table.clicked.connect(self._selectionChanged)
+        self._datasets_table.clicked.connect(self._selection_changed)
                         
         # Buttons.
         self._unloadalldatasets_button = QtGui.QPushButton('Remove all datasets')
@@ -424,9 +424,9 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         self._viewdataset_checkbox = QtGui.QCheckBox('View marked dataset')
         self._viewdataset_checkbox.setChecked(False)
         # Button connections.
-        self.connect(self._unloadalldatasets_button, QtCore.SIGNAL('clicked()'), self._unloadAllDatasets)                
-        self.connect(self._unloadmarkeddatasets_button, QtCore.SIGNAL('clicked()'), self._unloadMarkedDatasets)                
-        self._viewdataset_checkbox.clicked.connect(self._selectionChanged)
+        self.connect(self._unloadalldatasets_button, QtCore.SIGNAL('clicked()'), self._unload_all_datasets)                
+        self.connect(self._unloadmarkeddatasets_button, QtCore.SIGNAL('clicked()'), self._unload_marked_datasets)                
+        self._viewdataset_checkbox.clicked.connect(self._selection_changed)
         # Layout widgets.
         buttonlayout = QtGui.QHBoxLayout()
         buttonlayout.addWidget(self._unloadalldatasets_button)
@@ -443,11 +443,11 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         #       
         return selectdatabox
 
-    def _unloadAllDatasets(self):
+    def _unload_all_datasets(self):
         """ """
         toolbox_datasets.ToolboxDatasets().clear()
 
-    def _unloadMarkedDatasets(self):
+    def _unload_marked_datasets(self):
         # Remove datasets, start with the last one. 
         rowcount = self._datasets_table.tablemodel.rowCount()
         for rowindex in range(rowcount):
@@ -489,7 +489,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         self._datasets_table.resizeColumnsToContents()
 
     
-    def _selectionChanged(self):
+    def _selection_changed(self):
         """ """
         if self._viewdataset_checkbox.isChecked():
             modelIndex = self._datasets_table.selectionModel.currentIndex()

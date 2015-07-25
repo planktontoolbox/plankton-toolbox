@@ -30,15 +30,15 @@ class ActivityBase(QtGui.QWidget):
         #
         self._write_to_status_bar('')
 
-    def setMainMenuButton(self, button):
+    def set_main_menu_button(self, button):
         """ """
         self._mainmenubutton = button
     
-    def getMainMenuButton(self):
+    def get_main_menu_button(self):
         """ """
         return self._mainmenubutton
     
-    def showInMainWindow(self):
+    def show_in_main_window(self):
         """ """
         self._parent.showActivity(self)
     

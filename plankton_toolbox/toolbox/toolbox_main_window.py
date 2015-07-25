@@ -65,7 +65,7 @@ class MainWindow(QtGui.QMainWindow):
         self._toolmanager.init_tools()
         self._activitymanager = activity_manager.ActivityManager()
         self._activitymanager.set_parent(self)
-        self._activitymanager.initActivities()
+        self._activitymanager.init_activities()
         # Add tools to selector.
         self._create_contentSelectors()
         # Loads last used window positions.
@@ -180,20 +180,20 @@ class MainWindow(QtGui.QMainWindow):
         toolsgroup.setLayout(toolsvbox)
         grid1.addStretch(5)
         # Add one button for each activity. Create stacked widgets.
-        for activity in self._activitymanager.getActivityList():
+        for activity in self._activitymanager.get_activity_list():
             button = utils_qt.ActivityMenuQLabel(' ' + activity.objectName())
-            activity.setMainMenuButton(button)
+            activity.set_main_menu_button(button)
             activitiesvbox.addWidget(button) # Adds to stack.                  
             # The activity is called to select stack item by object, not index.
             self.connect(button, QtCore.SIGNAL('clicked()'), button.markAsSelected)
-            self.connect(button, QtCore.SIGNAL('clicked()'), activity.showInMainWindow)
+            self.connect(button, QtCore.SIGNAL('clicked()'), activity.show_in_main_window)
             # Create one layer in the stacked activity widget.
             self._activitystack.addWidget(activity)
         activitiesvbox.addStretch(5)
         # Add one button for each tool.
         for tool in self._toolmanager.get_tool_list():
             button = utils_qt.ClickableQLabel(' ' + tool.objectName())
-            button_hide = utils_qt.ClickableQLabel('(hide)')
+            button_hide = utils_qt.ClickableQLabel('Hide')
             showhidehbox = QtGui.QHBoxLayout()
             showhidehbox.addWidget(button)
             showhidehbox.addWidget(button_hide)
@@ -201,23 +201,27 @@ class MainWindow(QtGui.QMainWindow):
             toolsvbox.addLayout(showhidehbox)
             self.connect(button, QtCore.SIGNAL('clicked()'), tool.show_tool) 
             self.connect(button_hide, QtCore.SIGNAL('clicked()'), tool.hide_tool) 
+        # Button to hide all tools.
+        button = utils_qt.ClickableQLabel('Hide all')
+        toolsvbox.addWidget(button)
+        self.connect(button, QtCore.SIGNAL('clicked()'), self._hideAllTools) 
         toolsvbox.addStretch(10)
         # Activate startup activity. Select the first one in list.
-        activities = self._activitymanager.getActivityList()
+        activities = self._activitymanager.get_activity_list()
         if len(activities) > 0:
-            activities[0].showInMainWindow()
+            activities[0].show_in_main_window()
 
     def showActivity(self, activity):
         """ """
 ###        self._activityheader.setText('<b>' + activity.objectName() + '</b>')
         self._activitystack.setCurrentWidget(activity)
         # Mark left menu item as  active. 
-        if activity.getMainMenuButton():
-            activity.getMainMenuButton().markAsSelected()
+        if activity.get_main_menu_button():
+            activity.get_main_menu_button().markAsSelected()
 
-    def showActivityByName(self, activity_name):
+    def show_activity_by_name(self, activity_name):
         """ """
-        for activity in self._activitymanager.getActivityList():
+        for activity in self._activitymanager.get_activity_list():
             if activity.objectName() == activity_name:
                 self.showActivity(activity)
                 return

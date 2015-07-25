@@ -30,7 +30,7 @@ class HelpTexts(object):
   
     def _addTexts(self):
         """ """          
-        self._texts['StartActivity_intro'] = """
+        self._texts['start_activity_intro'] = """
         <br/>
         <h3>Welcome to the Plankton Toolbox</h3>
         <p>

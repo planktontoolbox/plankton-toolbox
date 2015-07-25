@@ -34,8 +34,8 @@ class ScreeningActivity(activity_base.ActivityBase):
 
     def update(self):
         """ """
-        self.updateColumnList()
-        self.updateParameterList()
+        self.update_column_list()
+        self.update_parameter_list()
         
     def _create_content(self):
         """ """
@@ -51,17 +51,17 @@ class ScreeningActivity(activity_base.ActivityBase):
             """)
         contentLayout.addWidget(self._activityheader)
         # Add content to the activity.
-        contentLayout.addWidget(self._contentScreeningTabs())
+        contentLayout.addWidget(self._content_screening_tabs())
 
-    def _contentScreeningTabs(self):
+    def _content_screening_tabs(self):
         """ """
         # Active widgets and connections.
         selectdatabox = QtGui.QGroupBox('', self)
         tabWidget = QtGui.QTabWidget()
-        tabWidget.addTab(self._contentStructureScreening(), 'Structure')
-        tabWidget.addTab(self._contentCodesSpeciesScreening(), 'Code lists and species')
-        tabWidget.addTab(self._contentCheckColumnValues(), 'Column values')
-        tabWidget.addTab(self._contentPlotParameters(), 'Plot parameters')
+        tabWidget.addTab(self._content_structure_screening(), 'Structure')
+        tabWidget.addTab(self._content_codes_species_screening(), 'Code lists and species')
+        tabWidget.addTab(self._content_check_column_values(), 'Column values')
+        tabWidget.addTab(self._content_plot_parameters(), 'Plot parameters')
         # Layout widgets.
         layout = QtGui.QVBoxLayout()
         layout.addWidget(tabWidget)
@@ -70,7 +70,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         return selectdatabox
 
     # === Content structure ===
-    def _contentStructureScreening(self):
+    def _content_structure_screening(self):
         """ """
         widget = QtGui.QWidget()
         # Active widgets and connections.
@@ -78,14 +78,14 @@ class ScreeningActivity(activity_base.ActivityBase):
 #         introlabel.setText(help_texts.HelpTexts().getText('ScreeningActivity_intro_0'))
         #
         self._checkdatasets_button = QtGui.QPushButton('View\ndatasets')
-        self.connect(self._checkdatasets_button, QtCore.SIGNAL('clicked()'), self._checkDatasets)                
+        self.connect(self._checkdatasets_button, QtCore.SIGNAL('clicked()'), self._check_datasets)                
         self._checkvisits_button = QtGui.QPushButton('View\nsampling events')
-        self.connect(self._checkvisits_button, QtCore.SIGNAL('clicked()'), self._checkVisits) 
+        self.connect(self._checkvisits_button, QtCore.SIGNAL('clicked()'), self._check_visits) 
         self._checksamples_button = QtGui.QPushButton('View\nsamples')
-        self.connect(self._checksamples_button, QtCore.SIGNAL('clicked()'), self._checkSamples) 
+        self.connect(self._checksamples_button, QtCore.SIGNAL('clicked()'), self._check_samples) 
         #                
         self._checkduplicates_button = QtGui.QPushButton('Scan for\nduplicates')
-        self.connect(self._checkduplicates_button, QtCore.SIGNAL('clicked()'), self._scanForDuplicates)                
+        self.connect(self._checkduplicates_button, QtCore.SIGNAL('clicked()'), self._scan_for_duplicates)                
 
         # Result content.
         self._structureresult_list = QtGui.QTextEdit()
@@ -112,7 +112,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         #
         return widget
 
-    def _checkDatasets(self):
+    def _check_datasets(self):
         """ """
         self._structureresult_list.clear()
         datasets = toolbox_datasets.ToolboxDatasets().get_datasets()
@@ -139,7 +139,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                       ', variable rows: ' + unicode(countvariables) 
                 self._structureresult_list.append(row)
 
-    def _checkVisits(self):
+    def _check_visits(self):
         """ """
         self._structureresult_list.clear()
         datasets = toolbox_datasets.ToolboxDatasets().get_datasets()
@@ -167,7 +167,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                       ', variable rows: ' + unicode(countvariables) 
                     self._structureresult_list.append(row)
 
-    def _checkSamples(self):
+    def _check_samples(self):
         """ """
         self._structureresult_list.clear()
         datasets = toolbox_datasets.ToolboxDatasets().get_datasets()
@@ -213,7 +213,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                         row = '         - Unique taxon-names/size-classes/stages/sex: ' + unicode(len(taxonsizestagesex_set)) 
                         self._structureresult_list.append(row)
 
-    def _scanForDuplicates(self):
+    def _scan_for_duplicates(self):
         """ """
         self._structureresult_list.clear()
         datasets = toolbox_datasets.ToolboxDatasets().get_datasets()
@@ -261,7 +261,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                                 check_duplicates_list.append(unique_items)
 
     # === Content code lists and species ===
-    def _contentCodesSpeciesScreening(self):
+    def _content_codes_species_screening(self):
         """ """
         widget = QtGui.QWidget()
         # Active widgets and connections.
@@ -275,11 +275,11 @@ class ScreeningActivity(activity_base.ActivityBase):
 #         introlabel_4.setText(help_texts.HelpTexts().getText('ScreeningActivity_sizeclasses'))
         #
         self._checkcodes_button = QtGui.QPushButton('Check\ncode lists')
-        self.connect(self._checkcodes_button, QtCore.SIGNAL('clicked()'), self._codeListScreening)                
+        self.connect(self._checkcodes_button, QtCore.SIGNAL('clicked()'), self._code_list_screening)                
         self._checkspecies_button = QtGui.QPushButton('Check\nspecies')
-        self.connect(self._checkspecies_button, QtCore.SIGNAL('clicked()'), self._speciesScreening) 
+        self.connect(self._checkspecies_button, QtCore.SIGNAL('clicked()'), self._species_screening) 
         self._checksizeclasses_button = QtGui.QPushButton('Check\nsize classes')
-        self.connect(self._checksizeclasses_button, QtCore.SIGNAL('clicked()'), self._bvolScreening) 
+        self.connect(self._checksizeclasses_button, QtCore.SIGNAL('clicked()'), self._bvol_screening) 
 
         # Result content.
         self._codesspeciesresult_list = QtGui.QTextEdit()
@@ -307,7 +307,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         #
         return widget
 
-    def _codeListScreening(self):
+    def _code_list_screening(self):
         """ """
         # Screening results is also shown in the toolbox log.
         tool_manager.ToolManager().show_tool_by_name('Toolbox logging')
@@ -346,7 +346,7 @@ class ScreeningActivity(activity_base.ActivityBase):
             toolbox_utils.Logging().log('Code list screening done.')
             self._write_to_status_bar('')
 
-    def _speciesScreening(self):
+    def _species_screening(self):
         """ """
         # Screening results is also shown in the toolbox log.
         tool_manager.ToolManager().show_tool_by_name('Toolbox logging')
@@ -383,7 +383,7 @@ class ScreeningActivity(activity_base.ActivityBase):
             toolbox_utils.Logging().log('Species screening done.')
             self._write_to_status_bar('')
 
-    def _bvolScreening(self):
+    def _bvol_screening(self):
         """ """
         # Screening results is also shown in the toolbox log.
         tool_manager.ToolManager().show_tool_by_name('Toolbox logging')
@@ -421,7 +421,7 @@ class ScreeningActivity(activity_base.ActivityBase):
             self._write_to_status_bar('')
 
     # === Content column values ===
-    def _contentCheckColumnValues(self):
+    def _content_check_column_values(self):
         """ """
         widget = QtGui.QWidget()
         # Active widgets and connections.
@@ -433,7 +433,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         self._column_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         self._column_list.setEnabled(False)
         #
-        self.connect(self._column_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._updateColumnContent)                
+        self.connect(self._column_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._update_column_content)                
         # Column content.
 ##        self._content_list = utils_qt.SelectableQListView()
 ##        self._content_list = QtGui.QListWidget()
@@ -458,7 +458,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         #
         return widget
 
-    def updateColumnList(self):
+    def update_column_list(self):
         """ """
         self._column_list.clear()
         self._content_list.clear()
@@ -475,7 +475,7 @@ class ScreeningActivity(activity_base.ActivityBase):
             self._column_list.clear()
             self._column_list.setEnabled(False)
                                
-    def _updateColumnContent(self, selected_row):
+    def _update_column_content(self, selected_row):
         """ """
         datasets = toolbox_datasets.ToolboxDatasets().get_datasets()
         self._content_list.clear()
@@ -532,7 +532,7 @@ class ScreeningActivity(activity_base.ActivityBase):
             self._content_list.append(row)
 
     # === Content plot ===
-    def _contentPlotParameters(self):
+    def _content_plot_parameters(self):
         """ """
         widget = QtGui.QWidget()
         # Active widgets and connections.
@@ -547,9 +547,9 @@ class ScreeningActivity(activity_base.ActivityBase):
         self.connect(markall_label, QtCore.SIGNAL('clicked()'), self._parameter_list.checkAll)                
         #
         self._plotparameters_button = QtGui.QPushButton('Plot parameter values')
-        self.connect(self._plotparameters_button, QtCore.SIGNAL('clicked()'), self._plotScreening)                
+        self.connect(self._plotparameters_button, QtCore.SIGNAL('clicked()'), self._plot_screening)                
         self._plotparameterperdate_button = QtGui.QPushButton('Plot parameters values per date')
-        self.connect(self._plotparameterperdate_button, QtCore.SIGNAL('clicked()'), self._plotScreeningPerDate)                
+        self.connect(self._plotparameterperdate_button, QtCore.SIGNAL('clicked()'), self._plot_screening_per_date)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         gridrow = 0
@@ -575,7 +575,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         #
         return widget
 
-    def updateParameterList(self):
+    def update_parameter_list(self):
         """ """
         self._parameter_list.clear()
         datasets = toolbox_datasets.ToolboxDatasets().get_datasets()
@@ -588,7 +588,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                             parameter_set.add(variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')')
             self._parameter_list.setList(sorted(parameter_set))
 
-    def _plotScreening(self):
+    def _plot_screening(self):
         """ """
         # Show the Graph plotter tool if hidden. 
         tool_manager.ToolManager().show_tool_by_name('Graph plotter')
@@ -602,13 +602,13 @@ class ScreeningActivity(activity_base.ActivityBase):
                         y_label = 'Value')        
         # One plot for each selected parameter.
         for parameter in self._parameter_list.getSelectedDataList():
-            self._addPlot(parameter)
+            self._add_plot(parameter)
         # View in the graph-plot tool.    
         graphtool.set_chart_selection(chart = 'Line chart',
                                     combined = True, stacked = False, y_log_scale = True)
         graphtool.set_plot_data(self._graph_plot_data)   
 
-    def _addPlot(self, parameter):
+    def _add_plot(self, parameter):
         """ """
         datasets = toolbox_datasets.ToolboxDatasets().get_datasets()
         #
@@ -634,7 +634,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         except UserWarning as e:
             QtGui.QMessageBox.warning(self, "Warning", unicode(e))
 
-    def _plotScreeningPerDate(self):
+    def _plot_screening_per_date(self):
         """ """
         # Show the Graph plotter tool if hidden. 
         tool_manager.ToolManager().show_tool_by_name('Graph plotter')
@@ -648,13 +648,13 @@ class ScreeningActivity(activity_base.ActivityBase):
                         y_label = 'Value')        
         # One plot for each selected parameter.
         for parameter in self._parameter_list.getSelectedDataList():
-            self._addPlotPerDate(parameter)
+            self._add_plot_per_date(parameter)
         # View in the graph-plot tool.    
         graphtool.set_chart_selection(chart = 'Scatter chart',
                                     combined = True, stacked = False, y_log_scale = True)
         graphtool.set_plot_data(self._graph_plot_data)   
 
-    def _addPlotPerDate(self, parameter):
+    def _add_plot_per_date(self, parameter):
         """ """
         datasets = toolbox_datasets.ToolboxDatasets().get_datasets()
         #
