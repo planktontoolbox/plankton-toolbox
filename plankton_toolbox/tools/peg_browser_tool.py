@@ -51,25 +51,25 @@ class PegBrowserTool(tool_base.ToolBase):
         # Create model.
         self._peg_object = toolbox_resources.ToolboxResources().get_resource_peg()
         # Initialize parent. Should be called after other 
-        # initialization since the base class calls _createContent().
+        # initialization since the base class calls _create_content().
         super(PegBrowserTool, self).__init__(name, parentwidget)
         #
         # Where is the tool allowed to dock in the main window.
         self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea)
         self.setBaseSize(600,600)
         
-    def _createContent(self):
+    def _create_content(self):
         """ """
-        content = self._createScrollableContent()
+        content = self._create_scrollable_content()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
-        contentLayout.addLayout(self._contentTaxonList())
-        contentLayout.addLayout(self._contentPegItem())
-        contentLayout.addLayout(self._contentDyntaxaControl())
+        contentLayout.addLayout(self._content_taxon_list())
+        contentLayout.addLayout(self._content_peg_item())
+        contentLayout.addLayout(self._content_dyntaxa_control())
         # Used when toolbox resource has changed.        
-        self.connect(toolbox_resources.ToolboxResources(), QtCore.SIGNAL('pegResourceLoaded'), self._pegRefresh)
+        self.connect(toolbox_resources.ToolboxResources(), QtCore.SIGNAL('pegResourceLoaded'), self._peg_refresh)
 
-    def _contentTaxonList(self):
+    def _content_taxon_list(self):
         """ """
         layout = QtGui.QVBoxLayout()
         self._tableView = utils_qt.ToolboxQTableView()
@@ -78,12 +78,12 @@ class PegBrowserTool(tool_base.ToolBase):
         self._model = PegTableModel(self._peg_object)
         self._tableView.setTablemodel(self._model)
         #
-        self.connect(self._tableView.selectionModel, QtCore.SIGNAL('currentChanged(QModelIndex, QModelIndex)'), self._showItemInfo)
-        self.connect(self._tableView.selectionModel, QtCore.SIGNAL('selectionChanged(QModelIndex, QModelIndex)'), self._showItemInfo)
+        self.connect(self._tableView.selectionModel, QtCore.SIGNAL('currentChanged(QModelIndex, QModelIndex)'), self._show_item_info)
+        self.connect(self._tableView.selectionModel, QtCore.SIGNAL('selectionChanged(QModelIndex, QModelIndex)'), self._show_item_info)
         #
         return layout
     
-    def _contentPegItem(self):
+    def _content_peg_item(self):
         """ """
         # Active widgets and connections.
         # Species level.
@@ -115,11 +115,11 @@ class PegBrowserTool(tool_base.ToolBase):
         #
         return layout
 
-    def _contentDyntaxaControl(self):
+    def _content_dyntaxa_control(self):
         """ """
         # Active widgets and connections.
         self._loadresource_button = QtGui.QPushButton('Load PEG resource')
-        self.connect(self._loadresource_button, QtCore.SIGNAL('clicked()'), self._loadResource)                
+        self.connect(self._loadresource_button, QtCore.SIGNAL('clicked()'), self._load_resource)                
         # Layout widgets.
         layout = QtGui.QHBoxLayout()
         layout.addStretch(5)
@@ -127,7 +127,7 @@ class PegBrowserTool(tool_base.ToolBase):
         #
         return layout
 
-    def _showItemInfo(self, index):
+    def _show_item_info(self, index):
         """ """
         #
         taxon = self._peg_object.getNameAndSizeList()[index.row()][0]
@@ -148,17 +148,17 @@ class PegBrowserTool(tool_base.ToolBase):
         self._volume_label.setText(unicode(sizeclass.get('Calculated volume, um3', '-')))
         self._carbon_label.setText(unicode(sizeclass.get('Calculated Carbon pg/counting unit', '-')))
 
-    def _loadResource(self):
+    def _load_resource(self):
         """ """
         # Dyntaxa is needed to load PEG.
-        self._writeToStatusBar('Loading PEG resource...')
+        self._write_to_status_bar('Loading PEG resource...')
         try:
             toolbox_resources.ToolboxResources().load_unloaded_resource_dyntaxa()
             toolbox_resources.ToolboxResources().load_resource_peg()
         finally:
-            self._writeToStatusBar('')
+            self._write_to_status_bar('')
 
-    def _pegRefresh(self):
+    def _peg_refresh(self):
         """ """
         self._model.reset()
         self._tableView.resizeColumnsToContents() # TODO: Check if time-consuming...
@@ -176,14 +176,14 @@ class PegTableModel(QtCore.QAbstractTableModel):
         """ """
         self._dataset = dataset
         
-    def row_count(self, parent=QtCore.QModelIndex()):
+    def rowCount(self, parent=QtCore.QModelIndex()):
         """ """
         if self._dataset:
             return len(self._dataset.getNameAndSizeList())
         else:
             return 0
 
-    def column_count(self, parent=QtCore.QModelIndex()):
+    def columnCount(self, parent=QtCore.QModelIndex()):
         """ """
         return 4
 

@@ -17,22 +17,22 @@ class TaxonImagesTool(tool_base.ToolBase):
     def __init__(self, name, parentwidget):
         """ """
         # Initialize parent. Should be called after other 
-        # initialization since the base class calls _createContent().
+        # initialization since the base class calls _create_content().
         super(TaxonImagesTool, self).__init__(name, parentwidget)
         #
         # Where is the tool allowed to dock in the main window.
         self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea)
         self.setBaseSize(600,600)
 
-    def _createContent(self):
+    def _create_content(self):
         """ """
-        content = self._createScrollableContent()
+        content = self._create_scrollable_content()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
-        contentLayout.addLayout(self._contentImage())
+        contentLayout.addLayout(self._content_image())
         contentLayout.addStretch(5)
 
-    def _contentImage(self):
+    def _content_image(self):
         """ """
         layout = QtGui.QVBoxLayout()
         label = QtGui.QLabel('<b><i>Incertae sedis</i></b>')
@@ -48,4 +48,4 @@ class TaxonImagesTool(tool_base.ToolBase):
     
     def _test(self):
         """ """
-        self._writeToLog('Name: ' + unicode(self._nameedit.text()))
+        self._write_to_log('Name: ' + unicode(self._nameedit.text()))

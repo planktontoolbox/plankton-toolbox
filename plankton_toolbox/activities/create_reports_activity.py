@@ -45,9 +45,9 @@ class CreateReportsActivity(activity_base.ActivityBase):
         # Initialize parent.
         super(CreateReportsActivity, self).__init__(name, parentwidget)
 
-    def _createContent(self):
+    def _create_content(self):
         """ """
-        content = self._createScrollableContent()
+        content = self._create_scrollable_content()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
         # Add activity name at top.

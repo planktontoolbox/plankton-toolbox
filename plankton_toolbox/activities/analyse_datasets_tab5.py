@@ -98,10 +98,10 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         
     def _addPlot_1(self, subplot_only = False):
         """ """
-        tool_manager.ToolManager().showToolByName('Graph plotter') # Show tool if hidden.
-        graphtool = tool_manager.ToolManager().getToolByName('Graph plotter')
+        tool_manager.ToolManager().show_tool_by_name('Graph plotter') # Show tool if hidden.
+        graphtool = tool_manager.ToolManager().get_tool_by_name('Graph plotter')
         if not subplot_only:
-            graphtool.clearPlotData()
+            graphtool.clear_plot_data()
         # Filtered data should be used.
         self._main_activity.updateFilter() # Must be done before create_filtered_dataset().
         analysisdata = self._analysisdata.create_filtered_dataset()
@@ -119,9 +119,9 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         #
         self._createPlotDataForTimeSeries(selectedparameter, analysisdata, self._plotdata)
         # Plot.
-        graphtool.setChartSelection(chart = 'Scatter chart',
+        graphtool.set_chart_selection(chart = 'Scatter chart',
                                     combined = True, stacked = False, y_log_scale = False)
-        graphtool.setPlotData(self._plotdata)
+        graphtool.set_plot_data(self._plotdata)
         
     def _addSubPlot_1(self):
         """ """
@@ -129,10 +129,10 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         
     def _addPlot_2(self, subplot_only = False):
         """ """
-        tool_manager.ToolManager().showToolByName('Graph plotter') # Show tool if hidden.
-        graphtool = tool_manager.ToolManager().getToolByName('Graph plotter')
+        tool_manager.ToolManager().show_tool_by_name('Graph plotter') # Show tool if hidden.
+        graphtool = tool_manager.ToolManager().get_tool_by_name('Graph plotter')
         if not subplot_only:
-            graphtool.clearPlotData()
+            graphtool.clear_plot_data()
         # Filtered data should be used.
         self._main_activity.updateFilter() # Must be done before create_filtered_dataset().
         analysisdata = self._analysisdata.create_filtered_dataset()
@@ -151,9 +151,9 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         #
         self._createPlotDataForSeasonalCycle(selectedparameter, analysisdata, self._plotdata)
         # Plot.
-        graphtool.setChartSelection(chart = 'Scatter chart',
+        graphtool.set_chart_selection(chart = 'Scatter chart',
                                     combined = True, stacked = False, y_log_scale = False)
-        graphtool.setPlotData(self._plotdata)
+        graphtool.set_plot_data(self._plotdata)
         
     def _addSubPlot_2(self):
         """ """
@@ -161,9 +161,9 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         
     def _addPlot_3(self):
         """ """
-        tool_manager.ToolManager().showToolByName('Graph plotter') # Show tool if hidden.
-        graphtool = tool_manager.ToolManager().getToolByName('Graph plotter')
-        graphtool.clearPlotData()
+        tool_manager.ToolManager().show_tool_by_name('Graph plotter') # Show tool if hidden.
+        graphtool = tool_manager.ToolManager().get_tool_by_name('Graph plotter')
+        graphtool.clear_plot_data()
         # Filtered data should be used.
         self._main_activity.updateFilter() # Must be done before create_filtered_dataset().
         analysisdata = self._analysisdata.create_filtered_dataset()
@@ -182,16 +182,16 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         #
         self._addPlotAaaaaaaaa(selectedparameter, analysisdata, plotdata)
         # Plot.
-        graphtool.setChartSelection(chart = 'Bar chart',
+        graphtool.set_chart_selection(chart = 'Bar chart',
                                     combined = True, stacked = False, y_log_scale = False)
-        graphtool.setPlotData(plotdata)
+        graphtool.set_plot_data(plotdata)
         
         
     def _addPlot_4(self):
         """ """
-        tool_manager.ToolManager().showToolByName('Graph plotter') # Show tool if hidden.
-        graphtool = tool_manager.ToolManager().getToolByName('Graph plotter')
-        graphtool.clearPlotData()
+        tool_manager.ToolManager().show_tool_by_name('Graph plotter') # Show tool if hidden.
+        graphtool = tool_manager.ToolManager().get_tool_by_name('Graph plotter')
+        graphtool.clear_plot_data()
         # Filtered data should be used.
         self._main_activity.updateFilter() # Must be done before create_filtered_dataset().
         analysisdata = self._analysisdata.create_filtered_dataset()
@@ -209,9 +209,9 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         #
         self._addPlotBbbbbbbbb(selectedparameter, analysisdata, plotdata)
         # Plot.
-        graphtool.setChartSelection(chart = 'Bar chart',
+        graphtool.set_chart_selection(chart = 'Bar chart',
                                     combined = True, stacked = False, y_log_scale = False)
-        graphtool.setPlotData(plotdata)
+        graphtool.set_plot_data(plotdata)
 
     def _createPlotDataForTimeSeries(self, selectedparameter, dataset, plotdata):
         """ """

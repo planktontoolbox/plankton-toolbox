@@ -27,9 +27,9 @@ from __future__ import unicode_literals
 #         # Initialize parent.
 #         super(ManageSpeciesListsActivity, self).__init__(name, parentwidget)
 # 
-#     def _createContent(self):
+#     def _create_content(self):
 #         """ """
-#         content = self._createScrollableContent()
+#         content = self._create_scrollable_content()
 #         contentLayout = QtGui.QVBoxLayout()
 #         content.setLayout(contentLayout)
 #         # Add activity name at top.
@@ -43,11 +43,11 @@ from __future__ import unicode_literals
 #         # Add content to the activity.
 #         widget = QtGui.QTabWidget()
 #         contentLayout.addWidget(widget)
-#         widget.addTab(self._createContentDyntaxa(), "Dyntaxa')
-#         widget.addTab(self._createContentPeg(), "PEG')
-#         widget.addTab(self._createContentHarmfulPlankton(), "Harmful plankton')
+#         widget.addTab(self._create_contentDyntaxa(), "Dyntaxa')
+#         widget.addTab(self._create_contentPeg(), "PEG')
+#         widget.addTab(self._create_contentHarmfulPlankton(), "Harmful plankton')
 #         
-#     def _createContentDyntaxa(self):
+#     def _create_contentDyntaxa(self):
 #         """ """        
 #         widget = QtGui.QWidget()
 #         # Active widgets and connections.
@@ -100,7 +100,7 @@ from __future__ import unicode_literals
 #         #
 #         return widget
 # 
-#     def _createContentPeg(self):
+#     def _create_contentPeg(self):
 #         """ """
 #         widget = QtGui.QWidget()
 #         # Active widgets and connections.
@@ -166,7 +166,7 @@ from __future__ import unicode_literals
 #         #
 #         return widget
 # 
-#     def _createContentHarmfulPlankton(self):
+#     def _create_contentHarmfulPlankton(self):
 #         """ """
 #         widget = QtGui.QWidget()
 #         # Active widgets and connections.

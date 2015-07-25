@@ -23,7 +23,7 @@ class ScreeningActivity(activity_base.ActivityBase):
     def __init__(self, name, parentwidget):
         """ """
         # Initialize parent. Should be called after other 
-        # initialization since the base class calls _createContent().
+        # initialization since the base class calls _create_content().
         super(ScreeningActivity, self).__init__(name, parentwidget)
         # Listen for changes in the toolbox dataset list.
         self.connect(toolbox_datasets.ToolboxDatasets(), 
@@ -37,9 +37,9 @@ class ScreeningActivity(activity_base.ActivityBase):
         self.updateColumnList()
         self.updateParameterList()
         
-    def _createContent(self):
+    def _create_content(self):
         """ """
-        content = self._createScrollableContent()
+        content = self._create_scrollable_content()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
         # Add activity name at top.
@@ -310,7 +310,7 @@ class ScreeningActivity(activity_base.ActivityBase):
     def _codeListScreening(self):
         """ """
         # Screening results is also shown in the toolbox log.
-        tool_manager.ToolManager().showToolByName('Toolbox logging')
+        tool_manager.ToolManager().show_tool_by_name('Toolbox logging')
         #
         self._codesspeciesresult_list.clear()
         #
@@ -318,7 +318,7 @@ class ScreeningActivity(activity_base.ActivityBase):
             toolbox_utils.Logging().log('') # Empty line.
             toolbox_utils.Logging().log('Code list screening started...')
             toolbox_utils.Logging().start_accumulated_logging()
-            self._writeToStatusBar('Code list screening in progress...')
+            self._write_to_status_bar('Code list screening in progress...')
             # Perform screening.
             codetypes_set = toolbox_utils.ScreeningManager().codeListScreening(toolbox_datasets.ToolboxDatasets().get_datasets())
         finally:
@@ -344,12 +344,12 @@ class ScreeningActivity(activity_base.ActivityBase):
             toolbox_utils.Logging().log('Screening was done on these code types: ' + 
                                     unicode(sorted(codetypes_set)))
             toolbox_utils.Logging().log('Code list screening done.')
-            self._writeToStatusBar('')
+            self._write_to_status_bar('')
 
     def _speciesScreening(self):
         """ """
         # Screening results is also shown in the toolbox log.
-        tool_manager.ToolManager().showToolByName('Toolbox logging')
+        tool_manager.ToolManager().show_tool_by_name('Toolbox logging')
         #
         self._codesspeciesresult_list.clear()
         #
@@ -357,7 +357,7 @@ class ScreeningActivity(activity_base.ActivityBase):
             toolbox_utils.Logging().log('') # Empty line.
             toolbox_utils.Logging().log('Species screening started...')
             toolbox_utils.Logging().start_accumulated_logging()
-            self._writeToStatusBar('Species screening in progress...')
+            self._write_to_status_bar('Species screening in progress...')
             # Perform screening.
             toolbox_utils.ScreeningManager().speciesScreening(toolbox_datasets.ToolboxDatasets().get_datasets())
         finally:
@@ -381,12 +381,12 @@ class ScreeningActivity(activity_base.ActivityBase):
             # Also add to the logging tool.
             toolbox_utils.Logging().log_all_accumulated_rows()
             toolbox_utils.Logging().log('Species screening done.')
-            self._writeToStatusBar('')
+            self._write_to_status_bar('')
 
     def _bvolScreening(self):
         """ """
         # Screening results is also shown in the toolbox log.
-        tool_manager.ToolManager().showToolByName('Toolbox logging')
+        tool_manager.ToolManager().show_tool_by_name('Toolbox logging')
         #
         self._codesspeciesresult_list.clear()
         #
@@ -394,7 +394,7 @@ class ScreeningActivity(activity_base.ActivityBase):
             toolbox_utils.Logging().log('') # Empty line.
             toolbox_utils.Logging().log('BVOL Species screening started...')
             toolbox_utils.Logging().start_accumulated_logging()
-            self._writeToStatusBar('BVOL Species screening in progress...')
+            self._write_to_status_bar('BVOL Species screening in progress...')
             # Perform screening.
             toolbox_utils.ScreeningManager().bvolSpeciesScreening(toolbox_datasets.ToolboxDatasets().get_datasets())
         finally:
@@ -418,7 +418,7 @@ class ScreeningActivity(activity_base.ActivityBase):
             # Also add to the logging tool.
             toolbox_utils.Logging().log_all_accumulated_rows()
             toolbox_utils.Logging().log('BVOL Species screening done.')
-            self._writeToStatusBar('')
+            self._write_to_status_bar('')
 
     # === Content column values ===
     def _contentCheckColumnValues(self):
@@ -591,9 +591,9 @@ class ScreeningActivity(activity_base.ActivityBase):
     def _plotScreening(self):
         """ """
         # Show the Graph plotter tool if hidden. 
-        tool_manager.ToolManager().showToolByName('Graph plotter')
-        graphtool = tool_manager.ToolManager().getToolByName('Graph plotter')
-        graphtool.clearPlotData()
+        tool_manager.ToolManager().show_tool_by_name('Graph plotter')
+        graphtool = tool_manager.ToolManager().get_tool_by_name('Graph plotter')
+        graphtool.clear_plot_data()
         # Set up plot data for this type.
         self._graph_plot_data = toolbox_utils.GraphPlotData(
                         title = 'Parameter values in sequence', 
@@ -604,9 +604,9 @@ class ScreeningActivity(activity_base.ActivityBase):
         for parameter in self._parameter_list.getSelectedDataList():
             self._addPlot(parameter)
         # View in the graph-plot tool.    
-        graphtool.setChartSelection(chart = 'Line chart',
+        graphtool.set_chart_selection(chart = 'Line chart',
                                     combined = True, stacked = False, y_log_scale = True)
-        graphtool.setPlotData(self._graph_plot_data)   
+        graphtool.set_plot_data(self._graph_plot_data)   
 
     def _addPlot(self, parameter):
         """ """
@@ -637,9 +637,9 @@ class ScreeningActivity(activity_base.ActivityBase):
     def _plotScreeningPerDate(self):
         """ """
         # Show the Graph plotter tool if hidden. 
-        tool_manager.ToolManager().showToolByName('Graph plotter')
-        graphtool = tool_manager.ToolManager().getToolByName('Graph plotter')
-        graphtool.clearPlotData()
+        tool_manager.ToolManager().show_tool_by_name('Graph plotter')
+        graphtool = tool_manager.ToolManager().get_tool_by_name('Graph plotter')
+        graphtool.clear_plot_data()
         # Set up plot data for this type.
         self._graph_plot_data = toolbox_utils.GraphPlotData(
                         title = 'Parameter values per date', 
@@ -650,9 +650,9 @@ class ScreeningActivity(activity_base.ActivityBase):
         for parameter in self._parameter_list.getSelectedDataList():
             self._addPlotPerDate(parameter)
         # View in the graph-plot tool.    
-        graphtool.setChartSelection(chart = 'Scatter chart',
+        graphtool.set_chart_selection(chart = 'Scatter chart',
                                     combined = True, stacked = False, y_log_scale = True)
-        graphtool.setPlotData(self._graph_plot_data)   
+        graphtool.set_plot_data(self._graph_plot_data)   
 
     def _addPlotPerDate(self, parameter):
         """ """

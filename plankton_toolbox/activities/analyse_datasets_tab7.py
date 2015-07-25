@@ -490,9 +490,9 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
     def _plotGraph(self):
         """ """
         # Show the Graph plotter tool if hidden. 
-        tool_manager.ToolManager().showToolByName('Graph plotter')
-        graphtool = tool_manager.ToolManager().getToolByName('Graph plotter')
-        graphtool.clearPlotData()
+        tool_manager.ToolManager().show_tool_by_name('Graph plotter')
+        graphtool = tool_manager.ToolManager().get_tool_by_name('Graph plotter')
+        graphtool.clear_plot_data()
         # Filtered data should be used.
         self._main_activity.updateFilter() # Must be done before create_filtered_dataset().
         analysisdata = self._analysisdata.create_filtered_dataset()
@@ -524,9 +524,9 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                                   split_on_depth,
                                   split_on_taxon)
         # View in the graph-plot tool.    
-        graphtool.setChartSelection(chart = 'Boxplot chart',
+        graphtool.set_chart_selection(chart = 'Boxplot chart',
                                     combined = True, stacked = False, y_log_scale = False)
-        graphtool.setPlotData(self._graph_plot_data)   
+        graphtool.set_plot_data(self._graph_plot_data)   
         
     def _extractPlotValues(self, dataset,
                         selectedparameter, 

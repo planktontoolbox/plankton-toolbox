@@ -38,7 +38,7 @@ class ActivityManager(object):
         self._parent = None
         self._activitylist = [] # List of activities derived from ActivityBase.        
 
-    def setParent(self, parentwidget):
+    def set_parent(self, parentwidget):
         """ """
         self._parent = parentwidget
 

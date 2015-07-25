@@ -78,7 +78,7 @@ class ToolboxSettings(QtCore.QObject):
     def save_settings(self, ui_settings):
         """ Store settings to QtCore.QSettings object."""
         serialized_settings = pickle.dumps(self._settings)
-        ui_settings.set_value('Toolbox settings', QtCore.QVariant(serialized_settings))
+        ui_settings.setValue('Toolbox settings', QtCore.QVariant(serialized_settings))
 
     def restore_default(self):
         """ """

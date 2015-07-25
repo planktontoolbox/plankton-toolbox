@@ -22,13 +22,13 @@ class ActivityBase(QtGui.QWidget):
         self._parent = parentwidget
         self._mainmenubutton = None
         #
-        self._writeToStatusBar('Loading ' + name + '...')
+        self._write_to_status_bar('Loading ' + name + '...')
         #
         self.setObjectName(name)
         # Add specific content. Abstract, implemented by subclasses.
-        self._createContent()
+        self._create_content()
         #
-        self._writeToStatusBar('')
+        self._write_to_status_bar('')
 
     def setMainMenuButton(self, button):
         """ """
@@ -43,14 +43,14 @@ class ActivityBase(QtGui.QWidget):
         self._parent.showActivity(self)
     
     @abstractmethod
-    def _createContent(self):
+    def _create_content(self):
         """ 
         Used to create the content of the activity window.
         Note: Abstract. Should be implemented by subclasses.
         """
         pass
 
-    def _createScrollableContent(self):
+    def _create_scrollable_content(self):
         """ 
         Creates the scrollable part of the activity content.
         Used by subclasses, if needed.
@@ -68,14 +68,14 @@ class ActivityBase(QtGui.QWidget):
         self.setLayout(mainlayout)
         return content 
 
-    def _writeToStatusBar(self, message):
+    def _write_to_status_bar(self, message):
         """ Used to write short messages to the main window status bar. """
         self._parent.statusBar().showMessage(message)
 
-    def _writeToLog(self, message):
+    def _write_to_log(self, message):
         """ 
         Used to write log messages. Depending on the main window
         settings they will appear on different locations, for example
         in log file and/or in the Log tool window. 
         """
-        self._parent.writeToLog(message)
+        self._parent.write_to_log(message)

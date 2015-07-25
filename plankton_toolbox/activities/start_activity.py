@@ -22,12 +22,12 @@ class StartActivity(activity_base.ActivityBase):
     def __init__(self, name, parentwidget):
         """ """
         # Initialize parent. Should be called after other 
-        # initialization since the base class calls _createContent().
+        # initialization since the base class calls _create_content().
         super(StartActivity, self).__init__(name, parentwidget)
 
-    def _createContent(self):
+    def _create_content(self):
         """ """
-        content = self._createScrollableContent()
+        content = self._create_scrollable_content()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
         # Add activity name at top.

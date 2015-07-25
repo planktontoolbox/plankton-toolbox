@@ -17,23 +17,23 @@ class MetadataEditorTool(tool_base.ToolBase):
     def __init__(self, name, parentwidget):
         """ """
         # Initialize parent. Should be called after other 
-        # initialization since the base class calls _createContent().
+        # initialization since the base class calls _create_content().
         super(MetadataEditorTool, self).__init__(name, parentwidget)
         #
         # Where is the tool allowed to dock in the main window.
         self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea)
         self.setBaseSize(600,600)
 
-    def _createContent(self):
+    def _create_content(self):
         """ """
-        content = self._createScrollableContent()
+        content = self._create_scrollable_content()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
-        contentLayout.addLayout(self._contentTest1())
-        contentLayout.addLayout(self._contentTest2())
+        contentLayout.addLayout(self._content_test_1())
+        contentLayout.addLayout(self._content_test_2())
         contentLayout.addStretch(5)
 
-    def _contentTest1(self):
+    def _content_test_1(self):
         """ """
         # Active widgets and connections.
         self._nameedit = QtGui.QLineEdit('<Name>')
@@ -47,7 +47,7 @@ class MetadataEditorTool(tool_base.ToolBase):
         #
         return layout
 
-    def _contentTest2(self):
+    def _content_test_2(self):
         """ """
         # Active widgets and connections.
         self._testbutton = QtGui.QPushButton('Write name to log')
@@ -61,4 +61,4 @@ class MetadataEditorTool(tool_base.ToolBase):
 
     def _test(self):
         """ """
-        self._writeToLog('Name: ' + unicode(self._nameedit.text()))
+        self._write_to_log('Name: ' + unicode(self._nameedit.text()))

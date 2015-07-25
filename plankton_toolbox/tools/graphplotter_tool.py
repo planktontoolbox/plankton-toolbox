@@ -27,18 +27,18 @@ class GraphPlotterTool(tool_base.ToolBase):
         self._plotdata = None
         self._current_chart = None 
         # Initialize parent. Should be called after other 
-        # initialization since the base class calls _createContent().
+        # initialization since the base class calls _create_content().
         super(GraphPlotterTool, self).__init__(name, parentwidget)
         # Where is the tool allowed to dock in the main window.
         self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea | QtCore.Qt.BottomDockWidgetArea)
         self.setBaseSize(600,600)
         #
         
-    def clearPlotData(self):
+    def clear_plot_data(self):
         """ """
-        self.setPlotData(None)
+        self.set_plot_data(None)
 
-    def setPlotData(self, plot_data):
+    def set_plot_data(self, plot_data):
         """ """
         self._figure.clear()
         self._canvas.draw()
@@ -52,10 +52,10 @@ class GraphPlotterTool(tool_base.ToolBase):
         else:
             self._plotdata = None
         #
-        self._resetLabels()
-        self._drawEmbeddedChart()
+        self._reset_labels()
+        self._draw_embedded_chart()
 
-    def setChartSelection(self, 
+    def set_chart_selection(self, 
                           chart = 'Line chart', # Line chart, Bar chart, Scatter chart, Pie chart, Map chart.
                           combined = False,
                           stacked = False,
@@ -68,31 +68,31 @@ class GraphPlotterTool(tool_base.ToolBase):
         self._stacked_checkbox.setChecked(stacked)
         self._ylogscale_checkbox.setChecked(y_log_scale)
         
-    def _createContent(self):
+    def _create_content(self):
         """ """
-        content = self._createScrollableContent()
+        content = self._create_scrollable_content()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
         # Tab widget. 
         self._tabWidget = QtGui.QTabWidget()
         contentLayout.addWidget(self._tabWidget)
-        self._tabWidget.addTab(self._createContentChart(), 'Chart')
-        self._tabWidget.addTab(self._createContentLabels(), 'Labels')        
-#        tabWidget.addTab(self._createContentSettings(), "Settings')        
-#        tabWidget.addTab(self._createContentEditDataJson(), "Edit data (JSON)')        
+        self._tabWidget.addTab(self._create_content_chart(), 'Chart')
+        self._tabWidget.addTab(self._create_content_labels(), 'Labels')        
+#        tabWidget.addTab(self._create_content_settings(), "Settings')        
+#        tabWidget.addTab(self._create_contentEditDataJson(), "Edit data (JSON)')        
 
-    def _createContentChart(self):
+    def _create_content_chart(self):
         """ """
         widget = QtGui.QWidget()
         contentLayout = QtGui.QVBoxLayout()
-        contentLayout.addLayout(self._createContentSelectChart())
-        contentLayout.addLayout(self._createContentChartArea(), 10)
+        contentLayout.addLayout(self._create_content_select_chart())
+        contentLayout.addLayout(self._create_content_chart_area(), 10)
         #
         widget.setLayout(contentLayout)
         #
         return widget
 
-    def _createContentSettings(self):
+    def _create_content_settings(self):
         """ """
         widget = QtGui.QWidget()
         # Active widgets and connections.
@@ -139,7 +139,7 @@ class GraphPlotterTool(tool_base.ToolBase):
         #
         return widget
 
-    def _createContentLabels(self):
+    def _create_content_labels(self):
         """ """
         widget = QtGui.QWidget()
         # Active widgets and connections.
@@ -161,9 +161,9 @@ class GraphPlotterTool(tool_base.ToolBase):
         self._plotlabels_editable.tablemodel.setModeldata(self._plotlabels_table)
         #                
         self._labelsreset_button = QtGui.QPushButton('Reset')
-        self.connect(self._labelsreset_button, QtCore.SIGNAL('clicked()'), self._resetLabels)                
+        self.connect(self._labelsreset_button, QtCore.SIGNAL('clicked()'), self._reset_labels)                
         self._labelsapply_button = QtGui.QPushButton('Apply')
-        self.connect(self._labelsapply_button, QtCore.SIGNAL('clicked()'), self._applyLabels)                
+        self.connect(self._labelsapply_button, QtCore.SIGNAL('clicked()'), self._apply_labels)                
         # Layout.
         form0 = QtGui.QFormLayout()
         form0.addRow('Title:    ', self._title_edit)
@@ -212,14 +212,14 @@ class GraphPlotterTool(tool_base.ToolBase):
         #
         return widget
 
-#     def _createContentEditDataJson(self):
+#     def _create_contentEditDataJson(self):
 #         """ """
 #         widget = QtGui.QWidget()
 #         # Active widgets and connections.
 #         self.plotdatainfo_textedit = QtGui.QTextEdit()
 #         self.plotdatalist_textedit = QtGui.QTextEdit()
 #         self._resetplotdata_button = QtGui.QPushButton('Reset')
-#         self.connect(self._resetplotdata_button, QtCore.SIGNAL('clicked()'), self._resetLabels)                
+#         self.connect(self._resetplotdata_button, QtCore.SIGNAL('clicked()'), self._reset_labels)                
 #         #                
 #         self._applyplotdata_button = QtGui.QPushButton('Apply')
 #         self.connect(self._applyplotdata_button, QtCore.SIGNAL('clicked()'), self._applyLabelsJson)                
@@ -238,7 +238,7 @@ class GraphPlotterTool(tool_base.ToolBase):
 #         #
 #         return widget
 
-    def _createContentSelectChart(self):
+    def _create_content_select_chart(self):
         """ """
         # Active widgets and connections.
         self._charttype_list = QtGui.QComboBox()
@@ -250,28 +250,28 @@ class GraphPlotterTool(tool_base.ToolBase):
 #                                        'Map chart"  # Can't use BaseMap with PyInstaller, sorry...
                                        ])
 #        self._charttype_list.setDisabled(True)
-        self.connect(self._charttype_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._drawEmbeddedChart)
+        self.connect(self._charttype_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._draw_embedded_chart)
         #
         self._combined_checkbox = QtGui.QCheckBox('Combined')
         self._combined_checkbox.setChecked(False) 
 #        self._combined_checkbox.setDisabled(True)
-        self.connect(self._combined_checkbox, QtCore.SIGNAL('stateChanged(int)'), self._drawEmbeddedChart)
+        self.connect(self._combined_checkbox, QtCore.SIGNAL('stateChanged(int)'), self._draw_embedded_chart)
         #
         self._stacked_checkbox = QtGui.QCheckBox('Stacked')
         self._stacked_checkbox.setChecked(False) 
 #        self._stacked_checkbox.setDisabled(True)
-        self.connect(self._stacked_checkbox, QtCore.SIGNAL('stateChanged(int)'), self._drawEmbeddedChart)
+        self.connect(self._stacked_checkbox, QtCore.SIGNAL('stateChanged(int)'), self._draw_embedded_chart)
         #
         self._ylogscale_checkbox = QtGui.QCheckBox('Y log scale')
         self._ylogscale_checkbox.setChecked(False) 
 #        self._ylogscale_checkbox.setDisabled(True)
-        self.connect(self._ylogscale_checkbox, QtCore.SIGNAL('stateChanged(int)'), self._drawEmbeddedChart)
+        self.connect(self._ylogscale_checkbox, QtCore.SIGNAL('stateChanged(int)'), self._draw_embedded_chart)
         #                
         self._clear_button = QtGui.QPushButton('Clear')
-        self.connect(self._clear_button, QtCore.SIGNAL('clicked()'), self.clearPlotData)                
+        self.connect(self._clear_button, QtCore.SIGNAL('clicked()'), self.clear_plot_data)                
         #                
         self._savecharttofile_button = QtGui.QPushButton('Edit and save...')
-        self.connect(self._savecharttofile_button, QtCore.SIGNAL('clicked()'), self._saveChartToFile)                
+        self.connect(self._savecharttofile_button, QtCore.SIGNAL('clicked()'), self._save_chart_to_file)                
         # Layout widgets.
         layout = QtGui.QHBoxLayout()
         layout.addWidget(QtGui.QLabel('Chart type:'))
@@ -285,7 +285,7 @@ class GraphPlotterTool(tool_base.ToolBase):
         #
         return layout
         
-    def _createContentChartArea(self):
+    def _create_content_chart_area(self):
         """ """
         # Matplotlib figure and canvas for Qt4.
         self._figure = mpl_figure.Figure()
@@ -297,11 +297,11 @@ class GraphPlotterTool(tool_base.ToolBase):
         #
         return layout
         
-    def _drawEmbeddedChart(self):
+    def _draw_embedded_chart(self):
         """ """
-        self._drawChart(embedded = True)
+        self._draw_chart(embedded = True)
         
-    def _drawChart(self, embedded = True):
+    def _draw_chart(self, embedded = True):
         """ """
         try:
             if embedded:
@@ -372,7 +372,7 @@ class GraphPlotterTool(tool_base.ToolBase):
             toolbox_utils.Logging().error(unicode(e))
             raise
 
-    def _resetLabels(self):
+    def _reset_labels(self):
         """ """
         self._plotlabels_table.clearRows()
         if self._plotdata:
@@ -416,7 +416,7 @@ class GraphPlotterTool(tool_base.ToolBase):
 #             self.plotdatainfo_textedit.setText('')
 #             self.plotdatalist_textedit.setText('')
             
-    def _applyLabels(self):
+    def _apply_labels(self):
         """ """
         # The graph part.
         plotdatainfo = self._plotdata.getPlotDataInfo()
@@ -438,9 +438,9 @@ class GraphPlotterTool(tool_base.ToolBase):
             plotlist[index]['y_label'] = unicode(row[2])
             plotlist[index]['z_label'] = unicode(row[3])
         #
-        self. _resetLabels()
+        self. _reset_labels()
         # Update chart.
-        self._drawEmbeddedChart()
+        self._draw_embedded_chart()
         
         self._tabWidget.setCurrentIndex(0) # Go back to graph view.
         
@@ -456,13 +456,13 @@ class GraphPlotterTool(tool_base.ToolBase):
 #                                 json.loads(unicode(self.plotdatalist_textedit.toPlainText()), 
 #                                            encoding = 'utf8'))
 #         #
-#         self. _resetLabels()
+#         self. _reset_labels()
 #         # Update chart.
-#         self._drawEmbeddedChart()
+#         self._draw_embedded_chart()
 
-    def _saveChartToFile(self):
+    def _save_chart_to_file(self):
         """ """
         if self._plotdata:
             # Use matplotlib.pyplot for drawing.
-            self._drawChart(embedded = False)
+            self._draw_chart(embedded = False)
 

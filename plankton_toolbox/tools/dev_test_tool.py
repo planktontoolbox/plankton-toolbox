@@ -65,22 +65,22 @@ class DevTestTool(tool_base.ToolBase):
         ]
 
         # Initialize parent. Should be called after other 
-        # initialization since the base class calls _createContent().
+        # initialization since the base class calls _create_content().
         super(DevTestTool, self).__init__(name, parentwidget)
         #
         # Where is the tool allowed to dock in the main window.
         self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea)
         self.setBaseSize(600,600)
 
-    def _createContent(self):
+    def _create_content(self):
         """ """
-        content = self._createScrollableContent()
+        content = self._create_scrollable_content()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
-        contentLayout.addLayout(self._contentButtons())
+        contentLayout.addLayout(self._content_buttons())
         contentLayout.addStretch(5)
 
-    def _contentButtons(self):
+    def _content_buttons(self):
         """ """
         # Active widgets and connections.
         layout = QtGui.QVBoxLayout()

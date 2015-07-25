@@ -61,13 +61,13 @@ class MainWindow(QtGui.QMainWindow):
         self._createCentralWidget()
         # Set up activities and tools.
         self._toolmanager = tool_manager.ToolManager()
-        self._toolmanager.setParent(self)
-        self._toolmanager.initTools()
+        self._toolmanager.set_parent(self)
+        self._toolmanager.init_tools()
         self._activitymanager = activity_manager.ActivityManager()
-        self._activitymanager.setParent(self)
+        self._activitymanager.set_parent(self)
         self._activitymanager.initActivities()
         # Add tools to selector.
-        self._createContentSelectors()
+        self._create_contentSelectors()
         # Loads last used window positions.
         self.setGeometry(self._ui_settings.value('MainWindow/Geometry').toRect())
         self.restoreState(self._ui_settings.value('MainWindow/State').toByteArray())        
@@ -76,7 +76,7 @@ class MainWindow(QtGui.QMainWindow):
         self.resize(size)
         self.move(position)        
         # Tell the user.
-        tool_manager.ToolManager().showToolByName('Toolbox logging') # Show the log tool if hidden.
+        tool_manager.ToolManager().show_tool_by_name('Toolbox logging') # Show the log tool if hidden.
         toolbox_utils.Logging().log('Welcome to the Plankton Toolbox.')
         toolbox_utils.Logging().log('Note: Log rows are both sent to the "Toolbox logging" tool and written to the text file "plankton_toolbox_log.txt".')
         # Load resources when the main event loop has started.
@@ -87,10 +87,10 @@ class MainWindow(QtGui.QMainWindow):
     def closeEvent(self, event):
         """ Called on application shutdown. """
         # Stores current window positions.
-        self._ui_settings.set_value('MainWindow/Size', QtCore.QVariant(self.size()))
-        self._ui_settings.set_value('MainWindow/Position', QtCore.QVariant(self.pos()))
-        self._ui_settings.set_value('MainWindow/State', self.saveState())
-        self._ui_settings.set_value('MainWindow/Geometry', self.geometry())
+        self._ui_settings.setValue('MainWindow/Size', QtCore.QVariant(self.size()))
+        self._ui_settings.setValue('MainWindow/Position', QtCore.QVariant(self.pos()))
+        self._ui_settings.setValue('MainWindow/State', self.saveState())
+        self._ui_settings.setValue('MainWindow/Geometry', self.geometry())
         self._logfile.close
         # Save toolbox settings.
         toolbox_settings.ToolboxSettings().save_settings(self._ui_settings)
@@ -118,7 +118,7 @@ class MainWindow(QtGui.QMainWindow):
         
     def _hideAllTools(self):
         """ """
-        tools = self._toolmanager.getToolList()
+        tools = self._toolmanager.get_tool_list()
         for tool in tools:
             tool.close()
 
@@ -130,7 +130,7 @@ class MainWindow(QtGui.QMainWindow):
         """
         self.statusBar().showMessage(self.tr('Plankton Toolbox.'))
 
-    def _createContentSelectors(self):
+    def _create_contentSelectors(self):
         """ 
         The user should be able to choose one activity and a number of tools.
         """
@@ -191,12 +191,17 @@ class MainWindow(QtGui.QMainWindow):
             self._activitystack.addWidget(activity)
         activitiesvbox.addStretch(5)
         # Add one button for each tool.
-        for tool in self._toolmanager.getToolList():
+        for tool in self._toolmanager.get_tool_list():
             button = utils_qt.ClickableQLabel(' ' + tool.objectName())
-            toolsvbox.addWidget(button)
-            self.connect(button, QtCore.SIGNAL('clicked()'), tool.show) # Show if hidden.
-            self.connect(button, QtCore.SIGNAL('clicked()'), tool.raise_) # Bring to front.
-        toolsvbox.addStretch(5)
+            button_hide = utils_qt.ClickableQLabel('(hide)')
+            showhidehbox = QtGui.QHBoxLayout()
+            showhidehbox.addWidget(button)
+            showhidehbox.addWidget(button_hide)
+            showhidehbox.addStretch(10)
+            toolsvbox.addLayout(showhidehbox)
+            self.connect(button, QtCore.SIGNAL('clicked()'), tool.show_tool) 
+            self.connect(button_hide, QtCore.SIGNAL('clicked()'), tool.hide_tool) 
+        toolsvbox.addStretch(10)
         # Activate startup activity. Select the first one in list.
         activities = self._activitymanager.getActivityList()
         if len(activities) > 0:
@@ -248,18 +253,18 @@ class MainWindow(QtGui.QMainWindow):
         self._aboutaction.setStatusTip(self.tr('Show the application\'s About box'))
         self._aboutaction.triggered.connect(self._about)
 
-    def writeToLog(self, message):
+    def write_to_log(self, message):
         """ Log to file and to the log tool when available. """
 #        self.console.addItem(message)
         self._logfile.write(message + '\r\n')
         self._logfile.flush()        
         # Search for the console tool. Note: Not available during startup.
         if not self._logtool:
-            for tool in self._toolmanager.getToolList():
+            for tool in self._toolmanager.get_tool_list():
                 if type(tool) == log_tool.LogTool:
                     self._logtool = tool
         # Log message.                   
-        if self._logtool: self._logtool.writeToLog(message)
+        if self._logtool: self._logtool.write_to_log(message)
 
     def _loadResources(self):
         """ """

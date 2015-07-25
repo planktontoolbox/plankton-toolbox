@@ -21,7 +21,7 @@ class ToolBase(QtGui.QDockWidget):
         super(ToolBase, self).__init__(name, parentwidget)
         self._parent = parentwidget
         #
-        self._writeToStatusBar('Loading ' + name + '...')
+        self._write_to_status_bar('Loading ' + name + '...')
         #        
         self.setObjectName(name)
         #
@@ -29,24 +29,24 @@ class ToolBase(QtGui.QDockWidget):
 #                             QtCore.Qt.BottomDockWidgetArea)
 #        self.setBaseSize(600,600)
         # Add specific content. Abstract, implemented by subclasses.
-        self._createContent() 
+        self._create_content() 
         # Default position to the right. Hide as default.
         self._parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, self)
         self.hide()
         #  Toggles show/hide from the Tools menu in the main window.
         self._parent.toolsmenu.addAction(self.toggleViewAction())
         #
-        self._writeToStatusBar('')
+        self._write_to_status_bar('')
 
     @abstractmethod
-    def _createContent(self):
+    def _create_content(self):
         """ 
         Used to create the content of the tool window.
         Note: Abstract. Should be implemented by subclasses. 
         """
         pass
 
-    def _createScrollableContent(self):
+    def _create_scrollable_content(self):
         """ 
         Creates the scrollable part of the tool content. 
         Used by subclasses, if needed.
@@ -66,14 +66,24 @@ class ToolBase(QtGui.QDockWidget):
         widget.setLayout(mainlayout)
         return content 
 
-    def _writeToStatusBar(self, message):
+    def _write_to_status_bar(self, message):
         """ Used to write short messages to the main window status bar. """
         self._parent.statusBar().showMessage(message)
 
-    def _writeToLog(self, message):
+    def _write_to_log(self, message):
         """ 
         Used to write log messages. Depending on the main window
         settings they will appear on different locations, for example
         in log file and/or in the log tool window. 
         """
-        self._parent.writeToLog(message)
+        self._parent.write_to_log(message)
+
+    def show_tool(self):
+        """ """
+        self.show()
+        self.raise_() # Bring to front.
+
+    def hide_tool(self):
+        """ """
+        self.hide()
+

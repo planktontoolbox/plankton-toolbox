@@ -21,12 +21,12 @@ class TemplateActivity(activity_base.ActivityBase):
     def __init__(self, name, parentwidget):
         """ """
         # Initialize parent. Should be called after other 
-        # initialization since the base class calls _createContent().
+        # initialization since the base class calls _create_content().
         super(TemplateActivity, self).__init__(name, parentwidget)
 
-    def _createContent(self):
+    def _create_content(self):
         """ """
-        content = self._createScrollableContent()
+        content = self._create_scrollable_content()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
         # Add activity name at top.
@@ -38,11 +38,11 @@ class TemplateActivity(activity_base.ActivityBase):
 #            """)
         contentLayout.addWidget(self._activityheader)
         # Add content to the activity.
-        contentLayout.addLayout(self._contentPersonInfo())
-        contentLayout.addLayout(self._contentButtons())
+        contentLayout.addLayout(self._content_person_info())
+        contentLayout.addLayout(self._content_buttons())
         contentLayout.addStretch(5)
 
-    def _contentPersonInfo(self):
+    def _content_person_info(self):
         """ """
         # Active widgets and connections.
         self._nameedit = QtGui.QLineEdit('<Name>')
@@ -60,7 +60,7 @@ class TemplateActivity(activity_base.ActivityBase):
         #
         return layout
 
-    def _contentButtons(self):
+    def _content_buttons(self):
         """ """
         # Active widgets and connections.
         self._testbutton = QtGui.QPushButton('Write name to log')

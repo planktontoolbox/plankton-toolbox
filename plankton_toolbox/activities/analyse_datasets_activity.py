@@ -68,9 +68,9 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         """ """
         return self._reportdata 
         
-    def _createContent(self):
+    def _create_content(self):
         """ """
-        content = self._createScrollableContent()
+        content = self._create_scrollable_content()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
         # Add activity name at top.
@@ -172,7 +172,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         saveresultbox = QtGui.QGroupBox('Export data', self)
         # Active widgets and connections.
         self._copytoclipboard_button = QtGui.QPushButton('Copy to clipboard')
-        self.connect(self._copytoclipboard_button, QtCore.SIGNAL('clicked()'), self._copyToClipboard)                
+        self.connect(self._copytoclipboard_button, QtCore.SIGNAL('clicked()'), self._copy_to_clipboard)                
         self._saveformat_list = QtGui.QComboBox()
         self._saveformat_list.addItems(["Tab delimited text file (*.txt)",
                                          "Excel file (*.xlsx)"])
@@ -281,7 +281,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
                 elif self._saveformat_list.currentIndex() == 1: # Excel file.
                     self._tableview.tablemodel.getModeldata().saveAsExcelFile(filename)
 
-    def _copyToClipboard(self):
+    def _copy_to_clipboard(self):
         """ """
         clipboard = QtGui.QApplication.clipboard()
         field_separator = '\t'

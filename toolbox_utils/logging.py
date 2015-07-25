@@ -29,7 +29,7 @@ class Logging(object):
         self.set_log_target(DefaultLogTarget())
         
     def set_log_target(self, target):
-        """ Target must be an object containing a method named writeToLog(message). """
+        """ Target must be an object containing a method named write_to_log(message). """
         self._logtarget = target
 
     def clear(self):
@@ -43,14 +43,14 @@ class Logging(object):
         message = unicode(message)
         if message:
             if self._logtarget:
-                self._logtarget.writeToLog(time.strftime('%Y-%m-%d %H:%M:%S') + ': ' + message)
+                self._logtarget.write_to_log(time.strftime('%Y-%m-%d %H:%M:%S') + ': ' + message)
             else:
                 # Use console if no target is defined.
                 print(time.strftime('%Y-%m-%d %H:%M:%S') + ': ' + message)
         else:
             # Don't write time info if row is empty.
             if self._logtarget:
-                self._logtarget.writeToLog('')
+                self._logtarget.write_to_log('')
             else:
                 print('')
   
@@ -182,7 +182,7 @@ class DefaultLogTarget(object):
     def __init__(self):
         """ """
         
-    def writeToLog(self, message):
+    def write_to_log(self, message):
         """ """
         print(message)
 

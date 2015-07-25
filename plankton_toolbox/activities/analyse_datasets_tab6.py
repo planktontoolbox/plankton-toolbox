@@ -258,8 +258,8 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
     def _addSubplotData(self):
         """ """
         # Show the Graph plotter tool if hidden. 
-        tool_manager.ToolManager().showToolByName('Graph plotter')
-        graphtool = tool_manager.ToolManager().getToolByName('Graph plotter')
+        tool_manager.ToolManager().show_tool_by_name('Graph plotter')
+        graphtool = tool_manager.ToolManager().get_tool_by_name('Graph plotter')
         #
         # Selected columns.
         x_selected_column = unicode(self._x_axis_column_list.currentText())
@@ -327,7 +327,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
             QtGui.QMessageBox.warning(self._main_activity, 'Warning', unicode(e))
 
         # View in Graph plotter tool.
-        graphtool.setPlotData(self._graph_plot_data)
+        graphtool.set_plot_data(self._graph_plot_data)
 
     
     def _getPlotData(self):

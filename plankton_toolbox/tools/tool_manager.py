@@ -42,11 +42,11 @@ class ToolManager(object):
         self._parent = None
         self._toollist = [] # List of tools derived from ToolsBase.        
 
-    def setParent(self, parentwidget):
+    def set_parent(self, parentwidget):
         """ """
         self._parent = parentwidget
 
-    def initTools(self):
+    def init_tools(self):
         """ Tool activator. """
         # The log tool should be loaded before other tools.
         self._toollist.append(dataset_viewer_tool.DatasetViewerTool('Dataset viewer', self._parent))
@@ -64,26 +64,20 @@ class ToolManager(object):
         self._toollist.append(dev_test_tool.DevTestTool('< Development and test >', self._parent))
 
 
-    def getToolByName(self, object_name):
+    def get_tool_by_name(self, object_name):
         """ Returns the tool. """
         for tool in self._toollist:
             if tool.objectName() == object_name: 
                 return tool
         return None
         
-    def showToolByIndex(self, index):
+    def show_tool_by_name(self, object_name):
         """ Makes a tool visible. """
-        self._toollist[index].show()
-        self._toollist[index].raise_() # Bring to front.
-        
-    def showToolByName(self, object_name):
-        """ Makes a tool visible. """
-        for index, tool in enumerate(self._toollist):
+        for tool in self._toollist:
             if tool.objectName() == object_name: 
-                self._toollist[index].show()
-                self._toollist[index].raise_() # Bring to front.
+                tool.show_tool()
                 return
         
-    def getToolList(self):
+    def get_tool_list(self):
         """ """
         return self._toollist

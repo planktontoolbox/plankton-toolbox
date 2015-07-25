@@ -34,7 +34,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         # Load available dataset parsers.
         self._parser_list = []
         self._loadAvailableParsers()
-        # Initialize parent (self._createContent will be called).
+        # Initialize parent (self._create_content will be called).
         super(LoadDatasetsActivity, self).__init__(name, parentwidget)
         # Log available parsers when GUI setup has finished.
         QtCore.QTimer.singleShot(10, self._logAvailableParsers)
@@ -57,9 +57,9 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         else:
             toolbox_utils.Logging().log('No dataset parsers are found in "/toolbox_data/parsers". ')
 
-    def _createContent(self):
+    def _create_content(self):
         """ """
-        content = self._createScrollableContent()
+        content = self._create_scrollable_content()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
         # Add activity name at top.
@@ -210,7 +210,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             toolbox_utils.Logging().log('') # Empty line.
             toolbox_utils.Logging().log('Importing datasets...')
             toolbox_utils.Logging().start_accumulated_logging()
-            self._writeToStatusBar('Importing datasets...')
+            self._write_to_status_bar('Importing datasets...')
             # Show select file dialog box. Multiple files can be selected.
             namefilter = 'Text files (*.txt);;All files (*.*)'
             filenames = QtGui.QFileDialog.getOpenFileNames(
@@ -253,7 +253,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             raise
         finally:
             datasetcount = len(toolbox_core.Datasets().get_datasets())
-            self._writeToStatusBar('Imported datasets: ' + unicode(datasetcount))
+            self._write_to_status_bar('Imported datasets: ' + unicode(datasetcount))
             toolbox_utils.Logging().log_all_accumulated_rows()
             toolbox_utils.Logging().log('Importing datasets done. Number of imported datasets: ' + unicode(datasetcount))
 
@@ -345,7 +345,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             toolbox_utils.Logging().log('') # Empty line.
             toolbox_utils.Logging().log('Importing datasets...')
             toolbox_utils.Logging().start_accumulated_logging()
-            self._writeToStatusBar('Importing datasets...')
+            self._write_to_status_bar('Importing datasets...')
             # Show select file dialog box. Multiple files can be selected.
             namefilter = 'Excel files (*.xlsx);;All files (*.*)'
             filenames = QtGui.QFileDialog.getOpenFileNames(
@@ -383,7 +383,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             raise
         finally:
             datasetcount = len(toolbox_core.Datasets().get_datasets())
-            self._writeToStatusBar('Imported datasets: ' + unicode(datasetcount))
+            self._write_to_status_bar('Imported datasets: ' + unicode(datasetcount))
             toolbox_utils.Logging().log_all_accumulated_rows()  
             toolbox_utils.Logging().log('Importing datasets done. Number of loaded datasets: ' + unicode(datasetcount))
 
@@ -413,7 +413,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         # Listen for changes in the toolbox dataset list.
         self.connect(toolbox_datasets.ToolboxDatasets(), 
              QtCore.SIGNAL('datasetListChanged'), 
-             self._updateDatasetList)
+             self._update_dataset_list)
         # Connection for selected row.
         self._datasets_table.clicked.connect(self._selectionChanged)
                         
@@ -455,7 +455,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             if self._datasets_table.selectionModel.isSelected(self._datasets_table.tablemodel.createIndex(index, 0)): # Check if selected by user.
                 toolbox_datasets.ToolboxDatasets().remove_dataset_by_index(index)
 
-    def _updateDatasetList(self):
+    def _update_dataset_list(self):
         """ """
         self._datasettabledata.clearRows()
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().get_datasets()):
@@ -495,7 +495,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             modelIndex = self._datasets_table.selectionModel.currentIndex()
             if modelIndex.isValid():
                 # View tool.
-                tool_manager.ToolManager().showToolByName('Dataset viewer') # Show tool if hidden.
+                tool_manager.ToolManager().show_tool_by_name('Dataset viewer') # Show tool if hidden.
                 # graphtool = tool_manager.ToolManager().getToolByName('Dataset viewer')
                 toolbox_sync.ToolboxSync().set_row_index('dataset', modelIndex.row())
 

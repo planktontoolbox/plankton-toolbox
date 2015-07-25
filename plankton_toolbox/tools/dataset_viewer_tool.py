@@ -25,7 +25,7 @@ class DatasetViewerTool(tool_base.ToolBase):
     def __init__(self, name, parentwidget):
         """ """
         # Initialize parent. Should be called after other 
-        # initialization since the base class calls _createContent().
+        # initialization since the base class calls _create_content().
         super(DatasetViewerTool, self).__init__(name, parentwidget)
         #
         # Where is the tool allowed to dock in the main window.
@@ -34,32 +34,32 @@ class DatasetViewerTool(tool_base.ToolBase):
         # Filename used when saving data to file.
         self._lastuseddirectory = '.'
 
-    def _createContent(self):
+    def _create_content(self):
         """ """
-        content = self._createScrollableContent()
+        content = self._create_scrollable_content()
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
-        contentLayout.addLayout(self._contentSelectDataset())
-        contentLayout.addLayout(self._contentResultTable())
-        contentLayout.addWidget(self._contentSaveResult())
+        contentLayout.addLayout(self._content_select_dataset())
+        contentLayout.addLayout(self._content_result_table())
+        contentLayout.addWidget(self._content_save_result())
         # Listen for changes in the toolbox dataset list.
         self.connect(toolbox_datasets.ToolboxDatasets(), 
                      QtCore.SIGNAL('datasetListChanged'), 
-                     self._updateDatasetList)
+                     self._update_dataset_list)
         # Allow synch is confusing. Activate again when used in more tools.                       
         # (Currently used in the other way, controlled by a checkbox in load_datasets_activity.)                       
         # Listen for changes in the toolbox sync.
         self.connect(toolbox_sync.ToolboxSync(), 
                      QtCore.SIGNAL('toolboxSyncSelectedRow'), 
-                     self._setSelectedDataset)
+                     self._set_selected_dataset)
 
-    def _contentSelectDataset(self):
+    def _content_select_dataset(self):
         """ """
         # Active widgets and connections.
         self._selectdataset_list = QtGui.QComboBox()
         self._selectdataset_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         self._selectdataset_list.addItems(["<select dataset>"])
-        self.connect(self._selectdataset_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._viewDataset)
+        self.connect(self._selectdataset_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._view_dataset)
         #
         self._numberofrows_label = QtGui.QLabel('Number of rows: 0')
         
@@ -76,7 +76,7 @@ class DatasetViewerTool(tool_base.ToolBase):
         #
         return layout
         
-    def _contentResultTable(self):
+    def _content_result_table(self):
         """ """
         # Active widgets and connections.
         self._tableview = utils_qt.ToolboxQTableView()
@@ -86,17 +86,17 @@ class DatasetViewerTool(tool_base.ToolBase):
         #
         return layout
         
-    def _contentSaveResult(self):
+    def _content_save_result(self):
         """ """
         saveresultbox = QtGui.QGroupBox('Export dataset', self)
         # Active widgets and connections.
         self._copytoclipboard_button = QtGui.QPushButton('Copy to clipboard')
-        self.connect(self._copytoclipboard_button, QtCore.SIGNAL('clicked()'), self._copyToClipboard)                
+        self.connect(self._copytoclipboard_button, QtCore.SIGNAL('clicked()'), self._copy_to_clipboard)                
         self._saveformat_list = QtGui.QComboBox()
         self._saveformat_list.addItems(["Tab delimited text file (*.txt)",
                                          "Excel file (*.xlsx)"])
         self._savedataset_button = QtGui.QPushButton('Save...')
-        self.connect(self._savedataset_button, QtCore.SIGNAL('clicked()'), self._saveData)                
+        self.connect(self._savedataset_button, QtCore.SIGNAL('clicked()'), self._save_data)                
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addWidget(self._copytoclipboard_button)
@@ -109,7 +109,7 @@ class DatasetViewerTool(tool_base.ToolBase):
         #
         return saveresultbox
         
-    def _updateDatasetList(self):
+    def _update_dataset_list(self):
         """ """
         self._selectdataset_list.clear()
         self._selectdataset_list.addItems(["<select dataset>"])
@@ -117,34 +117,34 @@ class DatasetViewerTool(tool_base.ToolBase):
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().get_datasets()):
             self._selectdataset_list.addItems(['Dataset-' + unicode(rowindex + 1)])
 
-    def _viewDataset(self, index):
+    def _view_dataset(self, index):
         """ """
         if index <= 0:
             # Clear table.
             self._tableview.tablemodel.setModeldata(None)
-            self._refreshResultTable()
+            self._refresh_result_table()
         else:
             # envmonlib:
             dataset = toolbox_datasets.ToolboxDatasets().get_dataset_by_index(index - 1)
             if isinstance(dataset, toolbox_core.DatasetTable):
                 self._tableview.tablemodel.setModeldata(dataset)
-                self._refreshResultTable()
+                self._refresh_result_table()
             elif isinstance(dataset, toolbox_core.DatasetNode):
                 # Tree dataset must be converted to table dataset before viewing.
                 targetdataset = toolbox_core.DatasetTable()
                 dataset.convertToTableDataset(targetdataset)
                 #
                 self._tableview.tablemodel.setModeldata(targetdataset)
-                self._refreshResultTable()
+                self._refresh_result_table()
             #
             # TODO: Remove later. Default alternative used for non toolbox_utils.
             else:
                 self._tableview.tablemodel.setModeldata(dataset)
-                self._refreshResultTable()
+                self._refresh_result_table()
         #
         self._numberofrows_label.setText('Number of rows: ' + unicode(self._tableview.tablemodel.rowCount()))
     
-    def _saveData(self):
+    def _save_data(self):
         """ """
         if self._tableview.tablemodel.getModeldata():
             # Show select file dialog box.
@@ -167,7 +167,7 @@ class DatasetViewerTool(tool_base.ToolBase):
                 elif self._saveformat_list.currentIndex() == 1: # Excel file.
                     self._tableview.tablemodel.getModeldata().saveAsExcelFile(filename)
         
-    def _copyToClipboard(self):
+    def _copy_to_clipboard(self):
         """ """
         clipboard = QtGui.QApplication.clipboard()
         field_separator = '\t'
@@ -177,27 +177,27 @@ class DatasetViewerTool(tool_base.ToolBase):
         table_dataset = self._tableview.tablemodel.getModeldata()
         if table_dataset:
             # Header.
-            clipboardstring = field_separator.join(map(unicode, table_dataset.getHeader())) + row_separator
+            clipboardstring = field_separator.join(map(unicode, table_dataset.getHeader())).strip() + row_separator
             # Rows.
             for row in table_dataset.getRows():
-                clipboardstring += field_separator.join(map(unicode, row)) + row_separator
+                clipboardstring += field_separator.join(map(unicode, row)).strip() + row_separator
         #
         clipboard.setText(clipboardstring)
 
-    def _refreshResultTable(self):
+    def _refresh_result_table(self):
         """ """
         self._tableview.tablemodel.reset() # Model data has changed.
         self._tableview.resizeColumnsToContents()
 
     # Allow synch is confusing. Activate again when used in more tools.
     # (Currently used in the other way, controlled by a checkbox in load_datasets_activity.)                       
-    def _setSelectedDataset(self):
+    def _set_selected_dataset(self):
         """ """
         index = toolbox_sync.ToolboxSync().get_row_index('dataset')
         self._selectdataset_list.setCurrentIndex(index + 1)
-        self._viewDataset(index + 1)
+        self._view_dataset(index + 1)
 #         if self._allowsync_checkbox.isChecked():
 #             index = toolbox_sync.ToolboxSync().get_row_index('dataset')
 #             self._selectdataset_list.setCurrentIndex(index + 1)
-#             self._viewDataset(index + 1)
+#             self._view_dataset(index + 1)
         

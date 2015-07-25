@@ -169,7 +169,7 @@ class DataNode(object):
         self._datadict = {}
         self._idstring = None
         
-    def setParent(self, parent):
+    def set_parent(self, parent):
         """ """
         self._parent = parent
         
@@ -181,7 +181,7 @@ class DataNode(object):
         """ """
         self._children.append(child)
         # Set this node as parent for child.
-        child.setParent(self)
+        child.set_parent(self)
 
     def getChildren(self):
         """ """
