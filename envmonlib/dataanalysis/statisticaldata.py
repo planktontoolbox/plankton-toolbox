@@ -24,7 +24,7 @@ class StatisticalData(object):
         """ """
         self._data = None
         
-    def set_data(self, analysisdata):
+    def setData(self, analysisdata):
         """ """
         self._data = analysisdata
         

@@ -114,7 +114,7 @@ class DatasetViewerTool(tool_base.ToolBase):
         self._selectdataset_list.clear()
         self._selectdataset_list.addItems(["<select dataset>"])
         
-        for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
+        for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().get_datasets()):
             self._selectdataset_list.addItems(['Dataset-' + unicode(rowindex + 1)])
 
     def _viewDataset(self, index):
@@ -125,7 +125,7 @@ class DatasetViewerTool(tool_base.ToolBase):
             self._refreshResultTable()
         else:
             # envmonlib:
-            dataset = toolbox_datasets.ToolboxDatasets().getDatasetByIndex(index - 1)
+            dataset = toolbox_datasets.ToolboxDatasets().get_dataset_by_index(index - 1)
             if isinstance(dataset, toolbox_core.DatasetTable):
                 self._tableview.tablemodel.setModeldata(dataset)
                 self._refreshResultTable()
@@ -193,11 +193,11 @@ class DatasetViewerTool(tool_base.ToolBase):
     # (Currently used in the other way, controlled by a checkbox in load_datasets_activity.)                       
     def _setSelectedDataset(self):
         """ """
-        index = toolbox_sync.ToolboxSync().getRow()
+        index = toolbox_sync.ToolboxSync().get_row_index('dataset')
         self._selectdataset_list.setCurrentIndex(index + 1)
         self._viewDataset(index + 1)
 #         if self._allowsync_checkbox.isChecked():
-#             index = toolbox_sync.ToolboxSync().getRow()
+#             index = toolbox_sync.ToolboxSync().get_row_index('dataset')
 #             self._selectdataset_list.setCurrentIndex(index + 1)
 #             self._viewDataset(index + 1)
         

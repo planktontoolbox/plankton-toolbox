@@ -75,7 +75,7 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
     def _updateImportedDatasetList(self):
         """ """
         self._loaded_datasets_model.clear()        
-        for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
+        for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().get_datasets()):
             item = QtGui.QStandardItem('Dataset-' + unicode(rowindex + 1) + 
                                        '.   Source: ' + dataset.getMetadata('file_name'))
             item.setCheckState(QtCore.Qt.Checked)
@@ -107,7 +107,7 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
             for rowindex in range(self._loaded_datasets_model.rowCount()):
                 item = self._loaded_datasets_model.item(rowindex, 0)
                 if item.checkState() == QtCore.Qt.Checked:        
-                    datasets.append(toolbox_core.Datasets().getDatasets()[rowindex])
+                    datasets.append(toolbox_core.Datasets().get_datasets()[rowindex])
             # Use the datasets for analysis.
             self._analysisdata.copy_datasets_to_analysis_data(datasets)  
             # Check.

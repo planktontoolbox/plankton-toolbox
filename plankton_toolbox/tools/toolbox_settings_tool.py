@@ -98,18 +98,18 @@ class ToolboxSettingsTool(tool_base.ToolBase):
 #    def _toogleLoadResources(self, checkStatus):
 #        """ """
 #        if checkStatus == QtCore.Qt.Checked:
-#            toolbox_settings.ToolboxSettings().setValue('Resources:Load at startup', True)
+#            toolbox_settings.ToolboxSettings().set_value('Resources:Load at startup', True)
 #        else:
-#            toolbox_settings.ToolboxSettings().setValue('Resources:Load at startup', False)
+#            toolbox_settings.ToolboxSettings().set_value('Resources:Load at startup', False)
     
     def _update(self):
         """ """
-        self._delimiter_edit.setText(toolbox_settings.ToolboxSettings().getValue('General:Decimal delimiter'))
-        self._dyntaxafilepath_edit.setText(toolbox_settings.ToolboxSettings().getValue('Resources:Dyntaxa:Filepath'))
-        self._pegfilepath_edit.setText(toolbox_settings.ToolboxSettings().getValue('Resources:PEG:Filepath'))
-        self._iocfilepath_edit.setText(toolbox_settings.ToolboxSettings().getValue('Resources:Harmful plankton:Filepath'))
+        self._delimiter_edit.setText(toolbox_settings.ToolboxSettings().get_value('General:Decimal delimiter'))
+        self._dyntaxafilepath_edit.setText(toolbox_settings.ToolboxSettings().get_value('Resources:Dyntaxa:Filepath'))
+        self._pegfilepath_edit.setText(toolbox_settings.ToolboxSettings().get_value('Resources:PEG:Filepath'))
+        self._iocfilepath_edit.setText(toolbox_settings.ToolboxSettings().get_value('Resources:Harmful plankton:Filepath'))
         #
-        loadresources = toolbox_settings.ToolboxSettings().getValue('Resources:Load at startup')
+        loadresources = toolbox_settings.ToolboxSettings().get_value('Resources:Load at startup')
         if loadresources:
             self._loadresources_checkbox.setCheckState(QtCore.Qt.Checked)
         else:
@@ -118,7 +118,7 @@ class ToolboxSettingsTool(tool_base.ToolBase):
     
     def _restoreDefault(self):
         """ """
-        toolbox_settings.ToolboxSettings().restoreDefault()
+        toolbox_settings.ToolboxSettings().restore_default()
         self._update()
     
     def _cancel(self):
@@ -127,14 +127,14 @@ class ToolboxSettingsTool(tool_base.ToolBase):
     
     def _save(self):
         """ """
-        toolbox_settings.ToolboxSettings().setValue('General:Decimal delimiter', unicode(self._delimiter_edit.text()))
-        toolbox_settings.ToolboxSettings().setValue('Resources:Dyntaxa:Filepath', unicode(self._dyntaxafilepath_edit.text()))
-        toolbox_settings.ToolboxSettings().setValue('Resources:PEG:Filepath', unicode(self._pegfilepath_edit.text()))
-        toolbox_settings.ToolboxSettings().setValue('Resources:Harmful plankton:Filepath', unicode(self._iocfilepath_edit.text()))
+        toolbox_settings.ToolboxSettings().set_value('General:Decimal delimiter', unicode(self._delimiter_edit.text()))
+        toolbox_settings.ToolboxSettings().set_value('Resources:Dyntaxa:Filepath', unicode(self._dyntaxafilepath_edit.text()))
+        toolbox_settings.ToolboxSettings().set_value('Resources:PEG:Filepath', unicode(self._pegfilepath_edit.text()))
+        toolbox_settings.ToolboxSettings().set_value('Resources:Harmful plankton:Filepath', unicode(self._iocfilepath_edit.text()))
         if self._loadresources_checkbox.checkState() == QtCore.Qt.Checked:
-            toolbox_settings.ToolboxSettings().setValue('Resources:Load at startup', True)
+            toolbox_settings.ToolboxSettings().set_value('Resources:Load at startup', True)
         else:
-            toolbox_settings.ToolboxSettings().setValue('Resources:Load at startup', False)
+            toolbox_settings.ToolboxSettings().set_value('Resources:Load at startup', False)
         # Save by use of QSettings.
-        toolbox_settings.ToolboxSettings().saveSettings(QtCore.QSettings())
+        toolbox_settings.ToolboxSettings().save_settings(QtCore.QSettings())
 

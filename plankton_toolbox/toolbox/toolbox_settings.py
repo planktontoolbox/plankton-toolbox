@@ -65,7 +65,7 @@ class ToolboxSettings(QtCore.QObject):
         #
         QtCore.QObject.__init__(self) # TODO: Check...
         
-    def loadSettings(self, ui_settings):
+    def load_settings(self, ui_settings):
         """ Load settings from QtCore.QSettings object. """
         serialized_settings = ui_settings.value('Toolbox settings', QtCore.QVariant('')).toByteArray()
         if len(serialized_settings) == 0:
@@ -75,19 +75,19 @@ class ToolboxSettings(QtCore.QObject):
         # Emit signal.
         self.emit(QtCore.SIGNAL('settingsChanged'))
 
-    def saveSettings(self, ui_settings):
+    def save_settings(self, ui_settings):
         """ Store settings to QtCore.QSettings object."""
         serialized_settings = pickle.dumps(self._settings)
-        ui_settings.setValue('Toolbox settings', QtCore.QVariant(serialized_settings))
+        ui_settings.set_value('Toolbox settings', QtCore.QVariant(serialized_settings))
 
-    def restoreDefault(self):
+    def restore_default(self):
         """ """
         # Deep copy needed.
         self._settings = copy.deepcopy(self._default_settings)
         # Emit signal.
         self.emit(QtCore.SIGNAL('settingsChanged'))
 
-    def getValue(self, compoundkey, default = ''):
+    def get_value(self, compoundkey, default = ''):
         """ Use compound key with field delimiter ':'. """
         current_level_item = self._settings
         # Split the key and walk down in dictionary hierarchy..
@@ -100,7 +100,7 @@ class ToolboxSettings(QtCore.QObject):
         else:
             return default
 
-    def setValue(self, compoundkey, value):
+    def set_value(self, compoundkey, value):
         """ Use compound key with field delimiter ':'. """
         current_level_item = self._settings
         last_used_dict = current_level_item

@@ -115,14 +115,14 @@ class ScreeningActivity(activity_base.ActivityBase):
     def _checkDatasets(self):
         """ """
         self._structureresult_list.clear()
-        datasets = toolbox_datasets.ToolboxDatasets().getDatasets()
+        datasets = toolbox_datasets.ToolboxDatasets().get_datasets()
         #
         countvisits = 0
         countsamples = 0
         countvariables = 0
         #
         if datasets and (len(datasets) > 0):
-            for dataset in toolbox_datasets.ToolboxDatasets().getDatasets():
+            for dataset in toolbox_datasets.ToolboxDatasets().get_datasets():
                 row = 'Dataset: ' + dataset.getMetadata('file_name')
                 self._structureresult_list.append(row)
                 countvisits = 0
@@ -142,13 +142,13 @@ class ScreeningActivity(activity_base.ActivityBase):
     def _checkVisits(self):
         """ """
         self._structureresult_list.clear()
-        datasets = toolbox_datasets.ToolboxDatasets().getDatasets()
+        datasets = toolbox_datasets.ToolboxDatasets().get_datasets()
         #
         countsamples = 0
         countvariables = 0
         #
         if datasets and (len(datasets) > 0):
-            for dataset in toolbox_datasets.ToolboxDatasets().getDatasets():
+            for dataset in toolbox_datasets.ToolboxDatasets().get_datasets():
                 row = 'Dataset: ' + dataset.getMetadata('file_name')
                 self._structureresult_list.append(row)
                 countsamples = 0
@@ -170,10 +170,10 @@ class ScreeningActivity(activity_base.ActivityBase):
     def _checkSamples(self):
         """ """
         self._structureresult_list.clear()
-        datasets = toolbox_datasets.ToolboxDatasets().getDatasets()
+        datasets = toolbox_datasets.ToolboxDatasets().get_datasets()
         #
         if datasets and (len(datasets) > 0):
-            for dataset in toolbox_datasets.ToolboxDatasets().getDatasets():
+            for dataset in toolbox_datasets.ToolboxDatasets().get_datasets():
                 row = 'Dataset: ' + dataset.getMetadata('file_name')
                 self._structureresult_list.append(row)
                 for visitnode in dataset.getChildren():
@@ -216,7 +216,7 @@ class ScreeningActivity(activity_base.ActivityBase):
     def _scanForDuplicates(self):
         """ """
         self._structureresult_list.clear()
-        datasets = toolbox_datasets.ToolboxDatasets().getDatasets()
+        datasets = toolbox_datasets.ToolboxDatasets().get_datasets()
         #
         dataset_descr = ''
         visit_descr = ''
@@ -225,7 +225,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         check_duplicates_list = []
         #
         if datasets and (len(datasets) > 0):
-            for dataset in toolbox_datasets.ToolboxDatasets().getDatasets():
+            for dataset in toolbox_datasets.ToolboxDatasets().get_datasets():
                 dataset_descr = dataset.getMetadata('file_name')
                 for visitnode in dataset.getChildren():
                     visit_descr = unicode(visitnode.get_data('station_name')) + ', ' + \
@@ -320,7 +320,7 @@ class ScreeningActivity(activity_base.ActivityBase):
             toolbox_utils.Logging().start_accumulated_logging()
             self._writeToStatusBar('Code list screening in progress...')
             # Perform screening.
-            codetypes_set = toolbox_utils.ScreeningManager().codeListScreening(toolbox_datasets.ToolboxDatasets().getDatasets())
+            codetypes_set = toolbox_utils.ScreeningManager().codeListScreening(toolbox_datasets.ToolboxDatasets().get_datasets())
         finally:
             # Log in result window.
             self._codesspeciesresult_list.append('Screening was done on these code types: ' + 
@@ -359,7 +359,7 @@ class ScreeningActivity(activity_base.ActivityBase):
             toolbox_utils.Logging().start_accumulated_logging()
             self._writeToStatusBar('Species screening in progress...')
             # Perform screening.
-            toolbox_utils.ScreeningManager().speciesScreening(toolbox_datasets.ToolboxDatasets().getDatasets())
+            toolbox_utils.ScreeningManager().speciesScreening(toolbox_datasets.ToolboxDatasets().get_datasets())
         finally:
             # Log in result window.
 #             self._codesspeciesresult_list.append('Screening was done on these code types: ' + 
@@ -396,7 +396,7 @@ class ScreeningActivity(activity_base.ActivityBase):
             toolbox_utils.Logging().start_accumulated_logging()
             self._writeToStatusBar('BVOL Species screening in progress...')
             # Perform screening.
-            toolbox_utils.ScreeningManager().bvolSpeciesScreening(toolbox_datasets.ToolboxDatasets().getDatasets())
+            toolbox_utils.ScreeningManager().bvolSpeciesScreening(toolbox_datasets.ToolboxDatasets().get_datasets())
         finally:
             # Log in result window.
 #             self._codesspeciesresult_list.append('Screening was done on these code types: ' + 
@@ -462,10 +462,10 @@ class ScreeningActivity(activity_base.ActivityBase):
         """ """
         self._column_list.clear()
         self._content_list.clear()
-        datasets = toolbox_datasets.ToolboxDatasets().getDatasets()
+        datasets = toolbox_datasets.ToolboxDatasets().get_datasets()
         if datasets and (len(datasets) > 0):        
             columns_set = set()
-            for dataset in toolbox_datasets.ToolboxDatasets().getDatasets():
+            for dataset in toolbox_datasets.ToolboxDatasets().get_datasets():
                 for column in dataset.getExportTableColumns():
                     columns_set.add(column['header']) 
             #    
@@ -477,7 +477,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                                
     def _updateColumnContent(self, selected_row):
         """ """
-        datasets = toolbox_datasets.ToolboxDatasets().getDatasets()
+        datasets = toolbox_datasets.ToolboxDatasets().get_datasets()
         self._content_list.clear()
         if not (datasets and (len(datasets) > 0)):        
             return # Empty data.
@@ -578,10 +578,10 @@ class ScreeningActivity(activity_base.ActivityBase):
     def updateParameterList(self):
         """ """
         self._parameter_list.clear()
-        datasets = toolbox_datasets.ToolboxDatasets().getDatasets()
+        datasets = toolbox_datasets.ToolboxDatasets().get_datasets()
         if datasets and (len(datasets) > 0):        
             parameter_set = set()
-            for dataset in toolbox_datasets.ToolboxDatasets().getDatasets():
+            for dataset in toolbox_datasets.ToolboxDatasets().get_datasets():
                 for visitnode in dataset.getChildren():
                     for samplenode in visitnode.getChildren():
                         for variablenode in samplenode.getChildren():
@@ -610,13 +610,13 @@ class ScreeningActivity(activity_base.ActivityBase):
 
     def _addPlot(self, parameter):
         """ """
-        datasets = toolbox_datasets.ToolboxDatasets().getDatasets()
+        datasets = toolbox_datasets.ToolboxDatasets().get_datasets()
         #
         yarray = []
 #        unit_set = set() # In case of different units on the same parameter.
         #
         if datasets and (len(datasets) > 0):
-            for dataset in toolbox_datasets.ToolboxDatasets().getDatasets():
+            for dataset in toolbox_datasets.ToolboxDatasets().get_datasets():
                 for visitnode in dataset.getChildren():
                     for samplenode in visitnode.getChildren():
                         for variablenode in samplenode.getChildren():
@@ -656,14 +656,14 @@ class ScreeningActivity(activity_base.ActivityBase):
 
     def _addPlotPerDate(self, parameter):
         """ """
-        datasets = toolbox_datasets.ToolboxDatasets().getDatasets()
+        datasets = toolbox_datasets.ToolboxDatasets().get_datasets()
         #
         xarray = []
         yarray = []
 #        unit_set = set() # In case of different units on the same parameter.
         #
         if datasets and (len(datasets) > 0):
-            for dataset in toolbox_datasets.ToolboxDatasets().getDatasets():
+            for dataset in toolbox_datasets.ToolboxDatasets().get_datasets():
                 for visitnode in dataset.getChildren():
                     date = visitnode.get_data('date')
                     for samplenode in visitnode.getChildren():

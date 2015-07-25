@@ -19,7 +19,7 @@ class DyntaxaBrowserTool(tool_base.ToolBase):
     def __init__(self, name, parentwidget):
         """ """
         # Create model.
-        self._dyntaxa_object = toolbox_resources.ToolboxResources().getResourceDyntaxa()
+        self._dyntaxa_object = toolbox_resources.ToolboxResources().get_resource_dyntaxa()
         # Initialize parent. Should be called after other 
         # initialization since the base class calls _createContent().
         super(DyntaxaBrowserTool, self).__init__(name, parentwidget)
@@ -150,7 +150,7 @@ class DyntaxaBrowserTool(tool_base.ToolBase):
 
     def _loadResource(self):
         """ """
-        toolbox_resources.ToolboxResources().loadResourceDyntaxa()
+        toolbox_resources.ToolboxResources().load_resource_dyntaxa()
 
     def _dyntaxaRefresh(self):
         """ """
@@ -171,19 +171,20 @@ class DyntaxaTableModel(QtCore.QAbstractTableModel):
         """ """
         self._dataset = dataset
         
-    def rowCount(self, parent=QtCore.QModelIndex()):
+    def row_count(self, parent=QtCore.QModelIndex()):
         """ """
         if self._dataset:
             return len(self._dataset.getSortedNameList())
         else:
             return 0
 
-    def columnCount(self, parent=QtCore.QModelIndex()):
+    def column_count(self, parent=QtCore.QModelIndex()):
         """ """
         return 6
 
     def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
-        """ Columns: Dyntaxa id, Dyntaxa name. """
+        """ Overridden abstract method.
+            Columns: Dyntaxa id, Dyntaxa name. """
         if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
             if section == 0:
                 return QtCore.QVariant('Dyntaxa id')            
@@ -202,7 +203,7 @@ class DyntaxaTableModel(QtCore.QAbstractTableModel):
         return QtCore.QVariant()
 
     def data(self, index=QtCore.QModelIndex(), role=QtCore.Qt.DisplayRole):
-        """ """
+        """ Overridden abstract method. """
         if role == QtCore.Qt.DisplayRole:
             if index.isValid():
                 if index.column() == 0:

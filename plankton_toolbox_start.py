@@ -8,5 +8,9 @@ from __future__ import unicode_literals
 
 import plankton_toolbox.toolbox.toolbox_app as toolbox_app
 
+__version__ = '1.?.? DEVELOPMENT VERSION' # Plankton Toolbox version.
+#__version__ = '1.0.1 (25 Nov 2014)' # Plankton Toolbox version.
+
 if __name__ == "__main__":
+    toolbox_app.setVersion(__version__)
     toolbox_app.plankton_toolbox_application()

@@ -22,21 +22,21 @@ class Datasets(object):
         """ """
         self._datasets = []
         
-    def getDatasets(self):
+    def get_datasets(self):
         """ """
         return self._datasets 
         
-    def getDatasetByIndex(self, index):
+    def get_dataset_by_index(self, index):
         """ """
         if len(self._datasets) > index:
             return self._datasets[index]
         return None 
         
-    def addDataset(self, dataset_node):
+    def add_dataset(self, dataset_node):
         """ """
         self._datasets.append(dataset_node)
         
-    def removeDatasetByIndex(self, index):
+    def remove_dataset_by_index(self, index):
         """ """
         if (index >= 0) or (len(self._datasets) > index):
             del self._datasets[index]

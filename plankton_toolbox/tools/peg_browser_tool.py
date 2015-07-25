@@ -49,7 +49,7 @@ class PegBrowserTool(tool_base.ToolBase):
     def __init__(self, name, parentwidget):
         """ """
         # Create model.
-        self._peg_object = toolbox_resources.ToolboxResources().getResourcePeg()
+        self._peg_object = toolbox_resources.ToolboxResources().get_resource_peg()
         # Initialize parent. Should be called after other 
         # initialization since the base class calls _createContent().
         super(PegBrowserTool, self).__init__(name, parentwidget)
@@ -153,8 +153,8 @@ class PegBrowserTool(tool_base.ToolBase):
         # Dyntaxa is needed to load PEG.
         self._writeToStatusBar('Loading PEG resource...')
         try:
-            toolbox_resources.ToolboxResources().loadUnloadedResourceDyntaxa()
-            toolbox_resources.ToolboxResources().loadResourcePeg()
+            toolbox_resources.ToolboxResources().load_unloaded_resource_dyntaxa()
+            toolbox_resources.ToolboxResources().load_resource_peg()
         finally:
             self._writeToStatusBar('')
 
@@ -176,19 +176,20 @@ class PegTableModel(QtCore.QAbstractTableModel):
         """ """
         self._dataset = dataset
         
-    def rowCount(self, parent=QtCore.QModelIndex()):
+    def row_count(self, parent=QtCore.QModelIndex()):
         """ """
         if self._dataset:
             return len(self._dataset.getNameAndSizeList())
         else:
             return 0
 
-    def columnCount(self, parent=QtCore.QModelIndex()):
+    def column_count(self, parent=QtCore.QModelIndex()):
         """ """
         return 4
 
     def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
-        """ Columns: Taxon, Sizeclass. """
+        """ Overridden abstract method.
+            Columns: Taxon, Sizeclass. """
         if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
             if section == 0:
                 return QtCore.QVariant('PEG name')
@@ -203,7 +204,7 @@ class PegTableModel(QtCore.QAbstractTableModel):
         return QtCore.QVariant()
 
     def data(self, index=QtCore.QModelIndex(), role=QtCore.Qt.DisplayRole):
-        """ """
+        """ Overridden abstract method. """
         if role == QtCore.Qt.DisplayRole:
             if index.isValid():
                 if index.column() == 0:
@@ -217,7 +218,7 @@ class PegTableModel(QtCore.QAbstractTableModel):
                     return QtCore.QVariant(peg.get('Dyntaxa id', ''))
                 if index.column() == 3:
                     peg = self._dataset.getNameAndSizeList()[index.row()][0]
-                    dyntaxaresource = toolbox_resources.ToolboxResources().getResourceDyntaxa()
+                    dyntaxaresource = toolbox_resources.ToolboxResources().get_resource_dyntaxa()
                     dyntaxa = dyntaxaresource.getTaxonById(peg.get('Dyntaxa id', ''))
                     if dyntaxa:
                         return QtCore.QVariant(dyntaxa.get('Scientific name', ''))

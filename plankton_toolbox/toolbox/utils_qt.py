@@ -47,9 +47,11 @@ class ClickableQLabel(QtGui.QLabel):
         self.updateStyleSheet()
   
     def mouseReleaseEvent(self, ev):  
+        """ Overridden abstract method. """
         self.emit(QtCore.SIGNAL('clicked()'))  
   
     def enterEvent(self, ev):
+        """ Overridden abstract method. """
         self.setStyleSheet(""" 
 /*            * [ActivityStatus="Selected"] { color: #d1581c; background-color: #eaa97e; }
 */
@@ -58,6 +60,7 @@ class ClickableQLabel(QtGui.QLabel):
             """)
   
     def leaveEvent(self, ev):  
+        """ Overridden abstract method. """
         self.setStyleSheet(""" 
 /*            * [ActivityStatus="Selected"] { color: #00677f; background-color: #eaa97e; }
 */
@@ -84,14 +87,17 @@ class ClickableLinkQLabel(QtGui.QLabel):
             """)
   
     def mouseReleaseEvent(self, ev):  
+        """ Overridden abstract method. """
         self.emit(QtCore.SIGNAL('clicked()'))  
   
     def enterEvent(self, ev):
+        """ Overridden abstract method. """
         self.setStyleSheet(""" 
             * { color: #d1581c; }
             """)
   
     def leaveEvent(self, ev):  
+        """ Overridden abstract method. """
         self.setStyleSheet(""" 
             * { color: #00677f; }
             """)
@@ -245,6 +251,18 @@ class ToolboxTableModel(QtCore.QAbstractTableModel):
         # Initialize parent.
         QtCore.QAbstractTableModel.__init__(self)
         
+    def rowCount(self, parent=QtCore.QModelIndex()):
+        """ Overridden abstract method. """
+        if self._modeldata == None:
+            return 0
+        return self._modeldata.getRowCount()
+
+    def columnCount(self, parent=QtCore.QModelIndex()):
+        """ Overridden abstract method. """
+        if self._modeldata == None:
+            return 0
+        return self._modeldata.getColumnCount()
+
     def setModeldata(self, modeldata):
         """ """
         self._modeldata = modeldata
@@ -254,20 +272,8 @@ class ToolboxTableModel(QtCore.QAbstractTableModel):
         """ """
         return self._modeldata
 
-    def rowCount(self, parent=QtCore.QModelIndex()):
-        """ """
-        if self._modeldata == None:
-            return 0
-        return self._modeldata.getRowCount()
-
-    def columnCount(self, parent=QtCore.QModelIndex()):
-        """ """
-        if self._modeldata == None:
-            return 0
-        return self._modeldata.getColumnCount()
-
     def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
-        """ """
+        """ Overridden abstract method. """
         if self._modeldata == None:
             return QtCore.QVariant()
         if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
@@ -277,7 +283,7 @@ class ToolboxTableModel(QtCore.QAbstractTableModel):
         return QtCore.QVariant()
 
     def data(self, index=QtCore.QModelIndex(), role=QtCore.Qt.DisplayRole):
-        """ """
+        """ Overridden abstract method. """
         if self._modeldata == None:
             return QtCore.QVariant()
         if role == QtCore.Qt.DisplayRole:
@@ -332,6 +338,18 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
         # Initialize parent.
         QtCore.QAbstractTableModel.__init__(self)
         
+    def rowCount(self, parent=QtCore.QModelIndex()):
+        """ Overridden abstract method. """
+        if self._modeldata == None:
+            return 0
+        return self._modeldata.getRowCount()
+
+    def columnCount(self, parent=QtCore.QModelIndex()):
+        """ Overridden abstract method. """
+        if self._modeldata == None:
+            return 0
+        return self._modeldata.getColumnCount()
+
     def setModeldata(self, modeldata):
         """ """
         self._modeldata = modeldata
@@ -341,20 +359,8 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
         """ """
         return self._modeldata
 
-    def rowCount(self, parent=QtCore.QModelIndex()):
-        """ """
-        if self._modeldata == None:
-            return 0
-        return self._modeldata.getRowCount()
-
-    def columnCount(self, parent=QtCore.QModelIndex()):
-        """ """
-        if self._modeldata == None:
-            return 0
-        return self._modeldata.getColumnCount()
-
     def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
-        """ """
+        """ Overridden abstract method. """
         if self._modeldata == None:
             return QtCore.QVariant()
         if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
@@ -364,7 +370,7 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
         return QtCore.QVariant()
 
     def data(self, index=QtCore.QModelIndex(), role=QtCore.Qt.DisplayRole):
-        """ """
+        """ Overridden abstract method. """
         if self._modeldata == None:
             return QtCore.QVariant()
         if role == QtCore.Qt.DisplayRole:
@@ -373,7 +379,7 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
         return QtCore.QVariant()
 
     # For editing:
-    def set_data(self, index, value, role):
+    def setData(self, index, value, role):
         """ """
         try:        
             self._modeldata.setDataItem(index.row(), index.column(), unicode(value.toString()))
@@ -400,7 +406,7 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
 #    Blue 25%: #b7d3de
 #    Green 30%: #e0e3cd
          
-#def setAppStyleSheet(app):
+#def set_app_style_sheet(app):
 #    app.setStyleSheet("""
 #        /* Default for all dock widgets.*/
 #
@@ -466,7 +472,7 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
 #        QWizardPage, 
 #        QWorkspace 
 
-def setAppStyleSheet(app):
+def set_app_style_sheet(app):
     app.setStyleSheet("""
         
 /*        QDockWidget .QWidget { background-color: whitesmoke; }

@@ -36,7 +36,7 @@ class AnalysisData(object):
         """ """
         self._data = None
         
-    def set_data(self, analysisdata):
+    def setData(self, analysisdata):
         """ """
         self._data = analysisdata
         
@@ -99,7 +99,7 @@ class AnalysisData(object):
             toolbox_utils.Logging().log('Selected datasets are empty.')
             raise UserWarning('Selected datasets are empty.')
         # Use the concatenated dataset for analysis.
-        self.set_data(analysis_dataset)    
+        self.setData(analysis_dataset)    
     
     def remove_data(self, selectedcolumn, selectedcontent):
         """ """        
@@ -301,7 +301,7 @@ class StatisticalData(object):
         """ """
         self._data = None
         
-    def set_data(self, analysisdata):
+    def setData(self, analysisdata):
         """ """
         self._data = analysisdata
         
@@ -324,7 +324,7 @@ class ReportData(object):
         """ """
         self._data = None
         
-    def set_data(self, analysisdata):
+    def setData(self, analysisdata):
         """ """
         self._data = analysisdata
         

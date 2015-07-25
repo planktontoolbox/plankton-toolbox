@@ -16,26 +16,33 @@ class ToolboxSync(QtCore.QObject):
     """ """
     def __init__(self):
         """ """
-        self._test = None 
+        self._source_count_dict = {} 
         # 
         QtCore.QObject.__init__(self)
 
-    def clear(self):
+    def clear_all(self):
         """ """
-        self._test = None 
+        c = {} 
         # Emit signal after short delay.
-        QtCore.QTimer.singleShot(100, self._emitChangeNotification)
+        QtCore.QTimer.singleShot(100, self._emit_selected_row_changed)
         
-    def setRow(self, rowIndex):
+    def clear(self, source):
         """ """
-        self._test = rowIndex 
+        if source in self._source_count_dict:
+            self._source_count_dict.pop(source) # Remove key and value. 
+            # Emit signal after short delay.
+            QtCore.QTimer.singleShot(100, self._emit_selected_row_changed)
+        
+    def set_row_index(self, source, row_index):
+        """ """
+        self._source_count_dict[source] = row_index 
         # Emit signal after short delay.
-        QtCore.QTimer.singleShot(100, self._emitSelectedRowChangedTEST)
+        QtCore.QTimer.singleShot(100, self._emit_selected_row_changed)
         
-    def getRow(self):
+    def get_row_index(self, source):
         """ """
-        return self._test 
+        return self._source_count_dict.get(source, None) 
         
-    def _emitSelectedRowChangedTEST(self):
+    def _emit_selected_row_changed(self):
         """ """
         self.emit(QtCore.SIGNAL('toolboxSyncSelectedRow'))

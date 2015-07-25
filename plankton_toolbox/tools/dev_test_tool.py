@@ -145,7 +145,7 @@ class DevTestTool(tool_base.ToolBase):
             dataset.addMetadata('file_path', data_file_path)
             dataset.addMetadata('import_column', import_column)
             dataset.addMetadata('export_column', export_column)
-            toolbox_datasets.ToolboxDatasets().addDataset(dataset)
+            toolbox_datasets.ToolboxDatasets().add_dataset(dataset)
             
             self._parent.showActivityByName(settings['show_activity_after'])
         except Exception as e:

@@ -26,8 +26,8 @@ import PyQt4.QtGui as QtGui
 import plankton_toolbox.toolbox.toolbox_main_window as toolbox_main_window
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 
+__version__ = '' 
 
-###if __name__ == '__main__':
 def plankton_toolbox_application():
     """
     Main application for the Plankton Toolbox.
@@ -49,9 +49,15 @@ def plankton_toolbox_application():
 
 #     app.setWindowIcon(QtGui.QIcon('toolbox_data/img/plankton_toolbox_icon.ico'))
     app.setWindowIcon(QtGui.QIcon('toolbox_data/img/plankton_toolbox_icon.png'))
-    
-    utils_qt.setAppStyleSheet(app)
-    
+    # Style, colours, etc.
+    utils_qt.set_app_style_sheet(app)
+    # Create application and start the main event loop. 
     window = toolbox_main_window.MainWindow()
+    window.setVersion(__version__)
     window.show()
     sys.exit(app.exec_())
+
+def setVersion(version):
+        """ """
+        global __version__
+        __version__ = version

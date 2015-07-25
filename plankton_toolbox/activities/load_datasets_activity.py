@@ -244,7 +244,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                     dataset.addMetadata('import_column', unicode(self._textfile_importcolumn_list.currentText()))
                     dataset.addMetadata('export_column', unicode(self._textfile_exportcolumn_list.currentText()))
                     # Add to dataset list. (Note:ToolboxDatasets is a wrapper containing the 'datasetListChanged'-signal).
-                    toolbox_datasets.ToolboxDatasets().addDataset(dataset)
+                    toolbox_datasets.ToolboxDatasets().add_dataset(dataset)
             #
         except Exception as e:
             toolbox_utils.Logging().error('Text file import failed on exception: ' + unicode(e))
@@ -252,7 +252,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                                       'Text file import failed on exception.\n' + unicode(e))
             raise
         finally:
-            datasetcount = len(toolbox_core.Datasets().getDatasets())
+            datasetcount = len(toolbox_core.Datasets().get_datasets())
             self._writeToStatusBar('Imported datasets: ' + unicode(datasetcount))
             toolbox_utils.Logging().log_all_accumulated_rows()
             toolbox_utils.Logging().log('Importing datasets done. Number of imported datasets: ' + unicode(datasetcount))
@@ -374,7 +374,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                     dataset.addMetadata('import_column', unicode(self._excel_importcolumn_list.currentText()))
                     dataset.addMetadata('export_column', unicode(self._excel_exportcolumn_list.currentText()))
                     # Add to dataset list. (Note:ToolboxDatasets is a wrapper containing the 'datasetListChanged'-signal).
-                    toolbox_datasets.ToolboxDatasets().addDataset(dataset)
+                    toolbox_datasets.ToolboxDatasets().add_dataset(dataset)
         #
         except Exception as e:
             toolbox_utils.Logging().error('Excel file import failed on exception: ' + unicode(e))
@@ -382,7 +382,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                                       'Excel file import failed on exception.\n' + unicode(e))
             raise
         finally:
-            datasetcount = len(toolbox_core.Datasets().getDatasets())
+            datasetcount = len(toolbox_core.Datasets().get_datasets())
             self._writeToStatusBar('Imported datasets: ' + unicode(datasetcount))
             toolbox_utils.Logging().log_all_accumulated_rows()  
             toolbox_utils.Logging().log('Importing datasets done. Number of loaded datasets: ' + unicode(datasetcount))
@@ -453,12 +453,12 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         for rowindex in range(rowcount):
             index = rowcount - rowindex - 1
             if self._datasets_table.selectionModel.isSelected(self._datasets_table.tablemodel.createIndex(index, 0)): # Check if selected by user.
-                toolbox_datasets.ToolboxDatasets().removeDatasetByIndex(index)
+                toolbox_datasets.ToolboxDatasets().remove_dataset_by_index(index)
 
     def _updateDatasetList(self):
         """ """
         self._datasettabledata.clearRows()
-        for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().getDatasets()):
+        for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().get_datasets()):
             # Get content info depending on dataset type.
 #             datasettype = '',
             contentinfo = ''
@@ -497,7 +497,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                 # View tool.
                 tool_manager.ToolManager().showToolByName('Dataset viewer') # Show tool if hidden.
                 # graphtool = tool_manager.ToolManager().getToolByName('Dataset viewer')
-                toolbox_sync.ToolboxSync().setRow(modelIndex.row())
+                toolbox_sync.ToolboxSync().set_row_index('dataset', modelIndex.row())
 
     
 class DatasetTableData(object):

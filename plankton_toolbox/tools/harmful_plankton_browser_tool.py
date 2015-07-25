@@ -23,7 +23,7 @@ class HarmfulPlanktonBrowserTool(tool_base.ToolBase):
     def __init__(self, name, parentwidget):
         """ """
         # Create model.
-        self._harmfulplankton_object = toolbox_resources.ToolboxResources().getResourceHarmfulPlankton()
+        self._harmfulplankton_object = toolbox_resources.ToolboxResources().get_resource_harmful_plankton()
         self._marinespecies_url = None
         # Initialize parent. Should be called after other 
         # initialization since the base class calls _createContent().
@@ -114,8 +114,8 @@ class HarmfulPlanktonBrowserTool(tool_base.ToolBase):
     def _loadResource(self):
         """ """
         # All resources are needed.
-        toolbox_resources.ToolboxResources().loadUnloadedResourceDyntaxa()
-        toolbox_resources.ToolboxResources().loadResourceHarmfulPlankton()
+        toolbox_resources.ToolboxResources().load_unloaded_resource_dyntaxa()
+        toolbox_resources.ToolboxResources().load_resource_harmful_plankton()
 
     def _harmfulPlanktonRefresh(self):
         """ """
@@ -143,19 +143,20 @@ class HarmfulPlanktonTableModel(QtCore.QAbstractTableModel):
         """ """
         self._dataset = dataset
         
-    def rowCount(self, parent=QtCore.QModelIndex()):
+    def row_count(self, parent=QtCore.QModelIndex()):
         """ """
         if self._dataset:
             return len(self._dataset.getSortedNameList())
         else:
             return 0
 
-    def columnCount(self, parent=QtCore.QModelIndex()):
+    def column_count(self, parent=QtCore.QModelIndex()):
         """ """
         return 4
 
     def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
-        """ Columns: Taxon, Sizeclass. """
+        """ Overridden abstract method.
+            Columns: Taxon, Sizeclass. """
         if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
             if section == 0:
                 return QtCore.QVariant('Scientific name')
@@ -170,7 +171,7 @@ class HarmfulPlanktonTableModel(QtCore.QAbstractTableModel):
         return QtCore.QVariant()
 
     def data(self, index=QtCore.QModelIndex(), role=QtCore.Qt.DisplayRole):
-        """ """
+        """ Overridden abstract method. """
         if role == QtCore.Qt.DisplayRole:
             if index.isValid():
                 if index.column() == 0:
@@ -184,7 +185,7 @@ class HarmfulPlanktonTableModel(QtCore.QAbstractTableModel):
                     return QtCore.QVariant(harmfulplankton.get('Dyntaxa id', ''))
                 if index.column() == 3:
                     harmfulplankton = self._dataset.getSortedNameList()[index.row()]
-                    dyntaxaresource = toolbox_resources.ToolboxResources().getResourceDyntaxa()
+                    dyntaxaresource = toolbox_resources.ToolboxResources().get_resource_dyntaxa()
                     dyntaxa = dyntaxaresource.getTaxonById(harmfulplankton.get('Dyntaxa id', ''))
                     if dyntaxa:
                         return QtCore.QVariant(dyntaxa.get('Scientific name', ''))

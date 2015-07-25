@@ -24,28 +24,28 @@ class ToolboxDatasets(QtCore.QObject):
         """ """
         toolbox_core.Datasets().clear()
         # Emit signal after short delay.
-        QtCore.QTimer.singleShot(100, self._emitChangeNotification)
+        QtCore.QTimer.singleShot(100, self._emit_change_notification)
         
-    def getDatasets(self):
+    def get_datasets(self):
         """ """
-        return toolbox_core.Datasets().getDatasets()
+        return toolbox_core.Datasets().get_datasets()
         
-    def getDatasetByIndex(self, index):
+    def get_dataset_by_index(self, index):
         """ """
-        return toolbox_core.Datasets().getDatasetByIndex(index)
+        return toolbox_core.Datasets().get_dataset_by_index(index)
         
-    def addDataset(self, dataset):
+    def add_dataset(self, dataset):
         """ """
-        toolbox_core.Datasets().addDataset(dataset)
+        toolbox_core.Datasets().add_dataset(dataset)
         # Emit signal after short delay.
-        QtCore.QTimer.singleShot(100, self._emitChangeNotification)
+        QtCore.QTimer.singleShot(100, self._emit_change_notification)
         
-    def removeDatasetByIndex(self, index):
+    def remove_dataset_by_index(self, index):
         """ """
-        toolbox_core.Datasets().removeDatasetByIndex(index)
+        toolbox_core.Datasets().remove_dataset_by_index(index)
         # Emit signal after short delay.
-        QtCore.QTimer.singleShot(100, self._emitChangeNotification)
+        QtCore.QTimer.singleShot(100, self._emit_change_notification)
 
-    def _emitChangeNotification(self):
+    def _emit_change_notification(self):
         """ """
         self.emit(QtCore.SIGNAL('datasetListChanged'))

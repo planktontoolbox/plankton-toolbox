@@ -141,7 +141,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         """  """
         # Create a dataset (table, not tree).
         tabledata = toolbox_core.DatasetTable()
-        reportdata.set_data(tabledata)
+        reportdata.setData(tabledata)
         # Check indata.
         if parameters == None:
             raise UserWarning('Parameters are missing.')
@@ -258,7 +258,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         """ """
         # Create a dataset (table, not tree).
         tabledata = toolbox_core.DatasetTable()
-        reportdata.set_data(tabledata)
+        reportdata.setData(tabledata)
         # Header.
         header_row = []
         header_row.append('Station name')

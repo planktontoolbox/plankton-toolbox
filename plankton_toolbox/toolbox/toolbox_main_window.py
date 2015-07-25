@@ -13,7 +13,6 @@ import PyQt4.QtCore as QtCore
 
 import envmonlib
 import toolbox_utils
-import toolbox_core
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.activities.activity_manager as activity_manager
@@ -21,7 +20,8 @@ import plankton_toolbox.tools.log_tool as log_tool
 import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 #import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
 
-__version__ = '1.0.1 (25 Nov 2014)' # Plankton Toolbox version.
+###from plankton_toolbox_start import get_toolbox_version
+###__version__ = '1.0.1 (25 Nov 2014)' # Plankton Toolbox version.
 
 class MainWindow(QtGui.QMainWindow):
     """
@@ -37,14 +37,16 @@ class MainWindow(QtGui.QMainWindow):
         # Initialize parent.
         super(MainWindow, self).__init__()
         self.setWindowTitle(self.tr('Plankton Toolbox'))
+        # Version.
+        self._version = ''
         # Note: Tools menu is public.
         self.toolsmenu = None
         # Load toolbox settings.
         self._ui_settings = QtCore.QSettings()
-        toolbox_settings.ToolboxSettings().loadSettings(self._ui_settings)
+        toolbox_settings.ToolboxSettings().load_settings(self._ui_settings)
         # Logging. Always log to plankton_toolbox_log.txt. Use the Log tool when  
         # it is available.
-        txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
+        txtencode = toolbox_settings.ToolboxSettings().get_value('General:Character encoding, txt-files', 'cp1252')
         self._logfile = codecs.open('plankton_toolbox_log.txt', mode = 'w', encoding = txtencode)
         self._logfile.write('Plankton Toolbox. ' +
                              time.strftime('%Y-%m-%d %H:%M:%S') )
@@ -78,20 +80,20 @@ class MainWindow(QtGui.QMainWindow):
         toolbox_utils.Logging().log('Welcome to the Plankton Toolbox.')
         toolbox_utils.Logging().log('Note: Log rows are both sent to the "Toolbox logging" tool and written to the text file "plankton_toolbox_log.txt".')
         # Load resources when the main event loop has started.
-#        if toolbox_settings.ToolboxSettings().getValue('Resources:Load at startup'):
+#        if toolbox_settings.ToolboxSettings().get_value('Resources:Load at startup'):
 #            QtCore.QTimer.singleShot(10, toolbox_resources.ToolboxResources().loadAllResources)
         QtCore.QTimer.singleShot(100, self._loadResources)
         
     def closeEvent(self, event):
         """ Called on application shutdown. """
         # Stores current window positions.
-        self._ui_settings.setValue('MainWindow/Size', QtCore.QVariant(self.size()))
-        self._ui_settings.setValue('MainWindow/Position', QtCore.QVariant(self.pos()))
-        self._ui_settings.setValue('MainWindow/State', self.saveState())
-        self._ui_settings.setValue('MainWindow/Geometry', self.geometry())
+        self._ui_settings.set_value('MainWindow/Size', QtCore.QVariant(self.size()))
+        self._ui_settings.set_value('MainWindow/Position', QtCore.QVariant(self.pos()))
+        self._ui_settings.set_value('MainWindow/State', self.saveState())
+        self._ui_settings.set_value('MainWindow/Geometry', self.geometry())
         self._logfile.close
         # Save toolbox settings.
-        toolbox_settings.ToolboxSettings().saveSettings(self._ui_settings)
+        toolbox_settings.ToolboxSettings().save_settings(self._ui_settings)
     
     def _createMenu(self):
         """ 
@@ -267,41 +269,45 @@ class MainWindow(QtGui.QMainWindow):
         finally:
             self.statusBar().showMessage(self.tr(''))            
 
+    def setVersion(self, version):
+        """ """
+        self._version = version
+        
     def _about(self):
         """ """
         QtGui.QMessageBox.about(self, self.tr('About Plankton Toolbox'),
                 self.tr(
-"""
-<p>
-<b>Plankton Toolbox</b> version %s
-</p>
-<p>
-The Plankton Toolbox is a free tool for aquatic scientists, and others, 
-working with environmental monitoring related to phyto- and zooplankton.
-</p>
-<p>
-The software is under development and provided free with no 
-guarantees regarding functionality. Comments, bug reports and requests 
-for new functionality are welcome and can be sent to 
-<a href="mailto:info@nordicmicroalgae.org">info@nordicmicroalgae.org</a>
-</p>
-<p>
-Plankton Toolbox can be run on Windows, Mac OS X and Ubuntu (UNIX). No installation is needed.
-The latest version can be found at: 
-<a href="http://downloads.plankton-toolbox.org">http://downloads.plankton-toolbox.org</a>.
-</p>
-<p>
-Plankton Toolbox is developed by the oceanographic unit of the 
-<a href="http://smhi.se">Swedish Meterological and Hydrological Institute (SMHI)</a>.
-The software is a product of the 
-<a href="http://svenskalifewatch.se">Swedish LifeWatch project</a> 
-funded by the 
-<a href="http://www.vr.se">Swedish Science Council</a>.
-</p>
-<p>
-Developed in Python 2.7 and Qt/PyQt4. Released under the MIT license. <br/>
-Source code and info for developers at: 
-<a href="http://plankton-toolbox.org">http://plankton-toolbox.org</a>.
-</p>
-""" % (__version__)))
+        """
+        <p>
+        <b>Plankton Toolbox</b> version %s
+        </p>
+        <p>
+        The Plankton Toolbox is a free tool for aquatic scientists, and others, 
+        working with environmental monitoring related to phyto- and zooplankton.
+        </p>
+        <p>
+        The software is under development and provided free with no 
+        guarantees regarding functionality. Comments, bug reports and requests 
+        for new functionality are welcome and can be sent to 
+        <a href="mailto:info@nordicmicroalgae.org">info@nordicmicroalgae.org</a>
+        </p>
+        <p>
+        Plankton Toolbox can be run on Windows, Mac OS X and Ubuntu (UNIX). No installation is needed.
+        The latest version can be found at: 
+        <a href="http://downloads.plankton-toolbox.org">http://downloads.plankton-toolbox.org</a>.
+        </p>
+        <p>
+        Plankton Toolbox is developed by the oceanographic unit of the 
+        <a href="http://smhi.se">Swedish Meterological and Hydrological Institute (SMHI)</a>.
+        The software is a product of the 
+        <a href="http://svenskalifewatch.se">Swedish LifeWatch project</a> 
+        funded by the 
+        <a href="http://www.vr.se">Swedish Science Council</a>.
+        </p>
+        <p>
+        Developed in Python 2.7 and Qt/PyQt4. Released under the MIT license. <br/>
+        Source code and info for developers at: 
+        <a href="http://plankton-toolbox.org">http://plankton-toolbox.org</a>.
+        </p>
+        """ % (self._version)))
         

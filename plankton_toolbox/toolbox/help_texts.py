@@ -8,7 +8,6 @@ from __future__ import unicode_literals
 
 # import envmonlib
 import toolbox_utils
-import toolbox_core
 
 @toolbox_utils.singleton
 class HelpTexts(object):  

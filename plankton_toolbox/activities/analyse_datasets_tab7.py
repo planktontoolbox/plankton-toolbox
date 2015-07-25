@@ -175,7 +175,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         data_dict = {}        
         # Create a dataset (table, not tree).
         tabledata = toolbox_core.DatasetTable()
-        reportdata.set_data(tabledata)
+        reportdata.setData(tabledata)
         # Header for result table.
         header_row = []
         header_row.append('Parameter')
@@ -364,7 +364,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         data_dict = {}        
         # Create a dataset (table, not tree).
         tabledata = toolbox_core.DatasetTable()
-        reportdata.set_data(tabledata)
+        reportdata.setData(tabledata)
         # Extract values.
         yearkey = ''
         monthkey = ''
