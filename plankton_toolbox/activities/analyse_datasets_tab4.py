@@ -22,10 +22,10 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         self._analysisdata = None
         super(AnalyseDatasetsTab4, self).__init__()
 
-    def setMainActivity(self, main_activity):
+    def set_main_activity(self, main_activity):
         """ """
         self._main_activity = main_activity
-        self._analysisdata = main_activity.getAnalysisData()
+        self._analysisdata = main_activity.get_analysis_data()
                 
     def clear(self):
         """ """
@@ -41,16 +41,16 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
     def update(self):
         """ """
         self.clear()        
-        self._updateFilterAlternatives()
+        self._update_filter_alternatives()
 
-    def updateFilter(self):
+    def update_filter(self):
         """ Call this before filtered analysis data is created. 
             (It is too complicated to implement automatic update on each change in the filter.)
         """
-        self._updateFilter()
+        self._update_filter()
         
     # ===== TAB: Select data ===== 
-    def contentSelectData(self):
+    def content_select_data(self):
         """ """
         # Active widgets and connections.
 #         introlabel = utils_qt.RichTextQLabel()
@@ -163,7 +163,7 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         #
         return self
 
-    def _updateFilterAlternatives(self):
+    def _update_filter_alternatives(self):
         """ """
         analysisdata = self._analysisdata.get_data()
         if not analysisdata:
@@ -209,7 +209,7 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         self._trophic_type_listview.setList(sorted(trophic_type_set))
         self._lifestage_listview.setList(sorted(lifestage_set))
             
-    def _updateFilter(self):
+    def _update_filter(self):
         """ """
         self._analysisdata.clear_filter()
         

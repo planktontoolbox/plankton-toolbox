@@ -45,26 +45,26 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         self._tab7widget = tab7.AnalyseDatasetsTab7()
         self._tab8widget = tab8.AnalyseDatasetsTab8()
         # 
-        self._tab1widget.setMainActivity(self)
-        self._tab2widget.setMainActivity(self)
-        self._tab3widget.setMainActivity(self)
-        self._tab4widget.setMainActivity(self)
-        self._tab5widget.setMainActivity(self)
-        self._tab6widget.setMainActivity(self)
-        self._tab7widget.setMainActivity(self)
-        self._tab8widget.setMainActivity(self)
+        self._tab1widget.set_main_activity(self)
+        self._tab2widget.set_main_activity(self)
+        self._tab3widget.set_main_activity(self)
+        self._tab4widget.set_main_activity(self)
+        self._tab5widget.set_main_activity(self)
+        self._tab6widget.set_main_activity(self)
+        self._tab7widget.set_main_activity(self)
+        self._tab8widget.set_main_activity(self)
         # Initialize parent.
         super(AnalyseDatasetsActivity, self).__init__(name, parentwidget)
 
-    def getAnalysisData(self):
+    def get_analysis_data(self):
         """ """
         return self._analysisdata 
         
-    def getStatisticalData(self):
+    def get_statistical_data(self):
         """ """
         return self._statisticaldata 
         
-    def getReportData(self):
+    def get_report_data(self):
         """ """
         return self._reportdata 
         
@@ -82,23 +82,23 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
             """)
         contentLayout.addWidget(self._activityheader)
         # Add content to the activity.
-        contentLayout.addWidget(self._contentAnalyseTabs(), 3)
-        contentLayout.addWidget(self._contentAnalysisDataTable(), 10)
-        contentLayout.addWidget(self._contentSaveAnalysisData())
+        contentLayout.addWidget(self._content_analyse_tabs(), 3)
+        contentLayout.addWidget(self._content_analysis_data_table(), 10)
+        contentLayout.addWidget(self._content_save_analysis_data())
     
-    def _contentAnalyseTabs(self):
+    def _content_analyse_tabs(self):
         """ """
         # Active widgets and connections.
         selectdatabox = QtGui.QGroupBox('', self)
         tabWidget = QtGui.QTabWidget()
-        tabWidget.addTab(self._tab1widget.contentSelectDatasets(), 'Select dataset(s)')
-        tabWidget.addTab(self._tab2widget.contentPrepareData(), 'Clean up')
-        tabWidget.addTab(self._tab3widget.contentAggregateData(), 'Aggregate/complement data')
-        tabWidget.addTab(self._tab4widget.contentSelectData(), 'Filter')
-        tabWidget.addTab(self._tab5widget.contentPredefinedGraphs(), 'Predefined graphs')
-        tabWidget.addTab(self._tab6widget.contentGenericGraphs(), 'Generic graphs')
-        tabWidget.addTab(self._tab7widget.contentStatistics(), 'Statistics')
-        tabWidget.addTab(self._tab8widget.contentReports(), 'Exports')
+        tabWidget.addTab(self._tab1widget.content_select_datasets(), 'Select dataset(s)')
+        tabWidget.addTab(self._tab2widget.content_prepare_data(), 'Clean up')
+        tabWidget.addTab(self._tab3widget.content_aggregate_data(), 'Aggregate/complement data')
+        tabWidget.addTab(self._tab4widget.content_select_data(), 'Filter')
+        tabWidget.addTab(self._tab5widget.content_predefined_graphs(), 'Predefined graphs')
+        tabWidget.addTab(self._tab6widget.content_generic_graphs(), 'Generic graphs')
+        tabWidget.addTab(self._tab7widget.content_statistics(), 'Statistics')
+        tabWidget.addTab(self._tab8widget.content_reports(), 'Exports')
         # Layout widgets.
         layout = QtGui.QVBoxLayout()
         layout.addWidget(tabWidget)
@@ -107,7 +107,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         return selectdatabox
 
     # ===== ANALYSIS DATA =====    
-    def _contentAnalysisDataTable(self):
+    def _content_analysis_data_table(self):
         """ """
         # Active widgets and connections.
         analysisdatagroupbox = QtGui.QGroupBox('Analysis data, filtered data, statistical data and export data', self)
@@ -118,17 +118,17 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
                                       "Statistical data",
                                       "Export data",
                                       "Hide data (to increase performance)"])
-        self.connect(self._viewdata_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._viewDataListChanged)                
+        self.connect(self._viewdata_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._view_data_list_changed)                
         #
         self._numberofrows_label = QtGui.QLabel('Number of rows: 0')
         #
 #        self._hidedata_checkbox = QtGui.QCheckBox('Hide data')
 #        self._hidedata_checkbox.setChecked(False)
-#        self.connect(self._hidedata_checkbox, QtCore.SIGNAL('clicked()'), self._viewHideDataChanged)                
+#        self.connect(self._hidedata_checkbox, QtCore.SIGNAL('clicked()'), self._view_hide_data_changed)                
         #
         self._refreshfiltereddata_button = QtGui.QPushButton('Refresh filtered data') # TODO:
         self._refreshfiltereddata_button.hide()
-        self.connect(self._refreshfiltereddata_button, QtCore.SIGNAL('clicked()'), self._refreshFilteredData)                
+        self.connect(self._refreshfiltereddata_button, QtCore.SIGNAL('clicked()'), self._refresh_filtered_data)                
         #
         self._tableview = utils_qt.ToolboxQTableView()
         # Layout widgets.
@@ -149,25 +149,25 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         #
         return analysisdatagroupbox
 
-    def _viewDataListChanged(self, row_index):
+    def _view_data_list_changed(self, row_index):
         """ """
         if row_index == 1:
             self._refreshfiltereddata_button.show()
         else:
             self._refreshfiltereddata_button.hide()
         #
-        self.updateViewedData()
+        self.update_viewed_data()
         
-    def _refreshFilteredData(self):
+    def _refresh_filtered_data(self):
         """ """
-        # Note: row_index used inside updateViewedData().
-        self.updateViewedData()
+        # Note: row_index used inside update_viewed_data().
+        self.update_viewed_data()
         
-    def _viewHideDataChanged(self):
+    def _view_hide_data_changed(self):
         """ """
-        self.updateViewedData()
+        self.update_viewed_data()
         
-    def _contentSaveAnalysisData(self):
+    def _content_save_analysis_data(self):
         """ """
         saveresultbox = QtGui.QGroupBox('Export data', self)
         # Active widgets and connections.
@@ -177,7 +177,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         self._saveformat_list.addItems(["Tab delimited text file (*.txt)",
                                          "Excel file (*.xlsx)"])
         self._savedataset_button = QtGui.QPushButton('Save...')
-        self.connect(self._savedataset_button, QtCore.SIGNAL('clicked()'), self._saveAnalysisData)                
+        self.connect(self._savedataset_button, QtCore.SIGNAL('clicked()'), self._save_analysis_data)                
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addWidget(self._copytoclipboard_button)
@@ -193,26 +193,26 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
 #     def setAnalysisData(self, analysis_data):
 #         """ """
 #         self._analysisdata = analysis_data
-#         self.updateViewedData()
-#         self.updateAllTabs()    
+#         self.update_viewed_data()
+#         self.update_all_tabs()    
     
-    def updateViewedDataAndTabs(self):
+    def update_viewed_data_and_tabs(self):
         """ """
-        self.updateViewedData()
-        self.updateAllTabs()
+        self.update_viewed_data()
+        self.update_all_tabs()
         
-    def hideViewedData(self):
+    def hide_viewed_data(self):
         """ """
         # Clear table.
         self._tableview.tablemodel.setModeldata(None)
-        self._refreshViewedDataTable()
+        self._refresh_viewed_data_table()
 
         
-    def updateViewedData(self):
+    def update_viewed_data(self):
         """ """
         # Clear table.
         self._tableview.tablemodel.setModeldata(None)
-        self._refreshViewedDataTable()
+        self._refresh_viewed_data_table()
         self._numberofrows_label.setText('Number of rows: 0')
         # 
         if not self._analysisdata.get_data():
@@ -226,39 +226,39 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
             self._analysisdata.get_data().convertToTableDataset(targetdataset)
             # View model.
             self._tableview.tablemodel.setModeldata(targetdataset)
-            self._refreshViewedDataTable()
+            self._refresh_viewed_data_table()
         elif selectedviewindex == 1:
             # View filtered data only.
-            self._tab4widget.updateFilter() # Must be done before create_filtered_dataset().
+            self._tab4widget.update_filter() # Must be done before create_filtered_dataset().
             filtereddataset = self._analysisdata.create_filtered_dataset()
             # Convert from tree model to table model.
             targetdataset = toolbox_core.DatasetTable()
             filtereddataset.convertToTableDataset(targetdataset)
             # View model.
             self._tableview.tablemodel.setModeldata(targetdataset)
-            self._refreshViewedDataTable()
+            self._refresh_viewed_data_table()
         elif selectedviewindex == 2:
             # Statistical data.
             self._tableview.tablemodel.setModeldata(self._statisticaldata.get_data())
-            self._refreshViewedDataTable()
+            self._refresh_viewed_data_table()
         elif selectedviewindex == 3:
             # Export data.
             self._tableview.tablemodel.setModeldata(self._reportdata.get_data())
-            self._refreshViewedDataTable()
+            self._refresh_viewed_data_table()
         else:
             # Hide data.
             self._tableview.tablemodel.setModeldata(None)
-            self._refreshViewedDataTable()
+            self._refresh_viewed_data_table()
         #
         self._numberofrows_label.setText('Number of rows: ' + unicode(self._tableview.tablemodel.rowCount()))
 
         
-    def _refreshViewedDataTable(self):
+    def _refresh_viewed_data_table(self):
         """ """
         self._tableview.tablemodel.reset() # Model data has changed.
         self._tableview.resizeColumnsToContents()
 
-    def _saveAnalysisData(self):
+    def _save_analysis_data(self):
         """ """
         if self._tableview.tablemodel.getModeldata():
             # Show select file dialog box.
@@ -298,7 +298,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         #
         clipboard.setText(clipboardstring)
 
-    def clearAllTabs(self):
+    def clear_all_tabs(self):
         """ """
         self._tab1widget.clear()
         self._tab2widget.clear()
@@ -309,7 +309,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         self._tab7widget.clear()
         self._tab8widget.clear()
 
-    def updateAllTabs(self):
+    def update_all_tabs(self):
         """ """
         self._tab1widget.update()
         self._tab2widget.update()
@@ -320,25 +320,25 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         self._tab7widget.update()
         self._tab8widget.update()
 
-    def updateFilter(self):
+    def update_filter(self):
         """ Must be done before calls to create_filtered_dataset(). """
-        self._tab4widget.updateFilter()
+        self._tab4widget.update_filter()
 
-    def viewAnalysisData(self):
+    def view_analysis_data(self):
         """ """
         if self._viewdata_list.currentIndex() < 4: # 4 = hide.
             self._viewdata_list.setCurrentIndex(0)
-            self.updateViewedData()
+            self.update_viewed_data()
 
-    def viewStatisticalData(self):
+    def view_statistical_data(self):
         """ """
         if self._viewdata_list.currentIndex() < 4: # 4 = hide.
             self._viewdata_list.setCurrentIndex(2)
-            self.updateViewedData()
+            self.update_viewed_data()
 
-    def viewReportData(self):
+    def view_report_data(self):
         """ """
         if self._viewdata_list.currentIndex() < 4: # 4 = hide.
             self._viewdata_list.setCurrentIndex(3)
-            self.updateViewedData()
+            self.update_viewed_data()
 

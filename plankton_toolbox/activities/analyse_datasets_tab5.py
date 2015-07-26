@@ -23,10 +23,10 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         self._analysisdata = None
         super(AnalyseDatasetsTab5, self).__init__()
 
-    def setMainActivity(self, main_activity):
+    def set_main_activity(self, main_activity):
         """ """
         self._main_activity = main_activity
-        self._analysisdata = main_activity.getAnalysisData()
+        self._analysisdata = main_activity.get_analysis_data()
                 
     def clear(self):
         """ """
@@ -47,7 +47,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
             self._parameter_list.addItems(parameterlist)
 
     # ===== TAB: Predefined graphs ===== 
-    def contentPredefinedGraphs(self):
+    def content_predefined_graphs(self):
         """ """
         # Active widgets and connections.
 #         introlabel = utils_qt.RichTextQLabel()
@@ -58,17 +58,17 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         #
         # Predefined graphs.
         self._addplot_1_button = QtGui.QPushButton('Time series')
-        self.connect(self._addplot_1_button, QtCore.SIGNAL('clicked()'), self._addPlot_1)                
+        self.connect(self._addplot_1_button, QtCore.SIGNAL('clicked()'), self._add_plot_1)                
         self._addplot_1_subplot_button = QtGui.QPushButton('Add plot')
-        self.connect(self._addplot_1_subplot_button, QtCore.SIGNAL('clicked()'), self._addSubPlot_1)                
+        self.connect(self._addplot_1_subplot_button, QtCore.SIGNAL('clicked()'), self._add_sub_plot_1)                
         self._addplot_2_button = QtGui.QPushButton('Seasonal cycle')
-        self.connect(self._addplot_2_button, QtCore.SIGNAL('clicked()'), self._addPlot_2)                
+        self.connect(self._addplot_2_button, QtCore.SIGNAL('clicked()'), self._add_plot_2)                
         self._addplot_2_subplot_button = QtGui.QPushButton('Add plot')
-        self.connect(self._addplot_2_subplot_button, QtCore.SIGNAL('clicked()'), self._addSubPlot_2)                
+        self.connect(self._addplot_2_subplot_button, QtCore.SIGNAL('clicked()'), self._add_sub_plot_2)                
         self._addplot_3_button = QtGui.QPushButton('Values for taxa / station and date')
-        self.connect(self._addplot_3_button, QtCore.SIGNAL('clicked()'), self._addPlot_3)                
+        self.connect(self._addplot_3_button, QtCore.SIGNAL('clicked()'), self._add_plot_3)                
         self._addplot_4_button = QtGui.QPushButton('Values for station and date / taxa')
-        self.connect(self._addplot_4_button, QtCore.SIGNAL('clicked()'), self._addPlot_4)                
+        self.connect(self._addplot_4_button, QtCore.SIGNAL('clicked()'), self._add_plot_4)                
 
         # Layout widgets.
         form1 = QtGui.QGridLayout()
@@ -96,14 +96,14 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         #
         return self
         
-    def _addPlot_1(self, subplot_only = False):
+    def _add_plot_1(self, subplot_only = False):
         """ """
         tool_manager.ToolManager().show_tool_by_name('Graph plotter') # Show tool if hidden.
         graphtool = tool_manager.ToolManager().get_tool_by_name('Graph plotter')
         if not subplot_only:
             graphtool.clear_plot_data()
         # Filtered data should be used.
-        self._main_activity.updateFilter() # Must be done before create_filtered_dataset().
+        self._main_activity.update_filter() # Must be done before create_filtered_dataset().
         analysisdata = self._analysisdata.create_filtered_dataset()
         if not analysisdata:
             return # Can't plot from empty dataset
@@ -117,24 +117,24 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                                     y_type = 'float',
                                     y_label = selectedparameter)
         #
-        self._createPlotDataForTimeSeries(selectedparameter, analysisdata, self._plotdata)
+        self._create_plot_data_for_time_series(selectedparameter, analysisdata, self._plotdata)
         # Plot.
         graphtool.set_chart_selection(chart = 'Scatter chart',
                                     combined = True, stacked = False, y_log_scale = False)
         graphtool.set_plot_data(self._plotdata)
         
-    def _addSubPlot_1(self):
+    def _add_sub_plot_1(self):
         """ """
-        self._addPlot_1(subplot_only = True)
+        self._add_plot_1(subplot_only = True)
         
-    def _addPlot_2(self, subplot_only = False):
+    def _add_plot_2(self, subplot_only = False):
         """ """
         tool_manager.ToolManager().show_tool_by_name('Graph plotter') # Show tool if hidden.
         graphtool = tool_manager.ToolManager().get_tool_by_name('Graph plotter')
         if not subplot_only:
             graphtool.clear_plot_data()
         # Filtered data should be used.
-        self._main_activity.updateFilter() # Must be done before create_filtered_dataset().
+        self._main_activity.update_filter() # Must be done before create_filtered_dataset().
         analysisdata = self._analysisdata.create_filtered_dataset()
         if not analysisdata:
             return # Can't plot from empty dataset
@@ -149,23 +149,23 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                                     x_format = '%m',
                                     y_type = 'float')
         #
-        self._createPlotDataForSeasonalCycle(selectedparameter, analysisdata, self._plotdata)
+        self._create_plot_data_for_seasonal_cycle(selectedparameter, analysisdata, self._plotdata)
         # Plot.
         graphtool.set_chart_selection(chart = 'Scatter chart',
                                     combined = True, stacked = False, y_log_scale = False)
         graphtool.set_plot_data(self._plotdata)
         
-    def _addSubPlot_2(self):
+    def _add_sub_plot_2(self):
         """ """
-        self._addPlot_2(subplot_only = True)
+        self._add_plot_2(subplot_only = True)
         
-    def _addPlot_3(self):
+    def _add_plot_3(self):
         """ """
         tool_manager.ToolManager().show_tool_by_name('Graph plotter') # Show tool if hidden.
         graphtool = tool_manager.ToolManager().get_tool_by_name('Graph plotter')
         graphtool.clear_plot_data()
         # Filtered data should be used.
-        self._main_activity.updateFilter() # Must be done before create_filtered_dataset().
+        self._main_activity.update_filter() # Must be done before create_filtered_dataset().
         analysisdata = self._analysisdata.create_filtered_dataset()
         if not analysisdata:
             return # Can't plot from empty dataset
@@ -180,20 +180,20 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                                 x_label = '',
                                 y_label = '')
         #
-        self._addPlotAaaaaaaaa(selectedparameter, analysisdata, plotdata)
+        self._add_plot_aaaaaaaaa(selectedparameter, analysisdata, plotdata)
         # Plot.
         graphtool.set_chart_selection(chart = 'Bar chart',
                                     combined = True, stacked = False, y_log_scale = False)
         graphtool.set_plot_data(plotdata)
         
         
-    def _addPlot_4(self):
+    def _add_plot_4(self):
         """ """
         tool_manager.ToolManager().show_tool_by_name('Graph plotter') # Show tool if hidden.
         graphtool = tool_manager.ToolManager().get_tool_by_name('Graph plotter')
         graphtool.clear_plot_data()
         # Filtered data should be used.
-        self._main_activity.updateFilter() # Must be done before create_filtered_dataset().
+        self._main_activity.update_filter() # Must be done before create_filtered_dataset().
         analysisdata = self._analysisdata.create_filtered_dataset()
         if not analysisdata:
             return # Can't plot from empty dataset
@@ -207,13 +207,13 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                                 x_label = '',
                                 y_label = '')
         #
-        self._addPlotBbbbbbbbb(selectedparameter, analysisdata, plotdata)
+        self._add_plot_bbbbbbbbb(selectedparameter, analysisdata, plotdata)
         # Plot.
         graphtool.set_chart_selection(chart = 'Bar chart',
                                     combined = True, stacked = False, y_log_scale = False)
         graphtool.set_plot_data(plotdata)
 
-    def _createPlotDataForTimeSeries(self, selectedparameter, dataset, plotdata):
+    def _create_plot_data_for_time_series(self, selectedparameter, dataset, plotdata):
         """ """
         # Extract values for the plot.
         date = None
@@ -240,7 +240,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
             QtGui.QMessageBox.warning(self._main_activity, 'Warning', unicode(e))
 
 
-    def _createPlotDataForSeasonalCycle(self, selectedparameter, dataset, plotdata):
+    def _create_plot_data_for_seasonal_cycle(self, selectedparameter, dataset, plotdata):
         """ """
         # Extract values for the plot.
         date = None
@@ -272,7 +272,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         except UserWarning as e:
             QtGui.QMessageBox.warning(self._main_activity, 'Warning', unicode(e))
     
-    def _addPlotAaaaaaaaa(self, selectedparameter, dataset, plotdata):
+    def _add_plot_aaaaaaaaa(self, selectedparameter, dataset, plotdata):
         """ """
         # Step 1: Create lists of visits and taxa.
         visit_set = set()
@@ -336,7 +336,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
             except UserWarning as e:
                 QtGui.QMessageBox.warning(self._main_activity, 'Warning', unicode(e))
 
-    def _addPlotBbbbbbbbb(self, selectedparameter, dataset, plotdata):
+    def _add_plot_bbbbbbbbb(self, selectedparameter, dataset, plotdata):
         """ """
         # Step 1: Create lists of visits and taxa.
         visit_set = set()

@@ -47,7 +47,7 @@ class LogTool(tool_base.ToolBase):
 #        self.connect(self._openlogfile_button, QtCore.SIGNAL('clicked()'), self._openLogFile)      
         # Layout.
         layout = QtGui.QHBoxLayout()
-        limit_label = QtGui.QLabel('Row limit: ')
+        limit_label = QtGui.QLabel('View last number of rows: ')
         layout.addStretch(5)
         layout.addWidget(limit_label)
         layout.addWidget(self._limit_edit)

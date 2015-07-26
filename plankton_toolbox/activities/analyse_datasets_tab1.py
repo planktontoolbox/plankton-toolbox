@@ -25,19 +25,21 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
         self._analysisdata = None
         super(AnalyseDatasetsTab1, self).__init__()
 
-    def setMainActivity(self, main_activity):
+    def set_main_activity(self, main_activity):
         """ """
         self._main_activity = main_activity
-        self._analysisdata = main_activity.getAnalysisData()
+        self._analysisdata = main_activity.get_analysis_data()
                 
     def clear(self):
         """ """
+        self._main_activity = None
+        self._analysisdata = None
         
     def update(self):
         """ """        
 
     # ===== TAB: Select dataset(s) ===== 
-    def contentSelectDatasets(self):
+    def content_select_datasets(self):
         """ """
         # Active widgets and connections.
 #         introlabel = utils_qt.RichTextQLabel()
@@ -51,12 +53,12 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
         # Listen for changes in the toolbox dataset list.
         self.connect(toolbox_datasets.ToolboxDatasets(), 
                      QtCore.SIGNAL('datasetListChanged'), 
-                     self._updateImportedDatasetList)
+                     self._update_imported_dataset_list)
         #
         self._clearanalysisdata_button = QtGui.QPushButton('Clear analysis data')
-        self.connect(self._clearanalysisdata_button, QtCore.SIGNAL('clicked()'), self._clearAnalysisData)                
+        self.connect(self._clearanalysisdata_button, QtCore.SIGNAL('clicked()'), self._clear_analysis_data)                
         self._copydatasets_button = QtGui.QPushButton('Load marked dataset(s) for analysis')
-        self.connect(self._copydatasets_button, QtCore.SIGNAL('clicked()'), self._copyDatasetsForAnalysis)                
+        self.connect(self._copydatasets_button, QtCore.SIGNAL('clicked()'), self._copy_datasets_for_analysis)                
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addWidget(self._clearanalysisdata_button)
@@ -72,7 +74,7 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
         #
         return self
 
-    def _updateImportedDatasetList(self):
+    def _update_imported_dataset_list(self):
         """ """
         self._loaded_datasets_model.clear()        
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().get_datasets()):
@@ -83,25 +85,25 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
             item.setCheckable(True)
             self._loaded_datasets_model.appendRow(item)
 
-    def _clearAnalysisData(self):
+    def _clear_analysis_data(self):
         """ """
-        self._main_activity.viewAnalysisData()
+        self._main_activity.view_analysis_data()
 #         self._analysisdata.setData(None)    
-        self._main_activity.getAnalysisData().clear_data()    
-        self._main_activity.getStatisticalData().clear_data()    
-        self._main_activity.getReportData().clear_data()    
-        self._main_activity.updateViewedDataAndTabs() 
+        self._main_activity.get_analysis_data().clear_data()    
+        self._main_activity.get_statistical_data().clear_data()    
+        self._main_activity.get_report_data().clear_data()    
+        self._main_activity.update_viewed_data_and_tabs() 
 
-    def _copyDatasetsForAnalysis(self):
+    def _copy_datasets_for_analysis(self):
         """ """
         try:
             toolbox_utils.Logging().log('Copy datasets for analysis...')
             toolbox_utils.Logging().start_accumulated_logging()
             #
-            self._main_activity.viewAnalysisData()
+            self._main_activity.view_analysis_data()
             # Clear analysis data
             self._analysisdata.clear_data()
-            self._main_activity.updateViewedDataAndTabs() 
+            self._main_activity.update_viewed_data_and_tabs() 
             # Create a list of selected datasets.        
             datasets = []
             for rowindex in range(self._loaded_datasets_model.rowCount()):
@@ -114,7 +116,7 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
             if (self._analysisdata.get_data() == None) or (len(self._analysisdata.get_data().getChildren()) == 0):
                 toolbox_utils.Logging().log('Selected datasets are empty.')
                 raise UserWarning('Selected datasets are empty.')
-            self._main_activity.updateViewedDataAndTabs() 
+            self._main_activity.update_viewed_data_and_tabs() 
         #
         except UserWarning as e:
             toolbox_utils.Logging().error('Failed to copy data for analysis. ' + unicode(e))

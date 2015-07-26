@@ -23,10 +23,10 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         self._analysisdata = None
         super(AnalyseDatasetsTab8, self).__init__()
 
-    def setMainActivity(self, main_activity):
+    def set_main_activity(self, main_activity):
         """ """
         self._main_activity = main_activity
-        self._analysisdata = main_activity.getAnalysisData()
+        self._analysisdata = main_activity.get_analysis_data()
                 
     def clear(self):
         """ """
@@ -47,7 +47,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
             self._parameter_list.setList(parameterlist)
 
     # ===== TAB: Reports ===== 
-    def contentReports(self):
+    def content_reports(self):
         """ """
         # Active widgets and connections.
 #         introlabel = utils_qt.RichTextQLabel()
@@ -60,9 +60,9 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         self.connect(markall_label, QtCore.SIGNAL('clicked()'), self._parameter_list.checkAll)                
         # Predefined reports.
         self._report_1_button = QtGui.QPushButton('PRIMER')
-        self.connect(self._report_1_button, QtCore.SIGNAL('clicked()'), self._createReport_1)                
+        self.connect(self._report_1_button, QtCore.SIGNAL('clicked()'), self._create_report_1)                
         self._report_2_button = QtGui.QPushButton('Zooplankton: Abundance m2 and m3, length median and mean')
-        self.connect(self._report_2_button, QtCore.SIGNAL('clicked()'), self._createReport_2)                
+        self.connect(self._report_2_button, QtCore.SIGNAL('clicked()'), self._create_report_2)                
 
         # Layout widgets.
         form1 = QtGui.QGridLayout()
@@ -97,44 +97,44 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         #
         return self
                 
-    def _createReport_1(self):
+    def _create_report_1(self):
         """ """
         # Clear the report and view the report area.
-        reportdata = self._main_activity.getReportData()
+        reportdata = self._main_activity.get_report_data()
         reportdata.clear_data()
-        self._main_activity.viewReportData()
+        self._main_activity.view_report_data()
         # Filtered data should be used.
-        self._main_activity.updateFilter() # Must be done before create_filtered_dataset().
+        self._main_activity.update_filter() # Must be done before create_filtered_dataset().
         analysisdata = self._analysisdata.create_filtered_dataset()
         if not analysisdata:
             return # Can't create a report from an empty dataset.
         # Create the report.
         parameters = self._parameter_list.getSelectedDataList()        
-        self.createPrimerReport(parameters, # Note:Support for multiple parameters.
+        self.create_primer_report(parameters, # Note:Support for multiple parameters.
                                 [analysisdata], # Note:Support for multiple datasets. Not used here.
                                 reportdata)
         # View the result in the report area.
-        self._main_activity.viewReportData()
+        self._main_activity.view_report_data()
         
-    def _createReport_2(self):
+    def _create_report_2(self):
         """ """
         # Clear the report and view the report area.
-        reportdata = self._main_activity.getReportData()
+        reportdata = self._main_activity.get_report_data()
         reportdata.clear_data()
-        self._main_activity.viewReportData()
+        self._main_activity.view_report_data()
         # Filtered data should be used.
-        self._main_activity.updateFilter() # Must be done before create_filtered_dataset().
+        self._main_activity.update_filter() # Must be done before create_filtered_dataset().
         analysisdata = self._analysisdata.create_filtered_dataset()
         if not analysisdata:
             return # Can't create a report from an empty dataset.
         # Create the report.
-        self._createReportZooplanktonAbundanceLengthMedianAndMean(analysisdata, reportdata)
+        self._create_report_zooplankton_abundance_length_median_and_mean(analysisdata, reportdata)
         # View the result in the report area.
-        self._main_activity.viewReportData()
+        self._main_activity.view_report_data()
 
 
 
-    def createPrimerReport(self, 
+    def create_primer_report(self, 
                            parameters, 
                            datasets, 
                            reportdata):
@@ -254,7 +254,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
             tabledata.appendRow(row)
 
    
-    def _createReportZooplanktonAbundanceLengthMedianAndMean(self, dataset, reportdata):
+    def _create_report_zooplankton_abundance_length_median_and_mean(self, dataset, reportdata):
         """ """
         # Create a dataset (table, not tree).
         tabledata = toolbox_core.DatasetTable()

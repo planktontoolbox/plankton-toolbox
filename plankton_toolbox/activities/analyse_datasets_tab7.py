@@ -29,10 +29,10 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         self._analysisdata = None
         super(AnalyseDatasetsTab7, self).__init__()
 
-    def setMainActivity(self, main_activity):
+    def set_main_activity(self, main_activity):
         """ """
         self._main_activity = main_activity
-        self._analysisdata = main_activity.getAnalysisData()
+        self._analysisdata = main_activity.get_analysis_data()
                 
     def clear(self):
         """ """
@@ -53,7 +53,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
             self._parameter_list.addItems(parameterlist)
 
     # ===== TAB: Statistics ===== 
-    def contentStatistics(self):
+    def content_statistics(self):
         """ """
         # Active widgets and connections.
 #         introlabel = utils_qt.RichTextQLabel()
@@ -78,13 +78,13 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         self._splitby_taxon_checkbox.setChecked(False) 
         # - View data.
         self._viewdata_button = QtGui.QPushButton('View data')
-        self.connect(self._viewdata_button, QtCore.SIGNAL('clicked()'), self._viewData)                
+        self.connect(self._viewdata_button, QtCore.SIGNAL('clicked()'), self._view_data)                
         # - Calculate statistics.
         self._calcstatistics_button = QtGui.QPushButton('Calculate statistics')
-        self.connect(self._calcstatistics_button, QtCore.SIGNAL('clicked()'), self._calcStats)                
+        self.connect(self._calcstatistics_button, QtCore.SIGNAL('clicked()'), self._calc_stats)                
         # - Plot graph.
         self._plotgraphs_button = QtGui.QPushButton('Plot graph')
-        self.connect(self._plotgraphs_button, QtCore.SIGNAL('clicked()'), self._plotGraph)                
+        self.connect(self._plotgraphs_button, QtCore.SIGNAL('clicked()'), self._plot_graph)                
 
         # Layout widgets.
         form1 = QtGui.QGridLayout()
@@ -127,14 +127,14 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         #
         return self
         
-    def _calcStats(self):
+    def _calc_stats(self):
         """ """
         # Clear the statistical data and view the statistic area.
-        statisticaldata = self._main_activity.getStatisticalData()
+        statisticaldata = self._main_activity.get_statistical_data()
         statisticaldata.clear_data()
-        self._main_activity.viewStatisticalData()
+        self._main_activity.view_statistical_data()
         # Filtered data should be used.
-        self._main_activity.updateFilter() # Must be done before create_filtered_dataset().
+        self._main_activity.update_filter() # Must be done before create_filtered_dataset().
         analysisdata = self._analysisdata.create_filtered_dataset()
         if not analysisdata:
             return # Can't create a report from an empty dataset.
@@ -149,7 +149,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         split_on_depth = self._splitby_depth_checkbox.isChecked()
         split_on_taxon = self._splitby_taxon_checkbox.isChecked()
         # Calculate the statistics.
-        self._calcStatistics(analysisdata, statisticaldata,
+        self._calc_statistics(analysisdata, statisticaldata,
                                   selectedparameter, 
                                   split_on_year,
                                   split_on_season,
@@ -159,9 +159,9 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                                   split_on_depth,
                                   split_on_taxon)
         # View the result in the report area.
-        self._main_activity.viewStatisticalData()
+        self._main_activity.view_statistical_data()
         
-    def _calcStatistics(self, dataset, reportdata,
+    def _calc_statistics(self, dataset, reportdata,
                         selectedparameter, 
                         split_on_year = False,
                         split_on_season = False,
@@ -316,14 +316,14 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
             tabledata.appendRow(report_row)
 
 
-    def _viewData(self):
+    def _view_data(self):
         """ """
         # Clear the statistical data and view the statistic area.
-        statisticaldata = self._main_activity.getStatisticalData()
+        statisticaldata = self._main_activity.get_statistical_data()
         statisticaldata.clear_data()
-        self._main_activity.viewStatisticalData()
+        self._main_activity.view_statistical_data()
         # Filtered data should be used.
-        self._main_activity.updateFilter() # Must be done before create_filtered_dataset().
+        self._main_activity.update_filter() # Must be done before create_filtered_dataset().
         analysisdata = self._analysisdata.create_filtered_dataset()
         if not analysisdata:
             return # Can't create a report from an empty dataset.
@@ -338,7 +338,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         split_on_depth = self._splitby_depth_checkbox.isChecked()
         split_on_taxon = self._splitby_taxon_checkbox.isChecked()
         # Calculate the statistics.
-        self._extractValues(analysisdata, statisticaldata,
+        self._extract_values(analysisdata, statisticaldata,
                                   selectedparameter, 
                                   split_on_year,
                                   split_on_season,
@@ -348,9 +348,9 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                                   split_on_depth,
                                   split_on_taxon)
         # View the result in the report area.
-        self._main_activity.viewStatisticalData()
+        self._main_activity.view_statistical_data()
         
-    def _extractValues(self, dataset, reportdata,
+    def _extract_values(self, dataset, reportdata,
                         selectedparameter, 
                         split_on_year = False,
                         split_on_season = False,
@@ -487,14 +487,14 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         for row in resulttable:
             tabledata.appendRow(row)  
            
-    def _plotGraph(self):
+    def _plot_graph(self):
         """ """
         # Show the Graph plotter tool if hidden. 
         tool_manager.ToolManager().show_tool_by_name('Graph plotter')
         graphtool = tool_manager.ToolManager().get_tool_by_name('Graph plotter')
         graphtool.clear_plot_data()
         # Filtered data should be used.
-        self._main_activity.updateFilter() # Must be done before create_filtered_dataset().
+        self._main_activity.update_filter() # Must be done before create_filtered_dataset().
         analysisdata = self._analysisdata.create_filtered_dataset()
         if not analysisdata:
             return # Can't create a report from an empty dataset.
@@ -514,7 +514,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                                     y_type = 'float',
                                     y_label = '')
         # Create subplots.
-        self._extractPlotValues(analysisdata,
+        self._extract_plot_values(analysisdata,
                                   selectedparameter, 
                                   split_on_year,
                                   split_on_season,
@@ -528,7 +528,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                                     combined = True, stacked = False, y_log_scale = False)
         graphtool.set_plot_data(self._graph_plot_data)   
         
-    def _extractPlotValues(self, dataset,
+    def _extract_plot_values(self, dataset,
                         selectedparameter, 
                         split_on_year = False,
                         split_on_season = False,

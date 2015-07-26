@@ -26,10 +26,10 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         self._graph_plot_data = toolbox_utils.GraphPlotData()
         self._type_list_values = ["float", "integer", "text", "date", "datetime"]
 
-    def setMainActivity(self, main_activity):
+    def set_main_activity(self, main_activity):
         """ """
         self._main_activity = main_activity
-        self._analysisdata = main_activity.getAnalysisData()
+        self._analysisdata = main_activity.get_analysis_data()
                 
     def clear(self):
         """ """
@@ -51,7 +51,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         self._z_axis_column_list.setEnabled(False)
         self._z_axis_parameter_list.setEnabled(False)
         #
-        self._updateEnabledDisabledAndTypes()
+        self._update_enabled_disabled_and_types()
         
     def update(self):
         """ """
@@ -75,10 +75,10 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
             self._y_axis_parameter_list.addItems(parameterlist)
             self._z_axis_parameter_list.addItems(parameterlist)
             #  Make combo-boxes visible.
-            self._updateEnabledDisabledAndTypes()
+            self._update_enabled_disabled_and_types()
 
     # ===== TAB: Generic graphs ===== 
-    def contentGenericGraphs(self):
+    def content_generic_graphs(self):
         """ """
         # Active widgets and connections.
 #         introlabel = utils_qt.RichTextQLabel()
@@ -89,7 +89,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                                                "Two variables (X and Y)", 
                                                "Three variables (X, Y and Z)"])
         self._numberofvariables_list.setCurrentIndex(1)
-        self.connect(self._numberofvariables_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._clearPlotData)                
+        self.connect(self._numberofvariables_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._clear_plot_data)                
         # - Select column for x-axis:
         self._x_axis_column_list = QtGui.QComboBox()
         self._x_axis_column_list.setMinimumContentsLength(20)
@@ -99,7 +99,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         self._x_axis_parameter_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         self._x_axistype_list = QtGui.QComboBox()
         self._x_axistype_list.addItems(self._type_list_values)
-        self.connect(self._x_axis_column_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._updateEnabledDisabledAndTypes)                
+        self.connect(self._x_axis_column_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._update_enabled_disabled_and_types)                
         # - Select column for y-axis:
         self._y_axis_column_list = QtGui.QComboBox()
         self._y_axis_column_list.setMinimumContentsLength(20)
@@ -109,7 +109,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         self._y_axis_parameter_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         self._y_axistype_list = QtGui.QComboBox()
         self._y_axistype_list.addItems(self._type_list_values)
-        self.connect(self._y_axis_column_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._updateEnabledDisabledAndTypes)                
+        self.connect(self._y_axis_column_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._update_enabled_disabled_and_types)                
         # - Select column for z-axis:
         self._z_axis_column_list = QtGui.QComboBox()
         self._z_axis_column_list.setMinimumContentsLength(20)
@@ -119,13 +119,13 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         self._z_axis_parameter_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
         self._z_axistype_list = QtGui.QComboBox()
         self._z_axistype_list.addItems(self._type_list_values)
-        self.connect(self._z_axis_column_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._updateEnabledDisabledAndTypes)                
+        self.connect(self._z_axis_column_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._update_enabled_disabled_and_types)                
         # Clear data object.
         self._newgraph_button = QtGui.QPushButton('New graph')
-        self.connect(self._newgraph_button, QtCore.SIGNAL('clicked()'), self._newGraphAndPlotData)                
+        self.connect(self._newgraph_button, QtCore.SIGNAL('clicked()'), self._new_graph_and_plot_data)                
         # Add subplot data to the Graph plotter tool.
         self._addsubplotdata_button = QtGui.QPushButton('Add plot to graph')
-        self.connect(self._addsubplotdata_button, QtCore.SIGNAL('clicked()'), self._addSubplotData)                
+        self.connect(self._addsubplotdata_button, QtCore.SIGNAL('clicked()'), self._add_subplot_data)                
 
         # Layout widgets.
         #
@@ -183,17 +183,17 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         layout.addLayout(hbox2)
         self.setLayout(layout)                
         #
-        self._updateEnabledDisabledAndTypes()
+        self._update_enabled_disabled_and_types()
         #
         return self
         
-    def _clearPlotData(self):
+    def _clear_plot_data(self):
         """ """
         self._graph_plot_data.clear()
         # Enable/disable x, y or z-related items.
-        self._updateEnabledDisabledAndTypes()
+        self._update_enabled_disabled_and_types()
 
-    def _updateEnabledDisabledAndTypes(self):
+    def _update_enabled_disabled_and_types(self):
         """ """
         # Default is one variable.
         self._x_axis_column_list.setEnabled(False)
@@ -250,12 +250,12 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                     if item['header'] == z_selected_column:
                         self._z_axistype_list.setCurrentIndex(self._type_list_values.index(item['view_format']))
             
-    def _newGraphAndPlotData(self):
+    def _new_graph_and_plot_data(self):
         """ """
-        self._clearPlotData()
-        self._addSubplotData()
+        self._clear_plot_data()
+        self._add_subplot_data()
     
-    def _addSubplotData(self):
+    def _add_subplot_data(self):
         """ """
         # Show the Graph plotter tool if hidden. 
         tool_manager.ToolManager().show_tool_by_name('Graph plotter')
@@ -289,7 +289,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         plotdatainfo['z_format'] = ''
         #
         # Add plot data.
-        x_data, y_data, z_data = self._getPlotData()
+        x_data, y_data, z_data = self._get_plot_data()
         #
         if x_data and (x_selected_type == 'float'):
             for index, item in enumerate(x_data):
@@ -330,11 +330,11 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         graphtool.set_plot_data(self._graph_plot_data)
 
     
-    def _getPlotData(self):
+    def _get_plot_data(self):
         """ """
         
         # Filtered data should be used.
-        self._main_activity.updateFilter() # Must be done before create_filtered_dataset().
+        self._main_activity.update_filter() # Must be done before create_filtered_dataset().
         analysisdata = self._analysisdata.create_filtered_dataset()
         if not analysisdata:
             return # Can't plot from empty dataset

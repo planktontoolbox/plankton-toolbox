@@ -31,6 +31,8 @@ class MainWindow(QtGui.QMainWindow):
     left and movable tools to the right and bottom. Activites are handled as stacked widgets 
     and tools are dockable widgets. The activity-and-tool-selector can also be dockable by 
     is currently locked.
+    
+    Note: Camel case method names are used since the class is inherited from a Qt class.
     """
     def __init__(self):
         """ """
@@ -189,11 +191,16 @@ class MainWindow(QtGui.QMainWindow):
             self.connect(button, QtCore.SIGNAL('clicked()'), activity.show_in_main_window)
             # Create one layer in the stacked activity widget.
             self._activitystack.addWidget(activity)
+        #
         activitiesvbox.addStretch(5)
+        # Button to hide all tools.
+        button = utils_qt.ClickableQLabel('Hide all tools')
+        toolsvbox.addWidget(button)
+        self.connect(button, QtCore.SIGNAL('clicked()'), self._hideAllTools) 
         # Add one button for each tool.
         for tool in self._toolmanager.get_tool_list():
             button = utils_qt.ClickableQLabel(' ' + tool.objectName())
-            button_hide = utils_qt.ClickableQLabel('Hide')
+            button_hide = utils_qt.ClickableQLabel('- hide')
             showhidehbox = QtGui.QHBoxLayout()
             showhidehbox.addWidget(button)
             showhidehbox.addWidget(button_hide)
@@ -201,10 +208,7 @@ class MainWindow(QtGui.QMainWindow):
             toolsvbox.addLayout(showhidehbox)
             self.connect(button, QtCore.SIGNAL('clicked()'), tool.show_tool) 
             self.connect(button_hide, QtCore.SIGNAL('clicked()'), tool.hide_tool) 
-        # Button to hide all tools.
-        button = utils_qt.ClickableQLabel('Hide all')
-        toolsvbox.addWidget(button)
-        self.connect(button, QtCore.SIGNAL('clicked()'), self._hideAllTools) 
+        #
         toolsvbox.addStretch(10)
         # Activate startup activity. Select the first one in list.
         activities = self._activitymanager.get_activity_list()

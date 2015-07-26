@@ -22,10 +22,10 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         self._analysisdata = None
         super(AnalyseDatasetsTab3, self).__init__()
 
-    def setMainActivity(self, main_activity):
+    def set_main_activity(self, main_activity):
         """ """
         self._main_activity = main_activity
-        self._analysisdata = main_activity.getAnalysisData()
+        self._analysisdata = main_activity.get_analysis_data()
 
     def clear(self):
         """ """
@@ -34,10 +34,10 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
     def update(self):
         """ """
         self.clear()        
-        self._updateSelectDataAlternatives()
+        self._update_select_data_alternatives()
         
     # ===== TAB: Aggregate data ===== 
-    def contentAggregateData(self):
+    def content_aggregate_data(self):
         """ """
         # Active widgets and connections.
 #         introlabel = utils_qt.RichTextQLabel()
@@ -73,13 +73,13 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
 #         self._lifestage_listview.setMaximumHeight(80)
         # Buttons.
         self._aggregatedata_button = QtGui.QPushButton('Aggregate data')
-        self.connect(self._aggregatedata_button, QtCore.SIGNAL('clicked()'), self._aggregateData)
+        self.connect(self._aggregatedata_button, QtCore.SIGNAL('clicked()'), self._aggregate_data)
         #
         self._reloaddata_button = QtGui.QPushButton('Reload analysis data (no clean up)')
-        self.connect(self._reloaddata_button, QtCore.SIGNAL('clicked()'), self._main_activity._tab1widget._copyDatasetsForAnalysis)
+        self.connect(self._reloaddata_button, QtCore.SIGNAL('clicked()'), self._main_activity._tab1widget._copy_datasets_for_analysis)
         #               
         self._addmissingtaxa_button = QtGui.QPushButton('Add 0 for not observed')
-        self.connect(self._addmissingtaxa_button, QtCore.SIGNAL('clicked()'), self._addMissingTaxa)                
+        self.connect(self._addmissingtaxa_button, QtCore.SIGNAL('clicked()'), self._add_missing_taxa)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         gridrow = 0
@@ -117,7 +117,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         #
         return self
 
-    def _aggregateData(self):
+    def _aggregate_data(self):
         """ """
         try:
 #             if self._aggregate_rank_list.currentIndex() == 0:
@@ -244,7 +244,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                             newvariable.addData('genus', envmonlib.Species().getTaxonValue(newtaxon, 'Genus'))
                             newvariable.addData('species', envmonlib.Species().getTaxonValue(newtaxon, 'Species'))
                 #
-                self._main_activity.updateViewedDataAndTabs()    
+                self._main_activity.update_viewed_data_and_tabs()    
             except UserWarning as e:
                 toolbox_utils.Logging().error('Failed to aggregate data. ' + unicode(e))
                 QtGui.QMessageBox.warning(self._main_activity, 'Warning', 'Failed to aggregate data. ' + unicode(e))
@@ -253,7 +253,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             toolbox_utils.Logging().log('Aggregation of data is done.')
             
 
-    def _updateSelectDataAlternatives(self):
+    def _update_select_data_alternatives(self):
         """ """
         analysisdata = self._analysisdata.get_data()
         if not analysisdata:
@@ -275,7 +275,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         self._trophic_type_listview.setList(sorted(trophic_type_set))
         self._lifestage_listview.setList(sorted(lifestageset))
             
-    def _addMissingTaxa(self):
+    def _add_missing_taxa(self):
         """ """
         try:
             toolbox_utils.Logging().log('Adding 0 for not observed...')
@@ -287,7 +287,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             # 
             toolbox_core.AnalysisPrepare().addMissingTaxa(analysisdata)
             #
-            self._main_activity.updateViewedDataAndTabs()    
+            self._main_activity.update_viewed_data_and_tabs()    
         except UserWarning as e:
             toolbox_utils.Logging().error('Failed to add 0 for not observed. ' + unicode(e))
             QtGui.QMessageBox.warning(self._main_activity, 'Warning', 'Failed to add 0 for not observed. ' + unicode(e))

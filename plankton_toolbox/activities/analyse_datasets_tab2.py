@@ -23,10 +23,10 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
         self._analysisdata = None
         super(AnalyseDatasetsTab2, self).__init__()
 
-    def setMainActivity(self, main_activity):
+    def set_main_activity(self, main_activity):
         """ """
         self._main_activity = main_activity
-        self._analysisdata = main_activity.getAnalysisData()
+        self._analysisdata = main_activity.get_analysis_data()
                 
     def clear(self):
         """ """
@@ -44,7 +44,7 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
             self._column_list.setEnabled(True)
 
     # ===== TAB: Prepare data ===== 
-    def contentPrepareData(self):
+    def content_prepare_data(self):
         """ """
         # Active widgets and connections.
 #         introlabel = utils_qt.RichTextQLabel()
@@ -66,9 +66,9 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
         self.connect(markall_label, QtCore.SIGNAL('clicked()'), self._content_listview.checkAll)                
         #
         self._keepdata_button = QtGui.QPushButton('Keep marked data')
-        self.connect(self._keepdata_button, QtCore.SIGNAL('clicked()'), self._keepData)                
+        self.connect(self._keepdata_button, QtCore.SIGNAL('clicked()'), self._keep_data)                
         self._removedata_button = QtGui.QPushButton('Remove marked data')
-        self.connect(self._removedata_button, QtCore.SIGNAL('clicked()'), self._removeData)                
+        self.connect(self._removedata_button, QtCore.SIGNAL('clicked()'), self._remove_data)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         gridrow = 0
@@ -144,11 +144,11 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
             # Content list.
         self._content_listview.setList(sorted(columncontent_set))
 
-    def _keepData(self):
+    def _keep_data(self):
         """ """        
-        self._removeData(keep_data = True)
+        self._remove_data(keep_data = True)
 
-    def _removeData(self, keep_data = False):
+    def _remove_data(self, keep_data = False):
         """ """
         selectedcolumn = unicode(self._column_list.currentText())
         #
@@ -159,4 +159,4 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
         #
         self._analysisdata.remove_data(selectedcolumn, markedcontent)
         #
-        self._main_activity.updateViewedDataAndTabs()    
+        self._main_activity.update_viewed_data_and_tabs()    
