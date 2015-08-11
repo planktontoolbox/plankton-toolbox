@@ -16,7 +16,7 @@ class LogTool(tool_base.ToolBase):
     """
     
     def __init__(self, name, parentwidget):
-        """ """
+        """ """                                                                                                 
         # Initialize parent. Should be called after other 
         # initialization since the base class calls _create_content().
         super(LogTool, self).__init__(name, parentwidget)
@@ -47,7 +47,7 @@ class LogTool(tool_base.ToolBase):
 #        self.connect(self._openlogfile_button, QtCore.SIGNAL('clicked()'), self._openLogFile)      
         # Layout.
         layout = QtGui.QHBoxLayout()
-        limit_label = QtGui.QLabel('View last number of rows: ')
+        limit_label = QtGui.QLabel('Number of displayed rows: ')
         layout.addStretch(5)
         layout.addWidget(limit_label)
         layout.addWidget(self._limit_edit)

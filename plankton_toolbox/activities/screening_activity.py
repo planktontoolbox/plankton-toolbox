@@ -34,6 +34,16 @@ class ScreeningActivity(activity_base.ActivityBase):
 
     def update(self):
         """ """
+        # Selectable list of loaded datasets.
+        self._loaded_datasets_model.clear()        
+        for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().get_datasets()):
+            item = QtGui.QStandardItem('Dataset-' + unicode(rowindex + 1) + 
+                                       '.   Source: ' + dataset.getMetadata('file_name'))
+            item.setCheckState(QtCore.Qt.Checked)
+#            item.setCheckState(QtCore.Qt.Unchecked)
+            item.setCheckable(True)
+            self._loaded_datasets_model.appendRow(item)
+        #
         self.update_column_list()
         self.update_parameter_list()
         
@@ -58,9 +68,10 @@ class ScreeningActivity(activity_base.ActivityBase):
         # Active widgets and connections.
         selectdatabox = QtGui.QGroupBox('', self)
         tabWidget = QtGui.QTabWidget()
-        tabWidget.addTab(self._content_structure_screening(), 'Structure')
-        tabWidget.addTab(self._content_codes_species_screening(), 'Code lists and species')
-        tabWidget.addTab(self._content_check_column_values(), 'Column values')
+        tabWidget.addTab(self._content_select_datasets(), 'Select datasets')
+        tabWidget.addTab(self._content_structure_screening(), 'Check structure')
+        tabWidget.addTab(self._content_codes_species_screening(), 'Check code lists and species')
+        tabWidget.addTab(self._content_check_column_values(), 'Check column values')
         tabWidget.addTab(self._content_plot_parameters(), 'Plot parameters')
         # Layout widgets.
         layout = QtGui.QVBoxLayout()
@@ -68,6 +79,44 @@ class ScreeningActivity(activity_base.ActivityBase):
         selectdatabox.setLayout(layout)        
         #
         return selectdatabox
+
+    # === Select datasets ===
+    def _content_select_datasets(self):
+        """ """
+        widget = QtGui.QWidget()
+        #
+        loaded_datasets_listview = QtGui.QListView()
+        self._loaded_datasets_model = QtGui.QStandardItemModel()
+        loaded_datasets_listview.setModel(self._loaded_datasets_model)
+        #
+        self._clearall_button = QtGui.QPushButton('Clear all')
+        self.connect(self._clearall_button, QtCore.SIGNAL('clicked()'), self._uncheck_all_datasets)                
+        self._markall_button = QtGui.QPushButton('Mark all')
+        self.connect(self._markall_button, QtCore.SIGNAL('clicked()'), self._check_all_datasets)                
+        # Layout widgets.
+        hbox1 = QtGui.QHBoxLayout()
+        hbox1.addWidget(self._clearall_button)
+        hbox1.addWidget(self._markall_button)
+        hbox1.addStretch(10)
+        #
+        layout = QtGui.QVBoxLayout()
+        layout.addWidget(loaded_datasets_listview, 10)
+        layout.addLayout(hbox1)
+        widget.setLayout(layout)                
+        #
+        return widget
+
+    def _check_all_datasets(self):
+        """ """
+        for rowindex in range(self._loaded_datasets_model.rowCount()):
+            item = self._loaded_datasets_model.item(rowindex, 0)
+            item.setCheckState(QtCore.Qt.Checked)
+            
+    def _uncheck_all_datasets(self):
+        """ """
+        for rowindex in range(self._loaded_datasets_model.rowCount()):
+            item = self._loaded_datasets_model.item(rowindex, 0)
+            item.setCheckState(QtCore.Qt.Unchecked)
 
     # === Content structure ===
     def _content_structure_screening(self):
@@ -122,22 +171,26 @@ class ScreeningActivity(activity_base.ActivityBase):
         countvariables = 0
         #
         if datasets and (len(datasets) > 0):
-            for dataset in toolbox_datasets.ToolboxDatasets().get_datasets():
-                row = 'Dataset: ' + dataset.getMetadata('file_name')
-                self._structureresult_list.append(row)
-                countvisits = 0
-                countsamples = 0
-                countvariables = 0
-                for visitnode in dataset.getChildren():
-                    countvisits += 1
-                    for samplenode in visitnode.getChildren():
-                        countsamples += 1
-                        countvariables += len(samplenode.getChildren())
+            for rowindex, dataset in enumerate(datasets):
                 #
-                row = '   - Sampling events: ' + unicode(countvisits) + \
-                      ', samples: ' + unicode(countsamples) + \
-                      ', variable rows: ' + unicode(countvariables) 
-                self._structureresult_list.append(row)
+                item = self._loaded_datasets_model.item(rowindex, 0)
+                if item.checkState() == QtCore.Qt.Checked:        
+                    #
+                    row = 'Dataset: ' + dataset.getMetadata('file_name')
+                    self._structureresult_list.append(row)
+                    countvisits = 0
+                    countsamples = 0
+                    countvariables = 0
+                    for visitnode in dataset.getChildren():
+                        countvisits += 1
+                        for samplenode in visitnode.getChildren():
+                            countsamples += 1
+                            countvariables += len(samplenode.getChildren())
+                    #
+                    row = '   - Sampling events: ' + unicode(countvisits) + \
+                          ', samples: ' + unicode(countsamples) + \
+                          ', variable rows: ' + unicode(countvariables) 
+                    self._structureresult_list.append(row)
 
     def _check_visits(self):
         """ """
@@ -148,24 +201,28 @@ class ScreeningActivity(activity_base.ActivityBase):
         countvariables = 0
         #
         if datasets and (len(datasets) > 0):
-            for dataset in toolbox_datasets.ToolboxDatasets().get_datasets():
-                row = 'Dataset: ' + dataset.getMetadata('file_name')
-                self._structureresult_list.append(row)
-                countsamples = 0
-                countvariables = 0
-                for visitnode in dataset.getChildren():
-                    row = '   - Sampling event: ' + visitnode.get_data('station_name') + \
-                          ', ' + visitnode.get_data('date')
+            for rowindex, dataset in enumerate(datasets):
+                #
+                item = self._loaded_datasets_model.item(rowindex, 0)
+                if item.checkState() == QtCore.Qt.Checked:        
+                    #
+                    row = 'Dataset: ' + dataset.getMetadata('file_name')
                     self._structureresult_list.append(row)
                     countsamples = 0
                     countvariables = 0
-                    for samplenode in visitnode.getChildren():
-                        countsamples += 1
-                        countvariables += len(samplenode.getChildren())
-                    #
-                    row = '      - Samples: ' + unicode(countsamples) + \
-                      ', variable rows: ' + unicode(countvariables) 
-                    self._structureresult_list.append(row)
+                    for visitnode in dataset.getChildren():
+                        row = '   - Sampling event: ' + visitnode.get_data('station_name') + \
+                              ', ' + visitnode.get_data('date')
+                        self._structureresult_list.append(row)
+                        countsamples = 0
+                        countvariables = 0
+                        for samplenode in visitnode.getChildren():
+                            countsamples += 1
+                            countvariables += len(samplenode.getChildren())
+                        #
+                        row = '      - Samples: ' + unicode(countsamples) + \
+                          ', variable rows: ' + unicode(countvariables) 
+                        self._structureresult_list.append(row)
 
     def _check_samples(self):
         """ """
@@ -173,45 +230,49 @@ class ScreeningActivity(activity_base.ActivityBase):
         datasets = toolbox_datasets.ToolboxDatasets().get_datasets()
         #
         if datasets and (len(datasets) > 0):
-            for dataset in toolbox_datasets.ToolboxDatasets().get_datasets():
-                row = 'Dataset: ' + dataset.getMetadata('file_name')
-                self._structureresult_list.append(row)
-                for visitnode in dataset.getChildren():
-                    row = '   - Sampling event: ' + \
-                          unicode(visitnode.get_data('station_name')) + ' ' + \
-                          unicode(visitnode.get_data('date'))
+            for rowindex, dataset in enumerate(datasets):
+                #
+                item = self._loaded_datasets_model.item(rowindex, 0)
+                if item.checkState() == QtCore.Qt.Checked:        
+                    #
+                    row = 'Dataset: ' + dataset.getMetadata('file_name')
                     self._structureresult_list.append(row)
-                    for samplenode in visitnode.getChildren():
-                        row = '      - Sample: ' + \
-                              unicode(samplenode.get_data('sample_min_depth')) + '-' + \
-                              unicode(samplenode.get_data('sample_max_depth'))
+                    for visitnode in dataset.getChildren():
+                        row = '   - Sampling event: ' + \
+                              unicode(visitnode.get_data('station_name')) + ' ' + \
+                              unicode(visitnode.get_data('date'))
                         self._structureresult_list.append(row)
-                        countvariables = len(samplenode.getChildren())
-                        #
-                        row = '         - Variable rows: ' + unicode(countvariables) 
-                        self._structureresult_list.append(row)
-                        #
-                        parameter_set = set()
-                        taxonname_set = set()
-                        taxonsizestagesex_set = set()
-                        for variablenode in samplenode.getChildren():
-                            parameter = variablenode.get_data('parameter')
-                            unit = variablenode.get_data('unit')
-                            taxonname = variablenode.get_data('scientific_name')
-                            sizeclass = variablenode.get_data('size_class')
-                            stage = variablenode.get_data('stage')
-                            sex = variablenode.get_data('sex')
-                            if parameter:
-                                parameter_set.add(parameter + '+' + unit)
-                            if taxonname:
-                                taxonname_set.add(taxonname)
-                                taxonsizestagesex_set.add(taxonname + '+' + sizeclass + '+' + stage + '+' + sex)
-                        row = '         - Unique parameters/units: ' + unicode(len(parameter_set)) 
-                        self._structureresult_list.append(row)
-                        row = '         - Unique taxon names: ' + unicode(len(taxonname_set)) 
-                        self._structureresult_list.append(row)
-                        row = '         - Unique taxon-names/size-classes/stages/sex: ' + unicode(len(taxonsizestagesex_set)) 
-                        self._structureresult_list.append(row)
+                        for samplenode in visitnode.getChildren():
+                            row = '      - Sample: ' + \
+                                  unicode(samplenode.get_data('sample_min_depth')) + '-' + \
+                                  unicode(samplenode.get_data('sample_max_depth'))
+                            self._structureresult_list.append(row)
+                            countvariables = len(samplenode.getChildren())
+                            #
+                            row = '         - Variable rows: ' + unicode(countvariables) 
+                            self._structureresult_list.append(row)
+                            #
+                            parameter_set = set()
+                            taxonname_set = set()
+                            taxonsizestagesex_set = set()
+                            for variablenode in samplenode.getChildren():
+                                parameter = variablenode.get_data('parameter')
+                                unit = variablenode.get_data('unit')
+                                taxonname = variablenode.get_data('scientific_name')
+                                sizeclass = variablenode.get_data('size_class')
+                                stage = variablenode.get_data('stage')
+                                sex = variablenode.get_data('sex')
+                                if parameter:
+                                    parameter_set.add(parameter + '+' + unit)
+                                if taxonname:
+                                    taxonname_set.add(taxonname)
+                                    taxonsizestagesex_set.add(taxonname + '+' + sizeclass + '+' + stage + '+' + sex)
+                            row = '         - Unique parameters/units: ' + unicode(len(parameter_set)) 
+                            self._structureresult_list.append(row)
+                            row = '         - Unique taxon names: ' + unicode(len(taxonname_set)) 
+                            self._structureresult_list.append(row)
+                            row = '         - Unique taxon-names/size-classes/stages/sex: ' + unicode(len(taxonsizestagesex_set)) 
+                            self._structureresult_list.append(row)
 
     def _scan_for_duplicates(self):
         """ """
@@ -225,40 +286,44 @@ class ScreeningActivity(activity_base.ActivityBase):
         check_duplicates_list = []
         #
         if datasets and (len(datasets) > 0):
-            for dataset in toolbox_datasets.ToolboxDatasets().get_datasets():
-                dataset_descr = dataset.getMetadata('file_name')
-                for visitnode in dataset.getChildren():
-                    visit_descr = unicode(visitnode.get_data('station_name')) + ', ' + \
-                                  unicode(visitnode.get_data('date'))
-                    for samplenode in visitnode.getChildren():
-                        sample_descr = unicode(samplenode.get_data('sample_min_depth')) + '-' + \
-                                       unicode(samplenode.get_data('sample_max_depth'))
-                        check_duplicates_list = [] # Duplicates can occur inside one sample.
-                        sample_description = dataset_descr + ', ' + visit_descr + ', ' + sample_descr
-                        for variablenode in samplenode.getChildren():
-                            scientific_name = unicode(variablenode.get_data('scientific_name'))
-                            size_class = unicode(variablenode.get_data('size_class'))
-                            stage = unicode(variablenode.get_data('stage'))
-                            sex = unicode(variablenode.get_data('sex'))
-                            parameter = unicode(variablenode.get_data('parameter'))
-                            unit = unicode(variablenode.get_data('unit'))
-                            #
-                            unique_items = (scientific_name, size_class, stage, sex, parameter, unit)
-                            if unique_items in check_duplicates_list:
-                                if sample_description:
-                                    # Print first time for sample.
-                                    self._structureresult_list.append(sample_description)
-                                    sample_description = ''
-                                row = '   - Duplicate found: ' + \
-                                      scientific_name + ', ' + \
-                                      size_class + ', ' + \
-                                      stage + ', ' + \
-                                      sex + ', ' + \
-                                      parameter + ', ' + \
-                                      unit                                        
-                                self._structureresult_list.append(row)
-                            else:
-                                check_duplicates_list.append(unique_items)
+            for rowindex, dataset in enumerate(datasets):
+                #
+                item = self._loaded_datasets_model.item(rowindex, 0)
+                if item.checkState() == QtCore.Qt.Checked:        
+                    #
+                    dataset_descr = dataset.getMetadata('file_name')
+                    for visitnode in dataset.getChildren():
+                        visit_descr = unicode(visitnode.get_data('station_name')) + ', ' + \
+                                      unicode(visitnode.get_data('date'))
+                        for samplenode in visitnode.getChildren():
+                            sample_descr = unicode(samplenode.get_data('sample_min_depth')) + '-' + \
+                                           unicode(samplenode.get_data('sample_max_depth'))
+                            check_duplicates_list = [] # Duplicates can occur inside one sample.
+                            sample_description = dataset_descr + ', ' + visit_descr + ', ' + sample_descr
+                            for variablenode in samplenode.getChildren():
+                                scientific_name = unicode(variablenode.get_data('scientific_name'))
+                                size_class = unicode(variablenode.get_data('size_class'))
+                                stage = unicode(variablenode.get_data('stage'))
+                                sex = unicode(variablenode.get_data('sex'))
+                                parameter = unicode(variablenode.get_data('parameter'))
+                                unit = unicode(variablenode.get_data('unit'))
+                                #
+                                unique_items = (scientific_name, size_class, stage, sex, parameter, unit)
+                                if unique_items in check_duplicates_list:
+                                    if sample_description:
+                                        # Print first time for sample.
+                                        self._structureresult_list.append(sample_description)
+                                        sample_description = ''
+                                    row = '   - Duplicate found: ' + \
+                                          scientific_name + ', ' + \
+                                          size_class + ', ' + \
+                                          stage + ', ' + \
+                                          sex + ', ' + \
+                                          parameter + ', ' + \
+                                          unit                                        
+                                    self._structureresult_list.append(row)
+                                else:
+                                    check_duplicates_list.append(unique_items)
 
     # === Content code lists and species ===
     def _content_codes_species_screening(self):
@@ -465,9 +530,13 @@ class ScreeningActivity(activity_base.ActivityBase):
         datasets = toolbox_datasets.ToolboxDatasets().get_datasets()
         if datasets and (len(datasets) > 0):        
             columns_set = set()
-            for dataset in toolbox_datasets.ToolboxDatasets().get_datasets():
-                for column in dataset.getExportTableColumns():
-                    columns_set.add(column['header']) 
+            for rowindex, dataset in enumerate(datasets):
+                #
+                item = self._loaded_datasets_model.item(rowindex, 0)
+                if item.checkState() == QtCore.Qt.Checked:        
+                    #
+                    for column in dataset.getExportTableColumns():
+                        columns_set.add(column['header']) 
             #    
             self._column_list.addItems(sorted(columns_set))
             self._column_list.setEnabled(True)
@@ -487,45 +556,53 @@ class ScreeningActivity(activity_base.ActivityBase):
         # Search for export column corresponding model element.
         nodelevel = ''
         key = ''
-        for dataset in datasets:
-            for info_dict in dataset.getExportTableColumns():
-                if info_dict['header'] == selectedcolumn:
-                    nodelevel = info_dict['node']
-                    key = info_dict['key']
-                    break # Break loop.
+        for rowindex, dataset in enumerate(datasets):
+            #
+            item = self._loaded_datasets_model.item(rowindex, 0)
+            if item.checkState() == QtCore.Qt.Checked:        
+                #
+                for info_dict in dataset.getExportTableColumns():
+                    if info_dict['header'] == selectedcolumn:
+                        nodelevel = info_dict['node']
+                        key = info_dict['key']
+                        break # Break loop.
             if nodelevel:
                 break # Also break next loop.
         #
-        for dataset in datasets:
-            if nodelevel == 'dataset':
-                if key in dataset.getDataDict().keys():
-                    columncontent_set.add(unicode(dataset.get_data(key)))
-                else:
-                    columncontent_set.add('') # Add empty field.
+        for rowindex, dataset in enumerate(datasets):
             #
-            for visitnode in dataset.getChildren():
-                if nodelevel == 'visit':
-                    if key in visitnode.getDataDict().keys():
-                        columncontent_set.add(unicode(visitnode.get_data(key)))
+            item = self._loaded_datasets_model.item(rowindex, 0)
+            if item.checkState() == QtCore.Qt.Checked:        
+                #
+                if nodelevel == 'dataset':
+                    if key in dataset.getDataDict().keys():
+                        columncontent_set.add(unicode(dataset.get_data(key)))
                     else:
                         columncontent_set.add('') # Add empty field.
-                    continue    
                 #
-                for samplenode in visitnode.getChildren():
-                    if nodelevel == 'sample':
-                        if key in samplenode.getDataDict().keys():
-                            columncontent_set.add(unicode(samplenode.get_data(key)))
+                for visitnode in dataset.getChildren():
+                    if nodelevel == 'visit':
+                        if key in visitnode.getDataDict().keys():
+                            columncontent_set.add(unicode(visitnode.get_data(key)))
                         else:
                             columncontent_set.add('') # Add empty field.
                         continue    
                     #
-                    for variablenode in samplenode.getChildren():
-                        if nodelevel == 'variable':
-                            if key in variablenode.getDataDict().keys():
-                                columncontent_set.add(unicode(variablenode.get_data(key)))
+                    for samplenode in visitnode.getChildren():
+                        if nodelevel == 'sample':
+                            if key in samplenode.getDataDict().keys():
+                                columncontent_set.add(unicode(samplenode.get_data(key)))
                             else:
                                 columncontent_set.add('') # Add empty field.
                             continue    
+                        #
+                        for variablenode in samplenode.getChildren():
+                            if nodelevel == 'variable':
+                                if key in variablenode.getDataDict().keys():
+                                    columncontent_set.add(unicode(variablenode.get_data(key)))
+                                else:
+                                    columncontent_set.add('') # Add empty field.
+                                continue    
         # Content list.
 #        self._content_list.addItems(sorted(columncontent_set))
         for row in sorted(columncontent_set): 
@@ -581,12 +658,16 @@ class ScreeningActivity(activity_base.ActivityBase):
         datasets = toolbox_datasets.ToolboxDatasets().get_datasets()
         if datasets and (len(datasets) > 0):        
             parameter_set = set()
-            for dataset in toolbox_datasets.ToolboxDatasets().get_datasets():
-                for visitnode in dataset.getChildren():
-                    for samplenode in visitnode.getChildren():
-                        for variablenode in samplenode.getChildren():
-                            parameter_set.add(variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')')
-            self._parameter_list.setList(sorted(parameter_set))
+            for rowindex, dataset in enumerate(datasets):
+                #
+                item = self._loaded_datasets_model.item(rowindex, 0)
+                if item.checkState() == QtCore.Qt.Checked:        
+                    #
+                    for visitnode in dataset.getChildren():
+                        for samplenode in visitnode.getChildren():
+                            for variablenode in samplenode.getChildren():
+                                parameter_set.add(variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')')
+                self._parameter_list.setList(sorted(parameter_set))
 
     def _plot_screening(self):
         """ """
@@ -598,7 +679,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         self._graph_plot_data = toolbox_utils.GraphPlotData(
                         title = 'Parameter values in sequence', 
                         y_type = 'float',
-                        x_label = 'Sequence position in dataset',
+                        x_label = 'Sequence position in dataset(s)',
                         y_label = 'Value')        
         # One plot for each selected parameter.
         for parameter in self._parameter_list.getSelectedDataList():
@@ -616,14 +697,18 @@ class ScreeningActivity(activity_base.ActivityBase):
 #        unit_set = set() # In case of different units on the same parameter.
         #
         if datasets and (len(datasets) > 0):
-            for dataset in toolbox_datasets.ToolboxDatasets().get_datasets():
-                for visitnode in dataset.getChildren():
-                    for samplenode in visitnode.getChildren():
-                        for variablenode in samplenode.getChildren():
-                            if (variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')') == parameter:
-#                                 unit_set.add(variablenode.get_data('unit'))
-                                value = variablenode.get_data('value')
-                                yarray.append(value)                  
+            for rowindex, dataset in enumerate(datasets):
+                #
+                item = self._loaded_datasets_model.item(rowindex, 0)
+                if item.checkState() == QtCore.Qt.Checked:        
+                    #
+                    for visitnode in dataset.getChildren():
+                        for samplenode in visitnode.getChildren():
+                            for variablenode in samplenode.getChildren():
+                                if (variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')') == parameter:
+    #                                 unit_set.add(variablenode.get_data('unit'))
+                                    value = variablenode.get_data('value')
+                                    yarray.append(value)                  
         #
 #         units = ' --- '.join(sorted(unit_set))
 #         parameter_unit = parameter + ' (' + units + ')' 
@@ -663,17 +748,21 @@ class ScreeningActivity(activity_base.ActivityBase):
 #        unit_set = set() # In case of different units on the same parameter.
         #
         if datasets and (len(datasets) > 0):
-            for dataset in toolbox_datasets.ToolboxDatasets().get_datasets():
-                for visitnode in dataset.getChildren():
-                    date = visitnode.get_data('date')
-                    for samplenode in visitnode.getChildren():
-                        for variablenode in samplenode.getChildren():
-                            if (variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')') == parameter:
-#                                 unit_set.add(variablenode.get_data('unit'))
-                                value = variablenode.get_data('value')
-                                xarray.append(date)                  
-                                yarray.append(value)                  
-        #
+            for rowindex, dataset in enumerate(datasets):
+                #
+                item = self._loaded_datasets_model.item(rowindex, 0)
+                if item.checkState() == QtCore.Qt.Checked:        
+                    #
+                    for visitnode in dataset.getChildren():
+                        date = visitnode.get_data('date')
+                        for samplenode in visitnode.getChildren():
+                            for variablenode in samplenode.getChildren():
+                                if (variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')') == parameter:
+    #                                 unit_set.add(variablenode.get_data('unit'))
+                                    value = variablenode.get_data('value')
+                                    xarray.append(date)                  
+                                    yarray.append(value)                  
+            #
 #         units = ' --- '.join(sorted(unit_set))
 #         parameter_unit = parameter + ' (' + units + ')' 
         #

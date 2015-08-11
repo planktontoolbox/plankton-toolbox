@@ -7,16 +7,18 @@
 from __future__ import unicode_literals
 
 import plankton_toolbox.activities.start_activity as start_activity
-#import plankton_toolbox.activities.create_dataset_activity as create_dataset_activity
+
+import plankton_toolbox.activities.counter_activity as counter_activity
+
 import plankton_toolbox.activities.load_datasets_activity as load_datasets_activity
 import plankton_toolbox.activities.screening_activity as screening_activity
 import plankton_toolbox.activities.analyse_datasets_activity as analyse_datasets_activity
-#import plankton_toolbox.activities.create_reports_activity as create_reports_activity
+import plankton_toolbox.activities.create_reports_activity as create_reports_activity
 #import plankton_toolbox.activities.manage_species_lists_activity as manage_species_lists_activity
 
 #import plankton_toolbox.activities.load_datasets_OLD_activity as load_datasets_OLD_activity
 #import plankton_toolbox.activities.create_reports_OLD_activity as create_reports_OLD_activity
-#import plankton_toolbox.activities.template_activity as template_activity
+# import plankton_toolbox.activities.template_activity as template_activity
 
 # import envmonlib
 import toolbox_utils
@@ -44,17 +46,20 @@ class ActivityManager(object):
 
     def init_activities(self):
         """ Activity activator. """
-        self._activitylist.append(start_activity.StartActivity('Introduction', self._parent))
-#        self._activitylist.append(create_dataset_activity.CreateDatasetActivity('(Create dataset)', self._parent))
-        self._activitylist.append(load_datasets_activity.LoadDatasetsActivity('Import datasets', self._parent))
-        self._activitylist.append(screening_activity.ScreeningActivity('Screening', self._parent))
-        self._activitylist.append(analyse_datasets_activity.AnalyseDatasetsActivity('Analyse data', self._parent))
-#        self._activitylist.append(create_reports_activity.CreateReportsActivity('(Create reports)", self._parent))
+#         self._activitylist.append(start_activity.StartActivity('Introduction', self._parent))
+        self._activitylist.append(start_activity.StartActivity('Welcome', self._parent))
+
+        self._activitylist.append(counter_activity.CounterActivity('Plankton counter', self._parent))
+
+        self._activitylist.append(load_datasets_activity.LoadDatasetsActivity('Dataset manager', self._parent))
+        self._activitylist.append(screening_activity.ScreeningActivity('Dataset screening', self._parent))
+        self._activitylist.append(analyse_datasets_activity.AnalyseDatasetsActivity('Dataset analysis', self._parent))
+        self._activitylist.append(create_reports_activity.CreateReportsActivity('Report generator', self._parent))
 #        self._activitylist.append(manage_species_lists_activity.ManageSpeciesListsActivity('Manage species lists", self._parent))
 
-#        self._activitylist.append(load_datasets_OLD_activity.LoadDatasetsActivity('Load datasets (OLD)", self._parent))
-#        self._activitylist.append(create_reports_OLD_activity.CreateReportsActivity('Create reports (OLD)", self._parent))
-#        self._activitylist.append(template_activity.TemplateActivity('(Activity template)", self._parent))
+#        self._activitylist.append(load_datasets_OLD_activity.LoadDatasetsActivity('Load datasets (OLD)', self._parent))
+#        self._activitylist.append(create_reports_OLD_activity.CreateReportsActivity('Create reports (OLD)', self._parent))
+#         self._activitylist.append(template_activity.TemplateActivity('(Activity template)', self._parent))
         
 #     def get_activity_by_name(self, object_name):
 #         """ Returns the activity. """

@@ -33,9 +33,9 @@ class TemplateActivity(activity_base.ActivityBase):
         self._activityheader = QtGui.QLabel('<h2>' + self.objectName() + '</h2>', self)
         self._activityheader.setTextFormat(QtCore.Qt.RichText)
         self._activityheader.setAlignment(QtCore.Qt.AlignHCenter)
-#        self._activityheader.setStyleSheet(""" 
-#            * { color: white; background-color: #00677f; }
-#            """)
+        self._activityheader.setStyleSheet(""" 
+            * { color: white; background-color: #00677f; }
+            """)
         contentLayout.addWidget(self._activityheader)
         # Add content to the activity.
         contentLayout.addLayout(self._content_person_info())
@@ -74,5 +74,5 @@ class TemplateActivity(activity_base.ActivityBase):
 
     def _test(self):
         """ """
-        toolbox_utils.Logging().log('Name: ' + unicode(self._emailedit.text()))
+        toolbox_utils.Logging().log('Name: ' + unicode(self._nameedit.text()))
         

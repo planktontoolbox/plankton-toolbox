@@ -51,17 +51,19 @@ class ToolManager(object):
         # The log tool should be loaded before other tools.
         self._toollist.append(dataset_viewer_tool.DatasetViewerTool('Dataset viewer', self._parent))
         self._toollist.append(graphplotter_tool.GraphPlotterTool('Graph plotter', self._parent))
-#        self._toollist.append(dyntaxa_browser_tool.DyntaxaBrowserTool('Dyntaxa browser", self._parent))
-#        self._toollist.append(peg_browser_tool.PegBrowserTool('PEG browser", self._parent))
-#        self._toollist.append(harmful_plankton_browser_tool.HarmfulPlanktonBrowserTool('Harmful plankton", self._parent))
-#        self._toollist.append(toolbox_settings_tool.ToolboxSettingsTool('Toolbox settings", self._parent))
+#        self._toollist.append(dyntaxa_browser_tool.DyntaxaBrowserTool('Dyntaxa browser', self._parent))
+#        self._toollist.append(peg_browser_tool.PegBrowserTool('PEG browser', self._parent))
+#        self._toollist.append(harmful_plankton_browser_tool.HarmfulPlanktonBrowserTool('Harmful plankton', self._parent))
+        
+        self._toollist.append(toolbox_settings_tool.ToolboxSettingsTool('Toolbox settings', self._parent))
+        
         self._toollist.append(log_tool.LogTool('Toolbox logging', self._parent))
-#        self._toollist.append(metadata_editor_tool.MetadataEditorTool('(Metadata editor)", self._parent))
-#        self._toollist.append(taxon_facts_tool.TaxonFactsTool('(Taxon facts)", self._parent))
-#        self._toollist.append(taxon_images_tool.TaxonImagesTool('(Taxon images)", self._parent))
-#        self._toollist.append(template_tool.TemplateTool('(Tool template)", self._parent))
+#        self._toollist.append(metadata_editor_tool.MetadataEditorTool('(Metadata editor)', self._parent))
+#        self._toollist.append(taxon_facts_tool.TaxonFactsTool('(Taxon facts)', self._parent))
+#        self._toollist.append(taxon_images_tool.TaxonImagesTool('(Taxon images)', self._parent))
+#        self._toollist.append(template_tool.TemplateTool('(Tool template)', self._parent))
 
-        self._toollist.append(dev_test_tool.DevTestTool('< Development and test >', self._parent))
+#         self._toollist.append(dev_test_tool.DevTestTool('< Development and test >', self._parent))
 
 
     def get_tool_by_name(self, object_name):

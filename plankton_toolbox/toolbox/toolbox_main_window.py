@@ -107,12 +107,12 @@ class MainWindow(QtGui.QMainWindow):
         self._filemenu.addSeparator()
         self._filemenu.addAction(self._quitaction)
         self._viewmenu = self.menuBar().addMenu(self.tr('&View'))
-        self.toolsmenu = self.menuBar().addMenu(self.tr('&Tools')) # Note: Public.
+        self.toolsmenu = self.menuBar().addMenu(self.tr('&Extra tools')) # Note: Public.
         self._helpmenu = self.menuBar().addMenu(self.tr('&Help'))
         self._helpmenu.addAction(self._aboutaction)
         # Add sub-menu in the tools menu to hide all tools.
-        self._hidealltools = QtGui.QAction(self.tr('Hide all tools'), self)
-        self._hidealltools.setStatusTip(self.tr('Make all tools invisible.'))
+        self._hidealltools = QtGui.QAction(self.tr('Hide all extra tools'), self)
+        self._hidealltools.setStatusTip(self.tr('Make all extra tools invisible.'))
         self._hidealltools.triggered.connect(self._hideAllTools)
         self.toolsmenu.addAction(self._hidealltools)
         #
@@ -141,7 +141,7 @@ class MainWindow(QtGui.QMainWindow):
                             QtGui.QMainWindow.AllowTabbedDocks | 
                             QtGui.QMainWindow.VerticalTabs)
         # Create left dock widget and dock to main window.
-        dock = QtGui.QDockWidget(self.tr(' Main menu '), self)
+        dock = QtGui.QDockWidget(self.tr(' Tool selector '), self)
         dock.setObjectName('Activities and tools selector')
         dock.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea)
         dock.setFeatures(QtGui.QDockWidget.NoDockWidgetFeatures)
@@ -176,7 +176,7 @@ class MainWindow(QtGui.QMainWindow):
         activitiesvbox = QtGui.QVBoxLayout()
         activitiesgroup.setLayout(activitiesvbox)
         # Groupbox for tools.
-        toolsgroup = QtGui.QGroupBox('Tools')
+        toolsgroup = QtGui.QGroupBox('Extra tools')
         grid1.addWidget(toolsgroup)        
         toolsvbox = QtGui.QVBoxLayout()
         toolsgroup.setLayout(toolsvbox)
@@ -193,14 +193,10 @@ class MainWindow(QtGui.QMainWindow):
             self._activitystack.addWidget(activity)
         #
         activitiesvbox.addStretch(5)
-        # Button to hide all tools.
-        button = utils_qt.ClickableQLabel('Hide all tools')
-        toolsvbox.addWidget(button)
-        self.connect(button, QtCore.SIGNAL('clicked()'), self._hideAllTools) 
         # Add one button for each tool.
         for tool in self._toolmanager.get_tool_list():
             button = utils_qt.ClickableQLabel(' ' + tool.objectName())
-            button_hide = utils_qt.ClickableQLabel('- hide')
+            button_hide = utils_qt.ClickableQLabel('- <hide>')
             showhidehbox = QtGui.QHBoxLayout()
             showhidehbox.addWidget(button)
             showhidehbox.addWidget(button_hide)
@@ -208,6 +204,11 @@ class MainWindow(QtGui.QMainWindow):
             toolsvbox.addLayout(showhidehbox)
             self.connect(button, QtCore.SIGNAL('clicked()'), tool.show_tool) 
             self.connect(button_hide, QtCore.SIGNAL('clicked()'), tool.hide_tool) 
+        #
+        # Button to hide all tools.
+        button = utils_qt.ClickableQLabel(' <Hide all extra tools>')
+        toolsvbox.addWidget(button)
+        self.connect(button, QtCore.SIGNAL('clicked()'), self._hideAllTools) 
         #
         toolsvbox.addStretch(10)
         # Activate startup activity. Select the first one in list.
