@@ -313,7 +313,7 @@ class ToolboxEditableQTableView( QtGui.QTableView):
         self.selectionModel = QtGui.QItemSelectionModel(self.tablemodel)
         self.setSelectionModel(self.selectionModel)
         self.resizeColumnsToContents()
-          
+
     def clear(self):
         """ """
         self.selectionModel.clear()
@@ -321,7 +321,6 @@ class ToolboxEditableQTableView( QtGui.QTableView):
         super(ToolboxQTableView, self).clear()
         self.tablemodel = None
 
-        
     def setTablemodel(self, model):
         """ Use this method if the default model should be replaced. """
         self.tablemodel = model
@@ -329,6 +328,7 @@ class ToolboxEditableQTableView( QtGui.QTableView):
         self.selectionModel = QtGui.QItemSelectionModel(self.tablemodel)
         self.setSelectionModel(self.selectionModel)
         self.resizeColumnsToContents()
+
 
 class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
     """ Table model for editing. """
@@ -359,7 +359,7 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
         """ """
         return self._modeldata
 
-    def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
+    def headerData(self, section, orientation, role = QtCore.Qt.DisplayRole):
         """ Overridden abstract method. """
         if self._modeldata == None:
             return QtCore.QVariant()
@@ -369,26 +369,26 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
             return QtCore.QVariant(unicode(section + 1))
         return QtCore.QVariant()
 
-    def data(self, index=QtCore.QModelIndex(), role=QtCore.Qt.DisplayRole):
+    def data(self, index=QtCore.QModelIndex(), role = QtCore.Qt.DisplayRole):
         """ Overridden abstract method. """
         if self._modeldata == None:
             return QtCore.QVariant()
-        if role == QtCore.Qt.DisplayRole:
+        # Also for editing.
+        if (role == QtCore.Qt.DisplayRole) or (role == QtCore.Qt.EditRole):
             if index.isValid():
-                return QtCore.QVariant((unicode(self._modeldata.getDataItem(index.row(), index.column()))))
+                return QtCore.QVariant(unicode(self._modeldata.getDataItem(index.row(), index.column())))
         return QtCore.QVariant()
 
-    # For editing:
-    def setData(self, index, value, role):
-        """ """
-        try:        
+    def setData(self, index, value, role = QtCore.Qt.EditRole):
+        """ Overridden abstract method. For editing. """
+        if role == QtCore.Qt.EditRole:
             self._modeldata.setDataItem(index.row(), index.column(), unicode(value.toString()))
+            self.dataChanged.emit(index, index)
             return True
-        except:
-            return False
+        return False
 
-    # For editing:
     def flags(self, index):
+        """ Overridden abstract method. For editing. """
         return QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
 
 

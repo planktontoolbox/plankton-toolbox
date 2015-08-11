@@ -9,7 +9,7 @@ from __future__ import unicode_literals
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.tools.tool_base as tool_base
-# import envmonlib
+import envmonlib
 import toolbox_utils
 import toolbox_core
 
@@ -26,42 +26,66 @@ class DevTestTool(tool_base.ToolBase):
         """ """
         # Settings for the DevTestTool. NOTE: Max 4 is supported.
         self._dev_settings = [
-            {   'button_text': 'SHARKweb_ZP_2010-2012_en_SHORT',
+            {   'button_text': 'Phytoplankton',
                 'import_parser_path': 'toolbox_data/parsers/',
-                'import_parser': 'SHARKweb_Zooplankton_parser.xlsx',
+                'import_parser': 'sharkweb_phytoplankton_parser.xlsx',
+                'import_column': 'Sharkweb english',
+                'export_column': 'Export english',
+                'data_file_path': '',
+                'data_file_name': 'demodata_Phytoplankton.txt',
+                'data_file_encoding': 'windows-1252',
+#                 'show_activity_after': 'Import datasets'
+                'show_activity_after': 'Dataset analysis'
+
+            },
+            {   'button_text': 'Zooplankton',
+                'import_parser_path': 'toolbox_data/parsers/',
+                'import_parser': 'sharkweb_zooplankton_parser.xlsx',
                 'import_column': 'SHARKweb english',
                 'export_column': 'Export english',
                 'data_file_path': '',
-                'data_file_name': 'SHARKweb_ZP_2010-2012_en_SHORT.txt',
+                'data_file_name': 'demodata_Zooplankton.txt',
                 'data_file_encoding': 'windows-1252',
 #                 'show_activity_after': 'Import datasets'
-                'show_activity_after': 'Analyse data'
+                'show_activity_after': 'Dataset screening'
 
             },
-            {   'button_text': 'SHARKweb_ZP_2010-2012_sv_SHORT',
-                'import_parser_path': 'toolbox_data/parsers/',
-                'import_parser': 'SHARKweb_Zooplankton_parser.xlsx',
-                'import_column': 'SHARKweb swedish',
-                'export_column': 'Export swedish',
-                'data_file_path': '',
-                'data_file_name': 'SHARKweb_ZP_2010-2012_sv_SHORT.txt',
-                'data_file_encoding': 'windows-1252',
-#                 'show_activity_after': 'Import datasets'
-                'show_activity_after': 'Analyse data'
-
-            },
-            {   'button_text': 'PTBX_testdata',
-                'import_parser_path': 'toolbox_data/parsers/',
-                'import_parser': 'PTBX_testdata_parser.xlsx',
-                'import_column': 'Import format',
-                'export_column': 'Export format',
-                'data_file_path': '',
-                'data_file_name': 'PTBX_testdata.txt',
-                'data_file_encoding': 'windows-1252',
-#                 'show_activity_after': 'Import datasets'
-                'show_activity_after': 'Screening'
-
-            },
+#             {   'button_text': 'SHARKweb_ZP_2010-2012_en_SHORT',
+#                 'import_parser_path': 'toolbox_data/parsers/',
+#                 'import_parser': 'SHARKweb_Zooplankton_parser.xlsx',
+#                 'import_column': 'SHARKweb english',
+#                 'export_column': 'Export english',
+#                 'data_file_path': '',
+#                 'data_file_name': 'SHARKweb_ZP_2010-2012_en_SHORT.txt',
+#                 'data_file_encoding': 'windows-1252',
+# #                 'show_activity_after': 'Import datasets'
+#                 'show_activity_after': 'Analyse data'
+# 
+#             },
+#             {   'button_text': 'SHARKweb_ZP_2010-2012_sv_SHORT',
+#                 'import_parser_path': 'toolbox_data/parsers/',
+#                 'import_parser': 'SHARKweb_Zooplankton_parser.xlsx',
+#                 'import_column': 'SHARKweb swedish',
+#                 'export_column': 'Export swedish',
+#                 'data_file_path': '',
+#                 'data_file_name': 'SHARKweb_ZP_2010-2012_sv_SHORT.txt',
+#                 'data_file_encoding': 'windows-1252',
+# #                 'show_activity_after': 'Import datasets'
+#                 'show_activity_after': 'Analyse data'
+# 
+#             },
+#             {   'button_text': 'PTBX_testdata',
+#                 'import_parser_path': 'toolbox_data/parsers/',
+#                 'import_parser': 'PTBX_testdata_parser.xlsx',
+#                 'import_column': 'Import format',
+#                 'export_column': 'Export format',
+#                 'data_file_path': '',
+#                 'data_file_name': 'PTBX_testdata.txt',
+#                 'data_file_encoding': 'windows-1252',
+# #                 'show_activity_after': 'Import datasets'
+#                 'show_activity_after': 'Screening'
+# 
+#             },
         ]
 
         # Initialize parent. Should be called after other 
@@ -129,7 +153,7 @@ class DevTestTool(tool_base.ToolBase):
             self._parent.show_activity_by_name(settings['show_activity_after'])
             #
             # Set up for import file parsing.
-            impMgr = toolbox_utils.ImportManager(import_parser_path + import_parser,
+            impMgr = envmonlib.ImportManager(import_parser_path + import_parser,
                                              import_column,
                                              export_column)
             # Import and parse file.
