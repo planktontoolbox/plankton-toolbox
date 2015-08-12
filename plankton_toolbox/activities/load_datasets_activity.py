@@ -79,10 +79,10 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
     def _content_load_dataset(self):
         """ """
         # Active widgets and connections.
-        selectdatabox = QtGui.QGroupBox('Import dataset', self)
+        selectdatabox = QtGui.QGroupBox('Import datasets', self)
         tabWidget = QtGui.QTabWidget()
         tabWidget.addTab(self._content_plankton_counter(), 'Plankton counter datasets')
-        tabWidget.addTab(self._content_archive_dataset(), 'Archive datasets (*.zip)')
+        tabWidget.addTab(self._content_archive_dataset(), 'Archive datasets')
         tabWidget.addTab(self._content_textfile(), 'Data files - Text (*.txt)')
         tabWidget.addTab(self._content_xlsx(), 'Data files - Excel (*.xlsx)')
         # Layout widgets.
@@ -96,208 +96,77 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
     def _content_plankton_counter(self):
         """ """
         widget = QtGui.QWidget()
-        # Active widgets and connections.
-#         introlabel = utils_qt.RichTextQLabel()
-#         introlabel.setText(help_texts.HelpTexts().getText('LoadDatasetsActivity_text_intro'))
-        # - Select dataset parsers:
-        self._textfile_parser_list = QtGui.QComboBox()
-        self._textfile_parser_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
-        self._textfile_parser_list.addItems(["<select>"])
-        self.connect(self._textfile_parser_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._textfile_parser_selected)                
-        # - Add available dataset parsers.
-        self._textfile_parser_list.addItems(self._parser_list)                
-        # - Select import column:
-        self._textfile_importcolumn_list = QtGui.QComboBox()
-        self._textfile_importcolumn_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
-        self._textfile_importcolumn_list.addItems(["<no parser selected>"])        
-        self.connect(self._textfile_importcolumn_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._textfile_import_column_selected)                
-        # - Select export column:
-        self._textfile_exportcolumn_list = QtGui.QComboBox()
-        self._textfile_exportcolumn_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
-        self._textfile_exportcolumn_list.addItems(["<no parser selected>"])        
-        # - Select text coding.
-        self._textfile_encoding_list = QtGui.QComboBox()
-        self._encodings_list = ['<platform default>',
-                                'windows-1252',
-                                'utf-8',
-                                'utf-16',
-                                'ascii',
-                                'latin1',
-                                'macroman']
-        self._textfile_encoding_list.addItems(self._encodings_list)
-        # Load dataset.
-        self._textfile_getdataset_button = QtGui.QPushButton('Import dataset(s)...')
-        self.connect(self._textfile_getdataset_button, QtCore.SIGNAL('clicked()'), self._load_text_files)                
-        # Layout widgets.
-        form1 = QtGui.QGridLayout()
-        gridrow = 0
-        label1 = QtGui.QLabel('Select parser:')
-        stretchlabel = QtGui.QLabel('')
-        form1.addWidget(label1, gridrow, 0, 1, 1)
-        form1.addWidget(self._textfile_parser_list, gridrow, 1, 1, 1)
-        form1.addWidget(stretchlabel, gridrow,2, 1, 9)
-        gridrow += 1
-        label1 = QtGui.QLabel('Select import column:')
-        form1.addWidget(label1, gridrow, 0, 1, 1)
-        form1.addWidget(self._textfile_importcolumn_list, gridrow, 1, 1, 1)
-        gridrow += 1
-        label1 = QtGui.QLabel('Select export column:')
-        form1.addWidget(label1, gridrow, 0, 1, 1)
-        form1.addWidget(self._textfile_exportcolumn_list, gridrow, 1, 1, 1)
         #
+        loaded_datasets_listview = QtGui.QListView()
+        self._loaded_datasets_model = QtGui.QStandardItemModel()
+        loaded_datasets_listview.setModel(self._loaded_datasets_model)
+        #
+        self._clearall_button = QtGui.QPushButton('Clear all')
+        self.connect(self._clearall_button, QtCore.SIGNAL('clicked()'), self._uncheck_all_datasets)                
+        self._markall_button = QtGui.QPushButton('Mark all')
+        self.connect(self._markall_button, QtCore.SIGNAL('clicked()'), self._check_all_datasets)                
+        self._importcounterdataset_button = QtGui.QPushButton('Import marked dataset(s)')
+        self.connect(self._importcounterdataset_button, QtCore.SIGNAL('clicked()'), self._import_counter_datasets)                
+        # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
-        label1 = QtGui.QLabel('Text file character encoding (affects å, è, µ, etc.):')
-        hbox1.addWidget(label1)
-        hbox1.addWidget(self._textfile_encoding_list)
+        hbox1.addWidget(self._clearall_button)
+        hbox1.addWidget(self._markall_button)
         hbox1.addStretch(10)
-        hbox1.addWidget(self._textfile_getdataset_button)
+        hbox1.addWidget(self._importcounterdataset_button)
         #
         layout = QtGui.QVBoxLayout()
-#         layout.addWidget(introlabel)
-        layout.addLayout(form1)
-        layout.addStretch(1)
+        layout.addWidget(loaded_datasets_listview, 10)
         layout.addLayout(hbox1)
         widget.setLayout(layout)                
         #
         return widget
-        
-    def _textfile_parser_selected(self, selected_row):
-        """ """
-        if (selected_row > 0) and (selected_row <= len(self._parser_list)):
-            toolbox_utils.Logging().log('Selected parser: ' + unicode(self._parser_list[selected_row - 1]))
-#            tabledata = toolbox_core.DatasetTable()
-#             toolbox_utils.ExcelFiles().readToTableDataset(tabledata, 
-#                                                  file_name = self._parser_path + self._parser_list[selected_row - 1])            
-            tablereader = toolbox_utils.TableFileReader(file_path = self._parser_path, 
-                                                        excel_file_name = self._parser_list[selected_row - 1])
-            self._textfile_importcolumn_list.clear()
-            self._textfile_exportcolumn_list.clear()
-            header = tablereader.header()
-            for row in tablereader.rows():
-                if (row[0] == 'info') and (row[1] == 'column_type'):
-                    for index, item in enumerate(row):
-                        if item == 'import':
-                            self._textfile_importcolumn_list.addItems([header[index]])
-                        if item == 'export':
-                            self._textfile_exportcolumn_list.addItems([header[index]])
-        else:
-            self._textfile_importcolumn_list.clear()
-            self._textfile_importcolumn_list.addItems(['<no parser selected>'])
-            self._textfile_exportcolumn_list.clear()
-            self._textfile_exportcolumn_list.addItems(['<no parser selected>'])
 
-    def _load_plankton_counter_dataset(self):
+    def _check_all_datasets(self):
         """ """
-#         try:
-#             toolbox_utils.Logging().log('') # Empty line.
-#             toolbox_utils.Logging().log('Importing datasets...')
-#             toolbox_utils.Logging().start_accumulated_logging()
-#             self._write_to_status_bar('Importing datasets...')
-#             # Show select file dialog box. Multiple files can be selected.
-#             namefilter = 'Text files (*.txt);;All files (*.*)'
-#             filenames = QtGui.QFileDialog.getOpenFileNames(
-#                                 self,
-#                                 'Import dataset(s)',
-#                                 self._last_used_textfile_name,
-#                                 namefilter)
-#             # From QString to unicode.
-#             filenames = map(unicode, filenames)
-#             # Check if user pressed ok or cancel.
-#             self._tabledataset = toolbox_core.DatasetTable()
-#             if filenames:
-#                 for filename in filenames:
-#                     # Store selected path. Will be used as default next time.
-#                     self._last_used_textfile_name = filename
-#                     # Text files may have strange encodings.
-#                     if unicode(self._textfile_encoding_list.currentText()) == '<platform default>':
-#                         textfileencoding = locale.getpreferredencoding()
-#                     else:
-#                         textfileencoding = unicode(self._textfile_encoding_list.currentText())                        
-#                     # Set up for import file parsing.
-#                     importmanager = envmonlib.ImportManager(self._parser_path + unicode(self._textfile_parser_list.currentText()),
-#                                                      unicode(self._textfile_importcolumn_list.currentText()),
-#                                                      unicode(self._textfile_exportcolumn_list.currentText()))
-#                     # Import and parse file.
-#                     dataset = importmanager.importTextFile(filename, textfileencoding)
-#                     # Add metadata related to imported file.
-#                     dataset.addMetadata('parser', self._parser_path + unicode(self._textfile_parser_list.currentText()))
-#                     dataset.addMetadata('file_name', os.path.basename(filename))
-#                     dataset.addMetadata('file_path', filename)
-#                     dataset.addMetadata('import_column', unicode(self._textfile_importcolumn_list.currentText()))
-#                     dataset.addMetadata('export_column', unicode(self._textfile_exportcolumn_list.currentText()))
-#                     # Add to dataset list. (Note:ToolboxDatasets is a wrapper containing the 'datasetListChanged'-signal).
-#                     toolbox_datasets.ToolboxDatasets().add_dataset(dataset)
-#             #
-#         except Exception as e:
-#             toolbox_utils.Logging().error('Text file import failed on exception: ' + unicode(e))
-#             QtGui.QMessageBox.warning(self, 'Text file loading.\n', 
-#                                       'Text file import failed on exception.\n' + unicode(e))
-#             raise
-#         finally:
-#             datasetcount = len(toolbox_core.Datasets().get_datasets())
-#             self._write_to_status_bar('Imported datasets: ' + unicode(datasetcount))
-#             toolbox_utils.Logging().log_all_accumulated_rows()
-#             toolbox_utils.Logging().log('Importing datasets done. Number of imported datasets: ' + unicode(datasetcount))
+        for rowindex in range(self._loaded_datasets_model.rowCount()):
+            item = self._loaded_datasets_model.item(rowindex, 0)
+            item.setCheckState(QtCore.Qt.Checked)
+            
+    def _uncheck_all_datasets(self):
+        """ """
+        for rowindex in range(self._loaded_datasets_model.rowCount()):
+            item = self._loaded_datasets_model.item(rowindex, 0)
+            item.setCheckState(QtCore.Qt.Unchecked)
+
+    def _import_counter_datasets(self):
+        """ """
+        QtGui.QMessageBox.information(self, "Information", 'Not implemented yet.')
 
     # ===== ARCHIVE DATASETS ======
     def _content_archive_dataset(self):
         """ """
         widget = QtGui.QWidget()
-        # Active widgets and connections.
-#         introlabel = utils_qt.RichTextQLabel()
-#         introlabel.setText(help_texts.HelpTexts().getText('LoadDatasetsActivity_text_intro'))
         # - Select dataset parsers:
-        self._textfile_parser_list = QtGui.QComboBox()
-        self._textfile_parser_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
-        self._textfile_parser_list.addItems(["<select>"])
-        self.connect(self._textfile_parser_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._textfile_parser_selected)                
+        self._archive_format_combo = QtGui.QComboBox()
+        self._archive_format_combo.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
+#         self.connect(self._textfile_parser_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._textfile_parser_selected)                
         # - Add available dataset parsers.
-        self._textfile_parser_list.addItems(self._parser_list)                
-        # - Select import column:
-        self._textfile_importcolumn_list = QtGui.QComboBox()
-        self._textfile_importcolumn_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
-        self._textfile_importcolumn_list.addItems(["<no parser selected>"])        
-        self.connect(self._textfile_importcolumn_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._textfile_import_column_selected)                
-        # - Select export column:
-        self._textfile_exportcolumn_list = QtGui.QComboBox()
-        self._textfile_exportcolumn_list.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
-        self._textfile_exportcolumn_list.addItems(["<no parser selected>"])        
-        # - Select text coding.
-        self._textfile_encoding_list = QtGui.QComboBox()
-        self._encodings_list = ['<platform default>',
-                                'windows-1252',
-                                'utf-8',
-                                'utf-16',
-                                'ascii',
-                                'latin1',
-                                'macroman']
-        self._textfile_encoding_list.addItems(self._encodings_list)
+        self._archiveformat_list = ['SHARK Archive Format (*.zip)',
+                                    'SHARK Archive Format (http://sharkdata.se)',
+                                    'SHARK Archive Format (http://test.sharkdata.se)',
+                                    'Darwin Core Archive',
+                                    'Darwin Core Archive - EurOBIS']
+        self._archive_format_combo.addItems(self._archiveformat_list)
         # Load dataset.
-        self._textfile_getdataset_button = QtGui.QPushButton('Import dataset(s)...')
-        self.connect(self._textfile_getdataset_button, QtCore.SIGNAL('clicked()'), self._load_text_files)                
+        self._archive_getdataset_button = QtGui.QPushButton('Import dataset(s)...')
+        self.connect(self._archive_getdataset_button, QtCore.SIGNAL('clicked()'), self._import_archive_datasets)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         gridrow = 0
-        label1 = QtGui.QLabel('Select parser:')
+        label1 = QtGui.QLabel('Archive format:')
         stretchlabel = QtGui.QLabel('')
         form1.addWidget(label1, gridrow, 0, 1, 1)
-        form1.addWidget(self._textfile_parser_list, gridrow, 1, 1, 1)
+        form1.addWidget(self._archive_format_combo, gridrow, 1, 1, 1)
         form1.addWidget(stretchlabel, gridrow,2, 1, 9)
-        gridrow += 1
-        label1 = QtGui.QLabel('Select import column:')
-        form1.addWidget(label1, gridrow, 0, 1, 1)
-        form1.addWidget(self._textfile_importcolumn_list, gridrow, 1, 1, 1)
-        gridrow += 1
-        label1 = QtGui.QLabel('Select export column:')
-        form1.addWidget(label1, gridrow, 0, 1, 1)
-        form1.addWidget(self._textfile_exportcolumn_list, gridrow, 1, 1, 1)
         #
         hbox1 = QtGui.QHBoxLayout()
-        label1 = QtGui.QLabel('Text file character encoding (affects å, è, µ, etc.):')
-        hbox1.addWidget(label1)
-        hbox1.addWidget(self._textfile_encoding_list)
         hbox1.addStretch(10)
-        hbox1.addWidget(self._textfile_getdataset_button)
+        hbox1.addWidget(self._archive_getdataset_button)
         #
         layout = QtGui.QVBoxLayout()
 #         layout.addWidget(introlabel)
@@ -308,6 +177,10 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         #
         return widget
         
+    def _import_archive_datasets(self):
+        """ """
+        QtGui.QMessageBox.information(self, "Information", 'Not implemented yet.')
+
     # ===== TEXT FILES ======
     def _content_textfile(self):
         """ """
