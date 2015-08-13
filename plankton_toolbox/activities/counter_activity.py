@@ -30,33 +30,33 @@ class CounterActivity(activity_base.ActivityBase):
     
     def __init__(self, name, parentwidget):
         """ """
-        self._datasettabledata = DatasetTableData()
-        self._last_used_textfile_name = ''
-        self._last_used_excelfile_name = ''
+#         self._datasettabledata = DatasetTableData()
+#         self._last_used_textfile_name = ''
+#         self._last_used_excelfile_name = ''
         # Load available dataset parsers.
-        self._parser_list = []
-        self._load_available_parsers()
+#         self._parser_list = []
+#         self._load_available_parsers()
         # Initialize parent (self._create_content will be called).
         super(CounterActivity, self).__init__(name, parentwidget)
         # Log available parsers when GUI setup has finished.
-        QtCore.QTimer.singleShot(10, self._log_available_parsers)
+#         QtCore.QTimer.singleShot(10, self._log_available_parsers)
 
-    def _load_available_parsers(self):
-        """ """
-        self._parser_path = 'toolbox_data/parsers/'
-        self._parser_list = []
-        for parserpath in glob.glob(self._parser_path + '*.xlsx'):
-            self._parser_list.append(os.path.basename(parserpath))
-
-    def _log_available_parsers(self):
-        """ """
-        if len(self._parser_list) > 0:
-            toolbox_utils.Logging().log('') # Empty line.
-            toolbox_utils.Logging().log('Available dataset parsers (located in "toolbox_data/parsers"):')
-            for parserpath in self._parser_list:
-                toolbox_utils.Logging().log('- ' + os.path.basename(parserpath))
-        else:
-            toolbox_utils.Logging().log('No dataset parsers are found in "/toolbox_data/parsers". ')
+#     def _load_available_parsers(self):
+#         """ """
+#         self._parser_path = 'toolbox_data/parsers/'
+#         self._parser_list = []
+#         for parserpath in glob.glob(self._parser_path + '*.xlsx'):
+#             self._parser_list.append(os.path.basename(parserpath))
+# 
+#     def _log_available_parsers(self):
+#         """ """
+#         if len(self._parser_list) > 0:
+#             toolbox_utils.Logging().log('') # Empty line.
+#             toolbox_utils.Logging().log('Available dataset parsers (located in "toolbox_data/parsers"):')
+#             for parserpath in self._parser_list:
+#                 toolbox_utils.Logging().log('- ' + os.path.basename(parserpath))
+#         else:
+#             toolbox_utils.Logging().log('No dataset parsers are found in "/toolbox_data/parsers". ')
 
     def _create_content(self):
         """ """
@@ -69,7 +69,7 @@ class CounterActivity(activity_base.ActivityBase):
         self._activityheader.setAlignment(QtCore.Qt.AlignHCenter)
         contentLayout.addWidget(self._activityheader)
         # Add content to the activity.
-        contentLayout.addWidget(self._content_loaded_datasets(), 10)
+        contentLayout.addWidget(self._content_plankton_counter(), 10)
 #        contentLayout.addStretch(5)
         # Style.
         self._activityheader.setStyleSheet(""" 
@@ -90,169 +90,105 @@ class CounterActivity(activity_base.ActivityBase):
         #
         return selectdatabox
 
-    # ===== LOADED DATASETS =====    
-    def _content_loaded_datasets(self):
+    # ===== COUNTER DATASETS =====    
+    def _content_plankton_counter(self):
         """ """
-        # Active widgets and connections.
-        selectdatabox = QtGui.QGroupBox('Loaded datasets', self)
+        widget = QtGui.QWidget()
         #
-        self._datasets_table = utils_qt.ToolboxQTableView()
-        self._datasets_table.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        loaded_datasets_listview = QtGui.QListView()
+        self._loaded_datasets_model = QtGui.QStandardItemModel()
+        loaded_datasets_listview.setModel(self._loaded_datasets_model)
+        #
         
-        self._datasettabledata.clear()
-        self._datasettabledata.setHeader(['Dataset      ', 
-#                                           'Type         ', 
-                                          'Content      ', 
-                                          'File         ', 
-                                          'File path    ',
-                                          'Parser       ',
-                                          'Import column',
-                                          'Export column'])
-        self._datasets_table.tablemodel.setModeldata(self._datasettabledata)
-        self._datasets_table.resizeColumnsToContents()
+#         loaded_datasets_listview.
         
-        self._datasets_table.selectionModel.Rows
-        
-        # Listen for changes in the toolbox dataset list.
-        self.connect(toolbox_datasets.ToolboxDatasets(), 
-             QtCore.SIGNAL('datasetListChanged'), 
-             self._update_dataset_list)
-        # Connection for selected row.
-        self._datasets_table.clicked.connect(self._selection_changed)
-                        
-        # Buttons.
-        self._unloadalldatasets_button = QtGui.QPushButton('Remove all datasets')
-        self._unloadmarkeddatasets_button = QtGui.QPushButton('Remove marked dataset(s)')
-        # If checked the selected dataset content should be viewed in the dataset viewer tool.
-        self._viewdataset_checkbox = QtGui.QCheckBox('View marked dataset')
-        self._viewdataset_checkbox.setChecked(False)
-        # Button connections.
-        self.connect(self._unloadalldatasets_button, QtCore.SIGNAL('clicked()'), self._unload_all_datasets)                
-        self.connect(self._unloadmarkeddatasets_button, QtCore.SIGNAL('clicked()'), self._unload_marked_datasets)                
-        self._viewdataset_checkbox.clicked.connect(self._selection_changed)
+        #
+        self._clearall_button = QtGui.QPushButton('Clear all')
+        self.connect(self._clearall_button, QtCore.SIGNAL('clicked()'), self._uncheck_all_datasets)                
+        self._markall_button = QtGui.QPushButton('Mark all')
+        self.connect(self._markall_button, QtCore.SIGNAL('clicked()'), self._check_all_datasets)                
+        self._importcounterdataset_button = QtGui.QPushButton('Import marked dataset(s)')
+        self.connect(self._importcounterdataset_button, QtCore.SIGNAL('clicked()'), self._import_counter_datasets)                
         # Layout widgets.
-        buttonlayout = QtGui.QHBoxLayout()
-        buttonlayout.addWidget(self._unloadalldatasets_button)
-        buttonlayout.addWidget(self._unloadmarkeddatasets_button)
-        buttonlayout.addWidget(self._viewdataset_checkbox)
-        buttonlayout.addStretch(5)
+        hbox1 = QtGui.QHBoxLayout()
+        hbox1.addWidget(self._clearall_button)
+        hbox1.addWidget(self._markall_button)
+        hbox1.addStretch(10)
+        hbox1.addWidget(self._importcounterdataset_button)
         #
-        widget = QtGui.QWidget()        
         layout = QtGui.QVBoxLayout()
-        widget.setLayout(layout)
-        layout.addWidget(self._datasets_table)
-        layout.addLayout(buttonlayout)
-        selectdatabox.setLayout(layout) 
-        #       
-        return selectdatabox
+        layout.addWidget(loaded_datasets_listview, 10)
+        layout.addLayout(hbox1)
+        widget.setLayout(layout)                
+        #
+        return widget
 
-    def _unload_all_datasets(self):
+    def _check_all_datasets(self):
         """ """
-        toolbox_datasets.ToolboxDatasets().clear()
-
-    def _unload_marked_datasets(self):
-        # Remove datasets, start with the last one. 
-        rowcount = self._datasets_table.tablemodel.rowCount()
-        for rowindex in range(rowcount):
-            index = rowcount - rowindex - 1
-            if self._datasets_table.selectionModel.isSelected(self._datasets_table.tablemodel.createIndex(index, 0)): # Check if selected by user.
-                toolbox_datasets.ToolboxDatasets().remove_dataset_by_index(index)
-
-    def _update_dataset_list(self):
+        for rowindex in range(self._loaded_datasets_model.rowCount()):
+            item = self._loaded_datasets_model.item(rowindex, 0)
+            item.setCheckState(QtCore.Qt.Checked)
+            
+    def _uncheck_all_datasets(self):
         """ """
-        self._datasettabledata.clearRows()
-        for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().get_datasets()):
-            # Get content info depending on dataset type.
-#             datasettype = '',
-            contentinfo = ''
-            if isinstance(dataset, toolbox_core.DatasetTable):
-#                 datasettype = 'Table dataset'
-                contentinfo = 'Rows: ' + unicode(len(dataset.getRows())) + '. '
-            elif isinstance(dataset, toolbox_core.DatasetNode):
-#                 datasettype = 'Tree dataset'
-                visitcount, samplecound, variablecount = dataset.getCounters()
-                contentinfo = 'Visits: ' + unicode(visitcount) + ', ' + \
-                              'samples: ' + unicode(samplecound) + ', ' + \
-                              'variables: ' + unicode(variablecount) + '. '
-#             else:
-#                 datasettype = 'Unspecified'
+        for rowindex in range(self._loaded_datasets_model.rowCount()):
+            item = self._loaded_datasets_model.item(rowindex, 0)
+            item.setCheckState(QtCore.Qt.Unchecked)
 
-            # Add row 
-            self._datasettabledata.addRow(
-                ['Dataset-' + unicode(rowindex + 1),
-#                  datasettype,
-                 contentinfo,
-                 dataset.getMetadata('file_name'),
-                 dataset.getMetadata('file_path'),
-                 dataset.getMetadata('parser'),
-                 dataset.getMetadata('import_column'),
-                 dataset.getMetadata('export_column')])
-            #
-        self._datasets_table.tablemodel.reset()
-        self._datasets_table.resizeColumnsToContents()
-
+    def _import_counter_datasets(self):
+        """ """
+        QtGui.QMessageBox.information(self, "Information", 'Not implemented yet.')
     
-    def _selection_changed(self):
-        """ """
-        if self._viewdataset_checkbox.isChecked():
-            modelIndex = self._datasets_table.selectionModel.currentIndex()
-            if modelIndex.isValid():
-                # View tool.
-                tool_manager.ToolManager().show_tool_by_name('Dataset viewer') # Show tool if hidden.
-                # graphtool = tool_manager.ToolManager().getToolByName('Dataset viewer')
-                toolbox_sync.ToolboxSync().set_row_index('dataset', modelIndex.row())
-
-    
-class DatasetTableData(object):
-    """ """
-    def __init__(self):
-        """ """
-        self._header = []
-        self._rows = []
-        
-    def clear(self):
-        """ """
-        self._header = []
-        self._rows = []
-
-    def clearRows(self):
-        """ """
-        self._rows = []
-
-    def setHeader(self, header):
-        """ """
-        self._header = header
-
-    def addRow(self, row):
-        """ """
-        self._rows.append(row)
-
-    def getHeaderItem(self, column):
-        """ Used for calls from QAbstractTableModel. """
-        try:
-            return self._header[column]
-        except Exception:
-            return ''
-
-    def getDataItem(self, row, column):
-        """ Used for calls from QAbstractTableModel. """
-        try:
-            return self._rows[row][column]
-        except Exception:
-            return ''
-
-    def getColumnCount(self):
-        """ Used for calls from QAbstractTableModel. """
-        try:
-            return len(self._header)
-        except Exception:
-            return ''
-
-    def getRowCount(self):
-        """ Used for calls from QAbstractTableModel. """
-        try:
-            return len(self._rows)
-        except Exception:
-            return ''
+# class DatasetTableData(object):
+#     """ """
+#     def __init__(self):
+#         """ """
+#         self._header = []
+#         self._rows = []
+#         
+#     def clear(self):
+#         """ """
+#         self._header = []
+#         self._rows = []
+# 
+#     def clearRows(self):
+#         """ """
+#         self._rows = []
+# 
+#     def setHeader(self, header):
+#         """ """
+#         self._header = header
+# 
+#     def addRow(self, row):
+#         """ """
+#         self._rows.append(row)
+# 
+#     def getHeaderItem(self, column):
+#         """ Used for calls from QAbstractTableModel. """
+#         try:
+#             return self._header[column]
+#         except Exception:
+#             return ''
+# 
+#     def getDataItem(self, row, column):
+#         """ Used for calls from QAbstractTableModel. """
+#         try:
+#             return self._rows[row][column]
+#         except Exception:
+#             return ''
+# 
+#     def getColumnCount(self):
+#         """ Used for calls from QAbstractTableModel. """
+#         try:
+#             return len(self._header)
+#         except Exception:
+#             return ''
+# 
+#     def getRowCount(self):
+#         """ Used for calls from QAbstractTableModel. """
+#         try:
+#             return len(self._rows)
+#         except Exception:
+#             return ''
 
         

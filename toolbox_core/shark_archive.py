@@ -286,13 +286,16 @@ if __name__ == "__main__":
     try:
         sharkarchive = SharkArchive(
                     file_path = '../test_data',
-                    archive_filename = 'SHARK_Phytoplankton_2013_UMSC_version_2015-04-14.zip',                 
+                    archive_filename = 'SHARK_Phytoplankton_2013_UMSC_version_2015-04-14.zip',
                      )
         #
         sharkarchive.load_shark_data()
         print('\nDEBUG: ' + unicode(sharkarchive.get_data_tableobject().header()))
-#         for row in sharkarchive.get_data_tableobject().rows():
-#             print('DEBUG: ' + unicode(row))
+        for index, row in enumerate(sharkarchive.get_data_tableobject().rows()):
+            if index >= 10:
+                print('DEBUG: Show 10 first rows.')
+                break
+            print('DEBUG: ' + unicode(row))
         #
         sharkarchive.load_shark_metadata()
         print('\nDEBUG: ' + unicode(sharkarchive.get_metadata_text()))
