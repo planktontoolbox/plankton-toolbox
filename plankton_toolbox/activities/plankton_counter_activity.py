@@ -23,10 +23,8 @@ import envmonlib
 import toolbox_utils
 import toolbox_core
 
-class CounterActivity(activity_base.ActivityBase):
-    """
-    Template class for new activities.
-    """
+class PlanktonCounterActivity(activity_base.ActivityBase):
+    """ """
     
     def __init__(self, name, parentwidget):
         """ """
@@ -37,7 +35,7 @@ class CounterActivity(activity_base.ActivityBase):
 #         self._parser_list = []
 #         self._load_available_parsers()
         # Initialize parent (self._create_content will be called).
-        super(CounterActivity, self).__init__(name, parentwidget)
+        super(PlanktonCounterActivity, self).__init__(name, parentwidget)
         # Log available parsers when GUI setup has finished.
 #         QtCore.QTimer.singleShot(10, self._log_available_parsers)
 
@@ -76,28 +74,28 @@ class CounterActivity(activity_base.ActivityBase):
             * { color: white; background-color: #00677f; }
             """)
     
-    def _content_load_dataset(self):
-        """ """
-        # Active widgets and connections.
-        selectdatabox = QtGui.QGroupBox('Import dataset', self)
-        tabWidget = QtGui.QTabWidget()
-        tabWidget.addTab(self._content_textfile(), 'Text files (*.txt)')
-        tabWidget.addTab(self._content_xlsx(), 'Excel files (*.xlsx)')
-        # Layout widgets.
-        layout = QtGui.QVBoxLayout()
-        layout.addWidget(tabWidget)
-        selectdatabox.setLayout(layout)        
-        #
-        return selectdatabox
+#     def _content_load_dataset(self):
+#         """ """
+#         # Active widgets and connections.
+#         selectdatabox = QtGui.QGroupBox('Import dataset', self)
+#         tabWidget = QtGui.QTabWidget()
+#         tabWidget.addTab(self._content_textfile(), 'Text files (*.txt)')
+#         tabWidget.addTab(self._content_xlsx(), 'Excel files (*.xlsx)')
+#         # Layout widgets.
+#         layout = QtGui.QVBoxLayout()
+#         layout.addWidget(tabWidget)
+#         selectdatabox.setLayout(layout)        
+#         #
+#         return selectdatabox
 
     # ===== COUNTER DATASETS =====    
     def _content_plankton_counter(self):
         """ """
         widget = QtGui.QWidget()
         #
-        loaded_datasets_listview = QtGui.QListView()
-        self._loaded_datasets_model = QtGui.QStandardItemModel()
-        loaded_datasets_listview.setModel(self._loaded_datasets_model)
+        counter_datasets_listview = QtGui.QListView()
+        self._counter_datasets_model = QtGui.QStandardItemModel()
+        counter_datasets_listview.setModel(self._counter_datasets_model)
         #
         
 #         loaded_datasets_listview.
@@ -117,7 +115,7 @@ class CounterActivity(activity_base.ActivityBase):
         hbox1.addWidget(self._importcounterdataset_button)
         #
         layout = QtGui.QVBoxLayout()
-        layout.addWidget(loaded_datasets_listview, 10)
+        layout.addWidget(counter_datasets_listview, 10)
         layout.addLayout(hbox1)
         widget.setLayout(layout)                
         #
@@ -125,15 +123,30 @@ class CounterActivity(activity_base.ActivityBase):
 
     def _check_all_datasets(self):
         """ """
-        for rowindex in range(self._loaded_datasets_model.rowCount()):
-            item = self._loaded_datasets_model.item(rowindex, 0)
-            item.setCheckState(QtCore.Qt.Checked)
+        
+        self._update_counter_dataset_list()
+        
+        
+        
+#         for rowindex in range(self._counter_datasets_model.rowCount()):
+#             item = self._counter_datasets_model.item(rowindex, 0)
+#             item.setCheckState(QtCore.Qt.Checked)
             
     def _uncheck_all_datasets(self):
         """ """
-        for rowindex in range(self._loaded_datasets_model.rowCount()):
-            item = self._loaded_datasets_model.item(rowindex, 0)
+        for rowindex in range(self._counter_datasets_model.rowCount()):
+            item = self._counter_datasets_model.item(rowindex, 0)
             item.setCheckState(QtCore.Qt.Unchecked)
+
+    def _update_counter_dataset_list(self):
+        """ """
+        self._counter_datasets_model.clear()        
+        for datasetname in toolbox_core.PlanktonCounterManager().get_dataset_names():
+            item = QtGui.QStandardItem('Dataset-' + datasetname)
+#             item.setCheckState(QtCore.Qt.Checked)
+            item.setCheckState(QtCore.Qt.Unchecked)
+            item.setCheckable(True)
+            self._counter_datasets_model.appendRow(item)
 
     def _import_counter_datasets(self):
         """ """

@@ -8,7 +8,7 @@ from __future__ import unicode_literals
 
 import plankton_toolbox.activities.start_activity as start_activity
 
-import plankton_toolbox.activities.counter_activity as counter_activity
+import plankton_toolbox.activities.plankton_counter_activity as counter_activity
 
 import plankton_toolbox.activities.load_datasets_activity as load_datasets_activity
 import plankton_toolbox.activities.screening_activity as screening_activity
@@ -49,7 +49,7 @@ class ActivityManager(object):
 #         self._activitylist.append(start_activity.StartActivity('Introduction', self._parent))
         self._activitylist.append(start_activity.StartActivity('Welcome', self._parent))
 
-        self._activitylist.append(counter_activity.CounterActivity('Plankton counter', self._parent))
+        self._activitylist.append(counter_activity.PlanktonCounterActivity('Plankton counter', self._parent))
 
         self._activitylist.append(load_datasets_activity.LoadDatasetsActivity('Dataset manager', self._parent))
         self._activitylist.append(screening_activity.ScreeningActivity('Dataset screening', self._parent))

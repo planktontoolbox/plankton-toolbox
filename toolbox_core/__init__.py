@@ -27,6 +27,8 @@ from analysis_manager import AnalysisPrepare
 from analysis_manager import ReportData
 from analysis_manager import StatisticalData
 
+from plankton_counter import PlanktonCounterManager
+
 # # Module utils:
 # from utils.patterns import singleton
 # from utils.logging import Logging

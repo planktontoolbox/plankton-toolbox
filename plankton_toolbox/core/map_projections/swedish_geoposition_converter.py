@@ -105,7 +105,7 @@ class SwedishGeoPositionConverter(object):
     used map projections in Sweden. These projections are based on the 
     Bessel 1841, GRS 80 and the SWEREF 99 ellipsoids.   
     """
-    def __init__(self, projection = "sweref_99_tm'):
+    def __init__(self, projection = 'sweref_99_tm'):
         """ """        
         # Local variables.
         self._initialized = False
