@@ -6,8 +6,10 @@
 #
 from __future__ import unicode_literals
 
+import os
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
+import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.activities.activity_base as activity_base
 import toolbox_core
 
@@ -69,8 +71,8 @@ class PlanktonCounterActivity(activity_base.ActivityBase):
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addWidget(self._newdataset_button)
         hbox1.addWidget(self._deletedataset_button)
-        hbox1.addStretch(10)
         hbox1.addWidget(self._exportdatasets_button)
+        hbox1.addStretch(10)
         #
         layout = QtGui.QVBoxLayout()
         layout.addWidget(self._counter_datasets_listview)
@@ -86,20 +88,6 @@ class PlanktonCounterActivity(activity_base.ActivityBase):
             item = QtGui.QStandardItem(datasetname)
             self._counter_datasets_model.appendRow(item)
 
-    def _new_datasets(self):
-        """ """        
-        QtGui.QMessageBox.information(self, "Information", 'Not implemented yet.')
-            
-    def _delete_datasets(self):
-        """ """
-        my_dialog = NewSampleDialog(self)
-        if my_dialog.exec_():
-            self._update_counter_dataset_list()
-
-    def _import_export(self):
-        """ """
-        QtGui.QMessageBox.information(self, "Information", 'Not implemented yet.')
-    
     def _update_selected_sample(self):
         """ """
         index = self._counter_datasets_listview.currentIndex()
@@ -107,6 +95,24 @@ class PlanktonCounterActivity(activity_base.ActivityBase):
         datasetname = unicode(datasetname.text())
         self._update_counter_sample_list(datasetname)
     
+    def _new_datasets(self):
+        """ """        
+        my_dialog = NewDatasetDialog(self)
+        if my_dialog.exec_():
+            self._update_counter_dataset_list()
+
+    def _delete_datasets(self):
+        """ """
+        my_dialog = DeleteDatasetDialog(self)
+        if my_dialog.exec_():
+            self._update_counter_dataset_list()
+
+    def _import_export(self):
+        """ """
+        my_dialog = ImportExportDatasetDialog(self)
+        if my_dialog.exec_():
+            self._update_counter_dataset_list()
+
      
     ##############################################################################
     def _content_sample_tabs(self):
@@ -168,22 +174,27 @@ class PlanktonCounterActivity(activity_base.ActivityBase):
 
     def _new_sample(self):
         """ """
-#         my_dialog = NewSampleDialog(self)
-#         if my_dialog.exec_():
-#             self._update_counter_dataset_list()
-            
+        my_dialog = NewSampleDialog(self)
+        if my_dialog.exec_():
+            self._update_counter_dataset_list()
             
     def _delete_sample(self):
         """ """        
-        QtGui.QMessageBox.information(self, "Information", 'Not implemented yet.')
+        my_dialog = DeleteSampleDialog(self)
+        if my_dialog.exec_():
+            self._update_counter_dataset_list()
             
     def _edit_sample(self):
         """ """        
-        QtGui.QMessageBox.information(self, "Information", 'Not implemented yet.')
+        my_dialog = EditSampleDialog(self)
+        if my_dialog.exec_():
+            self._update_counter_dataset_list()
             
     def _count_sample(self):
         """ """        
-        QtGui.QMessageBox.information(self, "Information", 'Not implemented yet.')
+        my_dialog = CountSampleDialog(self)
+        if my_dialog.exec_():
+            self._update_counter_dataset_list()
             
     # ===== _content_samples =====    
     def _content_dataset_metadata(self):
@@ -193,11 +204,49 @@ class PlanktonCounterActivity(activity_base.ActivityBase):
         return widget
 
 
-class NewSampleDialog(QtGui.QDialog):
+class NewDatasetDialog(QtGui.QDialog):
     """ This dialog is allowed to access private parts in the parent widget. """
     def __init__(self, parentwidget):
         """ """
-        super(NewSampleDialog, self).__init__(parentwidget)
+        super(NewDatasetDialog, self).__init__(parentwidget)
+        self.setLayout(self._content())
+
+    def _content(self):
+        """ """
+        self._datasetname_edit = QtGui.QLineEdit('')
+        self._datasetname_edit.setMinimumWidth(400)
+        createdataset_button = QtGui.QPushButton('Create dataset')
+        createdataset_button.clicked.connect(self._create_dataset)               
+        cancel_button = QtGui.QPushButton('Cancel')
+        cancel_button.clicked.connect(self.reject) # Close dialog box.               
+        # Layout widgets.
+        formlayout = QtGui.QFormLayout()
+        formlayout.addRow('Dataset name:', self._datasetname_edit)
+        
+        hbox1 = QtGui.QHBoxLayout()
+        hbox1.addStretch(10)
+        hbox1.addWidget(createdataset_button)
+        hbox1.addWidget(cancel_button)
+        #
+        layout = QtGui.QVBoxLayout()
+        layout.addLayout(formlayout, 10)
+        layout.addLayout(hbox1)
+        #
+        return layout                
+
+    def _create_dataset(self):
+        """ """
+        datasetname = unicode(self._datasetname_edit.text())
+        toolbox_core.PlanktonCounterManager().create_dataset(datasetname)
+        #            
+        self.accept() # Close dialog box.
+
+
+class DeleteDatasetDialog(QtGui.QDialog):
+    """ This dialog is allowed to access private parts in the parent widget. """
+    def __init__(self, parentwidget):
+        """ """
+        super(DeleteDatasetDialog, self).__init__(parentwidget)
         self._parentwidget = parentwidget
         self.setLayout(self._content())
         self._load_data()
@@ -207,25 +256,25 @@ class NewSampleDialog(QtGui.QDialog):
         datasets_listview = QtGui.QListView()
         self._datasets_model = QtGui.QStandardItemModel()
         datasets_listview.setModel(self._datasets_model)
-        #
-        self._clearall_button = QtGui.QPushButton('Clear all')
-        self._clearall_button.clicked.connect(self._uncheck_all_datasets)                
-        self._markall_button = QtGui.QPushButton('Mark all')
-        self._markall_button.clicked.connect(self._check_all_datasets)                
-        self._delete_button = QtGui.QPushButton('Delete marked datasets')
-        self._delete_button.clicked.connect(self._delete_marked_datasets)               
-        self._cancel_button = QtGui.QPushButton('Cancel')
-        self._cancel_button.clicked.connect(self.reject) # Close dialog box.               
+
+        clearall_button = utils_qt.ClickableQLabel('Clear all')
+        self.connect(clearall_button, QtCore.SIGNAL('clicked()'), self._uncheck_all_datasets)                
+        markall_button = utils_qt.ClickableQLabel('Mark all')
+        self.connect(markall_button, QtCore.SIGNAL('clicked()'), self._check_all_datasets)                
+        delete_button = QtGui.QPushButton('Delete marked datasets')
+        delete_button.clicked.connect(self._delete_marked_datasets)               
+        cancel_button = QtGui.QPushButton('Cancel')
+        cancel_button.clicked.connect(self.reject) # Close dialog box.               
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
-        hbox1.addWidget(self._clearall_button)
-        hbox1.addWidget(self._markall_button)
+        hbox1.addWidget(clearall_button)
+        hbox1.addWidget(markall_button)
         hbox1.addStretch(10)
         #
         hbox2 = QtGui.QHBoxLayout()
         hbox2.addStretch(10)
-        hbox2.addWidget(self._delete_button)
-        hbox2.addWidget(self._cancel_button)
+        hbox2.addWidget(delete_button)
+        hbox2.addWidget(cancel_button)
         #
         layout = QtGui.QVBoxLayout()
         layout.addWidget(datasets_listview, 10)
@@ -235,13 +284,14 @@ class NewSampleDialog(QtGui.QDialog):
         return layout                
 
     def _load_data(self):
-        """ """  
+        """ """
         self._datasets_model.clear()        
         for datasetname in toolbox_core.PlanktonCounterManager().get_dataset_names():
             item = QtGui.QStandardItem(datasetname)
             item.setCheckState(QtCore.Qt.Unchecked)
             item.setCheckable(True)
             self._datasets_model.appendRow(item)
+            
     def _check_all_datasets(self):
         """ """
         for rowindex in range(self._datasets_model.rowCount()):
@@ -258,10 +308,201 @@ class NewSampleDialog(QtGui.QDialog):
         """ """
         for rowindex in range(self._datasets_model.rowCount()):
             item = self._datasets_model.item(rowindex, 0)
-            
             if item.checkState() == QtCore.Qt.Checked:
                 datasetname = unicode(item.text())
                 print(datasetname)
                 toolbox_core.PlanktonCounterManager().delete_dataset(datasetname)
         #            
         self.accept() # Close dialog box.
+
+
+class ImportExportDatasetDialog(QtGui.QDialog):
+    """ This dialog is allowed to access private parts in the parent widget. """
+    def __init__(self, parentwidget):
+        """ """
+        super(ImportExportDatasetDialog, self).__init__(parentwidget)
+        self.setLayout(self._content())
+        self.setMinimumSize(800, 300)
+        #
+        self._update_export_dataset_list()
+
+    def _content(self):
+        """ """
+        tabWidget = QtGui.QTabWidget()
+        tabWidget.addTab(self._content_import(), 'Import')
+        tabWidget.addTab(self._content_export(), 'Export')
+        #
+        layout = QtGui.QVBoxLayout()
+        layout.addWidget(tabWidget, 10)
+        #
+        return layout                
+ 
+    def _content_import(self):
+        """ """
+        widget = QtGui.QWidget()
+        self._importsourcetype_list = QtGui.QComboBox()
+        self._importsourcetype_list.addItems(['<select>',
+                                           'SHARK Archive',
+                                           ])
+        self._importsourcefile_edit = QtGui.QLineEdit('')
+        self._importsourcefile_button = QtGui.QPushButton('Browse...')
+        self._importsourcefile_button.clicked.connect(self._browse_source)
+        self._importtargetdatasetname_edit = QtGui.QLineEdit('')        
+        self._import_button = QtGui.QPushButton('Import')
+        self._import_button.clicked.connect(self._import_dataset)
+        self._importcancel_button = QtGui.QPushButton('Cancel')
+        self._importcancel_button.clicked.connect(self.reject)
+        # Layout widgets.
+        form1 = QtGui.QGridLayout()
+        gridrow = 0
+        label1 = QtGui.QLabel('Archive type:')
+        form1.addWidget(label1, gridrow, 0, 1, 1)
+        form1.addWidget(self._importsourcetype_list, gridrow, 1, 1, 1)
+        gridrow += 1
+        label2 = QtGui.QLabel('Archive file:')
+        form1.addWidget(label2, gridrow, 0, 1, 1)
+        form1.addWidget(self._importsourcefile_edit, gridrow, 1, 1, 9)
+        form1.addWidget(self._importsourcefile_button, gridrow, 10, 1, 1)
+        gridrow += 1
+        label3 = QtGui.QLabel('New dataset name:')
+        form1.addWidget(label3, gridrow, 0, 1, 1)
+        form1.addWidget(self._importtargetdatasetname_edit, gridrow, 1, 1, 9)
+        #
+        hbox1 = QtGui.QHBoxLayout()
+        hbox1.addStretch(5)
+        hbox1.addWidget(self._import_button)
+        hbox1.addWidget(self._importcancel_button)
+        layout = QtGui.QVBoxLayout()
+        layout.addLayout(form1)
+        layout.addLayout(hbox1)
+        layout.addStretch(100)
+        widget.setLayout(layout)
+        #
+        return widget
+    
+    def _browse_source(self):
+        """ """
+        dirdialog = QtGui.QFileDialog(self)
+        dirdialog.setDirectory(unicode(self._importsourcefile_edit.text()))
+        namefilter = 'Zip files (*.zip);;All files (*.*)'
+        filepath = dirdialog.getOpenFileName(
+                                self,
+                                'Import Archive file',
+                                self._importsourcefile_edit.text(),
+                                namefilter)
+        if not filepath.isEmpty():
+            self._importsourcefile_edit.setText(unicode(filepath))
+            head, tail = os.path.split(unicode(filepath))
+            self._importtargetdatasetname_edit.setText(tail.replace('.zip', ''))
+    
+    def _import_dataset(self):
+        """ """
+        QtGui.QMessageBox.information(self, "Information", 'Not implemented yet.')        
+        
+    def _content_export(self):
+        """ """
+        widget = QtGui.QWidget()
+        self._datasettoexport_list = QtGui.QComboBox()
+        self._datasettoexport_list.addItems(['<select>'])
+        self._datasettoexport_list.currentIndexChanged.connect(self._dataset_changed)
+        self._exportsourcetype_list = QtGui.QComboBox()
+        self._exportsourcetype_list.addItems(['<select>',
+                                           'SHARK Archive',
+                                           ])
+        self._exporttargetdir_edit = QtGui.QLineEdit('')
+        self._exporttargetdir_button = QtGui.QPushButton('Browse...')
+        self._exporttargetdir_button.clicked.connect(self._browse_target_dir)
+        self._exporttargetfilename_edit = QtGui.QLineEdit('')
+        self._export_button = QtGui.QPushButton('Export')
+        self._export_button.clicked.connect(self._export_dataset)
+        self._exportcancel_button = QtGui.QPushButton('Cancel')
+        self._exportcancel_button.clicked.connect(self.reject)
+        # Layout widgets.
+        form1 = QtGui.QGridLayout()
+        gridrow = 0
+        label1 = QtGui.QLabel('Dataset to export:')
+        form1.addWidget(label1, gridrow, 0, 1, 1)
+        form1.addWidget(self._datasettoexport_list, gridrow, 1, 1, 1)
+        gridrow += 1
+        label1 = QtGui.QLabel('Archive type:')
+        form1.addWidget(label1, gridrow, 0, 1, 1)
+        form1.addWidget(self._exportsourcetype_list, gridrow, 1, 1, 1)
+        gridrow += 1
+        label2 = QtGui.QLabel('Export to directory:')
+        form1.addWidget(label2, gridrow, 0, 1, 1)
+        form1.addWidget(self._exporttargetdir_edit, gridrow, 1, 1, 9)
+        form1.addWidget(self._exporttargetdir_button, gridrow, 10, 1, 1)
+        gridrow += 1
+        label2 = QtGui.QLabel('Export file name:')
+        form1.addWidget(label2, gridrow, 0, 1, 1)
+        form1.addWidget(self._exporttargetfilename_edit, gridrow, 1, 1, 9)
+        #
+        hbox1 = QtGui.QHBoxLayout()
+        hbox1.addStretch(5)
+        hbox1.addWidget(self._export_button)
+        hbox1.addWidget(self._exportcancel_button)
+        layout = QtGui.QVBoxLayout()
+        layout.addLayout(form1)
+        layout.addLayout(hbox1)
+        layout.addStretch(100)
+        widget.setLayout(layout)
+        #
+        return widget
+
+    def _update_export_dataset_list(self):
+        """ """
+        self._datasettoexport_list.clear()        
+        self._datasettoexport_list.addItems(['<select>'])
+        for datasetname in toolbox_core.PlanktonCounterManager().get_dataset_names():
+            self._datasettoexport_list.addItem(datasetname)
+        
+    def _dataset_changed(self):
+        """ """
+        index = self._datasettoexport_list.currentIndex()
+        datasetname = unicode(self._datasettoexport_list.itemText(index))
+        self._exporttargetfilename_edit.setText(datasetname)
+        
+        
+        
+    def _browse_target_dir(self):
+        """ """
+        dirdialog = QtGui.QFileDialog(self)
+        dirdialog.setFileMode(QtGui.QFileDialog.Directory)
+        dirdialog.setOptions(QtGui.QFileDialog.ShowDirsOnly)
+        dirdialog.setDirectory(unicode(self._exporttargetdir_edit.text()))
+        dirpath = dirdialog.getExistingDirectory()
+        if dirpath:
+            self._exporttargetdir_edit.setText(dirpath)
+    
+    def _export_dataset(self):
+        """ """
+        QtGui.QMessageBox.information(self, "Information", 'Not implemented yet.')
+        
+    
+class NewSampleDialog(QtGui.QDialog):
+    """ This dialog is allowed to access private parts in the parent widget. """
+    def __init__(self, parentwidget):
+        """ """
+        super(NewSampleDialog, self).__init__(parentwidget)
+
+
+class DeleteSampleDialog(QtGui.QDialog):
+    """ This dialog is allowed to access private parts in the parent widget. """
+    def __init__(self, parentwidget):
+        """ """
+        super(DeleteSampleDialog, self).__init__(parentwidget)
+
+
+class EditSampleDialog(QtGui.QDialog):
+    """ This dialog is allowed to access private parts in the parent widget. """
+    def __init__(self, parentwidget):
+        """ """
+        super(EditSampleDialog, self).__init__(parentwidget)
+
+
+class CountSampleDialog(QtGui.QDialog):
+    """ This dialog is allowed to access private parts in the parent widget. """
+    def __init__(self, parentwidget):
+        """ """
+        super(CountSampleDialog, self).__init__(parentwidget)
+
