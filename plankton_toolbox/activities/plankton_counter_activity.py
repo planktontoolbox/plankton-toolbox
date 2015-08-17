@@ -6,21 +6,9 @@
 #
 from __future__ import unicode_literals
 
-import os.path
-import glob
-
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-import plankton_toolbox.tools.tool_manager as tool_manager
-import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.activities.activity_base as activity_base
-#import plankton_toolbox.core.monitoring.monitoring_files as monitoring_files
-import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
-import plankton_toolbox.toolbox.toolbox_sync as toolbox_sync
-# import plankton_toolbox.toolbox.help_texts as help_texts
-
-import envmonlib
-import toolbox_utils
 import toolbox_core
 
 class PlanktonCounterActivity(activity_base.ActivityBase):
@@ -28,34 +16,14 @@ class PlanktonCounterActivity(activity_base.ActivityBase):
     
     def __init__(self, name, parentwidget):
         """ """
-#         self._datasettabledata = DatasetTableData()
-#         self._last_used_textfile_name = ''
-#         self._last_used_excelfile_name = ''
-        # Load available dataset parsers.
-#         self._parser_list = []
-#         self._load_available_parsers()
+        self._counter_datasets_model = QtGui.QStandardItemModel()
+        self._counter_samples_model = QtGui.QStandardItemModel()
+        #
         # Initialize parent (self._create_content will be called).
         super(PlanktonCounterActivity, self).__init__(name, parentwidget)
-        # Log available parsers when GUI setup has finished.
-#         QtCore.QTimer.singleShot(10, self._log_available_parsers)
-
-#     def _load_available_parsers(self):
-#         """ """
-#         self._parser_path = 'toolbox_data/parsers/'
-#         self._parser_list = []
-#         for parserpath in glob.glob(self._parser_path + '*.xlsx'):
-#             self._parser_list.append(os.path.basename(parserpath))
-# 
-#     def _log_available_parsers(self):
-#         """ """
-#         if len(self._parser_list) > 0:
-#             toolbox_utils.Logging().log('') # Empty line.
-#             toolbox_utils.Logging().log('Available dataset parsers (located in "toolbox_data/parsers"):')
-#             for parserpath in self._parser_list:
-#                 toolbox_utils.Logging().log('- ' + os.path.basename(parserpath))
-#         else:
-#             toolbox_utils.Logging().log('No dataset parsers are found in "/toolbox_data/parsers". ')
-
+        #
+        self._update_counter_dataset_list()
+        
     def _create_content(self):
         """ """
         content = self._create_scrollable_content()
@@ -67,141 +35,233 @@ class PlanktonCounterActivity(activity_base.ActivityBase):
         self._activityheader.setAlignment(QtCore.Qt.AlignHCenter)
         contentLayout.addWidget(self._activityheader)
         # Add content to the activity.
-        contentLayout.addWidget(self._content_plankton_counter(), 10)
+        splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
+        splitter.addWidget(self._content_plankton_counter())
+        splitter.addWidget(self._content_sample_tabs())
+        splitter.setStretchFactor(3, 10)
+        contentLayout.addWidget(splitter, 100)
 #        contentLayout.addStretch(5)
         # Style.
         self._activityheader.setStyleSheet(""" 
             * { color: white; background-color: #00677f; }
             """)
     
-#     def _content_load_dataset(self):
-#         """ """
-#         # Active widgets and connections.
-#         selectdatabox = QtGui.QGroupBox('Import dataset', self)
-#         tabWidget = QtGui.QTabWidget()
-#         tabWidget.addTab(self._content_textfile(), 'Text files (*.txt)')
-#         tabWidget.addTab(self._content_xlsx(), 'Excel files (*.xlsx)')
-#         # Layout widgets.
-#         layout = QtGui.QVBoxLayout()
-#         layout.addWidget(tabWidget)
-#         selectdatabox.setLayout(layout)        
-#         #
-#         return selectdatabox
-
     # ===== COUNTER DATASETS =====    
     def _content_plankton_counter(self):
         """ """
-        widget = QtGui.QWidget()
+#         widget = QtGui.QWidget()
+        widget = QtGui.QGroupBox('Plankton counter datasets', self)
         #
-        counter_datasets_listview = QtGui.QListView()
-        self._counter_datasets_model = QtGui.QStandardItemModel()
-        counter_datasets_listview.setModel(self._counter_datasets_model)
+        self._counter_datasets_listview = QtGui.QListView()
+        self._counter_datasets_listview.setModel(self._counter_datasets_model)
+#         self._counter_datasets_listview.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
         #
-        
-#         loaded_datasets_listview.
-        
+        self._counter_datasets_selection_model = self._counter_datasets_listview.selectionModel()
+        self._counter_datasets_selection_model.selectionChanged.connect(self._update_selected_sample)
         #
-        self._clearall_button = QtGui.QPushButton('Clear all')
-        self.connect(self._clearall_button, QtCore.SIGNAL('clicked()'), self._uncheck_all_datasets)                
-        self._markall_button = QtGui.QPushButton('Mark all')
-        self.connect(self._markall_button, QtCore.SIGNAL('clicked()'), self._check_all_datasets)                
-        self._importcounterdataset_button = QtGui.QPushButton('Import marked dataset(s)')
-        self.connect(self._importcounterdataset_button, QtCore.SIGNAL('clicked()'), self._import_counter_datasets)                
+        self._newdataset_button = QtGui.QPushButton('New...')        
+        self._newdataset_button.clicked.connect(self._new_datasets)
+        self._deletedataset_button = QtGui.QPushButton('Delete...')
+        self._deletedataset_button.clicked.connect(self._delete_datasets)               
+        self._exportdatasets_button = QtGui.QPushButton('Import/export...')
+        self._exportdatasets_button.clicked.connect(self._import_export)
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
-        hbox1.addWidget(self._clearall_button)
-        hbox1.addWidget(self._markall_button)
+        hbox1.addWidget(self._newdataset_button)
+        hbox1.addWidget(self._deletedataset_button)
         hbox1.addStretch(10)
-        hbox1.addWidget(self._importcounterdataset_button)
+        hbox1.addWidget(self._exportdatasets_button)
         #
         layout = QtGui.QVBoxLayout()
-        layout.addWidget(counter_datasets_listview, 10)
+        layout.addWidget(self._counter_datasets_listview)
         layout.addLayout(hbox1)
         widget.setLayout(layout)                
         #
         return widget
 
-    def _check_all_datasets(self):
-        """ """
-        
-        self._update_counter_dataset_list()
-        
-        
-        
-#         for rowindex in range(self._counter_datasets_model.rowCount()):
-#             item = self._counter_datasets_model.item(rowindex, 0)
-#             item.setCheckState(QtCore.Qt.Checked)
-            
-    def _uncheck_all_datasets(self):
-        """ """
-        for rowindex in range(self._counter_datasets_model.rowCount()):
-            item = self._counter_datasets_model.item(rowindex, 0)
-            item.setCheckState(QtCore.Qt.Unchecked)
-
     def _update_counter_dataset_list(self):
         """ """
         self._counter_datasets_model.clear()        
         for datasetname in toolbox_core.PlanktonCounterManager().get_dataset_names():
-            item = QtGui.QStandardItem('Dataset-' + datasetname)
-#             item.setCheckState(QtCore.Qt.Checked)
-            item.setCheckState(QtCore.Qt.Unchecked)
-            item.setCheckable(True)
+            item = QtGui.QStandardItem(datasetname)
             self._counter_datasets_model.appendRow(item)
 
-    def _import_counter_datasets(self):
+    def _new_datasets(self):
+        """ """        
+        QtGui.QMessageBox.information(self, "Information", 'Not implemented yet.')
+            
+    def _delete_datasets(self):
+        """ """
+        my_dialog = NewSampleDialog(self)
+        if my_dialog.exec_():
+            self._update_counter_dataset_list()
+
+    def _import_export(self):
         """ """
         QtGui.QMessageBox.information(self, "Information", 'Not implemented yet.')
     
-# class DatasetTableData(object):
-#     """ """
-#     def __init__(self):
-#         """ """
-#         self._header = []
-#         self._rows = []
-#         
-#     def clear(self):
-#         """ """
-#         self._header = []
-#         self._rows = []
-# 
-#     def clearRows(self):
-#         """ """
-#         self._rows = []
-# 
-#     def setHeader(self, header):
-#         """ """
-#         self._header = header
-# 
-#     def addRow(self, row):
-#         """ """
-#         self._rows.append(row)
-# 
-#     def getHeaderItem(self, column):
-#         """ Used for calls from QAbstractTableModel. """
-#         try:
-#             return self._header[column]
-#         except Exception:
-#             return ''
-# 
-#     def getDataItem(self, row, column):
-#         """ Used for calls from QAbstractTableModel. """
-#         try:
-#             return self._rows[row][column]
-#         except Exception:
-#             return ''
-# 
-#     def getColumnCount(self):
-#         """ Used for calls from QAbstractTableModel. """
-#         try:
-#             return len(self._header)
-#         except Exception:
-#             return ''
-# 
-#     def getRowCount(self):
-#         """ Used for calls from QAbstractTableModel. """
-#         try:
-#             return len(self._rows)
-#         except Exception:
-#             return ''
+    def _update_selected_sample(self):
+        """ """
+        index = self._counter_datasets_listview.currentIndex()
+        datasetname = self._counter_datasets_model.item(index.row(), column=0)
+        datasetname = unicode(datasetname.text())
+        self._update_counter_sample_list(datasetname)
+    
+     
+    ##############################################################################
+    def _content_sample_tabs(self):
+        """ """
+        # Active widgets and connections.
+        selectdatabox = QtGui.QGroupBox('', self)
+        tabWidget = QtGui.QTabWidget()
+        tabWidget.addTab(self._content_samples(), 'Samples in dataset')
+        tabWidget.addTab(self._content_dataset_metadata(), 'Metadata for dataset')
+        # Layout widgets.
+        layout = QtGui.QVBoxLayout()
+        layout.addWidget(tabWidget, 10)
+        selectdatabox.setLayout(layout)        
+        #
+        return selectdatabox
 
+    # ===== _content_dataset_metadata =====    
+    def _content_samples(self):
+        """ """
+        widget = QtGui.QWidget(self)
+#         widget = QtGui.QGroupBox('Counter datasets', self)
+        #
+        self._counter_samples_listview = QtGui.QListView()
+        self._counter_samples_listview.setModel(self._counter_samples_model)
+#         self._counter_datasets_listview.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
+        #
+#         self._counter_samples_selection_model = self._counter_samples_listview.selectionModel()
+#         self._counter_samples_selection_model.selectionChanged.connect(self._update_selected_sample)
+        #
+        self._newsample_button = QtGui.QPushButton('New...')        
+        self._newsample_button.clicked.connect(self._new_sample)
+        self._deletesample_button = QtGui.QPushButton('Delete...')
+        self._deletesample_button.clicked.connect(self._delete_sample)               
+        self._editsample_button = QtGui.QPushButton('Edit...')        
+        self._editsample_button.clicked.connect(self._edit_sample)
+        self._countsample_button = QtGui.QPushButton('Count...')
+        self._countsample_button.clicked.connect(self._count_sample)               
+        # Layout widgets.
+        hbox1 = QtGui.QHBoxLayout()
+        hbox1.addWidget(self._newsample_button)
+        hbox1.addWidget(self._deletesample_button)
+        hbox1.addWidget(self._editsample_button)
+        hbox1.addWidget(self._countsample_button)
+        hbox1.addStretch(10)
+        #
+        layout = QtGui.QVBoxLayout()
+        layout.addWidget(self._counter_samples_listview)
+        layout.addLayout(hbox1)
+        widget.setLayout(layout)                
+        #
+        return widget
+
+    def _update_counter_sample_list(self, dataset_name):
+        """ """
+        self._counter_samples_model.clear()        
+        for samplename in toolbox_core.PlanktonCounterManager().get_sample_names(dataset_name):
+            item = QtGui.QStandardItem(samplename)
+            self._counter_samples_model.appendRow(item)
+
+    def _new_sample(self):
+        """ """
+#         my_dialog = NewSampleDialog(self)
+#         if my_dialog.exec_():
+#             self._update_counter_dataset_list()
+            
+            
+    def _delete_sample(self):
+        """ """        
+        QtGui.QMessageBox.information(self, "Information", 'Not implemented yet.')
+            
+    def _edit_sample(self):
+        """ """        
+        QtGui.QMessageBox.information(self, "Information", 'Not implemented yet.')
+            
+    def _count_sample(self):
+        """ """        
+        QtGui.QMessageBox.information(self, "Information", 'Not implemented yet.')
+            
+    # ===== _content_samples =====    
+    def _content_dataset_metadata(self):
+        """ """
+        widget = QtGui.QWidget()
+        #
+        return widget
+
+
+class NewSampleDialog(QtGui.QDialog):
+    """ This dialog is allowed to access private parts in the parent widget. """
+    def __init__(self, parentwidget):
+        """ """
+        super(NewSampleDialog, self).__init__(parentwidget)
+        self._parentwidget = parentwidget
+        self.setLayout(self._content())
+        self._load_data()
+
+    def _content(self):
+        """ """  
+        datasets_listview = QtGui.QListView()
+        self._datasets_model = QtGui.QStandardItemModel()
+        datasets_listview.setModel(self._datasets_model)
+        #
+        self._clearall_button = QtGui.QPushButton('Clear all')
+        self._clearall_button.clicked.connect(self._uncheck_all_datasets)                
+        self._markall_button = QtGui.QPushButton('Mark all')
+        self._markall_button.clicked.connect(self._check_all_datasets)                
+        self._delete_button = QtGui.QPushButton('Delete marked datasets')
+        self._delete_button.clicked.connect(self._delete_marked_datasets)               
+        self._cancel_button = QtGui.QPushButton('Cancel')
+        self._cancel_button.clicked.connect(self.reject) # Close dialog box.               
+        # Layout widgets.
+        hbox1 = QtGui.QHBoxLayout()
+        hbox1.addWidget(self._clearall_button)
+        hbox1.addWidget(self._markall_button)
+        hbox1.addStretch(10)
+        #
+        hbox2 = QtGui.QHBoxLayout()
+        hbox2.addStretch(10)
+        hbox2.addWidget(self._delete_button)
+        hbox2.addWidget(self._cancel_button)
+        #
+        layout = QtGui.QVBoxLayout()
+        layout.addWidget(datasets_listview, 10)
+        layout.addLayout(hbox1)
+        layout.addLayout(hbox2)
         
+        return layout                
+
+    def _load_data(self):
+        """ """  
+        self._datasets_model.clear()        
+        for datasetname in toolbox_core.PlanktonCounterManager().get_dataset_names():
+            item = QtGui.QStandardItem(datasetname)
+            item.setCheckState(QtCore.Qt.Unchecked)
+            item.setCheckable(True)
+            self._datasets_model.appendRow(item)
+    def _check_all_datasets(self):
+        """ """
+        for rowindex in range(self._datasets_model.rowCount()):
+            item = self._datasets_model.item(rowindex, 0)
+            item.setCheckState(QtCore.Qt.Checked)
+            
+    def _uncheck_all_datasets(self):
+        """ """
+        for rowindex in range(self._datasets_model.rowCount()):
+            item = self._datasets_model.item(rowindex, 0)
+            item.setCheckState(QtCore.Qt.Unchecked)
+
+    def _delete_marked_datasets(self):
+        """ """
+        for rowindex in range(self._datasets_model.rowCount()):
+            item = self._datasets_model.item(rowindex, 0)
+            
+            if item.checkState() == QtCore.Qt.Checked:
+                datasetname = unicode(item.text())
+                print(datasetname)
+                toolbox_core.PlanktonCounterManager().delete_dataset(datasetname)
+        #            
+        self.accept() # Close dialog box.

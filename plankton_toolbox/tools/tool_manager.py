@@ -40,7 +40,7 @@ class ToolManager(object):
     def __init__(self):
         """ """
         self._parent = None
-        self._toollist = [] # List of tools derived from ToolsBase.        
+        self._toollist = [] # List of tools derived from ToolsBase.
 
     def set_parent(self, parentwidget):
         """ """
@@ -58,12 +58,12 @@ class ToolManager(object):
         self._toollist.append(toolbox_settings_tool.ToolboxSettingsTool('Toolbox settings', self._parent))
         
         self._toollist.append(log_tool.LogTool('Toolbox logging', self._parent))
-#        self._toollist.append(metadata_editor_tool.MetadataEditorTool('(Metadata editor)', self._parent))
+#         self._toollist.append(metadata_editor_tool.MetadataEditorTool('(Metadata editor)', self._parent))
 #        self._toollist.append(taxon_facts_tool.TaxonFactsTool('(Taxon facts)', self._parent))
 #        self._toollist.append(taxon_images_tool.TaxonImagesTool('(Taxon images)', self._parent))
 #        self._toollist.append(template_tool.TemplateTool('(Tool template)', self._parent))
 
-        self._toollist.append(dev_test_tool.DevTestTool('<<Development and test>>', self._parent))
+        self._toollist.append(dev_test_tool.DevTestTool('REMOVE: Development', self._parent))
 
 
     def get_tool_by_name(self, object_name):

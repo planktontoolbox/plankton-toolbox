@@ -93,7 +93,7 @@ class DevTestTool(tool_base.ToolBase):
         super(DevTestTool, self).__init__(name, parentwidget)
         #
         # Where is the tool allowed to dock in the main window.
-        self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea)
+        self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea | QtCore.Qt.BottomDockWidgetArea)
         self.setBaseSize(600,600)
 
     def _create_content(self):
