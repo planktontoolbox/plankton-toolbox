@@ -12,6 +12,8 @@ import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.activities.activity_base as activity_base
+import plankton_toolbox.activities.plankton_counter_edit as plankton_counter_edit
+import plankton_toolbox.activities.plankton_counter_count as plankton_counter_count
 import toolbox_core
 
 class PlanktonCounterActivity(activity_base.ActivityBase):
@@ -226,7 +228,7 @@ class PlanktonCounterActivity(activity_base.ActivityBase):
             QtGui.QMessageBox.warning(self, "Warning", 'No sample is selected. Please try again.')
             return       
         #
-        my_dialog = EditSampleDialog(self, self._current_dataset, self._current_sample)
+        my_dialog = plankton_counter_edit.PlanktonCounterEdit(self, self._current_dataset, self._current_sample)
         if my_dialog.exec_():
             self._update_counter_sample_list()
             
@@ -239,7 +241,7 @@ class PlanktonCounterActivity(activity_base.ActivityBase):
             QtGui.QMessageBox.warning(self, "Warning", 'No sample is selected. Please try again.')
             return       
         #
-        my_dialog = CountSampleDialog(self, self._current_dataset, self._current_sample)
+        my_dialog = plankton_counter_count.PlanktonCounterCount(self, self._current_dataset, self._current_sample)
         if my_dialog.exec_():
             self._update_counter_sample_list()
             
@@ -617,21 +619,4 @@ class DeleteSampleDialog(QtGui.QDialog):
         self._current_sample = sample
         super(DeleteSampleDialog, self).__init__(parentwidget)
 
-
-class EditSampleDialog(QtGui.QDialog):
-    """ This dialog is allowed to access private parts in the parent widget. """
-    def __init__(self, parentwidget, dataset, sample):
-        """ """
-        self._current_dataset = dataset
-        self._current_sample = sample
-        super(EditSampleDialog, self).__init__(parentwidget)
-
-
-class CountSampleDialog(QtGui.QDialog):
-    """ This dialog is allowed to access private parts in the parent widget. """
-    def __init__(self, parentwidget, dataset, sample):
-        """ """
-        self._current_dataset = dataset
-        self._current_sample = sample
-        super(CountSampleDialog, self).__init__(parentwidget)
 

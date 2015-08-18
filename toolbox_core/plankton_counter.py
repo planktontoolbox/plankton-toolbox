@@ -132,6 +132,17 @@ class PlanktonCounterManager(shark_archive.SharkArchive):
         """ """
         self._current_sample.save_sample()
 
+    def get_sample_header_and_rows(self):
+        """ """
+        header = self._current_sample.get_header()
+        rows = self._current_sample.get_rows()
+        return header, rows
+
+    def set_sample_header_and_rows(self, header, rows):
+        """ """
+        self._current_sample.set_header(header)
+        self._current_sample.set_rows(rows)
+
     # === Metadata ===
     def load_dataset_metadata(self, dataset_name):
         """ """
@@ -209,6 +220,7 @@ class Sample():
         self._dataset_name = dataset_name
         self._sample_name = sample_name
         #
+        self._sample_header = ['scientific_name', 'counted']
         self._sample_rows = {} # <row_key>: <CounterRow-object>
         #
         self.load_sample()
@@ -224,6 +236,29 @@ class Sample():
         """ """
         self._sample_rows = {} # <row_key>: <CounterRow-object>
         
+    def get_header(self):
+        """ """
+        return self._sample_header
+
+    def get_rows(self):
+        """ """
+        rows = []
+        for key in sorted(self._sample_rows.keys()):
+            rows.append(self._sample_rows[key].get_as_text_list())
+        return rows
+
+    def set_header(self, header):
+        """ """
+        self._sample_header = header
+
+    def set_rows(self, rows):
+        """ """
+        self._sample_rows = {}
+        for row in rows:
+            if (len(row) >= 2) and (len(row[0]) >= 0) and (len(row[1]) >= 0):
+                sample_row = SampleRow(self._sample_header, row)
+                self._sample_rows[sample_row.get_key()] = sample_row
+
     def save_counted_value(self, row_key, counted_value):
         """ """
         self._sample_rows[row_key].set_counted(counted_value)
@@ -266,11 +301,14 @@ class SampleRow():
                  ):
         """ """
         self._scientific_name = ''
-        self._counted = 0
-        if len(row) >= 2:
-            self._scientific_name = row[0]
-            self._counted = int(row[1])
-
+        self._counted = ''
+        if (len(row) >= 2) and (len(row[0]) > 0):
+            self._scientific_name = row[0].strip()
+            try:
+                self._counted = int(row[1].strip())
+            except:
+                self._counted = row[1].strip()
+                
     def get_key(self):
         """ """
         return self._scientific_name
@@ -282,6 +320,10 @@ class SampleRow():
     def get_as_text_row(self):
         """ """
         return self._scientific_name + '\t' + unicode(self._counted)
+    
+    def get_as_text_list(self):
+        """ """
+        return [self._scientific_name, unicode(self._counted)]
 
 
 # ===== TEST =====
