@@ -7,6 +7,7 @@
 from __future__ import unicode_literals
 
 import os
+import datetime
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
@@ -18,6 +19,8 @@ class PlanktonCounterActivity(activity_base.ActivityBase):
     
     def __init__(self, name, parentwidget):
         """ """
+        self._current_dataset = None
+        self._current_sample = None
         self._counter_datasets_model = QtGui.QStandardItemModel()
         self._counter_samples_model = QtGui.QStandardItemModel()
         #
@@ -56,10 +59,8 @@ class PlanktonCounterActivity(activity_base.ActivityBase):
         #
         self._counter_datasets_listview = QtGui.QListView()
         self._counter_datasets_listview.setModel(self._counter_datasets_model)
-#         self._counter_datasets_listview.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
-        #
         self._counter_datasets_selection_model = self._counter_datasets_listview.selectionModel()
-        self._counter_datasets_selection_model.selectionChanged.connect(self._update_selected_sample)
+        self._counter_datasets_selection_model.selectionChanged.connect(self._selected_dataset_changed)
         #
         self._newdataset_button = QtGui.QPushButton('New...')        
         self._newdataset_button.clicked.connect(self._new_datasets)
@@ -83,34 +84,44 @@ class PlanktonCounterActivity(activity_base.ActivityBase):
 
     def _update_counter_dataset_list(self):
         """ """
+        self._sampledata_groupbox.setTitle('Selected dataset: -')
         self._counter_datasets_model.clear()        
         for datasetname in toolbox_core.PlanktonCounterManager().get_dataset_names():
             item = QtGui.QStandardItem(datasetname)
             self._counter_datasets_model.appendRow(item)
+        #
+        self._selected_dataset_changed()
 
-    def _update_selected_sample(self):
+    def _selected_dataset_changed(self):
         """ """
+        self._current_dataset = None
         index = self._counter_datasets_listview.currentIndex()
-        datasetname = self._counter_datasets_model.item(index.row(), column=0)
-        datasetname = unicode(datasetname.text())
-        self._update_counter_sample_list(datasetname)
+        if index.isValid():
+            datasetname = self._counter_datasets_model.item(index.row(), column=0)
+            datasetname = unicode(datasetname.text())
+            self._current_dataset = datasetname
+        #
+        self._update_counter_sample_list()
     
     def _new_datasets(self):
         """ """        
         my_dialog = NewDatasetDialog(self)
         if my_dialog.exec_():
+            self._current_dataset = None
             self._update_counter_dataset_list()
 
     def _delete_datasets(self):
         """ """
         my_dialog = DeleteDatasetDialog(self)
         if my_dialog.exec_():
+            self._current_dataset = None
             self._update_counter_dataset_list()
 
     def _import_export(self):
         """ """
         my_dialog = ImportExportDatasetDialog(self)
         if my_dialog.exec_():
+            self._current_dataset = None
             self._update_counter_dataset_list()
 
      
@@ -118,16 +129,16 @@ class PlanktonCounterActivity(activity_base.ActivityBase):
     def _content_sample_tabs(self):
         """ """
         # Active widgets and connections.
-        selectdatabox = QtGui.QGroupBox('', self)
+        self._sampledata_groupbox = QtGui.QGroupBox('Selected dataset: -', self)
         tabWidget = QtGui.QTabWidget()
         tabWidget.addTab(self._content_samples(), 'Samples in dataset')
         tabWidget.addTab(self._content_dataset_metadata(), 'Metadata for dataset')
         # Layout widgets.
         layout = QtGui.QVBoxLayout()
         layout.addWidget(tabWidget, 10)
-        selectdatabox.setLayout(layout)        
+        self._sampledata_groupbox.setLayout(layout)        
         #
-        return selectdatabox
+        return self._sampledata_groupbox
 
     # ===== _content_dataset_metadata =====    
     def _content_samples(self):
@@ -137,10 +148,8 @@ class PlanktonCounterActivity(activity_base.ActivityBase):
         #
         self._counter_samples_listview = QtGui.QListView()
         self._counter_samples_listview.setModel(self._counter_samples_model)
-#         self._counter_datasets_listview.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
-        #
-#         self._counter_samples_selection_model = self._counter_samples_listview.selectionModel()
-#         self._counter_samples_selection_model.selectionChanged.connect(self._update_selected_sample)
+        self._counter_samples_selection_model = self._counter_samples_listview.selectionModel()
+        self._counter_samples_selection_model.selectionChanged.connect(self._selected_sample_changed)
         #
         self._newsample_button = QtGui.QPushButton('New...')        
         self._newsample_button.clicked.connect(self._new_sample)
@@ -165,36 +174,74 @@ class PlanktonCounterActivity(activity_base.ActivityBase):
         #
         return widget
 
-    def _update_counter_sample_list(self, dataset_name):
+    def _selected_sample_changed(self):
         """ """
+        self._current_sample = None
+        index = self._counter_samples_listview.currentIndex()
+        if index.isValid():
+            samplename = self._counter_samples_model.item(index.row(), column=0)
+            samplename = unicode(samplename.text())
+            self._current_sample = samplename
+    
+    def _update_counter_sample_list(self):
+        """ """
+        self._sampledata_groupbox.setTitle('Selected dataset: -')
         self._counter_samples_model.clear()        
-        for samplename in toolbox_core.PlanktonCounterManager().get_sample_names(dataset_name):
-            item = QtGui.QStandardItem(samplename)
-            self._counter_samples_model.appendRow(item)
+        if self._current_dataset is not None:
+            self._sampledata_groupbox.setTitle('Selected dataset: ' + self._current_dataset)
+            
+            for samplename in toolbox_core.PlanktonCounterManager().get_sample_names(self._current_dataset):
+                item = QtGui.QStandardItem(samplename)
+                self._counter_samples_model.appendRow(item)
 
     def _new_sample(self):
         """ """
-        my_dialog = NewSampleDialog(self)
+        if self._current_dataset is None:
+            QtGui.QMessageBox.warning(self, "Warning", 'No dataset is selected. Please try again.')
+            return       
+        #
+        my_dialog = NewSampleDialog(self, self._current_dataset)
         if my_dialog.exec_():
-            self._update_counter_dataset_list()
+            self._update_counter_sample_list()
             
     def _delete_sample(self):
         """ """        
-        my_dialog = DeleteSampleDialog(self)
+        if self._current_dataset is None:
+            QtGui.QMessageBox.warning(self, "Warning", 'No dataset is selected. Please try again.')
+            return       
+        if self._current_sample is None:
+            QtGui.QMessageBox.warning(self, "Warning", 'No sample is selected. Please try again.')
+            return       
+        #
+        my_dialog = DeleteSampleDialog(self, self._current_dataset, self._current_sample)
         if my_dialog.exec_():
-            self._update_counter_dataset_list()
+            self._update_counter_sample_list()
             
     def _edit_sample(self):
         """ """        
-        my_dialog = EditSampleDialog(self)
+        if self._current_dataset is None:
+            QtGui.QMessageBox.warning(self, "Warning", 'No dataset is selected. Please try again.')
+            return       
+        if self._current_sample is None:
+            QtGui.QMessageBox.warning(self, "Warning", 'No sample is selected. Please try again.')
+            return       
+        #
+        my_dialog = EditSampleDialog(self, self._current_dataset, self._current_sample)
         if my_dialog.exec_():
-            self._update_counter_dataset_list()
+            self._update_counter_sample_list()
             
     def _count_sample(self):
         """ """        
-        my_dialog = CountSampleDialog(self)
+        if self._current_dataset is None:
+            QtGui.QMessageBox.warning(self, "Warning", 'No dataset is selected. Please try again.')
+            return       
+        if self._current_sample is None:
+            QtGui.QMessageBox.warning(self, "Warning", 'No sample is selected. Please try again.')
+            return       
+        #
+        my_dialog = CountSampleDialog(self, self._current_dataset, self._current_sample)
         if my_dialog.exec_():
-            self._update_counter_dataset_list()
+            self._update_counter_sample_list()
             
     # ===== _content_samples =====    
     def _content_dataset_metadata(self):
@@ -249,6 +296,7 @@ class DeleteDatasetDialog(QtGui.QDialog):
         super(DeleteDatasetDialog, self).__init__(parentwidget)
         self._parentwidget = parentwidget
         self.setLayout(self._content())
+        self.setMinimumSize(500, 500)
         self._load_data()
 
     def _content(self):
@@ -331,6 +379,7 @@ class ImportExportDatasetDialog(QtGui.QDialog):
         tabWidget = QtGui.QTabWidget()
         tabWidget.addTab(self._content_import(), 'Import')
         tabWidget.addTab(self._content_export(), 'Export')
+        tabWidget.addTab(self._content_publish(), 'Publish')
         #
         layout = QtGui.QVBoxLayout()
         layout.addWidget(tabWidget, 10)
@@ -344,6 +393,7 @@ class ImportExportDatasetDialog(QtGui.QDialog):
         self._importsourcetype_list.addItems(['<select>',
                                            'SHARK Archive',
                                            ])
+        self._importsourcetype_list.setCurrentIndex(1)
         self._importsourcefile_edit = QtGui.QLineEdit('')
         self._importsourcefile_button = QtGui.QPushButton('Browse...')
         self._importsourcefile_button.clicked.connect(self._browse_source)
@@ -409,11 +459,22 @@ class ImportExportDatasetDialog(QtGui.QDialog):
         self._exportsourcetype_list.addItems(['<select>',
                                            'SHARK Archive',
                                            ])
+        self._exportsourcetype_list.setCurrentIndex(1)
         self._exporttargetdir_edit = QtGui.QLineEdit('')
         self._exporttargetdir_button = QtGui.QPushButton('Browse...')
         self._exporttargetdir_button.clicked.connect(self._browse_target_dir)
         self._exporttargetfilename_edit = QtGui.QLineEdit('')
-        self._export_button = QtGui.QPushButton('Export')
+        
+        self._publish_checkbox = QtGui.QCheckBox('Publish dataset')
+        self._publishtarget_list = QtGui.QComboBox()
+        self._publishtarget_list.addItems(['<select>',
+                                           'SHARKdata (http://sharkdata.se)',
+                                           'SHARKdata-test (http://test.sharkdata.se)',
+                                           ])
+        self._publishuser_edit = QtGui.QLineEdit('')
+        self._publishpassword_edit = QtGui.QLineEdit('')
+        
+        self._export_button = QtGui.QPushButton('Export/publish')
         self._export_button.clicked.connect(self._export_dataset)
         self._exportcancel_button = QtGui.QPushButton('Cancel')
         self._exportcancel_button.clicked.connect(self.reject)
@@ -436,6 +497,26 @@ class ImportExportDatasetDialog(QtGui.QDialog):
         label2 = QtGui.QLabel('Export file name:')
         form1.addWidget(label2, gridrow, 0, 1, 1)
         form1.addWidget(self._exporttargetfilename_edit, gridrow, 1, 1, 9)
+        gridrow += 1
+        # Empty row.
+        form1.addWidget(QtGui.QLabel(''), gridrow, 0, 1, 1)
+        gridrow += 1
+        form1.addWidget(self._publish_checkbox, gridrow, 0, 1, 1)
+        gridrow += 1
+        label2 = QtGui.QLabel('Publish on:')
+        form1.addWidget(label2, gridrow, 0, 1, 1)
+        form1.addWidget(self._publishtarget_list, gridrow, 1, 1, 1)
+        gridrow += 1
+        label2 = QtGui.QLabel('User:')
+        form1.addWidget(label2, gridrow, 0, 1, 1)
+        form1.addWidget(self._publishuser_edit, gridrow, 1, 1, 5)
+        gridrow += 1
+        label2 = QtGui.QLabel('Password:')
+        form1.addWidget(label2, gridrow, 0, 1, 1)
+        form1.addWidget(self._publishpassword_edit, gridrow, 1, 1, 5)
+        gridrow += 1
+        # Empty row.
+        form1.addWidget(QtGui.QLabel(''), gridrow, 0, 1, 1)
         #
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(5)
@@ -459,11 +540,17 @@ class ImportExportDatasetDialog(QtGui.QDialog):
     def _dataset_changed(self):
         """ """
         index = self._datasettoexport_list.currentIndex()
-        datasetname = unicode(self._datasettoexport_list.itemText(index))
-        self._exporttargetfilename_edit.setText(datasetname)
-        
-        
-        
+        if index > 0:
+            datasetname = unicode(self._datasettoexport_list.itemText(index))
+            if self._exportsourcetype_list.currentIndex() == 1:
+                # Adjust ti SHARK archive name.
+                datestring = datetime.date.today().isoformat()
+                datasetname = 'SHARK_' + datasetname + '_version_' + datestring + '.zip' 
+            #
+            self._exporttargetfilename_edit.setText(datasetname)
+        else:
+            self._exporttargetfilename_edit.setText('')
+
     def _browse_target_dir(self):
         """ """
         dirdialog = QtGui.QFileDialog(self)
@@ -478,31 +565,73 @@ class ImportExportDatasetDialog(QtGui.QDialog):
         """ """
         QtGui.QMessageBox.information(self, "Information", 'Not implemented yet.')
         
+    def _content_publish(self):
+        """ """
+        widget = QtGui.QWidget()
+        return widget
     
 class NewSampleDialog(QtGui.QDialog):
     """ This dialog is allowed to access private parts in the parent widget. """
-    def __init__(self, parentwidget):
+    def __init__(self, parentwidget, dataset):
         """ """
+        self._current_dataset = dataset
         super(NewSampleDialog, self).__init__(parentwidget)
+        self.setLayout(self._content())
+
+    def _content(self):
+        """ """
+        self._samplename_edit = QtGui.QLineEdit('')
+        self._samplename_edit.setMinimumWidth(400)
+        createsample_button = QtGui.QPushButton('Create sample')
+        createsample_button.clicked.connect(self._create_sample)               
+        cancel_button = QtGui.QPushButton('Cancel')
+        cancel_button.clicked.connect(self.reject) # Close dialog box.               
+        # Layout widgets.
+        formlayout = QtGui.QFormLayout()
+        formlayout.addRow('sample name:', self._samplename_edit)
+        
+        hbox1 = QtGui.QHBoxLayout()
+        hbox1.addStretch(10)
+        hbox1.addWidget(createsample_button)
+        hbox1.addWidget(cancel_button)
+        #
+        layout = QtGui.QVBoxLayout()
+        layout.addLayout(formlayout, 10)
+        layout.addLayout(hbox1)
+        #
+        return layout                
+
+    def _create_sample(self):
+        """ """
+        samplename = unicode(self._samplename_edit.text())
+        toolbox_core.PlanktonCounterManager().create_sample(self._current_dataset, samplename)
+        #            
+        self.accept() # Close dialog box.
 
 
 class DeleteSampleDialog(QtGui.QDialog):
     """ This dialog is allowed to access private parts in the parent widget. """
-    def __init__(self, parentwidget):
+    def __init__(self, parentwidget, dataset, sample):
         """ """
+        self._current_dataset = dataset
+        self._current_sample = sample
         super(DeleteSampleDialog, self).__init__(parentwidget)
 
 
 class EditSampleDialog(QtGui.QDialog):
     """ This dialog is allowed to access private parts in the parent widget. """
-    def __init__(self, parentwidget):
+    def __init__(self, parentwidget, dataset, sample):
         """ """
+        self._current_dataset = dataset
+        self._current_sample = sample
         super(EditSampleDialog, self).__init__(parentwidget)
 
 
 class CountSampleDialog(QtGui.QDialog):
     """ This dialog is allowed to access private parts in the parent widget. """
-    def __init__(self, parentwidget):
+    def __init__(self, parentwidget, dataset, sample):
         """ """
+        self._current_dataset = dataset
+        self._current_sample = sample
         super(CountSampleDialog, self).__init__(parentwidget)
 
