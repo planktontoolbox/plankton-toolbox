@@ -11,9 +11,9 @@ import PyQt4.QtCore as QtCore
 import plankton_toolbox.tools.tool_manager as tool_manager
 # import plankton_toolbox.toolbox.utils_qt as utils_qt
 # import plankton_toolbox.toolbox.help_texts as help_texts
-# import envmonlib
+
 import toolbox_utils
-import toolbox_core
+import plankton_core
 
 class AnalyseDatasetsTab6(QtGui.QWidget):
     """ """
@@ -59,15 +59,15 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         analysisdata = self._analysisdata.get_data()
         if analysisdata:        
             # For tab "Generic graphs".
-            items = [item['header'] for item in analysisdata.getExportTableColumns()]        
+            items = [item['header'] for item in analysisdata.get_export_table_columns()]        
             self._x_axis_column_list.addItems(items)
             self._y_axis_column_list.addItems(items)
             self._z_axis_column_list.addItems(items)
             # Search for all parameters in analysis data.
             parameterset = set()
-            for visitnode in analysisdata.getChildren():
-                for samplenode in visitnode.getChildren():
-                    for variablenode in samplenode.getChildren():
+            for visitnode in analysisdata.get_children():
+                for samplenode in visitnode.get_children():
+                    for variablenode in samplenode.get_children():
                         parameterset.add(variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')')
             parameterlist = sorted(parameterset)
             #
@@ -232,21 +232,21 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
             if x_selected_column == 'parameter:':
                 self._x_axistype_list.setCurrentIndex(0)
             else:
-                for item in self._analysisdata.get_data().getExportTableColumns():
+                for item in self._analysisdata.get_data().get_export_table_columns():
                         if item['header'] == x_selected_column:
                             self._x_axistype_list.setCurrentIndex(self._type_list_values.index(item['view_format']))
             #
             if y_selected_column == 'parameter:':
                 self._y_axistype_list.setCurrentIndex(0)
             else:
-                for item in self._analysisdata.get_data().getExportTableColumns():
+                for item in self._analysisdata.get_data().get_export_table_columns():
                     if item['header'] == y_selected_column:
                         self._y_axistype_list.setCurrentIndex(self._type_list_values.index(item['view_format']))
             #
             if z_selected_column == 'parameter:':
                 self._z_axistype_list.setCurrentIndex(0)
             else:
-                for item in self._analysisdata.get_data().getExportTableColumns():
+                for item in self._analysisdata.get_data().get_export_table_columns():
                     if item['header'] == z_selected_column:
                         self._z_axistype_list.setCurrentIndex(self._type_list_values.index(item['view_format']))
             
@@ -274,7 +274,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         y_selected_type = unicode(self._y_axistype_list.currentText())
         z_selected_type = unicode(self._z_axistype_list.currentText())
         #
-        plotdatainfo = self._graph_plot_data.getPlotDataInfo()
+        plotdatainfo = self._graph_plot_data.get_plot_data_info()
         #
         plotdatainfo['x_label'] = x_selected_column if x_selected_column != 'parameter:' else x_selected_param
         plotdatainfo['x_type'] = x_selected_type
@@ -315,7 +315,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
 #                     x_selected_column if x_selected_column != 'parameter:' else x_selected_param
         #
         try:
-            self._graph_plot_data.addPlot(
+            self._graph_plot_data.add_plot(
                             plot_name = plot_name, 
                              x_label = x_selected_column if x_selected_column != 'parameter:' else x_selected_param,
                              x_array = x_data,
@@ -365,7 +365,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         z_sample_key = None                      
         z_variable_key = None
         if x_column != 'parameter:':
-            for export_info in analysisdata.getExportTableColumns():
+            for export_info in analysisdata.get_export_table_columns():
                 if export_info.get('header', '') == x_column:
                     if export_info.get('node', '') == 'visit':
                         x_visit_key =  export_info.get('key', None)
@@ -374,7 +374,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                     elif export_info.get('node', '') == 'variable':
                         x_variable_key =  export_info.get('key', None)
         if y_column != 'parameter:':
-            for export_info in analysisdata.getExportTableColumns():
+            for export_info in analysisdata.get_export_table_columns():
                 if export_info.get('header', '') == y_column:
                     if export_info.get('node', '') == 'visit':
                         y_visit_key =  export_info.get('key', None)
@@ -383,7 +383,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                     elif export_info.get('node', '') == 'variable':
                         y_variable_key =  export_info.get('key', None)
         if z_column != 'parameter:':
-            for export_info in analysisdata.getExportTableColumns():
+            for export_info in analysisdata.get_export_table_columns():
                 if export_info.get('header', '') == z_column:
                     if export_info.get('node', '') == 'visit':
                         z_visit_key =  export_info.get('key', None)
@@ -416,7 +416,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         z_value = None
         
         # Iterate over visits. 
-        for visitnode in analysisdata.getChildren():
+        for visitnode in analysisdata.get_children():
             # Get data.
             if x_visit_key: x_value = visitnode.get_data(x_visit_key)
             if y_visit_key: y_value = visitnode.get_data(y_visit_key)
@@ -441,7 +441,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                 if z_visit_key: z_value = None
                 continue            
             # Iterate over samples.
-            for samplenode in visitnode.getChildren():
+            for samplenode in visitnode.get_children():
                 # Get data.
                 if x_sample_key: x_value = samplenode.get_data(x_sample_key)
                 if y_sample_key: y_value = samplenode.get_data(y_sample_key)
@@ -470,7 +470,7 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
                 # Iterate over sample content. 
                 # Note: Create a level between sample and variabel.
                 grouped_lifestages = {}
-                for variablenode in samplenode.getChildren():
+                for variablenode in samplenode.get_children():
                     group_key = variablenode.get_data('scientific_name')
                     group_key += ':' + variablenode.get_data('size_class') # For phytoplankton 
                     group_key += ':' + variablenode.get_data('stage') # For zooplankton

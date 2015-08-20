@@ -16,9 +16,8 @@ TODO: Not used in current version. Should be rewritten and integrated with toolb
 
 #import plankton_toolbox.PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
-# import envmonlib
 import toolbox_utils
-import toolbox_core
+import plankton_core
 import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 import plankton_toolbox.core.biology.taxa as taxa
 import plankton_toolbox.core.biology.taxa_sources as taxa_sources

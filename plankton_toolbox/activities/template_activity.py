@@ -8,10 +8,11 @@ from __future__ import unicode_literals
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
+import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.activities.activity_base as activity_base
-# import envmonlib
+
 import toolbox_utils
-import toolbox_core
+import plankton_core
 
 class TemplateActivity(activity_base.ActivityBase):
     """
@@ -30,12 +31,8 @@ class TemplateActivity(activity_base.ActivityBase):
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
         # Add activity name at top.
-        self._activityheader = QtGui.QLabel('<h2>' + self.objectName() + '</h2>', self)
-        self._activityheader.setTextFormat(QtCore.Qt.RichText)
-        self._activityheader.setAlignment(QtCore.Qt.AlignHCenter)
-        self._activityheader.setStyleSheet(""" 
-            * { color: white; background-color: #00677f; }
-            """)
+        self._activityheader = utils_qt.HeaderQLabel()
+        self._activityheader.setText('<h2>' + self.objectName() + '</h2>')
         contentLayout.addWidget(self._activityheader)
         # Add content to the activity.
         contentLayout.addLayout(self._content_person_info())

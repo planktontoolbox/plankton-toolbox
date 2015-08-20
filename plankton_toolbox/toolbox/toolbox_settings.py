@@ -17,9 +17,8 @@ TODO: Not used in current version. Should be rewritten and integrated with toolb
 import pickle
 import copy
 import PyQt4.QtCore as QtCore
-# import envmonlib
 import toolbox_utils
-import toolbox_core
+import plankton_core
 
 @toolbox_utils.singleton
 class ToolboxSettings(QtCore.QObject):

@@ -10,9 +10,9 @@ import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 # import plankton_toolbox.toolbox.help_texts as help_texts
-# import envmonlib
+
 import toolbox_utils
-import toolbox_core
+import plankton_core
 
 class AnalyseDatasetsTab4(QtGui.QWidget):
     """ """
@@ -179,16 +179,16 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         trophic_type_set = set()
         lifestage_set = set()
         #
-        for visitnode in analysisdata.getChildren():
+        for visitnode in analysisdata.get_children():
             station_set.add(visitnode.get_data('station_name'))
             visitmonth_set.add(visitnode.get_data('month'))
             visit_set.add(unicode(visitnode.get_data('station_name')) + ' : ' + unicode(visitnode.get_data('date')))
             startdate = min(startdate, visitnode.get_data('date'))
             enddate = max(enddate, visitnode.get_data('date'))
-            for samplenode in visitnode.getChildren():
-                depthstring = unicode(samplenode.get_data('sample_min_depth')) + '-' + unicode(samplenode.get_data('sample_max_depth'))
+            for samplenode in visitnode.get_children():
+                depthstring = unicode(samplenode.get_data('sample_min_depth_m')) + '-' + unicode(samplenode.get_data('sample_max_depth_m'))
                 minmaxdepth_set.add(depthstring)
-                for variablenode in samplenode.getChildren():
+                for variablenode in samplenode.get_children():
                     taxon_set.add(variablenode.get_data('scientific_name'))
                     #
                     trophic_type_set.add(variablenode.get_data('trophic_type'))
@@ -218,7 +218,7 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         self._analysisdata.set_filter_item('stations', self._stations_listview.getSelectedDataList())
         self._analysisdata.set_filter_item('visit_months', self._months_listview.getSelectedDataList())
         self._analysisdata.set_filter_item('visits', self._visits_listview.getSelectedDataList())
-        self._analysisdata.set_filter_item('min_max_depth', self._minmaxdepth_listview.getSelectedDataList())
+        self._analysisdata.set_filter_item('min_max_depth_m', self._minmaxdepth_listview.getSelectedDataList())
         self._analysisdata.set_filter_item('taxon', self._taxon_listview.getSelectedDataList())
         self._analysisdata.set_filter_item('trophic_type', self._trophic_type_listview.getSelectedDataList())
         self._analysisdata.set_filter_item('life_stage', self._lifestage_listview.getSelectedDataList())

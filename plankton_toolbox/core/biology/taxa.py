@@ -34,7 +34,7 @@ class Taxa(object):
         self._idToTaxonDict.clear()
         self._nameToTaxonDict.clear()
         
-    def getMetadata(self):
+    def get_metadata(self):
         """ """
         return self._metadata
         

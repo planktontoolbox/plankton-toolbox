@@ -13,9 +13,9 @@ import plankton_toolbox.activities.activity_base as activity_base
 import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 # import plankton_toolbox.toolbox.help_texts as help_texts
-# import envmonlib
+
 import toolbox_utils
-import toolbox_core
+import plankton_core
 
 class ScreeningActivity(activity_base.ActivityBase):
     """ Used for screening of content of loaded datasets. """
@@ -38,7 +38,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         self._loaded_datasets_model.clear()        
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().get_datasets()):
             item = QtGui.QStandardItem('Dataset-' + unicode(rowindex + 1) + 
-                                       '.   Source: ' + dataset.getMetadata('file_name'))
+                                       '.   Source: ' + dataset.get_metadata('file_name'))
             item.setCheckState(QtCore.Qt.Checked)
 #            item.setCheckState(QtCore.Qt.Unchecked)
             item.setCheckable(True)
@@ -53,12 +53,8 @@ class ScreeningActivity(activity_base.ActivityBase):
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
         # Add activity name at top.
-        self._activityheader = QtGui.QLabel('<h2>' + self.objectName() + '</h2>', self)
-        self._activityheader.setTextFormat(QtCore.Qt.RichText)
-        self._activityheader.setAlignment(QtCore.Qt.AlignHCenter)
-        self._activityheader.setStyleSheet(""" 
-            * { color: white; background-color: #00677f; }
-            """)
+        self._activityheader = utils_qt.HeaderQLabel()
+        self._activityheader.setText('<h2>' + self.objectName() + '</h2>')
         contentLayout.addWidget(self._activityheader)
         # Add content to the activity.
         contentLayout.addWidget(self._content_screening_tabs())
@@ -89,13 +85,13 @@ class ScreeningActivity(activity_base.ActivityBase):
         self._loaded_datasets_model = QtGui.QStandardItemModel()
         loaded_datasets_listview.setModel(self._loaded_datasets_model)
         #
-        self._clearall_button = QtGui.QPushButton('Clear all')
-        self.connect(self._clearall_button, QtCore.SIGNAL('clicked()'), self._uncheck_all_datasets)                
+        self._cleara_metadata_button = QtGui.QPushButton('Clear all')
+        self.connect(self._cleara_metadata_button, QtCore.SIGNAL('clicked()'), self._uncheck_all_datasets)                
         self._markall_button = QtGui.QPushButton('Mark all')
         self.connect(self._markall_button, QtCore.SIGNAL('clicked()'), self._check_all_datasets)                
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
-        hbox1.addWidget(self._clearall_button)
+        hbox1.addWidget(self._cleara_metadata_button)
         hbox1.addWidget(self._markall_button)
         hbox1.addStretch(10)
         #
@@ -176,16 +172,16 @@ class ScreeningActivity(activity_base.ActivityBase):
                 item = self._loaded_datasets_model.item(rowindex, 0)
                 if item.checkState() == QtCore.Qt.Checked:        
                     #
-                    row = 'Dataset: ' + dataset.getMetadata('file_name')
+                    row = 'Dataset: ' + dataset.get_metadata('file_name')
                     self._structureresult_list.append(row)
                     countvisits = 0
                     countsamples = 0
                     countvariables = 0
-                    for visitnode in dataset.getChildren():
+                    for visitnode in dataset.get_children():
                         countvisits += 1
-                        for samplenode in visitnode.getChildren():
+                        for samplenode in visitnode.get_children():
                             countsamples += 1
-                            countvariables += len(samplenode.getChildren())
+                            countvariables += len(samplenode.get_children())
                     #
                     row = '   - Sampling events: ' + unicode(countvisits) + \
                           ', samples: ' + unicode(countsamples) + \
@@ -206,19 +202,19 @@ class ScreeningActivity(activity_base.ActivityBase):
                 item = self._loaded_datasets_model.item(rowindex, 0)
                 if item.checkState() == QtCore.Qt.Checked:        
                     #
-                    row = 'Dataset: ' + dataset.getMetadata('file_name')
+                    row = 'Dataset: ' + dataset.get_metadata('file_name')
                     self._structureresult_list.append(row)
                     countsamples = 0
                     countvariables = 0
-                    for visitnode in dataset.getChildren():
+                    for visitnode in dataset.get_children():
                         row = '   - Sampling event: ' + visitnode.get_data('station_name') + \
                               ', ' + visitnode.get_data('date')
                         self._structureresult_list.append(row)
                         countsamples = 0
                         countvariables = 0
-                        for samplenode in visitnode.getChildren():
+                        for samplenode in visitnode.get_children():
                             countsamples += 1
-                            countvariables += len(samplenode.getChildren())
+                            countvariables += len(samplenode.get_children())
                         #
                         row = '      - Samples: ' + unicode(countsamples) + \
                           ', variable rows: ' + unicode(countvariables) 
@@ -235,19 +231,19 @@ class ScreeningActivity(activity_base.ActivityBase):
                 item = self._loaded_datasets_model.item(rowindex, 0)
                 if item.checkState() == QtCore.Qt.Checked:        
                     #
-                    row = 'Dataset: ' + dataset.getMetadata('file_name')
+                    row = 'Dataset: ' + dataset.get_metadata('file_name')
                     self._structureresult_list.append(row)
-                    for visitnode in dataset.getChildren():
+                    for visitnode in dataset.get_children():
                         row = '   - Sampling event: ' + \
                               unicode(visitnode.get_data('station_name')) + ' ' + \
                               unicode(visitnode.get_data('date'))
                         self._structureresult_list.append(row)
-                        for samplenode in visitnode.getChildren():
+                        for samplenode in visitnode.get_children():
                             row = '      - Sample: ' + \
-                                  unicode(samplenode.get_data('sample_min_depth')) + '-' + \
-                                  unicode(samplenode.get_data('sample_max_depth'))
+                                  unicode(samplenode.get_data('sample_min_depth_m')) + '-' + \
+                                  unicode(samplenode.get_data('sample_max_depth_m'))
                             self._structureresult_list.append(row)
-                            countvariables = len(samplenode.getChildren())
+                            countvariables = len(samplenode.get_children())
                             #
                             row = '         - Variable rows: ' + unicode(countvariables) 
                             self._structureresult_list.append(row)
@@ -255,7 +251,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                             parameter_set = set()
                             taxonname_set = set()
                             taxonsizestagesex_set = set()
-                            for variablenode in samplenode.getChildren():
+                            for variablenode in samplenode.get_children():
                                 parameter = variablenode.get_data('parameter')
                                 unit = variablenode.get_data('unit')
                                 taxonname = variablenode.get_data('scientific_name')
@@ -291,16 +287,16 @@ class ScreeningActivity(activity_base.ActivityBase):
                 item = self._loaded_datasets_model.item(rowindex, 0)
                 if item.checkState() == QtCore.Qt.Checked:        
                     #
-                    dataset_descr = dataset.getMetadata('file_name')
-                    for visitnode in dataset.getChildren():
+                    dataset_descr = dataset.get_metadata('file_name')
+                    for visitnode in dataset.get_children():
                         visit_descr = unicode(visitnode.get_data('station_name')) + ', ' + \
                                       unicode(visitnode.get_data('date'))
-                        for samplenode in visitnode.getChildren():
-                            sample_descr = unicode(samplenode.get_data('sample_min_depth')) + '-' + \
-                                           unicode(samplenode.get_data('sample_max_depth'))
+                        for samplenode in visitnode.get_children():
+                            sample_descr = unicode(samplenode.get_data('sample_min_depth_m')) + '-' + \
+                                           unicode(samplenode.get_data('sample_max_depth_m'))
                             check_duplicates_list = [] # Duplicates can occur inside one sample.
                             sample_description = dataset_descr + ', ' + visit_descr + ', ' + sample_descr
-                            for variablenode in samplenode.getChildren():
+                            for variablenode in samplenode.get_children():
                                 scientific_name = unicode(variablenode.get_data('scientific_name'))
                                 size_class = unicode(variablenode.get_data('size_class'))
                                 stage = unicode(variablenode.get_data('stage'))
@@ -385,7 +381,7 @@ class ScreeningActivity(activity_base.ActivityBase):
             toolbox_utils.Logging().start_accumulated_logging()
             self._write_to_status_bar('Code list screening in progress...')
             # Perform screening.
-            codetypes_set = toolbox_utils.ScreeningManager().codeListScreening(toolbox_datasets.ToolboxDatasets().get_datasets())
+            codetypes_set = toolbox_utils.ScreeningManager().code_list_screening(toolbox_datasets.ToolboxDatasets().get_datasets())
         finally:
             # Log in result window.
             self._codesspeciesresult_list.append('Screening was done on these code types: ' + 
@@ -424,7 +420,7 @@ class ScreeningActivity(activity_base.ActivityBase):
             toolbox_utils.Logging().start_accumulated_logging()
             self._write_to_status_bar('Species screening in progress...')
             # Perform screening.
-            toolbox_utils.ScreeningManager().speciesScreening(toolbox_datasets.ToolboxDatasets().get_datasets())
+            toolbox_utils.ScreeningManager().species_screening(toolbox_datasets.ToolboxDatasets().get_datasets())
         finally:
             # Log in result window.
 #             self._codesspeciesresult_list.append('Screening was done on these code types: ' + 
@@ -461,7 +457,7 @@ class ScreeningActivity(activity_base.ActivityBase):
             toolbox_utils.Logging().start_accumulated_logging()
             self._write_to_status_bar('BVOL Species screening in progress...')
             # Perform screening.
-            toolbox_utils.ScreeningManager().bvolSpeciesScreening(toolbox_datasets.ToolboxDatasets().get_datasets())
+            toolbox_utils.ScreeningManager().bvol_species_screening(toolbox_datasets.ToolboxDatasets().get_datasets())
         finally:
             # Log in result window.
 #             self._codesspeciesresult_list.append('Screening was done on these code types: ' + 
@@ -535,7 +531,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                 item = self._loaded_datasets_model.item(rowindex, 0)
                 if item.checkState() == QtCore.Qt.Checked:        
                     #
-                    for column in dataset.getExportTableColumns():
+                    for column in dataset.get_export_table_columns():
                         columns_set.add(column['header']) 
             #    
             self._column_list.addItems(sorted(columns_set))
@@ -561,7 +557,7 @@ class ScreeningActivity(activity_base.ActivityBase):
             item = self._loaded_datasets_model.item(rowindex, 0)
             if item.checkState() == QtCore.Qt.Checked:        
                 #
-                for info_dict in dataset.getExportTableColumns():
+                for info_dict in dataset.get_export_table_columns():
                     if info_dict['header'] == selectedcolumn:
                         nodelevel = info_dict['node']
                         key = info_dict['key']
@@ -575,30 +571,30 @@ class ScreeningActivity(activity_base.ActivityBase):
             if item.checkState() == QtCore.Qt.Checked:        
                 #
                 if nodelevel == 'dataset':
-                    if key in dataset.getDataDict().keys():
+                    if key in dataset.get_data_dict().keys():
                         columncontent_set.add(unicode(dataset.get_data(key)))
                     else:
                         columncontent_set.add('') # Add empty field.
                 #
-                for visitnode in dataset.getChildren():
+                for visitnode in dataset.get_children():
                     if nodelevel == 'visit':
-                        if key in visitnode.getDataDict().keys():
+                        if key in visitnode.get_data_dict().keys():
                             columncontent_set.add(unicode(visitnode.get_data(key)))
                         else:
                             columncontent_set.add('') # Add empty field.
                         continue    
                     #
-                    for samplenode in visitnode.getChildren():
+                    for samplenode in visitnode.get_children():
                         if nodelevel == 'sample':
-                            if key in samplenode.getDataDict().keys():
+                            if key in samplenode.get_data_dict().keys():
                                 columncontent_set.add(unicode(samplenode.get_data(key)))
                             else:
                                 columncontent_set.add('') # Add empty field.
                             continue    
                         #
-                        for variablenode in samplenode.getChildren():
+                        for variablenode in samplenode.get_children():
                             if nodelevel == 'variable':
-                                if key in variablenode.getDataDict().keys():
+                                if key in variablenode.get_data_dict().keys():
                                     columncontent_set.add(unicode(variablenode.get_data(key)))
                                 else:
                                     columncontent_set.add('') # Add empty field.
@@ -663,9 +659,9 @@ class ScreeningActivity(activity_base.ActivityBase):
                 item = self._loaded_datasets_model.item(rowindex, 0)
                 if item.checkState() == QtCore.Qt.Checked:        
                     #
-                    for visitnode in dataset.getChildren():
-                        for samplenode in visitnode.getChildren():
-                            for variablenode in samplenode.getChildren():
+                    for visitnode in dataset.get_children():
+                        for samplenode in visitnode.get_children():
+                            for variablenode in samplenode.get_children():
                                 parameter_set.add(variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')')
                 self._parameter_list.setList(sorted(parameter_set))
 
@@ -702,9 +698,9 @@ class ScreeningActivity(activity_base.ActivityBase):
                 item = self._loaded_datasets_model.item(rowindex, 0)
                 if item.checkState() == QtCore.Qt.Checked:        
                     #
-                    for visitnode in dataset.getChildren():
-                        for samplenode in visitnode.getChildren():
-                            for variablenode in samplenode.getChildren():
+                    for visitnode in dataset.get_children():
+                        for samplenode in visitnode.get_children():
+                            for variablenode in samplenode.get_children():
                                 if (variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')') == parameter:
     #                                 unit_set.add(variablenode.get_data('unit'))
                                     value = variablenode.get_data('value')
@@ -713,9 +709,9 @@ class ScreeningActivity(activity_base.ActivityBase):
 #         units = ' --- '.join(sorted(unit_set))
 #         parameter_unit = parameter + ' (' + units + ')' 
         #
-#         self._graph_plot_data.addPlot(plot_name = parameter_unit, y_array = yarray)
+#         self._graph_plot_data.add_plot(plot_name = parameter_unit, y_array = yarray)
         try:
-            self._graph_plot_data.addPlot(plot_name = parameter, y_array = yarray)
+            self._graph_plot_data.add_plot(plot_name = parameter, y_array = yarray)
         except UserWarning as e:
             QtGui.QMessageBox.warning(self, "Warning", unicode(e))
 
@@ -753,10 +749,10 @@ class ScreeningActivity(activity_base.ActivityBase):
                 item = self._loaded_datasets_model.item(rowindex, 0)
                 if item.checkState() == QtCore.Qt.Checked:        
                     #
-                    for visitnode in dataset.getChildren():
+                    for visitnode in dataset.get_children():
                         date = visitnode.get_data('date')
-                        for samplenode in visitnode.getChildren():
-                            for variablenode in samplenode.getChildren():
+                        for samplenode in visitnode.get_children():
+                            for variablenode in samplenode.get_children():
                                 if (variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')') == parameter:
     #                                 unit_set.add(variablenode.get_data('unit'))
                                     value = variablenode.get_data('value')
@@ -766,9 +762,9 @@ class ScreeningActivity(activity_base.ActivityBase):
 #         units = ' --- '.join(sorted(unit_set))
 #         parameter_unit = parameter + ' (' + units + ')' 
         #
-#         self._graph_plot_data.addPlot(plot_name = parameter_unit, y_array = yarray)
+#         self._graph_plot_data.add_plot(plot_name = parameter_unit, y_array = yarray)
         try:
-            self._graph_plot_data.addPlot(plot_name = parameter, x_array = xarray, y_array = yarray)
+            self._graph_plot_data.add_plot(plot_name = parameter, x_array = xarray, y_array = yarray)
         except UserWarning as e:
             QtGui.QMessageBox.warning(self, "Warning", unicode(e))
 

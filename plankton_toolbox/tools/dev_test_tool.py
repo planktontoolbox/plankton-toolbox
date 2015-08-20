@@ -9,9 +9,9 @@ from __future__ import unicode_literals
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.tools.tool_base as tool_base
-import envmonlib
+
 import toolbox_utils
-import toolbox_core
+import plankton_core
 
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 #import plankton_toolbox.toolbox.toolbox_main_window as toolbox_main_window
@@ -153,7 +153,7 @@ class DevTestTool(tool_base.ToolBase):
             self._parent.show_activity_by_name(settings['show_activity_after'])
             #
             # Set up for import file parsing.
-            impMgr = envmonlib.ImportManager(import_parser_path + import_parser,
+            impMgr = plankton_core.ImportManager(import_parser_path + import_parser,
                                              import_column,
                                              export_column)
             # Import and parse file.
@@ -161,14 +161,14 @@ class DevTestTool(tool_base.ToolBase):
             data_file_name = settings['data_file_name']
             data_file_encoding = settings['data_file_encoding']
             #
-            dataset = impMgr.importTextFile(data_file_path + data_file_name,
+            dataset = impMgr.import_text_file(data_file_path + data_file_name,
                                             data_file_encoding)
             # Add metadata related to imported file.
-            dataset.addMetadata('parser', import_parser)
-            dataset.addMetadata('file_name', data_file_name)
-            dataset.addMetadata('file_path', data_file_path)
-            dataset.addMetadata('import_column', import_column)
-            dataset.addMetadata('export_column', export_column)
+            dataset.add_metadata('parser', import_parser)
+            dataset.add_metadata('file_name', data_file_name)
+            dataset.add_metadata('file_path', data_file_path)
+            dataset.add_metadata('import_column', import_column)
+            dataset.add_metadata('export_column', export_column)
             toolbox_datasets.ToolboxDatasets().add_dataset(dataset)
             
             self._parent.show_activity_by_name(settings['show_activity_after'])

@@ -11,9 +11,9 @@ import PyQt4.QtCore as QtCore
 import plankton_toolbox.tools.tool_manager as tool_manager
 # import plankton_toolbox.toolbox.utils_qt as utils_qt
 # import plankton_toolbox.toolbox.help_texts as help_texts
-# import envmonlib
+
 import toolbox_utils
-import toolbox_core
+import plankton_core
 
 class AnalyseDatasetsTab5(QtGui.QWidget):
     """ """
@@ -39,9 +39,9 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         if analysisdata:        
             # Search for all parameters in analysis data.
             parameterset = set()
-            for visitnode in analysisdata.getChildren():
-                for samplenode in visitnode.getChildren():
-                    for variablenode in samplenode.getChildren():
+            for visitnode in analysisdata.get_children():
+                for samplenode in visitnode.get_children():
+                    for variablenode in samplenode.get_children():
                         parameterset.add(variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')')
             parameterlist = sorted(parameterset)
             self._parameter_list.addItems(parameterlist)
@@ -220,10 +220,10 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         value = None
         date_list = []
         value_list = [] 
-        for visitnode in dataset.getChildren():
+        for visitnode in dataset.get_children():
             date = visitnode.get_data('date')
-            for samplenode in visitnode.getChildren():
-                for variablenode in samplenode.getChildren():
+            for samplenode in visitnode.get_children():
+                for variablenode in samplenode.get_children():
                     parameter = variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')'
                     if parameter == selectedparameter:                        
                         value = variablenode.get_data('value')
@@ -231,7 +231,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                         value_list.append(value)               
         #                
         try:
-            plotdata.addPlot(plot_name = selectedparameter, 
+            plotdata.add_plot(plot_name = selectedparameter, 
                              x_array = date_list, 
                              y_array = value_list, 
                              x_label = '',
@@ -247,7 +247,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         value = None
         date_list = []
         value_list = [] 
-        for visitnode in dataset.getChildren():
+        for visitnode in dataset.get_children():
             # Replace year with '0000' seasonal cycle.
             date = visitnode.get_data('date')
             try: 
@@ -255,8 +255,8 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
             except:
                 continue # Skip to the next if date is invalid.
             #
-            for samplenode in visitnode.getChildren():
-                for variablenode in samplenode.getChildren():
+            for samplenode in visitnode.get_children():
+                for variablenode in samplenode.get_children():
                     parameter = variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')'
                     if parameter == selectedparameter:                        
                         value = variablenode.get_data('value')
@@ -264,7 +264,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                         value_list.append(value)               
         #                
         try:
-            plotdata.addPlot(plot_name = selectedparameter, 
+            plotdata.add_plot(plot_name = selectedparameter, 
                              x_array = date_list, 
                              y_array = value_list, 
                              x_label = '',
@@ -277,13 +277,13 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         # Step 1: Create lists of visits and taxa.
         visit_set = set()
         taxon_set = set()
-        for visitnode in dataset.getChildren():
+        for visitnode in dataset.get_children():
             #
             visit_set.add(unicode(visitnode.get_data('station_name')) + ' : ' + unicode(visitnode.get_data('date'))) # Station name
             #
-            for samplenode in visitnode.getChildren():
+            for samplenode in visitnode.get_children():
                 #
-                for variablenode in samplenode.getChildren():
+                for variablenode in samplenode.get_children():
                     #
                     taxonname = variablenode.get_data('scientific_name')
                     if taxonname:
@@ -297,12 +297,12 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
             for taxon in taxon_set:
                 visit_taxon_dict[visit][taxon] = 0.0
         # Step 3: Fill with data.
-        for visitnode in dataset.getChildren():
+        for visitnode in dataset.get_children():
             #
             visit = (unicode(visitnode.get_data('station_name')) + ' : ' + unicode(visitnode.get_data('date')))
-            for samplenode in visitnode.getChildren():
+            for samplenode in visitnode.get_children():
                 #
-                for variablenode in samplenode.getChildren():
+                for variablenode in samplenode.get_children():
                     #
                     taxonname = variablenode.get_data('scientific_name')
                     if not taxonname:
@@ -328,7 +328,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                 taxon_visit_value_list.append(visit_taxon_dict[station][taxon])
             # 
             try:
-                plotdata.addPlot(plot_name = taxon, 
+                plotdata.add_plot(plot_name = taxon, 
                                     x_array = visit_list, 
                                     y_array = taxon_visit_value_list, 
                                     x_label = '',
@@ -341,13 +341,13 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         # Step 1: Create lists of visits and taxa.
         visit_set = set()
         taxon_set = set()
-        for visitnode in dataset.getChildren():
+        for visitnode in dataset.get_children():
             #
             visit_set.add(unicode(visitnode.get_data('station_name')) + ' : ' + unicode(visitnode.get_data('date'))) # Station name
             #
-            for samplenode in visitnode.getChildren():
+            for samplenode in visitnode.get_children():
                 #
-                for variablenode in samplenode.getChildren():
+                for variablenode in samplenode.get_children():
                     #
                     taxonname = variablenode.get_data('scientific_name')
                     if taxonname:
@@ -362,12 +362,12 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
             for visit in visit_set:
                 taxon_visit_dict[taxon][visit] = 0.0
         # Step 3: Fill with data.
-        for visitnode in dataset.getChildren():
+        for visitnode in dataset.get_children():
             #
             visit = (unicode(visitnode.get_data('station_name')) + ' : ' + unicode(visitnode.get_data('date')))
-            for samplenode in visitnode.getChildren():
+            for samplenode in visitnode.get_children():
                 #
-                for variablenode in samplenode.getChildren():
+                for variablenode in samplenode.get_children():
                     #
                     taxonname = variablenode.get_data('scientific_name')
                     if not taxonname:
@@ -393,7 +393,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                 visit_taxon_value_list.append(taxon_visit_dict[taxon][visit])
             # 
             try:
-                plotdata.addPlot(plot_name = visit, 
+                plotdata.add_plot(plot_name = visit, 
                                     x_array = taxon_list, 
                                     y_array = visit_taxon_value_list, 
                                     x_label = '',

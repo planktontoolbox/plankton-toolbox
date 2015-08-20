@@ -17,8 +17,8 @@ TODO: Should be integrated with toolbox_utils.
 
 """
 This module contains an implementation of the "Gauss Conformal Projection 
-(Transverse Mercator), Kr�gers Formulas" and a set of parameters for the most 
-commonly used map projections in Sweden. The Gauss-Kr�ger formula transforms 
+(Transverse Mercator), Krugers Formulas" and a set of parameters for the most 
+commonly used map projections in Sweden. The Gauss-Kruger formula transforms 
 between geodetic coordinates and grid coordinates.
 
 Standard transformations are implemented as pure functions. For transformations 
@@ -249,42 +249,42 @@ class SwedishGeoPositionConverter(object):
         Parameter: projection (string). Must match if-statement.
         """
         # RT90 parameters, GRS 80 ellipsoid.
-        if (projection == "rt90_7.5_gon_v'):
+        if (projection == 'rt90_7.5_gon_v'):
             self._grs80()
             self._central_meridian = 11.0 + 18.375/60.0
             self._scale = 1.000006000000
             self._false_northing = -667.282
             self._false_easting = 1500025.141
             self._initialized = True
-        elif (projection == "rt90_5.0_gon_v'):
+        elif (projection == 'rt90_5.0_gon_v'):
             self._grs80()
             self._central_meridian = 13.0 + 33.376/60.0
             self._scale = 1.000005800000
             self._false_northing = -667.130
             self._false_easting = 1500044.695
             self._initialized = True
-        elif (projection == "rt90_2.5_gon_v'):
+        elif (projection == 'rt90_2.5_gon_v'):
             self._grs80()
             self._central_meridian = 15.0 + 48.0/60.0 + 22.624306/3600.0
             self._scale = 1.00000561024
             self._false_northing = -667.711
             self._false_easting = 1500064.274
             self._initialized = True
-        elif (projection == "rt90_0.0_gon_v'):
+        elif (projection == 'rt90_0.0_gon_v'):
             self._grs80()
             self._central_meridian = 18.0 + 3.378/60.0
             self._scale = 1.000005400000
             self._false_northing = -668.844
             self._false_easting = 1500083.521
             self._initialized = True
-        elif (projection == "rt90_2.5_gon_o'):
+        elif (projection == 'rt90_2.5_gon_o'):
             self._grs80()
             self._central_meridian = 20.0 + 18.379/60.0
             self._scale = 1.000005200000
             self._false_northing = -670.706
             self._false_easting = 1500102.765
             self._initialized = True
-        elif (projection == "rt90_5.0_gon_o'):
+        elif (projection == 'rt90_5.0_gon_o'):
             self._grs80()
             self._central_meridian = 22.0 + 33.380/60.0
             self._scale = 1.000004900000
@@ -292,32 +292,32 @@ class SwedishGeoPositionConverter(object):
             self._false_easting = 1500121.846
             self._initialized = True
         # RT90 parameters, Bessel 1841 ellipsoid.
-        elif (projection == "bessel_rt90_7.5_gon_v'):
+        elif (projection == 'bessel_rt90_7.5_gon_v'):
             self._bessel()
             self._central_meridian = 11.0 + 18.0/60.0 + 29.8/3600.0
             self._initialized = True
-        elif (projection == "bessel_rt90_5.0_gon_v'):
+        elif (projection == 'bessel_rt90_5.0_gon_v'):
             self._bessel()
             self._central_meridian = 13.0 + 33.0/60.0 + 29.8/3600.0
             self._initialized = True
-        elif (projection == "bessel_rt90_2.5_gon_v'):
+        elif (projection == 'bessel_rt90_2.5_gon_v'):
             self._bessel()
             self._central_meridian = 15.0 + 48.0/60.0 + 29.8/3600.0
             self._initialized = True
-        elif (projection == "bessel_rt90_0.0_gon_v'):
+        elif (projection == 'bessel_rt90_0.0_gon_v'):
             self._bessel()
             self._central_meridian = 18.0 + 3.0/60.0 + 29.8/3600.0
             self._initialized = True
-        elif (projection == "bessel_rt90_2.5_gon_o'):
+        elif (projection == 'bessel_rt90_2.5_gon_o'):
             self._bessel()
             self._central_meridian = 20.0 + 18.0/60.0 + 29.8/3600.0
             self._initialized = True
-        elif (projection == "bessel_rt90_5.0_gon_o'):
+        elif (projection == 'bessel_rt90_5.0_gon_o'):
             self._bessel()
             self._central_meridian = 22.0 + 33.0/60.0 + 29.8/3600.0
             self._initialized = True
         # SWEREF99TM and SWEREF99ddmm  parameters.
-        elif (projection == "sweref_99_tm'):
+        elif (projection == 'sweref_99_tm'):
             self._sweref99()
             self._central_meridian = 15.00
             self._lat_of_origin = 0.0
@@ -325,56 +325,56 @@ class SwedishGeoPositionConverter(object):
             self._false_northing = 0.0
             self._false_easting = 500000.0
             self._initialized = True
-        elif (projection == "sweref_99_1200'):
+        elif (projection == 'sweref_99_1200'):
             self._sweref99()
             self._central_meridian = 12.00
             self._initialized = True
-        elif (projection == "sweref_99_1330'):
+        elif (projection == 'sweref_99_1330'):
             self._sweref99()
             self._central_meridian = 13.50
             self._initialized = True
-        elif (projection == "sweref_99_1500'):
+        elif (projection == 'sweref_99_1500'):
             self._sweref99()
             self._central_meridian = 15.00
             self._initialized = True
-        elif (projection == "sweref_99_1630'):
+        elif (projection == 'sweref_99_1630'):
             self._sweref99()
             self._central_meridian = 16.50
             self._initialized = True
-        elif (projection == "sweref_99_1800'):
+        elif (projection == 'sweref_99_1800'):
             self._sweref99()
             self._central_meridian = 18.00
             self._initialized = True
-        elif (projection == "sweref_99_1415'):
+        elif (projection == 'sweref_99_1415'):
             self._sweref99()
             self._central_meridian = 14.25
             self._initialized = True
-        elif (projection == "sweref_99_1545'):
+        elif (projection == 'sweref_99_1545'):
             self._sweref99()
             self._central_meridian = 15.75
             self._initialized = True
-        elif (projection == "sweref_99_1715'):
+        elif (projection == 'sweref_99_1715'):
             self._sweref99()
             self._central_meridian = 17.25
             self._initialized = True
-        elif (projection == "sweref_99_1845'):
+        elif (projection == 'sweref_99_1845'):
             self._sweref99()
             self._central_meridian = 18.75
             self._initialized = True
-        elif (projection == "sweref_99_2015'):
+        elif (projection == 'sweref_99_2015'):
             self._sweref99()
             self._central_meridian = 20.25
             self._initialized = True
-        elif (projection == "sweref_99_2145'):
+        elif (projection == 'sweref_99_2145'):
             self._sweref99()
             self._central_meridian = 21.75
             self._initialized = True
-        elif (projection == "sweref_99_2315'):
+        elif (projection == 'sweref_99_2315'):
             self._sweref99()
             self._central_meridian = 23.25
             self._initialized = True
         # For testing.
-        elif (projection == "test_case'):
+        elif (projection == 'test_case'):
             # Test-case:
             #    Lat: 66 0'0", long: 24 0'0".
             #    X:1135809.413803 Y:555304.016555.

@@ -11,9 +11,9 @@ import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.activities.activity_base as activity_base
 import plankton_toolbox.toolbox.help_texts as help_texts
-# import envmonlib
+
 import toolbox_utils
-import toolbox_core
+import plankton_core
 
 class StartActivity(activity_base.ActivityBase):
     """
@@ -31,12 +31,8 @@ class StartActivity(activity_base.ActivityBase):
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
         # Add activity name at top.
-        self._activityheader = QtGui.QLabel('<h2>' + self.objectName() + '</h2>', self)
-        self._activityheader.setTextFormat(QtCore.Qt.RichText)
-        self._activityheader.setAlignment(QtCore.Qt.AlignHCenter)
-        self._activityheader.setStyleSheet(""" 
-            * { color: white; background-color: #00677f; }
-            """)
+        self._activityheader = utils_qt.HeaderQLabel()
+        self._activityheader.setText('<h2>' + self.objectName() + '</h2>')
         contentLayout.addWidget(self._activityheader)
         # Add content to the activity.
         contentLayout.addLayout(self._content_welcome())
@@ -46,8 +42,8 @@ class StartActivity(activity_base.ActivityBase):
         """ """
         # Active widgets and connections.
         label = utils_qt.RichTextQLabel()
-#         label.setText(help_texts.HelpTexts().getText('StartActivity_intro_1'))
-        label.setText(help_texts.HelpTexts().getText('start_activity_intro'))
+#         label.setText(help_texts.HelpTexts().get_text('StartActivity_intro_1'))
+        label.setText(help_texts.HelpTexts().get_text('start_activity_intro'))
         # Layout.
         layout = QtGui.QGridLayout()
         gridrow = 0

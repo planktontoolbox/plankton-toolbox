@@ -11,9 +11,8 @@ import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.tools.tool_base as tool_base
 import json
-# import envmonlib
 import toolbox_utils
-import toolbox_core
+import plankton_core
 import matplotlib.backends.backend_qt4agg as mpl_backend
 import matplotlib.figure as mpl_figure
 
@@ -100,12 +99,12 @@ class GraphPlotterTool(tool_base.ToolBase):
         self._xyplotformat_edit = QtGui.QLineEdit(""" bo, ro, g^, ys""")
         #
         self._editable_listview = utils_qt.ToolboxEditableQTableView()
-        data = toolbox_core.DatasetTable()
-        data.setHeader(['X label     ', 'Y label     ', 'Z label     '])
-        data.appendRow(['a', 'b', 'c'])
-        data.appendRow(['1', '2', '3'])
-        self._editable_listview.tablemodel.setModeldata(data)
-        self._editable_listview.tablemodel.reset() # Model data has changed.
+        data = plankton_core.DatasetTable()
+        data.set_header(['X label     ', 'Y label     ', 'Z label     '])
+        data.append_row(['a', 'b', 'c'])
+        data.append_row(['1', '2', '3'])
+        self._editable_listview.setTableModel(data)
+        self._editable_listview.resetModel() # Model data has changed.
         self._editable_listview.resizeColumnsToContents()
         #                
         self._resetsettings_button = QtGui.QPushButton('Reset')
@@ -155,10 +154,10 @@ class GraphPlotterTool(tool_base.ToolBase):
         self._zformat_edit = QtGui.QLineEdit()
         # 
         self._plotlabels_editable = utils_qt.ToolboxEditableQTableView()
-        self._plotlabels_table = toolbox_core.DatasetTable()
-        self._plotlabels_table.setHeader(['Plot name     ', 'X-label     ', 'Y-label     ', 'Z-label     '])
-        self._plotlabels_table.appendRow(['', '', '', ''])
-        self._plotlabels_editable.tablemodel.setModeldata(self._plotlabels_table)
+        self._plotlabels_table = plankton_core.DatasetTable()
+        self._plotlabels_table.set_header(['Plot name     ', 'X-label     ', 'Y-label     ', 'Z-label     '])
+        self._plotlabels_table.append_row(['', '', '', ''])
+        self._plotlabels_editable.setTableModel(self._plotlabels_table)
         #                
         self._labelsreset_button = QtGui.QPushButton('Reset')
         self.connect(self._labelsreset_button, QtCore.SIGNAL('clicked()'), self._reset_labels)                
@@ -336,32 +335,32 @@ class GraphPlotterTool(tool_base.ToolBase):
             # Draw selected chart.
             if selectedchart == 'Line chart':
                 self._current_chart = toolbox_utils.LineChart(self._plotdata, figure = figure)
-                self._current_chart.plotChart(combined = combined, stacked = stacked, y_log_scale = ylogscale)        
+                self._current_chart.plot_chart(combined = combined, stacked = stacked, y_log_scale = ylogscale)        
                 self._canvas.draw()
             #
             if selectedchart == 'Bar chart':
                 self._current_chart = toolbox_utils.BarChart(self._plotdata, figure = figure)
-                self._current_chart.plotChart(combined = combined, stacked = stacked, y_log_scale = ylogscale)                
+                self._current_chart.plot_chart(combined = combined, stacked = stacked, y_log_scale = ylogscale)                
                 self._canvas.draw()
             #
             if selectedchart == 'Scatter chart':
                 self._current_chart = toolbox_utils.ScatterChart(self._plotdata, figure = figure)
-                self._current_chart.plotChart(combined = combined, y_log_scale = ylogscale)                
+                self._current_chart.plot_chart(combined = combined, y_log_scale = ylogscale)                
                 self._canvas.draw()
             #
             if selectedchart == 'Pie chart':
                 self._current_chart = toolbox_utils.PieChart(self._plotdata, figure = figure)
-                self._current_chart.plotChart()        
+                self._current_chart.plot_chart()        
                 self._canvas.draw()
             #
             if selectedchart == 'Boxplot chart':
                 self._current_chart = toolbox_utils.BoxPlotChart(self._plotdata, figure = figure)
-                self._current_chart.plotChart(y_log_scale = ylogscale)        
+                self._current_chart.plot_chart(y_log_scale = ylogscale)        
                 self._canvas.draw()
             #
             if selectedchart == 'Map chart':
                 self._current_chart = toolbox_utils.MapChart(self._plotdata, figure = figure)
-                self._current_chart.plotChart()        
+                self._current_chart.plot_chart()        
                 self._canvas.draw()
         #    
         except UserWarning, e:
@@ -374,10 +373,10 @@ class GraphPlotterTool(tool_base.ToolBase):
 
     def _reset_labels(self):
         """ """
-        self._plotlabels_table.clearRows()
+        self._plotlabels_table.clear_rows()
         if self._plotdata:
             # The graph part.
-            plotdatainfo = self._plotdata.getPlotDataInfo()
+            plotdatainfo = self._plotdata.get_plot_data_info()
             self._title_edit.setText(plotdatainfo['title'])
             self._xlabel_edit.setText(plotdatainfo['x_label'])
             self._xtype_edit.setText(plotdatainfo['x_type'])
@@ -389,26 +388,26 @@ class GraphPlotterTool(tool_base.ToolBase):
             self._ztype_edit.setText(plotdatainfo['z_type'])
             self._zformat_edit.setText(plotdatainfo['z_format'])
             # Plots.             
-            for plot in self._plotdata.getPlotList():
+            for plot in self._plotdata.get_plot_list():
                 row = []
                 row.append(plot['plot_name'])
                 row.append(plot['x_label'])
                 row.append(plot['y_label'])
                 row.append(plot['z_label'])
-                self._plotlabels_table.appendRow(row)
+                self._plotlabels_table.append_row(row)
 
-#         self._plotlabels_editable.tablemodel.setModeldata(self._plotlabels_table)
-        self._plotlabels_editable.tablemodel.reset() # Model data has changed.
+#         self._plotlabels_editable.setTableModel(self._plotlabels_table)
+        self._plotlabels_editable.resetModel() # Model data has changed.
         self._plotlabels_editable.resizeColumnsToContents()
 
             
 #             # Tab: Edit data (JSON). For development.
 #             self.plotdatainfo_textedit.setText(
-#                        json.dumps(self._plotdata.getPlotDataInfo(), 
+#                        json.dumps(self._plotdata.get_plot_data_info(), 
 #                                   encoding = 'utf8', 
 #                                   sort_keys=True, indent=4))
 #             self.plotdatalist_textedit.setText(
-#                        json.dumps(self._plotdata.getPlotList(), 
+#                        json.dumps(self._plotdata.get_plot_list(), 
 #                                   encoding = 'utf8', 
 #                                   sort_keys=True, indent=4))
 #         else:
@@ -419,7 +418,7 @@ class GraphPlotterTool(tool_base.ToolBase):
     def _apply_labels(self):
         """ """
         # The graph part.
-        plotdatainfo = self._plotdata.getPlotDataInfo()
+        plotdatainfo = self._plotdata.get_plot_data_info()
         plotdatainfo['title'] = unicode(self._title_edit.text())  
         plotdatainfo['x_label'] = unicode(self._xlabel_edit.text())
         plotdatainfo['x_type'] = unicode(self._xtype_edit.text())
@@ -431,8 +430,8 @@ class GraphPlotterTool(tool_base.ToolBase):
         plotdatainfo['z_type'] = unicode(self._ztype_edit.text())
         plotdatainfo['z_format'] = unicode(self._zformat_edit.text())
         # Plots.
-        plotlist = self._plotdata.getPlotList()
-        for index, row in enumerate(self._plotlabels_table.getRows()):
+        plotlist = self._plotdata.get_plot_list()
+        for index, row in enumerate(self._plotlabels_table.get_rows()):
             plotlist[index]['plot_name'] = unicode(row[0])
             plotlist[index]['x_label'] = unicode(row[1])
             plotlist[index]['y_label'] = unicode(row[2])

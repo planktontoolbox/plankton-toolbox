@@ -19,9 +19,8 @@ import plankton_toolbox.activities.create_reports_activity as create_reports_act
 #import plankton_toolbox.activities.create_reports_OLD_activity as create_reports_OLD_activity
 # import plankton_toolbox.activities.template_activity as template_activity
 
-# import envmonlib
 import toolbox_utils
-import toolbox_core
+import plankton_core
 
 @toolbox_utils.singleton
 class ActivityManager(object):
@@ -45,14 +44,14 @@ class ActivityManager(object):
 
     def init_activities(self):
         """ Activity activator. """
-        self._activitylist.append(counter_activity.PlanktonCounterActivity('Plankton counter', self._parent))
 
         self._activitylist.append(start_activity.StartActivity('Welcome', self._parent))
 
+        self._activitylist.append(counter_activity.PlanktonCounterActivity('Plankton counter', self._parent))
         self._activitylist.append(load_datasets_activity.LoadDatasetsActivity('Dataset manager', self._parent))
         self._activitylist.append(screening_activity.ScreeningActivity('Dataset screening', self._parent))
+        self._activitylist.append(create_reports_activity.CreateReportsActivity('Dataset reports', self._parent))
         self._activitylist.append(analyse_datasets_activity.AnalyseDatasetsActivity('Dataset analysis', self._parent))
-        self._activitylist.append(create_reports_activity.CreateReportsActivity('Report generator', self._parent))
 
 #         self._activitylist.append(template_activity.TemplateActivity('(Activity template)', self._parent))
         

@@ -16,8 +16,6 @@ from toolbox_utils.logging import Logging
 from toolbox_utils.table_file_reader import TableFileReader
 from toolbox_utils.table_file_writer import TableFileWriter
 
-from toolbox_utils.marinespecies_ws import WormsWebservice
-
 from toolbox_utils.graphplotter import GraphPlotData
 from toolbox_utils.graphplotter import ChartBase
 from toolbox_utils.graphplotter import LineChart

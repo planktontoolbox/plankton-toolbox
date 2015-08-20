@@ -15,7 +15,7 @@ import shutil
  
 # This utility should work even if openpyxl is not installed, but with no Excel support.
 openpyxl_installed = True
-try: import openpyxl
+try: import lib.openpyxl as openpyxl
 except ImportError: 
     openpyxl_installed = False
     print('Excel files not suported since openpyxl is not installed.')

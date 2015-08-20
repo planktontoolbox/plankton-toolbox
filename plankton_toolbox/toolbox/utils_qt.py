@@ -12,6 +12,7 @@ This module contains GUI-related toolbox_utils for the Plankton Toolbox project.
 
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
+import plankton_core
 
 class RichTextQLabel(QtGui.QLabel):  
     """ Customized QLabel. Used for informative texts. """
@@ -20,9 +21,6 @@ class RichTextQLabel(QtGui.QLabel):
         self.setTextFormat(QtCore.Qt.RichText)
         self.setOpenExternalLinks(True) 
         self.setWordWrap(True)
-#        self.setStyleSheet(""" 
-#            * { color: white; background-color: #00677f; }
-#            """)
 
 class HeaderQLabel(QtGui.QLabel):  
     """ Customized QLabel. Used for informative texts. """
@@ -31,12 +29,26 @@ class HeaderQLabel(QtGui.QLabel):
         self.setTextFormat(QtCore.Qt.RichText)
         self.setAlignment(QtCore.Qt.AlignHCenter)
         self.setStyleSheet(""" 
-            * { color: white; background-color: #00677f; }
+            * { color: white; background-color: black; }
             """)
         
-#    def setHeaderText(self, text):
-#        """ """ 
-#        self.setText(text)
+class RightAlignedQLabel(QtGui.QLabel):  
+    """ Customized QLabel. """
+    def __init__(self, parent = None):  
+        QtGui.QLabel.__init__(self, parent)  
+        self.setAlignment(QtCore.Qt.AlignVCenter | QtCore.Qt.AlignRight)
+ 
+class CenterAlignedQLabel(QtGui.QLabel):  
+    """ Customized QLabel. """
+    def __init__(self, parent = None):  
+        QtGui.QLabel.__init__(self, parent)  
+        self.setAlignment(QtCore.Qt.AlignVCenter | QtCore.Qt.AlignCenter)
+
+class LeftAlignedQLabel(QtGui.QLabel):  
+    """ Customized QLabel. """
+    def __init__(self, parent = None):  
+        QtGui.QLabel.__init__(self, parent)  
+        self.setAlignment(QtCore.Qt.AlignVCenter | QtCore.Qt.AlignLeft)
 
 class ClickableQLabel(QtGui.QLabel):  
     """ Customized QLabel. Emits signal when clicked, and change color when hovering. """
@@ -53,8 +65,6 @@ class ClickableQLabel(QtGui.QLabel):
     def enterEvent(self, ev):
         """ Overridden abstract method. """
         self.setStyleSheet(""" 
-/*            * [ActivityStatus="Selected"] { color: #d1581c; background-color: #eaa97e; }
-*/
             * [ActivityStatus="Selected"] { color: #d1581c; background-color: #6da8bd; }
             * [ActivityStatus="Unselected"] { color: #d1581c; background-color: white; }
             """)
@@ -62,18 +72,14 @@ class ClickableQLabel(QtGui.QLabel):
     def leaveEvent(self, ev):  
         """ Overridden abstract method. """
         self.setStyleSheet(""" 
-/*            * [ActivityStatus="Selected"] { color: #00677f; background-color: #eaa97e; }
-*/
-            * [ActivityStatus="Selected"] { color: white; background-color: #6da8bd; }
-            * [ActivityStatus="Unselected"] { color: #00677f; background-color: white; }
+            * [ActivityStatus="Selected"] { color: white; background-color: black; }
+            * [ActivityStatus="Unselected"] { color: black; background-color: white; }
             """)
 
     def updateStyleSheet(self):  
         self.setStyleSheet(""" 
-/*            * [ActivityStatus="Selected"] { color:  #00677f; background-color: #eaa97e; }
-*/
-            * [ActivityStatus="Selected"] { color:  white; background-color: #6da8bd; }
-            * [ActivityStatus="Unselected"] { color:  #00677f; background-color: white; }
+            * [ActivityStatus="Selected"] { color:  white; background-color: black; }
+            * [ActivityStatus="Unselected"] { color:  black; background-color: white; }
             """)
 
 
@@ -83,7 +89,7 @@ class ClickableLinkQLabel(QtGui.QLabel):
         QtGui.QLabel.__init__(self, parent)
         #  
         self.setStyleSheet(""" 
-            * { color: #00677f; }
+            * { color: black; }
             """)
   
     def mouseReleaseEvent(self, ev):  
@@ -99,7 +105,7 @@ class ClickableLinkQLabel(QtGui.QLabel):
     def leaveEvent(self, ev):  
         """ Overridden abstract method. """
         self.setStyleSheet(""" 
-            * { color: #00677f; }
+            * { color: black; }
             """)
 
 
@@ -134,40 +140,40 @@ class SelectableQListView(QtGui.QListView):
     def __init__(self, parent = None):
         """ """
         QtGui.QListView.__init__(self, parent)
-        self.tablemodel = QtGui.QStandardItemModel()
-        self.setModel(self.tablemodel)
+        self._tablemodel = QtGui.QStandardItemModel()
+        self.setModel(self._tablemodel)
 
     def clear(self):
         """ """
-        self.tablemodel.clear()        
+        self._tablemodel.clear()        
          
     def setList(self, data_list = None, default_check_state = True):
         """ """
-        self.tablemodel.clear()        
+        self._tablemodel.clear()        
         for tableitem in data_list:
             standarditem = QtGui.QStandardItem(tableitem)
             standarditem.setCheckState(QtCore.Qt.Checked)
             standarditem.setCheckable(default_check_state)
-            self.tablemodel.appendRow(standarditem)
+            self._tablemodel.appendRow(standarditem)
          
     def checkAll(self):
         """ """
-        for rowindex in range(self.tablemodel.rowCount()):
-            item = self.tablemodel.item(rowindex, 0)
+        for rowindex in range(self._tablemodel.rowCount()):
+            item = self._tablemodel.item(rowindex, 0)
             item.setCheckState(QtCore.Qt.Checked)
             
     def uncheckAll(self):
         """ """
-        for rowindex in range(self.tablemodel.rowCount()):
-            item = self.tablemodel.item(rowindex, 0)
+        for rowindex in range(self._tablemodel.rowCount()):
+            item = self._tablemodel.item(rowindex, 0)
             item.setCheckState(QtCore.Qt.Unchecked)
 
     def getSelectedDataList(self):
         """ """
         selecteddata = []
         self._selected_data_list = []
-        for rowindex in range(self.tablemodel.rowCount()):
-            item = self.tablemodel.item(rowindex, 0)
+        for rowindex in range(self._tablemodel.rowCount()):
+            item = self._tablemodel.item(rowindex, 0)
             if item.checkState() == QtCore.Qt.Checked:
                 selecteddata.append(unicode(item.text()))
         #
@@ -177,8 +183,8 @@ class SelectableQListView(QtGui.QListView):
         """ """
         selecteddata = []
         self._selected_data_list = []
-        for rowindex in range(self.tablemodel.rowCount()):
-            item = self.tablemodel.item(rowindex, 0)
+        for rowindex in range(self._tablemodel.rowCount()):
+            item = self._tablemodel.item(rowindex, 0)
             if item.checkState() != QtCore.Qt.Checked:
                 selecteddata.append(unicode(item.text()))
         #
@@ -188,8 +194,8 @@ class SelectableQListView(QtGui.QListView):
         """ """
         selectedindexes = []
         self._selected_data_list = []
-        for rowindex in range(self.tablemodel.rowCount()):
-            item = self.tablemodel.item(rowindex, 0)
+        for rowindex in range(self._tablemodel.rowCount()):
+            item = self._tablemodel.item(rowindex, 0)
             if item.checkState() == QtCore.Qt.Checked:
                 selectedindexes.append(rowindex)
         #
@@ -199,8 +205,8 @@ class SelectableQListView(QtGui.QListView):
         """ """
         selectedindexes = []
         self._selected_data_list = []
-        for rowindex in range(self.tablemodel.rowCount()):
-            item = self.tablemodel.item(rowindex, 0)
+        for rowindex in range(self._tablemodel.rowCount()):
+            item = self._tablemodel.item(rowindex, 0)
             if item.checkState() != QtCore.Qt.Checked:
                 selectedindexes.append(rowindex)
         #
@@ -210,38 +216,69 @@ class SelectableQListView(QtGui.QListView):
 class ToolboxQTableView( QtGui.QTableView):  
     """ Customized QTableView. The table is automatically connected to an 
         instance of ToolboxTableModel.  """
-    def __init__(self, parent = None):
+    def __init__(self, parent = None, filter_column_index = None):
         """ """
         QtGui.QTableView.__init__(self, parent)
-        self.tablemodel = None # Note: Public. 
-        self.selectionModel = None # Note: Public. 
-        
+        self._tablemodel = ToolboxTableModel(modeldata = plankton_core.DatasetTable())
+        self._selectionmodel = None # Created below.
+        # Connect models.
+        if filter_column_index is None:
+            self.setModel(self._tablemodel)
+            #
+            self._selectionmodel = QtGui.QItemSelectionModel(self._tablemodel) 
+            self.setSelectionModel(self._selectionmodel)
+            self.resizeColumnsToContents()
+        else:
+            """ Use this method if the default model should be replaced by a filtered model. """
+            # Filter proxy model.
+            self.filterproxymodel = QtGui.QSortFilterProxyModel(self)
+            self.filterproxymodel.setSourceModel(self._tablemodel)
+            self.filterproxymodel.setFilterKeyColumn(filter_column_index)
+            self.setModel(self.filterproxymodel)
+            #
+            self._selectionmodel = QtGui.QItemSelectionModel(self.filterproxymodel) 
+            self.setSelectionModel(self._selectionmodel)
+            self.resizeColumnsToContents()        
         # Default setup for tables.
         self.setAlternatingRowColors(True)
         self.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
         #self.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         self.setSelectionMode(QtGui.QAbstractItemView.ContiguousSelection)
         self.verticalHeader().setDefaultSectionSize(18)
-        # Default model, data and selection        
-        self.tablemodel = ToolboxTableModel()
-        self.setModel(self.tablemodel)
-        self.selectionModel = QtGui.QItemSelectionModel(self.tablemodel)
-        self.setSelectionModel(self.selectionModel)
-        self.resizeColumnsToContents()
-          
-    def clear(self):
+           
+    def clearModel(self):
         """ """
-        self.selectionModel.clear()
-        # Call same method in parent class.
-        super(ToolboxQTableView, self).clear()
+        if self._tablemodel.getModeldata():
+            self._tablemodel.getModeldata().clear()
+#         # Call same method in parent class.
+#         super(ToolboxQTableView, self).clear()
+          
+    def resetModel(self):
+        """ Used to repaint. """
+        if self._tablemodel:
+            self._tablemodel.reset()
+          
+    def getTableModel(self):
+        """ """
+        return self._tablemodel.getModeldata()
+          
+    def setTableModel(self, tablemodeldata):
+        """ """
+        self._tablemodel.setModeldata(tablemodeldata)
+          
+    def getSelectionModel(self):
+        """ """
+        return self._selectionmodel
+          
+    def onFilterTextChanged(self, text):
+        """ link the textChanged signal to this method for filtering. 
+            In the constructor 'filter_column_index' must be defined. """          
+        filterString = QtCore.QRegExp(unicode(text),
+                                QtCore.Qt.CaseInsensitive,
+#                                 QtCore.QRegExp.RegExp
+                                )
+        self.filterproxymodel.setFilterRegExp(filterString)
         
-    def setTablemodel(self, model):
-        """ Use this method if the default model should be replaced. """
-        self.tablemodel = model
-        self.setModel(self.tablemodel)
-        self.selectionModel = QtGui.QItemSelectionModel(self.tablemodel)
-        self.setSelectionModel(self.selectionModel)
-        self.resizeColumnsToContents()
 
 class ToolboxTableModel(QtCore.QAbstractTableModel):
     """ """
@@ -255,29 +292,29 @@ class ToolboxTableModel(QtCore.QAbstractTableModel):
         """ Overridden abstract method. """
         if self._modeldata == None:
             return 0
-        return self._modeldata.getRowCount()
+        return self._modeldata.get_row_count()
 
     def columnCount(self, parent=QtCore.QModelIndex()):
         """ Overridden abstract method. """
         if self._modeldata == None:
             return 0
-        return self._modeldata.getColumnCount()
-
-    def setModeldata(self, modeldata):
-        """ """
-        self._modeldata = modeldata
-        self.reset() 
+        return self._modeldata.get_column_count()
 
     def getModeldata(self):
         """ """
         return self._modeldata
+
+    def setModeldata(self, tablemodeldata):
+        """ """
+        self._modeldata = tablemodeldata
+        self.reset() 
 
     def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
         """ Overridden abstract method. """
         if self._modeldata == None:
             return QtCore.QVariant()
         if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
-            return QtCore.QVariant(unicode(self._modeldata.getHeaderItem(section)))
+            return QtCore.QVariant(unicode(self._modeldata.get_header_item(section)))
         if orientation == QtCore.Qt.Vertical and role == QtCore.Qt.DisplayRole:
             return QtCore.QVariant(unicode(section + 1))
         return QtCore.QVariant()
@@ -288,7 +325,7 @@ class ToolboxTableModel(QtCore.QAbstractTableModel):
             return QtCore.QVariant()
         if role == QtCore.Qt.DisplayRole:
             if index.isValid():
-                return QtCore.QVariant(unicode(self._modeldata.getDataItem(index.row(), index.column())))
+                return QtCore.QVariant(unicode(self._modeldata.get_data_item(index.row(), index.column())))
         return QtCore.QVariant()
 
 
@@ -298,9 +335,9 @@ class ToolboxEditableQTableView( QtGui.QTableView):
     def __init__(self, parent = None):
         """ """
         QtGui.QTableView.__init__(self, parent)
-        self.tablemodel = None # Note: Public. 
-        self.selectionModel = None # Note: Public. 
-        
+        self._tablemodel = ToolboxTableModel(modeldata = plankton_core.DatasetTable())
+        self._selectionmodel = None
+         
         # Default setup for tables.
         self.setAlternatingRowColors(True)
         self.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
@@ -308,26 +345,33 @@ class ToolboxEditableQTableView( QtGui.QTableView):
         self.setSelectionMode(QtGui.QAbstractItemView.ContiguousSelection)
         self.verticalHeader().setDefaultSectionSize(18)
         # Default model, data and selection        
-        self.tablemodel = ToolboxEditableTableModel()
-        self.setModel(self.tablemodel)
-        self.selectionModel = QtGui.QItemSelectionModel(self.tablemodel)
-        self.setSelectionModel(self.selectionModel)
+        self._tablemodel = ToolboxEditableTableModel()
+        self.setModel(self._tablemodel)
+        self._selectionmodel = QtGui.QItemSelectionModel(self._tablemodel)
+        self.setSelectionModel(self._selectionmodel)
         self.resizeColumnsToContents()
-
-    def clear(self):
+ 
+    def clearModel(self):
         """ """
-        self.selectionModel.clear()
-        # Call same method in parent class.
-        super(ToolboxQTableView, self).clear()
-        self.tablemodel = None
-
-    def setTablemodel(self, model):
-        """ Use this method if the default model should be replaced. """
-        self.tablemodel = model
-        self.setModel(self.tablemodel)
-        self.selectionModel = QtGui.QItemSelectionModel(self.tablemodel)
-        self.setSelectionModel(self.selectionModel)
-        self.resizeColumnsToContents()
+        if self._tablemodel.getModeldata():
+            self._tablemodel.getModeldata().clear()
+         
+    def resetModel(self):
+        """ Used to repaint. """
+        if self._tablemodel:
+            self._tablemodel.reset()
+          
+    def getTableModel(self):
+        """ """
+        return self._tablemodel.getModeldata()
+          
+    def setTableModel(self, tablemodeldata):
+        """ """
+        self._tablemodel.setModeldata(tablemodeldata)
+          
+    def getSelectionModel(self):
+        """ """
+        return self._selectionmodel
 
 
 class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
@@ -342,29 +386,29 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
         """ Overridden abstract method. """
         if self._modeldata == None:
             return 0
-        return self._modeldata.getRowCount()
+        return self._modeldata.get_row_count()
 
     def columnCount(self, parent=QtCore.QModelIndex()):
         """ Overridden abstract method. """
         if self._modeldata == None:
             return 0
-        return self._modeldata.getColumnCount()
-
-    def setModeldata(self, modeldata):
-        """ """
-        self._modeldata = modeldata
-        self.reset() 
+        return self._modeldata.get_column_count()
 
     def getModeldata(self):
         """ """
         return self._modeldata
+
+    def setModeldata(self, tablemodeldata):
+        """ """
+        self._modeldata = tablemodeldata
+        self.reset() 
 
     def headerData(self, section, orientation, role = QtCore.Qt.DisplayRole):
         """ Overridden abstract method. """
         if self._modeldata == None:
             return QtCore.QVariant()
         if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
-            return QtCore.QVariant(unicode(self._modeldata.getHeaderItem(section)))
+            return QtCore.QVariant(unicode(self._modeldata.get_header_item(section)))
         if orientation == QtCore.Qt.Vertical and role == QtCore.Qt.DisplayRole:
             return QtCore.QVariant(unicode(section + 1))
         return QtCore.QVariant()
@@ -376,13 +420,13 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
         # Also for editing.
         if (role == QtCore.Qt.DisplayRole) or (role == QtCore.Qt.EditRole):
             if index.isValid():
-                return QtCore.QVariant(unicode(self._modeldata.getDataItem(index.row(), index.column())))
+                return QtCore.QVariant(unicode(self._modeldata.get_data_item(index.row(), index.column())))
         return QtCore.QVariant()
 
     def setData(self, index, value, role = QtCore.Qt.EditRole):
         """ Overridden abstract method. For editing. """
         if role == QtCore.Qt.EditRole:
-            self._modeldata.setDataItem(index.row(), index.column(), unicode(value.toString()))
+            self._modeldata.set_data_item(index.row(), index.column(), unicode(value.toString()))
             self.dataChanged.emit(index, index)
             return True
         return False

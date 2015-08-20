@@ -11,17 +11,16 @@ import codecs
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 
-import envmonlib
 import toolbox_utils
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.activities.activity_manager as activity_manager
 import plankton_toolbox.tools.log_tool as log_tool
 import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
-#import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
 
-###from plankton_toolbox_start import get_toolbox_version
-###__version__ = '1.0.1 (25 Nov 2014)' # Plankton Toolbox version.
+import plankton_core
+
+#import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
 
 class MainWindow(QtGui.QMainWindow):
     """
@@ -279,7 +278,7 @@ class MainWindow(QtGui.QMainWindow):
         """ """
         try:
             self.statusBar().showMessage(self.tr('Loading species lists...'))
-            envmonlib.Species() # Load species files.
+            plankton_core.Species() # Load species files.
         finally:
             self.statusBar().showMessage(self.tr(''))            
 
@@ -308,18 +307,18 @@ class MainWindow(QtGui.QMainWindow):
         <p>
         Plankton Toolbox can be run on Windows, Mac OS X and Ubuntu (UNIX). No installation is needed.
         The latest version can be found at: 
-        <a href="http://downloads.plankton-toolbox.org">http://downloads.plankton-toolbox.org</a>.
+        <a href="http://nordicmicroalgae.org/tools">http://nordicmicroalgae.org/tools</a>.
         </p>
         <p>
         Plankton Toolbox is developed by the oceanographic unit of the 
         <a href="http://smhi.se">Swedish Meterological and Hydrological Institute (SMHI)</a>.
         The software is a product of the 
-        <a href="http://svenskalifewatch.se">Swedish LifeWatch project</a> 
+        <a href="http://www.svenskalifewatch.se">Swedish LifeWatch project</a> 
         funded by the 
         <a href="http://www.vr.se">Swedish Science Council</a>.
         </p>
         <p>
-        Developed in Python 2.7 and Qt/PyQt4. Released under the MIT license. <br/>
+        Developed in Python 2.7 and Qt/PyQt4. Released under the MIT license.
         Source code and info for developers at: 
         <a href="http://plankton-toolbox.org">http://plankton-toolbox.org</a>.
         </p>

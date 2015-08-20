@@ -6,7 +6,6 @@
 #
 from __future__ import unicode_literals
 
-# import envmonlib
 import toolbox_utils
 
 @toolbox_utils.singleton
@@ -18,9 +17,9 @@ class HelpTexts(object):
     def __init__(self, parent = None):  
         """ """
         self._texts = {}
-        self._addTexts()
+        self._add_texts()
 
-    def getText(self, key):
+    def get_text(self, key):
         """ """
         try:          
             return self._texts[key]
@@ -28,7 +27,7 @@ class HelpTexts(object):
             pass
         return ''
   
-    def _addTexts(self):
+    def _add_texts(self):
         """ """          
         self._texts['start_activity_intro'] = """
         <br/>
@@ -40,11 +39,15 @@ class HelpTexts(object):
         <p>
         Features include:
         <ul>        
+            <li>Counting module for use by the microscope
+            </li>
             <li>Imports phyto- or zooplankton data in .txt and .xlsx files in different formats (configurable)
             </li>
             <li>Work with data on abundance, biovolume and carbon content
             </li>
             <li>Data screening - quality control of data
+            </li>
+            <li>Report generator
             </li>
             <li>Aggregate data, e.g. from species level to class level
             </li>
@@ -60,7 +63,7 @@ class HelpTexts(object):
         <h4>Usage instructions</h4>
         <p>
         A User Guide is available at: 
-        <a href="http://wiki.plankton-toolbox.org">http://wiki.plankton-toolbox.org</a>.
+        <a href="http://nordicmicroalgae.org/tools">http://nordicmicroalgae.org/tools</a>.
         </p>
 
         <h4>Preloaded data</h4>
@@ -70,17 +73,16 @@ class HelpTexts(object):
         and code-lists for screening. These files can be modified by the user and new files can be added 
         if the default set of files can't be used.
         </p>
-        <p>
-        More information about the content in the toolbox_data folder is available at: 
-        <a href="http://wiki.plankton-toolbox.org">http://wiki.plankton-toolbox.org</a>.
-        </p>
         
         <h4>Under development</h4>
         <p>
         The Plankton Toolbox  is under development and provided free with no guarantees regarding functionality. 
         Comments, bug reports and requests for new functionality are welcome and can be sent to 
         <a href="mailto:info@nordicmicroalgae.org">info@nordicmicroalgae.org</a>
+        <p>
+        More information about the project is available via the menu "Help/About".
         </p>
+
 
         """
 

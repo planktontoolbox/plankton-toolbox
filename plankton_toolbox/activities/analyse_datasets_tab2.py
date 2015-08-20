@@ -11,9 +11,9 @@ import PyQt4.QtCore as QtCore
 # import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 # import plankton_toolbox.toolbox.help_texts as help_texts
-# import envmonlib
+
 import toolbox_utils
-import toolbox_core
+import plankton_core
 
 class AnalyseDatasetsTab2(QtGui.QWidget):
     """ """
@@ -39,7 +39,7 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
         analysisdata = self._analysisdata.get_data()
         if analysisdata:        
             # For tab "Generic graphs".        
-            self._column_list.addItems([item['header'] for item in analysisdata.getExportTableColumns()])
+            self._column_list.addItems([item['header'] for item in analysisdata.get_export_table_columns()])
             #  Make combo-boxes visible.
             self._column_list.setEnabled(True)
 
@@ -106,37 +106,37 @@ class AnalyseDatasetsTab2(QtGui.QWidget):
         # Search for export column corresponding model element.
         nodelevel = ''
         key = ''
-        for info_dict in analysisdata.getExportTableColumns():
+        for info_dict in analysisdata.get_export_table_columns():
             if info_dict['header'] == selectedcolumn:
                 nodelevel = info_dict['node']
                 key = info_dict['key']
                 break # Break loop.
         #
         if nodelevel == 'dataset':
-            if key in analysisdata.getDataDict().keys():
+            if key in analysisdata.get_data_dict().keys():
                 columncontent_set.add(unicode(analysisdata.get_data(key)))
             else:
                 columncontent_set.add('') # Add empty field.
         #    
-        for visitnode in analysisdata.getChildren():
+        for visitnode in analysisdata.get_children():
             if nodelevel == 'visit':
-                if key in visitnode.getDataDict().keys():
+                if key in visitnode.get_data_dict().keys():
                     columncontent_set.add(unicode(visitnode.get_data(key)))
                 else:
                     columncontent_set.add('') # Add empty field.
                 continue    
             #
-            for samplenode in visitnode.getChildren():
+            for samplenode in visitnode.get_children():
                 if nodelevel == 'sample':
-                    if key in samplenode.getDataDict().keys():
+                    if key in samplenode.get_data_dict().keys():
                         columncontent_set.add(unicode(samplenode.get_data(key)))
                     else:
                         columncontent_set.add('') # Add empty field.
                     continue    
                 #
-                for variablenode in samplenode.getChildren():
+                for variablenode in samplenode.get_children():
                     if nodelevel == 'variable':
-                        if key in variablenode.getDataDict().keys():
+                        if key in variablenode.get_data_dict().keys():
                             columncontent_set.add(unicode(variablenode.get_data(key)))
                         else:
                             columncontent_set.add('') # Add empty field.

@@ -26,9 +26,8 @@ TODO: Not used in current version. Should be rewritten and integrated with toolb
 # import codecs
 # #import json
 # import string
-# import envmonlib
 import toolbox_utils
-import toolbox_core
+import plankton_core
 # import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 # import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
 # 

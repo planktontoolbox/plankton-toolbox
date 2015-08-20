@@ -13,9 +13,9 @@ import PyQt4.QtCore as QtCore
 # import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 # import plankton_toolbox.toolbox.help_texts as help_texts
-# import envmonlib
+
 import toolbox_utils
-import toolbox_core
+import plankton_core
 
 class AnalyseDatasetsTab1(QtGui.QWidget):
     """ """
@@ -79,7 +79,7 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
         self._loaded_datasets_model.clear()        
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().get_datasets()):
             item = QtGui.QStandardItem('Dataset-' + unicode(rowindex + 1) + 
-                                       '.   Source: ' + dataset.getMetadata('file_name'))
+                                       '.   Source: ' + dataset.get_metadata('file_name'))
             item.setCheckState(QtCore.Qt.Checked)
 #            item.setCheckState(QtCore.Qt.Unchecked)
             item.setCheckable(True)
@@ -88,7 +88,7 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
     def _clear_analysis_data(self):
         """ """
         self._main_activity.view_analysis_data()
-#         self._analysisdata.setData(None)    
+#         self._analysisdata.set_data(None)    
         self._main_activity.get_analysis_data().clear_data()    
         self._main_activity.get_statistical_data().clear_data()    
         self._main_activity.get_report_data().clear_data()    
@@ -109,11 +109,11 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
             for rowindex in range(self._loaded_datasets_model.rowCount()):
                 item = self._loaded_datasets_model.item(rowindex, 0)
                 if item.checkState() == QtCore.Qt.Checked:        
-                    datasets.append(toolbox_core.Datasets().get_datasets()[rowindex])
+                    datasets.append(plankton_core.Datasets().get_datasets()[rowindex])
             # Use the datasets for analysis.
             self._analysisdata.copy_datasets_to_analysis_data(datasets)  
             # Check.
-            if (self._analysisdata.get_data() == None) or (len(self._analysisdata.get_data().getChildren()) == 0):
+            if (self._analysisdata.get_data() == None) or (len(self._analysisdata.get_data().get_children()) == 0):
                 toolbox_utils.Logging().log('Selected datasets are empty.')
                 raise UserWarning('Selected datasets are empty.')
             self._main_activity.update_viewed_data_and_tabs() 

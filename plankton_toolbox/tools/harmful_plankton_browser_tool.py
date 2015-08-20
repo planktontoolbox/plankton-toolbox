@@ -9,9 +9,8 @@ from __future__ import unicode_literals
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import webbrowser
-# import envmonlib
 import toolbox_utils
-import toolbox_core
+import plankton_core
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_toolbox.tools.tool_base as tool_base
 import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
@@ -51,10 +50,10 @@ class HarmfulPlanktonBrowserTool(tool_base.ToolBase):
         layout.addWidget(self._tableView)
         # Data model.        
         self._model = HarmfulPlanktonTableModel(self._harmfulplankton_object)
-        self._tableView.setTablemodel(self._model)
+        self._tableView.setTableModel(self._model)
         #
-        self.connect(self._tableView.selectionModel, QtCore.SIGNAL('currentChanged(QModelIndex, QModelIndex)'), self._show_item_info)
-        self.connect(self._tableView.selectionModel, QtCore.SIGNAL('selectionChanged(QModelIndex, QModelIndex)'), self._show_item_info)
+        self.connect(self._tableView.getSelectionModel(), QtCore.SIGNAL('currentChanged(QModelIndex, QModelIndex)'), self._show_item_info)
+        self.connect(self._tableView.getSelectionModel(), QtCore.SIGNAL('selectionChanged(QModelIndex, QModelIndex)'), self._show_item_info)
         #
         return layout
     
@@ -120,7 +119,7 @@ class HarmfulPlanktonBrowserTool(tool_base.ToolBase):
     def _harmful_plankton_refresh(self):
         """ """
         self._marinespecies_url = None
-        self._model.reset()
+        self._tableView.resetModel()
         self._tableView.resizeColumnsToContents() # Only visible columns.
         
 class HarmfulPlanktonTableModel(QtCore.QAbstractTableModel):
@@ -139,7 +138,7 @@ class HarmfulPlanktonTableModel(QtCore.QAbstractTableModel):
         # Initialize parent.
         super(HarmfulPlanktonTableModel, self).__init__()
         
-    def setDataset(self, dataset):
+    def set_dataset(self, dataset):
         """ """
         self._dataset = dataset
         

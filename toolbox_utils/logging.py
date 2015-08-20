@@ -8,7 +8,7 @@ from __future__ import unicode_literals
 
 import time
 import toolbox_utils
-import toolbox_core
+import plankton_core
 
 @toolbox_utils.singleton
 class Logging(object):

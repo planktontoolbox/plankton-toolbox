@@ -17,9 +17,9 @@ import PyQt4.QtCore as QtCore
 # import plankton_toolbox.toolbox.utils_qt as utils_qt
 # import plankton_toolbox.toolbox.help_texts as help_texts
 import plankton_toolbox.tools.tool_manager as tool_manager
-# import envmonlib
+
 import toolbox_utils
-import toolbox_core
+import plankton_core
 
 class AnalyseDatasetsTab7(QtGui.QWidget):
     """ """
@@ -45,9 +45,9 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         if analysisdata:        
             # Search for all parameters in analysis data.
             parameterset = set()
-            for visitnode in analysisdata.getChildren():
-                for samplenode in visitnode.getChildren():
-                    for variablenode in samplenode.getChildren():
+            for visitnode in analysisdata.get_children():
+                for samplenode in visitnode.get_children():
+                    for variablenode in samplenode.get_children():
                         parameterset.add(variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')')
             parameterlist = sorted(parameterset)
             self._parameter_list.addItems(parameterlist)
@@ -174,8 +174,8 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         # Target list.
         data_dict = {}        
         # Create a dataset (table, not tree).
-        tabledata = toolbox_core.DatasetTable()
-        reportdata.setData(tabledata)
+        tabledata = plankton_core.DatasetTable()
+        reportdata.set_data(tabledata)
         # Header for result table.
         header_row = []
         header_row.append('Parameter')
@@ -192,7 +192,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         header_row.append('Min')
         header_row.append('Max')
         header_row.append('Counted values')
-        tabledata.setHeader(header_row)
+        tabledata.set_header(header_row)
         # Extract values.
         yearkey = ''
         monthkey = ''
@@ -202,7 +202,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         depthkey = ''
         taxonkey = ''
         #
-        for visitnode in dataset.getChildren():
+        for visitnode in dataset.get_children():
             visitdate = visitnode.get_data('date')
             visitstation = visitnode.get_data('station_name')
             visitvisit = visitstation + ' ' + visitdate 
@@ -218,14 +218,14 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
             elif visitmonth in ['09', '10','11']:
                 visitseason = 'Sep-Oct-Nov'
             #
-            for samplenode in visitnode.getChildren():
-                sample_min_depth = unicode(samplenode.get_data('sample_min_depth'))
-                sample_max_depth = unicode(samplenode.get_data('sample_max_depth'))
-                sampleminmaxdepth = sample_min_depth + '-' + sample_max_depth   
+            for samplenode in visitnode.get_children():
+                sample_min_depth_m = unicode(samplenode.get_data('sample_min_depth_m'))
+                sample_max_depth_m = unicode(samplenode.get_data('sample_max_depth_m'))
+                sampleminmaxdepth = sample_min_depth_m + '-' + sample_max_depth_m   
                 # Iterate over sample content. 
                 # Note: Create a level between sample and variabel.
                 grouped_size_lifestages = {}
-                for variablenode in samplenode.getChildren():
+                for variablenode in samplenode.get_children():
                     group_key = variablenode.get_data('scientific_name')
                     group_key += ':' + variablenode.get_data('size_class') # Specific for phytoplankton.
                     group_key += ':' + variablenode.get_data('stage') # Specific for zooplankton.
@@ -313,7 +313,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
             report_row.append(maxvalue)
             report_row.append(countedvalues)
             #
-            tabledata.appendRow(report_row)
+            tabledata.append_row(report_row)
 
 
     def _view_data(self):
@@ -363,8 +363,8 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         # Target list.
         data_dict = {}        
         # Create a dataset (table, not tree).
-        tabledata = toolbox_core.DatasetTable()
-        reportdata.setData(tabledata)
+        tabledata = plankton_core.DatasetTable()
+        reportdata.set_data(tabledata)
         # Extract values.
         yearkey = ''
         monthkey = ''
@@ -374,7 +374,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         depthkey = ''
         taxonkey = ''
         #
-        for visitnode in dataset.getChildren():
+        for visitnode in dataset.get_children():
             visitdate = visitnode.get_data('date')
             visitstation = visitnode.get_data('station_name')
             visitvisit = visitstation + ' ' + visitdate 
@@ -390,14 +390,14 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
             elif visitmonth in ['09', '10','11']:
                 visitseason = 'Sep-Oct-Nov'
             #
-            for samplenode in visitnode.getChildren():
-                sample_min_depth = unicode(samplenode.get_data('sample_min_depth'))
-                sample_max_depth = unicode(samplenode.get_data('sample_max_depth'))
-                sampleminmaxdepth = sample_min_depth + '-' + sample_max_depth   
+            for samplenode in visitnode.get_children():
+                sample_min_depth_m = unicode(samplenode.get_data('sample_min_depth_m'))
+                sample_max_depth_m = unicode(samplenode.get_data('sample_max_depth_m'))
+                sampleminmaxdepth = sample_min_depth_m + '-' + sample_max_depth_m   
                 # Iterate over sample content. 
                 # Note: Create a level between sample and variabel.
                 grouped_size_lifestages = {}
-                for variablenode in samplenode.getChildren():
+                for variablenode in samplenode.get_children():
                     group_key = variablenode.get_data('scientific_name')
                     group_key += ':' + variablenode.get_data('size_class') # Specific for phytoplankton.
                     group_key += ':' + variablenode.get_data('stage') # Specific for zooplankton.
@@ -482,10 +482,10 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
                 resulttable[rowindex + 9][colindex + 1] = value
         # Header.
         header = emptyrow[:]
-        tabledata.setHeader(header)
+        tabledata.set_header(header)
         # Rows.
         for row in resulttable:
-            tabledata.appendRow(row)  
+            tabledata.append_row(row)  
            
     def _plot_graph(self):
         """ """
@@ -541,7 +541,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         # Target list.
         data_dict = {}        
         #
-        for visitnode in dataset.getChildren():
+        for visitnode in dataset.get_children():
             visitdate = visitnode.get_data('date')
             visitstation = visitnode.get_data('station_name')
             visitvisit = visitstation + ' ' + visitdate 
@@ -557,14 +557,14 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
             elif visitmonth in ['09', '10','11']:
                 visitseason = 'Sep-Oct-Nov'
             #
-            for samplenode in visitnode.getChildren():
-                sample_min_depth = unicode(samplenode.get_data('sample_min_depth'))
-                sample_max_depth = unicode(samplenode.get_data('sample_max_depth'))
-                sampleminmaxdepth = sample_min_depth + '-' + sample_max_depth   
+            for samplenode in visitnode.get_children():
+                sample_min_depth_m = unicode(samplenode.get_data('sample_min_depth_m'))
+                sample_max_depth_m = unicode(samplenode.get_data('sample_max_depth_m'))
+                sampleminmaxdepth = sample_min_depth_m + '-' + sample_max_depth_m   
                 # Iterate over sample content. 
                 # Note: Create a level between sample and variabel.
                 grouped_size_lifestages = {}
-                for variablenode in samplenode.getChildren():
+                for variablenode in samplenode.get_children():
                     group_key = variablenode.get_data('scientific_name')
                     group_key += ':' + variablenode.get_data('size_class') # Specific for phytoplankton.
                     group_key += ':' + variablenode.get_data('stage') # Specific for zooplankton.
@@ -608,6 +608,6 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         # Calculate result
         try:
             for key in sorted(data_dict.keys()):
-                self._graph_plot_data.addPlot(plot_name = key, y_array = data_dict[key])
+                self._graph_plot_data.add_plot(plot_name = key, y_array = data_dict[key])
         except UserWarning as e:
             QtGui.QMessageBox.warning(self, 'Warning', unicode(e))

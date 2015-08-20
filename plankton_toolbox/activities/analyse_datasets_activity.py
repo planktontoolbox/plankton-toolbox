@@ -19,9 +19,9 @@ import plankton_toolbox.activities.analyse_datasets_tab5 as tab5
 import plankton_toolbox.activities.analyse_datasets_tab6 as tab6
 import plankton_toolbox.activities.analyse_datasets_tab7 as tab7
 import plankton_toolbox.activities.analyse_datasets_tab8 as tab8
-# import envmonlib
+
 import toolbox_utils
-import toolbox_core
+import plankton_core
 
 class AnalyseDatasetsActivity(activity_base.ActivityBase):
     """
@@ -29,9 +29,9 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
     def __init__(self, name, parentwidget):
         """ """
         # Create object containing analysis data.
-        self._analysisdata = toolbox_core.AnalysisData()
-        self._statisticaldata = toolbox_core.StatisticalData()
-        self._reportdata = toolbox_core.ReportData()
+        self._analysisdata = plankton_core.AnalysisData()
+        self._statisticaldata = plankton_core.StatisticalData()
+        self._reportdata = plankton_core.ReportData()
         
         # Filename used when saving data to file.
         self._lastuseddirectory = '.'
@@ -55,6 +55,8 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         self._tab8widget.set_main_activity(self)
         # Initialize parent.
         super(AnalyseDatasetsActivity, self).__init__(name, parentwidget)
+        #
+        self._empty_dataset_table = plankton_core.DatasetTable()
 
     def get_analysis_data(self):
         """ """
@@ -74,12 +76,8 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
         # Add activity name at top.
-        self._activityheader = QtGui.QLabel('<h2>' + self.objectName() + '</h2>', self)
-        self._activityheader.setTextFormat(QtCore.Qt.RichText)
-        self._activityheader.setAlignment(QtCore.Qt.AlignHCenter)
-        self._activityheader.setStyleSheet(""" 
-            * { color: white; background-color: #00677f; }
-            """)
+        self._activityheader = utils_qt.HeaderQLabel()
+        self._activityheader.setText('<h2>' + self.objectName() + '</h2>')
         contentLayout.addWidget(self._activityheader)
         # Add content to the activity.
         contentLayout.addWidget(self._content_analyse_tabs(), 3)
@@ -190,7 +188,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         #
         return saveresultbox
         
-#     def setAnalysisData(self, analysis_data):
+#     def set_analysis_data(self, analysis_data):
 #         """ """
 #         self._analysisdata = analysis_data
 #         self.update_viewed_data()
@@ -204,14 +202,14 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
     def hide_viewed_data(self):
         """ """
         # Clear table.
-        self._tableview.tablemodel.setModeldata(None)
+        self._tableview.setTableModel(self._empty_dataset_table)
         self._refresh_viewed_data_table()
 
         
     def update_viewed_data(self):
         """ """
         # Clear table.
-        self._tableview.tablemodel.setModeldata(None)
+        self._tableview.setTableModel(self._empty_dataset_table)
         self._refresh_viewed_data_table()
         self._numberofrows_label.setText('Number of rows: 0')
         # 
@@ -222,45 +220,49 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         if selectedviewindex == 0:
             # View analysis data.
             # Convert from tree model to table model.
-            targetdataset = toolbox_core.DatasetTable()
-            self._analysisdata.get_data().convertToTableDataset(targetdataset)
+            targetdataset = plankton_core.DatasetTable()
+            self._analysisdata.get_data().convert_to_table_dataset(targetdataset)
             # View model.
-            self._tableview.tablemodel.setModeldata(targetdataset)
+            self._tableview.setTableModel(targetdataset)
             self._refresh_viewed_data_table()
         elif selectedviewindex == 1:
             # View filtered data only.
             self._tab4widget.update_filter() # Must be done before create_filtered_dataset().
             filtereddataset = self._analysisdata.create_filtered_dataset()
             # Convert from tree model to table model.
-            targetdataset = toolbox_core.DatasetTable()
-            filtereddataset.convertToTableDataset(targetdataset)
+            targetdataset = plankton_core.DatasetTable()
+            filtereddataset.convert_to_table_dataset(targetdataset)
             # View model.
-            self._tableview.tablemodel.setModeldata(targetdataset)
+            self._tableview.setTableModel(targetdataset)
             self._refresh_viewed_data_table()
         elif selectedviewindex == 2:
             # Statistical data.
-            self._tableview.tablemodel.setModeldata(self._statisticaldata.get_data())
+            self._tableview.setTableModel(self._statisticaldata.get_data())
             self._refresh_viewed_data_table()
         elif selectedviewindex == 3:
             # Export data.
-            self._tableview.tablemodel.setModeldata(self._reportdata.get_data())
+            self._tableview.setTableModel(self._reportdata.get_data())
             self._refresh_viewed_data_table()
         else:
             # Hide data.
-            self._tableview.tablemodel.setModeldata(None)
+            self._tableview.setTableModel(self._empty_dataset_table)
             self._refresh_viewed_data_table()
         #
-        self._numberofrows_label.setText('Number of rows: ' + unicode(self._tableview.tablemodel.rowCount()))
+        if self._tableview.getTableModel():
+            self._numberofrows_label.setText('Number of rows: ' + unicode(self._tableview.getTableModel().get_row_count()))
+        else:
+            self._numberofrows_label.setText('Number of rows: 0')
 
         
     def _refresh_viewed_data_table(self):
         """ """
-        self._tableview.tablemodel.reset() # Model data has changed.
+        self._tableview.resetModel() # Model data has changed.
         self._tableview.resizeColumnsToContents()
 
     def _save_analysis_data(self):
         """ """
-        if self._tableview.tablemodel.getModeldata():
+#         if self._tableview.getTableModel().getModeldata():
+        if self._tableview.getTableModel():
             # Show select file dialog box.
             namefilter = 'All files (*.*)'
             if self._saveformat_list.currentIndex() == 1: # Xlsx file.
@@ -277,9 +279,11 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
             if filename:
                 self._lastuseddirectory = os.path.dirname(filename)
                 if self._saveformat_list.currentIndex() == 0: # Text file.
-                    self._tableview.tablemodel.getModeldata().saveAsTextFile(filename)
+#                     self._tableview.getTableModel().getModeldata().saveAsTextFile(filename)
+                    self._tableview.getTableModel().saveAsTextFile(filename)
                 elif self._saveformat_list.currentIndex() == 1: # Excel file.
-                    self._tableview.tablemodel.getModeldata().saveAsExcelFile(filename)
+#                     self._tableview.getTableModel().getModeldata().saveAsExcelFile(filename)
+                    self._tableview.getTableModel().saveAsExcelFile(filename)
 
     def _copy_to_clipboard(self):
         """ """
@@ -288,12 +292,13 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         row_separator = '\r\n'
         clipboardstring = ''
         #
-        table_dataset = self._tableview.tablemodel.getModeldata()
+#         table_dataset = self._tableview.getTableModel().getModeldata()
+        table_dataset = self._tableview.getTableModel()
         if table_dataset:
             # Header.
-            clipboardstring = field_separator.join(map(unicode, table_dataset.getHeader())) + row_separator
+            clipboardstring = field_separator.join(map(unicode, table_dataset.get_header())) + row_separator
             # Rows.
-            for row in table_dataset.getRows():
+            for row in table_dataset.get_rows():
                 clipboardstring += field_separator.join(map(unicode, row)) + row_separator
         #
         clipboard.setText(clipboardstring)

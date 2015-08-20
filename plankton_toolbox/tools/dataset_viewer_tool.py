@@ -14,9 +14,8 @@ import plankton_toolbox.tools.tool_base as tool_base
 import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 import plankton_toolbox.toolbox.toolbox_sync as toolbox_sync
 
-# import envmonlib
 import toolbox_utils
-import toolbox_core
+import plankton_core
 
 class DatasetViewerTool(tool_base.ToolBase):
     """
@@ -100,7 +99,7 @@ class DatasetViewerTool(tool_base.ToolBase):
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addWidget(self._copytoclipboard_button)
-        hbox1.addStretch(5)
+        hbox1.addStretch(10)
         hbox1.addWidget(QtGui.QLabel('File format:'))
         hbox1.addWidget(self._saveformat_list)
         hbox1.addWidget(self._savedataset_button)
@@ -121,32 +120,36 @@ class DatasetViewerTool(tool_base.ToolBase):
         """ """
         if index <= 0:
             # Clear table.
-            self._tableview.tablemodel.setModeldata(None)
+            self._tableview.clearModel()
             self._refresh_result_table()
         else:
             # envmonlib:
             dataset = toolbox_datasets.ToolboxDatasets().get_dataset_by_index(index - 1)
-            if isinstance(dataset, toolbox_core.DatasetTable):
-                self._tableview.tablemodel.setModeldata(dataset)
+            if isinstance(dataset, plankton_core.DatasetTable):
+                self._tableview.setTableModel(dataset)
                 self._refresh_result_table()
-            elif isinstance(dataset, toolbox_core.DatasetNode):
+            elif isinstance(dataset, plankton_core.DatasetNode):
                 # Tree dataset must be converted to table dataset before viewing.
-                targetdataset = toolbox_core.DatasetTable()
-                dataset.convertToTableDataset(targetdataset)
+                targetdataset = plankton_core.DatasetTable()
+                dataset.convert_to_table_dataset(targetdataset)
                 #
-                self._tableview.tablemodel.setModeldata(targetdataset)
+                self._tableview.setTableModel(targetdataset)
                 self._refresh_result_table()
             #
             # TODO: Remove later. Default alternative used for non toolbox_utils.
             else:
-                self._tableview.tablemodel.setModeldata(dataset)
+                self._tableview.setTableModel(dataset)
                 self._refresh_result_table()
         #
-        self._numberofrows_label.setText('Number of rows: ' + unicode(self._tableview.tablemodel.rowCount()))
+        if self._tableview.getTableModel():
+            self._numberofrows_label.setText('Number of rows: ' + unicode(self._tableview.getTableModel().get_row_count()))
+        else:
+            self._numberofrows_label.setText('Number of rows: 0')
     
     def _save_data(self):
         """ """
-        if self._tableview.tablemodel.getModeldata():
+#         if self._tableview.getTableModel().getModeldata():
+        if self._tableview.getTableModel():
             # Show select file dialog box.
             namefilter = 'All files (*.*)'
             if self._saveformat_list.currentIndex() == 1: # Xlsx file.
@@ -163,9 +166,11 @@ class DatasetViewerTool(tool_base.ToolBase):
             if filename:
                 self._lastuseddirectory = os.path.dirname(filename)
                 if self._saveformat_list.currentIndex() == 0: # Text file.
-                    self._tableview.tablemodel.getModeldata().saveAsTextFile(filename)
+#                     self._tableview.getTableModel().getModeldata().saveAsTextFile(filename)
+                    self._tableview.getTableModel().saveAsTextFile(filename)
                 elif self._saveformat_list.currentIndex() == 1: # Excel file.
-                    self._tableview.tablemodel.getModeldata().saveAsExcelFile(filename)
+#                     self._tableview.getTableModel().getModeldata().saveAsExcelFile(filename)
+                    self._tableview.getTableModel().saveAsExcelFile(filename)
         
     def _copy_to_clipboard(self):
         """ """
@@ -174,19 +179,20 @@ class DatasetViewerTool(tool_base.ToolBase):
         row_separator = '\r\n'
         clipboardstring = ''
         #
-        table_dataset = self._tableview.tablemodel.getModeldata()
+#         table_dataset = self._tableview.getTableModel().getModeldata()
+        table_dataset = self._tableview.getTableModel()
         if table_dataset:
             # Header.
-            clipboardstring = field_separator.join(map(unicode, table_dataset.getHeader())).strip() + row_separator
+            clipboardstring = field_separator.join(map(unicode, table_dataset.get_header())).strip() + row_separator
             # Rows.
-            for row in table_dataset.getRows():
+            for row in table_dataset.get_rows():
                 clipboardstring += field_separator.join(map(unicode, row)).strip() + row_separator
         #
         clipboard.setText(clipboardstring)
 
     def _refresh_result_table(self):
         """ """
-        self._tableview.tablemodel.reset() # Model data has changed.
+        self._tableview.resetModel() # Model data has changed.
         self._tableview.resizeColumnsToContents()
 
     # Allow synch is confusing. Activate again when used in more tools.

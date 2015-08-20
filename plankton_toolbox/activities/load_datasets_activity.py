@@ -20,25 +20,31 @@ import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 import plankton_toolbox.toolbox.toolbox_sync as toolbox_sync
 # import plankton_toolbox.toolbox.help_texts as help_texts
 
-import envmonlib
 import toolbox_utils
-import toolbox_core
+import plankton_core
 
 class LoadDatasetsActivity(activity_base.ActivityBase):
     """ """
     def __init__(self, name, parentwidget):
         """ """
-        self._datasettabledata = DatasetTableData()
         self._last_used_textfile_name = ''
         self._last_used_excelfile_name = ''
         # Load available dataset parsers.
         self._parser_list = []
         self._load_available_parsers()
+        #
+        self._lastusedphytowinfilename = ''
         # Initialize parent (self._create_content will be called).
         super(LoadDatasetsActivity, self).__init__(name, parentwidget)
         # Log available parsers when GUI setup has finished.
         QtCore.QTimer.singleShot(10, self._log_available_parsers)
         
+        # Update plankton counter datasets. 
+        self._counter_update_dataset_list()
+        # Update plankton counter datasets when changes occured.
+        self.connect(plankton_core.PlanktonCounterManager(), 
+             QtCore.SIGNAL('planktonCounterListChanged'), 
+             self._counter_update_dataset_list)
 
     def _load_available_parsers(self):
         """ """
@@ -63,7 +69,8 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         contentLayout = QtGui.QVBoxLayout()
         content.setLayout(contentLayout)
         # Add activity name at top.
-        self._activityheader = QtGui.QLabel('<h2>' + self.objectName() + '</h2>', self)
+        self._activityheader = utils_qt.HeaderQLabel()
+        self._activityheader.setText('<h2>' + self.objectName() + '</h2>')
         self._activityheader.setTextFormat(QtCore.Qt.RichText)
         self._activityheader.setAlignment(QtCore.Qt.AlignHCenter)
         contentLayout.addWidget(self._activityheader)
@@ -71,18 +78,14 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         contentLayout.addWidget(self._content_load_dataset())
         contentLayout.addWidget(self._content_loaded_datasets(), 10)
 #        contentLayout.addStretch(5)
-        # Style.
-        self._activityheader.setStyleSheet(""" 
-            * { color: white; background-color: #00677f; }
-            """)
     
     def _content_load_dataset(self):
         """ """
         # Active widgets and connections.
-        selectdatabox = QtGui.QGroupBox('Import datasets', self)
+        selectdatabox = QtGui.QGroupBox('Import datasets/datafiles', self)
         tabWidget = QtGui.QTabWidget()
         tabWidget.addTab(self._content_plankton_counter(), 'Plankton counter datasets')
-        tabWidget.addTab(self._content_archive_dataset(), 'Archive datasets')
+        tabWidget.addTab(self._content_predefined_formats(), 'Predefined formats')
         tabWidget.addTab(self._content_textfile(), 'Data files - Text (*.txt)')
         tabWidget.addTab(self._content_xlsx(), 'Data files - Excel (*.xlsx)')
         # Layout widgets.
@@ -97,76 +100,143 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         """ """
         widget = QtGui.QWidget()
         #
-        loaded_datasets_listview = QtGui.QListView()
-        self._loaded_datasets_model = QtGui.QStandardItemModel()
-        loaded_datasets_listview.setModel(self._loaded_datasets_model)
+        counter_datasets_listview = QtGui.QListView()
+        self._counter_datasets_model = QtGui.QStandardItemModel()
+        counter_datasets_listview.setModel(self._counter_datasets_model)
         #
-        self._clearall_button = QtGui.QPushButton('Clear all')
-        self.connect(self._clearall_button, QtCore.SIGNAL('clicked()'), self._uncheck_all_datasets)                
+        self._cleara_metadata_button = QtGui.QPushButton('Clear all')
+        self.connect(self._cleara_metadata_button, QtCore.SIGNAL('clicked()'), self._counter_uncheck_all_datasets)                
         self._markall_button = QtGui.QPushButton('Mark all')
-        self.connect(self._markall_button, QtCore.SIGNAL('clicked()'), self._check_all_datasets)                
+        self.connect(self._markall_button, QtCore.SIGNAL('clicked()'), self._counter_check_all_datasets)                
         self._importcounterdataset_button = QtGui.QPushButton('Import marked dataset(s)')
-        self.connect(self._importcounterdataset_button, QtCore.SIGNAL('clicked()'), self._import_counter_datasets)                
+        self.connect(self._importcounterdataset_button, QtCore.SIGNAL('clicked()'), self._counter_import_counter_datasets)                
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
-        hbox1.addWidget(self._clearall_button)
+        hbox1.addWidget(self._cleara_metadata_button)
         hbox1.addWidget(self._markall_button)
         hbox1.addStretch(10)
         hbox1.addWidget(self._importcounterdataset_button)
         #
         layout = QtGui.QVBoxLayout()
-        layout.addWidget(loaded_datasets_listview, 10)
+        layout.addWidget(counter_datasets_listview, 10)
         layout.addLayout(hbox1)
         widget.setLayout(layout)                
         #
         return widget
 
-    def _check_all_datasets(self):
+    def _counter_update_dataset_list(self):
         """ """
-        for rowindex in range(self._loaded_datasets_model.rowCount()):
-            item = self._loaded_datasets_model.item(rowindex, 0)
+        self._counter_datasets_model.clear()
+        for datasetname in sorted(plankton_core.PlanktonCounterManager().get_dataset_names()):
+            for samplename in sorted(plankton_core.PlanktonCounterManager().get_sample_names(datasetname)):
+                item = QtGui.QStandardItem(datasetname + ': ' + samplename)
+                item.setCheckState(QtCore.Qt.Unchecked)
+                item.setCheckable(True)
+                self._counter_datasets_model.appendRow(item)
+            
+    def _counter_check_all_datasets(self):
+        """ """
+        for rowindex in range(self._counter_datasets_model.rowCount()):
+            item = self._counter_datasets_model.item(rowindex, 0)
             item.setCheckState(QtCore.Qt.Checked)
             
-    def _uncheck_all_datasets(self):
+    def _counter_uncheck_all_datasets(self):
         """ """
-        for rowindex in range(self._loaded_datasets_model.rowCount()):
-            item = self._loaded_datasets_model.item(rowindex, 0)
+        for rowindex in range(self._counter_datasets_model.rowCount()):
+            item = self._counter_datasets_model.item(rowindex, 0)
             item.setCheckState(QtCore.Qt.Unchecked)
 
-    def _import_counter_datasets(self):
+    def _counter_import_counter_datasets(self):
         """ """
-        QtGui.QMessageBox.information(self, "Information", 'Not implemented yet.')
+        # Create a list with selected datasets.
+        selectedsamples = []
+        for rowindex in range(self._counter_datasets_model.rowCount()):
+            item = self._counter_datasets_model.item(rowindex, 0)
+            if item.checkState() == QtCore.Qt.Checked:        
+                selectedsamples.append(unicode(item.text()))
+        #
+        if len(selectedsamples) == 0:
+            return
+        #            
+        try:
+            toolbox_utils.Logging().log('') # Empty line.
+            toolbox_utils.Logging().log('Importing datasets...')
+            toolbox_utils.Logging().start_accumulated_logging()
+            self._write_to_status_bar('Importing datasets...')
 
-    # ===== ARCHIVE DATASETS ======
-    def _content_archive_dataset(self):
+            for datasetandsample in selectedsamples:
+                datasetandsamplepair = datasetandsample.split(':')
+                dataset_name = datasetandsamplepair[0].strip()
+                sample_name = datasetandsamplepair[1].strip()
+            
+                print('DEBUG: dataset_name: ' + dataset_name)
+                print('DEBUG: sample_name: ' + sample_name)
+
+
+                datasetnode = plankton_core.DataImportManager().import_dataset_file(dataset_name = dataset_name, 
+                                                                                    sample_name = sample_name, 
+                                                                                    import_format = 'PlanktonCounter')
+                # Use datasets-wrapper to emit change notification when dataset list is updated.
+                toolbox_datasets.ToolboxDatasets().emit_change_notification()
+
+                # Add metadata related to imported file.
+                datasetnode.add_metadata('parser', '-')
+#                 datasetnode.add_metadata('file_name', os.path.basename(filename))
+#                 datasetnode.add_metadata('file_path', filename)
+                datasetnode.add_metadata('import_column', '-')
+                datasetnode.add_metadata('export_column', '-')
+            #
+        except Exception as e:
+            toolbox_utils.Logging().error('Plankton conter file import failed on exception: ' + unicode(e))
+            QtGui.QMessageBox.warning(self, 'Plankton conter file loading.\n', 
+                                      'Plankton conter file import failed on exception.\n' + unicode(e))
+            raise
+        finally:
+            datasetcount = len(plankton_core.Datasets().get_datasets())
+            self._write_to_status_bar('Imported datasets: ' + unicode(datasetcount))
+            toolbox_utils.Logging().log_all_accumulated_rows()
+            toolbox_utils.Logging().log('Importing datasets done. Number of imported datasets: ' + unicode(datasetcount))
+
+            
+            
+            
+            
+
+    # ===== PREDEFINED FORMATS ======
+    def _content_predefined_formats(self):
         """ """
         widget = QtGui.QWidget()
         # - Select dataset parsers:
-        self._archive_format_combo = QtGui.QComboBox()
-        self._archive_format_combo.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
+        self._predefined_format_combo = QtGui.QComboBox()
+        self._predefined_format_combo.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContents)
 #         self.connect(self._textfile_parser_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._textfile_parser_selected)                
         # - Add available dataset parsers.
-        self._archiveformat_list = ['SHARK Archive Format (*.zip)',
-                                    'SHARK Archive Format (http://sharkdata.se)',
-                                    'SHARK Archive Format (http://test.sharkdata.se)',
-                                    'Darwin Core Archive',
-                                    'Darwin Core Archive - EurOBIS']
-        self._archive_format_combo.addItems(self._archiveformat_list)
+#         self._predefinedformat_list = ['PTBX Archive Format (*.zip) (Not implemented)',
+#                                     'PTBX Archive Format (http://sharkdata.se) (Not implemented)',
+#                                     'PTBX Archive Format (http://test.sharkdata.se) (Not implemented)',
+#                                     'Darwin Core Archive (Not implemented)',
+#                                     'Darwin Core Archive - EurOBIS (Not implemented)',
+#                                     'PhytoWin (*.cvs)']
+        self._predefinedformat_list = ['PhytoWin (*.cvs)']
+        self._predefined_format_combo.addItems(self._predefinedformat_list)
+        
+        self._predefined_format_combo.setCurrentIndex(0) # 'PhytoWin (*.cvs)
+        
         # Load dataset.
-        self._archive_getdataset_button = QtGui.QPushButton('Import dataset(s)...')
-        self.connect(self._archive_getdataset_button, QtCore.SIGNAL('clicked()'), self._import_archive_datasets)                
+        self._predefined_getdataset_button = QtGui.QPushButton('Import datasets/datafiles...')
+        self.connect(self._predefined_getdataset_button, QtCore.SIGNAL('clicked()'), self._import_predefined_datasets)                
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         gridrow = 0
-        label1 = QtGui.QLabel('Archive format:')
+        label1 = QtGui.QLabel('Format:')
         stretchlabel = QtGui.QLabel('')
         form1.addWidget(label1, gridrow, 0, 1, 1)
-        form1.addWidget(self._archive_format_combo, gridrow, 1, 1, 1)
+        form1.addWidget(self._predefined_format_combo, gridrow, 1, 1, 1)
         form1.addWidget(stretchlabel, gridrow,2, 1, 9)
         #
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(10)
-        hbox1.addWidget(self._archive_getdataset_button)
+        hbox1.addWidget(self._predefined_getdataset_button)
         #
         layout = QtGui.QVBoxLayout()
 #         layout.addWidget(introlabel)
@@ -177,9 +247,74 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         #
         return widget
         
-    def _import_archive_datasets(self):
+    def _import_predefined_datasets(self):
         """ """
-        QtGui.QMessageBox.information(self, "Information", 'Not implemented yet.')
+        selectedformat = self._predefined_format_combo.currentText()
+        if selectedformat == 'PhytoWin (*.cvs)':
+            self._load_phytowin_datasets()
+        else: 
+            QtGui.QMessageBox.information(self, "Information", 'Not implemented yet.')
+
+    def _load_phytowin_datasets(self):
+        """ """
+        try:
+            toolbox_utils.Logging().log('') # Empty line.
+            toolbox_utils.Logging().log('Importing datasets...')
+            toolbox_utils.Logging().start_accumulated_logging()
+            self._write_to_status_bar('Importing datasets...')
+
+            # Show select file dialog box. Multiple files can be selected.
+            namefilter = 'Phytowin files (*.csv);;All files (*.*)'
+            filenames = QtGui.QFileDialog.getOpenFileNames(
+                                self,
+                                'Load PhytoWin file(s). ',
+                                self._lastusedphytowinfilename,
+                                namefilter)
+            # From QString to unicode.
+            filenames = map(unicode, filenames)
+            # Check if user pressed ok or cancel.
+#             phytowin = plankton_core.ImportPhytowin()
+#             self._tabledataset = plankton_core.DatasetTable()
+            if filenames:
+                for filename in filenames:
+                    self._lastusedphytowinfilename = filename
+
+
+                    datasetnode = plankton_core.DataImportManager().import_dataset_file(filename, 
+                                                                                        import_format = 'PhytoWin')
+                    # Use datasets-wrapper to emit change notification when dataset list is updated.
+                    toolbox_datasets.ToolboxDatasets().emit_change_notification()
+
+
+#                     phytowin.clear()
+#                     phytowin.read_file(filename)
+# #                     # Used for report 'combined datasets'.
+# #                     phytowin.add_to_table_dataset(self._tabledataset)
+#                     # Add as tree dataset for calculated reports.
+#                     datasetnode = plankton_core.DatasetNode()
+#                     phytowin.add_to_dataset_node(datasetnode)
+#                     # Add to dataset list. (Note:ToolboxDatasets is a wrapper containing the 'datasetListChanged'-signal).
+#                     toolbox_datasets.ToolboxDatasets().add_dataset(datasetnode)
+                    # Add metadata related to imported file.
+                    datasetnode.add_metadata('parser', '-')
+                    datasetnode.add_metadata('file_name', os.path.basename(filename))
+                    datasetnode.add_metadata('file_path', filename)
+                    datasetnode.add_metadata('import_column', '-')
+                    datasetnode.add_metadata('export_column', '-')
+            #
+        except Exception as e:
+            toolbox_utils.Logging().error('PhytoWin file import failed on exception: ' + unicode(e))
+            QtGui.QMessageBox.warning(self, 'Text file loading.\n', 
+                                      'PhytoWin file import failed on exception.\n' + unicode(e))
+            raise
+        finally:
+            datasetcount = len(plankton_core.Datasets().get_datasets())
+            self._write_to_status_bar('Imported datasets: ' + unicode(datasetcount))
+            toolbox_utils.Logging().log_all_accumulated_rows()
+            toolbox_utils.Logging().log('Importing datasets done. Number of imported datasets: ' + unicode(datasetcount))
+
+        
+        
 
     # ===== TEXT FILES ======
     def _content_textfile(self):
@@ -254,7 +389,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         """ """
         if (selected_row > 0) and (selected_row <= len(self._parser_list)):
             toolbox_utils.Logging().log('Selected parser: ' + unicode(self._parser_list[selected_row - 1]))
-#            tabledata = toolbox_core.DatasetTable()
+#            tabledata = plankton_core.DatasetTable()
 #             toolbox_utils.ExcelFiles().readToTableDataset(tabledata, 
 #                                                  file_name = self._parser_path + self._parser_list[selected_row - 1])            
             tablereader = toolbox_utils.TableFileReader(file_path = self._parser_path, 
@@ -282,7 +417,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         #
         selectedimportcolumn = unicode(self._textfile_importcolumn_list.currentText())
         # Read parser file.
-#         tabledata = toolbox_core.DatasetTable()
+#         tabledata = plankton_core.DatasetTable()
 #         toolbox_utils.ExcelFiles().readToTableDataset(tabledata, 
 #                                 file_name = self._parser_path + self._parser_list[self._textfile_parser_list.currentIndex() - 1])
         tablereader = toolbox_utils.TableFileReader(file_path = self._parser_path, 
@@ -312,7 +447,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             # From QString to unicode.
             filenames = map(unicode, filenames)
             # Check if user pressed ok or cancel.
-            self._tabledataset = toolbox_core.DatasetTable()
+            self._tabledataset = plankton_core.DatasetTable()
             if filenames:
                 for filename in filenames:
                     # Store selected path. Will be used as default next time.
@@ -323,17 +458,17 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                     else:
                         textfileencoding = unicode(self._textfile_encoding_list.currentText())                        
                     # Set up for import file parsing.
-                    importmanager = envmonlib.ImportManager(self._parser_path + unicode(self._textfile_parser_list.currentText()),
+                    importmanager = plankton_core.ImportManager(self._parser_path + unicode(self._textfile_parser_list.currentText()),
                                                      unicode(self._textfile_importcolumn_list.currentText()),
                                                      unicode(self._textfile_exportcolumn_list.currentText()))
                     # Import and parse file.
-                    dataset = importmanager.importTextFile(filename, textfileencoding)
+                    dataset = importmanager.import_text_file(filename, textfileencoding)
                     # Add metadata related to imported file.
-                    dataset.addMetadata('parser', self._parser_path + unicode(self._textfile_parser_list.currentText()))
-                    dataset.addMetadata('file_name', os.path.basename(filename))
-                    dataset.addMetadata('file_path', filename)
-                    dataset.addMetadata('import_column', unicode(self._textfile_importcolumn_list.currentText()))
-                    dataset.addMetadata('export_column', unicode(self._textfile_exportcolumn_list.currentText()))
+                    dataset.add_metadata('parser', self._parser_path + unicode(self._textfile_parser_list.currentText()))
+                    dataset.add_metadata('file_name', os.path.basename(filename))
+                    dataset.add_metadata('file_path', filename)
+                    dataset.add_metadata('import_column', unicode(self._textfile_importcolumn_list.currentText()))
+                    dataset.add_metadata('export_column', unicode(self._textfile_exportcolumn_list.currentText()))
                     # Add to dataset list. (Note:ToolboxDatasets is a wrapper containing the 'datasetListChanged'-signal).
                     toolbox_datasets.ToolboxDatasets().add_dataset(dataset)
             #
@@ -343,7 +478,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                                       'Text file import failed on exception.\n' + unicode(e))
             raise
         finally:
-            datasetcount = len(toolbox_core.Datasets().get_datasets())
+            datasetcount = len(plankton_core.Datasets().get_datasets())
             self._write_to_status_bar('Imported datasets: ' + unicode(datasetcount))
             toolbox_utils.Logging().log_all_accumulated_rows()
             toolbox_utils.Logging().log('Importing datasets done. Number of imported datasets: ' + unicode(datasetcount))
@@ -409,7 +544,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         if (selected_row > 0) and (selected_row <= len(self._parser_list)):
             toolbox_utils.Logging().log('Selected parser: ' + unicode(self._parser_list[selected_row - 1]))
             
-#             tabledata = toolbox_core.DatasetTable()
+#             tabledata = plankton_core.DatasetTable()
 #             toolbox_utils.ExcelFiles().readToTableDataset(tabledata, 
 #                                                  file_name = self._parser_path + self._parser_list[selected_row - 1])
             tablereader = toolbox_utils.TableFileReader(file_path = self._parser_path, 
@@ -447,23 +582,23 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             # From QString to unicode.
             filenames = map(unicode, filenames)
             # Check if user pressed ok or cancel.
-            self._tabledataset = toolbox_core.DatasetTable()
+            self._tabledataset = plankton_core.DatasetTable()
             if filenames:
                 for filename in filenames:
                     # Store selected path. Will be used as default next time.
                     self._last_used_excelfile_name = filename
                     # Set up for import file parsing.
-                    importmanager = envmonlib.ImportManager(self._parser_path + unicode(self._excel_parser_list.currentText()),
+                    importmanager = plankton_core.ImportManager(self._parser_path + unicode(self._excel_parser_list.currentText()),
                                                      unicode(self._excel_importcolumn_list.currentText()),
                                                      unicode(self._excel_exportcolumn_list.currentText()))
                     # Import and parse file.
-                    dataset = importmanager.importExcelFile(filename)
+                    dataset = importmanager.import_excel_file(filename)
                     # Add metadata related to imported file.
-                    dataset.addMetadata('parser', self._parser_path + unicode(self._excel_parser_list.currentText()))
-                    dataset.addMetadata('file_name', os.path.basename(filename))
-                    dataset.addMetadata('file_path', filename)
-                    dataset.addMetadata('import_column', unicode(self._excel_importcolumn_list.currentText()))
-                    dataset.addMetadata('export_column', unicode(self._excel_exportcolumn_list.currentText()))
+                    dataset.add_metadata('parser', self._parser_path + unicode(self._excel_parser_list.currentText()))
+                    dataset.add_metadata('file_name', os.path.basename(filename))
+                    dataset.add_metadata('file_path', filename)
+                    dataset.add_metadata('import_column', unicode(self._excel_importcolumn_list.currentText()))
+                    dataset.add_metadata('export_column', unicode(self._excel_exportcolumn_list.currentText()))
                     # Add to dataset list. (Note:ToolboxDatasets is a wrapper containing the 'datasetListChanged'-signal).
                     toolbox_datasets.ToolboxDatasets().add_dataset(dataset)
         #
@@ -473,7 +608,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                                       'Excel file import failed on exception.\n' + unicode(e))
             raise
         finally:
-            datasetcount = len(toolbox_core.Datasets().get_datasets())
+            datasetcount = len(plankton_core.Datasets().get_datasets())
             self._write_to_status_bar('Imported datasets: ' + unicode(datasetcount))
             toolbox_utils.Logging().log_all_accumulated_rows()  
             toolbox_utils.Logging().log('Importing datasets done. Number of loaded datasets: ' + unicode(datasetcount))
@@ -482,24 +617,23 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
     def _content_loaded_datasets(self):
         """ """
         # Active widgets and connections.
-        selectdatabox = QtGui.QGroupBox('Imported datasets', self)
+        selectdatabox = QtGui.QGroupBox('Imported datasets/datafiles', self)
         #
         self._datasets_table = utils_qt.ToolboxQTableView()
         self._datasets_table.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         
-        self._datasettabledata.clear()
-        self._datasettabledata.setHeader(['Dataset      ', 
-#                                           'Type         ', 
-                                          'Content      ', 
-                                          'File         ', 
-                                          'File path    ',
-                                          'Parser       ',
-                                          'Import column',
-                                          'Export column'])
-        self._datasets_table.tablemodel.setModeldata(self._datasettabledata)
+        self._datasets_table.getTableModel().clear()
+        self._datasets_table.getTableModel().set_header(
+                                        ['Dataset      ', 
+#                                        'Type         ', 
+                                         'Content      ', 
+                                         'File         ', 
+                                         'File path    ',
+                                         'Parser       ',
+                                         'Import column',
+                                         'Export column'])
+        self._datasets_table.resetModel()
         self._datasets_table.resizeColumnsToContents()
-        
-        self._datasets_table.selectionModel.Rows
         
         # Listen for changes in the toolbox dataset list.
         self.connect(toolbox_datasets.ToolboxDatasets(), 
@@ -507,6 +641,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
              self._update_dataset_list)
         # Connection for selected row.
         self._datasets_table.clicked.connect(self._selection_changed)
+        self._datasets_table.doubleClicked.connect(self._view_dataset)
                         
         # Buttons.
         self._unloadalldatasets_button = QtGui.QPushButton('Remove all datasets')
@@ -517,7 +652,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         # Button connections.
         self.connect(self._unloadalldatasets_button, QtCore.SIGNAL('clicked()'), self._unload_all_datasets)                
         self.connect(self._unloadmarkeddatasets_button, QtCore.SIGNAL('clicked()'), self._unload_marked_datasets)                
-        self._viewdataset_checkbox.clicked.connect(self._selection_changed)
+        self._viewdataset_checkbox.stateChanged.connect(self._selection_changed)
         # Layout widgets.
         buttonlayout = QtGui.QHBoxLayout()
         buttonlayout.addWidget(self._unloadalldatasets_button)
@@ -540,25 +675,25 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
 
     def _unload_marked_datasets(self):
         # Remove datasets, start with the last one. 
-        rowcount = self._datasets_table.tablemodel.rowCount()
+        rowcount = self._datasets_table.getTableModel().get_row_count()
         for rowindex in range(rowcount):
             index = rowcount - rowindex - 1
-            if self._datasets_table.selectionModel.isSelected(self._datasets_table.tablemodel.createIndex(index, 0)): # Check if selected by user.
+            if self._datasets_table.getSelectionModel().isSelected(self._datasets_table._tablemodel.createIndex(index, 0)): # Check if selected by user.
                 toolbox_datasets.ToolboxDatasets().remove_dataset_by_index(index)
 
     def _update_dataset_list(self):
         """ """
-        self._datasettabledata.clearRows()
+        self._datasets_table.getTableModel().clear_rows()
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().get_datasets()):
             # Get content info depending on dataset type.
 #             datasettype = '',
             contentinfo = ''
-            if isinstance(dataset, toolbox_core.DatasetTable):
+            if isinstance(dataset, plankton_core.DatasetTable):
 #                 datasettype = 'Table dataset'
-                contentinfo = 'Rows: ' + unicode(len(dataset.getRows())) + '. '
-            elif isinstance(dataset, toolbox_core.DatasetNode):
+                contentinfo = 'Rows: ' + unicode(len(dataset.get_rows())) + '. '
+            elif isinstance(dataset, plankton_core.DatasetNode):
 #                 datasettype = 'Tree dataset'
-                visitcount, samplecound, variablecount = dataset.getCounters()
+                visitcount, samplecound, variablecount = dataset.get_counters()
                 contentinfo = 'Visits: ' + unicode(visitcount) + ', ' + \
                               'samples: ' + unicode(samplecound) + ', ' + \
                               'variables: ' + unicode(variablecount) + '. '
@@ -566,29 +701,33 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
 #                 datasettype = 'Unspecified'
 
             # Add row 
-            self._datasettabledata.addRow(
+            self._datasets_table.getTableModel().append_row(
                 ['Dataset-' + unicode(rowindex + 1),
 #                  datasettype,
                  contentinfo,
-                 dataset.getMetadata('file_name'),
-                 dataset.getMetadata('file_path'),
-                 dataset.getMetadata('parser'),
-                 dataset.getMetadata('import_column'),
-                 dataset.getMetadata('export_column')])
+                 dataset.get_metadata('file_name'),
+                 dataset.get_metadata('file_path'),
+                 dataset.get_metadata('parser'),
+                 dataset.get_metadata('import_column'),
+                 dataset.get_metadata('export_column')])
             #
-        self._datasets_table.tablemodel.reset()
+        self._datasets_table.resetModel()
         self._datasets_table.resizeColumnsToContents()
 
     
     def _selection_changed(self):
         """ """
         if self._viewdataset_checkbox.isChecked():
-            modelIndex = self._datasets_table.selectionModel.currentIndex()
-            if modelIndex.isValid():
-                # View tool.
-                tool_manager.ToolManager().show_tool_by_name('Dataset viewer') # Show tool if hidden.
-                # graphtool = tool_manager.ToolManager().getToolByName('Dataset viewer')
-                toolbox_sync.ToolboxSync().set_row_index('dataset', modelIndex.row())
+            self._view_dataset()
+
+    def _view_dataset(self):
+        """ """
+        modelIndex = self._datasets_table.getSelectionModel().currentIndex()
+        if modelIndex.isValid():
+            # View tool.
+            tool_manager.ToolManager().show_tool_by_name('Dataset viewer') # Show tool if hidden.
+            # graphtool = tool_manager.ToolManager().getToolByName('Dataset viewer')
+            toolbox_sync.ToolboxSync().set_row_index('dataset', modelIndex.row())
 
     
 class DatasetTableData(object):
@@ -603,11 +742,11 @@ class DatasetTableData(object):
         self._header = []
         self._rows = []
 
-    def clearRows(self):
+    def clear_rows(self):
         """ """
         self._rows = []
 
-    def setHeader(self, header):
+    def set_header(self, header):
         """ """
         self._header = header
 
@@ -615,28 +754,28 @@ class DatasetTableData(object):
         """ """
         self._rows.append(row)
 
-    def getHeaderItem(self, column):
+    def get_header_item(self, column):
         """ Used for calls from QAbstractTableModel. """
         try:
             return self._header[column]
         except Exception:
             return ''
 
-    def getDataItem(self, row, column):
+    def get_data_item(self, row, column):
         """ Used for calls from QAbstractTableModel. """
         try:
             return self._rows[row][column]
         except Exception:
             return ''
 
-    def getColumnCount(self):
+    def get_column_count(self):
         """ Used for calls from QAbstractTableModel. """
         try:
             return len(self._header)
         except Exception:
             return ''
 
-    def getRowCount(self):
+    def get_row_count(self):
         """ Used for calls from QAbstractTableModel. """
         try:
             return len(self._rows)

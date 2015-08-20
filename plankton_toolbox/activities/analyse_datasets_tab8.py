@@ -11,9 +11,9 @@ import PyQt4.QtCore as QtCore
 # import plankton_toolbox.tools.tool_manager as tool_manager
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 # import plankton_toolbox.toolbox.help_texts as help_texts
-# import envmonlib
+
 import toolbox_utils
-import toolbox_core
+import plankton_core
 
 class AnalyseDatasetsTab8(QtGui.QWidget):
     """ """
@@ -39,9 +39,9 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         if analysisdata:        
             # Search for all parameters in analysis data.
             parameterset = set()
-            for visitnode in analysisdata.getChildren():
-                for samplenode in visitnode.getChildren():
-                    for variablenode in samplenode.getChildren():
+            for visitnode in analysisdata.get_children():
+                for samplenode in visitnode.get_children():
+                    for variablenode in samplenode.get_children():
                         parameterset.add(variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')')
             parameterlist = sorted(parameterset)
             self._parameter_list.setList(parameterlist)
@@ -140,8 +140,8 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
                            reportdata):
         """  """
         # Create a dataset (table, not tree).
-        tabledata = toolbox_core.DatasetTable()
-        reportdata.setData(tabledata)
+        tabledata = plankton_core.DatasetTable()
+        reportdata.set_data(tabledata)
         # Check indata.
         if parameters == None:
             raise UserWarning('Parameters are missing.')
@@ -151,12 +151,12 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         # Calculate number of samples and columns.
         numberofsamples = 0
         for dataset in datasets:
-            for visit in dataset.getChildren():
-                numberofsamples += len(visit.getChildren())
+            for visit in dataset.get_children():
+                numberofsamples += len(visit.get_children())
         numberofparameters = len(parameters)
         numberofcolumns = 6 + (numberofsamples * numberofparameters)
         # Set header. Note: Normal header is not used.
-        tabledata.setHeader([''] * numberofcolumns)
+        tabledata.set_header([''] * numberofcolumns)
         #
         # Part 1: Create header rows with columns for sample related data.
         #
@@ -172,12 +172,12 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         # Iterate over file to create column headers.
         sampleindex = 0
         for dataset in datasets:
-            for visit in dataset.getChildren():
-                for sample in visit.getChildren():
+            for visit in dataset.get_children():
+                for sample in visit.get_children():
                     header_row_1[6 + (sampleindex * numberofparameters)] = visit.get_data('station_name')
                     header_row_2[6 + (sampleindex * numberofparameters)] = visit.get_data('date')
-                    header_row_3[6 + (sampleindex * numberofparameters)] = sample.get_data('sample_min_depth')
-                    header_row_4[6 + (sampleindex * numberofparameters)] = sample.get_data('sample_max_depth')
+                    header_row_3[6 + (sampleindex * numberofparameters)] = sample.get_data('sample_min_depth_m')
+                    header_row_4[6 + (sampleindex * numberofparameters)] = sample.get_data('sample_max_depth_m')
                     sampleindex += 1
         #
         # Part 2: Iterate over all rows in all samples. Create a dictionary with 
@@ -188,9 +188,9 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         # Iterate through datasets.
         sampleindex = 0
         for dataset in datasets:
-            for visit in dataset.getChildren():
-                for sample in visit.getChildren():
-                    for variable in sample.getChildren():
+            for visit in dataset.get_children():
+                for sample in visit.get_children():
+                    for variable in sample.get_children():
                         scientific_name = variable.get_data('scientific_name')
                         size_class = variable.get_data('size_class')
                         trophic_type = variable.get_data('trophic_type')
@@ -242,23 +242,23 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         #
         # Part 4: Put all parts together and add to result table.
         # 
-        tabledata.appendRow(header_row_1)
-        tabledata.appendRow(header_row_2)
-        tabledata.appendRow(header_row_3)
-        tabledata.appendRow(header_row_4)
+        tabledata.append_row(header_row_1)
+        tabledata.append_row(header_row_2)
+        tabledata.append_row(header_row_3)
+        tabledata.append_row(header_row_4)
 
-        tabledata.appendRow(['Scientific name', 'Size class', 'Trophic type', 'Stage', 'Sex', ''] + \
+        tabledata.append_row(['Scientific name', 'Size class', 'Trophic type', 'Stage', 'Sex', ''] + \
                             parameters * numberofsamples) # Multiple columns per sample.
         #
         for row in taxon_rows:
-            tabledata.appendRow(row)
+            tabledata.append_row(row)
 
    
     def _create_report_zooplankton_abundance_length_median_and_mean(self, dataset, reportdata):
         """ """
         # Create a dataset (table, not tree).
-        tabledata = toolbox_core.DatasetTable()
-        reportdata.setData(tabledata)
+        tabledata = plankton_core.DatasetTable()
+        reportdata.set_data(tabledata)
         # Header.
         header_row = []
         header_row.append('Station name')
@@ -272,23 +272,23 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         header_row.append('Abundance (ind/m3)')
         header_row.append('Length (median)')
         header_row.append('Length (mean)')
-        tabledata.setHeader(header_row)
+        tabledata.set_header(header_row)
         # Extract values for the plot.
         date = '-'
         station_name = '-'
-        sample_min_depth = '-'
-        sample_max_depth = '-'
-        for visitnode in dataset.getChildren():
+        sample_min_depth_m = '-'
+        sample_max_depth_m = '-'
+        for visitnode in dataset.get_children():
             station_name = visitnode.get_data('station_name')
             date = visitnode.get_data('date')
-            for samplenode in visitnode.getChildren():
-                sample_min_depth = samplenode.get_data('sample_min_depth')
-                sample_max_depth = samplenode.get_data('sample_max_depth')
+            for samplenode in visitnode.get_children():
+                sample_min_depth_m = samplenode.get_data('sample_min_depth_m')
+                sample_max_depth_m = samplenode.get_data('sample_max_depth_m')
                 
                 # Iterate over sample content. 
                 # Note: Create a level between sample and variabel.
                 grouped_lifestages = {}
-                for variablenode in samplenode.getChildren():
+                for variablenode in samplenode.get_children():
                     group_key = variablenode.get_data('scientific_name')
                     group_key += ':' + variablenode.get_data('stage') # Specific for zooplankton.
                     group_key += ':' + variablenode.get_data('sex') # Specific for zooplankton.
@@ -328,8 +328,8 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
                     report_row = []
                     report_row.append(station_name)
                     report_row.append(date)
-                    report_row.append(sample_min_depth)
-                    report_row.append(sample_max_depth)
+                    report_row.append(sample_min_depth_m)
+                    report_row.append(sample_max_depth_m)
                     report_row.append(scientific_name)
                     report_row.append(stage)
                     report_row.append(sex)
@@ -338,7 +338,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
                     report_row.append(length_median)
                     report_row.append(length_mean)
                     #
-                    tabledata.appendRow(report_row)
+                    tabledata.append_row(report_row)
 
 
 
@@ -401,7 +401,7 @@ def primer_report_count_table_sort(s1, s2):
 #         # Set header.
 #         numberofsamples = len(datasets)
 #         numberofcolumns = 6 + (numberofsamples * 2) # Two columns per sample.
-#         report_table.setHeader([''] * numberofcolumns) # Note: Header is not used.
+#         report_table.set_header([''] * numberofcolumns) # Note: Header is not used.
 #         #
 #         # Part 1: Create header rows with columns for sample related data.
 #         #
@@ -420,8 +420,8 @@ def primer_report_count_table_sort(s1, s2):
 #         #
 #         # Iterate over file to create columns.
 #         for datasetindex, datasetnode in enumerate(datasets):
-#             visitnode = datasetnode.getChildren()[0] # Only one child.
-#             samplenode = visitnode.getChildren()[0] # Only one child.
+#             visitnode = datasetnode.get_children()[0] # Only one child.
+#             samplenode = visitnode.get_children()[0] # Only one child.
 #             #
 #             header_row_1[6 + (datasetindex * 2)] = visitnode.get_data('Stat name')
 #             header_row_2[6 + (datasetindex * 2)] = visitnode.get_data('Date')
@@ -437,9 +437,9 @@ def primer_report_count_table_sort(s1, s2):
 #         species_sample_dict = {}
 #         # Iterate through datasets.
 #         for datasetindex, datasetnode in enumerate(datasets):
-#             visitnode = datasetnode.getChildren()[0] # Only one child.
-#             samplenode = visitnode.getChildren()[0] # Only one child.
-#             for variablenode in samplenode.getChildren():
+#             visitnode = datasetnode.get_children()[0] # Only one child.
+#             samplenode = visitnode.get_children()[0] # Only one child.
+#             for variablenode in samplenode.get_children():
 #                 # "Species","Abundance (scale 1 to 5)" 
 #                 phytowinnameandsize = variablenode.get_data('Species') + ':' + variablenode.get_data('Size')
 #                 #
@@ -563,23 +563,23 @@ def primer_report_count_table_sort(s1, s2):
 #         #
 #         # Part 4: Put all parts together and add to result table.
 #         # 
-#         report_table.appendRow(header_row_1)
-#         report_table.appendRow(header_row_2)
-#         report_table.appendRow(header_row_3)
-#         report_table.appendRow(header_row_4)
-#         report_table.appendRow(header_row_5)
-#         report_table.appendRow(header_row_6)
+#         report_table.append_row(header_row_1)
+#         report_table.append_row(header_row_2)
+#         report_table.append_row(header_row_3)
+#         report_table.append_row(header_row_4)
+#         report_table.append_row(header_row_5)
+#         report_table.append_row(header_row_6)
 #         # NET samples:
-#         #report_table.appendRow(['Klass', 'Pot. giftig', 'Art', 'Sflag'] + ['Förekomst'] * numberofsamples) 
+#         #report_table.append_row(['Klass', 'Pot. giftig', 'Art', 'Sflag'] + ['Förekomst'] * numberofsamples) 
 #         # Counted samples:
 #         if aggregate_rows:
-#             report_table.appendRow(['Klass', 'Pot. giftig', 'Art', '', 'Sflag', 'Trofigrad'] + ['Celler/l', 'Biovolym (mm3/l)'] * numberofsamples) # Two columns per sample.
+#             report_table.append_row(['Klass', 'Pot. giftig', 'Art', '', 'Sflag', 'Trofigrad'] + ['Celler/l', 'Biovolym (mm3/L)'] * numberofsamples) # Two columns per sample.
 #         else:
-#             report_table.appendRow(['Klass', 'Pot. giftig', 'Art', 'Storleksklass (PEG)', 'Sflag', 'Trofigrad'] + ['Celler/l', 'Biovolym (mm3/l)'] * numberofsamples) # Two columns per sample.
+#             report_table.append_row(['Klass', 'Pot. giftig', 'Art', 'Storleksklass (PEG)', 'Sflag', 'Trofigrad'] + ['Celler/L', 'Biovolym (mm3/L)'] * numberofsamples) # Two columns per sample.
 #         #
 #         for row in species_rows:
 #             if row[0] != 'REMOVE AGGREGATED':
-#                 report_table.appendRow(row)
+#                 report_table.append_row(row)
 # 
 # 
 # # Sort function for the result table.

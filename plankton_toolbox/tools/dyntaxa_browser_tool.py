@@ -46,10 +46,10 @@ class DyntaxaBrowserTool(tool_base.ToolBase):
         layout.addWidget(self._tableView)
         # Data model.        
         self._model = DyntaxaTableModel(self._dyntaxa_object)
-        self._tableView.setTablemodel(self._model)
+        self._tableView.setTableModel(self._model)
         #
-        self.connect(self._tableView.selectionModel, QtCore.SIGNAL('currentChanged(QModelIndex, QModelIndex)'), self._show_item_info)
-        self.connect(self._tableView.selectionModel, QtCore.SIGNAL('selectionChanged(QModelIndex, QModelIndex)'), self._show_item_info)
+        self.connect(self._tableView.getSelectionModel(), QtCore.SIGNAL('currentChanged(QModelIndex, QModelIndex)'), self._show_item_info)
+        self.connect(self._tableView.getSelectionModel(), QtCore.SIGNAL('selectionChanged(QModelIndex, QModelIndex)'), self._show_item_info)
         #
         return layout
     
@@ -154,7 +154,7 @@ class DyntaxaBrowserTool(tool_base.ToolBase):
 
     def _dyntaxa_refresh(self):
         """ """
-        self._model.reset()
+        self._tableView.resetModel()
         self._tableView.resizeColumnsToContents() # TODO: Check if time-consuming...
         
 ##############################################################
@@ -167,7 +167,7 @@ class DyntaxaTableModel(QtCore.QAbstractTableModel):
         # Initialize parent.
         super(DyntaxaTableModel, self).__init__()
         
-    def setDataset(self, dataset):
+    def set_dataset(self, dataset):
         """ """
         self._dataset = dataset
         

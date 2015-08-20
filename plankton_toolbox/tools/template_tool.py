@@ -9,9 +9,8 @@ from __future__ import unicode_literals
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.tools.tool_base as tool_base
-# import envmonlib
 import toolbox_utils
-import toolbox_core
+import plankton_core
 
 
 class TemplateTool(tool_base.ToolBase):
