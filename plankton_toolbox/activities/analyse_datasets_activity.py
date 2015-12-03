@@ -280,10 +280,10 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
                 self._lastuseddirectory = os.path.dirname(filename)
                 if self._saveformat_list.currentIndex() == 0: # Text file.
 #                     self._tableview.getTableModel().getModeldata().saveAsTextFile(filename)
-                    self._tableview.getTableModel().saveAsTextFile(filename)
+                    self._tableview.getTableModel().save_as_file(text_file_name = filename)
                 elif self._saveformat_list.currentIndex() == 1: # Excel file.
 #                     self._tableview.getTableModel().getModeldata().saveAsExcelFile(filename)
-                    self._tableview.getTableModel().saveAsExcelFile(filename)
+                    self._tableview.getTableModel().save_as_file(excel_file_name = filename)
 
     def _copy_to_clipboard(self):
         """ """

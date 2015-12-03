@@ -145,6 +145,17 @@ class DatasetTable(DatasetBase):
         except Exception:
             return 0
 
+    def save_as_file(self, text_file_name = None, excel_file_name = None):
+        """ Save to text or Excel, depending on which parameter is used. """
+        tablefilewriter = toolbox_utils.TableFileWriter(
+                                file_path = '', # Is included in the file names below.
+                                text_file_name = text_file_name,                 
+                                excel_file_name = excel_file_name,                 
+                                )
+        #
+        tablefilewriter.write_file(self._header, 
+                                   self._rows)
+        
 
 """
 Functions and classes below should be used for datasets organized as trees.
