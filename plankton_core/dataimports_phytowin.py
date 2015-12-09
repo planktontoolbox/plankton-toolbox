@@ -7,6 +7,7 @@
 from __future__ import unicode_literals
 
 import codecs
+import dateutil
 import toolbox_utils
 import plankton_core
 
@@ -105,62 +106,67 @@ class ImportPhytowin(plankton_core.DataImportPreparedBase):
 ###            txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
             txtencode = 'cp1252'
             file = codecs.open(file_name, mode = 'r', encoding = txtencode)
-            separator = ',' # Use ',' as item separator.
             
             # Read data header. Same header used for data and aggregated data.
+            
+            separator = ',' # Use ',' as default item separator.
+            first_row = file.readline()
+            if ';' in first_row:
+                separator = ';' # Use ';' as item separator.
+                
             self._phytowin_header = []
-            for headeritem in file.readline().split(separator):
+            for headeritem in first_row.strip(separator).split(separator):
                 item = headeritem.strip().strip('"').strip()
                 self._phytowin_header.append(item)
                 
             # Empty line.
-            file.readline()
+            file.readline().strip(separator)
             
             # Read data rows. Continue until empty line occurs.
             self._phytowin_rows = []
-            row = file.readline()
-            while len(row.strip()) > 0:
+            row = file.readline().strip(separator)
+            while len(row.replace(separator, '').strip()) > 0:
                 rowitems = []
                 for item in row.split(separator):
                     rowitems.append(item.strip().strip('"').strip())
                 self._phytowin_rows.append(rowitems) 
-                row = file.readline()
+                row = file.readline().strip(separator)
             
             # Read aggregated data rows. Continue until empty line occurs.
             self._phytowin_aggregated_rows = []
-            row = file.readline()
-            while len(row.strip()) > 0:
+            row = file.readline().strip(separator)
+            while len(row.replace(separator, '').strip()) > 0:
                 rowitems = []
                 for item in row.split(separator):
                     rowitems.append(item.strip().strip('"').strip())
                 self._phytowin_aggregated_rows.append(rowitems) 
-                row = file.readline()
+                row = file.readline().strip(separator)
                          
             if self._phytowin_header[1] not in ['Abundance (scale 1 to 5)']:
                 # Read total counted.
-                row = file.readline() # Not used.
-                row = file.readline() # Empty.
+                row = file.readline().strip(separator) # Not used.
+                row = file.readline().strip(separator) # Empty.
                 
                 # Read total counted.
-                row = file.readline() # Not used.
-                row = file.readline() # Empty.
+                row = file.readline().strip(separator) # Not used.
+                row = file.readline().strip(separator) # Empty.
             
             # Read chamber and magnification info.
             # Put result in self._phytowin_coeff2magni_dict for later use.
-            row = file.readline()
-            while len(row.strip()) > 0:
+            row = file.readline().strip(separator)
+            while len(row.replace(separator, '').strip()) > 0:
                 rowitems = []
                 for item in row.split(separator):
                     rowitems.append(item.strip().strip('"').strip())
                 if (len(rowitems) > 4) and (rowitems[3] == u"COEFF="):
                     self._phytowin_coeff2magni_dict[rowitems[4]] = rowitems[0]
-                row = file.readline()
+                row = file.readline().strip(separator)
                          
             # Read info related to sample.
             row = file.readline()
-            while len(row.strip()) > 0:
+            while len(row.replace(separator, '').strip()) > 0:
                 key, value = row.split(separator, 1) # Don't split values (maxsplit = 1).
-                self._phytowin_sample_info[key.strip().strip('"').strip()] = value.strip().strip('"').strip()
+                self._phytowin_sample_info[key.strip().strip('"').strip()] = value.replace(separator, '').strip().strip('"').strip()
                 row = file.readline()
         #                       
         except (IOError, OSError):
@@ -182,7 +188,25 @@ class ImportPhytowin(plankton_core.DataImportPreparedBase):
         
         for parsinginforow in self._parsing_info:
             if parsinginforow[0] == 'visit':
-                visitnode.add_data(parsinginforow[1], self._phytowin_sample_info[parsinginforow[3]])        
+
+                
+                                
+                if parsinginforow[1] == 'date':
+                    reporteddate = self._phytowin_sample_info[parsinginforow[3]]
+                    reporteddate = reporteddate                                  
+                    try:
+                        value = dateutil.parser.parse(reporteddate)
+                        if value:
+                            reporteddate = unicode(value.strftime('%Y-%m-%d'))
+                    except:
+                        toolbox_utils.Logging().warning('Parser: Failed to convert to date: ' + reporteddate)
+                    #
+                    visitnode.add_data(parsinginforow[1], reporteddate)        
+                else:
+
+                    
+                    
+                    visitnode.add_data(parsinginforow[1], self._phytowin_sample_info[parsinginforow[3]])        
         
         # Create sample node and add data. Note: Only one sample in each file. 
         samplenode = plankton_core.SampleNode()

@@ -216,11 +216,11 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
 #                                     'PTBX Archive Format (http://test.sharkdata.se) (Not implemented)',
 #                                     'Darwin Core Archive (Not implemented)',
 #                                     'Darwin Core Archive - EurOBIS (Not implemented)',
-#                                     'PhytoWin (*.cvs)']
-        self._predefinedformat_list = ['PhytoWin (*.cvs)']
+#                                     'PhytoWin (*.csv)']
+        self._predefinedformat_list = ['PhytoWin (*.csv)']
         self._predefined_format_combo.addItems(self._predefinedformat_list)
         
-        self._predefined_format_combo.setCurrentIndex(0) # 'PhytoWin (*.cvs)
+        self._predefined_format_combo.setCurrentIndex(0) # 'PhytoWin (*.csv)
         
         # Load dataset.
         self._predefined_getdataset_button = QtGui.QPushButton('Import datasets/datafiles...')
@@ -250,7 +250,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
     def _import_predefined_datasets(self):
         """ """
         selectedformat = self._predefined_format_combo.currentText()
-        if selectedformat == 'PhytoWin (*.cvs)':
+        if selectedformat == 'PhytoWin (*.csv)':
             self._load_phytowin_datasets()
         else: 
             QtGui.QMessageBox.information(self, "Information", 'Not implemented yet.')
