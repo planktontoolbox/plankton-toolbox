@@ -45,6 +45,8 @@ class Species(object):
         self._bvol_filenames = self._get_files_by_prefix('bvol_')
         # Plankton groups definition. Useful grouping that differ from 
         self._planktongroups_filenames = self._get_files_by_prefix('planktongroups_')
+        # Trophic type files.
+        self._trophictype_filenames = self._get_files_by_prefix('trophictype_')
         # Harmful algae files.
         self._harmful_filenames = self._get_files_by_prefix('harmful_')
 
@@ -123,6 +125,7 @@ class Species(object):
             # Load taxa.
             for excelfilename in self._taxa_filenames:
                 if os.path.exists(excelfilename):
+                    toolbox_utils.Logging().log('') # Empty line.
                     toolbox_utils.Logging().log('- ' + os.path.basename(excelfilename) + ' (Species and other taxa)')
                     try:
                         toolbox_utils.Logging().start_accumulated_logging()
@@ -134,6 +137,7 @@ class Species(object):
             # Add translated scientific names to taxa.
             for excelfilename in self._taxatranslate_filenames:
                 if os.path.exists(excelfilename):
+                    toolbox_utils.Logging().log('') # Empty line.
                     toolbox_utils.Logging().log('- ' + os.path.basename(excelfilename) + ' (Misspellings etc.)')
                     try:
                         toolbox_utils.Logging().start_accumulated_logging()
@@ -145,6 +149,7 @@ class Species(object):
             # Add synonyms to taxa. Note: 'translate_to_' will be added to filenames.
             for excelfilename in self._taxasynonyms_filenames:
                 if os.path.exists(excelfilename):
+                    toolbox_utils.Logging().log('') # Empty line.
                     toolbox_utils.Logging().log('- ' + os.path.basename(excelfilename) + ' (Synonyms for taxa)')
                     try:
                         toolbox_utils.Logging().start_accumulated_logging()
@@ -156,6 +161,7 @@ class Species(object):
             # Load biovolume column mapping information.
             for excelfilename in self._bvolcolumns_filenames:
                 if os.path.exists(excelfilename):
+                    toolbox_utils.Logging().log('') # Empty line.
                     toolbox_utils.Logging().log('- ' + os.path.basename(excelfilename) + ' (Biovolume column mapping)')
                     try:
                         toolbox_utils.Logging().start_accumulated_logging()
@@ -167,6 +173,7 @@ class Species(object):
             # Load BVOL species data.
             for excelfilename in self._bvol_filenames:
                 if os.path.exists(excelfilename):
+                    toolbox_utils.Logging().log('') # Empty line.
                     toolbox_utils.Logging().log('- ' + os.path.basename(excelfilename) + ' (Biovolumes etc. for sizeclasses)')
                     try:
                         toolbox_utils.Logging().start_accumulated_logging()
@@ -175,12 +182,25 @@ class Species(object):
                     finally:
                         toolbox_utils.Logging().log_all_accumulated_rows()    
 
+            # Load trophic types.
+            for excelfilename in self._trophictype_filenames:
+                if os.path.exists(excelfilename):
+                    toolbox_utils.Logging().log('') # Empty line.
+                    toolbox_utils.Logging().log('- ' + os.path.basename(excelfilename) + ' (Trophic types)')
+                    try:
+                        toolbox_utils.Logging().start_accumulated_logging()
+                        #
+                        self._load_trophic_types(excelfilename)
+                    finally:
+                        toolbox_utils.Logging().log_all_accumulated_rows()    
+
             # Load harmful species.
             for excelfilename in self._harmful_filenames:
                 if os.path.exists(excelfilename):
+                    toolbox_utils.Logging().log('') # Empty line.
                     toolbox_utils.Logging().log('- ' + os.path.basename(excelfilename) + ' (Harmful organisms)')
                     try:
-                        toolbox_utils.Logging().startAccumulatedLogging()
+                        toolbox_utils.Logging().start_accumulated_logging()
                         #
                         self._load_harmful(excelfilename)
                     finally:
@@ -189,6 +209,7 @@ class Species(object):
             # Load plankton group definition.
             for excelfilename in self._planktongroups_filenames:
                 if os.path.exists(excelfilename):
+                    toolbox_utils.Logging().log('') # Empty line.
                     toolbox_utils.Logging().log('- ' + os.path.basename(excelfilename) + ' (Plankton group definition)')
                     try:
                         toolbox_utils.Logging().start_accumulated_logging()
@@ -213,6 +234,63 @@ class Species(object):
 #        out.write(json.dumps(self._taxa, encoding = 'utf8', sort_keys=True, indent=4))
 #        out.close()
 #        # DEBUG end.
+
+    def _load_trophic_types(self, excel_file_name):
+        """ Adds trophic type info to the species objects. """
+        tablefilereader = toolbox_utils.TableFileReader(excel_file_name = excel_file_name)
+        #
+        for row in tablefilereader.rows():
+            scientificname = ''
+            try:
+                scientificname = row[0].strip() # Scientific name.
+                sizeclass = row[1].strip() # Size class.
+                trophictype = row[2].strip() # Trophic type.
+                #
+                
+                if (scientificname == 'Anabaena macrospora'):
+                    print('DEBUG: Anabaena macrospora')
+                if (scientificname == 'Dolichospermum macrosporum'):
+                    print('DEBUG: Dolichospermum macrosporum')
+                
+                
+                
+                if scientificname in self._taxa_lookup:
+                    taxon = self._taxa_lookup[scientificname]
+                    #
+                    if sizeclass:
+                        sizeclassfound = False
+                        if 'size_classes' in taxon:
+                            for sizeclassdict in taxon['size_classes']:
+                                if sizeclassdict.get('bvol_size_class', '') == sizeclass:
+                                    if sizeclassdict.get('trophic_type', ''):
+                                        if scientificname == taxon['scientific_name']:
+                                            toolbox_utils.Logging().warning('Same taxon/size on multiple rows: ' + scientificname + ' Size: ' + sizeclass + '   (Source: ' + excel_file_name + ')')
+                                            sizeclassfound = True
+                                            break
+                                    #
+                                    sizeclassdict['trophic_type'] = trophictype
+                                    sizeclassfound = True
+                                    break
+                        #
+                        if sizeclassfound == False:
+                            toolbox_utils.Logging().warning('Size class is missing: ' + scientificname + ' Size: ' + sizeclass + '   (Source: ' + excel_file_name + ')')
+                    else:
+                        # No sizeclass in indata file. Put on species level.                        
+                        if taxon.get('trophic_type', ''):
+                            
+                            
+                            print('DEBUG-1:' + scientificname)
+                            print('DEBUG-2:' + taxon['scientific_name'])
+                            
+                            
+                            if scientificname == taxon['scientific_name']:
+                                toolbox_utils.Logging().warning('Same taxon on multiple rows: ' + scientificname + '   (Source: ' + excel_file_name + ')')
+                        #
+                        taxon['trophic_type'] = trophictype
+                else:
+                    toolbox_utils.Logging().warning('Scientific name is missing: ' + scientificname + '   (Source: ' + excel_file_name + ')')
+            except:
+                toolbox_utils.Logging().warning('Failed when loading trophic types. File:' + excel_file_name + '  Taxon: ' + scientificname)
 
     def _load_taxa(self, excel_file_name):
         """ Creates one data object for each taxon. """
