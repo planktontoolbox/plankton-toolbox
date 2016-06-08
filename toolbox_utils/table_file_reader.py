@@ -12,7 +12,8 @@ import zipfile
 
 # This utility should work even if openpyxl is not installed, but with no Excel support.
 openpyxl_installed = True
-try: import lib.openpyxl as openpyxl
+try: 
+    import openpyxl
 except ImportError: 
     openpyxl_installed = False
     print('Excel files not suported since openpyxl is not installed.')

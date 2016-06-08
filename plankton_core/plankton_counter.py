@@ -9,7 +9,7 @@ from __future__ import unicode_literals
 import os
 import shutil
 import math
-import lib.openpyxl as openpyxl
+import openpyxl
 import PyQt4.QtCore as QtCore
 import toolbox_utils
 import plankton_core

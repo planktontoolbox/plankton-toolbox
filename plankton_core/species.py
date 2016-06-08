@@ -279,8 +279,8 @@ class Species(object):
                         if taxon.get('trophic_type', ''):
                             
                             
-                            print('DEBUG-1:' + scientificname)
-                            print('DEBUG-2:' + taxon['scientific_name'])
+#                             print('DEBUG-1:' + scientificname)
+#                             print('DEBUG-2:' + taxon['scientific_name'])
                             
                             
                             if scientificname == taxon['scientific_name']:
