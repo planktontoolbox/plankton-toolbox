@@ -77,8 +77,9 @@ class Species(object):
     
     def get_taxon_value(self, scientific_name, key):
         """ """
+        key_lower = key.lower()
         if scientific_name in self._taxa_lookup:
-            return self._taxa_lookup[scientific_name].get(key, '')
+            return self._taxa_lookup[scientific_name].get(key_lower, '')
         #
         return ''
     
@@ -296,13 +297,21 @@ class Species(object):
         """ Creates one data object for each taxon. """
         tablefilereader = toolbox_utils.TableFileReader(excel_file_name = excel_file_name)
         #
+        header = tablefilereader.header()
         for row in tablefilereader.rows():
+            
+            row_dict = dict(zip(header, row))
+            
             scientificname = ''
             try:
-                scientificname = row[0].strip() # ScientificName.
-                author = row[1].strip() if row[1].strip() != 'NULL' else '' # Author.
-                rank = row[2].strip() # Rank.
-                parentname = row[3].strip() # Parent.
+#                 scientificname = row[0].strip() # ScientificName.
+#                 author = row[1].strip() if row[1].strip() != 'NULL' else '' # Author.
+#                 rank = row[2].strip() # Rank.
+#                 parentname = row[3].strip() # Parent.
+                scientificname = row_dict.get('scientific_name', '').strip() # ScientificName.
+                author = row_dict.get('author', '').strip() # Author.
+                rank = row_dict.get('rank', '').strip() # Rank.
+                parentname = row_dict.get('parent_name', '').strip() # Parent.
                 #
                 if scientificname:
                     if scientificname not in self._taxa:
