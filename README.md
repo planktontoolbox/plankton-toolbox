@@ -20,10 +20,9 @@ https://code.google.com/p/plankton-toolbox/wiki/
 
 ## Downloads ##
 
-Plankton Toolbox version 1.0.0 is available for MacOS and Windows at:
+The latest version of Plankton Toolbox is available for MacOS and Windows at:
 http://nordicmicroalgae.org/tools
-
 
 ## Screenshot ##
 
-![http://plankton-toolbox.googlecode.com/svn/wiki/plankton_toolbox_example.png](http://plankton-toolbox.googlecode.com/svn/wiki/plankton_toolbox_example.png)
+![Plankton Toolbox example](doc/plankton_toolbox_example.png)
