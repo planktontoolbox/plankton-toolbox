@@ -15,8 +15,12 @@ The Plankton Toolbox is a free tool for aquatic scientists, and others, working 
 
 ## Documentation ##
 
-Documentation is available on our Wiki page at:
-https://code.google.com/p/plankton-toolbox/wiki/
+Documentation is available here:
+  * [Introduction](doc/01-Introduction.md)
+  * [User guide](doc/02-UserGuide.md)
+  * [Datasets and parsers](doc/03-DatasetsAndParsers.md)
+  * [Species lists, etc.](doc/04-SpeciesLists.md)
+  * [For developers](doc/05-ForDevelopers.md)
 
 ## Downloads ##
 
