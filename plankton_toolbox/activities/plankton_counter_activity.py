@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 #
-# Copyright (c) 2010-2015 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2016 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 #
 from __future__ import unicode_literals
@@ -610,7 +610,7 @@ class ImportExportSamplesDialog(QtGui.QDialog):
 
 
 
-# === NOTE: Save this for the future. ===
+# === NOTE: Save this for the future use. ===
 # class ImportExportDatasetDialog(QtGui.QDialog):
 #     """ This dialog is allowed to access private parts in the parent widget. """
 #     def __init__(self, parentwidget):
@@ -842,7 +842,7 @@ class NewSampleDialog(QtGui.QDialog):
         formlayout = QtGui.QFormLayout()
 #         formlayout.addRow('Sample id:', self._sampleid_edit)
         formlayout.addRow('Sample name:', self._samplename_edit)
-        
+        #
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addStretch(10)
         hbox1.addWidget(createsample_button)
@@ -883,7 +883,7 @@ class DeleteSampleDialog(QtGui.QDialog):
         samples_listview = QtGui.QListView()
         self._samples_model = QtGui.QStandardItemModel()
         samples_listview.setModel(self._samples_model)
-
+        #
         clearall_button = utils_qt.ClickableQLabel('Clear all')
         self.connect(clearall_button, QtCore.SIGNAL('clicked()'), self._uncheck_all_samples)                
         markall_button = utils_qt.ClickableQLabel('Mark all')
@@ -941,5 +941,4 @@ class DeleteSampleDialog(QtGui.QDialog):
                 plankton_core.PlanktonCounterManager().delete_sample(self._current_dataset, samplename)
         #            
         self.accept() # Close dialog box.
-
 
