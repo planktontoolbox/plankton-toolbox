@@ -26,13 +26,13 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
         #   Column 4: export column name. None = not used, empty string ('') = same as column 1 (internal key).
         self._parsing_info = [
 #             ['dataset', 'sample_id', 'text', 'Sample Id', ''], 
-#             ['dataset', 'project', 'text', 'Project', ''], 
+#             ['dataset', 'project_code', 'text', 'Project', ''], 
 #             ['visit', 'platform_code', 'text', 'Ship', ''], 
 #             ['visit', 'station_number', 'text', 'StatNo', ''], 
             ['visit', 'station_name', 'text', 'station_name', ''], 
             ['visit', 'reported_latitude', 'text', 'latitude', ''], 
             ['visit', 'reported_longitude', 'text', 'longitude', ''], 
-            ['visit', 'date', 'text', 'sample_date', ''], 
+            ['visit', 'sample_date', 'text', 'sample_date', ''], 
             ['visit', 'time', 'text', 'sample_time', ''], 
             ['visit', 'water_depth_m', 'float', 'water_depth_m', ''], 
             ['sample', 'sample_min_depth_m', 'float', 'sample_min_depth_m', ''], 
@@ -40,22 +40,22 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
 
             ['variable', 'reported_scientific_name', 'text', 'scientific_full_name', None], # Internal use only. 
             ['variable', 'scientific_name', 'text', 'scientific_name', ''], 
-#             ['variable', 'species_flag', 'text', '', ''], 
+#             ['variable', 'species_flag_code', 'text', '', ''], 
             ['variable', 'size_class', 'text', 'size_class', ''], 
             ['variable', 'unit_type', 'text', 'unit_type', ''], 
-#             ['variable', 'reported_trophic_type', 'text', 'trophic_type', None], # Internal use only. 
-            ['variable', 'trophic_type', 'text', 'trophic_type', ''], # Will be calculated later.
+#             ['variable', 'reported_trophic_type', 'text', 'trophic_type_code', None], # Internal use only. 
+            ['variable', 'trophic_type_code', 'text', 'trophic_type_code', ''], # Will be calculated later.
             # Param/value/unit.
             ['variable', 'parameter', 'text', 'parameter', ''], 
             ['variable', 'value', 'float', 'value', ''], 
             ['variable', 'unit', 'text', 'unit', ''], 
             #
-            ['variable', 'class', 'text', '', ''], # Will be calculated later.
+            ['variable', 'taxon_class', 'text', '', ''], # Will be calculated later.
 #             ['variable', 'magnification', 'text', 'Magnification', 'magnification'], 
             ['variable', 'coefficient', 'text', 'coefficient', ''], 
 #             ['variable', 'counted_units', 'text', 'Units', ''], 
 #             ['sample', 'number_of_depths', 'text', 'No. Depths', ''], 
-            ['sample', 'sampler_type', 'text', 'sampler_type_code', ''], 
+            ['sample', 'sampler_type_code', 'text', 'sampler_type_code', ''], 
 #             ['sample', 'sample_size', 'text', 'Sample size', ''], 
 #             ['sample', 'sampled_by', 'text', 'Sample by', ''], 
             ['sample', 'sample_comment', 'text', 'sample_comment', ''], 
@@ -66,8 +66,8 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
 #             ['variable', 'preservative_amount', 'text', 'Amt. preservative', ''], 
 #             ['variable', 'sedimentation_time_h', 'text', 'Sedim. time (hr)', ''], 
 #             ['variable', 'chamber_diameter', 'text', 'Chamber diam.', ''], 
-            ['variable', 'counted_on', 'text', 'analysis_date', ''], 
-            ['variable', 'counted_by', 'text', 'analysed_by', ''], 
+            ['variable', 'analysis_date', 'text', 'analysis_date', ''], 
+            ['variable', 'taxonomist', 'text', 'taxonomist', ''], 
 #             ['variable', 'description', 'text', 'Descr', ''], 
             # Copy parameters.
             ['copy_parameter', '# counted:ind', 'text', 'counted_units'], 

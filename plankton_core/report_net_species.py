@@ -56,11 +56,11 @@ class CreateReportNetSpecies(object):
             samplenode = visitnode.get_children()[0] # Only one child.
             #
             header_row_1[4 + datasetindex] = visitnode.get_data('station_name')
-            header_row_2[4 + datasetindex] = visitnode.get_data('date')
+            header_row_2[4 + datasetindex] = visitnode.get_data('sample_date')
             header_row_3[4 + datasetindex] = samplenode.get_data('sample_min_depth_m')
             header_row_4[4 + datasetindex] = samplenode.get_data('sample_max_depth_m')
-            header_row_5[4 + datasetindex] = samplenode.get_data('counted_on')
-            header_row_6[4 + datasetindex] = samplenode.get_data('counted_by')
+            header_row_5[4 + datasetindex] = samplenode.get_data('analysis_date')
+            header_row_6[4 + datasetindex] = samplenode.get_data('taxonomist')
         #
         # Part 2: Iterate over all rows in all samples. Create a dictionary with 
         #         species as keys and lists of abundances for each sample.
@@ -116,7 +116,7 @@ class CreateReportNetSpecies(object):
                     sflag = 'cf.'
             
             taxonname = plankton_core.Species().get_taxon_value(pegname, 'scientific_name')
-            taxonclass = plankton_core.Species().get_taxon_value(pegname, 'class')
+            taxonclass = plankton_core.Species().get_taxon_value(pegname, 'taxon_class')
 #            author = taxa.Taxa().get_taxon_value(pegname, 'Author')
             harmful = plankton_core.Species().get_taxon_value(pegname, 'harmful')
 #            trophy = taxa.Taxa().getBvolValue(pegname, pegsize, 'Trophy')

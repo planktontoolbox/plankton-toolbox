@@ -39,7 +39,6 @@ class PlanktonCounterMethods():
         """ """
         return self._methods_dir_path
 
-
     # === Counting methods ===
 
     def get_analysis_method_list(self):

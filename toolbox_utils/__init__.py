@@ -11,7 +11,7 @@ from __future__ import unicode_literals
 """
 
 from toolbox_utils.patterns import singleton
-from toolbox_utils.logging import Logging
+from toolbox_utils.toolbox_logging import Logging
 
 from toolbox_utils.table_file_reader import TableFileReader
 from toolbox_utils.table_file_writer import TableFileWriter

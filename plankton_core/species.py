@@ -248,10 +248,10 @@ class Species(object):
                 trophictype = row[2].strip() # Trophic type.
                 #
                 
-                if (scientificname == 'Anabaena macrospora'):
-                    print('DEBUG: Anabaena macrospora')
-                if (scientificname == 'Dolichospermum macrosporum'):
-                    print('DEBUG: Dolichospermum macrosporum')
+#                 if (scientificname == 'Anabaena macrospora'):
+#                     print('DEBUG: Anabaena macrospora')
+#                 if (scientificname == 'Dolichospermum macrosporum'):
+#                     print('DEBUG: Dolichospermum macrosporum')
                 
                 
                 
@@ -263,21 +263,21 @@ class Species(object):
                         if 'size_classes' in taxon:
                             for sizeclassdict in taxon['size_classes']:
                                 if sizeclassdict.get('bvol_size_class', '') == sizeclass:
-                                    if sizeclassdict.get('trophic_type', ''):
+                                    if sizeclassdict.get('trophic_type_code', ''):
                                         if scientificname == taxon['scientific_name']:
                                             toolbox_utils.Logging().warning('Same taxon/size on multiple rows: ' + scientificname + ' Size: ' + sizeclass + '   (Source: ' + excel_file_name + ')')
                                             sizeclassfound = True
                                             break
                                     #
-                                    sizeclassdict['trophic_type'] = trophictype
+                                    sizeclassdict['trophic_type_code'] = trophictype
                                     sizeclassfound = True
                                     break
                         #
-                        if sizeclassfound == False:
-                            toolbox_utils.Logging().warning('Size class is missing: ' + scientificname + ' Size: ' + sizeclass + '   (Source: ' + excel_file_name + ')')
+#                         if sizeclassfound == False:
+#                             toolbox_utils.Logging().warning('Size class is missing: ' + scientificname + ' Size: ' + sizeclass + '   (Source: ' + excel_file_name + ')')
                     else:
                         # No sizeclass in indata file. Put on species level.                        
-                        if taxon.get('trophic_type', ''):
+                        if taxon.get('trophic_type_code', ''):
                             
                             
 #                             print('DEBUG-1:' + scientificname)
@@ -287,7 +287,7 @@ class Species(object):
                             if scientificname == taxon['scientific_name']:
                                 toolbox_utils.Logging().warning('Same taxon on multiple rows: ' + scientificname + '   (Source: ' + excel_file_name + ')')
                         #
-                        taxon['trophic_type'] = trophictype
+                        taxon['trophic_type_code'] = trophictype
                 else:
                     toolbox_utils.Logging().warning('Scientific name is missing: ' + scientificname + '   (Source: ' + excel_file_name + ')')
             except:
@@ -412,19 +412,19 @@ class Species(object):
                         continue
                     if 'rank' in parentobject:
                         if parentobject['rank'] == 'Species':
-                            speciesobject['species'] = parentobject['scientific_name']
+                            speciesobject['taxon_species'] = parentobject['scientific_name']
                         if parentobject['rank'] == 'Genus':
-                            speciesobject['genus'] = parentobject['scientific_name']
+                            speciesobject['taxon_genus'] = parentobject['scientific_name']
                         if parentobject['rank'] == 'Family':
-                            speciesobject['family'] = parentobject['scientific_name']
+                            speciesobject['taxon_family'] = parentobject['scientific_name']
                         if parentobject['rank'] == 'Order':
-                            speciesobject['order'] = parentobject['scientific_name']
+                            speciesobject['taxon_order'] = parentobject['scientific_name']
                         if parentobject['rank'] == 'Class':
-                            speciesobject['class'] = parentobject['scientific_name']
+                            speciesobject['taxon_class'] = parentobject['scientific_name']
                         if parentobject['rank'] == 'Phylum':
-                            speciesobject['phylum'] = parentobject['scientific_name']
+                            speciesobject['taxon_phylum'] = parentobject['scientific_name']
                         if parentobject['rank'] == 'Kingdom':
-                            speciesobject['kingdom'] = parentobject['scientific_name']
+                            speciesobject['taxon_kingdom'] = parentobject['scientific_name']
                             parentobject = None # Done. Continue with next.
                             continue
                     # One step up in hierarchy.
@@ -483,6 +483,7 @@ class Species(object):
                     if len(value) > 0:
                         # Separate columns contains taxon and size-class related info.                
                         if level == 'taxon':
+#                         if level == 'scientific_name':
                             taxondict[internalname] = value
                         elif level == 'size_class':
                             if (internalname == 'bvol_size_class'):

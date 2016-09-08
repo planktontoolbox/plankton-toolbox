@@ -46,11 +46,11 @@ class ActivityManager(object):
         """ Activity activator. """
 
 
-        self._activitylist.append(counter_activity.PlanktonCounterActivity('Plankton counter', self._parent))
+#         self._activitylist.append(counter_activity.PlanktonCounterActivity('Plankton counter', self._parent))
 
         
         self._activitylist.append(start_activity.StartActivity('Welcome', self._parent))
-#         self._activitylist.append(counter_activity.PlanktonCounterActivity('Plankton counter', self._parent))
+        self._activitylist.append(counter_activity.PlanktonCounterActivity('Plankton counter', self._parent))
         self._activitylist.append(load_datasets_activity.LoadDatasetsActivity('Dataset manager', self._parent))
         self._activitylist.append(screening_activity.ScreeningActivity('Dataset screening', self._parent))
         self._activitylist.append(create_reports_activity.CreateReportsActivity('Dataset reports', self._parent))

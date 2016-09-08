@@ -84,10 +84,10 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         # Active widgets and connections.
         selectdatabox = QtGui.QGroupBox('Import datasets/datafiles', self)
         tabWidget = QtGui.QTabWidget()
-        tabWidget.addTab(self._content_plankton_counter(), 'Plankton counter datasets')
         tabWidget.addTab(self._content_predefined_formats(), 'Predefined formats')
-        tabWidget.addTab(self._content_textfile(), 'Data files - Text (*.txt)')
-        tabWidget.addTab(self._content_xlsx(), 'Data files - Excel (*.xlsx)')
+        tabWidget.addTab(self._content_plankton_counter(), 'Plankton counter datasets')
+        tabWidget.addTab(self._content_textfile(), 'Parsers - Text file (*.txt)')
+        tabWidget.addTab(self._content_xlsx(), 'Parsers - Excel files (*.xlsx)')
         # Layout widgets.
         layout = QtGui.QVBoxLayout()
         layout.addWidget(tabWidget)

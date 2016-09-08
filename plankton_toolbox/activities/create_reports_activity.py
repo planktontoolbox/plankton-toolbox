@@ -121,9 +121,9 @@ class CreateReportsActivity(activity_base.ActivityBase):
         self._report_list = QtGui.QComboBox()
         self._report_list.addItems([
 #                                      'Raw data: Table format',
-#                                      'Qualitative (NET samples): DV format',
+                                    'Qualitative (NET samples): DV format',
 #                                      'Qualitative (NET samples): Species list',
-#                                      'Quantitative (counted): DV format',
+                                    'Quantitative (counted): DV format',
 #                                      'Quantitative (counted): Table format',
                                      'Quantitative (counted): Species list'
                                      ])

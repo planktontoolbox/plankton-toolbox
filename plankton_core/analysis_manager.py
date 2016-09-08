@@ -152,8 +152,8 @@ class AnalysisData(object):
             - 'visit_month'
             - 'visits': Contains <station_name> : <date>
             - 'min_max_depth_m': Contains <sample_min_depth_m>-<sample_max_depth_m>
-            - 'taxon'
-            - 'trophic_type'
+            - 'scientific_name'
+            - 'trophic_type_code'
             - 'life_stage'
         """
         # Create a tree dataset for filtered data.
@@ -171,21 +171,21 @@ class AnalysisData(object):
         filter_visit_months = self._filter['visit_months']
         filter_visits = self._filter['visits']
         filter_minmaxdepth =  self._filter['min_max_depth_m']
-        filter_taxon = self._filter['taxon']
-        filter_trophic_type = self._filter['trophic_type']
+        filter_taxon = self._filter['scientific_name']
+        filter_trophic_type = self._filter['trophic_type_code']
         filter_lifestage = self._filter['life_stage']
         #
         for visitnode in analysisdata.get_children():
-            if filter_startdate > visitnode.get_data('date'):
+            if filter_startdate > visitnode.get_data('sample_date'):
                 continue
-            if filter_enddate < visitnode.get_data('date'):
+            if filter_enddate < visitnode.get_data('sample_date'):
                 continue
             if visitnode.get_data('station_name') not in filter_stations:
                 continue
-            if visitnode.get_data('month') not in filter_visit_months:
+            if visitnode.get_data('sample_month') not in filter_visit_months:
                 continue
             if (unicode(visitnode.get_data('station_name')) + ' : ' + 
-                unicode(visitnode.get_data('date'))) not in filter_visits:
+                unicode(visitnode.get_data('sample_date'))) not in filter_visits:
                 continue
             # Create node and copy node data.            
             filteredvisit = plankton_core.VisitNode()
@@ -207,7 +207,7 @@ class AnalysisData(object):
                     if variablenode.get_data('scientific_name') not in filter_taxon:
                         continue
                     #
-                    if variablenode.get_data('trophic_type') not in filter_trophic_type:
+                    if variablenode.get_data('trophic_type_code') not in filter_trophic_type:
                         continue
                     #
                     lifestage = variablenode.get_data('stage')
@@ -246,7 +246,7 @@ class AnalysisPrepare(object):
                     if parameter:
                         parameter_set.add((parameter, unit))
                     taxonname = variablenode.get_data('scientific_name')
-                    trophic_type = variablenode.get_data('trophic_type')
+                    trophic_type = variablenode.get_data('trophic_type_code')
                     stage = variablenode.get_data('stage')
                     sex = variablenode.get_data('sex')
                     if taxonname:
@@ -268,7 +268,7 @@ class AnalysisPrepare(object):
                     parameter = variablenode.get_data('parameter')
                     unit = variablenode.get_data('unit')
                     taxon = variablenode.get_data('scientific_name')
-                    trophic_type = variablenode.get_data('trophic_type')
+                    trophic_type = variablenode.get_data('trophic_type_code')
                     stage = variablenode.get_data('stage')
                     sex = variablenode.get_data('sex')
                     sample_parameter_taxon_list.append(((parameter, unit), (taxon, trophic_type, stage, sex)))
@@ -278,7 +278,7 @@ class AnalysisPrepare(object):
                         variable = plankton_core.VariableNode()
                         samplenode.add_child(variable)
                         variable.add_data('scientific_name', itempairs[1][0])
-                        variable.add_data('trophic_type', itempairs[1][1])
+                        variable.add_data('trophic_type_code', itempairs[1][1])
                         variable.add_data('stage', itempairs[1][2])
                         variable.add_data('sex', itempairs[1][3])
                         variable.add_data('parameter', itempairs[0][0])

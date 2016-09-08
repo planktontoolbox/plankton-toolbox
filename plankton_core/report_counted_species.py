@@ -60,11 +60,11 @@ class CreateReportCountedSpecies(object):
                 for samplenode in visitnode.get_children():
                     #
                     header_row_1[7 + (sampleindex * 2)] = visitnode.get_data('station_name')
-                    header_row_2[7 + (sampleindex * 2)] = visitnode.get_data('date')
+                    header_row_2[7 + (sampleindex * 2)] = visitnode.get_data('sample_date')
                     header_row_3[7 + (sampleindex * 2)] = samplenode.get_data('sample_min_depth_m')
                     header_row_4[7 + (sampleindex * 2)] = samplenode.get_data('sample_max_depth_m')
-                    header_row_5[7 + (sampleindex * 2)] = samplenode.get_data('counted_on')
-                    header_row_6[7 + (sampleindex * 2)] = samplenode.get_data('counted_by')
+                    header_row_5[7 + (sampleindex * 2)] = samplenode.get_data('analysis_date')
+                    header_row_6[7 + (sampleindex * 2)] = samplenode.get_data('taxonomist')
                     #
                     sampleindex += 1
         #
@@ -110,7 +110,7 @@ class CreateReportCountedSpecies(object):
             scientificname = taxonandsize[0]
             sizeclass = taxonandsize[1]
             # Get extra info.
-            taxonclass = plankton_core.Species().get_taxon_value(scientificname, u'class')
+            taxonclass = plankton_core.Species().get_taxon_value(scientificname, u'taxon_class')
             harmful = plankton_core.Species().get_taxon_value(scientificname, u'harmful')
             unit_type = plankton_core.Species().get_bvol_value(scientificname, sizeclass, u'bvol_unit')
             trophic_type = plankton_core.Species().get_bvol_value(scientificname, sizeclass, u'bvol_trophic_type')

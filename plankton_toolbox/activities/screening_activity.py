@@ -208,7 +208,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                     countvariables = 0
                     for visitnode in dataset.get_children():
                         row = '   - Sampling event: ' + visitnode.get_data('station_name') + \
-                              ', ' + visitnode.get_data('date')
+                              ', ' + visitnode.get_data('sample_date')
                         self._structureresult_list.append(row)
                         countsamples = 0
                         countvariables = 0
@@ -236,7 +236,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                     for visitnode in dataset.get_children():
                         row = '   - Sampling event: ' + \
                               unicode(visitnode.get_data('station_name')) + ' ' + \
-                              unicode(visitnode.get_data('date'))
+                              unicode(visitnode.get_data('sample_date'))
                         self._structureresult_list.append(row)
                         for samplenode in visitnode.get_children():
                             row = '      - Sample: ' + \
@@ -290,7 +290,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                     dataset_descr = dataset.get_metadata('file_name')
                     for visitnode in dataset.get_children():
                         visit_descr = unicode(visitnode.get_data('station_name')) + ', ' + \
-                                      unicode(visitnode.get_data('date'))
+                                      unicode(visitnode.get_data('sample_date'))
                         for samplenode in visitnode.get_children():
                             sample_descr = unicode(samplenode.get_data('sample_min_depth_m')) + '-' + \
                                            unicode(samplenode.get_data('sample_max_depth_m'))
@@ -750,7 +750,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                 if item.checkState() == QtCore.Qt.Checked:        
                     #
                     for visitnode in dataset.get_children():
-                        date = visitnode.get_data('date')
+                        date = visitnode.get_data('sample_date')
                         for samplenode in visitnode.get_children():
                             for variablenode in samplenode.get_children():
                                 if (variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')') == parameter:

@@ -12,6 +12,7 @@ import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_core
+import toolbox_utils
 
 class PlanktonCounterSampleCount(QtGui.QWidget):
     """ """
@@ -24,17 +25,16 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         #
         self._current_sample_method = None
         self._current_sample_method_step_fields = {}
-        self._dont_update_flag = False # Control flow flag. (Note: control flags are dirty coding, but...)
-        self._dont_get_sample_row_flag = False # Control flow flags.
         #
         super(PlanktonCounterSampleCount, self).__init__()
         #
         self.setLayout(self._create_content_species_count())
         #
         self.load_data()
-                         
+
     def load_data(self):
-        """ """
+        """ Called at startup. """
+        #
         # Load common parts.
         self._update_select_specieslist_combo()             
         self._update_selected_specieslist(None) 
@@ -46,11 +46,19 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         sample_info_dict = self._current_sample_object.get_sample_info()
         methodstep = sample_info_dict.get('last_used_method_step', '')
         self.update_method_step(methodstep)
+        # NET. Conted as abundance classes. 
+        if sample_info_dict.get('sampler_type_code', '') == 'NET (Plankton net)':
+            self._net_sampler = True
+        else:
+            self._net_sampler = False
         # Summary.
         self._update_summary()
- 
+        self._disable_counting()
+        #
+        self._scientific_full_name_edit.setText('')
+
     def save_data(self):
-        """ """
+        """ Called at shutdown and when needed. """
         self._current_sample_object.save_sample_data()
         # Update info method steps and counting areas.
         methodstep = unicode(self._selectmethodstep_list.currentText())
@@ -66,26 +74,8 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
  
     def _create_content_species_count(self):
         """ """
-        # Column 1: Species lists for counting.
-        self._selectspecieslist_list = KeyPressQComboBox(self)
-        self._selectspecieslist_list.addItems(['<select>'])
-        self._selectspecieslist_list.currentIndexChanged.connect(self._selected_species_list_changed)
-        # 
-        self._species_tableview = KeyPressToolboxQTableView(self, filter_column_index = 0)
-        self._species_tableview.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
-        self._species_tableview.setStyleSheet("QTableView::item:hover{background-color:#cccccc;}")
-        self._species_tableview.getSelectionModel().selectionChanged.connect(self._selected_species_in_table_changed)
-        # Filter for specieslist.
-        self._speciesfilter_edit = KeyPressQLineEdit(self)
-        self._speciesfilter_edit.textChanged.connect(self._species_tableview.onFilterTextChanged)
-        self._speciesfilterclear_button = KeyPressQPushButton('Clear', self)
-        self._speciesfilterclear_button.clicked.connect(self._species_filter_clear)
-        # Checkbox for sizeclass info.
-        self._viewsizeclassinfo_checkbox = QtGui.QCheckBox('View sizeclass info')
-        self._viewsizeclassinfo_checkbox.setChecked(True)
-        self._viewsizeclassinfo_checkbox.stateChanged.connect(self._selected_species_list_changed)
-         
-        # Column 2: Counting.
+        # TODO: ######################################################################################
+        # Column 1: Counting.
         # - Method steps.
         self._selectmethodstep_list = QtGui.QComboBox(self)
         self._selectmethodstep_list.addItems(['<not available>']) 
@@ -98,34 +88,38 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         self._countareanumber_list = QtGui.QComboBox(self)
         self._countareanumber_list.setMinimumWidth(60)
         self._countareanumber_list.addItems(['1']) 
-        self._addcountarea_button = KeyPressQPushButton('Add count area', self)
+        self._addcountarea_button = KeyPressQPushButton(' Add count area ', self)
         self._addcountarea_button.clicked.connect(self._add_count_area)
         self._locktaxa_button = KeyPressQPushButton('Lock taxa...', self)
         self._locktaxa_button.clicked.connect(self._lock_taxa)
         self._coefficient_edit = KeyPressQLineEdit(self)
         self._coefficient_edit.setEnabled(False)
-
-        # Species.
-        self._selectedspecies_edit = KeyPressQLineEdit(self)
-        self._selectedspecies_edit.textChanged.connect(self._selected_species_changed)
-        self._selectedspecies_edit.textChanged.connect(self._update_scientific_full_name)
-        self._speciesfullname_edit = KeyPressQLineEdit(self)
-        self._speciesfullname_edit.setEnabled(False)
-#         self._speciesfullname_edit.textChanged.connect(self._update_scientific_full_name)
+        # Species and species info.
+        self._scientific_name_edit = KeyPressQLineEdit(self)
+        self._scientific_name_edit.textChanged.connect(self._selected_species_changed)
+        
+        
+        self._scientific_name_edit.textEdited.connect(self._selected_species_edited)
+        
+        
+        self._scientific_full_name_edit = KeyPressQLineEdit(self)
+        self._scientific_full_name_edit.setEnabled(False)
+        self._scientific_full_name_edit.textChanged.connect(self._species_full_name_changed)
         self._taxon_sflag_list = QtGui.QComboBox(self)
         self._taxon_sflag_list.addItems(['', 'sp.', 'spp.', 'GRP', 'CPX']) 
-        self._taxon_sflag_list.currentIndexChanged.connect(self._update_species_flag)
+        self._taxon_sflag_list.currentIndexChanged.connect(self._species_flag_changed)
         self._taxon_cf_list = QtGui.QComboBox(self)
         self._taxon_cf_list.addItems(['', 'cf. (species)', 'cf. (genus)']) 
-        self._taxon_cf_list.currentIndexChanged.connect(self._update_species_cf_flag)
+        self._taxon_cf_list.currentIndexChanged.connect(self._species_cf_flag_changed)
         # Sizeclass.
         self._speciessizeclass_list = QtGui.QComboBox(self)
         self._speciessizeclass_list.addItems(['']) 
-        self._speciessizeclass_list.currentIndexChanged.connect(self._selected_size_class_changed)
+        self._speciessizeclass_list.currentIndexChanged.connect(self._size_class_changed)
         # Count number.
+        self._infospecieslocked_label = QtGui.QLabel('<i>TEST: No species selected</i>') # 'No species selected', 'Selected species in locked.'
         self._countedunits_edit = KeyPressQSpinBox(self)
         self._countedunits_edit.setRange(0, 999999999)
-        self._countedunits_edit.valueChanged.connect(self._update_counted_value_in_core)
+        self._countedunits_edit.valueChanged.connect(self._counted_value_changed)
         self._counted_clear_button = KeyPressQPushButton('Clear', self)
         self._counted_add1_button = KeyPressQPushButton('+1', self)
         self._counted_sub1_button = KeyPressQPushButton('-1', self)
@@ -149,12 +143,62 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         self._counted_sub10_button.clicked.connect(self._sub_10)
         self._counted_add100_button.clicked.connect(self._add_100)
         self._counted_sub100_button.clicked.connect(self._sub_100)
+        # Counted, for net samples.
+        self._counted_class_clear_button = KeyPressQPushButton('Clear', self)
+        self._counted_class_clear_button.setMaximumWidth(45)
+        self._counted_class_clear_button.clicked.connect(self._counted_class_clear)
+        self._counted_class1_button = KeyPressQPushButton('1', self)
+        self._counted_class2_button = KeyPressQPushButton('2', self)
+        self._counted_class3_button = KeyPressQPushButton('3', self)
+        self._counted_class4_button = KeyPressQPushButton('4', self)
+        self._counted_class5_button = KeyPressQPushButton('5', self)
+        self._counted_class_clear_button.setMaximumWidth(45)
+        self._counted_class1_button.setMaximumWidth(35)
+        self._counted_class2_button.setMaximumWidth(35)
+        self._counted_class3_button.setMaximumWidth(35)
+        self._counted_class4_button.setMaximumWidth(35)
+        self._counted_class5_button.setMaximumWidth(35)
+        self._counted_class1_button.clicked.connect(self._class_1)
+        self._counted_class2_button.clicked.connect(self._class_2)
+        self._counted_class3_button.clicked.connect(self._class_3)
+        self._counted_class4_button.clicked.connect(self._class_4)
+        self._counted_class5_button.clicked.connect(self._class_5)
         # Dummy button used to catch key press events.
         self._resumecounting_button = KeyPressQPushButton('Resume counting', self) 
+        self._resumecounting_button.setMinimumHeight(30)
         # Comments.
         self._variable_comment_edit = QtGui.QLineEdit()
-        self._variable_comment_edit.textChanged.connect(self._update_sample_row)
-         
+        self._variable_comment_edit.textChanged.connect(self._comment_changed)
+        # Net sample. Abindance class 1.5.
+        self._abundance_class_list = KeyPressQComboBox(self)
+        self._abundance_class_list.addItems(['', 
+                                             '1 (Observed)', 
+                                             '2 (Several cells)', 
+                                             '3 (1-10%)', 
+                                             '4 (10-50%)', 
+                                             '5 (50-100%)',
+                                         ])
+        self._abundance_class_list.currentIndexChanged.connect(self._abundance_class_changed)
+        #
+        # Column 2: Species lists for counting.
+        self._selectspecieslist_list = KeyPressQComboBox(self)
+        self._selectspecieslist_list.addItems(['<select>'])
+        self._selectspecieslist_list.currentIndexChanged.connect(self._selected_species_list_changed)
+        # 
+        self._species_tableview = KeyPressToolboxQTableView(self, filter_column_index = 0)
+        self._species_tableview.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        self._species_tableview.setStyleSheet("QTableView::item:hover{background-color:#cccccc;}")
+        self._species_tableview.getSelectionModel().selectionChanged.connect(self._selected_species_in_table_changed)
+        # Filter for specieslist.
+        self._speciesfilter_edit = KeyPressQLineEdit(self)
+        self._speciesfilter_edit.textChanged.connect(self._species_tableview.onFilterTextChanged)
+        self._speciesfilterclear_button = KeyPressQPushButton('Clear', self)
+        self._speciesfilterclear_button.clicked.connect(self._species_filter_clear)
+        # Checkbox for sizeclass info.
+        self._viewsizeclassinfo_checkbox = QtGui.QCheckBox('View sizeclass info')
+        self._viewsizeclassinfo_checkbox.setChecked(True)
+        self._viewsizeclassinfo_checkbox.stateChanged.connect(self._selected_species_list_changed)
+        #
         # Column 3: Summary.
         self._summarytype_list = KeyPressQComboBox(self)
         self._summarytype_list.addItems(['Counted per taxa/sizes', 
@@ -162,12 +206,12 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
                                          'Counted per classes',
                                          ])
         self._summarytype_list.currentIndexChanged.connect(self._update_summary)
-         
+          
         self._summary_listview = KeyPressQListWidget(self)
         self._summary_listview.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
         self._summary_listview.setStyleSheet("QListWidget::item:hover{background-color:#cccccc;}")
         self._summary_listview.itemSelectionChanged.connect(self._selected_species_in_summary_changed)
- 
+  
         self._mostcountedsorted_checkbox = QtGui.QCheckBox('Sort on most counted')
         self._mostcountedsorted_checkbox.setChecked(False)
         self._mostcountedsorted_checkbox.stateChanged.connect(self._update_summary) 
@@ -178,11 +222,107 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         self._saveasspecieslist_button.clicked.connect(self._save_as_species_list)
         self._deletespecieslists_button = KeyPressQPushButton('Delete counting species lists...', self) 
         self._deletespecieslists_button.clicked.connect(self._delete_species_lists)
- 
- 
-        # Layout widgets.
+        #
+        # TODO: ######################################################################################
+        # Layout. Column 1A. Methods.
+        countgrid = QtGui.QGridLayout()
+        gridrow = 0
+        gridrow += 1
+        countgrid.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 1) # Add space.
+        gridrow += 1
+        countgrid.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 1) # Add space.
+        gridrow += 1
+        countgrid.addWidget(utils_qt.LeftAlignedQLabel('<b>Method steps</b>'), gridrow, 0, 1, 1)
+        gridrow += 1
+        countgrid.addWidget(utils_qt.RightAlignedQLabel('Method step:'), gridrow, 0, 1, 1)
+        countgrid.addWidget(self._selectmethodstep_list, gridrow, 1, 1, 3)
+        countgrid.addWidget(self._nextmethodstep_button, gridrow, 4, 1, 1)
+        gridrow += 1
+        countgrid.addWidget(utils_qt.RightAlignedQLabel('Count area type:'), gridrow, 0, 1, 1)
+        countgrid.addWidget(self._countareatype_edit, gridrow, 1, 1, 3)
+        gridrow += 1
+        countgrid.addWidget(utils_qt.RightAlignedQLabel('Count area number:'), gridrow, 0, 1, 1)
+        countgrid.addWidget(self._countareanumber_list, gridrow, 1, 1, 1)
+        countgrid.addWidget(self._addcountarea_button, gridrow, 2, 1, 1)
+        countgrid.addWidget(self._locktaxa_button, gridrow, 3, 1, 1)
+        gridrow += 1
+        countgrid.addWidget(utils_qt.RightAlignedQLabel('Coefficient:'), gridrow, 0, 1, 1)
+        countgrid.addWidget(self._coefficient_edit, gridrow, 1, 1, 2)
+        #
+        # Layout. Column 1B. Species info. 
+        gridrow += 1
+        countgrid.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 1) # Add space.
+        gridrow += 1
+        countgrid.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 1) # Add space.
+        gridrow += 1
+        countgrid.addWidget(utils_qt.LeftAlignedQLabel('<b>Species</b>'), gridrow, 0, 1, 1)
+        gridrow += 1
+        countgrid.addWidget(utils_qt.RightAlignedQLabel('Scientific name:'), gridrow, 0, 1, 1)
+        countgrid.addWidget(self._scientific_name_edit, gridrow, 1, 1, 6)
+        gridrow += 1
+        countgrid.addWidget(utils_qt.RightAlignedQLabel('Full name:'), gridrow, 0, 1, 1)
+        countgrid.addWidget(self._scientific_full_name_edit, gridrow, 1, 1, 6)
+        gridrow += 1
+        sp_spp_hbox = QtGui.QHBoxLayout()
+        sp_spp_hbox.addWidget(utils_qt.RightAlignedQLabel('Sp./spp.:'))
+        sp_spp_hbox.addWidget(self._taxon_sflag_list)
+        sp_spp_hbox.addWidget(utils_qt.RightAlignedQLabel('Cf.:'))
+        sp_spp_hbox.addWidget(self._taxon_cf_list)
+        sp_spp_hbox.addStretch(10)        
+        countgrid.addLayout(sp_spp_hbox, gridrow, 1, 1, 3)
+        gridrow += 1
+        countgrid.addWidget(utils_qt.RightAlignedQLabel('Size class:'), gridrow, 0, 1, 1)
+        countgrid.addWidget(self._speciessizeclass_list, gridrow, 1, 1, 1)
+        #
+        # Layout. Column 1C. Counted numbers. 
+        gridrow += 1
+        countgrid.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 1) # Add space.
+        gridrow += 1
+        countgrid.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 1) # Add space.
+        gridrow += 1
+        countgrid.addWidget(utils_qt.LeftAlignedQLabel('<b>Counting</b>'), gridrow, 0, 1, 1)
+        gridrow += 1
+        countgrid.addWidget(self._infospecieslocked_label, gridrow, 1, 1, 1)
+        gridrow += 1
+        countgrid.addWidget(utils_qt.RightAlignedQLabel('# counted:'), gridrow, 0, 1, 1)
+        countgrid.addWidget(self._countedunits_edit, gridrow, 1, 1, 1)
+        countbuttons_hbox = QtGui.QHBoxLayout()
+        countbuttons_hbox.addWidget(self._counted_sub100_button)
+        countbuttons_hbox.addWidget(self._counted_sub10_button)
+        countbuttons_hbox.addWidget(self._counted_sub1_button)
+        countbuttons_hbox.addWidget(self._counted_add1_button)
+        countbuttons_hbox.addWidget(self._counted_add10_button)
+        countbuttons_hbox.addWidget(self._counted_add100_button)
+        countbuttons_hbox.addStretch(10)
+        countbuttons_hbox.addWidget(self._counted_clear_button)
+        countgrid.addLayout(countbuttons_hbox, gridrow, 2, 1, 5)
+        #        
+        # Layout. Column 1E. Abundance classes. 
+        gridrow += 1
+        countgrid.addWidget(utils_qt.RightAlignedQLabel('Abundance class:'), gridrow, 0, 1, 1)
+        countgrid.addWidget(self._abundance_class_list, gridrow, 1, 1, 1)
+        abuundansclassbuttons_hbox = QtGui.QHBoxLayout()
+        abuundansclassbuttons_hbox.addWidget(self._counted_class1_button)
+        abuundansclassbuttons_hbox.addWidget(self._counted_class2_button)
+        abuundansclassbuttons_hbox.addWidget(self._counted_class3_button)
+        abuundansclassbuttons_hbox.addWidget(self._counted_class4_button)
+        abuundansclassbuttons_hbox.addWidget(self._counted_class5_button)
+        abuundansclassbuttons_hbox.addStretch(10)
+        abuundansclassbuttons_hbox.addWidget(self._counted_class_clear_button)
+        countgrid.addLayout(abuundansclassbuttons_hbox, gridrow, 2, 1, 5)
+        gridrow += 1
+        countgrid.addWidget(self._resumecounting_button, gridrow, 1, 1, 6)
+        gridrow += 1
+        countgrid.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 1) # Add space.
+        gridrow += 1
+        countgrid.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 1) # Add space.
+        gridrow += 1
+        countgrid.addWidget(utils_qt.RightAlignedQLabel('Comments:'), gridrow, 0, 1, 1)
+        countgrid.addWidget(self._variable_comment_edit, gridrow, 1, 1, 6)
+        #
+        # Layout. Column 2. Species.
         vboxspecies = QtGui.QVBoxLayout()
-        vboxspecies.addWidget(utils_qt.CenterAlignedQLabel('<b>Species</b>'))
+        vboxspecies.addWidget(utils_qt.CenterAlignedQLabel('<b>Species lists</b>'))
         vboxspecies.addWidget(QtGui.QLabel('Select counting species list:'))
         vboxspecies.addWidget(self._selectspecieslist_list)
         #
@@ -199,9 +339,7 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         hbox.addStretch(5)
         vboxspecies.addLayout(hbox)
         #
-        vboxcount = QtGui.QVBoxLayout()
-        vboxcount.addWidget(utils_qt.CenterAlignedQLabel('<b>Count</b>'))
-        #
+        # Layout. Column 3. Summary.
         vboxsummary = QtGui.QVBoxLayout()
         vboxsummary.addWidget(utils_qt.CenterAlignedQLabel('<b>Summary</b>'))
         vboxsummary.addWidget(QtGui.QLabel('Select summary type:'))
@@ -210,118 +348,458 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         vboxsummary.addWidget(self._currentmethodstep_checkbox)
         vboxsummary.addWidget(self._summary_listview)
         vboxsummary.addWidget(self._saveasspecieslist_button)
-        # Grid 1. Methods.
-        grid_1 = QtGui.QGridLayout()
-        gridrow = 0
-        space_label = QtGui.QLabel(' ')
-        space_label.setMinimumWidth(130)
-        grid_1.addWidget(space_label, gridrow, 10, 1, 1) # Add space.
-        grid_1.addWidget(QtGui.QLabel(''), gridrow, 11, 1, 7) # Add space.
-        gridrow += 1
-        grid_1.addWidget(QtGui.QLabel(''), gridrow, 10, 1, 1) # Add space.
-        gridrow += 1
-        grid_1.addWidget(utils_qt.RightAlignedQLabel('Method step:'), gridrow, 10, 1, 1)
-        grid_1.addWidget(self._selectmethodstep_list, gridrow, 11, 1, 3)
-        grid_1.addWidget(self._nextmethodstep_button, gridrow, 14, 1, 1)
-        gridrow += 1
-        grid_1.addWidget(utils_qt.RightAlignedQLabel('Count area type:'), gridrow, 10, 1, 1)
-        grid_1.addWidget(self._countareatype_edit, gridrow, 11, 1, 3)
-        gridrow += 1
-        grid_1.addWidget(utils_qt.RightAlignedQLabel('Count area number:'), gridrow, 10, 1, 1)
-        grid_1.addWidget(self._countareanumber_list, gridrow, 11, 1, 1)
-        grid_1.addWidget(self._addcountarea_button, gridrow, 12, 1, 1)
-        grid_1.addWidget(self._locktaxa_button, gridrow, 13, 1, 1)
-        gridrow += 1
-        grid_1.addWidget(utils_qt.RightAlignedQLabel('Coefficient:'), gridrow, 10, 1, 1)
-        grid_1.addWidget(self._coefficient_edit, gridrow, 11, 1, 2)
-        # Grid 2. Species and count. 
-        grid_2 = QtGui.QGridLayout()
-        gridrow = 0
-#         grid_2.addWidget(QtGui.QLabel(''), gridrow, 11, 1, 6) # Add space.
-#         gridrow += 1
-        grid_2.addWidget(utils_qt.RightAlignedQLabel('Scientific name:'), gridrow, 10, 1, 1)
-        grid_2.addWidget(self._selectedspecies_edit, gridrow, 11, 1, 6)
-        gridrow += 1
-        grid_2.addWidget(utils_qt.RightAlignedQLabel('Full name:'), gridrow, 10, 1, 1)
-        grid_2.addWidget(self._speciesfullname_edit, gridrow, 11, 1, 6)
-        gridrow += 1
-        sp_spp_hbox = QtGui.QHBoxLayout()
-        sp_spp_hbox.addWidget(utils_qt.RightAlignedQLabel('Sp./spp.:'))
-        sp_spp_hbox.addWidget(self._taxon_sflag_list)
-        sp_spp_hbox.addWidget(utils_qt.RightAlignedQLabel('Cf.:'))
-        sp_spp_hbox.addWidget(self._taxon_cf_list)
-        sp_spp_hbox.addStretch(10)        
-        grid_2.addLayout(sp_spp_hbox, gridrow, 11, 1, 3)
-        gridrow += 1
-        grid_2.addWidget(utils_qt.RightAlignedQLabel('Size class:'), gridrow, 10, 1, 1)
-        grid_2.addWidget(self._speciessizeclass_list, gridrow, 11, 1, 1)
         #
-        gridrow += 1
-        grid_2.addWidget(QtGui.QLabel(''), gridrow, 11, 1, 1) # Add space.
-        gridrow += 1
-        grid_2.addWidget(QtGui.QLabel(''), gridrow, 11, 1, 1) # Add space.
-        gridrow += 1
-        grid_2.addWidget(utils_qt.RightAlignedQLabel('# counted:'), gridrow, 10, 1, 1)
-        grid_2.addWidget(self._countedunits_edit, gridrow, 11, 1, 1)
+        # Main layout.
+        vboxcount = QtGui.QVBoxLayout()
+        vboxcount.addWidget(utils_qt.CenterAlignedQLabel('<b>Species counting</b>'))
+        vboxcount.addLayout(countgrid)
+        vboxcount.addStretch(10)
         #
-        countbuttons_hbox = QtGui.QHBoxLayout()
-        countbuttons_hbox.addStretch(10)
-        countbuttons_hbox.addWidget(self._counted_sub100_button)
-        countbuttons_hbox.addWidget(self._counted_sub10_button)
-        countbuttons_hbox.addWidget(self._counted_sub1_button)
-        countbuttons_hbox.addWidget(self._counted_add1_button)
-        countbuttons_hbox.addWidget(self._counted_add10_button)
-        countbuttons_hbox.addWidget(self._counted_add100_button)
-        countbuttons_hbox.addWidget(self._counted_clear_button)
-        grid_2.addLayout(countbuttons_hbox, gridrow, 12, 1, 5)
-        gridrow += 1
-        grid_2.addWidget(self._resumecounting_button, gridrow, 11, 1, 6)
-         
-        gridrow += 1
-        grid_2.addWidget(QtGui.QLabel(''), gridrow, 11, 1, 1) # Add space.
-        gridrow += 1
-        grid_2.addWidget(QtGui.QLabel(''), gridrow, 11, 1, 1) # Add space.
-        gridrow += 1
-        grid_2.addWidget(utils_qt.RightAlignedQLabel('Comments:'), gridrow, 10, 1, 1)
-        grid_2.addWidget(self._variable_comment_edit, gridrow, 11, 1, 6)
-        #
-        vboxcount.addLayout(grid_1)
-        vboxcount.addStretch(3)
-        vboxcount.addLayout(grid_2)
-        vboxcount.addStretch(6)
-        #
-        vboxspecies_widget = QtGui.QWidget()
-        vboxspecies_widget.setLayout(vboxspecies)
         vboxcount_widget = QtGui.QWidget()
         vboxcount_widget.setLayout(vboxcount)
+        vboxspecies_widget = QtGui.QWidget()
+        vboxspecies_widget.setLayout(vboxspecies)
         vboxsummary_widget = QtGui.QWidget()
         vboxsummary_widget.setLayout(vboxsummary)
         #
         splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
-        splitter.addWidget(vboxspecies_widget)
         splitter.addWidget(vboxcount_widget)
         splitter.addWidget(vboxsummary_widget)  
-        #
-        splitter.setStretchFactor(0, 100)
+        splitter.addWidget(vboxspecies_widget)
+        splitter.setStretchFactor(0, 20)
         splitter.setStretchFactor(1, 40)
-        splitter.setStretchFactor(2, 40)
+        splitter.setStretchFactor(2, 60)
         #
         layout = QtGui.QHBoxLayout()
         layout.addWidget(splitter)
         #
         return layout
      
-    #===== Methods connected to widgets. ===== # TODO:
-
-    def _species_filter_clear(self):
+    # TODO: ######################################################################################
+    #===== Methods connected to widgets. =====
+    
+    def _selected_species_changed(self, new):
         """ """
-        self._speciesfilter_edit.clear()
+        # Clear other fields.
+#         self._speciessizeclass_list.setCurrentIndex(0)
+#         self._speciessizeclass_list.clear()
+#         self._taxon_sflag_list.setCurrentIndex(0)
+#         self._taxon_cf_list.setCurrentIndex(0)
+        # Add content to size class list base on BVOL info.
+        scientific_name = unicode(self._scientific_name_edit.text())
+        # Get alternatives for size classes.
+        taxon_dict = plankton_core.Species().get_taxon_dict(scientific_name)
+        sizes = []
+        for sizeclass in taxon_dict.get('size_classes', {}):
+            size = sizeclass.get('bvol_size_class', '')
+            if size:
+                sizes.append(size)
+        self._speciessizeclass_list.clear()
+        self._speciessizeclass_list.addItems([''] + sizes)
+            
+    
+    def _selected_species_edited(self, new):
+        """ """
+        scientific_name = unicode(self._scientific_name_edit.text())
+        #
+        self._scientific_full_name_edit.setText('')
+        self._speciessizeclass_list.clear()
+        self._speciessizeclass_list.setCurrentIndex(0)
+        self._taxon_sflag_list.setCurrentIndex(0)
+        self._taxon_cf_list.setCurrentIndex(0)
+        self._scientific_full_name_edit.setText(scientific_name)
+    
+    def _size_class_changed(self):
+        """ """
+        self._get_sample_row()
+    
+    def _species_full_name_changed(self):
+        """ """
+        # Full name is used as key in plankton counting.
+        self._get_sample_row()
+    
+    def _species_flag_changed(self):
+        """ """
+        self._update_scientific_full_name()
+        
+    def _species_cf_flag_changed(self):
+        """ """
+        self._update_scientific_full_name()
+    
+    def _counted_value_changed(self, value):
+        """ """
+
+        self._update_sample_row()
+        
+#         info_dict = self._current_sample_method_step_fields
+#         # From fields in this tab widget.
+#         info_dict['scientific_name'] = unicode(self._scientific_name_edit.text())
+#         info_dict['size_class'] = unicode(self._speciessizeclass_list.currentText())
+#         info_dict['method_step'] = unicode(self._selectmethodstep_list.currentText())
+#         info_dict['count_area_number'] = unicode(self._countareanumber_list.currentText())
+#         info_dict['coefficient'] = unicode(self._coefficient_edit.text())
+#         #
+#         value = unicode(self._countedunits_edit.value())
+#         try:
+#             self._current_sample_object.update_counted_value_in_core(info_dict, value)
+#         except Exception as e:
+#             toolbox_utils.Logging().error('Failed to store changes. ' + unicode(e))
+#             QtGui.QMessageBox.warning(self, 'Warning', 'Failed to store changes. ' + unicode(e))
+#             # Update to last value.
+#             self._get_sample_row()
+#             #
+#         self._update_summary()
+         
+    def _counted_clear(self, value):
+        """ """
+        self._countedunits_edit.setValue(0)
+         
+    def _counted_class_clear(self, value):
+        """ """
+        self._abundance_class_list.setCurrentIndex(0)
+         
+    def _counted_add(self, value):
+        """ """
+        if self._countedunits_edit.isEnabled():
+            oldvalue = self._countedunits_edit.value()
+            newvalue = oldvalue + value
+            self._countedunits_edit.setValue(newvalue)
+         
+    def _add_1(self): self._counted_add(1)
+    def _sub_1(self): self._counted_add(-1)
+    def _add_10(self): self._counted_add(10)
+    def _sub_10(self): self._counted_add(-10)
+    def _add_100(self): self._counted_add(100)
+    def _sub_100(self): self._counted_add(-100)
+
+    def _class_1(self): self._abundance_class_list.setCurrentIndex(1)
+    def _class_2(self): self._abundance_class_list.setCurrentIndex(2)
+    def _class_3(self): self._abundance_class_list.setCurrentIndex(3)
+    def _class_4(self): self._abundance_class_list.setCurrentIndex(4)
+    def _class_5(self): self._abundance_class_list.setCurrentIndex(5)
+ 
+    def _update_summary(self):
+        """ """
+        summarytype = 'Counted taxa'
+        if self._summarytype_list.currentText() == 'Counted per taxa':
+            summarytype = 'Counted species report'
+        elif self._summarytype_list.currentText() == 'Counted per taxa/sizes':
+            summarytype = 'Counted taxa/sizes report'
+        elif self._summarytype_list.currentText() == 'Counted per classes':
+            summarytype = 'Counted per class report'
+        mostcountedsorting = False
+        if self._mostcountedsorted_checkbox.isChecked():
+            mostcountedsorting = True
+        method_step = None
+        if self._currentmethodstep_checkbox.isChecked():
+            method_step = unicode(self._selectmethodstep_list.currentText())
+        # 
+        summary_data = self._current_sample_object.get_taxa_summary(summary_type = summarytype,
+                                                                    most_counted_sorting = mostcountedsorting,
+                                                                    method_step = method_step)
+        # Update summary list.
+        self._summary_listview.clear()
+        self._summary_listview.addItems(summary_data)
+ 
+    def _comment_changed(self):
+        """ """
+        self._update_sample_row()
+    
+    def _abundance_class_changed(self):
+        """ """
+        self._update_sample_row()
     
     def _selected_species_list_changed(self):
         """ """
         selectedlist = unicode(self._selectspecieslist_list.currentText())
         self._update_selected_specieslist(selectedlist)
     
+    ### TODO:
+    ### TODO:
+    ### TODO:
+    ### TODO:
+    ### TODO:
+    ### TODO:
+    ### TODO:
+    ### TODO:
+    ### TODO:
+    ### TODO:
+    ### TODO:
+    ### TODO:
+    ### TODO:
+    ### TODO:
+    def _selected_species_in_table_changed(self):
+        """ """
+        self._scientific_name_edit.setText('')
+        self._scientific_full_name_edit.setText('')
+        scientific_name = ''
+        self._speciessizeclass_list.setCurrentIndex(0)
+        self._taxon_sflag_list.setCurrentIndex(0)
+        self._taxon_cf_list.setCurrentIndex(0)
+        # Get selected rows as indexes. Convert to base model if proxy model is used.
+        proxyindexes = self._species_tableview.selectedIndexes()
+        if len(proxyindexes) > 0:
+            proxyindex = proxyindexes[0]
+            index = self._species_tableview.model().mapToSource(proxyindex)
+            # Info from species table.
+            species_index = self._species_tableview._tablemodel.createIndex(index.row(), 0)
+            sizeclass_index = self._species_tableview._tablemodel.createIndex(index.row(), 1)
+            sflag_index = self._species_tableview._tablemodel.createIndex(index.row(), 2)
+            scientific_name = unicode(self._species_tableview._tablemodel.data(species_index).toString())
+            size_class = unicode(self._species_tableview._tablemodel.data(sizeclass_index).toString())
+            species_flag = unicode(self._species_tableview._tablemodel.data(sflag_index).toString())
+            #
+            # Update name and size in pair.
+            self._scientific_name_edit.setText(scientific_name)
+            # Species sizeclass list.
+            currentindex = self._taxon_sflag_list.findText(species_flag, QtCore.Qt.MatchFixedString)
+            if currentindex >= 0:
+                self._taxon_sflag_list.setCurrentIndex(currentindex)
+            # Species sizeclass list.
+            currentindex = self._speciessizeclass_list.findText(size_class, QtCore.Qt.MatchFixedString)
+            if currentindex >= 0:
+                self._speciessizeclass_list.setCurrentIndex(currentindex)
+            #
+            self._update_scientific_full_name()
+    
+    def _species_filter_clear(self):
+        """ """
+        self._speciesfilter_edit.clear()
+    
+    def _selected_species_in_summary_changed(self):
+        """ """
+#         self._scientific_name_edit.setText('')
+        # Clear the other species list.
+        self._species_tableview.clearSelection()
+        #
+        if not self._summary_listview.currentItem():
+            return
+        # Get name and size. 
+        size_class = ''
+        text_row = unicode(self._summary_listview.currentItem().text())
+        text_row_parts = text_row.split(':')
+        text_row_parts = text_row_parts[0].split('[')
+        scientific_full_name = text_row_parts[0].strip()
+        if len(text_row_parts) > 1:
+            size_class = text_row_parts[1].strip().strip(']')
+        # 
+        name_parts = scientific_full_name.split(' ')
+        spp_flag = ''
+        cf_flag = ''
+        scientific_name = ''
+        scientific_name_delimiter = ''
+        for name_part in name_parts:
+            name_part = name_part.strip()
+            if (name_part) > 0:
+                if name_part in ['sp.', 'spp.', 'CPX', 'GRP']:
+                    spp_flag = name_part
+                elif name_part == 'cf.':
+                    if len(scientific_name) == 0:
+                        cf_flag = 'cf. (genus)'
+                    else:
+                        cf_flag = 'cf. (species)'
+                else:
+                    scientific_name += scientific_name_delimiter + name_part
+                    scientific_name_delimiter = ' '
+        #
+        self._scientific_name_edit.setText(scientific_name)
+        
+        
+        
+        # Species CF. list.
+        currentindex = self._taxon_cf_list.findText(cf_flag, QtCore.Qt.MatchFixedString)
+        if currentindex >= 0:
+            self._taxon_cf_list.setCurrentIndex(currentindex)
+        # Species SFLAG list.
+        currentindex = self._taxon_sflag_list.findText(spp_flag, QtCore.Qt.MatchFixedString)
+        if currentindex >= 0:
+            self._taxon_sflag_list.setCurrentIndex(currentindex)
+        # Species sizeclass list.
+        currentindex = self._speciessizeclass_list.findText(size_class, QtCore.Qt.MatchFixedString)
+        if currentindex >= 0:
+            self._speciessizeclass_list.setCurrentIndex(currentindex)
+        #
+        self._update_scientific_full_name()
+
+    def _save_as_species_list(self):
+        """ """
+        dialog = SaveAsCountingSpeciesListDialog(self)
+        if dialog.exec_():
+            specieslistname = dialog.get_new_name()
+            if specieslistname:
+                currentmethodstep = None
+                if self._currentmethodstep_checkbox.isChecked():
+                    currentmethodstep = unicode(self._selectmethodstep_list.currentText())
+                #
+                species_list_rows = self._current_sample_object.get_taxa_summary(summary_type = 'Counted taxa',
+                                                                                 most_counted_sorting = False,
+                                                                                 method_step = currentmethodstep)
+                #
+                rows = []
+                for row in species_list_rows:
+                    if len(row) > 0:
+                        rows.append([row])
+                #   
+                plankton_core.PlanktonCounterMethods().create_counting_species_list(specieslistname,
+                                                                                rows)
+        #
+        self._update_select_specieslist_combo()             
+        self._update_selected_specieslist(None) 
+             
+    def _delete_species_lists(self):
+        """ """
+        dialog = DeleteCountingSpeciesListDialog(self)
+        if dialog.exec_():
+            self._update_select_specieslist_combo()             
+            self._update_selected_specieslist(None) 
+        #
+        self._update_select_specieslist_combo()             
+        self._update_selected_specieslist(None)
+        
+
+    # TODO: ######################################################################################
+
+    def _disable_counting(self):
+        """ """
+        self._countedunits_edit.setEnabled(False)
+        self._resumecounting_button.setEnabled(False)
+        self._counted_add1_button.setEnabled(False)
+        self._counted_sub1_button.setEnabled(False)
+        self._counted_add10_button.setEnabled(False)
+        self._counted_sub10_button.setEnabled(False)
+        self._counted_add100_button.setEnabled(False)
+        self._counted_sub100_button.setEnabled(False)
+        self._counted_clear_button.setEnabled(False)
+        #
+        self._abundance_class_list.setEnabled(False)
+        self._counted_class1_button.setEnabled(False)
+        self._counted_class2_button.setEnabled(False)
+        self._counted_class3_button.setEnabled(False)
+        self._counted_class4_button.setEnabled(False)
+        self._counted_class5_button.setEnabled(False)
+        self._counted_class_clear_button.setEnabled(False)
+    
+    def _enable_counting(self):
+        """ """
+        if not self._net_sampler:
+            self._countedunits_edit.setEnabled(True)
+            self._resumecounting_button.setEnabled(True)
+            self._counted_add1_button.setEnabled(True)
+            self._counted_sub1_button.setEnabled(True)
+            self._counted_add10_button.setEnabled(True)
+            self._counted_sub10_button.setEnabled(True)
+            self._counted_add100_button.setEnabled(True)
+            self._counted_sub100_button.setEnabled(True)
+            self._counted_clear_button.setEnabled(True)
+        else: # Net sample.
+            self._abundance_class_list.setEnabled(True)
+            self._counted_class1_button.setEnabled(True)
+            self._counted_class2_button.setEnabled(True)
+            self._counted_class3_button.setEnabled(True)
+            self._counted_class4_button.setEnabled(True)
+            self._counted_class5_button.setEnabled(True)
+            self._counted_class_clear_button.setEnabled(True)
+    
+    def _update_scientific_full_name(self):
+        """ """
+        scientific_name = unicode(self._scientific_name_edit.text())
+        #
+        if scientific_name == '':
+            self._scientific_full_name_edit.setText('')
+            return
+        #
+        cf = unicode(self._taxon_cf_list.currentText())
+        sflag = unicode(self._taxon_sflag_list.currentText())
+        #
+        scientific_full_name = scientific_name
+        #
+        if cf == 'cf. (species)':
+            scientificnameparts = scientific_name.split(' ')
+            if len(scientificnameparts) >= 2:
+                scientific_full_name = scientificnameparts[0] + ' cf. ' + scientificnameparts[1]
+        elif cf == 'cf. (genus)':
+            scientific_full_name = 'cf. ' + scientific_name
+        #
+        if sflag:
+            scientific_full_name = scientific_full_name + ' ' + sflag
+        #
+        self._scientific_full_name_edit.setText(scientific_full_name)
+
+    def _get_sample_row(self):
+        """ """
+        self._disable_counting()
+        ""
+        scientific_full_name = unicode(self._scientific_full_name_edit.text())
+        size_class = unicode(self._speciessizeclass_list.currentText())
+        # Don't ask if empty.
+        if scientific_full_name == '':
+            self._taxon_sflag_list.setCurrentIndex(0)
+            self._taxon_cf_list.setCurrentIndex(0)
+            self._disable_counting()
+            self._countedunits_edit.setValue(0)
+            self._variable_comment_edit.setText('')
+            return
+        # Get data from core.
+        info_dict = {}
+        info_dict['scientific_full_name'] = scientific_full_name
+        info_dict['size_class'] = size_class
+        sample_row_dict = self._current_sample_object.get_sample_row_dict(info_dict)
+        # Update fields.
+        counted_value = int(sample_row_dict.get('counted_units', '0'))
+        self._countedunits_edit.setValue(counted_value)
+        self._variable_comment_edit.setText(sample_row_dict.get('variable_comment', ''))
+        #
+        # Disable counting for taxa/sizes counted in another method step.
+        current_method_step = unicode(self._selectmethodstep_list.currentText())
+        stored_method_step = sample_row_dict.get('method_step', current_method_step)
+        locked_at_area = sample_row_dict.get('locked_at_area', '')
+        #
+        if counted_value == 0:
+            self._enable_counting()
+        else: 
+            if (stored_method_step == current_method_step) and (locked_at_area == ''):
+                self._enable_counting()
+            else:
+                self._disable_counting()
+                     
+    def _update_sample_row(self):
+        """ """
+        scientific_full_name = unicode(self._scientific_full_name_edit.text())
+        scientific_name = unicode(self._scientific_name_edit.text())
+        # Get method info.
+        info_dict = self._current_sample_method_step_fields
+        # From fields in this tab widget.
+        info_dict['scientific_full_name'] = scientific_full_name
+        info_dict['scientific_name'] = scientific_name
+        info_dict['size_class'] = unicode(self._speciessizeclass_list.currentText())
+        info_dict['cf'] = unicode(self._taxon_cf_list.currentText())
+        info_dict['species_flag_code'] = unicode(self._taxon_sflag_list.currentText())
+        info_dict['variable_comment'] = unicode(self._variable_comment_edit.text())
+        info_dict['method_step'] = unicode(self._selectmethodstep_list.currentText())
+        info_dict['count_area_number'] = unicode(self._countareanumber_list.currentText())
+        info_dict['coefficient'] = unicode(self._coefficient_edit.text())
+        #
+        self._current_sample_object.update_sample_row(info_dict)
+        #
+        value = unicode(self._countedunits_edit.value())
+        try:
+            self._current_sample_object.update_counted_value_in_core(info_dict, value)
+        except Exception as e:
+            toolbox_utils.Logging().error('Failed to store changes. ' + unicode(e))
+            QtGui.QMessageBox.warning(self, 'Warning', 'Failed to store changes. ' + unicode(e))
+            # Update to last value.
+            self._get_sample_row()
+            #
+        self._update_summary()
+         
+    # TODO: ######################################################################################
+    # ===== species lists.... =====
+    def _update_select_specieslist_combo(self):
+        """ """
+        self._selectspecieslist_list.clear()
+        specieslists = plankton_core.PlanktonCounterMethods().get_counting_species_lists()
+        self._selectspecieslist_list.addItems(['<select>'] + specieslists)
+ 
     def _update_selected_specieslist(self, selected_list):
         """ """
         self._species_tableview.getTableModel().clear()
@@ -392,42 +870,29 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         #
         return ', '.join(sizeinfolist)
 
-    def _selected_species_in_table_changed(self):
+ 
+    # TODO: ######################################################################################
+    # ===== Methods.... =====
+ 
+    def _load_counting_method(self):
         """ """
-        # Clear.
-        self._selectedspecies_edit.setText('')
-#         self._speciesfullname_edit.setText('')
+        self._selectmethodstep_list.clear()
         #
-        scientific_name = ''
-        self._speciessizeclass_list.setCurrentIndex(0)
-        self._taxon_sflag_list.setCurrentIndex(0)
-        self._taxon_cf_list.setCurrentIndex(0)
-        # Get selected rows as indexes. Convert to base model if proxy model is used.
-        proxyindexes = self._species_tableview.selectedIndexes()
-        if len(proxyindexes) > 0:
-            proxyindex = proxyindexes[0]
-            index = self._species_tableview.model().mapToSource(proxyindex)
-            # Info from species table.
-            species_index = self._species_tableview._tablemodel.createIndex(index.row(), 0)
-            sizeclass_index = self._species_tableview._tablemodel.createIndex(index.row(), 1)
-#             sflag_index = self._species_tableview._tablemodel.createIndex(index.row(), 2)
-            scientific_name = unicode(self._species_tableview._tablemodel.data(species_index).toString())
-            size_class = unicode(self._species_tableview._tablemodel.data(sizeclass_index).toString())
-#             species_flag = unicode(self._species_tableview._tablemodel.data(sflag_index).toString())
+        sample_path = self._current_sample_object.get_dir_path()
+        if os.path.exists(os.path.join(sample_path, 'counting_method.txt')):
+            header, rows = plankton_core.PlanktonCounterMethods().get_counting_method_table(
+                                                sample_path, 'counting_method.txt')        
+            self._current_sample_method = plankton_core.PlanktonCounterMethod(header, rows)
             #
-            # Update name and size in pair.
-            try:
-                self._dont_get_sample_row_flag = True
-                #
-                self._selectedspecies_edit.setText(scientific_name)
-                # Species sizeclass list.
-                currentindex = self._speciessizeclass_list.findText(size_class, QtCore.Qt.MatchFixedString)
-                if currentindex >= 0:
-                    self._speciessizeclass_list.setCurrentIndex(currentindex)
-            finally:
-                self._dont_get_sample_row_flag = False
-                self._get_sample_row()            
-
+            countingmethodsteps = self._current_sample_method.get_counting_method_steps_list()
+            if len(countingmethodsteps) > 0:
+                self._selectmethodstep_list.addItems(countingmethodsteps)
+                self._selectmethodstep_list.setCurrentIndex(0)
+            else:
+                self._selectmethodstep_list.addItems(['<not available>'])
+        else:
+            self._selectmethodstep_list.addItems(['<not available>'])
+  
     def _select_method_step_changed(self):
         """ """
         if not self._current_sample_method:
@@ -452,7 +917,7 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
             if currentindex >= 0:
                 self._selectspecieslist_list.setCurrentIndex(currentindex)
         # Clear fields.
-        self._selectedspecies_edit.setText('')
+        self._scientific_name_edit.setText('')
         #
         countareatype = self._current_sample_method_step_fields.get('count_area_type', '')
         self._countareatype_edit.setText(countareatype)
@@ -470,6 +935,27 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         #
         self._update_summary()
          
+    
+    def update_method_step(self, selected_method_step):
+        """ """
+        if self._selectmethodstep_list and selected_method_step:
+            currentindex = self._selectmethodstep_list.findText(selected_method_step, QtCore.Qt.MatchFixedString)
+            if currentindex >= 0:
+                self._selectmethodstep_list.setCurrentIndex(currentindex)
+        #
+        sample_info_dict = self._current_sample_object.get_sample_info()
+        maxcountarea = sample_info_dict.get('max_count_area<+>' + selected_method_step, '1')
+        maxareanumber = int(maxcountarea)
+        self._countareanumber_list.clear()
+        for index in range(maxareanumber):
+            countarea = index + 1
+            self._countareanumber_list.addItem(unicode(countarea))
+        self._countareanumber_list.setCurrentIndex(maxareanumber - 1)
+        #
+        self._calculate_coefficient()
+        # Update sample row since counting method step changed. 
+        self._get_sample_row()
+
     def _next_method_step(self):
         """ """
         currentindex = self._selectmethodstep_list.currentIndex()
@@ -509,385 +995,9 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         countareanumber = unicode(self._countareanumber_list.currentText())
         dialog = LockTaxaListDialog(self, self._current_sample_object, currentmethodstep, countareanumber)
         dialog.exec_()
-        # Update sample row since rows have been locked. 
+        # Update sample row since rows may have been locked. 
         self._get_sample_row()
         
-    def _selected_species_changed(self, new):
-        """ """
-        scientific_name = unicode(self._selectedspecies_edit.text())
-        # Get alternatives for size classes.
-        taxon_dict = plankton_core.Species().get_taxon_dict(scientific_name)
-        sizes = []
-        for sizeclass in taxon_dict.get('size_classes', {}):
-            size = sizeclass.get('bvol_size_class', '')
-            if size:
-                sizes.append(size)
-        self._speciessizeclass_list.clear()
-        self._speciessizeclass_list.addItems([''] + sizes)
-        
-    def _selected_size_class_changed(self, new):
-        """ """
-#         print('DEBUG _selected_size_class_changed.')
-
-        self._get_sample_row()
-        
-    def _get_sample_row(self):
-        """ """
-        if self._dont_get_sample_row_flag == True:
-            return 
-        #
-        scientific_name = unicode(self._selectedspecies_edit.text())
-        size_class = unicode(self._speciessizeclass_list.currentText())
-        
-#         print('DEBUG _get_sample_row: ' + scientific_name + ' : ' + size_class)
-         
-        # Clear fields with no updates.
-        try:
-            self._dont_update_flag = True
-            self._taxon_sflag_list.setCurrentIndex(0)
-            self._taxon_cf_list.setCurrentIndex(0)
-            self._speciesfullname_edit.setText(scientific_name)
-        finally:
-            self._dont_update_flag = False
-        
-        # Don't ask if empty.
-        if scientific_name == '':
-            return
-        # Get data from core.
-        sample_row_dict = {}
-        info_dict = {}
-        info_dict['scientific_name'] = scientific_name
-        info_dict['size_class'] = size_class
-        sample_row_dict = self._current_sample_object.get_sample_row_dict(info_dict)
-        # counted_units
-
-#         print('DEBUG: _countedunits_edit:' + sample_row_dict.get('counted_units', '0'))
-        
-        self._countedunits_edit.setValue(int(sample_row_dict.get('counted_units', '0')))
-        # Species flag (sflag).
-        species_flag = unicode(sample_row_dict.get('species_flag', ''))
-        if species_flag:
-            currentindex = self._taxon_sflag_list.findText(species_flag, QtCore.Qt.MatchFixedString)
-            if currentindex >= 0:
-                self._taxon_sflag_list.setCurrentIndex(currentindex)
-        # Cf.
-        cf = unicode(sample_row_dict.get('cf', ''))
-        if cf:
-            currentindex = self._taxon_cf_list.findText(cf, QtCore.Qt.MatchFixedString)
-            if currentindex >= 0:
-                self._taxon_cf_list.setCurrentIndex(currentindex)
-        # Comments.
-        self._variable_comment_edit.setText(sample_row_dict.get('variable_comment', ''))
-        #
-        # Disable counting for taxa/sizes counted in another method step.
-        currentmethodstep = unicode(self._selectmethodstep_list.currentText())
-        storedmethodstep = sample_row_dict.get('method_step', currentmethodstep)
-        lockedatarea = sample_row_dict.get('locked_at_area', '')
-        #
-#         print('DEBUG: currentmethodstep:' + currentmethodstep)
-#         print('DEBUG: storedmethodstep: ' + sample_row_dict.get('method_step', '???'))
-#         print('DEBUG: lockedatarea:' + lockedatarea)
-#         print('DEBUG: sample_row_dict:' + unicode(sample_row_dict))
-        #
-        if (storedmethodstep == currentmethodstep) and (lockedatarea == ''):
-            self._countedunits_edit.setEnabled(True)
-            self._resumecounting_button.setEnabled(True)
-            self._counted_add1_button.setEnabled(True)
-            self._counted_sub1_button.setEnabled(True)
-            self._counted_add10_button.setEnabled(True)
-            self._counted_sub10_button.setEnabled(True)
-            self._counted_add100_button.setEnabled(True)
-            self._counted_sub100_button.setEnabled(True)
-        else:
-            self._countedunits_edit.setEnabled(False)  
-            self._resumecounting_button.setEnabled(False)
-            self._counted_add1_button.setEnabled(False)
-            self._counted_sub1_button.setEnabled(False)
-            self._counted_add10_button.setEnabled(False)
-            self._counted_sub10_button.setEnabled(False)
-            self._counted_add100_button.setEnabled(False)
-            self._counted_sub100_button.setEnabled(False)
-         
-    def _update_scientific_full_name(self):
-        """ """
-        if self._dont_update_flag == True:
-            return
-        #
-        scientific_name = unicode(self._selectedspecies_edit.text())
-        size_class = unicode(self._speciessizeclass_list.currentText())
-
-#         print('DEBUG _update_scientific_full_name: ' + scientific_name + ' : ' + size_class)
-
-        if scientific_name == '':
-            return
-        #
-        cf = unicode(self._taxon_cf_list.currentText())
-        sflag = unicode(self._taxon_sflag_list.currentText())
-        #
-        scientificfullname = scientific_name
-        #
-        if cf == 'cf. (species)':
-            scientificnameparts = scientific_name.split(' ')
-            if len(scientificnameparts) >= 2:
-                scientificfullname = scientificnameparts[0] + ' cf. ' + scientificnameparts[1]
-        elif cf == 'cf. (genus)':
-            scientificfullname = 'cf. ' + scientific_name
-        #
-        if sflag:
-            scientificfullname = scientificfullname + ' ' + sflag
-        #
-        self._speciesfullname_edit.setText(scientificfullname)
-        # 
-        sample_row_dict = {}
-        sample_row_dict['scientific_name'] = scientific_name
-        sample_row_dict['size_class'] = size_class
-        sample_row_dict['scientific_full_name'] = scientificfullname
-        self._current_sample_object.update_sample_row(sample_row_dict)
-             
-    def _update_species_flag(self):
-        """ """
-        if self._dont_update_flag == True:
-            return
-        #
-        scientific_name = unicode(self._selectedspecies_edit.text())
-        size_class = unicode(self._speciessizeclass_list.currentText())
-
-#         print('DEBUG _update_species_flag: ' + scientific_name + ' : ' + size_class)
-
-        if scientific_name == '':
-            return
-        #
-        self._update_scientific_full_name()
-        #
-        sample_row_dict = {}
-        sample_row_dict['scientific_name'] = scientific_name
-        sample_row_dict['size_class'] = size_class
-        sflag = unicode(self._taxon_sflag_list.currentText()) 
-        sample_row_dict['species_flag'] = sflag
-        self._current_sample_object.update_sample_row(sample_row_dict)
-        
-    def _update_species_cf_flag(self):
-        """ """
-        if self._dont_update_flag == True:
-            return
-        #
-        scientific_name = unicode(self._selectedspecies_edit.text())
-        size_class = unicode(self._speciessizeclass_list.currentText())
-
-#         print('DEBUG _update_species_cf_flag: ' + scientific_name + ' : ' + size_class)
-
-        if scientific_name == '':
-            return
-        #
-        self._update_scientific_full_name()
-        #
-        sample_row_dict = {}
-        sample_row_dict['scientific_name'] = scientific_name
-        sample_row_dict['size_class'] = size_class
-        cf = unicode(self._taxon_cf_list.currentText())
-        sample_row_dict['cf'] = cf
-        self._current_sample_object.update_sample_row(sample_row_dict)
-        
-    def _update_sample_row(self):
-        """ """
-        if self._dont_update_flag == True:
-            return
-        #
-        scientific_name = unicode(self._selectedspecies_edit.text())
-        size_class = unicode(self._speciessizeclass_list.currentText())
-
-#         print('DEBUG _update_sample_row: ' + scientific_name + ' : ' + size_class)
-
-        if scientific_name == '':
-            return
-        #
-        sample_row_dict = {}
-        sample_row_dict['scientific_name'] = scientific_name
-        sample_row_dict['size_class'] = size_class
-        #
-        scientificfullname = unicode(self._speciesfullname_edit.text())
-        cf = unicode(self._taxon_cf_list.currentText())
-        sflag = unicode(self._taxon_sflag_list.currentText()) 
-        sample_row_dict['scientific_full_name'] = scientificfullname
-        sample_row_dict['cf'] = cf
-        sample_row_dict['species_flag'] = sflag
-        #
-        sample_row_dict['variable_comment'] = unicode(self._variable_comment_edit.text())
-        #
-        self._current_sample_object.update_sample_row(sample_row_dict)
-         
-    def _update_counted_value_in_core(self, value):
-        """ """
-        info_dict = self._current_sample_method_step_fields
-        # From fields in this tab widget.
-        info_dict['scientific_name'] = unicode(self._selectedspecies_edit.text())
-        info_dict['size_class'] = unicode(self._speciessizeclass_list.currentText())
-        info_dict['method_step'] = unicode(self._selectmethodstep_list.currentText())
-        info_dict['count_area_number'] = unicode(self._countareanumber_list.currentText())
-        info_dict['coefficient'] = unicode(self._coefficient_edit.text())
-        #
-        value = unicode(self._countedunits_edit.value())
-        self._current_sample_object.update_counted_value_in_core(info_dict, value)
-        #
-        self._update_summary()
-         
-    def _counted_clear(self, value):
-        """ """
-        self._countedunits_edit.setValue(0)
-        #
-        self._get_sample_row()
-         
-    def _counted_add(self, value):
-        """ """
-        if self._countedunits_edit.isEnabled():
-            oldvalue = self._countedunits_edit.value()
-            newvalue = oldvalue + value
-            self._countedunits_edit.setValue(newvalue)
-         
-    def _add_1(self): self._counted_add(1)
-    def _sub_1(self): self._counted_add(-1)
-    def _add_10(self): self._counted_add(10)
-    def _sub_10(self): self._counted_add(-10)
-    def _add_100(self): self._counted_add(100)
-    def _sub_100(self): self._counted_add(-100)
- 
-    def _update_summary(self):
-        """ """
-        summarytype = 'Counted taxa'
-        if self._summarytype_list.currentText() == 'Counted per taxa':
-            summarytype = 'Counted species report'
-        elif self._summarytype_list.currentText() == 'Counted per taxa/sizes':
-            summarytype = 'Counted taxa/sizes report'
-        elif self._summarytype_list.currentText() == 'Counted per classes':
-            summarytype = 'Counted per class report'
-        mostcountedsorting = False
-        if self._mostcountedsorted_checkbox.isChecked():
-            mostcountedsorting = True
-        method_step = None
-        if self._currentmethodstep_checkbox.isChecked():
-            method_step = unicode(self._selectmethodstep_list.currentText())
-        # 
-        summary_data = self._current_sample_object.get_taxa_summary(summary_type = summarytype,
-                                                                    most_counted_sorting = mostcountedsorting,
-                                                                    method_step = method_step)
-        # Update summary list.
-        self._summary_listview.clear()
-        self._summary_listview.addItems(summary_data)
- 
-    def _selected_species_in_summary_changed(self):
-        """ """
-        # Clear.
-        self._selectedspecies_edit.setText('')
-#         self._speciesfullname_edit.setText('')
-        # Clear the other species list.
-        self._species_tableview.clearSelection()
-        # Get name and size. 
-        size_class = ''
-        if not self._summary_listview.currentItem():
-            return
-        speciesandsizeclass = unicode(self._summary_listview.currentItem().text())
-        parts = speciesandsizeclass.split(':')
-        parts = parts[0].split('[')
-        scientific_name = parts[0].strip()
-        if len(parts) > 1:
-            size_class = parts[1].strip().strip(']')
-        # Update name and size in pair.
-        try:
-            self._dont_get_sample_row_flag = True
-            #
-            self._selectedspecies_edit.setText(scientific_name)
-            # Species sizeclass list.
-            currentindex = self._speciessizeclass_list.findText(size_class, QtCore.Qt.MatchFixedString)
-            if currentindex >= 0:
-                self._speciessizeclass_list.setCurrentIndex(currentindex)
-        finally:
-            self._dont_get_sample_row_flag = False
-            self._get_sample_row()            
-
-    def _save_as_species_list(self):
-        """ """
-        dialog = SaveAsCountingSpeciesListDialog(self)
-        if dialog.exec_():
-            specieslistname = dialog.get_new_name()
-            if specieslistname:
-                currentmethodstep = None
-                if self._currentmethodstep_checkbox.isChecked():
-                    currentmethodstep = unicode(self._selectmethodstep_list.currentText())
-                #
-                species_list_rows = self._current_sample_object.get_taxa_summary(summary_type = 'Counted taxa',
-                                                                                 most_counted_sorting = False,
-                                                                                 method_step = currentmethodstep)
-                #
-                rows = []
-                for row in species_list_rows:
-                    if len(row) > 0:
-                        rows.append([row])
-                #   
-                plankton_core.PlanktonCounterMethods().create_counting_species_list(specieslistname,
-                                                                                rows)
-        #
-        self._update_select_specieslist_combo()             
-        self._update_selected_specieslist(None) 
-             
-    def _delete_species_lists(self):
-        """ """
-        dialog = DeleteCountingSpeciesListDialog(self)
-        if dialog.exec_():
-            self._update_select_specieslist_combo()             
-            self._update_selected_specieslist(None) 
-        #
-        self._update_select_specieslist_combo()             
-        self._update_selected_specieslist(None)
-        
-         
-
-    #===== Local methods. ===== # TODO:
-
-    def _load_counting_method(self):
-        """ """
-        self._selectmethodstep_list.clear()
-        #
-        sample_path = self._current_sample_object.get_dir_path()
-        if os.path.exists(os.path.join(sample_path, 'counting_method.txt')):
-            header, rows = plankton_core.PlanktonCounterMethods().get_counting_method_table(
-                                                sample_path, 'counting_method.txt')        
-            self._current_sample_method = plankton_core.PlanktonCounterMethod(header, rows)
-            #
-            countingmethodsteps = self._current_sample_method.get_counting_method_steps_list()
-            if len(countingmethodsteps) > 0:
-                self._selectmethodstep_list.addItems(countingmethodsteps)
-                self._selectmethodstep_list.setCurrentIndex(0)
-            else:
-                self._selectmethodstep_list.addItems(['<not available>'])
-        else:
-            self._selectmethodstep_list.addItems(['<not available>'])
-  
-    def update_method_step(self, selected_method_step):
-        """ """
-        if self._selectmethodstep_list and selected_method_step:
-            currentindex = self._selectmethodstep_list.findText(selected_method_step, QtCore.Qt.MatchFixedString)
-            if currentindex >= 0:
-                self._selectmethodstep_list.setCurrentIndex(currentindex)
-        #
-        sample_info_dict = self._current_sample_object.get_sample_info()
-        maxcountarea = sample_info_dict.get('max_count_area<+>' + selected_method_step, '1')
-        maxareanumber = int(maxcountarea)
-        self._countareanumber_list.clear()
-        for index in range(maxareanumber):
-            countarea = index + 1
-            self._countareanumber_list.addItem(unicode(countarea))
-        self._countareanumber_list.setCurrentIndex(maxareanumber - 1)
-        #
-        self._calculate_coefficient()
-        # Update sample row since counting method step changed. 
-        self._get_sample_row()
-
-    def _update_select_specieslist_combo(self):
-        """ """
-        self._selectspecieslist_list.clear()
-        specieslists = plankton_core.PlanktonCounterMethods().get_counting_species_lists()
-        self._selectspecieslist_list.addItems(['<select>'] + specieslists)
- 
     def _calculate_coefficient(self):
         """ """
         # Coefficient.
@@ -901,9 +1011,10 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
             self._coefficient_edit.setText(unicode(coeff))
         except:
             self._coefficient_edit.setText('0')
- 
-    # ===== For key press events. ===== # TODO:
- 
+
+    # TODO: ######################################################################################
+    # ===== For key press events. =====
+    
     def keyPressEvent(self, qKeyEvent):
         """ """
         result = self.handle_key_press_event(qKeyEvent)

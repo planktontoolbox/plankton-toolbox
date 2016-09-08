@@ -59,13 +59,13 @@ class CreateReportCounted(object):
             #
             visitnode = datasetnode.get_children()[0] # Only one child.
             report_row[0] = visitnode.get_data('station_name') 
-            report_row[1] = visitnode.get_data('date')
+            report_row[1] = visitnode.get_data('sample_date')
             #
             samplenode = visitnode.get_children()[0] # Only one child.
-            report_row[2] = samplenode.get_data('counted_on') 
+            report_row[2] = samplenode.get_data('analysis_date') 
             report_row[3] = samplenode.get_data('sample_min_depth_m') 
             report_row[4] = samplenode.get_data('sample_max_depth_m') 
-            report_row[14] = samplenode.get_data('counted_by') 
+            report_row[14] = samplenode.get_data('taxonomist') 
             #
             for variablenode in samplenode.get_children():
                 # Clear columns:
@@ -107,7 +107,7 @@ class CreateReportCounted(object):
                         sflag = 'CF.'
                 # 
                 taxonname = plankton_core.Species().get_taxon_value(pegname, 'scientific_name')
-                taxonclass = plankton_core.Species().get_taxon_value(pegname, 'class')
+                taxonclass = plankton_core.Species().get_taxon_value(pegname, 'taxon_class')
                 author = plankton_core.Species().get_taxon_value(pegname, 'author')
                 harmful = plankton_core.Species().get_taxon_value(pegname, 'harmful')
                 trophy = plankton_core.Species().get_bvol_value(pegname, pegsize, 'bvol_trophic_type')

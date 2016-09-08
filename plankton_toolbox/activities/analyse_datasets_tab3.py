@@ -153,35 +153,35 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                                 elif selected_taxon_rank == 'Plankton group':
                                     newtaxon = plankton_core.Species().get_plankton_group_from_taxon_name(variablenode.get_data('scientific_name'))
                                 elif selected_taxon_rank == 'Kingdom':
-                                    newtaxon = plankton_core.Species().get_taxon_value(variablenode.get_data('scientific_name'), 'kingdom')
+                                    newtaxon = plankton_core.Species().get_taxon_value(variablenode.get_data('scientific_name'), 'taxon_kingdom')
                                 elif selected_taxon_rank == 'Phylum':
-                                    newtaxon = plankton_core.Species().get_taxon_value(variablenode.get_data('scientific_name'), 'phylum')
+                                    newtaxon = plankton_core.Species().get_taxon_value(variablenode.get_data('scientific_name'), 'taxon_phylum')
                                 elif selected_taxon_rank == 'Class':
-                                    newtaxon = plankton_core.Species().get_taxon_value(variablenode.get_data('scientific_name'), 'class')
+                                    newtaxon = plankton_core.Species().get_taxon_value(variablenode.get_data('scientific_name'), 'taxon_class')
                                 elif selected_taxon_rank == 'Order':
-                                    newtaxon = plankton_core.Species().get_taxon_value(variablenode.get_data('scientific_name'), 'order')
+                                    newtaxon = plankton_core.Species().get_taxon_value(variablenode.get_data('scientific_name'), 'taxon_order')
                                 elif selected_taxon_rank == 'Family':
-                                    newtaxon = plankton_core.Species().get_taxon_value(variablenode.get_data('scientific_name'), 'family')
+                                    newtaxon = plankton_core.Species().get_taxon_value(variablenode.get_data('scientific_name'), 'taxon_family')
                                 elif selected_taxon_rank == 'Genus':
-                                    newtaxon = plankton_core.Species().get_taxon_value(variablenode.get_data('scientific_name'), 'genus')
+                                    newtaxon = plankton_core.Species().get_taxon_value(variablenode.get_data('scientific_name'), 'taxon_genus')
                                 elif selected_taxon_rank == 'Species': 
-                                    newtaxon = plankton_core.Species().get_taxon_value(variablenode.get_data('scientific_name'), 'species')
+                                    newtaxon = plankton_core.Species().get_taxon_value(variablenode.get_data('scientific_name'), 'taxon_species')
                                 elif selected_taxon_rank == 'Scientific name': 
                                     newtaxon = variablenode.get_data('scientific_name')
                                 elif selected_taxon_rank == 'Kingdom (from dataset)':
-                                    newtaxon = variablenode.get_data('kingdom')
+                                    newtaxon = variablenode.get_data('taxon_kingdom')
                                 elif selected_taxon_rank == 'Phylum (from dataset)':
-                                    newtaxon = variablenode.get_data('phylum')
+                                    newtaxon = variablenode.get_data('taxon_phylum')
                                 elif selected_taxon_rank == 'Class (from dataset)':
-                                    newtaxon = variablenode.get_data('class')
+                                    newtaxon = variablenode.get_data('taxon_class')
                                 elif selected_taxon_rank == 'Order (from dataset)':
-                                    newtaxon = variablenode.get_data('order')
+                                    newtaxon = variablenode.get_data('taxon_order')
                                 elif selected_taxon_rank == 'Family (from dataset)':
-                                    newtaxon = variablenode.get_data('family')
+                                    newtaxon = variablenode.get_data('taxon_family')
                                 elif selected_taxon_rank == 'Genus (from dataset)':
-                                    newtaxon = variablenode.get_data('genus')
+                                    newtaxon = variablenode.get_data('taxon_genus')
                                 elif selected_taxon_rank == 'Species (from dataset)': 
-                                    newtaxon = variablenode.get_data('species')
+                                    newtaxon = variablenode.get_data('taxon_species')
                                 # If not found in classification, then use scientific_name. 
                                 # This is valid for taxon with rank above the selected rank.  
                                 if not newtaxon:
@@ -191,7 +191,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                                     toolbox_utils.Logging().warning('Not match for selected rank. "not-designated" assigned for: ' + variablenode.get_data('scientific_name'))
                                     newtaxon = 'not-designated' # Use this if empty.
                                 #
-                                taxontrophic_type = variablenode.get_data('trophic_type')
+                                taxontrophic_type = variablenode.get_data('trophic_type_code')
                                 if taxontrophic_type in selected_trophic_type_list:
                                     taxontrophic_type = selected_trophic_type_text # Concatenated string of ranks.
                                 else:
@@ -218,7 +218,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                                     aggregatedvariables[agg_tuple] = value
                             except:
                                 if variablenode.get_data('value'):
-                                    toolbox_utils.Logging().warning('Value is not a valid float: ' + unicode(variablenode.get_data('Value')))
+                                    toolbox_utils.Logging().warning('Value is not a valid float: ' + unicode(variablenode.get_data('value')))
                         #Remove all variables for this sample.
                         samplenode.remove_all_children()
                         # Add the new aggregated variables instead.  
@@ -229,20 +229,20 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                             samplenode.add_child(newvariable)    
                             #
                             newvariable.add_data('scientific_name', newtaxon)
-                            newvariable.add_data('trophic_type', taxontrophic_type)
+                            newvariable.add_data('trophic_type_code', taxontrophic_type)
                             newvariable.add_data('stage', stage)
                             newvariable.add_data('sex', sex)
                             newvariable.add_data('parameter', parameter)
                             newvariable.add_data('unit', unit)
                             newvariable.add_data('value', aggregatedvariables[variablekeytuple])
                             # Add taxon class, etc. based on taxon name.
-                            newvariable.add_data('kingdom', plankton_core.Species().get_taxon_value(newtaxon, 'kingdom'))
-                            newvariable.add_data('phylum', plankton_core.Species().get_taxon_value(newtaxon, 'phylum'))
-                            newvariable.add_data('class', plankton_core.Species().get_taxon_value(newtaxon, 'class'))
-                            newvariable.add_data('order', plankton_core.Species().get_taxon_value(newtaxon, 'order'))
-                            newvariable.add_data('family', plankton_core.Species().get_taxon_value(newtaxon, 'family'))
-                            newvariable.add_data('genus', plankton_core.Species().get_taxon_value(newtaxon, 'genus'))
-                            newvariable.add_data('species', plankton_core.Species().get_taxon_value(newtaxon, 'species'))
+                            newvariable.add_data('taxon_kingdom', plankton_core.Species().get_taxon_value(newtaxon, 'taxon_kingdom'))
+                            newvariable.add_data('taxon_phylum', plankton_core.Species().get_taxon_value(newtaxon, 'taxon_phylum'))
+                            newvariable.add_data('taxon_class', plankton_core.Species().get_taxon_value(newtaxon, 'taxon_class'))
+                            newvariable.add_data('taxon_order', plankton_core.Species().get_taxon_value(newtaxon, 'taxon_order'))
+                            newvariable.add_data('taxon_family', plankton_core.Species().get_taxon_value(newtaxon, 'taxon_family'))
+                            newvariable.add_data('taxon_genus', plankton_core.Species().get_taxon_value(newtaxon, 'taxon_genus'))
+                            newvariable.add_data('taxon_species', plankton_core.Species().get_taxon_value(newtaxon, 'taxon_species'))
                 #
                 self._main_activity.update_viewed_data_and_tabs()    
             except UserWarning as e:
@@ -265,7 +265,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             for samplenode in visitnode.get_children():
                 for variablenode in samplenode.get_children():
                     #
-                    trophic_type_set.add(unicode(variablenode.get_data('trophic_type')))
+                    trophic_type_set.add(unicode(variablenode.get_data('trophic_type_code')))
                     #
                     lifestage = variablenode.get_data('stage')
                     if variablenode.get_data('sex'):

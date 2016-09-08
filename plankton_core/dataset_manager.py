@@ -216,9 +216,9 @@ class DataNode(object):
         if key:
             self._datadict[key] = value
         
-    def get_data(self, key):
+    def get_data(self, key, default_value = ''):
         """ """
-        return self._datadict.get(key, '')
+        return self._datadict.get(key, default_value)
 
     def get_data_dict(self):
         """ """

@@ -146,7 +146,7 @@ class SharkArchive():
             if item in ['year', 'visit_year']: year_index = item_index
             if item in ['sample_date', 'sampling_date', 'visit_date']: date_index = item_index
             if item in ['sample_latitude_dd', 'latitude_dd', 'lat_dd']: latitude_index = item_index
-            if item in ['sample_longitude_dd', 'longitude_dd', 'long_dd']: longitude_index = item_index
+            if item in ['sample_longitude_dd', 'sample_longitude_dd', 'long_dd']: longitude_index = item_index
             if item in ['parameter']: parameter_index = item_index
             if item in ['unit']: unit_index = item_index
             #

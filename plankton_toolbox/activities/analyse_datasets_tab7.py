@@ -203,7 +203,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         taxonkey = ''
         #
         for visitnode in dataset.get_children():
-            visitdate = visitnode.get_data('date')
+            visitdate = visitnode.get_data('sample_date')
             visitstation = visitnode.get_data('station_name')
             visitvisit = visitstation + ' ' + visitdate 
             visityear = unicode(visitdate[0:4])
@@ -375,7 +375,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         taxonkey = ''
         #
         for visitnode in dataset.get_children():
-            visitdate = visitnode.get_data('date')
+            visitdate = visitnode.get_data('sample_date')
             visitstation = visitnode.get_data('station_name')
             visitvisit = visitstation + ' ' + visitdate 
             visityear = unicode(visitdate[0:4])
@@ -542,7 +542,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         data_dict = {}        
         #
         for visitnode in dataset.get_children():
-            visitdate = visitnode.get_data('date')
+            visitdate = visitnode.get_data('sample_date')
             visitstation = visitnode.get_data('station_name')
             visitvisit = visitstation + ' ' + visitdate 
             visityear = unicode(visitdate[0:4])

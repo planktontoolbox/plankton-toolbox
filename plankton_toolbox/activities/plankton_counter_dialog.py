@@ -30,10 +30,9 @@ class PlanktonCounterDialog(QtGui.QDialog):
         self.setWindowTitle("Plankton counter")
         #
         self.resize(1500, 900)
-        self.setMinimumSize(1000, 700)
         #
         self.metadata_widget = None
-        self.methods_widget = None        #
+        self.methods_widget = None
         self.count_widget = None
         self.summary_widget = None
         self._current_tab_index = 0

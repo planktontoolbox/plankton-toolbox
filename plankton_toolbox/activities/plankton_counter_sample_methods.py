@@ -69,7 +69,8 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         """ """
         # Stored analysis methods.
         self._selectanalysismethod_list = QtGui.QComboBox(self)
-        self._selectanalysismethod_list.addItems(['<method for current sample>']) 
+#         self._selectanalysismethod_list.addItems(['<method for current sample>']) 
+        self._selectanalysismethod_list.addItems(['<select>']) 
         self._selectanalysismethod_list.currentIndexChanged.connect(self._select_analysis_method_changed)
         # Stored methods.
         self._selectmethodstep_list = QtGui.QComboBox(self)
@@ -135,17 +136,17 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         self._viewsizeclassinfo_checkbox.stateChanged.connect(self._field_changed)
 
         # Buttons.
-        self._saveanalysis_method_button = QtGui.QPushButton('Save changes to analysis method ')
+        self._saveanalysis_method_button = QtGui.QPushButton('Save changes to default method ')
         self._saveanalysis_method_button.clicked.connect(self._save_analysis_method)
 
-        self._addmethodstep_button = QtGui.QPushButton('Add method step')
+        self._addmethodstep_button = QtGui.QPushButton('Add method step...')
         self._addmethodstep_button.clicked.connect(self._add_method_step)
-        self._deletemethodsteps_method_button = QtGui.QPushButton('Delete method step(s)')
+        self._deletemethodsteps_method_button = QtGui.QPushButton('Delete method step(s)...')
         self._deletemethodsteps_method_button.clicked.connect(self._delete_method_steps)
         
-        self._saveasanalysis_method_button = QtGui.QPushButton('Save analysis method as...')
+        self._saveasanalysis_method_button = QtGui.QPushButton('Save default method as...')
         self._saveasanalysis_method_button.clicked.connect(self._save_as_analysis_method)
-        self._deleteanalysis_method_button = QtGui.QPushButton('Delete analysis method(s)...')
+        self._deleteanalysis_method_button = QtGui.QPushButton('Delete default method(s)...')
         self._deleteanalysis_method_button.clicked.connect(self._analysis_method_delete)
 #         self._savesamplemethod_button = QtGui.QPushButton('Save sample method')
 #         self._savesamplemethod_button.clicked.connect(self._save_sample_method)
@@ -153,54 +154,92 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         gridrow = 0
+        form1.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 1) # Add space.
+        gridrow += 1
         form1.addWidget(utils_qt.LeftAlignedQLabel('<b>Counting methods</b>'), gridrow, 0, 1, 1)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Select analysis method:'), gridrow, 0, 1, 1)
+        form1.addWidget(utils_qt.RightAlignedQLabel('Copy from default method:'), gridrow, 0, 1, 1)
+#         form1.addWidget(utils_qt.RightAlignedQLabel('Select analysis method:'), gridrow, 0, 1, 1)
         form1.addWidget(self._selectanalysismethod_list, gridrow, 1, 1, 10)
         gridrow += 1
+        form1.addWidget(QtGui.QLabel(''), gridrow, 10, 1, 1) # Add space.
+        gridrow += 1
+        form1.addWidget(utils_qt.RightAlignedQLabel('Sampled volume (mL):'), gridrow, 0, 1, 1)
+        form1.addWidget(self._sampledvolume_edit, gridrow, 1, 1, 1)
+#         form1.addWidget(utils_qt.RightAlignedQLabel('Magnification:'), gridrow, 10, 1, 1)
+#         form1.addWidget(self._magnification_edit, gridrow, 11, 1, 1)
+        gridrow += 1
+        form1.addWidget(utils_qt.RightAlignedQLabel('Preservative:'), gridrow, 0, 1, 1)
+        form1.addWidget(self._preservative_list, gridrow, 1, 1, 1)
+#         form1.addWidget(utils_qt.RightAlignedQLabel('Microscope:'), gridrow, 10, 1, 1)
+#         form1.addWidget(self._microscope_edit, gridrow, 11, 1, 1)
+        gridrow += 1
+        form1.addWidget(utils_qt.RightAlignedQLabel('Preservative volume (mL):'), gridrow, 0, 1, 1)
+        form1.addWidget(self._preservative_volume_edit, gridrow, 1, 1, 1)
+#         form1.addWidget(utils_qt.RightAlignedQLabel('Count area type:'), gridrow, 10, 1, 1)
+#         form1.addWidget(self._countareatype_list, gridrow, 11, 1, 1)
+        gridrow += 1
+        form1.addWidget(utils_qt.RightAlignedQLabel('Counted volume (mL):'), gridrow, 0, 1, 1)
+        form1.addWidget(self._countedvolume_edit, gridrow, 1, 1, 1)
+#         form1.addWidget(utils_qt.RightAlignedQLabel('Diameter of view (mm):'), gridrow, 10, 1, 1)
+#         form1.addWidget(self._viewdiameter_edit, gridrow, 11, 1, 1)
+        gridrow += 1
+        form1.addWidget(utils_qt.RightAlignedQLabel('Chamber/filter diameter (mm):'), gridrow, 0, 1, 1)
+        form1.addWidget(self._chamber_filter_diameter_edit, gridrow, 1, 1, 1)
+#         form1.addWidget(utils_qt.RightAlignedQLabel('Transect/rectangle width (mm):'), gridrow, 10, 1, 1)
+#         form1.addWidget(self._transectrectanglewidth_edit, gridrow, 11, 1, 1)
+#         gridrow += 1
+#         form1.addWidget(utils_qt.RightAlignedQLabel('Transect/rectangle length (mm):'), gridrow, 10, 1, 1)
+#         form1.addWidget(self._transectrectanglelength_edit, gridrow, 11, 1, 1)
+#         gridrow += 1
+#         form1.addWidget(utils_qt.LeftAlignedQLabel(
+#             'Calculated coefficient for one chamber/filter, half chamber/filter, view, transect or rectangle:'), 
+#             gridrow, 10, 1, 2)
+#         gridrow += 1
+#         form1.addWidget(self._coefficient_one_unit_edit, gridrow, 11, 1, 1)
+        
+        gridrow += 1        
         form1.addWidget(QtGui.QLabel(''), gridrow, 0, 1, 20) # Add space.
+        gridrow += 1
+        form1.addWidget(utils_qt.LeftAlignedQLabel('<b>Counting method steps</b>'), gridrow, 0, 1, 1)
         gridrow += 1
         form1.addWidget(utils_qt.RightAlignedQLabel('Select method step:'), gridrow, 0, 1, 1)
         form1.addWidget(self._selectmethodstep_list, gridrow, 1, 1, 10)
         gridrow += 1
         form1.addWidget(utils_qt.RightAlignedQLabel('Method step description:'), gridrow, 0, 1, 1)
         form1.addWidget(self._methodstepdescription_edit, gridrow, 1, 1, 10)
+
         gridrow += 1
-        form1.addWidget(QtGui.QLabel(''), gridrow, 10, 1, 1) # Add space.
+        form1.addWidget(QtGui.QLabel(''), gridrow, 0, 1, 1) # Add space.
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Sampled volume (mL):'), gridrow, 0, 1, 1)
-        form1.addWidget(self._sampledvolume_edit, gridrow, 1, 1, 1)
-        form1.addWidget(utils_qt.RightAlignedQLabel('Magnification:'), gridrow, 10, 1, 1)
-        form1.addWidget(self._magnification_edit, gridrow, 11, 1, 1)
+        form1.addWidget(utils_qt.RightAlignedQLabel('Magnification:'), gridrow, 0, 1, 1)
+        form1.addWidget(self._magnification_edit, gridrow, 1, 1, 1)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Preservative:'), gridrow, 0, 1, 1)
-        form1.addWidget(self._preservative_list, gridrow, 1, 1, 1)
-        form1.addWidget(utils_qt.RightAlignedQLabel('Microscope:'), gridrow, 10, 1, 1)
-        form1.addWidget(self._microscope_edit, gridrow, 11, 1, 1)
+        form1.addWidget(utils_qt.RightAlignedQLabel('Microscope:'), gridrow, 0, 1, 1)
+        form1.addWidget(self._microscope_edit, gridrow, 1, 1, 1)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Preservative volume (mL):'), gridrow, 0, 1, 1)
-        form1.addWidget(self._preservative_volume_edit, gridrow, 1, 1, 1)
-        form1.addWidget(utils_qt.RightAlignedQLabel('Count area type:'), gridrow, 10, 1, 1)
-        form1.addWidget(self._countareatype_list, gridrow, 11, 1, 1)
+        form1.addWidget(utils_qt.RightAlignedQLabel('Count area type:'), gridrow, 0, 1, 1)
+        form1.addWidget(self._countareatype_list, gridrow, 1, 1, 1)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Counted volume (mL):'), gridrow, 0, 1, 1)
-        form1.addWidget(self._countedvolume_edit, gridrow, 1, 1, 1)
-        form1.addWidget(utils_qt.RightAlignedQLabel('Diameter of view (mm):'), gridrow, 10, 1, 1)
-        form1.addWidget(self._viewdiameter_edit, gridrow, 11, 1, 1)
+        form1.addWidget(utils_qt.RightAlignedQLabel('Diameter of view (mm):'), gridrow, 0, 1, 1)
+        form1.addWidget(self._viewdiameter_edit, gridrow, 1, 1, 1)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Chamber/filter diameter (mm):'), gridrow, 0, 1, 1)
-        form1.addWidget(self._chamber_filter_diameter_edit, gridrow, 1, 1, 1)
-        form1.addWidget(utils_qt.RightAlignedQLabel('Transect/rectangle width (mm):'), gridrow, 10, 1, 1)
-        form1.addWidget(self._transectrectanglewidth_edit, gridrow, 11, 1, 1)
+        form1.addWidget(utils_qt.RightAlignedQLabel('Transect/rectangle width (mm):'), gridrow, 0, 1, 1)
+        form1.addWidget(self._transectrectanglewidth_edit, gridrow, 1, 1, 1)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Transect/rectangle length (mm):'), gridrow, 10, 1, 1)
-        form1.addWidget(self._transectrectanglelength_edit, gridrow, 11, 1, 1)
+        form1.addWidget(utils_qt.RightAlignedQLabel('Transect/rectangle length (mm):'), gridrow, 0, 1, 1)
+        form1.addWidget(self._transectrectanglelength_edit, gridrow, 1, 1, 1)
         gridrow += 1
         form1.addWidget(utils_qt.LeftAlignedQLabel(
             'Calculated coefficient for one chamber/filter, half chamber/filter, view, transect or rectangle:'), 
-            gridrow, 10, 1, 2)
+            gridrow, 0, 1, 2)
         gridrow += 1
-        form1.addWidget(self._coefficient_one_unit_edit, gridrow, 11, 1, 1)
+        form1.addWidget(self._coefficient_one_unit_edit, gridrow, 1, 1, 1)
+        
+        
+        
+        gridrow += 1        
+        form1.addWidget(QtGui.QLabel(''), gridrow, 0, 1, 20) # Add space.
         gridrow += 1
         form1.addWidget(utils_qt.LeftAlignedQLabel('<b>Count settings for method step</b>'), gridrow, 0, 1, 1)
         gridrow += 1
@@ -211,18 +250,22 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         
         # 
         hbox1 = QtGui.QHBoxLayout()
-        hbox1.addWidget(self._saveanalysis_method_button)
-        hbox1.addWidget(self._addmethodstep_button)
-        hbox1.addWidget(self._deletemethodsteps_method_button)
-        hbox1.addWidget(self._saveasanalysis_method_button)
-        hbox1.addWidget(self._deleteanalysis_method_button)
+        hbox1.addLayout(form1)
         hbox1.addStretch(10)
         # 
+        hbox2 = QtGui.QHBoxLayout()
+        hbox2.addWidget(self._saveanalysis_method_button)
+        hbox2.addWidget(self._addmethodstep_button)
+        hbox2.addWidget(self._deletemethodsteps_method_button)
+        hbox2.addWidget(self._saveasanalysis_method_button)
+        hbox2.addWidget(self._deleteanalysis_method_button)
+        hbox2.addStretch(10)
+        # 
         layout = QtGui.QVBoxLayout()
-        layout.addLayout(form1)
-        layout.addStretch(100)
-        layout.addWidget(utils_qt.LeftAlignedQLabel('<b>Manage analysis methods:</b>'))
         layout.addLayout(hbox1)
+        layout.addStretch(100)
+        layout.addWidget(utils_qt.LeftAlignedQLabel('<b>Manage default analysis methods:</b>'))
+        layout.addLayout(hbox2)
         #
         return layout       
 
@@ -232,7 +275,7 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         #
         analysismethods = plankton_core.PlanktonCounterMethods().get_analysis_method_list()
         if len(analysismethods) > 0:
-            self._selectanalysismethod_list.addItems(['<current sample method>'] + analysismethods)
+            self._selectanalysismethod_list.addItems(['<select or show used values>'] + analysismethods)
 #             self._selectanalysismethod_list.addItems(analysismethods)
         else:
             self._selectanalysismethod_list.addItems(['<not available>'])            

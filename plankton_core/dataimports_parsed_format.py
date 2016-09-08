@@ -35,7 +35,7 @@ class ParsedFormat(plankton_core.FormatBase):
                 command = 'self._as_integer("' + command + '")'
             elif view_format == 'float':
                 command = 'self._as_float("' + command + '")'
-            elif view_format == 'date':
+            elif view_format == 'sample_date':
                 command = 'self._as_date("' + command + '")'
             else:
                 command = 'self._as_text("' + command + '")'
