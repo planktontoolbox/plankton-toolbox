@@ -7,7 +7,6 @@
 from __future__ import unicode_literals
 
 import plankton_core
-import toolbox_utils
 
 class CreateReportCountedSpecies(object):
     """ 
@@ -77,7 +76,13 @@ class CreateReportCountedSpecies(object):
         sampleindex = 0
         for dataset in datasets:
             for visitnode in dataset.get_children():
+                
+                print('DEBUG samples: ' + unicode(len(visitnode.get_children())))
+                
                 for samplenode in visitnode.get_children():
+                
+                    print('DEBUG variables: ' + unicode(len(samplenode.get_children())))
+                
                     for variablenode in samplenode.get_children():
                         #  
                         taxonandsize = variablenode.get_data('scientific_name') + ':' + variablenode.get_data(u'size_class')
@@ -97,8 +102,8 @@ class CreateReportCountedSpecies(object):
                            (parameter == 'Biovolume concentration') or \
                            (parameter == 'Biovolume concentration') :
                             parameter_values_dict[taxonandsize][sampleindex * 2 + 1] = value
-                #
-                sampleindex += 1
+                    #
+                    sampleindex += 1
         #
         # Part 3: Create the species rows in the report.        
         #
@@ -118,7 +123,7 @@ class CreateReportCountedSpecies(object):
                 trophic_type = plankton_core.Species().get_taxon_value(scientificname, u'bvol_trophic_type')
             #
             # Put the row together.
-            row = [''] * (self._numberofcolumns * 2)
+            row = [''] * (7 + (self._numberofcolumns * 2))
             row[0] = taxonclass
             row[1] = u'X' if harmful else u''
             row[2] = scientificname
@@ -191,7 +196,7 @@ class CreateReportCountedSpecies(object):
 def report_count_table_sort(s1, s2):
     """ """
     # Sort order: Class and scientific name.
-    columnsortorder = [0, 2, 5] # Class, Species and Trophy.
+    columnsortorder = [0, 2, 3, 5] # Class, species, size class and trophy.
     #
     for index in columnsortorder:
         s1item = s1[index]

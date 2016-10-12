@@ -75,7 +75,6 @@ class ImportPhytowin(plankton_core.DataImportPreparedBase):
             ['variable', 'mixed_volume', 'text', 'Mixed volume', ''], 
             ['variable', 'preservative', 'text', 'Preservative', ''], 
             ['variable', 'sedimentation_volume', 'text', 'Sedim. volume', ''], 
-            ['variable', 'preservative', 'text', 'Preservative', ''], 
             ['variable', 'preservative_amount', 'text', 'Amt. preservative', ''], 
             ['variable', 'sedimentation_time_h', 'text', 'Sedim. time (hr)', ''], 
             ['variable', 'chamber_diameter', 'text', 'Chamber diam.', ''], 

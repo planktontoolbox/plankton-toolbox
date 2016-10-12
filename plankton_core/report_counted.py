@@ -15,8 +15,27 @@ class CreateReportCounted(object):
         # Initialize parent.
         super(CreateReportCounted, self).__init__()
         #
-#         self._taxaphytowin = None
-        #
+#         self._header_items = [
+#             'Station', # 0
+#             'Provtagningsdatum', # 1
+#             'Analysdatum', # 2
+#             'Min djup', # 3
+#             'Max djup', # 4
+#             #
+#             'Klass', # 5
+#             'Art/Taxonomisk enhet', # 6
+#             'Sflag', # 7
+#             'Author', # 8
+#             'Trofigrad', # 9
+#             'Potentiellt giftig', # 10
+#             'Celler/l', # 11
+#             'Biovolym (mm3/L)', # 12
+#             #
+#             'Analys laboratorium', # 13
+# #            'Mikroskopist' # 14
+#             'Mikroskopist', # 14
+#             'Storleksklass (PEG)' # 15
+#             ]
         self._header_items = [
             'Station', # 0
             'Provtagningsdatum', # 1

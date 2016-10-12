@@ -22,6 +22,8 @@ class DataImportManager(object):
         """ """
         datasettopnode = plankton_core.DatasetNode()
         #
+        if import_format == 'SHARKweb':
+            self._import_sharkweb_file(datasettopnode, filename)
         if import_format == 'PhytoWin':
             self._import_phytowin_file(datasettopnode, filename)
         if import_format == 'PlanktonCounter':
@@ -32,6 +34,17 @@ class DataImportManager(object):
         #
         return datasettopnode
         
+    def _import_sharkweb_file(self, dataset_top_node, file_name):
+        """ """
+        # Create dataset from file content.
+        sharkweb = plankton_core.ImportSharkWeb()
+        sharkweb.read_file(file_name)
+        sharkweb.create_tree_dataset(dataset_top_node)
+
+        # Add export info to dataset.
+        columnsinfo = sharkweb.create_export_table_info()
+        dataset_top_node.set_export_table_columns(columnsinfo)
+
     def _import_phytowin_file(self, dataset_top_node, file_name):
         """ """
         # Create dataset from file content.
@@ -44,7 +57,6 @@ class DataImportManager(object):
         # Add export info to dataset.
         columnsinfo = phytowin.create_export_table_info()
         dataset_top_node.set_export_table_columns(columnsinfo)
-
         
     def _import_plankton_counter_sample(self, dataset_top_node, dataset_name, sample_name):
         """ """

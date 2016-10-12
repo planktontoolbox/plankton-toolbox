@@ -120,18 +120,18 @@ class CreateReportsActivity(activity_base.ActivityBase):
         createreportbox = QtGui.QGroupBox('Create report', self)        
         self._report_list = QtGui.QComboBox()
         self._report_list.addItems([
-#                                      'Raw data: Table format',
-                                    'Qualitative (NET samples): DV format',
-#                                      'Qualitative (NET samples): Species list',
+                                    'Standard table format',
+                                    'Quantitative (counted): Table format',
+                                    'Quantitative (counted): Species list',
                                     'Quantitative (counted): DV format',
-#                                      'Quantitative (counted): Table format',
-                                     'Quantitative (counted): Species list'
+                                    'Qualitative (NET samples): Species list',
+                                    'Qualitative (NET samples): DV format',
                                      ])
         #
-#         self._report_list.setCurrentIndex(0) # Select: 'Raw data: Table format'.
-#         self._report_list.setCurrentIndex(4) # TEST
+# TODO: For development:
+#         self._report_list.setCurrentIndex(4) # TODO:
         #
-        self.connect(self._report_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._report_list_changed)                
+        self.connect(self._report_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._report_list_changed)            
         #
         self._debuginfo_checkbox = QtGui.QCheckBox('View debug info')
         self._debuginfo_checkbox.setChecked(False)
@@ -216,25 +216,15 @@ class CreateReportsActivity(activity_base.ActivityBase):
         try:
             selectedreport = self._report_list.currentText()
             #
-            if selectedreport == 'Raw data: Table format':
+            if selectedreport == 'Standard table format':
                 toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
-                # Note: This report was prepared during data file import.
-                # Preview result.
-                if self._tabledataset:
-                    self._tableview.setTableModel(self._tabledataset)
-                    self._tableview.resizeColumnsToContents()
-            elif selectedreport == 'Qualitative (NET samples): DV format':
-                toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
-                report = plankton_core.CreateReportToSharkweb(report_type = 'net')
+                report = plankton_core.CreateReportStandard()
                 self._create_and_view_report(report)
-            elif selectedreport == 'Qualitative (NET samples): Species list':
-                toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
-                report = plankton_core.CreateReportNetSpecies()
-                self._create_and_view_report(report)
-            elif selectedreport == 'Quantitative (counted): DV format':
-                toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
-                report = plankton_core.CreateReportToSharkweb(report_type = 'counted')
-                self._create_and_view_report(report)
+#                 # Note: This report was prepared during data file import.
+#                 # Preview result.
+#                 if self._tabledataset:
+#                     self._tableview.setTableModel(self._tabledataset)
+#                     self._tableview.resizeColumnsToContents()
             elif selectedreport == 'Quantitative (counted): Table format':
                 toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
                 report = plankton_core.CreateReportCounted()
@@ -242,6 +232,18 @@ class CreateReportsActivity(activity_base.ActivityBase):
             elif selectedreport == 'Quantitative (counted): Species list':
                 toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
                 report = plankton_core.CreateReportCountedSpecies()
+                self._create_and_view_report(report)
+            elif selectedreport == 'Quantitative (counted): DV format':
+                toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
+                report = plankton_core.CreateReportToSharkweb(report_type = 'counted')
+                self._create_and_view_report(report)
+            elif selectedreport == 'Qualitative (NET samples): Species list':
+                toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
+                report = plankton_core.CreateReportNetSpecies()
+                self._create_and_view_report(report)
+            elif selectedreport == 'Qualitative (NET samples): DV format':
+                toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
+                report = plankton_core.CreateReportToSharkweb(report_type = 'net')
                 self._create_and_view_report(report)
             else:
                 raise UserWarning('Sorry, the selected report \ntype is not yet implemented.')
