@@ -113,7 +113,6 @@ class CreateReportToSharkweb(object):
         ]                  
      
     def create_report(self, datasets, result_table,
-                     show_debug_info = False, 
                      aggregate_rows = False): # Aggregated rows not used.
         """
         Note:
@@ -210,10 +209,6 @@ class CreateReportToSharkweb(object):
                             if not trophy: 
                                 trophy = plankton_core.Species().get_taxon_value(pegname, 'bvol_trophic_type')
                             #
-                            if show_debug_info:
-                                if not pegname: pegname = '' 
-                                pegname = pegname + ' [' + phytowinname + ']'
-                            #
                             rowdict['LATNM'] = pegname
                             rowdict['LATNM_DYNTAXA'] = taxonname
                             rowdict['SFLAG'] = sflag.lower() if sflag else '' # Lowercase.
@@ -261,12 +256,6 @@ class CreateReportToSharkweb(object):
                             # If trophy not available for this sizeclass, get it from taxon.
                             if not trophy: 
                                 trophy = plankton_core.Species().get_taxon_value(pegname, 'bvol_trophic_type')
-                            # Debug:
-                            if show_debug_info:
-                                if not pegname: pegname = '' 
-                                if not phytowinname: phytowinname = '' 
-                                if not phytowinsize: phytowinsize = '' 
-                                pegname = pegname + ' [' + phytowinname + ' : ' + unicode(phytowinsize) + ']'
                             #
                             rowdict['LATNM'] = pegname
                             rowdict['LATNM_DYNTAXA'] = taxonname
@@ -289,7 +278,7 @@ class CreateReportToSharkweb(object):
 #      water_depth_m    
 # scientific_name    
 # species_flag_code    
-# trophic_type_code    
+# trophic_type    
 # size_class    
 # description    
 # coefficient    

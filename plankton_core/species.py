@@ -9,6 +9,7 @@ from __future__ import unicode_literals
 import toolbox_utils
 import plankton_core
 import os.path
+from numpy import rank
 
 @toolbox_utils.singleton
 class Species(object):
@@ -263,13 +264,13 @@ class Species(object):
                         if 'size_classes' in taxon:
                             for sizeclassdict in taxon['size_classes']:
                                 if sizeclassdict.get('bvol_size_class', '') == sizeclass:
-                                    if sizeclassdict.get('trophic_type_code', ''):
+                                    if sizeclassdict.get('trophic_type', ''):
                                         if scientificname == taxon['scientific_name']:
                                             toolbox_utils.Logging().warning('Same taxon/size on multiple rows: ' + scientificname + ' Size: ' + sizeclass + '   (Source: ' + excel_file_name + ')')
                                             sizeclassfound = True
                                             break
                                     #
-                                    sizeclassdict['trophic_type_code'] = trophictype
+                                    sizeclassdict['trophic_type'] = trophictype
                                     sizeclassfound = True
                                     break
                         #
@@ -277,7 +278,7 @@ class Species(object):
 #                             toolbox_utils.Logging().warning('Size class is missing: ' + scientificname + ' Size: ' + sizeclass + '   (Source: ' + excel_file_name + ')')
                     else:
                         # No sizeclass in indata file. Put on species level.                        
-                        if taxon.get('trophic_type_code', ''):
+                        if taxon.get('trophic_type', ''):
                             
                             
 #                             print('DEBUG-1:' + scientificname)
@@ -287,7 +288,7 @@ class Species(object):
                             if scientificname == taxon['scientific_name']:
                                 toolbox_utils.Logging().warning('Same taxon on multiple rows: ' + scientificname + '   (Source: ' + excel_file_name + ')')
                         #
-                        taxon['trophic_type_code'] = trophictype
+                        taxon['trophic_type'] = trophictype
                 else:
                     toolbox_utils.Logging().warning('Scientific name is missing: ' + scientificname + '   (Source: ' + excel_file_name + ')')
             except:
@@ -541,20 +542,22 @@ class Species(object):
             return self._planktongroups_lookup[scientific_name]
         else:
             for rank in self._planktongroups_ranks_set:
+                renamed_rank = rank
+                if rank.lower() in ['species', 'genus', 'family', 'order', 'class', 'phylum', 'kingdom']:
+                    renamed_rank = 'taxon_' + rank.lower()
                 #
-                if rank == 'scientific_name':
+                if renamed_rank == 'taxon_species':
                     taxon_on_rank = scientific_name
                 else:
-                    taxon_on_rank = self.get_taxon_value(scientific_name, rank)
+                    taxon_on_rank = self.get_taxon_value(scientific_name, renamed_rank)
                 #
                 if taxon_on_rank in self._planktongroups_rank_dict[rank]:
                     planktongroup = self._planktongroups_rank_dict[rank][taxon_on_rank]
                     self._planktongroups_lookup[scientific_name] = planktongroup
                     return planktongroup
         #                            
-#        return 'plankton-group-not-designated'
         toolbox_utils.Logging().warning('Not match for Plankton group. "Others" assigned for: ' + scientific_name)
-        #
+        self._planktongroups_lookup[scientific_name] = 'Others'
         return 'Others'
 
     def _get_files_by_prefix(self, prefix):

@@ -102,7 +102,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
         form1.addWidget(self._addmissingtaxa_button, gridrow, 9, 1, 1)
         gridrow += 4
         form1.addWidget(self._reloaddata_button, gridrow, 0, 1, 1)
-        form1.addWidget(self._aggregatedata_button, gridrow, 6, 1, 1)
+        form1.addWidget(self._aggregatedata_button, gridrow, 1, 1, 1)
         #
 #        hbox1 = QtGui.QHBoxLayout()
 #        hbox1.addStretch(5)
@@ -191,7 +191,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                                     toolbox_utils.Logging().warning('Not match for selected rank. "not-designated" assigned for: ' + variablenode.get_data('scientific_name'))
                                     newtaxon = 'not-designated' # Use this if empty.
                                 #
-                                taxontrophic_type = variablenode.get_data('trophic_type_code')
+                                taxontrophic_type = variablenode.get_data('trophic_type')
                                 if taxontrophic_type in selected_trophic_type_list:
                                     taxontrophic_type = selected_trophic_type_text # Concatenated string of ranks.
                                 else:
@@ -229,7 +229,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                             samplenode.add_child(newvariable)    
                             #
                             newvariable.add_data('scientific_name', newtaxon)
-                            newvariable.add_data('trophic_type_code', taxontrophic_type)
+                            newvariable.add_data('trophic_type', taxontrophic_type)
                             newvariable.add_data('stage', stage)
                             newvariable.add_data('sex', sex)
                             newvariable.add_data('parameter', parameter)
@@ -265,7 +265,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
             for samplenode in visitnode.get_children():
                 for variablenode in samplenode.get_children():
                     #
-                    trophic_type_set.add(unicode(variablenode.get_data('trophic_type_code')))
+                    trophic_type_set.add(unicode(variablenode.get_data('trophic_type')))
                     #
                     lifestage = variablenode.get_data('stage')
                     if variablenode.get_data('sex'):

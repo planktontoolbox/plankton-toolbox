@@ -191,7 +191,7 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
                 for variablenode in samplenode.get_children():
                     taxon_set.add(variablenode.get_data('scientific_name'))
                     #
-                    trophic_type_set.add(variablenode.get_data('trophic_type_code'))
+                    trophic_type_set.add(variablenode.get_data('trophic_type'))
                     #
                     lifestage = variablenode.get_data('stage')
                     if variablenode.get_data('sex'):
@@ -220,6 +220,6 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         self._analysisdata.set_filter_item('visits', self._visits_listview.getSelectedDataList())
         self._analysisdata.set_filter_item('min_max_depth_m', self._minmaxdepth_listview.getSelectedDataList())
         self._analysisdata.set_filter_item('scientific_name', self._taxon_listview.getSelectedDataList())
-        self._analysisdata.set_filter_item('trophic_type_code', self._trophic_type_listview.getSelectedDataList())
+        self._analysisdata.set_filter_item('trophic_type', self._trophic_type_listview.getSelectedDataList())
         self._analysisdata.set_filter_item('life_stage', self._lifestage_listview.getSelectedDataList())
         

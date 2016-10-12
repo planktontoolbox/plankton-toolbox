@@ -208,7 +208,7 @@ class PlanktonCounterSample():
         self._sample_header = ['scientific_full_name', 
                                'taxon_class', 
                                'scientific_name', 
-                               'trophic_type_code', 
+                               'trophic_type', 
                                'size_class', 
                                'unit_type', 
                                'counted_units', 
@@ -608,7 +608,7 @@ class SampleRow():
         self._taxon_dict = plankton_core.Species().get_taxon_dict(self._scientific_name)
         self._size_class_dict = plankton_core.Species().get_bvol_dict(self._scientific_name, self._size_class)
         self._sample_row_dict['taxon_class'] = self._taxon_dict.get('taxon_class', '')
-        self._sample_row_dict['trophic_type_code'] = self._size_class_dict.get('bvol_trophic_type', '')
+        self._sample_row_dict['trophic_type'] = self._size_class_dict.get('bvol_trophic_type', '')
         self._sample_row_dict['unit_type'] = self._size_class_dict.get('bvol_unit', '')
         #
         self._bvol_volume = 0.0

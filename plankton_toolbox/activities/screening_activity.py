@@ -85,9 +85,9 @@ class ScreeningActivity(activity_base.ActivityBase):
         self._loaded_datasets_model = QtGui.QStandardItemModel()
         loaded_datasets_listview.setModel(self._loaded_datasets_model)
         #
-        self._cleara_metadata_button = QtGui.QPushButton('Clear all')
+        self._cleara_metadata_button = utils_qt.ClickableQLabel('Clear all')
         self.connect(self._cleara_metadata_button, QtCore.SIGNAL('clicked()'), self._uncheck_all_datasets)                
-        self._markall_button = QtGui.QPushButton('Mark all')
+        self._markall_button = utils_qt.ClickableQLabel('Mark all')
         self.connect(self._markall_button, QtCore.SIGNAL('clicked()'), self._check_all_datasets)                
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()

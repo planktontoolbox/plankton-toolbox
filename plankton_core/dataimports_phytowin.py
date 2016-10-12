@@ -41,7 +41,7 @@ class ImportPhytowin(plankton_core.DataImportPreparedBase):
             ['variable', 'scientific_name', 'text', 'Species', ''], 
             ['variable', 'species_flag_code', 'text', '', ''], 
             ['variable', 'reported_trophic_type', 'text', 'A/H', None], # Internal use only. 
-            ['variable', 'trophic_type_code', 'text', '', ''], # Will be calculated later.
+            ['variable', 'trophic_type', 'text', '', ''], # Will be calculated later.
             ['variable', 'reported_size_class', 'text', 'Size', None], # Internal use only. 
             ['variable', 'size_class', 'text', 'Size', ''], 
             ['variable', 'description', 'text', 'Descr', ''], 
@@ -286,9 +286,9 @@ class ImportPhytowin(plankton_core.DataImportPreparedBase):
                     # Get trophic level from peg.
                     value = plankton_core.Species().get_bvol_value(name, size, 'bvol_trophic_type')
                     if value:
-                        variable.add_data('trophic_type_code', value)
+                        variable.add_data('trophic_type', value)
                     else:
-                        variable.add_data('trophic_type_code', variable.get_data('reported_trophic_type'))
+                        variable.add_data('trophic_type', variable.get_data('reported_trophic_type'))
                     # Get taxonomic class from peg.
                     value = plankton_core.Species().get_taxon_value(name, 'taxon_class')
                     variable.add_data('taxon_class', value)

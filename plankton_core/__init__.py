@@ -37,8 +37,7 @@ from plankton_core.dataimports_planktoncounter import ImportPlanktonCounter
 
 from report_standard import CreateReportStandard
 from report_counted import CreateReportCounted
-from report_counted_species import CreateReportCountedSpecies
-from report_net_species import CreateReportNetSpecies
+from plankton_core.report_species import CreateReportSpecies
 from report_to_sharkweb import CreateReportToSharkweb
 
 from screening_manager import ScreeningManager

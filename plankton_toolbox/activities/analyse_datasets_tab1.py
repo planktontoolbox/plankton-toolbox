@@ -62,8 +62,8 @@ class AnalyseDatasetsTab1(QtGui.QWidget):
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addWidget(self._clearanalysisdata_button)
-        hbox1.addStretch(10)
         hbox1.addWidget(self._copydatasets_button)
+        hbox1.addStretch(10)
         #
         layout = QtGui.QVBoxLayout()
 #         layout.addWidget(introlabel)

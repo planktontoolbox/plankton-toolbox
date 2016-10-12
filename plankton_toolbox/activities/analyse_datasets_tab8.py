@@ -193,7 +193,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
                     for variable in sample.get_children():
                         scientific_name = variable.get_data('scientific_name')
                         size_class = variable.get_data('size_class')
-                        trophic_type = variable.get_data('trophic_type_code')
+                        trophic_type = variable.get_data('trophic_type')
                         stage = variable.get_data('stage')
                         sex = variable.get_data('sex')
                         #

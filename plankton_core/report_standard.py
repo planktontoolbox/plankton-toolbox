@@ -6,8 +6,6 @@
 #
 from __future__ import unicode_literals
 
-import plankton_core
-
 class CreateReportStandard(object):
     """ """
     def __init__(self):
@@ -29,7 +27,7 @@ class CreateReportStandard(object):
             'scientific_name', 
             'species_flag_code', 
             'size_class', #'text', 
-            'trophic_type_code', 
+            'trophic_type', 
             'parameter', 
             'value', 
             'unit', 
@@ -41,12 +39,11 @@ class CreateReportStandard(object):
             'taxon_family', 
             'taxon_genus', 
             'taxon_hierarchy', 
-            'sampling_laboratory_name_sv', 
-            'analytical_laboratory_name_sv', 
+            'sampling_laboratory', 
+            'analytical_laboratory', 
             ]
         
     def create_report(self, datasets, result_table,
-                     show_debug_info = False, 
                      aggregate_rows = False):
         """
         Note:

@@ -24,24 +24,28 @@ class ImportSharkWeb(plankton_core.DataImportPreparedBase):
         #   Column 3: source file column name. Multiple alternatives should be separated by '<or>'. TODO: '<or>' not implemented.
         #   Column 4: export column name. None = not used, empty string ('') = same as column 1 (internal key).
         self._parsing_info = [
-            ['visit', 'visit_year', 'text', 'visit_year', ''], 
-            ['visit', 'sample_date', 'text', 'sample_date', ''], 
-            ['visit', 'sample_month', 'text', '', ''], # Calculate.
+            ['visit', 'visit_year', 'integer', 'visit_year', ''], 
+            ['visit', 'sample_date', 'date', 'sample_date', ''], 
+            ['visit', 'sample_month', 'integer', '', ''], # Calculate. Code below.
             ['visit', 'station_name', 'text', 'station_name', ''], 
-            ['visit', 'sample_latitude_dd', 'text', 'sample_latitude_dd', ''], 
-            ['visit', 'sample_longitude_dd', 'text', 'sample_longitude_dd', ''], 
-            ['visit', 'water_depth_m', 'text', 'water_depth_m', ''], 
+            ['visit', 'sample_latitude_dd', 'float', 'sample_latitude_dd', ''], 
+            ['visit', 'sample_longitude_dd', 'float', 'sample_longitude_dd', ''], 
+            ['visit', 'water_depth_m', 'float', 'water_depth_m', ''],
+            # 
             ['sample', 'sample_id', 'text', 'sample_id', ''], 
-            ['sample', 'sample_min_depth_m', 'text', 'sample_min_depth_m', ''], 
-            ['sample', 'sample_max_depth_m', 'text', 'sample_max_depth_m', ''], 
+            ['sample', 'sample_min_depth_m', 'float', 'sample_min_depth_m', ''], 
+            ['sample', 'sample_max_depth_m', 'float', 'sample_max_depth_m', ''], 
+            #
             ['variable', 'scientific_name', 'text', 'scientific_name', ''], 
             ['variable', 'species_flag_code', 'text', 'species_flag_code', ''], 
             ['variable', 'size_class', 'text', 'size_class', ''], 
-            ['variable', 'trophic_type_code', 'text', 'trophic_type_code', ''], 
+            ['variable', 'trophic_type', 'text', 'trophic_type_code', ''], 
+            #
             ['variable', 'parameter', 'text', 'parameter', ''], 
-            ['variable', 'value', 'text', 'value', ''], 
+            ['variable', 'value', 'float', 'value', ''], 
             ['variable', 'unit', 'text', 'unit', ''], 
-            ['variable', 'plankton_group', 'text', '', ''], # Calculate.
+            #
+            ['variable', 'plankton_group', 'text', '', ''], # Calculate. Code below.
             ['variable', 'taxon_kingdom', 'text', 'taxon_kingdom', ''], 
             ['variable', 'taxon_phylum', 'text', 'taxon_phylum', ''], 
             ['variable', 'taxon_class', 'text', 'taxon_class', ''], 
@@ -49,8 +53,11 @@ class ImportSharkWeb(plankton_core.DataImportPreparedBase):
             ['variable', 'taxon_family', 'text', 'taxon_family', ''], 
             ['variable', 'taxon_genus', 'text', 'taxon_genus', ''], 
             ['variable', 'taxon_hierarchy', 'text', 'taxon_hierarchy', ''], 
-            ['variable', 'sampling_laboratory_name_sv', 'text', 'sampling_laboratory_name_sv', ''], 
-            ['variable', 'analytical_laboratory_name_sv', 'text', 'analytical_laboratory_name_sv', ''], 
+            #
+            ['variable', 'sampling_laboratory', 'text', 'sampling_laboratory_name_sv', ''], 
+            ['variable', 'analytical_laboratory', 'text', 'analytical_laboratory_name_sv', ''], 
+            ['variable', 'analysis_date', 'text', 'analysis_date', ''], 
+            ['variable', 'analysed_by', 'text', 'analysed_by', ''], 
         ]
         # Keys:
         self._visit_key_fields = ['sample_date', 'station_name']
@@ -138,17 +145,31 @@ class ImportSharkWeb(plankton_core.DataImportPreparedBase):
                 # === Parse row and add fields on nodes. ===                    
                 for parsinginforow in self._parsing_info:
                     #
+                    value = row_dict.get(parsinginforow[3], '')
+                    # Fix float.
+                    if parsinginforow[2] == 'float': 
+                        value = value.replace(',', '.')
+                    # Calculate some values.
+                    if parsinginforow[1] == 'sample_month':
+                        try:
+                            value = row_dict.get('sample_date', '')
+                            value = value[5:7]
+                        except: pass        
+                    if parsinginforow[1] == 'plankton_group':
+                        try:
+                            value = row_dict.get('scientific_name', '')
+                            value = plankton_core.Species().get_plankton_group_from_taxon_name(value)
+                        except: pass 
+                    # Add at right level.
                     if parsinginforow[0] == 'visit':
-                        value = row_dict.get(parsinginforow[3], '')
                         currentvisit.add_data(parsinginforow[1], value)        
                     #
                     if parsinginforow[0] == 'sample':
-                        value = row_dict.get(parsinginforow[3], '')
                         currentsample.add_data(parsinginforow[1], value)        
                     #
                     if parsinginforow[0] == 'variable':
-                        value = row_dict.get(parsinginforow[3], '')
-                        currentvariable.add_data(parsinginforow[1], value)    
+                        currentvariable.add_data(parsinginforow[1], value) 
+
         #
         except Exception as e:
             toolbox_utils.Logging().warning('Failed to parse dataset: %s' % (e.args[0]))
