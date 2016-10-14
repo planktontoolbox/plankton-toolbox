@@ -236,7 +236,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
                 self._create_and_view_report(report)
             elif selectedreport == 'Quantitative (counted): Data Center export':
                 toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
-                report = plankton_core.CreateReportToSharkweb(report_type = 'counted')
+                report = plankton_core.CreateReportToDataCenterShark(report_type = 'counted')
                 self._create_and_view_report(report)
             elif selectedreport == 'Qualitative (NET samples): Species list':
                 toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
@@ -244,7 +244,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
                 self._create_and_view_report(report)
             elif selectedreport == 'Qualitative (NET samples): Data Center export':
                 toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
-                report = plankton_core.CreateReportToSharkweb(report_type = 'net')
+                report = plankton_core.CreateReportToDataCenterShark(report_type = 'net')
                 self._create_and_view_report(report)
             else:
                 raise UserWarning('Sorry, the selected report \ntype is not yet implemented.')

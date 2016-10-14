@@ -8,11 +8,11 @@ from __future__ import unicode_literals
 
 import plankton_core
 
-class CreateReportToSharkweb(object):
+class CreateReportToDataCenterShark(object):
     """ """
     def __init__(self, report_type = 'counted'): # 'counted' or 'net'.):
         """ """
-        super(CreateReportToSharkweb, self).__init__()
+        super(CreateReportToDataCenterShark, self).__init__()
         self._reporttype = report_type
         self._taxaphytowin = None
         # Header for "qualitative" counting.
