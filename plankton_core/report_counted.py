@@ -28,8 +28,8 @@ class CreateReportCounted(object):
             'size_class', 
             'trophic_type', 
             'harmful', 
-            'abundance', 
-            'biovolume', 
+            'param_abundance', 
+            'param_biovolume', 
             #
             'analytical_laboratory', 
             'analysis_date', 
@@ -48,8 +48,8 @@ class CreateReportCounted(object):
             'scientific_authority': 'Authority', # 'Author', # 8
             'trophic_type': 'Trophi type', # 'Trofigrad', # 9
             'harmful': 'Pot. toxic', # 'Potentiellt giftig', # 10
-            'abundance': 'Abundance', # 'Celler/l', # 11
-            'biovolume': 'Biovolume', # 'Biovolym (mm3/L)', # 12
+            'param_abundance': 'Abundance', # 'Celler/l', # 11
+            'param_biovolume': 'Biovolume', # 'Biovolym (mm3/L)', # 12
             'analytical_laboratory': 'Analytical laboratory', # 'Analys laboratorium', # 13
             'analysed_by': 'Analysed by', # 'Mikroskopist', # 14
             'size_class': 'Size class', # 'Storleksklass (PEG)' # 15
@@ -114,9 +114,9 @@ class CreateReportCounted(object):
                                 report_rows_dict[row_key] = row_dict
                             # Parameters as columns.
                             if parameter == 'Abundance':
-                                report_rows_dict[row_key]['abundance'] = row_dict.get('value', '')
+                                report_rows_dict[row_key]['param_abundance'] = row_dict.get('value', '')
                             if parameter == 'Biovolume concentration':
-                                report_rows_dict[row_key]['biovolume'] = row_dict.get('value', '')
+                                report_rows_dict[row_key]['param_biovolume'] = row_dict.get('value', '')
                             # Complement columns.
                             self._add_more_content(row_dict)
         #
@@ -129,7 +129,7 @@ class CreateReportCounted(object):
                 report_row.append(row_dict.get(item, ''))
             #
             result_table.append_row(report_row)
-                        
+        
 #         # Sort result.
 #         report_rows.sort(report_conc_table_sort)
 #         # 

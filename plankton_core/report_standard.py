@@ -42,7 +42,7 @@ class CreateReportStandard(object):
             'sampling_laboratory', 
             'analytical_laboratory', 
             ]
-        
+    
     def create_report(self, datasets, result_table,
                      aggregate_rows = False):
         """
@@ -55,11 +55,9 @@ class CreateReportStandard(object):
             raise UserWarning('Datasets are missing.')
         if result_table == None:
             raise UserWarning('Result table is missing.')
-
-            result_table.set_header(self._header_counted_items)
         # Set header.
         result_table.set_header(self._header_items)
-
+        
         # Iterate through datasets.
         for datasetnode in datasets:
             #
@@ -82,7 +80,7 @@ class CreateReportStandard(object):
                         result_table.append_row(report_row)
         #
         result_table.get_rows().sort(report_table_sort)
-            
+
 
 # Sort function for the result table.
 def report_table_sort(s1, s2):
