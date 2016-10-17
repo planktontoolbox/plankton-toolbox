@@ -181,7 +181,7 @@ class AnalyseDatasetsTab4(QtGui.QWidget):
         #
         for visitnode in analysisdata.get_children():
             station_set.add(visitnode.get_data('station_name'))
-            visitmonth_set.add(visitnode.get_data('sample_month'))
+            visitmonth_set.add(visitnode.get_data('visit_month'))
             visit_set.add(unicode(visitnode.get_data('station_name')) + ' : ' + unicode(visitnode.get_data('sample_date')))
             startdate = min(startdate, visitnode.get_data('sample_date'))
             enddate = max(enddate, visitnode.get_data('sample_date'))

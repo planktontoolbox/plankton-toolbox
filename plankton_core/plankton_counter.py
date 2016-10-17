@@ -623,10 +623,16 @@ class SampleRow():
 
     def get_sample_row_dict(self):
         """ """
+#         print('DEBUG GET scientific_full_name: ' + self._sample_row_dict.get('scientific_full_name', ''))
+#         print('DEBUG GET size_class: ' + self._sample_row_dict.get('size_class', ''))
+#         print('DEBUG GET variable_comment: ' + self._sample_row_dict.get('variable_comment', ''))
         return self._sample_row_dict
 
     def update_sample_row_dict(self, sample_row_dict):
         """ """
+#         print('DEBUG UPDATE scientific_full_name: ' + sample_row_dict.get('scientific_full_name', ''))
+#         print('DEBUG UPDATE size_class: ' + sample_row_dict.get('size_class', ''))
+#         print('DEBUG UPDATE variable_comment: ' + sample_row_dict.get('variable_comment', ''))
         self._sample_row_dict.update(sample_row_dict)
     
     def get_key(self):

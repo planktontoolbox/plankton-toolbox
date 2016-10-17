@@ -26,7 +26,7 @@ class ImportSharkWeb(plankton_core.DataImportPreparedBase):
         self._parsing_info = [
             ['visit', 'visit_year', 'integer', 'visit_year', ''], 
             ['visit', 'sample_date', 'date', 'sample_date', ''], 
-            ['visit', 'sample_month', 'integer', '', ''], # Calculate. Code below.
+            ['visit', 'visit_month', 'integer', '', ''], # Calculate. Code below.
             ['visit', 'station_name', 'text', 'station_name', ''], 
             ['visit', 'sample_latitude_dd', 'float', 'sample_latitude_dd', ''], 
             ['visit', 'sample_longitude_dd', 'float', 'sample_longitude_dd', ''], 
@@ -150,7 +150,7 @@ class ImportSharkWeb(plankton_core.DataImportPreparedBase):
                     if parsinginforow[2] == 'float': 
                         value = value.replace(',', '.')
                     # Calculate some values.
-                    if parsinginforow[1] == 'sample_month':
+                    if parsinginforow[1] == 'visit_month':
                         try:
                             value = row_dict.get('sample_date', '')
                             value = value[5:7]

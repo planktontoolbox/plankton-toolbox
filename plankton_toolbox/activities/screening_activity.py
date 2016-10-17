@@ -37,7 +37,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         # Selectable list of loaded datasets.
         self._loaded_datasets_model.clear()        
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().get_datasets()):
-            item = QtGui.QStandardItem('Dataset-' + unicode(rowindex + 1) + 
+            item = QtGui.QStandardItem('Import-' + unicode(rowindex + 1) + 
                                        '.   Source: ' + dataset.get_metadata('file_name'))
             item.setCheckState(QtCore.Qt.Checked)
 #            item.setCheckState(QtCore.Qt.Unchecked)
@@ -381,7 +381,7 @@ class ScreeningActivity(activity_base.ActivityBase):
             toolbox_utils.Logging().start_accumulated_logging()
             self._write_to_status_bar('Code list screening in progress...')
             # Perform screening.
-            codetypes_set = toolbox_utils.ScreeningManager().code_list_screening(toolbox_datasets.ToolboxDatasets().get_datasets())
+            codetypes_set = plankton_core.ScreeningManager().code_list_screening(toolbox_datasets.ToolboxDatasets().get_datasets())
         finally:
             # Log in result window.
             self._codesspeciesresult_list.append('Screening was done on these code types: ' + 
@@ -420,7 +420,7 @@ class ScreeningActivity(activity_base.ActivityBase):
             toolbox_utils.Logging().start_accumulated_logging()
             self._write_to_status_bar('Species screening in progress...')
             # Perform screening.
-            toolbox_utils.ScreeningManager().species_screening(toolbox_datasets.ToolboxDatasets().get_datasets())
+            plankton_core.ScreeningManager().species_screening(toolbox_datasets.ToolboxDatasets().get_datasets())
         finally:
             # Log in result window.
 #             self._codesspeciesresult_list.append('Screening was done on these code types: ' + 
@@ -457,7 +457,7 @@ class ScreeningActivity(activity_base.ActivityBase):
             toolbox_utils.Logging().start_accumulated_logging()
             self._write_to_status_bar('BVOL Species screening in progress...')
             # Perform screening.
-            toolbox_utils.ScreeningManager().bvol_species_screening(toolbox_datasets.ToolboxDatasets().get_datasets())
+            plankton_core.ScreeningManager().bvol_species_screening(toolbox_datasets.ToolboxDatasets().get_datasets())
         finally:
             # Log in result window.
 #             self._codesspeciesresult_list.append('Screening was done on these code types: ' + 

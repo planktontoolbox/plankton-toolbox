@@ -161,7 +161,15 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
             if parsinginforow[0] == 'visit':
                 if parsinginforow[3] in self._sample_info:
                     visitnode.add_data(parsinginforow[1], self._sample_info[parsinginforow[3]])        
-        
+        # Add visit_year and visit_month.
+        sample_date = visitnode.get_data('sample_date', '')
+        try:
+            visitnode.add_data('visit_year', sample_date[0:4])
+        except: pass      
+        try:
+            visitnode.add_data('visit_month', sample_date[5:7])        
+        except: pass 
+             
         # Create sample node and add data. Note: Only one sample in each file. 
         samplenode = plankton_core.SampleNode()
         visitnode.add_child(samplenode)

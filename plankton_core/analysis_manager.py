@@ -6,8 +6,6 @@
 #
 from __future__ import unicode_literals
 
-import copy
-
 import toolbox_utils
 import plankton_core
 
@@ -73,7 +71,7 @@ class AnalysisData(object):
         columnsinfo = self.create_export_table_info()
         analysis_dataset.set_export_table_columns(columnsinfo)
                     
-        visit_items = ['visit_year', 'sample_date', 'sample_month', 'station_name', 'sample_latitude_dd', 'sample_longitude_dd', 'water_depth_m']
+        visit_items = ['visit_year', 'sample_date', 'visit_month', 'station_name', 'sample_latitude_dd', 'sample_longitude_dd', 'water_depth_m']
         sample_items = ['sample', 'sample_id', 'sample_min_depth_m', 'sample_max_depth_m'] 
         variable_items = ['variable', 'scientific_name', 'species_flag_code', 'size_class', 'trophic_type', 'parameter', 'value', 'unit', 'plankton_group', 'taxon_kingdom', 'taxon_phylum', 'taxon_class', 'taxon_order', 'variable', 'taxon_family', 'taxon_genus', 'taxon_hierarchy']
         
@@ -153,7 +151,7 @@ class AnalysisData(object):
         parsing_info = [
             ['visit', 'visit_year', 'integer', 'visit_year', ''], 
             ['visit', 'sample_date', 'date', 'sample_date', ''], 
-            ['visit', 'sample_month', 'integer', '', ''], # Calculate. Code below.
+            ['visit', 'visit_month', 'integer', '', ''], # Calculate. Code below.
             ['visit', 'station_name', 'text', 'station_name', ''], 
             ['visit', 'sample_latitude_dd', 'float', 'sample_latitude_dd', ''], 
             ['visit', 'sample_longitude_dd', 'float', 'sample_longitude_dd', ''], 
@@ -281,7 +279,7 @@ class AnalysisData(object):
                 continue
             if visitnode.get_data('station_name') not in filter_stations:
                 continue
-            if visitnode.get_data('sample_month') not in filter_visit_months:
+            if visitnode.get_data('visit_month') not in filter_visit_months:
                 continue
             if (unicode(visitnode.get_data('station_name')) + ' : ' + 
                 unicode(visitnode.get_data('sample_date'))) not in filter_visits:

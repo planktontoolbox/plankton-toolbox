@@ -41,7 +41,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
         # Selectable list of loaded datasets.
         self._loaded_datasets_model.clear()        
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().get_datasets()):
-            item = QtGui.QStandardItem('Dataset-' + unicode(rowindex + 1) + 
+            item = QtGui.QStandardItem('Import-' + unicode(rowindex + 1) + 
                                        '.   Source: ' + dataset.get_metadata('file_name'))
             item.setCheckState(QtCore.Qt.Checked)
 #            item.setCheckState(QtCore.Qt.Unchecked)

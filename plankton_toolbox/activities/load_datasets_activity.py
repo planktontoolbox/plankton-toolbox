@@ -182,8 +182,8 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
 
                 # Add metadata related to imported file.
                 datasetnode.add_metadata('parser', '-')
-#                 datasetnode.add_metadata('file_name', os.path.basename(filename))
-#                 datasetnode.add_metadata('file_path', filename)
+                datasetnode.add_metadata('file_name', dataset_name)
+                datasetnode.add_metadata('file_path', sample_name)
                 datasetnode.add_metadata('import_column', '-')
                 datasetnode.add_metadata('export_column', '-')
             #
@@ -671,11 +671,11 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         
         self._datasets_table.getTableModel().clear()
         self._datasets_table.getTableModel().set_header(
-                                        ['Dataset      ', 
+                                        ['Import      ', 
 #                                        'Type         ', 
                                          'Content      ', 
-                                         'File         ', 
-                                         'File path    ',
+                                         'File or dataset     ', 
+                                         'File-path or sample ',
                                          'Parser       ',
                                          'Import column',
                                          'Export column'])
@@ -749,7 +749,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
 
             # Add row 
             self._datasets_table.getTableModel().append_row(
-                ['Dataset-' + unicode(rowindex + 1),
+                ['Import-' + unicode(rowindex + 1),
 #                  datasettype,
                  contentinfo,
                  dataset.get_metadata('file_name'),

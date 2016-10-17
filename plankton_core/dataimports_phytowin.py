@@ -198,20 +198,25 @@ class ImportPhytowin(plankton_core.DataImportPreparedBase):
                 
                                 
                 if parsinginforow[1] == 'sample_date':
-                    reporteddate = self._phytowin_sample_info[parsinginforow[3]]
-                    reporteddate = reporteddate                                  
+                    sample_date = self._phytowin_sample_info[parsinginforow[3]]
+                    sample_date = sample_date                                  
                     try:
-                        value = dateutil.parser.parse(reporteddate)
+                        value = dateutil.parser.parse(sample_date)
                         if value:
-                            reporteddate = unicode(value.strftime('%Y-%m-%d'))
+                            sample_date = unicode(value.strftime('%Y-%m-%d'))
                     except:
-                        toolbox_utils.Logging().warning('Parser: Failed to convert to date: ' + reporteddate)
+                        toolbox_utils.Logging().warning('Parser: Failed to convert to date: ' + sample_date)
                     #
-                    visitnode.add_data(parsinginforow[1], reporteddate)        
+                    visitnode.add_data(parsinginforow[1], sample_date) 
+                    
+                    # Add visit_year and visit_month.
+                    try:
+                        visitnode.add_data('visit_year', sample_date[0:4])
+                    except: pass      
+                    try:
+                        visitnode.add_data('visit_month', sample_date[5:7])        
+                    except: pass      
                 else:
-
-                    
-                    
                     visitnode.add_data(parsinginforow[1], self._phytowin_sample_info[parsinginforow[3]])        
         
         # Create sample node and add data. Note: Only one sample in each file. 

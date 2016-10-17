@@ -7,6 +7,7 @@
 from __future__ import unicode_literals
 
 import os
+import time
 import string
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
@@ -25,6 +26,8 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         #
         self._current_sample_method = None
         self._current_sample_method_step_fields = {}
+        #
+        self._temporary_disable_update = False
         #
         super(PlanktonCounterSampleCount, self).__init__()
         #
@@ -53,7 +56,7 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
             self._net_sampler = False
         # Summary.
         self._update_summary()
-        self._disable_counting()
+        self._disable_counting_buttons()
         #
         self._scientific_full_name_edit.setText('')
 
@@ -168,7 +171,8 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         self._resumecounting_button.setMinimumHeight(30)
         # Comments.
         self._variable_comment_edit = QtGui.QLineEdit()
-        self._variable_comment_edit.textChanged.connect(self._comment_changed)
+#         self._variable_comment_edit.textChanged.connect(self._comment_changed)
+        self._variable_comment_edit.textEdited.connect(self._comment_changed)
         # Net sample. Abindance class 1.5.
         self._abundance_class_list = KeyPressQComboBox(self)
         self._abundance_class_list.addItems(['', 
@@ -659,7 +663,7 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
 
     # TODO: ######################################################################################
 
-    def _disable_counting(self):
+    def _disable_counting_buttons(self):
         """ """
         self._countedunits_edit.setEnabled(False)
         self._resumecounting_button.setEnabled(False)
@@ -679,7 +683,7 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         self._counted_class5_button.setEnabled(False)
         self._counted_class_clear_button.setEnabled(False)
     
-    def _enable_counting(self):
+    def _enable_counting_buttons(self):
         """ """
         if not self._net_sampler:
             self._countedunits_edit.setEnabled(True)
@@ -727,7 +731,9 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
 
     def _get_sample_row(self):
         """ """
-        self._disable_counting()
+        self._disable_counting_buttons()
+        # Lock of update chains off.
+        self._temporary_disable_update = True
         ""
         scientific_full_name = unicode(self._scientific_full_name_edit.text())
         size_class = unicode(self._speciessizeclass_list.currentText())
@@ -735,7 +741,7 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         if scientific_full_name == '':
             self._taxon_sflag_list.setCurrentIndex(0)
             self._taxon_cf_list.setCurrentIndex(0)
-            self._disable_counting()
+            self._disable_counting_buttons()
             self._countedunits_edit.setValue(0)
             self._variable_comment_edit.setText('')
             return
@@ -748,22 +754,28 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         counted_value = int(sample_row_dict.get('counted_units', '0'))
         self._countedunits_edit.setValue(counted_value)
         self._variable_comment_edit.setText(sample_row_dict.get('variable_comment', ''))
-        #
         # Disable counting for taxa/sizes counted in another method step.
         current_method_step = unicode(self._selectmethodstep_list.currentText())
         stored_method_step = sample_row_dict.get('method_step', current_method_step)
         locked_at_area = sample_row_dict.get('locked_at_area', '')
         #
         if counted_value == 0:
-            self._enable_counting()
+            self._enable_counting_buttons()
         else: 
             if (stored_method_step == current_method_step) and (locked_at_area == ''):
-                self._enable_counting()
+                self._enable_counting_buttons()
             else:
-                self._disable_counting()
+                self._disable_counting_buttons()
+        #
+        # Lock of update chains off.
+        time.sleep(0.01) # Avoid update queue.
+        self._temporary_disable_update = False
                      
     def _update_sample_row(self):
         """ """
+        if self._temporary_disable_update:
+            return
+        
         scientific_full_name = unicode(self._scientific_full_name_edit.text())
         scientific_name = unicode(self._scientific_name_edit.text())
         # Get method info.

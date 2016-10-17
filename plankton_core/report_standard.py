@@ -16,7 +16,7 @@ class CreateReportStandard(object):
         self._header_items = [
             'visit_year', 
             'sample_date', 
-            'sample_month', 
+            'visit_month', 
             'station_name', 
             'sample_latitude_dd', 
             'sample_longitude_dd', 
