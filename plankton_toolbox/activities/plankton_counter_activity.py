@@ -79,8 +79,9 @@ class PlanktonCounterActivity(activity_base.ActivityBase):
         hbox1.addWidget(self._deletesample_button)
 # TODO: Not finished yet...
 #         hbox1.addWidget(self._exportsamples_button)
-        hbox1.addStretch(10)
+#         hbox1.addStretch(10)
         hbox1.addWidget(self._countsample_button)
+        hbox1.addStretch(10)
         #
         layout = QtGui.QVBoxLayout()
         layout.addWidget(self._counter_samples_listview)

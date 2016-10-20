@@ -96,10 +96,11 @@ class PlanktonCounterSampleEdit(QtGui.QWidget):
         #
         layout = QtGui.QHBoxLayout()
         layout.addWidget(self._exportsamplereport_button)
-        layout.addStretch(10)
+#         layout.addStretch(10)
 #         layout.addWidget(self._load_button)
         layout.addWidget(self._save_button)
 #         layout.addWidget(self._clear_button)
+        layout.addStretch(10)
         widget.setLayout(layout)
         #
         return widget

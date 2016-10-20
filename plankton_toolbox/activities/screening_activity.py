@@ -85,13 +85,13 @@ class ScreeningActivity(activity_base.ActivityBase):
         self._loaded_datasets_model = QtGui.QStandardItemModel()
         loaded_datasets_listview.setModel(self._loaded_datasets_model)
         #
-        self._cleara_metadata_button = utils_qt.ClickableQLabel('Clear all')
-        self.connect(self._cleara_metadata_button, QtCore.SIGNAL('clicked()'), self._uncheck_all_datasets)                
+        self._clear_metadata_button = utils_qt.ClickableQLabel('Clear all')
+        self.connect(self._clear_metadata_button, QtCore.SIGNAL('clicked()'), self._uncheck_all_datasets)                
         self._markall_button = utils_qt.ClickableQLabel('Mark all')
         self.connect(self._markall_button, QtCore.SIGNAL('clicked()'), self._check_all_datasets)                
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
-        hbox1.addWidget(self._cleara_metadata_button)
+        hbox1.addWidget(self._clear_metadata_button)
         hbox1.addWidget(self._markall_button)
         hbox1.addStretch(10)
         #
@@ -635,9 +635,10 @@ class ScreeningActivity(activity_base.ActivityBase):
         form1.addWidget(markall_label, gridrow, 1, 1, 1)
         #
         hbox1 = QtGui.QHBoxLayout()
-        hbox1.addStretch(10)
+#         hbox1.addStretch(10)
         hbox1.addWidget(self._plotparameters_button)
         hbox1.addWidget(self._plotparameterperdate_button)
+        hbox1.addStretch(10)
         #
         layout = QtGui.QVBoxLayout()
 #         layout.addWidget(introlabel)

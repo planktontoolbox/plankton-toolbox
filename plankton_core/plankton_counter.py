@@ -353,6 +353,7 @@ class PlanktonCounterSample():
         #
         totalcounted = 0
         countedspecies = {} # Value for sizeclasses aggregated.
+        locked_list = []
         #
         for sampleobject in self._sample_rows.values():
             # Check method step.
@@ -362,6 +363,12 @@ class PlanktonCounterSample():
             # Count on scientific name. Standard alternative.
             taxon = sampleobject.get_scientific_full_name()
             size = sampleobject.get_size_class()
+            # Use the sam key for locked items.
+            if sampleobject.is_locked():
+                if size:
+                    locked_list.append(taxon + ' [' + size + '] ')     
+                else:
+                    locked_list.append(taxon)     
             # Count on class name.
             if summary_type == 'Counted per class report':
                 taxon = plankton_core.Species().get_taxon_value(taxon, 'taxon_class')
@@ -392,11 +399,17 @@ class PlanktonCounterSample():
             if most_counted_sorting == False:
                 # Alphabetical.
                 for key in sorted(countedspecies):
-                    summary_data.append(key + ': ' + unicode(countedspecies[key]))
+                    lock_info = ''
+                    if key in locked_list:
+                        lock_info = ' [Locked]'
+                    summary_data.append(key + ': ' + unicode(countedspecies[key]) + lock_info)
             else:
                 # Sort for most counted.
                 for key in sorted(countedspecies, key=countedspecies.get, reverse=True):
-                    summary_data.append(key + ': ' + unicode(countedspecies[key]))
+                    lock_info = ''
+                    if key in locked_list:
+                        lock_info = ' [Locked]'
+                    summary_data.append(key + ': ' + unicode(countedspecies[key]) + lock_info)
         #
         return summary_data
     
@@ -461,10 +474,10 @@ class PlanktonCounterSample():
                     sampleobject.set_count_area_number(count_area_number)
                     sampleobject.set_coefficient(coefficient)
     
-    def lock_taxa(self, scientific_name, size_class, locked_at_count_area):
+    def lock_taxa(self, scientific_full_name, size_class, locked_at_count_area):
         """ """
         search_dict = {}
-        search_dict['scientific_name'] = scientific_name
+        search_dict['scientific_full_name'] = scientific_full_name
         search_dict['size_class'] = size_class
         samplerowkey = SampleRow(search_dict).get_key()
         if samplerowkey in self._sample_rows:

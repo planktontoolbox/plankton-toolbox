@@ -8,6 +8,7 @@ from __future__ import unicode_literals
 
 import os
 import toolbox_utils
+import plankton_core
 
 @toolbox_utils.singleton
 class PlanktonCounterMethods():
@@ -75,6 +76,14 @@ class PlanktonCounterMethods():
 
     def get_counting_species_table(self, counting_species_file_name):
         """ """
+        # Use all prealoaded species.
+        if counting_species_file_name == '<all species>':
+            species_list_of_list = []
+            for key in sorted(plankton_core.Species().get_taxa_lookup_dict().keys()):
+                species_list_of_list.append([key])
+            return ['scientific_name'], species_list_of_list
+                
+        # Read stored species file.
         filepath = os.path.join(self._methods_species_lists_dir_path, counting_species_file_name + '.txt')
         if os.path.isfile(filepath):
             tablefilereader = toolbox_utils.TableFileReader(

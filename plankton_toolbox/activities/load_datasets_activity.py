@@ -115,8 +115,9 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addWidget(self._cleara_metadata_button)
         hbox1.addWidget(self._markall_button)
-        hbox1.addStretch(10)
+#         hbox1.addStretch(10)
         hbox1.addWidget(self._importcounterdataset_button)
+        hbox1.addStretch(10)
         #
         layout = QtGui.QVBoxLayout()
         layout.addWidget(counter_datasets_listview, 10)
@@ -237,8 +238,9 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         form1.addWidget(stretchlabel, gridrow,2, 1, 9)
         #
         hbox1 = QtGui.QHBoxLayout()
-        hbox1.addStretch(10)
+#         hbox1.addStretch(10)
         hbox1.addWidget(self._predefined_getdataset_button)
+        hbox1.addStretch(10)
         #
         layout = QtGui.QVBoxLayout()
 #         layout.addWidget(introlabel)
@@ -420,8 +422,9 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         label1 = QtGui.QLabel('Text file character encoding (affects å, è, µ, etc.):')
         hbox1.addWidget(label1)
         hbox1.addWidget(self._textfile_encoding_list)
-        hbox1.addStretch(10)
+#         hbox1.addStretch(10)
         hbox1.addWidget(self._textfile_getdataset_button)
+        hbox1.addStretch(10)
         #
         layout = QtGui.QVBoxLayout()
 #         layout.addWidget(introlabel)
@@ -574,8 +577,9 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         form1.addWidget(self._excel_exportcolumn_list, gridrow, 1, 1, 1)
         #
         hbox1 = QtGui.QHBoxLayout()
-        hbox1.addStretch(10)
+#         hbox1.addStretch(10)
         hbox1.addWidget(self._excel_getdataset_button)
+        hbox1.addStretch(10)
         #
         layout = QtGui.QVBoxLayout()
 #         layout.addWidget(introlabel)

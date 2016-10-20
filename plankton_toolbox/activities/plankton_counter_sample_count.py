@@ -26,8 +26,8 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         #
         self._current_sample_method = None
         self._current_sample_method_step_fields = {}
-        #
         self._temporary_disable_update = False
+        self._net_sampler = False
         #
         super(PlanktonCounterSampleCount, self).__init__()
         #
@@ -119,7 +119,7 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         self._speciessizeclass_list.addItems(['']) 
         self._speciessizeclass_list.currentIndexChanged.connect(self._size_class_changed)
         # Count number.
-        self._infospecieslocked_label = QtGui.QLabel('<i>TEST: No species selected</i>') # 'No species selected', 'Selected species in locked.'
+#         self._infospecieslocked_label = QtGui.QLabel('<i>TEST: No species selected</i>') # 'No species selected', 'Selected species in locked.'
         self._countedunits_edit = KeyPressQSpinBox(self)
         self._countedunits_edit.setRange(0, 999999999)
         self._countedunits_edit.valueChanged.connect(self._counted_value_changed)
@@ -231,9 +231,6 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         # Layout. Column 1A. Methods.
         countgrid = QtGui.QGridLayout()
         gridrow = 0
-        gridrow += 1
-        countgrid.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 1) # Add space.
-        gridrow += 1
         countgrid.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 1) # Add space.
         gridrow += 1
         countgrid.addWidget(utils_qt.LeftAlignedQLabel('<b>Method steps</b>'), gridrow, 0, 1, 1)
@@ -285,8 +282,8 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         countgrid.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 1) # Add space.
         gridrow += 1
         countgrid.addWidget(utils_qt.LeftAlignedQLabel('<b>Counting</b>'), gridrow, 0, 1, 1)
-        gridrow += 1
-        countgrid.addWidget(self._infospecieslocked_label, gridrow, 1, 1, 1)
+#         gridrow += 1
+#         countgrid.addWidget(self._infospecieslocked_label, gridrow, 1, 1, 1)
         gridrow += 1
         countgrid.addWidget(utils_qt.RightAlignedQLabel('# counted:'), gridrow, 0, 1, 1)
         countgrid.addWidget(self._countedunits_edit, gridrow, 1, 1, 1)
@@ -351,11 +348,16 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         vboxsummary.addWidget(self._mostcountedsorted_checkbox)
         vboxsummary.addWidget(self._currentmethodstep_checkbox)
         vboxsummary.addWidget(self._summary_listview)
-        vboxsummary.addWidget(self._saveasspecieslist_button)
+#         vboxsummary.addWidget(self._saveasspecieslist_button)
+        #
+        hbox = QtGui.QHBoxLayout()
+        hbox.addWidget(self._saveasspecieslist_button)
+        hbox.addStretch(5)
+        vboxsummary.addLayout(hbox)
         #
         # Main layout.
         vboxcount = QtGui.QVBoxLayout()
-        vboxcount.addWidget(utils_qt.CenterAlignedQLabel('<b>Species counting</b>'))
+#         vboxcount.addWidget(utils_qt.CenterAlignedQLabel('<b>Species counting</b>'))
         vboxcount.addLayout(countgrid)
         vboxcount.addStretch(10)
         #
@@ -457,10 +459,12 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
     def _counted_clear(self, value):
         """ """
         self._countedunits_edit.setValue(0)
+        self._enable_counting_buttons()
          
     def _counted_class_clear(self, value):
         """ """
         self._abundance_class_list.setCurrentIndex(0)
+        self._enable_counting_buttons()
          
     def _counted_add(self, value):
         """ """
@@ -673,7 +677,10 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         self._counted_sub10_button.setEnabled(False)
         self._counted_add100_button.setEnabled(False)
         self._counted_sub100_button.setEnabled(False)
-        self._counted_clear_button.setEnabled(False)
+        if self._net_sampler:
+            self._counted_clear_button.setEnabled(False)
+        else:
+            self._counted_clear_button.setEnabled(True)
         #
         self._abundance_class_list.setEnabled(False)
         self._counted_class1_button.setEnabled(False)
@@ -681,7 +688,10 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         self._counted_class3_button.setEnabled(False)
         self._counted_class4_button.setEnabled(False)
         self._counted_class5_button.setEnabled(False)
-        self._counted_class_clear_button.setEnabled(False)
+        if self._net_sampler:
+            self._counted_class_clear_button.setEnabled(True)
+        else:
+            self._counted_class_clear_button.setEnabled(False)
     
     def _enable_counting_buttons(self):
         """ """
@@ -810,7 +820,7 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         """ """
         self._selectspecieslist_list.clear()
         specieslists = plankton_core.PlanktonCounterMethods().get_counting_species_lists()
-        self._selectspecieslist_list.addItems(['<select>'] + specieslists)
+        self._selectspecieslist_list.addItems(['<select>' ] + specieslists + ['<all species>' ])
  
     def _update_selected_specieslist(self, selected_list):
         """ """
@@ -1009,6 +1019,8 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         dialog.exec_()
         # Update sample row since rows may have been locked. 
         self._get_sample_row()
+        #
+        self._update_summary()
         
     def _calculate_coefficient(self):
         """ """
@@ -1380,13 +1392,14 @@ class LockTaxaListDialog(QtGui.QDialog):
                 #
                 scientific_name = ''
                 size_class = ''
-                parts = selectedrow.split(':')
-                parts = parts[0].split('[')
-                scientific_name = parts[0].strip()
+#                 parts = selectedrow.split(':')
+#                 parts = parts[0].split('[')
+                parts = selectedrow.split('[')
+                scientific_full_name = parts[0].strip()
                 if len(parts) > 1:
                     size_class = parts[1].strip().strip(']')
                 #
-                self._current_sample_object.lock_taxa(scientific_name, size_class, self._count_area)
+                self._current_sample_object.lock_taxa(scientific_full_name, size_class, self._count_area)
         #            
         self.accept() # Close dialog box.
 

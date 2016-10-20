@@ -8,6 +8,7 @@ from __future__ import unicode_literals
 
 # import os
 # import datetime
+import math
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
@@ -91,22 +92,28 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         self._latitude_degree = QtGui.QLineEdit()
         self._latitude_degree.setPlaceholderText('dd')
         self._latitude_degree.setMaximumWidth(40)
+        self._latitude_degree.textEdited.connect(self._latlong_dm_edited)
         self._latitude_minute = QtGui.QLineEdit()
         self._latitude_minute.setPlaceholderText('mm.mm')
         self._latitude_minute.setMaximumWidth(80)
+        self._latitude_minute.textEdited.connect(self._latlong_dm_edited)
         self._longitude_degree = QtGui.QLineEdit()
         self._longitude_degree.setPlaceholderText('dd')
         self._longitude_degree.setMaximumWidth(40)
+        self._longitude_degree.textEdited.connect(self._latlong_dm_edited)
         self._longitude_minute = QtGui.QLineEdit()
         self._longitude_minute.setPlaceholderText('mm.mm')
         self._longitude_minute.setMaximumWidth(80)
+        self._longitude_minute.textEdited.connect(self._latlong_dm_edited)
 
         self._latitude_dd = QtGui.QLineEdit()
         self._latitude_dd.setPlaceholderText('dd.dddd')
         self._latitude_dd.setMaximumWidth(100)
+        self._latitude_dd.textEdited.connect(self._latlong_dd_edited)
         self._longitude_dd = QtGui.QLineEdit()
         self._longitude_dd.setPlaceholderText('dd.dddd')
         self._longitude_dd.setMaximumWidth(100)
+        self._longitude_dd.textEdited.connect(self._latlong_dd_edited)
 
         self._sample_min_depth_m_edit = QtGui.QLineEdit()
         self._sample_min_depth_m_edit.setMaximumWidth(60)
@@ -301,10 +308,11 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         form1.addWidget(utils_qt.RightAlignedQLabel(''), gridrow, 0, 1, 1)
         #
         hbox1 = QtGui.QHBoxLayout()
-        hbox1.addStretch(10)
+#         hbox1.addStretch(10)
 #         hbox1.addWidget(self._save_sample_info_button)
         hbox1.addWidget(self._clear_sample_info_button)
         hbox1.addWidget(self._copyfromsample_button)
+        hbox1.addStretch(10)
         #
         layout = QtGui.QVBoxLayout()
         layout.addLayout(form1)
@@ -312,6 +320,59 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         layout.addLayout(hbox1)
         #
         return layout
+    
+    
+    def _latlong_dm_edited(self):
+        """ """
+        lat_deg = str(self._latitude_degree.text()).replace(',', '.')
+        lat_min = str(self._latitude_minute.text()).replace(',', '.')
+        long_deg = str(self._longitude_degree.text()).replace(',', '.')
+        long_min = str(self._longitude_minute.text()).replace(',', '.')
+        #
+        try:
+            latitude_dd = float(lat_deg)
+            if lat_min: 
+                latitude_dd += float(lat_min) / 60
+            latitude_dd = math.floor(latitude_dd*10000)/10000
+            self._latitude_dd.setText(str(latitude_dd))
+        except:
+            self._latitude_dd.setText('')
+        try:
+            longitude_dd = float(long_deg)
+            if long_min:
+                longitude_dd += float(long_min) / 60
+            longitude_dd = math.floor(longitude_dd*10000)/10000
+            self._longitude_dd.setText(str(longitude_dd))
+        except:
+            self._longitude_dd.setText('')
+        
+    def _latlong_dd_edited(self):
+        """ """
+        lat_dd = str(self._latitude_dd.text()).replace(',', '.')
+        long_dd = str(self._longitude_dd.text()).replace(',', '.')
+        #
+        try:
+            value = float(lat_dd)
+            value += 0.0000008 # Round (= 0.5 min).
+            degrees = math.floor(abs(value))
+            minutes = (abs(value) - degrees) * 60
+            minutes = math.floor(minutes*100)/100
+            self._latitude_degree.setText(str(int(degrees)))
+            self._latitude_minute.setText(str(minutes))
+        except:
+            self._latitude_degree.setText('')
+            self._latitude_minute.setText('')
+        try:
+            value = float(long_dd)
+            value += 0.0000008 # Round (= 0.5 min).
+            degrees = math.floor(abs(value))
+            minutes = (abs(value) - degrees) * 60
+            minutes = math.floor(minutes*100)/100
+            self._longitude_degree.setText(str(int(degrees)))
+            self._longitude_minute.setText(str(minutes))
+        except:
+            self._longitude_degree.setText('')
+            self._longitude_minute.setText('')
     
     def clear_sample_info_selected(self):
         """ """

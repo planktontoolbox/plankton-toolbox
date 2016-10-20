@@ -113,10 +113,11 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         form1.addWidget(self._splitby_taxon_checkbox, gridrow, 2, 1, 1)
         #
         hbox2 = QtGui.QHBoxLayout()
-        hbox2.addStretch(10)
+#         hbox2.addStretch(10)
         hbox2.addWidget(self._viewdata_button)
         hbox2.addWidget(self._calcstatistics_button)
         hbox2.addWidget(self._plotgraphs_button)
+        hbox2.addStretch(10)
         #
         layout = QtGui.QVBoxLayout()
 #         layout.addWidget(introlabel)

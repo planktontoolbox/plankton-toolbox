@@ -151,8 +151,9 @@ class CreateReportsActivity(activity_base.ActivityBase):
         hbox1.addStretch(5)
         #
         hbox2 = QtGui.QHBoxLayout()
-        hbox2.addStretch(5)
+#         hbox2.addStretch(5)
         hbox2.addWidget(self._createreport_button)
+        hbox2.addStretch(5)
         #
         reportlayout = QtGui.QVBoxLayout()
         reportlayout.addLayout(hbox1)
@@ -201,10 +202,11 @@ class CreateReportsActivity(activity_base.ActivityBase):
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addWidget(self._copytoclipboard_button)
-        hbox1.addStretch(10)
+#         hbox1.addStretch(10)
         hbox1.addWidget(QtGui.QLabel('File format:'))
         hbox1.addWidget(self._saveformat_list)
         hbox1.addWidget(self._savedataset_button)
+        hbox1.addStretch(10)
         #
         saveresultbox.setLayout(hbox1)
         #

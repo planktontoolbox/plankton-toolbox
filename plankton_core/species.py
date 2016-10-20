@@ -556,9 +556,9 @@ class Species(object):
                     self._planktongroups_lookup[scientific_name] = planktongroup
                     return planktongroup
         #                            
-        toolbox_utils.Logging().warning('Not match for Plankton group. "Others" assigned for: ' + scientific_name)
-        self._planktongroups_lookup[scientific_name] = 'Others'
-        return 'Others'
+        toolbox_utils.Logging().warning('Not match for Plankton group. "OTHERS" assigned for: ' + scientific_name)
+        self._planktongroups_lookup[scientific_name] = 'OTHERS'
+        return 'OTHERS'
 
     def _get_files_by_prefix(self, prefix):
         """ """
