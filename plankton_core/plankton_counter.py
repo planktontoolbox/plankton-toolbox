@@ -561,7 +561,6 @@ class PlanktonCounterSample():
                 ]
         sample_info_rows = []
         for header_item in sample_info_header_order:
-            row = []
             sample_info_rows.append([header_item, sample_info_dict.get(header_item, '')])
         
         # Prepare sample info header and rows.
@@ -578,7 +577,7 @@ class PlanktonCounterSample():
 
         # Use openpyxl for Excel.
         workbook = openpyxl.Workbook(optimized_write = True)  # Supports big files.
-        sampleinfo_worksheet = workbook.create_sheet(0)
+        sampleinfo_worksheet = workbook.create_sheet('Sample info')
         sampleinfo_worksheet.title = 'Sample info'
         # Header.
         sampleinfo_worksheet.append(sample_info_header)
@@ -586,7 +585,7 @@ class PlanktonCounterSample():
         for row in sample_info_rows:
             sampleinfo_worksheet.append(row)
         #
-        sampledata_worksheet = workbook.create_sheet(1)
+        sampledata_worksheet = workbook.create_sheet('Sample data')
         sampledata_worksheet.title = 'Sample data'
         # Header.
         sampledata_worksheet.append(sample_data_header)
@@ -594,7 +593,7 @@ class PlanktonCounterSample():
         for row in sample_data_rows:
             sampledata_worksheet.append(row)
         #
-        samplemethod_worksheet = workbook.create_sheet(2)
+        samplemethod_worksheet = workbook.create_sheet('Sample method')
         samplemethod_worksheet.title = 'Sample method'
         # Header.
         samplemethod_worksheet.append(sample_method_header)
