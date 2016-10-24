@@ -171,9 +171,8 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                 dataset_name = datasetandsamplepair[0].strip()
                 sample_name = datasetandsamplepair[1].strip()
             
-                print('DEBUG: dataset_name: ' + dataset_name)
-                print('DEBUG: sample_name: ' + sample_name)
-
+#                 print('DEBUG: dataset_name: ' + dataset_name)
+#                 print('DEBUG: sample_name: ' + sample_name)
 
                 datasetnode = plankton_core.DataImportManager().import_dataset_file(dataset_name = dataset_name, 
                                                                                     sample_name = sample_name, 

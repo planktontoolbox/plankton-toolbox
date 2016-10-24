@@ -222,7 +222,7 @@ class CreateReportToDataCenterShark(object):
                             row_key = ''
                             for item in self._row_key_items:
                                 if row_key: row_key += '<+>'
-                                row_key += row_dict.get(item, '')
+                                row_key += unicode(row_dict.get(item, ''))
                             # Add to dict if first time.
                             if row_key not in report_rows_dict:
                                 report_rows_dict[row_key] = row_dict
@@ -250,6 +250,12 @@ class CreateReportToDataCenterShark(object):
 #                 report_row.append(row_dict.get(item, ''))
             # Create row by using order in header row.
             if self._reporttype == 'counted':
+                
+                
+#                 print(unicode(self._header_counted_items))
+#                 print(unicode(row_dict.keys()))
+                
+                
                 for item in self._header_counted_items:
                     report_row.append(row_dict.get(item, '')) 
             elif self._reporttype == 'net':

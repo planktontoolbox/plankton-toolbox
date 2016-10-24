@@ -409,7 +409,7 @@ class Species(object):
                     counter += 1
                     if counter > 20:
                         parentobject = None # Too many levels, or infinite loop.
-                        print('DEBUG: Species._precalculate_data(): Too many levels, or infinite loop.')
+#                         print('DEBUG: Species._precalculate_data(): Too many levels, or infinite loop.')
                         continue
                     if 'rank' in parentobject:
                         if parentobject['rank'] == 'Species':

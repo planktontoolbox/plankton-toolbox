@@ -60,10 +60,10 @@ def convert_long_from_dd(value):
     match = regex.match(value.upper())
     if match:
 #        print('MATCH:')
-#        print('1: ' + str(match.group(1)))
-#        print('2: ' + str(match.group(2)))
-#        print('3: ' + str(match.group(3)))
-#        print('4: ' + str(match.group(4)))
+#        print('1: ' + unicode(match.group(1)))
+#        print('2: ' + unicode(match.group(2)))
+#        print('3: ' + unicode(match.group(3)))
+#        print('4: ' + unicode(match.group(4)))
         if ((match.group(2) != '') and (match.group(2) != None)):
             longitude = float(match.group(2))
         if ((match.group(3) != '') and (match.group(3) != None) and (match.group(3).replace(',', '.') != '.')):
