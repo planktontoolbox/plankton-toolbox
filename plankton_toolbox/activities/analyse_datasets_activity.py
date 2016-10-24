@@ -180,7 +180,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addWidget(self._copytoclipboard_button)
 #         hbox1.addStretch(5)
-        hbox1.addWidget(QtGui.QLabel('File format:'))
+        hbox1.addWidget(QtGui.QLabel('        File format:'))
         hbox1.addWidget(self._saveformat_list)
         hbox1.addWidget(self._savedataset_button)
         hbox1.addStretch(5)

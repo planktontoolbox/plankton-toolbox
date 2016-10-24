@@ -585,6 +585,9 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         # Get name and size. 
         size_class = ''
         text_row = unicode(self._summary_listview.currentItem().text())
+        if text_row.startswith('Total counted'):
+            text_row = ''
+        #
         text_row_parts = text_row.split(':')
         text_row_parts = text_row_parts[0].split('[')
         scientific_full_name = text_row_parts[0].strip()
@@ -611,8 +614,6 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
                     scientific_name_delimiter = ' '
         #
         self._scientific_name_edit.setText(scientific_name)
-        
-        
         
         # Species CF. list.
         currentindex = self._taxon_cf_list.findText(cf_flag, QtCore.Qt.MatchFixedString)

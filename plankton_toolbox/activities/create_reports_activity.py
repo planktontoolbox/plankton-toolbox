@@ -157,6 +157,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
         #
         reportlayout = QtGui.QVBoxLayout()
         reportlayout.addLayout(hbox1)
+        reportlayout.addWidget(QtGui.QLabel('  ')) # Add space.
         reportlayout.addLayout(hbox2)
         #
         createreportbox.setLayout(reportlayout)
@@ -203,7 +204,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addWidget(self._copytoclipboard_button)
 #         hbox1.addStretch(10)
-        hbox1.addWidget(QtGui.QLabel('File format:'))
+        hbox1.addWidget(QtGui.QLabel('        File format:'))
         hbox1.addWidget(self._saveformat_list)
         hbox1.addWidget(self._savedataset_button)
         hbox1.addStretch(10)

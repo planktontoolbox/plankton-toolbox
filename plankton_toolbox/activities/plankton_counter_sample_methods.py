@@ -75,7 +75,7 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
 #         self._selectanalysismethod_list.currentIndexChanged.connect(self._select_analysis_method_changed)
         self._analysismethod_copy_button = QtGui.QPushButton('Copy values')
         self._analysismethod_copy_button.clicked.connect(self._copy_analysis_method_values)
-        self._analysismethod_reset_button = QtGui.QPushButton('Reset values')
+        self._analysismethod_reset_button = QtGui.QPushButton('Reset to used values')
         self._analysismethod_reset_button.clicked.connect(self._reset_analysis_method_values)
         # Stored methods.
         self._selectmethodstep_list = QtGui.QComboBox(self)
@@ -173,10 +173,7 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         hbox.addStretch(10)
         form1.addLayout(hbox, gridrow, 1, 1, 10)
         gridrow += 1
-        form1.addWidget(utils_qt.LeftAlignedQLabel('<b>Counting methods</b>'), gridrow, 0, 1, 1)
-        form1.addWidget(self._selectanalysismethod_list, gridrow, 1, 1, 10)
-        gridrow += 1
-        form1.addWidget(QtGui.QLabel(''), gridrow, 10, 1, 1) # Add space.
+        form1.addWidget(utils_qt.LeftAlignedQLabel('<b>Counting method</b>'), gridrow, 0, 1, 1)
         gridrow += 1
         form1.addWidget(utils_qt.RightAlignedQLabel('Sampled volume (mL):'), gridrow, 0, 1, 1)
         form1.addWidget(self._sampledvolume_edit, gridrow, 1, 1, 1)
@@ -276,7 +273,7 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         layout = QtGui.QVBoxLayout()
         layout.addLayout(hbox1)
         layout.addStretch(100)
-        layout.addWidget(utils_qt.LeftAlignedQLabel('<b>Manage default analysis methods:</b>'))
+        layout.addWidget(utils_qt.LeftAlignedQLabel('<b>Manage default counting methods:</b>'))
         layout.addLayout(hbox2)
         #
         return layout       
