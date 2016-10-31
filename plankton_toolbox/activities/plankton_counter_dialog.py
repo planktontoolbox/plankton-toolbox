@@ -29,7 +29,9 @@ class PlanktonCounterDialog(QtGui.QDialog):
         super(PlanktonCounterDialog, self).__init__(parentwidget)
         self.setWindowTitle("Plankton counter")
         #
-        self.resize(1500, 900)
+#         self.resize(1500, 900)
+        self.resize(1500, 845)
+#         self.resize(1000, 750)
         #
         self.metadata_widget = None
         self.methods_widget = None
@@ -86,7 +88,17 @@ class PlanktonCounterDialog(QtGui.QDialog):
         contentLayout.addWidget(QtGui.QLabel('')) # Empty label to create space.
 
         self._main_tab_widget = QtGui.QTabWidget(self)
-        contentLayout.addWidget(self._main_tab_widget)
+        
+        # Add scroll capabilities.
+        scrollarea = QtGui.QScrollArea()
+        scrollarea.setFrameShape(QtGui.QFrame.NoFrame)
+        scrollarea.setWidget(self._main_tab_widget)
+        scrollarea.setWidgetResizable(True)
+
+        contentLayout.addWidget(scrollarea)
+#         contentLayout.addWidget(self._main_tab_widget)
+        
+        
         self._main_tab_widget.addTab(self._content_metadata(), 'Sample info')
         self._main_tab_widget.addTab(self._content_methods(), 'Counting methods')
         self._main_tab_widget.addTab(self._content_count(), 'Count sample')
@@ -111,6 +123,12 @@ class PlanktonCounterDialog(QtGui.QDialog):
                                                            self._current_dataset, 
                                                            self._current_sample, 
                                                            self._current_sample_object)
+        # Add scroll capabilities.
+#         scrollarea = QtGui.QScrollArea()
+#         scrollarea.setFrameShape(QtGui.QFrame.NoFrame)
+#         scrollarea.setWidget(self.metadata_widget)
+#         scrollarea.setWidgetResizable(True)
+#         return scrollarea
         return self.metadata_widget
 
     def _content_methods(self):
@@ -119,6 +137,12 @@ class PlanktonCounterDialog(QtGui.QDialog):
                                                            self._current_dataset, 
                                                            self._current_sample, 
                                                            self._current_sample_object)
+#         # Add scroll capabilities.
+#         scrollarea = QtGui.QScrollArea()
+#         scrollarea.setFrameShape(QtGui.QFrame.NoFrame)
+#         scrollarea.setWidget(self.methods_widget)
+#         scrollarea.setWidgetResizable(True)
+#         return scrollarea
         return self.methods_widget
 
     def _content_count(self):

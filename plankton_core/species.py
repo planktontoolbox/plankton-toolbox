@@ -248,30 +248,22 @@ class Species(object):
                 sizeclass = row[1].strip() # Size class.
                 trophictype = row[2].strip() # Trophic type.
                 #
-                
-#                 if (scientificname == 'Anabaena macrospora'):
-#                     print('DEBUG: Anabaena macrospora')
-#                 if (scientificname == 'Dolichospermum macrosporum'):
-#                     print('DEBUG: Dolichospermum macrosporum')
-                
-                
-                
                 if scientificname in self._taxa_lookup:
                     taxon = self._taxa_lookup[scientificname]
                     #
                     if sizeclass:
-                        sizeclassfound = False
+#                         sizeclassfound = False
                         if 'size_classes' in taxon:
                             for sizeclassdict in taxon['size_classes']:
                                 if sizeclassdict.get('bvol_size_class', '') == sizeclass:
                                     if sizeclassdict.get('trophic_type', ''):
                                         if scientificname == taxon['scientific_name']:
-                                            toolbox_utils.Logging().warning('Same taxon/size on multiple rows: ' + scientificname + ' Size: ' + sizeclass + '   (Source: ' + excel_file_name + ')')
+#                                             toolbox_utils.Logging().warning('Same taxon/size on multiple rows: ' + scientificname + ' Size: ' + sizeclass + '   (Source: ' + excel_file_name + ')')
                                             sizeclassfound = True
                                             break
                                     #
                                     sizeclassdict['trophic_type'] = trophictype
-                                    sizeclassfound = True
+#                                     sizeclassfound = True
                                     break
                         #
 #                         if sizeclassfound == False:
@@ -279,18 +271,13 @@ class Species(object):
                     else:
                         # No sizeclass in indata file. Put on species level.                        
                         if taxon.get('trophic_type', ''):
-                            
-                            
-#                             print('DEBUG-1:' + scientificname)
-#                             print('DEBUG-2:' + taxon['scientific_name'])
-                            
-                            
-                            if scientificname == taxon['scientific_name']:
-                                toolbox_utils.Logging().warning('Same taxon on multiple rows: ' + scientificname + '   (Source: ' + excel_file_name + ')')
-                        #
-                        taxon['trophic_type'] = trophictype
+#                             if scientificname == taxon['scientific_name']:
+#                                 toolbox_utils.Logging().warning('Same taxon on multiple rows: ' + scientificname + '   (Source: ' + excel_file_name + ')')
+                            #
+                            taxon['trophic_type'] = trophictype
                 else:
-                    toolbox_utils.Logging().warning('Scientific name is missing: ' + scientificname + '   (Source: ' + excel_file_name + ')')
+#                     toolbox_utils.Logging().warning('Scientific name is missing: ' + scientificname + '   (Source: ' + excel_file_name + ')')
+                    pass
             except:
                 toolbox_utils.Logging().warning('Failed when loading trophic types. File:' + excel_file_name + '  Taxon: ' + scientificname)
 
