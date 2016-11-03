@@ -69,11 +69,29 @@ class MainWindow(QtGui.QMainWindow):
         self._activitymanager.init_activities()
         # Add tools to selector.
         self._create_contentSelectors()
-        # Loads last used window positions.
-        self.setGeometry(self._ui_settings.value('MainWindow/Geometry').toRect())
-        self.restoreState(self._ui_settings.value('MainWindow/State').toByteArray())        
+        # Load last used window positions.
         size = self._ui_settings.value('MainWindow/Size', QtCore.QVariant(QtCore.QSize(900, 600))).toSize()
         position = self._ui_settings.value('MainWindow/Position', QtCore.QVariant(QtCore.QPoint(100, 50))).toPoint()
+        # Check if outside window.
+        screengeometry = QtGui.QDesktopWidget().screenGeometry()
+        if ((size.width() + position.x()) > screengeometry.width()) or \
+            ((size.height() + position.y()) > screengeometry.height()):
+            size.setWidth(900)
+            size.setHeight(600)
+            position.setX(100)
+            position.setY(50)
+        elif (position.x() < -10) or \
+             (position.y() < -10):
+            size.setWidth(900)
+            size.setHeight(600)
+            position.setX(100)
+            position.setY(50)
+        else:   
+            self.setGeometry(self._ui_settings.value('MainWindow/Geometry').toRect())
+            self.restoreState(self._ui_settings.value('MainWindow/State').toByteArray())
+            size = self._ui_settings.value('MainWindow/Size', QtCore.QVariant(QtCore.QSize(900, 600))).toSize()
+            position = self._ui_settings.value('MainWindow/Position', QtCore.QVariant(QtCore.QPoint(100, 50))).toPoint()
+        #
         self.resize(size)
         self.move(position)        
         # Tell the user.
