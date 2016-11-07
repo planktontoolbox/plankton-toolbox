@@ -25,55 +25,61 @@ class ImportPhytowin(plankton_core.DataImportPreparedBase):
         #   Column 3: source file column name. Multiple alternatives should be separated by '<or>'. 
         #   Column 4: export column name. None = not used, empty string ('') = same as column 1 (internal key).
         self._parsing_info = [
-            ['dataset', 'sample_id', 'text', 'Sample Id', ''], 
-            ['dataset', 'project', 'text', 'Project', ''], 
-            ['visit', 'platform_code', 'text', 'Ship', ''], 
-            ['visit', 'station_number', 'text', 'StatNo', ''], 
+            
+            # Metadata:
             ['visit', 'station_name', 'text', 'StatName', ''], 
+            ['visit', 'sample_date', 'text', 'Date', ''], 
+            ['visit', 'time', 'text', 'Time', ''], 
             ['visit', 'reported_latitude', 'text', 'Latitude', ''], 
             ['visit', 'reported_longitude', 'text', 'Longitude', ''], 
-            ['visit', 'date', 'text', 'Date', ''], 
-            ['visit', 'time', 'text', 'Time', ''], 
-            ['visit', 'water_depth_m', 'float', 'Depth', ''], 
             ['sample', 'sample_min_depth_m', 'float', 'Min. Depth', ''], 
             ['sample', 'sample_max_depth_m', 'float', 'Max. Depth', ''], 
-            # "Species","A/H","Size","Descr","Units","Coeff","Units/l","ww mg/m3","µgC/m3"
+            ['visit', 'water_depth_m', 'float', 'Depth', ''], 
+
+            # Header: "Species","A/H","Size","Descr","Units","Coeff","Units/l","ww mg/m3","µgC/m3"
             ['variable', 'reported_scientific_name', 'text', 'Species', None], # Internal use only. 
             ['variable', 'scientific_name', 'text', 'Species', ''], 
-            ['variable', 'species_flag', 'text', '', ''], 
-            ['variable', 'reported_size_class', 'text', 'Size', None], # Internal use only. 
-            ['variable', 'size_class', 'text', 'Size', ''], 
+            ['variable', 'species_flag_code', 'text', '', ''], 
             ['variable', 'reported_trophic_type', 'text', 'A/H', None], # Internal use only. 
             ['variable', 'trophic_type', 'text', '', ''], # Will be calculated later.
-            # Param/value/unit.
-            ['variable', 'parameter', 'text', 'parameter', ''], 
+            ['variable', 'reported_size_class', 'text', 'Size', None], # Internal use only. 
+            ['variable', 'size_class', 'text', 'Size', ''], 
+            ['variable', 'description', 'text', 'Descr', ''], 
+            ['variable', 'coefficient', 'text', 'Coeff', ''], 
+
+            # Param/value/unit. (Added later from "copy parameters".)
+            ['variable', 'parameter', 'text', 'parameter', ''],
             ['variable', 'value', 'float', 'value', ''], 
             ['variable', 'unit', 'text', 'unit', ''], 
-            #
-            ['variable', 'class', 'text', '', ''], # Will be calculated later.
-            ['variable', 'magnification', 'text', 'Magnification', 'magnification'], 
-            ['variable', 'coefficient', 'text', 'Coeff', ''], 
+
+            # Copy parameters.
+            ['copy_parameter', '# counted:ind', 'text', 'Units'], 
+            ['copy_parameter', 'Abundance:ind/l', 'text', 'Units/l'], 
+            ['copy_parameter', 'Wet weight:mg/m3', 'text', 'ww mg/m3'], 
+            ['copy_parameter', 'Carbon content:µgC/m3', 'text', 'µgC/m3'], 
+            ['copy_parameter', 'Abundance class:abu_class', 'text', 'Abundance (scale 1 to 5)'],# NET sample.
+            
+            # More metadata:
+            ['dataset', 'sample_id', 'text', 'Sample Id', ''], 
+            ['dataset', 'project_code', 'text', 'Project', ''], 
+            ['visit', 'platform_code', 'text', 'Ship', ''], 
+            ['visit', 'station_number', 'text', 'StatNo', ''], 
+            ['variable', 'taxon_class', 'text', '', ''], # Will be calculated later.
+            ['variable', 'magnification', 'text', 'Magnification', ''], 
             ['variable', 'counted_units', 'text', 'Units', ''], 
             ['sample', 'number_of_depths', 'text', 'No. Depths', ''], 
-            ['sample', 'sampler_type', 'text', 'Sampler', ''], 
+            ['sample', 'sampler_type_code', 'text', 'Sampler', ''], 
             ['sample', 'sample_size', 'text', 'Sample size', ''], 
             ['sample', 'sampled_by', 'text', 'Sample by', ''], 
             ['sample', 'sample_comment', 'text', 'Comment', ''], 
             ['variable', 'mixed_volume', 'text', 'Mixed volume', ''], 
             ['variable', 'preservative', 'text', 'Preservative', ''], 
             ['variable', 'sedimentation_volume', 'text', 'Sedim. volume', ''], 
-            ['variable', 'preservative', 'text', 'Preservative', ''], 
             ['variable', 'preservative_amount', 'text', 'Amt. preservative', ''], 
             ['variable', 'sedimentation_time_h', 'text', 'Sedim. time (hr)', ''], 
             ['variable', 'chamber_diameter', 'text', 'Chamber diam.', ''], 
-            ['variable', 'counted_on', 'text', 'Counted on', ''], 
-            ['variable', 'counted_by', 'text', 'Counted by', ''], 
-            ['variable', 'description', 'text', 'Descr', ''], 
-            # Copy parameters.
-            ['copy_parameter', '# counted:ind', 'text', 'Units'], 
-            ['copy_parameter', 'Abundance:ind/l', 'text', 'Units/l'], 
-            ['copy_parameter', 'Wet weight:mg/m3', 'text', 'ww mg/m3'], 
-            ['copy_parameter', 'Carbon content:µgC/m3', 'text', 'µgC/m3'], 
+            ['variable', 'analysis_date', 'text', 'Counted on', ''], 
+            ['variable', 'taxonomist', 'text', 'Counted by', ''], 
         ]
         #
         self.clear() # 
@@ -191,21 +197,26 @@ class ImportPhytowin(plankton_core.DataImportPreparedBase):
 
                 
                                 
-                if parsinginforow[1] == 'date':
-                    reporteddate = self._phytowin_sample_info[parsinginforow[3]]
-                    reporteddate = reporteddate                                  
+                if parsinginforow[1] == 'sample_date':
+                    sample_date = self._phytowin_sample_info[parsinginforow[3]]
+                    sample_date = sample_date                                  
                     try:
-                        value = dateutil.parser.parse(reporteddate)
+                        value = dateutil.parser.parse(sample_date)
                         if value:
-                            reporteddate = unicode(value.strftime('%Y-%m-%d'))
+                            sample_date = unicode(value.strftime('%Y-%m-%d'))
                     except:
-                        toolbox_utils.Logging().warning('Parser: Failed to convert to date: ' + reporteddate)
+                        toolbox_utils.Logging().warning('Parser: Failed to convert to date: ' + sample_date)
                     #
-                    visitnode.add_data(parsinginforow[1], reporteddate)        
+                    visitnode.add_data(parsinginforow[1], sample_date) 
+                    
+                    # Add visit_year and visit_month.
+                    try:
+                        visitnode.add_data('visit_year', sample_date[0:4])
+                    except: pass      
+                    try:
+                        visitnode.add_data('visit_month', sample_date[5:7])        
+                    except: pass      
                 else:
-
-                    
-                    
                     visitnode.add_data(parsinginforow[1], self._phytowin_sample_info[parsinginforow[3]])        
         
         # Create sample node and add data. Note: Only one sample in each file. 
@@ -245,7 +256,10 @@ class ImportPhytowin(plankton_core.DataImportPreparedBase):
                 if parsinginforow[0] == 'copy_parameter':
                     paramunit = parsinginforow[1].split(':')
                     parameter = paramunit[0]
-                    unit = paramunit[1]
+                    if len(paramunit) > 1:
+                        unit = paramunit[1]
+                    else: 
+                        unit = ''
                     value = row_dict.get(parsinginforow[3], '')
                     if len(value.strip()) > 0:
                         self.copy_variable(variablenode, p = parameter, v = value, u = unit)
@@ -258,7 +272,7 @@ class ImportPhytowin(plankton_core.DataImportPreparedBase):
                 for variable in sample.get_children():
                     scientificname = variable.get_data('reported_scientific_name')
                     sizeclass = variable.get_data('reported_size_class')
-                    sflag = variable.get_data('species_flag')
+                    sflag = variable.get_data('species_flag_code')
                     # Fix 'cf.' and 'sp.''.
                     scientificname, sflag = plankton_core.DataImportUtils().cleanup_scientific_name_cf(scientificname, sflag)
                     scientificname, sflag = plankton_core.DataImportUtils().cleanup_scientific_name_sp(scientificname, sflag)
@@ -272,14 +286,17 @@ class ImportPhytowin(plankton_core.DataImportPreparedBase):
                     #
                     if name: variable.add_data('scientific_name', name)
                     if size: variable.add_data('size_class', size)
-                    if sflag: variable.add_data('species_flag', sflag.strip())
+                    if sflag: variable.add_data('species_flag_code', sflag.strip())
                     #
                     # Get trophic level from peg.
                     value = plankton_core.Species().get_bvol_value(name, size, 'bvol_trophic_type')
-                    variable.add_data('trophic_type', value)
+                    if value:
+                        variable.add_data('trophic_type', value)
+                    else:
+                        variable.add_data('trophic_type', variable.get_data('reported_trophic_type'))
                     # Get taxonomic class from peg.
-                    value = plankton_core.Species().get_taxon_value(name, 'class')
-                    variable.add_data('class', value)
+                    value = plankton_core.Species().get_taxon_value(name, 'taxon_class')
+                    variable.add_data('taxon_class', value)
 
     
     def _convert_phytowin_species_and_sizes(self, phytowin_name, phytowin_size_class):

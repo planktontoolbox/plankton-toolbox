@@ -97,8 +97,8 @@ class NordicMicroalgae(Taxa):
             id = taxon.get('Taxon id', None)
             if id:
                 self._idToTaxonDict[id] = taxon
-            else:
-                print('DEBUG: Name missing.')
+#             else:
+#                 print('DEBUG: Name missing.')
             
     def _createNameToTaxonDict(self):
         """ Note: Implementation of abstract method. """
@@ -106,8 +106,8 @@ class NordicMicroalgae(Taxa):
             name = taxon.get('Scientific name', None)
             if name:
                 self._nameToTaxonDict[name] = taxon
-            else:
-                print('DEBUG: Name missing.')
+#             else:
+#                 print('DEBUG: Name missing.')
             
     def getSortedNameList(self):
         """ 
@@ -155,8 +155,8 @@ class Dyntaxa(Taxa):
             id = taxon.get('Taxon id', None)
             if id:
                 self._idToTaxonDict[id] = taxon
-            else:
-                print('DEBUG: Name missing.')
+#             else:
+#                 print('DEBUG: Name missing.')
             
     def _createNameToTaxonDict(self):
         """ Note: Implementation of abstract method. """
@@ -164,8 +164,8 @@ class Dyntaxa(Taxa):
             name = taxon.get('Scientific name', None)
             if name:
                 self._nameToTaxonDict[name] = taxon
-            else:
-                print('DEBUG: Name missing.')
+#             else:
+#                 print('DEBUG: Name missing.')
             
     def getSortedNameList(self):
         """ 
@@ -279,8 +279,8 @@ class HarmfulPlankton(Taxa):
             id = taxon.get('Taxon id', None)
             if id:
                 self._idToTaxonDict[id] = taxon
-            else:
-                print('DEBUG: Name missing.')
+#             else:
+#                 print('DEBUG: Name missing.')
             
     def _createNameToTaxonDict(self):
         """ Note: Implementation of abstract method. """
@@ -288,8 +288,8 @@ class HarmfulPlankton(Taxa):
             name = taxon.get('Scientific name', None)
             if name:
                 self._nameToTaxonDict[name] = taxon
-            else:
-                print('DEBUG: Name missing.')
+#             else:
+#                 print('DEBUG: Name missing.')
             
     def getSortedNameList(self):
         """ 

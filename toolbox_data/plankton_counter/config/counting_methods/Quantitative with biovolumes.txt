@@ -1,5 +1,0 @@
-counting_method	method_description	sampled_volume_ml	preservative	preservative_volume_ml	counted_volume_ml	chamber_filter_diameter_mm	counting_method_step	magnification	microscope	count_area_type	diameter_of_view_mm	transect_rectangle_length_mm	transect_rectangle_width_mm	coefficient_one_unit	counting_species_list	view_sizeclass_info
-A - Utermohl	Utermohl	220	Neutral lugols	2.5	4	55	A1 - Utermohl - 100x	100	Zeiss	Chamber/filter	1	3	2	2669471	Baltic phytoplankton list	TRUE
-A - Utermohl	Utermohl	220	Neutral lugols	2.5	4	55	A2 - Utermohl - 400x	400	Zeiss	Transects		5	10	53389	Bengts phytoplankton list	TRUE
-B - Filtered sample - calcofluor stain		220	Neutral lugols	2.5	20	20	B1 - Filtered sample Calcofluor	100	Zeiss	Field of views	3			9988	Swedish bats - for test only	FALSE
-C - Utermohl chamber or Filtered sample		100	Glutardialdehyde	1.5	20	20	C1 - Filtered sample picoplankton	1000	Zeiss	Field of views	3			21894		TRUE

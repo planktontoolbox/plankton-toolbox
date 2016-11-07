@@ -41,7 +41,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
         # Selectable list of loaded datasets.
         self._loaded_datasets_model.clear()        
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().get_datasets()):
-            item = QtGui.QStandardItem('Dataset-' + unicode(rowindex + 1) + 
+            item = QtGui.QStandardItem('Import-' + unicode(rowindex + 1) + 
                                        '.   Source: ' + dataset.get_metadata('file_name'))
             item.setCheckState(QtCore.Qt.Checked)
 #            item.setCheckState(QtCore.Qt.Unchecked)
@@ -86,9 +86,9 @@ class CreateReportsActivity(activity_base.ActivityBase):
         self._loaded_datasets_model = QtGui.QStandardItemModel()
         loaded_datasets_listview.setModel(self._loaded_datasets_model)
         #
-        self._cleara_metadata_button = QtGui.QPushButton('Clear all')
+        self._cleara_metadata_button = utils_qt.ClickableQLabel('Clear all')
         self.connect(self._cleara_metadata_button, QtCore.SIGNAL('clicked()'), self._uncheck_all_datasets)                
-        self._markall_button = QtGui.QPushButton('Mark all')
+        self._markall_button = utils_qt.ClickableQLabel('Mark all')
         self.connect(self._markall_button, QtCore.SIGNAL('clicked()'), self._check_all_datasets)                
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
@@ -120,21 +120,21 @@ class CreateReportsActivity(activity_base.ActivityBase):
         createreportbox = QtGui.QGroupBox('Create report', self)        
         self._report_list = QtGui.QComboBox()
         self._report_list.addItems([
-#                                      'Raw data: Table format',
-#                                      'Qualitative (NET samples): DV format',
-#                                      'Qualitative (NET samples): Species list',
-#                                      'Quantitative (counted): DV format',
-#                                      'Quantitative (counted): Table format',
-                                     'Quantitative (counted): Species list'
+                                    'Standard table format',
+                                    'Quantitative (counted): Table format',
+                                    'Quantitative (counted): Species list',
+                                    'Quantitative (counted): Data Center export',
+                                    'Qualitative (NET samples): Species list',
+                                    'Qualitative (NET samples): Data Center export',
                                      ])
         #
-#         self._report_list.setCurrentIndex(0) # Select: 'Raw data: Table format'.
-#         self._report_list.setCurrentIndex(4) # TEST
+# TODO: For development:
+#         self._report_list.setCurrentIndex(4) # TODO:
         #
-        self.connect(self._report_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._report_list_changed)                
+        self.connect(self._report_list, QtCore.SIGNAL('currentIndexChanged(int)'), self._report_list_changed)            
         #
-        self._debuginfo_checkbox = QtGui.QCheckBox('View debug info')
-        self._debuginfo_checkbox.setChecked(False)
+#         self._debuginfo_checkbox = QtGui.QCheckBox('View debug info')
+#         self._debuginfo_checkbox.setChecked(False)
         #
         self._aggregate_checkbox = QtGui.QCheckBox('Aggregate similar rows')
         self._aggregate_checkbox.setChecked(False)
@@ -146,16 +146,18 @@ class CreateReportsActivity(activity_base.ActivityBase):
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addWidget(QtGui.QLabel('Report type:'))
         hbox1.addWidget(self._report_list)
+#         hbox1.addWidget(self._debuginfo_checkbox)
+        hbox1.addWidget(self._aggregate_checkbox)
         hbox1.addStretch(5)
         #
         hbox2 = QtGui.QHBoxLayout()
-        hbox2.addStretch(5)
-        hbox2.addWidget(self._debuginfo_checkbox)
-        hbox2.addWidget(self._aggregate_checkbox)
+#         hbox2.addStretch(5)
         hbox2.addWidget(self._createreport_button)
+        hbox2.addStretch(5)
         #
         reportlayout = QtGui.QVBoxLayout()
         reportlayout.addLayout(hbox1)
+        reportlayout.addWidget(QtGui.QLabel('  ')) # Add space.
         reportlayout.addLayout(hbox2)
         #
         createreportbox.setLayout(reportlayout)
@@ -164,11 +166,12 @@ class CreateReportsActivity(activity_base.ActivityBase):
 
     def _report_list_changed(self):
         """ """
-        reportindex = self._report_list.currentIndex()
-        if (reportindex == 4) or (reportindex == 5):
-            self._aggregate_checkbox.setEnabled(True)
-        else:
-            self._aggregate_checkbox.setEnabled(False)
+#         reportindex = self._report_list.currentIndex()
+#         if (reportindex == 4) or (reportindex == 5):
+#             self._aggregate_checkbox.setEnabled(True)
+#         else:
+#             self._aggregate_checkbox.setEnabled(False)
+        self._aggregate_checkbox.setEnabled(False)
         
         
     def _content_preview(self):
@@ -200,10 +203,11 @@ class CreateReportsActivity(activity_base.ActivityBase):
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addWidget(self._copytoclipboard_button)
-        hbox1.addStretch(10)
-        hbox1.addWidget(QtGui.QLabel('File format:'))
+#         hbox1.addStretch(10)
+        hbox1.addWidget(QtGui.QLabel('        File format:'))
         hbox1.addWidget(self._saveformat_list)
         hbox1.addWidget(self._savedataset_button)
+        hbox1.addStretch(10)
         #
         saveresultbox.setLayout(hbox1)
         #
@@ -216,32 +220,34 @@ class CreateReportsActivity(activity_base.ActivityBase):
         try:
             selectedreport = self._report_list.currentText()
             #
-            if selectedreport == 'Raw data: Table format':
+            if selectedreport == 'Standard table format':
                 toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
-                # Note: This report was prepared during data file import.
-                # Preview result.
-                if self._tabledataset:
-                    self._tableview.setTableModel(self._tabledataset)
-                    self._tableview.resizeColumnsToContents()
-            elif selectedreport == 'Qualitative (NET samples): DV format':
-                toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
-                report = plankton_core.CreateReportToSharkweb(report_type = 'net')
+                report = plankton_core.CreateReportStandard()
                 self._create_and_view_report(report)
-            elif selectedreport == 'Qualitative (NET samples): Species list':
-                toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
-                report = plankton_core.CreateReportNetSpecies()
-                self._create_and_view_report(report)
-            elif selectedreport == 'Quantitative (counted): DV format':
-                toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
-                report = plankton_core.CreateReportToSharkweb(report_type = 'counted')
-                self._create_and_view_report(report)
+#                 # Note: This report was prepared during data file import.
+#                 # Preview result.
+#                 if self._tabledataset:
+#                     self._tableview.setTableModel(self._tabledataset)
+#                     self._tableview.resizeColumnsToContents()
             elif selectedreport == 'Quantitative (counted): Table format':
                 toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
                 report = plankton_core.CreateReportCounted()
                 self._create_and_view_report(report)
             elif selectedreport == 'Quantitative (counted): Species list':
                 toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
-                report = plankton_core.CreateReportCountedSpecies()
+                report = plankton_core.CreateReportSpecies(report_type = 'counted')
+                self._create_and_view_report(report)
+            elif selectedreport == 'Quantitative (counted): Data Center export':
+                toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
+                report = plankton_core.CreateReportToDataCenterShark(report_type = 'counted')
+                self._create_and_view_report(report)
+            elif selectedreport == 'Qualitative (NET samples): Species list':
+                toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
+                report = plankton_core.CreateReportSpecies(report_type = 'net')
+                self._create_and_view_report(report)
+            elif selectedreport == 'Qualitative (NET samples): Data Center export':
+                toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
+                report = plankton_core.CreateReportToDataCenterShark(report_type = 'net')
                 self._create_and_view_report(report)
             else:
                 raise UserWarning('Sorry, the selected report \ntype is not yet implemented.')
@@ -276,7 +282,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
         # Preview result.
         result_table = plankton_core.DatasetTable()
         report.create_report(datasets, result_table,
-                            show_debug_info = self._debuginfo_checkbox.checkState(),
+#                             show_debug_info = self._debuginfo_checkbox.checkState(),
                             aggregate_rows = self._aggregate_checkbox.checkState())
         # Preview result.
         self._tableview.setTableModel(result_table)

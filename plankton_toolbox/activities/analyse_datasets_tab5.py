@@ -221,7 +221,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         date_list = []
         value_list = [] 
         for visitnode in dataset.get_children():
-            date = visitnode.get_data('date')
+            date = visitnode.get_data('sample_date')
             for samplenode in visitnode.get_children():
                 for variablenode in samplenode.get_children():
                     parameter = variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')'
@@ -249,7 +249,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         value_list = [] 
         for visitnode in dataset.get_children():
             # Replace year with '0000' seasonal cycle.
-            date = visitnode.get_data('date')
+            date = visitnode.get_data('sample_date')
             try: 
                 date = unicode('2000' + date[4:])
             except:
@@ -279,7 +279,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         taxon_set = set()
         for visitnode in dataset.get_children():
             #
-            visit_set.add(unicode(visitnode.get_data('station_name')) + ' : ' + unicode(visitnode.get_data('date'))) # Station name
+            visit_set.add(unicode(visitnode.get_data('station_name')) + ' : ' + unicode(visitnode.get_data('sample_date'))) # Station name
             #
             for samplenode in visitnode.get_children():
                 #
@@ -299,7 +299,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         # Step 3: Fill with data.
         for visitnode in dataset.get_children():
             #
-            visit = (unicode(visitnode.get_data('station_name')) + ' : ' + unicode(visitnode.get_data('date')))
+            visit = (unicode(visitnode.get_data('station_name')) + ' : ' + unicode(visitnode.get_data('sample_date')))
             for samplenode in visitnode.get_children():
                 #
                 for variablenode in samplenode.get_children():
@@ -343,7 +343,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         taxon_set = set()
         for visitnode in dataset.get_children():
             #
-            visit_set.add(unicode(visitnode.get_data('station_name')) + ' : ' + unicode(visitnode.get_data('date'))) # Station name
+            visit_set.add(unicode(visitnode.get_data('station_name')) + ' : ' + unicode(visitnode.get_data('sample_date'))) # Station name
             #
             for samplenode in visitnode.get_children():
                 #
@@ -364,7 +364,7 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
         # Step 3: Fill with data.
         for visitnode in dataset.get_children():
             #
-            visit = (unicode(visitnode.get_data('station_name')) + ' : ' + unicode(visitnode.get_data('date')))
+            visit = (unicode(visitnode.get_data('station_name')) + ' : ' + unicode(visitnode.get_data('sample_date')))
             for samplenode in visitnode.get_children():
                 #
                 for variablenode in samplenode.get_children():

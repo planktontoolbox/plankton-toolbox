@@ -33,6 +33,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         self._parser_list = []
         self._load_available_parsers()
         #
+        self._lastusedsharkwebfilename = ''
         self._lastusedphytowinfilename = ''
         # Initialize parent (self._create_content will be called).
         super(LoadDatasetsActivity, self).__init__(name, parentwidget)
@@ -84,10 +85,10 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         # Active widgets and connections.
         selectdatabox = QtGui.QGroupBox('Import datasets/datafiles', self)
         tabWidget = QtGui.QTabWidget()
-        tabWidget.addTab(self._content_plankton_counter(), 'Plankton counter datasets')
         tabWidget.addTab(self._content_predefined_formats(), 'Predefined formats')
-        tabWidget.addTab(self._content_textfile(), 'Data files - Text (*.txt)')
-        tabWidget.addTab(self._content_xlsx(), 'Data files - Excel (*.xlsx)')
+        tabWidget.addTab(self._content_plankton_counter(), 'Plankton counter datasets')
+        tabWidget.addTab(self._content_textfile(), 'Parsers - Text file (*.txt)')
+        tabWidget.addTab(self._content_xlsx(), 'Parsers - Excel files (*.xlsx)')
         # Layout widgets.
         layout = QtGui.QVBoxLayout()
         layout.addWidget(tabWidget)
@@ -104,9 +105,9 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         self._counter_datasets_model = QtGui.QStandardItemModel()
         counter_datasets_listview.setModel(self._counter_datasets_model)
         #
-        self._cleara_metadata_button = QtGui.QPushButton('Clear all')
+        self._cleara_metadata_button = utils_qt.ClickableQLabel('Clear all')
         self.connect(self._cleara_metadata_button, QtCore.SIGNAL('clicked()'), self._counter_uncheck_all_datasets)                
-        self._markall_button = QtGui.QPushButton('Mark all')
+        self._markall_button = utils_qt.ClickableQLabel('Mark all')
         self.connect(self._markall_button, QtCore.SIGNAL('clicked()'), self._counter_check_all_datasets)                
         self._importcounterdataset_button = QtGui.QPushButton('Import marked dataset(s)')
         self.connect(self._importcounterdataset_button, QtCore.SIGNAL('clicked()'), self._counter_import_counter_datasets)                
@@ -114,8 +115,9 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addWidget(self._cleara_metadata_button)
         hbox1.addWidget(self._markall_button)
-        hbox1.addStretch(10)
+#         hbox1.addStretch(10)
         hbox1.addWidget(self._importcounterdataset_button)
+        hbox1.addStretch(10)
         #
         layout = QtGui.QVBoxLayout()
         layout.addWidget(counter_datasets_listview, 10)
@@ -169,9 +171,8 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                 dataset_name = datasetandsamplepair[0].strip()
                 sample_name = datasetandsamplepair[1].strip()
             
-                print('DEBUG: dataset_name: ' + dataset_name)
-                print('DEBUG: sample_name: ' + sample_name)
-
+#                 print('DEBUG: dataset_name: ' + dataset_name)
+#                 print('DEBUG: sample_name: ' + sample_name)
 
                 datasetnode = plankton_core.DataImportManager().import_dataset_file(dataset_name = dataset_name, 
                                                                                     sample_name = sample_name, 
@@ -181,8 +182,8 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
 
                 # Add metadata related to imported file.
                 datasetnode.add_metadata('parser', '-')
-#                 datasetnode.add_metadata('file_name', os.path.basename(filename))
-#                 datasetnode.add_metadata('file_path', filename)
+                datasetnode.add_metadata('file_name', dataset_name)
+                datasetnode.add_metadata('file_path', sample_name)
                 datasetnode.add_metadata('import_column', '-')
                 datasetnode.add_metadata('export_column', '-')
             #
@@ -217,10 +218,11 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
 #                                     'Darwin Core Archive (Not implemented)',
 #                                     'Darwin Core Archive - EurOBIS (Not implemented)',
 #                                     'PhytoWin (*.csv)']
-        self._predefinedformat_list = ['PhytoWin (*.csv)']
+        self._predefinedformat_list = ['SHARKweb (*.txt)',
+                                       'Phytoplankton-archive (*.csv)']
         self._predefined_format_combo.addItems(self._predefinedformat_list)
         
-        self._predefined_format_combo.setCurrentIndex(0) # 'PhytoWin (*.csv)
+        self._predefined_format_combo.setCurrentIndex(0) # 'SHARKweb (*.txt)'
         
         # Load dataset.
         self._predefined_getdataset_button = QtGui.QPushButton('Import datasets/datafiles...')
@@ -235,8 +237,9 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         form1.addWidget(stretchlabel, gridrow,2, 1, 9)
         #
         hbox1 = QtGui.QHBoxLayout()
-        hbox1.addStretch(10)
+#         hbox1.addStretch(10)
         hbox1.addWidget(self._predefined_getdataset_button)
+        hbox1.addStretch(10)
         #
         layout = QtGui.QVBoxLayout()
 #         layout.addWidget(introlabel)
@@ -250,10 +253,55 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
     def _import_predefined_datasets(self):
         """ """
         selectedformat = self._predefined_format_combo.currentText()
-        if selectedformat == 'PhytoWin (*.csv)':
+        if selectedformat == 'SHARKweb (*.txt)':
+            self._load_sharkweb_datasets()
+        elif selectedformat == 'Phytoplankton-archive (*.csv)':
             self._load_phytowin_datasets()
         else: 
             QtGui.QMessageBox.information(self, "Information", 'Not implemented yet.')
+
+    def _load_sharkweb_datasets(self):
+        """ """
+        try:
+            toolbox_utils.Logging().log('') # Empty line.
+            toolbox_utils.Logging().log('Importing datasets...')
+            toolbox_utils.Logging().start_accumulated_logging()
+            self._write_to_status_bar('Importing datasets...')
+
+            # Show select file dialog box. Multiple files can be selected.
+            namefilter = 'SHARKweb files (*.txt);;All files (*.*)'
+            filenames = QtGui.QFileDialog.getOpenFileNames(
+                                self,
+                                'Load SHARKweb file(s). ',
+                                self._lastusedsharkwebfilename,
+                                namefilter)
+            # From QString to unicode.
+            filenames = map(unicode, filenames)
+            # Check if user pressed ok or cancel.
+            if filenames:
+                for filename in filenames:
+                    self._lastusedsharkwebfilename = filename
+                    datasetnode = plankton_core.DataImportManager().import_dataset_file(filename, 
+                                                                                        import_format = 'SHARKweb')
+                    # Use datasets-wrapper to emit change notification when dataset list is updated.
+                    toolbox_datasets.ToolboxDatasets().emit_change_notification()
+                    # Add metadata related to imported file.
+                    datasetnode.add_metadata('parser', '-')
+                    datasetnode.add_metadata('file_name', os.path.basename(filename))
+                    datasetnode.add_metadata('file_path', filename)
+                    datasetnode.add_metadata('import_column', '-')
+                    datasetnode.add_metadata('export_column', '-')
+            #
+        except Exception as e:
+            toolbox_utils.Logging().error('SHARKweb file import failed on exception: ' + unicode(e))
+            QtGui.QMessageBox.warning(self, 'Text file loading.\n', 
+                                      'SHARKweb file import failed on exception.\n' + unicode(e))
+            raise
+        finally:
+            datasetcount = len(plankton_core.Datasets().get_datasets())
+            self._write_to_status_bar('Imported datasets: ' + unicode(datasetcount))
+            toolbox_utils.Logging().log_all_accumulated_rows()
+            toolbox_utils.Logging().log('Importing datasets done. Number of imported datasets: ' + unicode(datasetcount))
 
     def _load_phytowin_datasets(self):
         """ """
@@ -373,8 +421,9 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         label1 = QtGui.QLabel('Text file character encoding (affects å, è, µ, etc.):')
         hbox1.addWidget(label1)
         hbox1.addWidget(self._textfile_encoding_list)
-        hbox1.addStretch(10)
+#         hbox1.addStretch(10)
         hbox1.addWidget(self._textfile_getdataset_button)
+        hbox1.addStretch(10)
         #
         layout = QtGui.QVBoxLayout()
 #         layout.addWidget(introlabel)
@@ -527,8 +576,9 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         form1.addWidget(self._excel_exportcolumn_list, gridrow, 1, 1, 1)
         #
         hbox1 = QtGui.QHBoxLayout()
-        hbox1.addStretch(10)
+#         hbox1.addStretch(10)
         hbox1.addWidget(self._excel_getdataset_button)
+        hbox1.addStretch(10)
         #
         layout = QtGui.QVBoxLayout()
 #         layout.addWidget(introlabel)
@@ -624,11 +674,11 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         
         self._datasets_table.getTableModel().clear()
         self._datasets_table.getTableModel().set_header(
-                                        ['Dataset      ', 
+                                        ['Import      ', 
 #                                        'Type         ', 
                                          'Content      ', 
-                                         'File         ', 
-                                         'File path    ',
+                                         'File or dataset     ', 
+                                         'File-path or sample ',
                                          'Parser       ',
                                          'Import column',
                                          'Export column'])
@@ -702,7 +752,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
 
             # Add row 
             self._datasets_table.getTableModel().append_row(
-                ['Dataset-' + unicode(rowindex + 1),
+                ['Import-' + unicode(rowindex + 1),
 #                  datasettype,
                  contentinfo,
                  dataset.get_metadata('file_name'),

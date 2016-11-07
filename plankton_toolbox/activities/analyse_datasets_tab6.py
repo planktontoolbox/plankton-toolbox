@@ -171,9 +171,10 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         form1.addWidget(stretchlabel, gridrow,6, 1, 20)
         #
         hbox2 = QtGui.QHBoxLayout()
-        hbox2.addStretch(10)
+#         hbox2.addStretch(10)
         hbox2.addWidget(self._newgraph_button)
         hbox2.addWidget(self._addsubplotdata_button)
+        hbox2.addStretch(10)
         #
         layout = QtGui.QVBoxLayout()
 #         layout.addWidget(introlabel)

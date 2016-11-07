@@ -112,14 +112,14 @@ import plankton_core
 #                     taxonDict = {}
 #                     taxonDict['Taxon id'] = taxonid
 #                     taxonDict['Taxon type id'] = taxontypid
-#                     taxonDict['Taxon type'] = self._taxonTypeDict[str(taxontypid)]
+#                     taxonDict['Taxon type'] = self._taxonTypeDict[unicode(taxontypid)]
 #                     taxonDict['Valid from'] = datum0
 #                     taxonDict['Valid to'] = datum1
 #                 self._taxa.append(taxonDict) # Updates Taxa object.
 #                 if not(taxonid in self._idToTaxon):
 #                     self._idToTaxon[taxonid] = taxonDict # Updates Taxa object.
 #                 else:
-#                     toolbox_utils.Logging().log('Duplicate taxon id: ' + str(taxonid) )
+#                     toolbox_utils.Logging().log('Duplicate taxon id: ' + unicode(taxonid) )
 #         taxonFile.close()
 #         
 #         # === HIER file ===
@@ -210,7 +210,7 @@ import plankton_core
 #                         taxon = self._idToTaxon[taxonid]    
 #                         nameDict = {}
 #                         nameDict['Name type id'] = namntypid
-#                         nameDict['Name type'] = self._nameTypeDict[str(namntypid)]
+#                         nameDict['Name type'] = self._nameTypeDict[unicode(namntypid)]
 #                         nameDict['Name'] = namn
 #                         nameDict['Author'] = auktor
 #                         nameDict['Valid from'] = datum0
@@ -223,7 +223,7 @@ import plankton_core
 #                             taxon['Scientific name'] = namn
 #                             taxon['Scientific name author'] = auktor
 #                     else:
-#                         toolbox_utils.Logging().info('Can not find Taxon id(name): ' + str(underid))                
+#                         toolbox_utils.Logging().info('Can not find Taxon id(name): ' + unicode(underid))                
 #         namesFile.close()
 #         
 #     def _cleanUpString(self,value):
@@ -502,7 +502,7 @@ import plankton_core
 #                     pegtaxon['Species PW SFLAG'] = sflag
 #             for pegsizeclass in pegtaxon['Size classes']:
 #                 # Add PW sizeclass.
-#                 pwnameandsize = pw_sizeclass_dict.get(pegtaxon['Species'] + ':' + str(pegsizeclass['Size class']), '')
+#                 pwnameandsize = pw_sizeclass_dict.get(pegtaxon['Species'] + ':' + unicode(pegsizeclass['Size class']), '')
 #                 pwsize = pwnameandsize.split(':')
 #                 if len(pwsize) > 1:
 #                     try:

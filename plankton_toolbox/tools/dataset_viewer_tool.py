@@ -67,7 +67,7 @@ class DatasetViewerTool(tool_base.ToolBase):
 #         self._allowsync_checkbox.setChecked(False) 
         # Layout widgets.
         layout = QtGui.QHBoxLayout()
-        layout.addWidget(QtGui.QLabel('Datasets:'))
+        layout.addWidget(QtGui.QLabel('Imports:'))
         layout.addWidget(self._selectdataset_list)
 #         layout.addWidget(self._allowsync_checkbox)
         layout.addStretch(5)
@@ -99,10 +99,11 @@ class DatasetViewerTool(tool_base.ToolBase):
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addWidget(self._copytoclipboard_button)
-        hbox1.addStretch(10)
-        hbox1.addWidget(QtGui.QLabel('File format:'))
+#         hbox1.addStretch(10)
+        hbox1.addWidget(QtGui.QLabel('        File format:'))
         hbox1.addWidget(self._saveformat_list)
         hbox1.addWidget(self._savedataset_button)
+        hbox1.addStretch(10)
         #
         saveresultbox.setLayout(hbox1)
         #
@@ -114,7 +115,7 @@ class DatasetViewerTool(tool_base.ToolBase):
         self._selectdataset_list.addItems(["<select dataset>"])
         
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().get_datasets()):
-            self._selectdataset_list.addItems(['Dataset-' + unicode(rowindex + 1)])
+            self._selectdataset_list.addItems(['Import-' + unicode(rowindex + 1)])
 
     def _view_dataset(self, index):
         """ """

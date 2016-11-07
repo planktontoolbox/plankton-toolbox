@@ -113,10 +113,11 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         form1.addWidget(self._splitby_taxon_checkbox, gridrow, 2, 1, 1)
         #
         hbox2 = QtGui.QHBoxLayout()
-        hbox2.addStretch(10)
+#         hbox2.addStretch(10)
         hbox2.addWidget(self._viewdata_button)
         hbox2.addWidget(self._calcstatistics_button)
         hbox2.addWidget(self._plotgraphs_button)
+        hbox2.addStretch(10)
         #
         layout = QtGui.QVBoxLayout()
 #         layout.addWidget(introlabel)
@@ -203,7 +204,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         taxonkey = ''
         #
         for visitnode in dataset.get_children():
-            visitdate = visitnode.get_data('date')
+            visitdate = visitnode.get_data('sample_date')
             visitstation = visitnode.get_data('station_name')
             visitvisit = visitstation + ' ' + visitdate 
             visityear = unicode(visitdate[0:4])
@@ -375,7 +376,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         taxonkey = ''
         #
         for visitnode in dataset.get_children():
-            visitdate = visitnode.get_data('date')
+            visitdate = visitnode.get_data('sample_date')
             visitstation = visitnode.get_data('station_name')
             visitvisit = visitstation + ' ' + visitdate 
             visityear = unicode(visitdate[0:4])
@@ -542,7 +543,7 @@ class AnalyseDatasetsTab7(QtGui.QWidget):
         data_dict = {}        
         #
         for visitnode in dataset.get_children():
-            visitdate = visitnode.get_data('date')
+            visitdate = visitnode.get_data('sample_date')
             visitstation = visitnode.get_data('station_name')
             visitvisit = visitstation + ' ' + visitdate 
             visityear = unicode(visitdate[0:4])

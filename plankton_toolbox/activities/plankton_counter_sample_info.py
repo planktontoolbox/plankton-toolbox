@@ -8,6 +8,7 @@ from __future__ import unicode_literals
 
 # import os
 # import datetime
+import math
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
@@ -55,7 +56,7 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         """ """
         self._sample_name_edit = QtGui.QLineEdit()
         self._sample_name_edit.setEnabled(False)
-        self._change_sample_name_button = QtGui.QPushButton('Change name...')
+        self._change_sample_name_button = QtGui.QPushButton(' Change name... ')
         self._change_sample_name_button.clicked.connect(self._change_sample_name)
         self._sample_id_edit = QtGui.QLineEdit()
 #         self._sample_date = QtGui.QDateEdit()
@@ -64,9 +65,9 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         self._sample_year_edit = QtGui.QLineEdit()
         self._sample_year_edit.setPlaceholderText('yyyy')
         self._sample_year_edit.setMaximumWidth(60)
-        self._sample_month_edit = QtGui.QLineEdit()
-        self._sample_month_edit.setPlaceholderText('mm')
-        self._sample_month_edit.setMaximumWidth(40)
+        self._visit_month_edit = QtGui.QLineEdit()
+        self._visit_month_edit.setPlaceholderText('mm')
+        self._visit_month_edit.setMaximumWidth(40)
         self._sample_day_edit = QtGui.QLineEdit()
         self._sample_day_edit.setPlaceholderText('dd')
         self._sample_day_edit.setMaximumWidth(40)
@@ -91,22 +92,28 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         self._latitude_degree = QtGui.QLineEdit()
         self._latitude_degree.setPlaceholderText('dd')
         self._latitude_degree.setMaximumWidth(40)
+        self._latitude_degree.textEdited.connect(self._latlong_dm_edited)
         self._latitude_minute = QtGui.QLineEdit()
         self._latitude_minute.setPlaceholderText('mm.mm')
         self._latitude_minute.setMaximumWidth(80)
+        self._latitude_minute.textEdited.connect(self._latlong_dm_edited)
         self._longitude_degree = QtGui.QLineEdit()
         self._longitude_degree.setPlaceholderText('dd')
         self._longitude_degree.setMaximumWidth(40)
+        self._longitude_degree.textEdited.connect(self._latlong_dm_edited)
         self._longitude_minute = QtGui.QLineEdit()
         self._longitude_minute.setPlaceholderText('mm.mm')
         self._longitude_minute.setMaximumWidth(80)
+        self._longitude_minute.textEdited.connect(self._latlong_dm_edited)
 
         self._latitude_dd = QtGui.QLineEdit()
         self._latitude_dd.setPlaceholderText('dd.dddd')
         self._latitude_dd.setMaximumWidth(100)
+        self._latitude_dd.textEdited.connect(self._latlong_dd_edited)
         self._longitude_dd = QtGui.QLineEdit()
         self._longitude_dd.setPlaceholderText('dd.dddd')
         self._longitude_dd.setMaximumWidth(100)
+        self._longitude_dd.textEdited.connect(self._latlong_dd_edited)
 
         self._sample_min_depth_m_edit = QtGui.QLineEdit()
         self._sample_min_depth_m_edit.setMaximumWidth(60)
@@ -121,7 +128,7 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         self._sampler_type_code_list.addItems(['<select or edit>', 
                                                'HOS (Hose)', 
                                                'IND (Integrated sample)', 
-                                               'NET (Net)', 
+                                               'NET (Plankton net)', 
                                                'RU (Ruttner sampler)', 
                                                'FBW (Ferry box water sampler)', 
                                                'PDD (Pooled sample from distinct depths)', 
@@ -130,6 +137,16 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
 
         self._sampled_volume_l_edit = QtGui.QLineEdit()
         self._sampled_volume_l_edit.setMaximumWidth(60)
+
+        self._net_type_code_list = QtGui.QComboBox()
+        self._net_type_code_list.setEditable(True)
+        self._net_type_code_list.setMaximumWidth(300)
+        self._net_type_code_list.addItems(['<select or edit>', 
+                                           'NET (Phytoplankton net)', 
+                                           'WP2 (Integrated sample)', 
+                                           'BONGO (Bongo net)', 
+                                           ])
+        
         self._sampler_area_m2_edit = QtGui.QLineEdit()
         self._sampler_area_m2_edit.setMaximumWidth(60)
         self._net_mesh_size_um_edit = QtGui.QLineEdit()
@@ -164,11 +181,13 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         gridrow = 0
+        form1.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 1) # Add space.
+        gridrow += 1
         form1.addWidget(utils_qt.LeftAlignedQLabel('<b>Sampling</b>'), gridrow, 0, 1, 1)
         gridrow += 1
         form1.addWidget(utils_qt.RightAlignedQLabel('Sample name:'), gridrow, 0, 1, 1)
-        form1.addWidget(self._sample_name_edit, gridrow, 1, 1, 3)
-        form1.addWidget(self._change_sample_name_button, gridrow, 4, 1, 1)
+        form1.addWidget(self._sample_name_edit, gridrow, 1, 1, 2)
+        form1.addWidget(self._change_sample_name_button, gridrow, 3, 1, 1)
         gridrow += 1
         form1.addWidget(utils_qt.RightAlignedQLabel('Sample id:'), gridrow, 0, 1, 1)
         form1.addWidget(self._sample_id_edit, gridrow, 1, 1, 3)
@@ -177,7 +196,7 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         hbox = QtGui.QHBoxLayout()
         hbox.addWidget(self._sample_year_edit)
         hbox.addWidget(utils_qt.RightAlignedQLabel('Month:'))
-        hbox.addWidget(self._sample_month_edit)
+        hbox.addWidget(self._visit_month_edit)
         hbox.addWidget(utils_qt.RightAlignedQLabel('Day:'))
         hbox.addWidget(self._sample_day_edit)
         hbox.addWidget(utils_qt.RightAlignedQLabel('Sampling time (UTC):'))
@@ -228,30 +247,38 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         gridrow += 1
         form1.addWidget(utils_qt.RightAlignedQLabel(''), gridrow, 0, 1, 10) # Empty row.
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Sample min depth (m):'), gridrow, 0, 1, 1)
-        form1.addWidget(self._sample_min_depth_m_edit, gridrow, 1, 1, 1)
-        form1.addWidget(utils_qt.RightAlignedQLabel('Sample max depth (m):'), gridrow, 2, 1, 1)
-        form1.addWidget(self._sample_max_depth_m_edit, gridrow, 3, 1, 1)
+        form1.addWidget(utils_qt.RightAlignedQLabel('Sampler type code:'), gridrow, 0, 1, 1)
+        form1.addWidget(self._sampler_type_code_list, gridrow, 1, 1, 1)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Water depth (m):'), gridrow, 0, 1, 1)
-        form1.addWidget(self._water_depth_m_edit, gridrow, 1, 1, 1)
+        form1.addWidget(utils_qt.RightAlignedQLabel('Sample min depth (m):'), gridrow, 0, 1, 1)
+        hbox = QtGui.QHBoxLayout()
+        hbox.addWidget(self._sample_min_depth_m_edit)
+        hbox.addWidget(utils_qt.RightAlignedQLabel('Sample max depth (m):'))
+        hbox.addWidget(self._sample_max_depth_m_edit)
+        hbox.addWidget(utils_qt.RightAlignedQLabel('Water depth (m):'))
+        hbox.addWidget(self._water_depth_m_edit)
+        hbox.addStretch(10)
+        form1.addLayout(hbox, gridrow, 1, 1, 3)
         gridrow += 1
         form1.addWidget(utils_qt.RightAlignedQLabel('Sampled volume (L):'), gridrow, 0, 1, 1)
         form1.addWidget(self._sampled_volume_l_edit, gridrow, 1, 1, 1)
-        form1.addWidget(utils_qt.RightAlignedQLabel('Sampler type code:'), gridrow, 2, 1, 1)
-        form1.addWidget(self._sampler_type_code_list, gridrow, 3, 1, 1)
         gridrow += 1
-        form1.addWidget(utils_qt.LeftAlignedQLabel('Extra info for zooplankton:'), gridrow, 0, 1, 1)
+        form1.addWidget(utils_qt.LeftAlignedQLabel('<b>Net sampling</b>'), gridrow, 0, 1, 1)
+        gridrow += 1
+        form1.addWidget(utils_qt.RightAlignedQLabel('Net type code:'), gridrow, 0, 1, 1)
+        form1.addWidget(self._net_type_code_list, gridrow, 1, 1, 1)
         gridrow += 1
         form1.addWidget(utils_qt.RightAlignedQLabel('Sampler area (m2):'), gridrow, 0, 1, 1)
-        form1.addWidget(self._sampler_area_m2_edit, gridrow, 1, 1, 1)
-        form1.addWidget(utils_qt.RightAlignedQLabel('Net mesh size (µm):'), gridrow, 2, 1, 1)
-        form1.addWidget(self._net_mesh_size_um_edit, gridrow, 3, 1, 1)        
-        gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Wire angle (deg):'), gridrow, 0, 1, 1)
-        form1.addWidget(self._wire_angle_deg_edit, gridrow, 1, 1, 1)        
-        form1.addWidget(utils_qt.RightAlignedQLabel('Net tow length (m):'), gridrow, 2, 1, 1)
-        form1.addWidget(self._net_tow_length_m_edit, gridrow, 3, 1, 1)        
+        hbox = QtGui.QHBoxLayout()
+        hbox.addWidget(self._sampler_area_m2_edit)
+        hbox.addWidget(utils_qt.RightAlignedQLabel('Mesh size (µm):'))
+        hbox.addWidget(self._net_mesh_size_um_edit)
+        hbox.addWidget(utils_qt.RightAlignedQLabel('Wire angle (deg):'))
+        hbox.addWidget(self._wire_angle_deg_edit)
+        hbox.addWidget(utils_qt.RightAlignedQLabel('Tow length (m):'))
+        hbox.addWidget(self._net_tow_length_m_edit)
+        hbox.addStretch(10)
+        form1.addLayout(hbox, gridrow, 1, 1, 3)
         # Empty row.
         gridrow += 1
         form1.addWidget(utils_qt.RightAlignedQLabel(''), gridrow, 0, 1, 1)
@@ -281,10 +308,11 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         form1.addWidget(utils_qt.RightAlignedQLabel(''), gridrow, 0, 1, 1)
         #
         hbox1 = QtGui.QHBoxLayout()
-        hbox1.addStretch(10)
+#         hbox1.addStretch(10)
 #         hbox1.addWidget(self._save_sample_info_button)
         hbox1.addWidget(self._clear_sample_info_button)
         hbox1.addWidget(self._copyfromsample_button)
+        hbox1.addStretch(10)
         #
         layout = QtGui.QVBoxLayout()
         layout.addLayout(form1)
@@ -292,6 +320,59 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         layout.addLayout(hbox1)
         #
         return layout
+    
+    
+    def _latlong_dm_edited(self):
+        """ """
+        lat_deg = unicode(self._latitude_degree.text()).replace(',', '.')
+        lat_min = unicode(self._latitude_minute.text()).replace(',', '.')
+        long_deg = unicode(self._longitude_degree.text()).replace(',', '.')
+        long_min = unicode(self._longitude_minute.text()).replace(',', '.')
+        #
+        try:
+            latitude_dd = float(lat_deg)
+            if lat_min: 
+                latitude_dd += float(lat_min) / 60
+            latitude_dd = math.floor(latitude_dd*10000)/10000
+            self._latitude_dd.setText(unicode(latitude_dd))
+        except:
+            self._latitude_dd.setText('')
+        try:
+            longitude_dd = float(long_deg)
+            if long_min:
+                longitude_dd += float(long_min) / 60
+            longitude_dd = math.floor(longitude_dd*10000)/10000
+            self._longitude_dd.setText(unicode(longitude_dd))
+        except:
+            self._longitude_dd.setText('')
+        
+    def _latlong_dd_edited(self):
+        """ """
+        lat_dd = unicode(self._latitude_dd.text()).replace(',', '.')
+        long_dd = unicode(self._longitude_dd.text()).replace(',', '.')
+        #
+        try:
+            value = float(lat_dd)
+            value += 0.0000008 # Round (= 0.5 min).
+            degrees = math.floor(abs(value))
+            minutes = (abs(value) - degrees) * 60
+            minutes = math.floor(minutes*100)/100
+            self._latitude_degree.setText(unicode(int(degrees)))
+            self._latitude_minute.setText(unicode(minutes))
+        except:
+            self._latitude_degree.setText('')
+            self._latitude_minute.setText('')
+        try:
+            value = float(long_dd)
+            value += 0.0000008 # Round (= 0.5 min).
+            degrees = math.floor(abs(value))
+            minutes = (abs(value) - degrees) * 60
+            minutes = math.floor(minutes*100)/100
+            self._longitude_degree.setText(unicode(int(degrees)))
+            self._longitude_minute.setText(unicode(minutes))
+        except:
+            self._longitude_degree.setText('')
+            self._longitude_minute.setText('')
     
     def clear_sample_info_selected(self):
         """ """
@@ -334,7 +415,7 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
 #         self._sample_name_edit = QtGui.QLineEdit()
 #         self._sample_id_edit = QtGui.QLineEdit()
 #         self._sample_year_edit = QtGui.QLineEdit()
-#         self._sample_month_edit = QtGui.QLineEdit()
+#         self._visit_month_edit = QtGui.QLineEdit()
 #         self._sample_day_edit = QtGui.QLineEdit()
 #         self._sample_time_edit = QtGui.QLineEdit()
 #         self._sampling_year_edit = QtGui.QLineEdit()
@@ -352,6 +433,7 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
 #         self._water_depth_m_edit = QtGui.QLineEdit()
 #         self._sampler_type_code_list = QtGui.QComboBox()
 #         self._sampled_volume_l_edit = QtGui.QLineEdit()
+# self._net_type_code_list = QtGui.QComboBox()
 #         self._sampler_area_m2_edit = QtGui.QLineEdit()
 #         self._net_mesh_size_um_edit = QtGui.QLineEdit()
 #         self._wire_angle_deg_edit = QtGui.QLineEdit()
@@ -366,32 +448,35 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         metadata_dict['sample_name'] = unicode(self._current_sample)
         metadata_dict['sample_id'] = unicode(self._sample_id_edit.text())
         year = unicode(self._sample_year_edit.text())
-        month = unicode(self._sample_month_edit.text())
+        month = unicode(self._visit_month_edit.text())
         day = unicode(self._sample_day_edit.text())
         date_tmp = year + '-' + month + '-' + day 
         metadata_dict['sample_date'] = date_tmp
         metadata_dict['sample_time'] = unicode(self._sample_time_edit.text())
-        metadata_dict['year'] = unicode(self._sampling_year_edit.text())
+        metadata_dict['visit_year'] = unicode(self._sampling_year_edit.text())
         metadata_dict['country_code'] = unicode(self._sampling_country_edit.text())
         metadata_dict['platform_code'] = unicode(self._sampling_platform_edit.text())
         metadata_dict['sampling_series'] = unicode(self._sampling_series_edit.text())
-        metadata_dict['project'] = unicode(self._project_edit.text())
+        metadata_dict['project_code'] = unicode(self._project_edit.text())
         metadata_dict['station_name'] = unicode(self._station_name_edit.text())
-        lat_deg_tmp = unicode(self._latitude_degree.text())
-        lat_min_tmp = unicode(self._latitude_minute.text())
-        long_deg_tmp = unicode(self._longitude_degree.text())
-        long_min_tmp = unicode(self._longitude_minute.text())
-        lat_dd_tmp = unicode(self._latitude_dd.text())
-        long_dd_tmp = unicode(self._longitude_dd.text())
-        metadata_dict['latitude_dm'] = lat_deg_tmp + ' ' + lat_min_tmp
-        metadata_dict['longitude_dm'] = long_deg_tmp + ' ' + long_min_tmp
-        metadata_dict['latitude_dd'] = lat_dd_tmp
-        metadata_dict['longitude_dd'] = long_dd_tmp
+        lat_deg_tmp = unicode(self._latitude_degree.text()).replace(',', '.')
+        lat_min_tmp = unicode(self._latitude_minute.text()).replace(',', '.')
+        long_deg_tmp = unicode(self._longitude_degree.text()).replace(',', '.')
+        long_min_tmp = unicode(self._longitude_minute.text()).replace(',', '.')
+        lat_dd_tmp = unicode(self._latitude_dd.text()).replace(',', '.')
+        long_dd_tmp = unicode(self._longitude_dd.text()).replace(',', '.')
+        metadata_dict['sample_latitude_dm'] = lat_deg_tmp + ' ' + lat_min_tmp
+        metadata_dict['sample_longitude_dm'] = long_deg_tmp + ' ' + long_min_tmp
+        metadata_dict['sample_latitude_dd'] = lat_dd_tmp
+        metadata_dict['sample_longitude_dd'] = long_dd_tmp
         metadata_dict['sample_min_depth_m'] = unicode(self._sample_min_depth_m_edit.text())
         metadata_dict['sample_max_depth_m'] = unicode(self._sample_max_depth_m_edit.text())
         metadata_dict['water_depth_m'] = unicode(self._water_depth_m_edit.text())
         metadata_dict['sampler_type_code'] = unicode(self._sampler_type_code_list.currentText())
         metadata_dict['sampled_volume_l'] = unicode(self._sampled_volume_l_edit.text())
+        
+        metadata_dict['net_type_code'] = unicode(self._net_type_code_list.currentText())        
+        
         metadata_dict['sampler_area_m2'] = unicode(self._sampler_area_m2_edit.text())
         metadata_dict['net_mesh_size_um'] = unicode(self._net_mesh_size_um_edit.text())
         metadata_dict['wire_angle_deg'] = unicode(self._wire_angle_deg_edit.text())
@@ -402,7 +487,7 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         day = unicode(self._analysis_day_edit.text())
         date_tmp = year + '-' + month + '-' + day 
         metadata_dict['analysis_date'] = date_tmp
-        metadata_dict['analysed_by'] = unicode(self._analysed_by_edit.text())
+        metadata_dict['taxonomist'] = unicode(self._analysed_by_edit.text())
         metadata_dict['sample_comment'] = unicode(self._sample_comment_edit.text())
 
     def _from_dict_to_fields(self, metadata_dict):
@@ -413,22 +498,22 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         date_tmp = metadata_dict.get('sample_date', '')
         if len(date_tmp) >= 10:
             self._sample_year_edit.setText(date_tmp[0:4])
-            self._sample_month_edit.setText(date_tmp[5:7])
+            self._visit_month_edit.setText(date_tmp[5:7])
             self._sample_day_edit.setText(date_tmp[8:10])
         else:
             self._sample_year_edit.setText('')
-            self._sample_month_edit.setText('')
+            self._visit_month_edit.setText('')
             self._sample_day_edit.setText('')
         self._sample_time_edit.setText(metadata_dict.get('sample_time', ''))
-        self._sampling_year_edit.setText(metadata_dict.get('year', ''))
+        self._sampling_year_edit.setText(metadata_dict.get('visit_year', ''))
         self._sampling_country_edit.setText(metadata_dict.get('country_code', ''))
         self._sampling_platform_edit.setText(metadata_dict.get('platform_code', ''))
         self._sampling_series_edit.setText(metadata_dict.get('sampling_series', ''))
-        self._project_edit.setText(metadata_dict.get('project', ''))
+        self._project_edit.setText(metadata_dict.get('project_code', ''))
         self._station_name_edit.setText(metadata_dict.get('station_name', ''))
         
-        lat_tmp = unicode(metadata_dict.get('latitude_dm', ''))
-        long_tmp = unicode(metadata_dict.get('longitude_dm', ''))
+        lat_tmp = unicode(metadata_dict.get('sample_latitude_dm', ''))
+        long_tmp = unicode(metadata_dict.get('sample_longitude_dm', ''))
         if (len(lat_tmp) > 2) and (' ' in lat_tmp):
             lat_deg_min = lat_tmp.split(' ') 
             self._latitude_degree.setText(lat_deg_min[0])
@@ -444,8 +529,8 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
             self._longitude_degree.setText('')
             self._longitude_minute.setText('')
         #
-        self._latitude_dd.setText(unicode(metadata_dict.get('latitude_dd', '')))
-        self._longitude_dd.setText(unicode(metadata_dict.get('longitude_dd', '')))
+        self._latitude_dd.setText(unicode(metadata_dict.get('sample_latitude_dd', '')))
+        self._longitude_dd.setText(unicode(metadata_dict.get('sample_longitude_dd', '')))
         #       
 #         self._latlong_format_list.setText(metadata_dict.get('latlong_format_list', ''))
         self._sample_min_depth_m_edit.setText(metadata_dict.get('sample_min_depth_m', ''))
@@ -457,8 +542,15 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
             self._sampler_type_code_list.setCurrentIndex(currentindex)
         else:
             self._sampler_type_code_list.setItemText(0, sampler_type_code)
-        
         self._sampled_volume_l_edit.setText(metadata_dict.get('sampled_volume_l', ''))
+
+        net_type_code = metadata_dict.get('net_type_code', '')
+        currentindex = self._net_type_code_list.findText(net_type_code, QtCore.Qt.MatchFixedString)
+        if currentindex >= 0:
+            self._net_type_code_list.setCurrentIndex(currentindex)
+        else:
+            self._net_type_code_list.setItemText(0, sampler_type_code)
+        
         self._sampler_area_m2_edit.setText(metadata_dict.get('sampler_area_m2', ''))
         self._net_mesh_size_um_edit.setText(metadata_dict.get('net_mesh_size_um', ''))
         self._wire_angle_deg_edit.setText(metadata_dict.get('wire_angle_deg', ''))
@@ -475,7 +567,7 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
             self._analysis_year_edit.setText('')
             self._analysis_month_edit.setText('')
             self._analysis_day_edit.setText('')
-        self._analysed_by_edit.setText(metadata_dict.get('analysed_by', ''))
+        self._analysed_by_edit.setText(metadata_dict.get('taxonomist', ''))
         self._sample_comment_edit.setText(metadata_dict.get('sample_comment', ''))
                        
 
@@ -570,7 +662,7 @@ class RenameSampleDialog(QtGui.QDialog):
         """ """
         self._newsamplename_edit = QtGui.QLineEdit(self._old_sample_name)
         self._newsamplename_edit.setMinimumWidth(400)
-        createsample_button = QtGui.QPushButton('Rename sample')
+        createsample_button = QtGui.QPushButton(' Rename sample ')
         createsample_button.clicked.connect(self._rename_sample)               
         cancel_button = QtGui.QPushButton('Cancel')
         cancel_button.clicked.connect(self.reject) # Close dialog box.               

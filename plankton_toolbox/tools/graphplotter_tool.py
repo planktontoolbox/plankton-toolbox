@@ -119,9 +119,10 @@ class GraphPlotterTool(tool_base.ToolBase):
         form.addRow('Plot labels', self._editable_listview)
         #
         hbox = QtGui.QHBoxLayout()
-        hbox.addStretch(5)
+#         hbox.addStretch(5)
         hbox.addWidget(self._resetsettings_button)
         hbox.addWidget(self._applysettings_button)
+        hbox.addStretch(10)
         #
         vbox = QtGui.QVBoxLayout()
         vbox.addLayout(form)
@@ -195,9 +196,10 @@ class GraphPlotterTool(tool_base.ToolBase):
         hbox3.addStretch()
         #
         hbox4 = QtGui.QHBoxLayout()
-        hbox4.addStretch(5)
+#         hbox4.addStretch(5)
         hbox4.addWidget(self._labelsreset_button)
         hbox4.addWidget(self._labelsapply_button)
+        hbox4.addStretch(10)
         #
         layout = QtGui.QVBoxLayout()
         layout.addWidget(QtGui.QLabel('Graph:'))
@@ -278,9 +280,10 @@ class GraphPlotterTool(tool_base.ToolBase):
         layout.addWidget(self._combined_checkbox)
         layout.addWidget(self._stacked_checkbox)
         layout.addWidget(self._ylogscale_checkbox)
-        layout.addStretch(5)
+#         layout.addStretch(5)
         layout.addWidget(self._clear_button)
         layout.addWidget(self._savecharttofile_button)
+        layout.addStretch(10)
         #
         return layout
         

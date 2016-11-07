@@ -48,11 +48,12 @@ class LogTool(tool_base.ToolBase):
         # Layout.
         layout = QtGui.QHBoxLayout()
         limit_label = QtGui.QLabel('Number of displayed rows: ')
-        layout.addStretch(5)
+#         layout.addStretch(5)
         layout.addWidget(limit_label)
         layout.addWidget(self._limit_edit)
         layout.addWidget(self._clear_button)
 #        layout.addWidget(self._openlogfile_button)
+        layout.addStretch(10)
         #
         return layout
 

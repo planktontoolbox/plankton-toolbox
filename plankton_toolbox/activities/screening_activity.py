@@ -37,7 +37,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         # Selectable list of loaded datasets.
         self._loaded_datasets_model.clear()        
         for rowindex, dataset in enumerate(toolbox_datasets.ToolboxDatasets().get_datasets()):
-            item = QtGui.QStandardItem('Dataset-' + unicode(rowindex + 1) + 
+            item = QtGui.QStandardItem('Import-' + unicode(rowindex + 1) + 
                                        '.   Source: ' + dataset.get_metadata('file_name'))
             item.setCheckState(QtCore.Qt.Checked)
 #            item.setCheckState(QtCore.Qt.Unchecked)
@@ -85,13 +85,13 @@ class ScreeningActivity(activity_base.ActivityBase):
         self._loaded_datasets_model = QtGui.QStandardItemModel()
         loaded_datasets_listview.setModel(self._loaded_datasets_model)
         #
-        self._cleara_metadata_button = QtGui.QPushButton('Clear all')
-        self.connect(self._cleara_metadata_button, QtCore.SIGNAL('clicked()'), self._uncheck_all_datasets)                
-        self._markall_button = QtGui.QPushButton('Mark all')
+        self._clear_metadata_button = utils_qt.ClickableQLabel('Clear all')
+        self.connect(self._clear_metadata_button, QtCore.SIGNAL('clicked()'), self._uncheck_all_datasets)                
+        self._markall_button = utils_qt.ClickableQLabel('Mark all')
         self.connect(self._markall_button, QtCore.SIGNAL('clicked()'), self._check_all_datasets)                
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
-        hbox1.addWidget(self._cleara_metadata_button)
+        hbox1.addWidget(self._clear_metadata_button)
         hbox1.addWidget(self._markall_button)
         hbox1.addStretch(10)
         #
@@ -208,7 +208,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                     countvariables = 0
                     for visitnode in dataset.get_children():
                         row = '   - Sampling event: ' + visitnode.get_data('station_name') + \
-                              ', ' + visitnode.get_data('date')
+                              ', ' + visitnode.get_data('sample_date')
                         self._structureresult_list.append(row)
                         countsamples = 0
                         countvariables = 0
@@ -236,7 +236,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                     for visitnode in dataset.get_children():
                         row = '   - Sampling event: ' + \
                               unicode(visitnode.get_data('station_name')) + ' ' + \
-                              unicode(visitnode.get_data('date'))
+                              unicode(visitnode.get_data('sample_date'))
                         self._structureresult_list.append(row)
                         for samplenode in visitnode.get_children():
                             row = '      - Sample: ' + \
@@ -290,7 +290,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                     dataset_descr = dataset.get_metadata('file_name')
                     for visitnode in dataset.get_children():
                         visit_descr = unicode(visitnode.get_data('station_name')) + ', ' + \
-                                      unicode(visitnode.get_data('date'))
+                                      unicode(visitnode.get_data('sample_date'))
                         for samplenode in visitnode.get_children():
                             sample_descr = unicode(samplenode.get_data('sample_min_depth_m')) + '-' + \
                                            unicode(samplenode.get_data('sample_max_depth_m'))
@@ -381,7 +381,7 @@ class ScreeningActivity(activity_base.ActivityBase):
             toolbox_utils.Logging().start_accumulated_logging()
             self._write_to_status_bar('Code list screening in progress...')
             # Perform screening.
-            codetypes_set = toolbox_utils.ScreeningManager().code_list_screening(toolbox_datasets.ToolboxDatasets().get_datasets())
+            codetypes_set = plankton_core.ScreeningManager().code_list_screening(toolbox_datasets.ToolboxDatasets().get_datasets())
         finally:
             # Log in result window.
             self._codesspeciesresult_list.append('Screening was done on these code types: ' + 
@@ -420,7 +420,7 @@ class ScreeningActivity(activity_base.ActivityBase):
             toolbox_utils.Logging().start_accumulated_logging()
             self._write_to_status_bar('Species screening in progress...')
             # Perform screening.
-            toolbox_utils.ScreeningManager().species_screening(toolbox_datasets.ToolboxDatasets().get_datasets())
+            plankton_core.ScreeningManager().species_screening(toolbox_datasets.ToolboxDatasets().get_datasets())
         finally:
             # Log in result window.
 #             self._codesspeciesresult_list.append('Screening was done on these code types: ' + 
@@ -457,7 +457,7 @@ class ScreeningActivity(activity_base.ActivityBase):
             toolbox_utils.Logging().start_accumulated_logging()
             self._write_to_status_bar('BVOL Species screening in progress...')
             # Perform screening.
-            toolbox_utils.ScreeningManager().bvol_species_screening(toolbox_datasets.ToolboxDatasets().get_datasets())
+            plankton_core.ScreeningManager().bvol_species_screening(toolbox_datasets.ToolboxDatasets().get_datasets())
         finally:
             # Log in result window.
 #             self._codesspeciesresult_list.append('Screening was done on these code types: ' + 
@@ -635,9 +635,10 @@ class ScreeningActivity(activity_base.ActivityBase):
         form1.addWidget(markall_label, gridrow, 1, 1, 1)
         #
         hbox1 = QtGui.QHBoxLayout()
-        hbox1.addStretch(10)
+#         hbox1.addStretch(10)
         hbox1.addWidget(self._plotparameters_button)
         hbox1.addWidget(self._plotparameterperdate_button)
+        hbox1.addStretch(10)
         #
         layout = QtGui.QVBoxLayout()
 #         layout.addWidget(introlabel)
@@ -750,7 +751,7 @@ class ScreeningActivity(activity_base.ActivityBase):
                 if item.checkState() == QtCore.Qt.Checked:        
                     #
                     for visitnode in dataset.get_children():
-                        date = visitnode.get_data('date')
+                        date = visitnode.get_data('sample_date')
                         for samplenode in visitnode.get_children():
                             for variablenode in samplenode.get_children():
                                 if (variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')') == parameter:

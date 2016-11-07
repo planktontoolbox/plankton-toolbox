@@ -103,14 +103,14 @@ from __future__ import unicode_literals
 #                 parent_id = parent_taxon.get('parent_id', None)
 #             #
 #             if taxon_class:
-#                 taxon['class'] =  taxon_class
+#                 taxon['taxon_class'] =  taxon_class
 #                 taxon['class_id'] =  taxon_class_id
 #         #
-#         table_header = ['scientific_name', 'rank', 'taxon_id', 'parent_id', 'class', 'class_id', 'classification']
+#         table_header = ['scientific_name', 'rank', 'taxon_id', 'parent_id', 'taxon_class', 'class_id', 'classification']
 #         table_rows = []
 #         for row in taxa_dict.values():
 #             outrow = []
-#             for item in ['scientificname', 'rank', 'AphiaID', 'parent_id', 'class', 'class_id', 'classification']:
+#             for item in ['scientificname', 'rank', 'AphiaID', 'parent_id', 'taxon_class', 'class_id', 'classification']:
 #                 outrow.append(unicode(row.get(item, '')))
 #             table_rows.append(outrow)
 #         #
@@ -170,12 +170,12 @@ from __future__ import unicode_literals
 # # 
 # #         worms_dict['worms_rank'] = self._get_value(aphia_dict, 'rank')
 # # 
-# #         worms_dict['worms_kingdom'] = self._get_value(aphia_dict, 'kingdom')
-# #         worms_dict['worms_phylum'] = self._get_value(aphia_dict, 'phylum')
-# #         worms_dict['worms_class'] = self._get_value(aphia_dict, 'class')
-# #         worms_dict['worms_order'] = self._get_value(aphia_dict, 'order')
-# #         worms_dict['worms_family'] = self._get_value(aphia_dict, 'family')
-# #         worms_dict['worms_genus'] = self._get_value(aphia_dict, 'genus')
+# #         worms_dict['worms_kingdom'] = self._get_value(aphia_dict, 'taxon_kingdom')
+# #         worms_dict['worms_phylum'] = self._get_value(aphia_dict, 'taxon_phylum')
+# #         worms_dict['worms_class'] = self._get_value(aphia_dict, 'taxon_class')
+# #         worms_dict['worms_order'] = self._get_value(aphia_dict, 'taxon_order')
+# #         worms_dict['worms_family'] = self._get_value(aphia_dict, 'taxon_family')
+# #         worms_dict['worms_genus'] = self._get_value(aphia_dict, 'taxon_genus')
 # #         worms_dict['worms_sscientific name'] = self._get_value(aphia_dict, 'scientificname')
 # #         worms_dict['worms_authority'] = self._get_value(aphia_dict, 'authority')
 # # 

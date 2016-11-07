@@ -25,22 +25,37 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
         #   Column 3: source file column name. Multiple alternatives should be separated by '<or>'. 
         #   Column 4: export column name. None = not used, empty string ('') = same as column 1 (internal key).
         self._parsing_info = [
-#             ['dataset', 'sample_id', 'text', 'Sample Id', ''], 
-#             ['dataset', 'project', 'text', 'Project', ''], 
-#             ['visit', 'platform_code', 'text', 'Ship', ''], 
-#             ['visit', 'station_number', 'text', 'StatNo', ''], 
+            ['visit', 'visit_year', 'text', 'visit_year', ''], 
+            ['visit', 'sample_date', 'text', 'sample_date', ''], 
+            ['sample', 'sample_time', 'text', 'sample_time', ''], 
+            ['visit', 'country_code', 'text', 'country_code', ''], 
+            ['visit', 'platform_code', 'text', 'platform_code', ''], 
+            ['visit', 'sampling_series', 'text', 'sampling_series', ''], 
+            
+            ['visit', 'project_code', 'text', 'project_code', ''], 
             ['visit', 'station_name', 'text', 'station_name', ''], 
-            ['visit', 'reported_latitude', 'text', 'latitude', ''], 
-            ['visit', 'reported_longitude', 'text', 'longitude', ''], 
-            ['visit', 'date', 'text', 'sample_date', ''], 
-            ['visit', 'time', 'text', 'sample_time', ''], 
-            ['visit', 'water_depth_m', 'float', 'water_depth_m', ''], 
+            ['visit', 'sample_latitude_dd', 'text', 'sample_latitude_dd', ''], 
+            ['visit', 'sample_longitude_dd', 'text', 'sample_longitude_dd', ''], 
+            ['visit', 'sample_latitude_dm', 'text', 'sample_latitude_dm', ''], 
+            ['visit', 'sample_longitude_dm', 'text', 'sample_longitude_dm', ''], 
+            #
+            ['sample', 'sample_name', 'text', 'sample_name', ''], 
+            ['sample', 'sample_id', 'text', 'sample_id', ''], 
+            ['sample', 'sampler_type_code', 'text', 'sampler_type_code', ''], 
             ['sample', 'sample_min_depth_m', 'float', 'sample_min_depth_m', ''], 
             ['sample', 'sample_max_depth_m', 'float', 'sample_max_depth_m', ''], 
-
-            ['variable', 'reported_scientific_name', 'text', 'scientific_full_name', None], # Internal use only. 
+            ['visit', 'water_depth_m', 'float', 'water_depth_m', ''], 
+            ['sample', 'sampled_volume_l', 'text', 'sampled_volume_l', ''], 
+            
+            ['sample', 'net_type_code', 'text', 'net_type_code', ''], 
+            ['sample', 'sampler_area_m2', 'text', 'sampler_area_m2', ''], 
+            ['sample', 'net_mesh_size_um', 'text', 'net_mesh_size_um', ''], 
+            ['sample', 'wire_angle_deg', 'text', 'wire_angle_deg', ''], 
+            ['sample', 'net_tow_length_m', 'text', 'net_tow_length_m', ''], 
+            #
+            ['variable', 'scientific_full_name', 'text', 'scientific_full_name', None], # Internal use only. 
             ['variable', 'scientific_name', 'text', 'scientific_name', ''], 
-#             ['variable', 'species_flag', 'text', '', ''], 
+            ['variable', 'species_flag_code', 'text', 'species_flag_code', ''], # TODO: Add cf.
             ['variable', 'size_class', 'text', 'size_class', ''], 
             ['variable', 'unit_type', 'text', 'unit_type', ''], 
 #             ['variable', 'reported_trophic_type', 'text', 'trophic_type', None], # Internal use only. 
@@ -50,25 +65,29 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
             ['variable', 'value', 'float', 'value', ''], 
             ['variable', 'unit', 'text', 'unit', ''], 
             #
-            ['variable', 'class', 'text', '', ''], # Will be calculated later.
-#             ['variable', 'magnification', 'text', 'Magnification', 'magnification'], 
-            ['variable', 'coefficient', 'text', 'coefficient', ''], 
-#             ['variable', 'counted_units', 'text', 'Units', ''], 
-#             ['sample', 'number_of_depths', 'text', 'No. Depths', ''], 
-            ['sample', 'sampler_type', 'text', 'sampler_type_code', ''], 
-#             ['sample', 'sample_size', 'text', 'Sample size', ''], 
-#             ['sample', 'sampled_by', 'text', 'Sample by', ''], 
+            ['variable', 'taxon_class', 'text', 'taxon_class', ''], # Will be calculated later.
             ['sample', 'sample_comment', 'text', 'sample_comment', ''], 
-#             ['variable', 'mixed_volume', 'text', 'Mixed volume', ''], 
-#             ['variable', 'preservative', 'text', 'Preservative', ''], 
-#             ['variable', 'sedimentation_volume', 'text', 'Sedim. volume', ''], 
-#             ['variable', 'preservative', 'text', 'Preservative', ''], 
-#             ['variable', 'preservative_amount', 'text', 'Amt. preservative', ''], 
-#             ['variable', 'sedimentation_time_h', 'text', 'Sedim. time (hr)', ''], 
-#             ['variable', 'chamber_diameter', 'text', 'Chamber diam.', ''], 
-            ['variable', 'counted_on', 'text', 'analysis_date', ''], 
-            ['variable', 'counted_by', 'text', 'analysed_by', ''], 
-#             ['variable', 'description', 'text', 'Descr', ''], 
+            ['variable', 'variable_comment', 'text', 'variable_comment', ''], 
+            # From counting_method.txt in sample.
+            ['variable', 'counting_method_step', 'text', 'counting_method_step', ''], 
+            ['variable', 'method_step_description', 'text', 'method_step_description', ''], 
+            ['variable', 'sampled_volume_ml', 'text', 'sampled_volume_ml', ''], 
+            ['variable', 'preservative', 'text', 'preservative', ''], 
+            ['variable', 'preservative_volume_ml', 'text', 'preservative_volume_ml', ''], 
+            ['variable', 'counted_volume_ml', 'text', 'counted_volume_ml', ''], 
+            ['variable', 'chamber_filter_diameter_mm', 'text', 'chamber_filter_diameter_mm', ''], 
+            ['variable', 'magnification', 'text', 'magnification', ''], 
+            ['variable', 'microscope', 'text', 'microscope', ''], 
+            ['variable', 'count_area_type', 'text', 'count_area_type', ''], 
+            ['variable', 'diameter_of_view_mm', 'text', 'diameter_of_view_mm', ''], 
+            ['variable', 'transect_rectangle_length_mm', 'text', 'transect_rectangle_length_mm', ''], 
+            ['variable', 'transect_rectangle_width_mm', 'text', 'transect_rectangle_width_mm', ''], 
+            ['variable', 'coefficient_one_unit', 'text', 'coefficient_one_unit', ''], 
+            #
+            ['variable', 'coefficient', 'text', 'coefficient', ''], 
+            ['sample', 'analysis_laboratory', 'text', 'analysis_laboratory', ''], 
+            ['variable', 'analysis_date', 'text', 'analysis_date', ''], 
+            ['variable', 'taxonomist', 'text', 'taxonomist', ''], 
             # Copy parameters.
             ['copy_parameter', '# counted:ind', 'text', 'counted_units'], 
             ['copy_parameter', 'Abundance:ind/l', 'text', 'abundance_units/l'], 
@@ -84,6 +103,9 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
         self._sample_info = {}
         self._sample_header = []
         self._sample_rows = []
+        self._sample_method_header = []
+        self._sample_method_rows = []
+
 
     def read_file(self, dataset_name = None, sample_name = None):
         """ """
@@ -105,6 +127,7 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
         self._sample_info = {}
         self._sample_header = []
         self._sample_rows = []
+        self._sample_method_dict = {}
         
         # Dataset metadata as <key>:<value>.
         try:
@@ -139,12 +162,22 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
         self._sample_header = tablefilereader.header()
         self._sample_rows = tablefilereader.rows()
 
+        # Sample method on table format.
+        tablefilereader = toolbox_utils.TableFileReader(
+                    file_path = sample_path,
+                    text_file_name = 'counting_method.txt',                 
+                    )
+        self._sample_method_header = tablefilereader.header()
+        self._sample_method_rows = tablefilereader.rows()
+        # Create dictionary with method step as key.
+        self._sample_method_dict = {}
+        for row in self._sample_method_rows:
+            method_dict = dict(zip(self._sample_method_header, row))
+            if 'counting_method_step' in method_dict:
+                self._sample_method_dict[method_dict['counting_method_step']] = method_dict
+
     def create_tree_dataset(self, dataset_top_node):    
         """ """
-        
-        # TODO: Concatenate dataset metadata and sample info.
-        
-        
         # Add data to dataset node.
         for parsinginforow in self._parsing_info:
             if parsinginforow[0] == 'dataset':
@@ -159,7 +192,15 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
             if parsinginforow[0] == 'visit':
                 if parsinginforow[3] in self._sample_info:
                     visitnode.add_data(parsinginforow[1], self._sample_info[parsinginforow[3]])        
-        
+        # Add visit_year and visit_month.
+        sample_date = visitnode.get_data('sample_date', '')
+        try:
+            visitnode.add_data('visit_year', sample_date[0:4])
+        except: pass      
+        try:
+            visitnode.add_data('visit_month', sample_date[5:7])        
+        except: pass 
+             
         # Create sample node and add data. Note: Only one sample in each file. 
         samplenode = plankton_core.SampleNode()
         visitnode.add_child(samplenode)
@@ -180,8 +221,15 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
                     value = self._sample_info.get(parsinginforow[3], '')
                     variablenode.add_data(parsinginforow[1], value)
                  
-            # Get info from row.
+            # Merge data header and row.     
             row_dict = dict(zip(self._sample_header, row))
+
+            # Get info from sample_method and add to row_dict.
+            if 'method_step' in row_dict:
+                method_dict = self._sample_method_dict[row_dict['method_step']]
+                row_dict.update(method_dict) 
+
+            # Get info from row.
             for parsinginforow in self._parsing_info:
                 if parsinginforow[0] == 'variable':
                     value = row_dict.get(parsinginforow[3], '')

@@ -205,8 +205,8 @@ class PlanktonCounterSample():
         #
         self._sample_info_dict = {} # <key>: <value>
         self._sample_rows = {} # <row_key>: <SampleRow-object>
-        self._sample_header = ['class', 
-                               'scientific_full_name', 
+        self._sample_header = ['scientific_full_name', 
+                               'taxon_class', 
                                'scientific_name', 
                                'trophic_type', 
                                'size_class', 
@@ -219,7 +219,7 @@ class PlanktonCounterSample():
                                'volume_um3/unit', 
                                'carbon_pg/unit',
                                'variable_comment',
-                               'species_flag',
+                               'species_flag_code',
                                'cf',
                                'method_step',
                                'count_area_number',
@@ -353,6 +353,7 @@ class PlanktonCounterSample():
         #
         totalcounted = 0
         countedspecies = {} # Value for sizeclasses aggregated.
+        locked_list = []
         #
         for sampleobject in self._sample_rows.values():
             # Check method step.
@@ -360,11 +361,17 @@ class PlanktonCounterSample():
                 if not method_step == sampleobject.get_method_step():
                     continue
             # Count on scientific name. Standard alternative.
-            taxon = sampleobject.get_scientific_name()
+            taxon = sampleobject.get_scientific_full_name()
             size = sampleobject.get_size_class()
+            # Use the sam key for locked items.
+            if sampleobject.is_locked():
+                if size:
+                    locked_list.append(taxon + ' [' + size + '] ')     
+                else:
+                    locked_list.append(taxon)     
             # Count on class name.
             if summary_type == 'Counted per class report':
-                taxon = plankton_core.Species().get_taxon_value(taxon, 'class')
+                taxon = plankton_core.Species().get_taxon_value(taxon, 'taxon_class')
                 if len(taxon) == 0:
                     taxon = '<class unknown>'
             # Count on scientific name and size class.
@@ -378,8 +385,10 @@ class PlanktonCounterSample():
             if taxon not in countedspecies:
                 countedspecies[taxon] = 0
             # Add.
-            countedspecies[taxon] += int(sampleobject.get_counted_units())
-            totalcounted += int(sampleobject.get_counted_units())
+            try:
+                countedspecies[taxon] += int(sampleobject.get_counted_units())
+                totalcounted += int(sampleobject.get_counted_units())
+            except: pass # If value = ''.
         #    
         if (summary_type == 'Counted taxa') or (summary_type == 'Counted taxa/sizes'):
             for key in sorted(countedspecies):
@@ -390,11 +399,17 @@ class PlanktonCounterSample():
             if most_counted_sorting == False:
                 # Alphabetical.
                 for key in sorted(countedspecies):
-                    summary_data.append(key + ': ' + unicode(countedspecies[key]))
+                    lock_info = ''
+                    if key in locked_list:
+                        lock_info = ' [Locked]'
+                    summary_data.append(key + ': ' + unicode(countedspecies[key]) + lock_info)
             else:
                 # Sort for most counted.
                 for key in sorted(countedspecies, key=countedspecies.get, reverse=True):
-                    summary_data.append(key + ': ' + unicode(countedspecies[key]))
+                    lock_info = ''
+                    if key in locked_list:
+                        lock_info = ' [Locked]'
+                    summary_data.append(key + ': ' + unicode(countedspecies[key]) + lock_info)
         #
         return summary_data
     
@@ -430,7 +445,7 @@ class PlanktonCounterSample():
                 del self._sample_rows[samplerowkey]
             return
         #
-        if len(counted_row_dict.get('scientific_name', '')) > 0:
+        if len(counted_row_dict.get('scientific_full_name', '')) > 0:
             samplerowkey = SampleRow(counted_row_dict).get_key()
             if samplerowkey not in self._sample_rows:
                 self._sample_rows[samplerowkey] = SampleRow(counted_row_dict)
@@ -440,8 +455,11 @@ class PlanktonCounterSample():
             if samplerowobject.get_counted_units() == value:
                 return
             if  samplerowobject.is_locked():
-                raise UserWarning('Selected taxon is locked')
-            if counted_row_dict.get('method_step') == samplerowobject.get_method_step():
+                raise UserWarning('Selected taxon is locked') 
+
+            
+#             if counted_row_dict.get('method_step') == samplerowobject.get_method_step():
+            if True:
                 samplerowobject.set_counted_units(value)
                 samplerowobject.update_sample_row_dict(counted_row_dict)
             else:
@@ -456,10 +474,10 @@ class PlanktonCounterSample():
                     sampleobject.set_count_area_number(count_area_number)
                     sampleobject.set_coefficient(coefficient)
     
-    def lock_taxa(self, scientific_name, size_class, locked_at_count_area):
+    def lock_taxa(self, scientific_full_name, size_class, locked_at_count_area):
         """ """
         search_dict = {}
-        search_dict['scientific_name'] = scientific_name
+        search_dict['scientific_full_name'] = scientific_full_name
         search_dict['size_class'] = size_class
         samplerowkey = SampleRow(search_dict).get_key()
         if samplerowkey in self._sample_rows:
@@ -517,16 +535,16 @@ class PlanktonCounterSample():
                 'sample_id',
                 'sample_date',
                 'sample_time',
-                'year',
+                'visit_year',
                 'country_code',
                 'platform_code',
                 'sampling_series',
-                'project',
+                'project_code',
                 'station_name',
-                'latitude_dm',
-                'longitude_dm',
-                'latitude_dd',
-                'longitude_dd',
+                'sample_latitude_dm',
+                'sample_longitude_dm',
+                'sample_latitude_dd',
+                'sample_longitude_dd',
                 'sample_min_depth_m',
                 'sample_max_depth_m',
                 'water_depth_m',
@@ -538,12 +556,11 @@ class PlanktonCounterSample():
                 'net_tow_length_m',
                 'analysis_laboratory', 
                 'analysis_date',
-                'analysed_by',
+                'taxonomist',
                 'sample_comment',               
                 ]
         sample_info_rows = []
         for header_item in sample_info_header_order:
-            row = []
             sample_info_rows.append([header_item, sample_info_dict.get(header_item, '')])
         
         # Prepare sample info header and rows.
@@ -560,7 +577,7 @@ class PlanktonCounterSample():
 
         # Use openpyxl for Excel.
         workbook = openpyxl.Workbook(optimized_write = True)  # Supports big files.
-        sampleinfo_worksheet = workbook.create_sheet(0)
+        sampleinfo_worksheet = workbook.create_sheet('Sample info')
         sampleinfo_worksheet.title = 'Sample info'
         # Header.
         sampleinfo_worksheet.append(sample_info_header)
@@ -568,7 +585,7 @@ class PlanktonCounterSample():
         for row in sample_info_rows:
             sampleinfo_worksheet.append(row)
         #
-        sampledata_worksheet = workbook.create_sheet(1)
+        sampledata_worksheet = workbook.create_sheet('Sample data')
         sampledata_worksheet.title = 'Sample data'
         # Header.
         sampledata_worksheet.append(sample_data_header)
@@ -576,7 +593,7 @@ class PlanktonCounterSample():
         for row in sample_data_rows:
             sampledata_worksheet.append(row)
         #
-        samplemethod_worksheet = workbook.create_sheet(2)
+        samplemethod_worksheet = workbook.create_sheet('Sample method')
         samplemethod_worksheet.title = 'Sample method'
         # Header.
         samplemethod_worksheet.append(sample_method_header)
@@ -595,13 +612,14 @@ class SampleRow():
         self._sample_row_dict = {}
         self._sample_row_dict.update(sample_row_dict)
         #
+        self._scientific_full_name = self._sample_row_dict.get('scientific_full_name', '')
         self._scientific_name = self._sample_row_dict.get('scientific_name', '')
         self._size_class = self._sample_row_dict.get('size_class', '')
         #
         # Get species related dictionaries for this taxon/sizeclass.
         self._taxon_dict = plankton_core.Species().get_taxon_dict(self._scientific_name)
         self._size_class_dict = plankton_core.Species().get_bvol_dict(self._scientific_name, self._size_class)
-        self._sample_row_dict['class'] = self._taxon_dict.get('class', '<unknown class>')
+        self._sample_row_dict['taxon_class'] = self._taxon_dict.get('taxon_class', '')
         self._sample_row_dict['trophic_type'] = self._size_class_dict.get('bvol_trophic_type', '')
         self._sample_row_dict['unit_type'] = self._size_class_dict.get('bvol_unit', '')
         #
@@ -617,17 +635,27 @@ class SampleRow():
 
     def get_sample_row_dict(self):
         """ """
+#         print('DEBUG GET scientific_full_name: ' + self._sample_row_dict.get('scientific_full_name', ''))
+#         print('DEBUG GET size_class: ' + self._sample_row_dict.get('size_class', ''))
+#         print('DEBUG GET variable_comment: ' + self._sample_row_dict.get('variable_comment', ''))
         return self._sample_row_dict
 
     def update_sample_row_dict(self, sample_row_dict):
         """ """
+#         print('DEBUG UPDATE scientific_full_name: ' + sample_row_dict.get('scientific_full_name', ''))
+#         print('DEBUG UPDATE size_class: ' + sample_row_dict.get('size_class', ''))
+#         print('DEBUG UPDATE variable_comment: ' + sample_row_dict.get('variable_comment', ''))
         self._sample_row_dict.update(sample_row_dict)
     
     def get_key(self):
         """ """
-        rowkey = self._scientific_name + '+' + self._size_class
+        rowkey = self._scientific_full_name + '+' + self._size_class
         return rowkey
         
+    def get_scientific_full_name(self):
+        """ """
+        return self._scientific_full_name
+    
     def get_scientific_name(self):
         """ """
         return self._scientific_name

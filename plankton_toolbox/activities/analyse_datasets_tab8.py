@@ -175,7 +175,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
             for visit in dataset.get_children():
                 for sample in visit.get_children():
                     header_row_1[6 + (sampleindex * numberofparameters)] = visit.get_data('station_name')
-                    header_row_2[6 + (sampleindex * numberofparameters)] = visit.get_data('date')
+                    header_row_2[6 + (sampleindex * numberofparameters)] = visit.get_data('sample_date')
                     header_row_3[6 + (sampleindex * numberofparameters)] = sample.get_data('sample_min_depth_m')
                     header_row_4[6 + (sampleindex * numberofparameters)] = sample.get_data('sample_max_depth_m')
                     sampleindex += 1
@@ -280,7 +280,7 @@ class AnalyseDatasetsTab8(QtGui.QWidget):
         sample_max_depth_m = '-'
         for visitnode in dataset.get_children():
             station_name = visitnode.get_data('station_name')
-            date = visitnode.get_data('date')
+            date = visitnode.get_data('sample_date')
             for samplenode in visitnode.get_children():
                 sample_min_depth_m = samplenode.get_data('sample_min_depth_m')
                 sample_max_depth_m = samplenode.get_data('sample_max_depth_m')
@@ -424,7 +424,7 @@ def primer_report_count_table_sort(s1, s2):
 #             samplenode = visitnode.get_children()[0] # Only one child.
 #             #
 #             header_row_1[6 + (datasetindex * 2)] = visitnode.get_data('Stat name')
-#             header_row_2[6 + (datasetindex * 2)] = visitnode.get_data('Date')
+#             header_row_2[6 + (datasetindex * 2)] = visitnode.get_data('sample_date')
 #             header_row_3[6 + (datasetindex * 2)] = samplenode.get_data('Min. depth')
 #             header_row_4[6 + (datasetindex * 2)] = samplenode.get_data('Max. depth')
 #             header_row_5[6 + (datasetindex * 2)] = samplenode.get_data('Counted on')
