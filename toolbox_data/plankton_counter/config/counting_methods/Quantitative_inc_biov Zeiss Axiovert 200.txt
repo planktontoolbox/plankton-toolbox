@@ -1,0 +1,7 @@
+counting_method_step	method_step_description	sampled_volume_ml	preservative	preservative_volume_ml	counted_volume_ml	chamber_filter_diameter_mm	magnification	microscope	count_area_type	diameter_of_view_mm	transect_rectangle_length_mm	transect_rectangle_width_mm	coefficient_one_unit	counting_species_list	view_sizeclass_info
+A1 - Utermohl - 100x		125	CLU (Acid Lugol큦 solution)	0.6	20.5	26	100	Zeiss Axiovert 200	Chamber/filter				49	Quantitative_100x	TRUE
+A2 - Utermohl - 200x		125	CLU (Acid Lugol큦 solution)	0.6	20.5	26	200	Zeiss Axiovert 200	Transects		26	1.1	901	Quantitative_200x	TRUE
+A3 - Utermohl - 400x		125	CLU (Acid Lugol큦 solution)	0.6	20.5	26	400	Zeiss Axiovert 200	Field of views	0.58			97557	Baltic phytoplankton list	TRUE
+A4 - Utermohl - 400x		125	CLU (Acid Lugol큦 solution)	0.6	20.5	26	400	Zeiss Axiovert 200	Transects		26	0.58	1709	Quantitative_400x	TRUE
+B1 - Filtered sample Calcofluor		125	CLU (Acid Lugol큦 solution)	2.5	20.5	26	100	Zeiss Axiovert 200	Field of views	2.2			6680	Swedish bats - for test only	FALSE
+C1 - Filtered sample picoplankton		125	Glutardialdehyde	1.5	20.5	26	1000	Zeiss Axiovert 200	Field of views	0.22			673235	Bengts phytoplankton list	TRUE

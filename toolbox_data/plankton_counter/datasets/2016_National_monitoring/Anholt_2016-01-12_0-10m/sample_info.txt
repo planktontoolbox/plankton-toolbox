@@ -1,0 +1,32 @@
+key	value
+analysis_date	2016-09-13
+analysis_laboratory	SMHI
+country_code	34
+last_used_method_step	A1 - Utermohl - 100x
+max_count_area<+><not available>	1
+max_count_area<+>A1 - Utermohl - 100x	1
+net_mesh_size_um	
+net_tow_length_m	
+net_type_code	
+platform_code	01
+project_code	BAS
+sample_comment	Chamber 20-9
+sample_date	2016-01-12
+sample_id	
+sample_latitude_dd	56.6666
+sample_latitude_dm	56 39.99
+sample_longitude_dd	12.1167
+sample_longitude_dm	12 7.0
+sample_max_depth_m	10
+sample_min_depth_m	0
+sample_name	Anholt_2016-01-12_0-10m
+sample_time	
+sampled_volume_l	6
+sampler_area_m2	
+sampler_type_code	HOS (Hose)
+sampling_series	
+station_name	Anholt E
+taxonomist	Marie Johansen
+visit_year	2016
+water_depth_m	55
+wire_angle_deg	
