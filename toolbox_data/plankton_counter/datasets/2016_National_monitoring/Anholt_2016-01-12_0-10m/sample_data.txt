@@ -1,0 +1,6 @@
+scientific_full_name	taxon_class	scientific_name	trophic_type	size_class	unit_type	counted_units	coefficient	abundance_units/l	volume_mg/m3	carbon_ugc/m3	volume_um3/unit	carbon_pg/unit	variable_comment	species_flag_code	cf	method_step	count_area_number	locked_at_area
+Alexandrium	Dinophyceae	Alexandrium	AU	3	cell	5	49	245.0	4.066	485.6	16600.0	1982.0				A1 - Utermohl - 100x	1	
+Ceratium fusus	Dinophyceae	Ceratium fusus	AU	2	cell	4	49	196.0	4.66	544.3	23770.0	2777.0				A1 - Utermohl - 100x	1	
+Coscinodiscus concinnus	Bacillariophyceae	Coscinodiscus concinnus	AU	1	cell	3	49	147.0	158.3	3303.0	1077000.0	22470.0				A1 - Utermohl - 100x	1	
+Dinophysis acuminata	Dinophyceae	Dinophysis acuminata	MX	3	cell	4	49	196.0	2.38	289.7	12140.0	1478.0				A1 - Utermohl - 100x	1	
+Dinophysis acuta	Dinophyceae	Dinophysis acuta	MX	4	cell	2	49	98.0	7.933	860.0	80950.0	8776.0				A1 - Utermohl - 100x	1	

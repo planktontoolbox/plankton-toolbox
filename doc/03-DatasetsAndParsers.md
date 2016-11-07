@@ -48,8 +48,8 @@ Each node contains a key/value list where all needed data from the dataset can b
 Some fields are mandatory if the analysis part of Plankton Toolbox should work properly.
 
 Mandatory fields on the **visit** node level:
-  * date
-  * month
+  * sample_date
+  * visit_month
   * station_name
 
 Mandatory fields on the **sample** node level:

@@ -7,7 +7,7 @@ The Plankton Toolbox is a free tool for aquatic scientists, and others, working 
   * Counting module for use by the microscope
   * Imports phyto- or zooplankton data in .txt and .xlsx files in different formats (configurable)
   * Work with data on abundance, biovolume and carbon content
-  * Data screening - quality control of data
+  * Data screening - quality control of data (in early development)
   * Aggregate data, e.g. from species level to class level
   * Plotting tools
   * Statistics (in early development)
@@ -23,7 +23,7 @@ stored here.
 
 ## Downloads ##
 
-Plankton Toolbox version 1.2 is available for MacOS and Windows at: [http://nordicmicroalgae.org/tools](http://nordicmicroalgae.org/tools)
+Plankton Toolbox version 1.2 is available for **Windows** and **MacOS** at: [http://nordicmicroalgae.org/tools](http://nordicmicroalgae.org/tools)
 Plankton Toolbox can be build for Ubuntu (Linux) on request.
 
 ## Under development ##

@@ -1,6 +1,9 @@
-scientific_name	shortcut_character	Sizeclasses-50x	Sizeclasses-100x	Sizeclasses-400x
-
-Aphanocapsa delicatissima	A	1,2,3	4,5	6,7,8,9
+Species
+Anathece bachmannii
+Anathece clathrata
+Anathece minutissima
+Anathece smithii
+Aphanocapsa delicatissima
 Aphanocapsa elachista
 Aphanocapsa holsatica
 Aphanocapsa incerta
@@ -8,16 +11,12 @@ Aphanocapsa planctonica
 Aphanocapsa reinboldii
 Aphanocapsa rivularis
 Aphanocapsa
-Anathece bachmannii
 Aphanothece castagnei
-Anathece clathrata
-Anathece minutissima
 Aphanothece paralleliformis
-Anathece smithii
 Aphanothece stagnina
 Aphanothece
 Chroococcales
-Chroococcus aphanocapsoides	B	1,2	3	4,5,6,7,8,9
+Chroococcus aphanocapsoides
 Chroococcus cumulatus
 Chroococcus dispersus
 Chroococcus distans
@@ -43,17 +42,17 @@ Cyanodictyon tubiforme
 Cyanodictyon
 Cyanonephron styloides
 Cyanonephron
-Eucapsis alpina	C
+Eucapsis alpina
 Eucapsis minuta
 Eucapsis
-Gomphosphaeria aponina	D
+Gomphosphaeria aponina
 Gomphosphaeria salina
 Gomphosphaeria
-Lemmermanniella pallida	E
+Lemmermanniella pallida
 Lemmermanniella parva
 Lemmermanniella
 Limnococcus limneticus
-Merismopedia elegans	F
+Merismopedia elegans
 Merismopedia glauca
 Merismopedia punctata
 Merismopedia tenuissima
@@ -84,11 +83,11 @@ Woronichinia fusca
 Woronichinia karelica
 Woronichinia naegeliana
 Woronichinia
+Kamptonema chlorinum
 Limnothrix planctonica
 Limnothrix redekei
 Limnothrix
 Lyngbya aestuarii
-Oscillatoria chlorina
 Oscillatoria limosa
 Oscillatoriales
 Geitlerinema amphibium
@@ -112,13 +111,10 @@ Tychonema bourrellyi
 Achroonema lentum
 Achroonema proteiforme
 Anabaena baltica
-Anabaena circinalis
 Anabaena cylindrica
 Anabaena inaequalis
-Anabaena macrospora
 Anabaena oscillarioides
 Anabaena planctonica
-Anabaena smithii
 Anabaena torulosa
 Anabaena
 Anabaenopsis elenkinii
@@ -136,6 +132,9 @@ Dolichospermum crassum
 Dolichospermum flosaquae
 Dolichospermum heterosporum
 Dolichospermum lemmermannii
+Dolichospermum macrosporum
+Dolichospermum sigmoideum
+Dolichospermum smithii
 Dolichospermum spiroides
 Dolichospermum 
 Gloeotrichia echinulata
@@ -196,6 +195,7 @@ Amphidinium sphenoides
 Amphidinium
 Azadinium spinosum
 Azadinium
+Biecheleria halophila
 Cochlodinium helicoides
 Cochlodinium pupa
 Cochlodinium
@@ -203,7 +203,6 @@ Gymnodinium albulum
 Gymnodinium aureolum
 Gymnodinium corollarium
 Gymnodinium gracile
-Gymnodinium halophilum
 Gymnodinium heterostriatum
 Gymnodinium ostenfeldii
 Gymnodinium simplex
@@ -254,13 +253,12 @@ Heterocapsa triquetra
 Heterocapsa
 Kryptoperidinium foliaceum
 Oblea rotunda
+Parvodinium inconspicuum
 Pentapharsodinium dalei
+Peridinium achromaticum
 Peridinium cinctum
-Peridinium inconspicuum
-Peridinium quinquecorne
 Peridinium
 Preperidinium meunieri
-Protoperidinium achromaticum
 Protoperidinium bipes
 Protoperidinium breve
 Protoperidinium brevipes
@@ -289,6 +287,7 @@ Protoperidinium punctulatum
 Protoperidinium steinii
 Protoperidinium subinerme
 Protoperidinium thorianum
+Protoperidinium quinquecorne
 Protoperidinium
 Scrippsiella hangoei
 Scrippsiella trochoidea
@@ -299,8 +298,8 @@ Alexandrium ostenfeldii
 Alexandrium pseudogonyaulax
 Alexandrium tamarense
 Alexandrium
-Amylax buxus
 Amylax triacantha
+Amylax triacantha var. buxus
 Ceratium furca
 Ceratium fusus
 Ceratium hirundinella
@@ -322,13 +321,14 @@ Gonyaulax
 Lingulodinium polyedrum
 Micracanthodinium claytonii 
 Micracanthodinium setiferum
+Micracanthodinium
 Oxytoxum criophilum
 Oxytoxum gracile
 Oxytoxum
 Peridiniella catenata
 Peridiniella danica
 Protoceratium reticulatum
-Pyrophacus horologicum
+Pyrophacus horologium
 Dinophyceae
 Acanthoica quattrospina
 Chrysochromulina birgeri
@@ -336,12 +336,12 @@ Chrysochromulina parkeae
 Prymnesium polylepis
 Chrysochromulina spinifera
 Chrysochromulina
+Chrysotila carterae
 Emiliania huxleyi
 Haptolina hirta 
 Phaeocystis globosa
 Phaeocystis pouchetii
 Phaeocystis
-Pleurochrysis carterae
 Pleurochrysis
 Prymnesium
 Prymnesiales
@@ -349,6 +349,7 @@ Pavlova
 Dinobryon acuminatum
 Dinobryon balticum
 Dinobryon bavaricum
+Dinobryon crenulatum
 Dinobryon cylindricum
 Dinobryon divergens
 Dinobryon faculiferum
@@ -358,8 +359,9 @@ Paraphysomonas
 Ochromonas
 Ochromonadales
 Ollicola vangoorii
-Uroglena americana
 Uroglena
+Uroglenopsis americana
+Uroglenopsis 
 Apedinella radians
 Pseudopedinella elastica
 Pseudopedinella pyriformis
@@ -368,13 +370,14 @@ Pseudopedinella
 Chrysophyceae
 Dictyocha fibula
 Dictyocha speculum
+Pseudochattonella farcimen
+Pseudochattonella verruculosa
 Pseudochattonella
-Verrucophora farcimen
-Mallomonas acaroides
 Mallomonas akrokomos
 Mallomonas caudata
 Mallomonas hamata
 Mallomonas multiunca
+Mallomonas ploesslii
 Mallomonas punctifera
 Mallomonas
 Synura uvella
@@ -446,8 +449,6 @@ Chaetoceros salsugineum
 Chaetoceros seiracanthus
 Chaetoceros similis
 Chaetoceros simplex
-Chaetoceros socialis f. radians
-Chaetoceros socialis f. socialis
 Chaetoceros socialis
 Chaetoceros subtilis
 Chaetoceros subtilis var. subtilis
@@ -459,9 +460,9 @@ Chaetoceros wighamii
 Chaetoceros
 Conticribra guillardii
 Conticribra weissflogii
+Coscinodiscopsis commutata
 Coscinodiscus asteromphalus
 Coscinodiscus centralis
-Coscinodiscus commutatus
 Coscinodiscus concinnus
 Coscinodiscus granii
 Coscinodiscus radiatus
@@ -501,7 +502,6 @@ Melosira varians
 Melosira
 Neocalyptrella robusta
 Odontella aurita
-Odontella mobiliensis
 Odontella sinensis
 Paralia sulcata
 Planktoniella sol
@@ -513,8 +513,8 @@ Rhizosolenia hebetata
 Rhizosolenia hebetata f. semispina
 Rhizosolenia imbricata
 Rhizosolenia longiseta
-Rhizosolenia pungens
 Rhizosolenia setigera
+Rhizosolenia setigera f. pungens
 Rhizosolenia styliformis
 Rhizosolenia
 Roperia tesselata
@@ -548,10 +548,9 @@ Thalassiosira nordenskioeldii
 Thalassiosira proschkinae
 Thalassiosira pseudonana
 Thalassiosira punctigera
-Thalassiosira rotula
 Thalassiosira
+Trieres mobiliensis
 Centrales
-Achnanthes taeniata
 Achnanthes
 Amphiprora paludosa var. paludosa
 Amphora commutata
@@ -562,6 +561,7 @@ Asterionella formosa
 Asterionellopsis glacialis
 Asteroplanus karianus
 Bacillaria paxillifera
+Belonastrum berolinensis
 Caloneis amphisbaena
 Caloneis amphisbaena var. subsalina
 Caloneis silicula
@@ -584,7 +584,6 @@ Cymbella
 Diatoma constricta
 Diatoma tenuis
 Diatoma vulgaris
-Diatoma vulgaris var. vulgaris
 Diploneis didyma
 Diploneis elliptica
 Diploneis interrupta
@@ -622,7 +621,6 @@ Mastogloia smithii
 Mastogloia smithii var. smithii
 Meridion circulare
 Meridion circulare var. circulare
-Navicula capitata var. capitata
 Navicula cari
 Navicula cryptocephala
 Navicula digitoradiata
@@ -653,6 +651,7 @@ Nitzschia paleacea
 Nitzschia sigmoidea
 Nitzschia vitrea
 Nitzschia
+Pauliella taeniata
 Petroneis humerosa
 Phaeodactylum tricornutum
 Pinnularia nobilis
@@ -678,7 +677,6 @@ Surirella minuta
 Surirella robusta
 Surirella
 Synedra acus var. acus
-Synedra berolinensis
 Synedra ulna
 Synedra
 Tabellaria fenestrata
@@ -694,7 +692,6 @@ Pennales
 Goniochloris mutica
 Goniochloris smithii
 Meringosphaera mediterranea
-Chattonella verruculosa
 Fibrocapsa japonica
 Heterosigma akashiwo
 Heterosigma
@@ -719,29 +716,21 @@ Trachelomonas hispida
 Trachelomonas volvocina
 Trachelomonas
 Euglenales
-Mantoniella squamata
-Micromonas pusilla
 Chlorodendrales
+Pachysphaera
+Pterosperma
+Tetraselmis cordiformis
+Pseudoscourfieldia marina
+Pseudoscourfieldia
 Cymbomonas tetramitiformis
 Halosphaera viridis
 Halosphaera
-Nephroselmis
-Pachysphaera
-Pseudoscourfieldia marina
-Pseudoscourfieldia
-Pterosperma
 Pyramimonas longicauda
 Pyramimonas virginica
 Pyramimonas
-Tetraselmis cordiformis
 Elakatothrix gelatinosa
 Elakatothrix genevensis
-Elakatothrix viridis
 Elakatothrix
-Koliella longiseta 
-Koliella spiculiformis
-Koliella spiralis
-Koliella
 Closterium acerosum
 Closterium aciculare
 Closterium acutum 
@@ -755,49 +744,28 @@ Closterium strigosum
 Closterium
 Cosmarium
 Mougeotia
+Spondylosium planum
 Staurastrum
 Staurodesmus triangularis
 Staurodesmus
-Carteria     
-Carteria               
-Chlamydocapsa ampla
-Chlamydomonas
-Chlorogonium maximum
-Chlorogonium minimum
-Eudorina elegans
-Eudorina unicocca
-Gonium pectorale
-Oltmannsiellopsis
-Pandorina morum
-Phacotus
-Polytoma
-Pseudosphaerocystis lacustris
-Tetrabaena socialis
-Tetraspora lemmermannii
-Volvocales
-Actinastrum hantzschii
-Acutodesmus acuminatus
-Acutodesmus obliquus
-Ankistrodesmus falcatus
-Ankistrodesmus fusiformis
-Ankyra judayi
-Botryococcus
-Chlorococcales
+Xanthidium antilopeum
 Choricystis chodatii
 Choricystis coccoides
-Closteriopsis longissima
+Fusola viridis
+Mychonastes jurisii
+Mychonastes elegans
+Treubaria triappendiculata
+Lobocystis planctonica
+Acutodesmus acutiformis
+Acutodesmus acuminatus
+Acutodesmus obliquus
+Ankistrodesmus fusiformis
+Ankyra judayi
 Coelastrum astroideum
 Coelastrum microporum
 Coelastrum pseudomicroporum
 Coelastrum sphaericum
 Coenocystis planctonica
-Crucigenia fenestrata
-Crucigenia quadrata
-Crucigenia tetrapedia
-Crucigeniella apiculata
-Crucigeniella irregularis
-Crucigeniella rectangularis
-Dactylosphaerium jurisii
 Desmodesmus abundans
 Desmodesmus armatus
 Desmodesmus armatus var. armatus
@@ -820,27 +788,13 @@ Desmodesmus opoliensis var. opoliensis
 Desmodesmus protuberans
 Desmodesmus spinosus
 Desmodesmus
-Dictyosphaerium ehrenbergianum
-Dictyosphaerium pulchellum
-Dictyosphaerium subsolitarium
-Franceia ovalis
 Golenkinia radiata
-Granulocystopsis decorata
 Hariotina reticulata
-Kirchneriella contorta
 Kirchneriella lunaris
 Kirchneriella obesa
 Kirchneriella
 Lacunastrum gracillimum
-Lagerheimia ciliata
-Lagerheimia citriformis
-Lagerheimia genevensis
-Lagerheimia longiseta var. longiseta
-Lagerheimia subsalsa
-Lagerheimia wratislaviensis
 Lanceola spatulifera
-Lobocystis planctonica
-Micractinium pusillum
 Monactinus simplex
 Monoraphidium arcuatum
 Monoraphidium contortum
@@ -851,18 +805,9 @@ Monoraphidium komarkovae
 Monoraphidium minutum
 Monoraphidium mirabile
 Monoraphidium
-Mychonastes elegans
 Neocystis ovalis
-Nephrochlamys rostrata
-Oocystis borgei
-Oocystis lacustris
-Oocystis naegelii
-Oocystis parva
-Oocystis pelagica
-Oocystis rhomboidea
-Oocystis solitaria
-Oocystis submarina
-Oocystis
+Raphidocelis danubiana
+Raphidocelis sigmoidea
 Parapediastrum biradiatum
 Pediastrum angulosum 
 Pediastrum angulosum var. angulosum
@@ -871,15 +816,9 @@ Pediastrum boryanum var. longicorne
 Pediastrum duplex 
 Pediastrum duplex var. duplex
 Pediastrum integrum
+Planktosphaeria gelatinosa
 Pseudopediastrum boryanum 
 Pseudopediastrum kawraiskyi
-Planctococcus sphaerocystiformis
-Planktosphaeria gelatinosa
-Quadricoccus ellipticus
-Quadricoccus euryhalinicus
-Quadricoccus verrucosus
-Raphidocelis sigmoidea
-Scenedesmus acutiformis
 Scenedesmus apiculatus
 Scenedesmus arcuatus 
 Scenedesmus arcuatus var. arcuatus
@@ -891,10 +830,7 @@ Scenedesmus
 Schroederia setigera
 Selenastrum bibraianum
 Selenastrum gracile
-Sphaerocystis planctonica
-Sphaerocystis schroeteri
 Stauridium tetras
-Tetrachlorella alternans
 Tetraëdron caudatum
 Tetraëdron caudatum 
 Tetraëdron minimum
@@ -902,11 +838,78 @@ Tetraëdron triangulare
 Tetrastrum elegans
 Tetrastrum staurogeniaeforme
 Tetrastrum
-Treubaria triappendiculata
 Westella botryoides
-Planctonema lauterbornii
-Ulothricales
+Willea apiculata
+Willea rectangularis
+Chlamydocapsa ampla
+Pseudosphaerocystis lacustris
+Sphaerocystis planctonica
+Sphaerocystis schroeteri
+Tetraspora lemmermannii
+Carteria     
+Carteria               
+Chlamydomonas
+Chlorogonium maximum
+Chlorogonium minimum
+Eudorina elegans
+Eudorina unicocca
+Gonium pectorale
+Pandorina morum
+Phacotus
+Polytoma
+Tetrabaena socialis
+Volvocales
+Chlorococcales
+Planctococcus sphaerocystiformis
+Mantoniella squamata
+Micromonas pusilla
+Nephroselmis
+Actinastrum hantzschii
+Closteriopsis longissima
+Dictyosphaerium ehrenbergianum
+Dictyosphaerium subsolitarium
+Koliella longiseta
+Koliella spiculiformis
+Koliella spiralis
+Koliella
+Micractinium pusillum
+Mucidosphaerium pulchellum
+Nephrochlamys rostrata
+Crucigeniella irregularis
+Franceia ovalis
+Granulocystopsis decorata
+Lagerheimia ciliata
+Lagerheimia citriformis
+Lagerheimia genevensis
+Lagerheimia longiseta var. longiseta
+Lagerheimia subsalsa
+Lagerheimia wratislaviensis
+Oocystis borgei
+Oocystis lacustris
+Oocystis naegelii
+Oocystis parva
+Oocystis pelagica
+Oocystis rhomboidea
+Oocystis solitaria
+Oocystis submarina
+Oocystis
+Quadricoccus ellipticus
+Quadricoccus euryhalinicus
+Quadricoccus verrucosus
+Tetrachlorella alternans
+Botryococcus
+Crucigenia fenestrata
+Crucigenia quadrata
+Crucigenia tetrapedia
+Oltmannsiellopsis
+Binuclearia lauterbornii
+Ulotrichales
 Bicosoeca
+Cryothecomonas scybalophora
+Cryothecomonas
+Diaphanoeca grandis
+Diaphanoeca sphaerica
+Diaphanoeca
 Desmarella moniliformis
 Monosiga
 Salpingoeca
@@ -914,14 +917,9 @@ Calliacantha longicaudata
 Calliacantha natans
 Calliacantha simplex
 Calliacantha
-Diaphanoeca grandis
-Diaphanoeca sphaerica
-Diaphanoeca
 Choanoflagellatea
 Ebria tripartita
 Commation
-Cryothecomonas scybalophora
-Cryothecomonas
 Cryptaulax marina
 Cryptaulax
 Katablepharis ovalis
@@ -936,4 +934,4 @@ Laboea strobila
 Mesodinium rubrum
 Flagellates
 Unicell
-
+  

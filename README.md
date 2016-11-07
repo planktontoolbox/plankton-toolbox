@@ -4,14 +4,14 @@ The Plankton Toolbox is a free tool for aquatic scientists, and others, working 
 
 ## Features ##
 
+  * Counting module for use by the microscope
   * Imports phyto- or zooplankton data in .txt and .xlsx files in different formats (configurable)
   * Work with data on abundance, biovolume and carbon content
-  * Data screening - quality control of data
+  * Data screening - quality control of data (in early development)
   * Aggregate data, e.g. from species level to class level
   * Plotting tools
   * Statistics (in early development)
-  * Export data in .txt or .xlsx for further analyses or plotting
-  * A future update will include functionality for using Plankton Toolbox as a counting tool by the microscope
+  * Export data in .txt or .xlsx for further analysis or plotting
 
 ## Documentation ##
 
