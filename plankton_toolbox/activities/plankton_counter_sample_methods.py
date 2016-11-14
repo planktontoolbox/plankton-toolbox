@@ -23,14 +23,13 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         self._current_sample = sample
         self._current_sample_object = current_sample_object
         self._current_sample_method = None
-#         self._dont_update_method_flag = False
         self._dont_update_current_sample_method_flag = False
         #
         super(PlanktonCounterSampleMethods, self).__init__()
         #
         self._selectanalysismethod_list = None
         self._selectmethod_list = None
-        self._selectmethodstep_list = None
+        self._selectmethodstep_table = None
         #
         self.setLayout(self._create_content_methods())
         #
@@ -73,16 +72,17 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
 #         self._selectanalysismethod_list.addItems(['<method for current sample>']) 
         self._selectanalysismethod_list.addItems(['<select>']) 
 #         self._selectanalysismethod_list.currentIndexChanged.connect(self._select_analysis_method_changed)
-        self._analysismethod_copy_button = QtGui.QPushButton('Copy values')
+        self._analysismethod_copy_button = QtGui.QPushButton('Copy values from selected default method')
         self._analysismethod_copy_button.clicked.connect(self._copy_analysis_method_values)
-        self._analysismethod_reset_button = QtGui.QPushButton('Reset to used values')
+        self._analysismethod_reset_button = QtGui.QPushButton('Reset to used values for this sample')
         self._analysismethod_reset_button.clicked.connect(self._reset_analysis_method_values)
         # Stored methods.
-        self._selectmethodstep_list = QtGui.QComboBox(self)
-        self._selectmethodstep_list.addItems(['<not available>']) 
-        self._selectmethodstep_list.currentIndexChanged.connect(self._select_method_step_changed)
-        self._methodstepdescription_edit = QtGui.QLineEdit('')
-        self._methodstepdescription_edit.textEdited.connect(self._field_changed)
+        self._selectmethodstep_table = QtGui.QListWidget(self) # utils_qt.ToolboxQTableView(self)
+        self._selectmethodstep_table.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
+        self._selectmethodstep_table.setStyleSheet("QListWidget::item:hover{background-color:#cccccc;}")
+        self._selectmethodstep_table.itemSelectionChanged.connect(self._select_method_step_changed)
+#         self._methodstepdescription_edit = QtGui.QLineEdit('')
+#         self._methodstepdescription_edit.textEdited.connect(self._field_changed)
         self._sampledvolume_edit = QtGui.QLineEdit('')
         self._sampledvolume_edit.setMaximumWidth(60)
         self._sampledvolume_edit.textEdited.connect(self._field_changed)
@@ -134,14 +134,14 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         self._coefficient_one_unit_edit.setEnabled(False)
 
         self._counting_species_list = QtGui.QComboBox()
-        self._counting_species_list.addItems(['<select>'])
+        self._counting_species_list.addItems(['<all species>'])
         self._counting_species_list.currentIndexChanged.connect(self._field_changed)
         self._viewsizeclassinfo_checkbox = QtGui.QCheckBox('View sizeclass info')
         self._viewsizeclassinfo_checkbox.setChecked(True) 
         self._viewsizeclassinfo_checkbox.stateChanged.connect(self._field_changed)
 
         # Buttons.
-        self._saveanalysis_method_button = QtGui.QPushButton('Save changes to default method ')
+        self._saveanalysis_method_button = QtGui.QPushButton('Save changes to selected default method ')
         self._saveanalysis_method_button.clicked.connect(self._save_analysis_method)
 
         self._addmethodstep_button = QtGui.QPushButton('Add method step...')
@@ -153,14 +153,12 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         self._saveasanalysis_method_button.clicked.connect(self._save_as_analysis_method)
         self._deleteanalysis_method_button = QtGui.QPushButton('Delete default method(s)...')
         self._deleteanalysis_method_button.clicked.connect(self._analysis_method_delete)
-#         self._savesamplemethod_button = QtGui.QPushButton('Save sample method')
-#         self._savesamplemethod_button.clicked.connect(self._save_sample_method)
 
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         gridrow = 0
-        form1.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 1) # Add space.
-        gridrow += 1
+#         form1.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 1) # Add space.
+#         gridrow += 1
         form1.addWidget(utils_qt.LeftAlignedQLabel('<b>Default counting methods</b>'), gridrow, 0, 1, 1)
         gridrow += 1
         form1.addWidget(utils_qt.RightAlignedQLabel('Default method:'), gridrow, 0, 1, 1)
@@ -209,54 +207,41 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
 #         gridrow += 1
 #         form1.addWidget(self._coefficient_one_unit_edit, gridrow, 11, 1, 1)
         
-        gridrow += 1        
-        form1.addWidget(QtGui.QLabel(''), gridrow, 0, 1, 20) # Add space.
+#         gridrow += 1        
+#         form1.addWidget(QtGui.QLabel(''), gridrow, 0, 1, 20) # Add space.
         gridrow += 1
-        form1.addWidget(utils_qt.LeftAlignedQLabel('<b>Counting method steps</b>'), gridrow, 0, 1, 1)
+        form1.addWidget(utils_qt.LeftAlignedQLabel('<b>Counting method steps:</b>'), gridrow, 0, 1, 1)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Select method step:'), gridrow, 0, 1, 1)
-        form1.addWidget(self._selectmethodstep_list, gridrow, 1, 1, 10)
+        form1.addWidget(self._selectmethodstep_table, gridrow, 0, 10, 2)
+##        gridrow += 1
+#         form1.addWidget(utils_qt.RightAlignedQLabel('Method step description:'), gridrow, 10, 1, 1)
+#         form1.addWidget(self._methodstepdescription_edit, gridrow, 11, 1, 10)
+        form1.addWidget(utils_qt.RightAlignedQLabel('Magnification:'), gridrow, 10, 1, 1)
+        form1.addWidget(self._magnification_edit, gridrow, 11, 1, 1)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Method step description:'), gridrow, 0, 1, 1)
-        form1.addWidget(self._methodstepdescription_edit, gridrow, 1, 1, 10)
-
+        form1.addWidget(utils_qt.RightAlignedQLabel('Microscope:'), gridrow, 10, 1, 1)
+        form1.addWidget(self._microscope_edit, gridrow, 11, 1, 1)
         gridrow += 1
-        form1.addWidget(QtGui.QLabel(''), gridrow, 0, 1, 1) # Add space.
+        form1.addWidget(utils_qt.RightAlignedQLabel('Count area type:'), gridrow, 10, 1, 1)
+        form1.addWidget(self._countareatype_list, gridrow, 11, 1, 1)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Magnification:'), gridrow, 0, 1, 1)
-        form1.addWidget(self._magnification_edit, gridrow, 1, 1, 1)
+        form1.addWidget(utils_qt.RightAlignedQLabel('Diameter of view (mm):'), gridrow, 10, 1, 1)
+        form1.addWidget(self._viewdiameter_edit, gridrow, 11, 1, 1)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Microscope:'), gridrow, 0, 1, 1)
-        form1.addWidget(self._microscope_edit, gridrow, 1, 1, 1)
+        form1.addWidget(utils_qt.RightAlignedQLabel('Transect/rectangle width (mm):'), gridrow, 10, 1, 1)
+        form1.addWidget(self._transectrectanglewidth_edit, gridrow, 11, 1, 1)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Count area type:'), gridrow, 0, 1, 1)
-        form1.addWidget(self._countareatype_list, gridrow, 1, 1, 1)
+        form1.addWidget(utils_qt.RightAlignedQLabel('Transect/rectangle length (mm):'), gridrow, 10, 1, 1)
+        form1.addWidget(self._transectrectanglelength_edit, gridrow, 11, 1, 1)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Diameter of view (mm):'), gridrow, 0, 1, 1)
-        form1.addWidget(self._viewdiameter_edit, gridrow, 1, 1, 1)
+        form1.addWidget(utils_qt.LeftAlignedQLabel('Calculated coefficient for one area:'), gridrow, 10, 1, 1)
+        form1.addWidget(self._coefficient_one_unit_edit, gridrow, 11, 1, 1)     
+#         form1.addWidget(utils_qt.LeftAlignedQLabel('<b>Count settings for method step</b>'), gridrow, 10, 1, 1)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Transect/rectangle width (mm):'), gridrow, 0, 1, 1)
-        form1.addWidget(self._transectrectanglewidth_edit, gridrow, 1, 1, 1)
+        form1.addWidget(utils_qt.RightAlignedQLabel('Default counting species list:'), gridrow, 10, 1, 1)
+        form1.addWidget(self._counting_species_list, gridrow, 11, 1, 1)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Transect/rectangle length (mm):'), gridrow, 0, 1, 1)
-        form1.addWidget(self._transectrectanglelength_edit, gridrow, 1, 1, 1)
-        gridrow += 1
-        form1.addWidget(utils_qt.LeftAlignedQLabel(
-            'Calculated coefficient for one chamber/filter, half chamber/filter, view, transect or rectangle:'), 
-            gridrow, 0, 1, 2)
-        gridrow += 1
-        form1.addWidget(self._coefficient_one_unit_edit, gridrow, 1, 1, 1)
-        
-        gridrow += 1        
-        form1.addWidget(QtGui.QLabel(''), gridrow, 0, 1, 20) # Add space.
-        gridrow += 1
-        form1.addWidget(utils_qt.LeftAlignedQLabel('<b>Count settings for method step</b>'), gridrow, 0, 1, 1)
-        gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Default counting species list:'), gridrow, 0, 1, 1)
-        form1.addWidget(self._counting_species_list, gridrow, 1, 1, 1)
-        gridrow += 1
-        form1.addWidget(self._viewsizeclassinfo_checkbox, gridrow, 1, 1, 1)
-        
+        form1.addWidget(self._viewsizeclassinfo_checkbox, gridrow, 11, 1, 1)
         # 
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addLayout(form1)
@@ -294,40 +279,13 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         self._counting_species_list.clear()
         specieslists = plankton_core.PlanktonCounterMethods().get_counting_species_lists()
         if len(specieslists) > 0:
-            self._counting_species_list.addItems(['<select>'] + specieslists)
+            self._counting_species_list.addItems(['<all species>'] + specieslists)
         else:
             self._counting_species_list.addItems(['<not available>'])        
         
-#     def _select_analysis_method_changed(self):
-#         """ """
-# #         if self._dont_update_method_flag:
-# #             return
-#         #
-#         self._selectmethodstep_list.clear()
-#         self._update_method_step_fields({}) # Clear.
-#         #
-#         if self._selectanalysismethod_list.currentIndex() == 0:
-#             self._load_current_sample_method()
-#         else:
-#             selectedanalysismethod = unicode(self._selectanalysismethod_list.currentText())
-#             try:
-#                 path = plankton_core.PlanktonCounterMethods().get_methods_dir_path()
-#                 header, rows = plankton_core.PlanktonCounterMethods().get_counting_method_table(
-#                                                                     path, selectedanalysismethod + '.txt')      
-#                 self._current_sample_method = plankton_core.PlanktonCounterMethod(header, rows)
-#             except:
-#                 self._current_sample_method = plankton_core.PlanktonCounterMethod([], [])
-#         #
-#         countingmethods = self._current_sample_method.get_counting_method_steps_list()
-#         if len(countingmethods) > 0:
-#             self._selectmethodstep_list.addItems(countingmethods)
-#             self._selectmethodstep_list.setCurrentIndex(0)
-#         else:
-#             self._selectmethodstep_list.addItems(['<not available>'])
-
     def _copy_analysis_method_values(self):
         """ """
-        self._selectmethodstep_list.clear()
+        self._selectmethodstep_table.clear()
         self._update_method_step_fields({}) # Clear.
         #
         if self._selectanalysismethod_list.currentIndex() == 0:
@@ -342,62 +300,43 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
             except:
                 self._current_sample_method = plankton_core.PlanktonCounterMethod([], [])
         #
+        self._update_method_step_table()
+        
+    def _update_method_step_table(self):
+        """ """
+        self._selectmethodstep_table.clear()
+        #
         countingmethods = self._current_sample_method.get_counting_method_steps_list()
         if len(countingmethods) > 0:
-            self._selectmethodstep_list.addItems(countingmethods)
-            self._selectmethodstep_list.setCurrentIndex(0)
+            self._selectmethodstep_table.addItems(countingmethods)
+            self._selectmethodstep_table.setCurrentRow(0)
         else:
-            self._selectmethodstep_list.addItems(['<not available>'])
+            self._selectmethodstep_table.addItems(['<not available>'])
+            self._selectmethodstep_table.setCurrentRow(0)
 
     def _reset_analysis_method_values(self):
         """ """
-        self._selectmethodstep_list.clear()
-        self._update_method_step_fields({}) # Clear.
+        self._selectmethodstep_table.clear()
         #
         self._load_current_sample_method()
         #
         countingmethods = self._current_sample_method.get_counting_method_steps_list()
         if len(countingmethods) > 0:
-            self._selectmethodstep_list.addItems(countingmethods)
-            self._selectmethodstep_list.setCurrentIndex(0)
+            self._selectmethodstep_table.addItems(countingmethods)
+            self._selectmethodstep_table.setCurrentRow(0)
         else:
-            self._selectmethodstep_list.addItems(['<not available>'])
-
-#     def _select_method_changed(self):
-#         """ """
-#         if self._current_sample_method  is None:
-#             return
-#         #
-#         self._selectmethodstep_list.clear()
-#         self._update_method_fields({}) # Clear.
-#         #
-#         selectedmethod = unicode(self._selectmethod_list.currentText())
-#         fields_dict = self._current_sample_method.get_counting_method_fields(selectedmethod)
-#         self._update_method_fields(fields_dict)
-#         #
-# #         countingmethodsteps = plankton_core.PlanktonCounterMethods().get_counting_method_steps_list(selectedanalysismethod, 
-# #                                                                                                    selectedmethod)
-#         countingmethodsteps = self._current_sample_method.get_counting_method_steps_list(selectedmethod)
-#         if len(countingmethodsteps) > 0:
-# #             self._selectmethodstep_list.addItems(['<select>'] + countingmethodsteps)
-#             self._selectmethodstep_list.addItems(countingmethodsteps)
-#             self._selectmethodstep_list.setCurrentIndex(0)
-#         else:
-#             self._selectmethodstep_list.addItems(['<not available>'])            
+            self._selectmethodstep_table.addItems(['<not available>'])
+            self._selectmethodstep_table.setCurrentRow(0)
 
     def _select_method_step_changed(self):
         """ """
         if self._current_sample_method is None:
             return
-
+        #
         self._update_method_step_fields({}) # Clear.
         #
-#         selectedanalysismethod = unicode(self._selectanalysismethod_list.currentText())
-#         selectedmethod = unicode(self._selectmethod_list.currentText())
-        selectedmethodstep = unicode(self._selectmethodstep_list.currentText())
+        selectedmethodstep = unicode(self._selectmethodstep_table.currentItem().text())
         #
-#         fields_dict = plankton_core.PlanktonCounterMethods().get_counting_methodstep_fields(selectedanalysismethod,
-#                                                                                            selectedmethodstep)
         fields_dict = self._current_sample_method.get_counting_method_step_fields(selectedmethodstep)
         self._update_method_step_fields(fields_dict)
 
@@ -406,7 +345,7 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         try:
             self._dont_update_current_sample_method_flag = True
             #
-            self._methodstepdescription_edit.setText(fields_dict.get('method_step_description', ''))
+#             self._methodstepdescription_edit.setText(fields_dict.get('method_step_description', ''))
             self._sampledvolume_edit.setText(fields_dict.get('sampled_volume_ml', ''))
             #
             preservative = fields_dict.get('preservative', '')
@@ -431,7 +370,7 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
             self._transectrectanglewidth_edit.setText(fields_dict.get('transect_rectangle_width_mm', ''))
             self._coefficient_one_unit_edit.setText(fields_dict.get('coefficient_one_unit', ''))
             #
-            comboindex = self._counting_species_list.findText(fields_dict.get('counting_species_list', '<select>'))
+            comboindex = self._counting_species_list.findText(fields_dict.get('counting_species_list', '<all species>'))
             self._counting_species_list.setCurrentIndex(comboindex)
             #
             combostate = fields_dict.get('view_sizeclass_info', 'FALSE')
@@ -440,20 +379,16 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
             else:
                 self._viewsizeclassinfo_checkbox.setChecked(False)
             #
-            self._calculate_coefficient_one_unit()
+##             self._calculate_coefficient_one_unit()
         finally:
             self._dont_update_current_sample_method_flag = False
 
     def _field_changed(self):
         """ """
-        self._calculate_coefficient_one_unit()
+##         self._calculate_coefficient_one_unit()
         self._update_current_sample_method()
-        # If any field changed, the go back to sample method.
-#         try:
-#             self._dont_update_method_flag = True
-#             self._selectanalysismethod_list.setCurrentIndex(0)
-#         finally:
-#             self._dont_update_method_flag = False
+#         # If any field changed, then go back to sample method.
+#         self._selectanalysismethod_list.setCurrentIndex(0)
 
     def _update_current_sample_method(self):
         """ Get info for both method and method step. """
@@ -464,8 +399,8 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
             return 
         #
         fields_dict = {}
-        fields_dict['counting_method_step'] = unicode(self._selectmethodstep_list.currentText())
-        fields_dict['method_step_description'] = unicode(self._methodstepdescription_edit.text())
+        fields_dict['counting_method_step'] = unicode(self._selectmethodstep_table.currentItem().text())
+#         fields_dict['method_step_description'] = unicode(self._methodstepdescription_edit.text())
         fields_dict['sampled_volume_ml'] = unicode(self._sampledvolume_edit.text())
         fields_dict['preservative'] = unicode(self._preservative_list.currentText())
         fields_dict['preservative_volume_ml'] = unicode(self._preservative_volume_edit.text())
@@ -489,58 +424,73 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
             fields_dict['view_sizeclass_info'] = 'FALSE'
         #
         self._current_sample_method.update_counting_method_step_fields(fields_dict['counting_method_step'], fields_dict)
+        # Update coefficient field.
+        self._current_sample_method.calculate_coefficient_one_unit(fields_dict)
+        self._coefficient_one_unit_edit.setText(fields_dict.get('coefficient_one_unit', '0'))
+ 
 
-    def _calculate_coefficient_one_unit(self):
-        """ """
-        # Clear result.
-        self._coefficient_one_unit_edit.setText('0')
-        #
-        try:
-            # From analysis method.
-            sampledvolume_ml = unicode(self._sampledvolume_edit.text())
-            preservative_volume_ml = unicode(self._preservative_volume_edit.text())
-            counted_volume_ml = unicode(self._countedvolume_edit.text())
-            chamber_filter_diameter_mm = unicode(self._chamber_filter_diameter_edit.text())
-            # From analysis method step.
-            countareatype = unicode(self._countareatype_list.currentText())
-            diameterofview_mm = unicode(self._viewdiameter_edit.text())
-            transectrectanglelength_mm = unicode(self._transectrectanglelength_edit.text())
-            transectrectanglewidth_mm = unicode(self._transectrectanglewidth_edit.text())
-            #
-            if not chamber_filter_diameter_mm:
-                return
-            if not sampledvolume_ml:
-                return
-            if not counted_volume_ml:
-                return
-            #
-            chamber_filter_area = ((float(chamber_filter_diameter_mm) / 2) ** 2) * math.pi # r2*pi.
-            sampledvolume = float(sampledvolume_ml)
-            counted_volume = float(counted_volume_ml)
-            #
-            try: preservative_volume = float(preservative_volume_ml)
-            except: preservative_volume = 0.0
-            singlearea = 1.0
-            #
-            if countareatype == 'Chamber/filter':
-                singlearea = chamber_filter_area
-            if countareatype == '1/2 Chamber/filter':
-                singlearea = chamber_filter_area * 0.5
-            if countareatype == 'Field of views':
-                singlearea = ((float(diameterofview_mm) / 2) ** 2) * math.pi # r2*pi.
-            if countareatype == 'Transects':
-                singlearea = float(transectrectanglelength_mm) * float(transectrectanglewidth_mm) # l * w.
-            if countareatype == 'Rectangles':
-                singlearea = float(transectrectanglelength_mm) * float(transectrectanglewidth_mm) # l * w.
-            
-            # Calculate coeff.
-            onelitre_ml = 1000.0
-            coeffoneunit = chamber_filter_area * sampledvolume * onelitre_ml / (singlearea * counted_volume * (sampledvolume + preservative_volume))
-            coeffoneunit = int(coeffoneunit + 0.5) # Round.
-            self._coefficient_one_unit_edit.setText(unicode(coeffoneunit))
-        #
-        except:
-            pass
+## Moved to plankton_counte_methods.py
+#     def _calculate_coefficient_one_unit(self, fields_dict):
+#         """ """
+#         # Clear result.
+#         self._coefficient_one_unit_edit.setText('0')
+#         #
+#         try:
+#             # From analysis method.
+# #             sampledvolume_ml = unicode(self._sampledvolume_edit.text())
+# #             preservative_volume_ml = unicode(self._preservative_volume_edit.text())
+# #             counted_volume_ml = unicode(self._countedvolume_edit.text())
+# #             chamber_filter_diameter_mm = unicode(self._chamber_filter_diameter_edit.text())
+# #             # From analysis method step.
+# #             countareatype = unicode(self._countareatype_list.currentText())
+# #             diameterofview_mm = unicode(self._viewdiameter_edit.text())
+# #             transectrectanglelength_mm = unicode(self._transectrectanglelength_edit.text())
+# #             transectrectanglewidth_mm = unicode(self._transectrectanglewidth_edit.text())
+#             sampledvolume_ml = fields_dict.get('sampled_volume_ml', 0.0)
+#             preservative_volume_ml = fields_dict.get('preservative_volume_ml', 0.0)
+#             counted_volume_ml = fields_dict.get('counted_volume_ml', 0.0)
+#             chamber_filter_diameter_mm = fields_dict.get('chamber_filter_diameter_mm', 0.0)
+#             # From analysis method step.
+#             countareatype = fields_dict.get('count_area_type', 0.0)
+#             diameterofview_mm = fields_dict.get('diameter_of_view_mm', 0.0)
+#             transectrectanglelength_mm = fields_dict.get('transect_rectangle_length_mm', 0.0)
+#             transectrectanglewidth_mm = fields_dict.get('transect_rectangle_width_mm', 0.0)
+#             #
+#             if not chamber_filter_diameter_mm:
+#                 return
+#             if not sampledvolume_ml:
+#                 return
+#             if not counted_volume_ml:
+#                 return
+#             #
+#             chamber_filter_area = ((float(chamber_filter_diameter_mm) / 2) ** 2) * math.pi # r2*pi.
+#             sampledvolume = float(sampledvolume_ml)
+#             counted_volume = float(counted_volume_ml)
+#             #
+#             try: preservative_volume = float(preservative_volume_ml)
+#             except: preservative_volume = 0.0
+#             singlearea = 1.0
+#             #
+#             if countareatype == 'Chamber/filter':
+#                 singlearea = chamber_filter_area
+#             if countareatype == '1/2 Chamber/filter':
+#                 singlearea = chamber_filter_area * 0.5
+#             if countareatype == 'Field of views':
+#                 singlearea = ((float(diameterofview_mm) / 2) ** 2) * math.pi # r2*pi.
+#             if countareatype == 'Transects':
+#                 singlearea = float(transectrectanglelength_mm) * float(transectrectanglewidth_mm) # l * w.
+#             if countareatype == 'Rectangles':
+#                 singlearea = float(transectrectanglelength_mm) * float(transectrectanglewidth_mm) # l * w.
+#             
+#             # Calculate coeff.
+#             onelitre_ml = 1000.0
+#             coeffoneunit = chamber_filter_area * sampledvolume * onelitre_ml / (singlearea * counted_volume * (sampledvolume + preservative_volume))
+#             coeffoneunit = int(coeffoneunit + 0.5) # Round.
+# #             self._coefficient_one_unit_edit.setText(unicode(coeffoneunit))
+#             fields_dict['coefficient_one_unit'] = unicode(coeffoneunit)
+#         #
+#         except:
+#             fields_dict['coefficient_one_unit'] = unicode(coeffoneunit)
         
     def _save_analysis_method(self):
         """ """
@@ -558,13 +508,12 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
             # Also save to current sample.
             self._save_method_to_current_sample()
 
-
     def _add_method_step(self):
         """ """
         old_method = ''
         if self._selectanalysismethod_list.currentIndex() > 0:
             old_method = unicode(self._selectanalysismethod_list.currentText())
-        current_method_step = unicode(self._selectmethodstep_list.currentText())
+        current_method_step = unicode(self._selectmethodstep_table.currentItem().text())
         #
         dialog = AddMethodStepDialog(self, self._current_sample_method, current_method_step)
         if dialog.exec_():
@@ -577,6 +526,8 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
             currentindex = self._selectanalysismethod_list.findText(old_method, QtCore.Qt.MatchFixedString)
             if currentindex >= 0:
                 self._selectanalysismethod_list.setCurrentIndex(currentindex)
+            #
+            self._update_method_step_table()
 
     def _delete_method_steps(self):
         """ """
@@ -595,8 +546,9 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
             currentindex = self._selectanalysismethod_list.findText(old_method, QtCore.Qt.MatchFixedString)
             if currentindex >= 0:
                 self._selectanalysismethod_list.setCurrentIndex(currentindex)
+            #
+            self._update_method_step_table()
             
-
     def _save_as_analysis_method(self):
         """ """
         if self._current_sample_method is None:
@@ -626,14 +578,6 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         dialog = DeleteAnalysisMethodDialog(self)
         if dialog.exec_():
             self._update_analysis_method_list()
-
-#     def _save_sample_method(self):
-#         """ """
-#         if self._current_sample_method is None:
-#             return
-#         #
-#         QtGui.QMessageBox.information(self, "Information", 
-#                                       "Not implemented yet.\n\nPlease edit: 'toolbox_data/plankton_counter/config/counting_methods.txt'")
 
 
 class SaveAnalysismethodAsDialog(QtGui.QDialog):

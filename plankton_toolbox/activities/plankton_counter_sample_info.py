@@ -84,11 +84,6 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         self._sampling_series_edit.setMaximumWidth(80)
         self._project_edit = QtGui.QLineEdit()
         self._station_name_edit = QtGui.QLineEdit()
-#         self._latlong_format_list = QtGui.QComboBox()
-#         self._latlong_format_list.addItems(['ICES (DDMM.mm)', 
-#                                             'DD (DD.dddd)', 
-#                                             'DM (DD MM.mm)', 
-#                                             'DMS (DD MM SS.ss)'])
         self._latitude_degree = QtGui.QLineEdit()
         self._latitude_degree.setPlaceholderText('dd')
         self._latitude_degree.setMaximumWidth(40)
@@ -134,7 +129,6 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
                                                'PDD (Pooled sample from distinct depths)', 
                                                'SEP (Separate depths)', 
                                                ])
-
         self._sampled_volume_l_edit = QtGui.QLineEdit()
         self._sampled_volume_l_edit.setMaximumWidth(60)
 
@@ -146,7 +140,6 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
                                            'WP2 (Integrated sample)', 
                                            'BONGO (Bongo net)', 
                                            ])
-        
         self._sampler_area_m2_edit = QtGui.QLineEdit()
         self._sampler_area_m2_edit.setMaximumWidth(60)
         self._net_mesh_size_um_edit = QtGui.QLineEdit()
@@ -171,8 +164,6 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         self._analysed_by_edit = QtGui.QLineEdit()
         self._sample_comment_edit = QtGui.QLineEdit()
         #
-#         self._save_sample_info_button = QtGui.QPushButton('Save sample info')
-#         self._save_sample_info_button.clicked.connect(self.save_data)
         self._clear_sample_info_button = QtGui.QPushButton('Clear')
         self._clear_sample_info_button.clicked.connect(self.clear_sample_info_selected)
         self._copyfromsample_button = QtGui.QPushButton('Copy from sample...')
@@ -181,9 +172,8 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         # Layout widgets.
         form1 = QtGui.QGridLayout()
         gridrow = 0
-        form1.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 1) # Add space.
-        gridrow += 1
         form1.addWidget(utils_qt.LeftAlignedQLabel('<b>Sampling</b>'), gridrow, 0, 1, 1)
+        form1.addWidget(utils_qt.RightAlignedQLabel(''), gridrow, 1, 1, 10) # Move the rest to left
         gridrow += 1
         form1.addWidget(utils_qt.RightAlignedQLabel('Sample name:'), gridrow, 0, 1, 1)
         form1.addWidget(self._sample_name_edit, gridrow, 1, 1, 2)
@@ -216,8 +206,8 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         hbox.addWidget(self._sampling_series_edit)
         hbox.addStretch(10)
         form1.addLayout(hbox, gridrow, 1, 1, 3)
-        gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel(''), gridrow, 0, 1, 10) # Empty row.
+#         gridrow += 1
+#         form1.addWidget(utils_qt.RightAlignedQLabel(''), gridrow, 0, 1, 10) # Empty row.
         gridrow += 1
         form1.addWidget(utils_qt.RightAlignedQLabel('Project:'), gridrow, 0, 1, 1)
         form1.addWidget(self._project_edit, gridrow, 1, 1, 3)
@@ -244,8 +234,8 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         hbox.addWidget(self._longitude_dd)
         hbox.addStretch(10)
         form1.addLayout(hbox, gridrow, 1, 1, 3)
-        gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel(''), gridrow, 0, 1, 10) # Empty row.
+#         gridrow += 1
+#         form1.addWidget(utils_qt.RightAlignedQLabel(''), gridrow, 0, 1, 10) # Empty row.
         gridrow += 1
         form1.addWidget(utils_qt.RightAlignedQLabel('Sampler type code:'), gridrow, 0, 1, 1)
         form1.addWidget(self._sampler_type_code_list, gridrow, 1, 1, 1)
@@ -279,9 +269,6 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         hbox.addWidget(self._net_tow_length_m_edit)
         hbox.addStretch(10)
         form1.addLayout(hbox, gridrow, 1, 1, 3)
-        # Empty row.
-        gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel(''), gridrow, 0, 1, 1)
         gridrow += 1
         form1.addWidget(utils_qt.LeftAlignedQLabel('<b>Analysis</b>'), gridrow, 0, 1, 1)
         gridrow += 1
@@ -303,13 +290,11 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         gridrow += 1
         form1.addWidget(utils_qt.RightAlignedQLabel('Comments:'), gridrow, 0, 1, 1)
         form1.addWidget(self._sample_comment_edit, gridrow, 1, 1, 3)
-        # Empty row.
-        gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel(''), gridrow, 0, 1, 1)
+#         # Empty row.
+#         gridrow += 1
+#         form1.addWidget(utils_qt.RightAlignedQLabel(''), gridrow, 0, 1, 10)
         #
         hbox1 = QtGui.QHBoxLayout()
-#         hbox1.addStretch(10)
-#         hbox1.addWidget(self._save_sample_info_button)
         hbox1.addWidget(self._clear_sample_info_button)
         hbox1.addWidget(self._copyfromsample_button)
         hbox1.addStretch(10)
@@ -376,10 +361,10 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
     
     def clear_sample_info_selected(self):
         """ """
-        if QtGui.QMessageBox.warning(self, 'Warning', 
+        box_result = QtGui.QMessageBox.warning(self, 'Warning', 
                                      'Do you want to clear all sample information?', 
-                                     QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Ok):
-            #
+                                     QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Ok)
+        if box_result == QtGui.QMessageBox.Ok:
             self.clear_sample_info()
 
     def _copy_sample_info_from(self):
@@ -412,39 +397,6 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
 
     def _from_fields_to_dict(self, metadata_dict):
         """ """
-#         self._sample_name_edit = QtGui.QLineEdit()
-#         self._sample_id_edit = QtGui.QLineEdit()
-#         self._sample_year_edit = QtGui.QLineEdit()
-#         self._visit_month_edit = QtGui.QLineEdit()
-#         self._sample_day_edit = QtGui.QLineEdit()
-#         self._sample_time_edit = QtGui.QLineEdit()
-#         self._sampling_year_edit = QtGui.QLineEdit()
-#         self._sampling_country_edit = QtGui.QLineEdit()
-#         self._sampling_platform_edit = QtGui.QLineEdit()
-#         self._sampling_series_edit = QtGui.QLineEdit()
-#         self._project_edit = QtGui.QLineEdit()
-#         self._station_name_edit = QtGui.QLineEdit()
-#         self._latitude_degree = QtGui.QLineEdit()
-#         self._latitude_minute = QtGui.QLineEdit()
-#         self._longitude_degree = QtGui.QLineEdit()
-#         self._longitude_minute = QtGui.QLineEdit()
-#         self._sample_min_depth_m_edit = QtGui.QLineEdit()
-#         self._sample_max_depth_m_edit = QtGui.QLineEdit()
-#         self._water_depth_m_edit = QtGui.QLineEdit()
-#         self._sampler_type_code_list = QtGui.QComboBox()
-#         self._sampled_volume_l_edit = QtGui.QLineEdit()
-# self._net_type_code_list = QtGui.QComboBox()
-#         self._sampler_area_m2_edit = QtGui.QLineEdit()
-#         self._net_mesh_size_um_edit = QtGui.QLineEdit()
-#         self._wire_angle_deg_edit = QtGui.QLineEdit()
-#         self._net_tow_length_m_edit = QtGui.QLineEdit()
-#         self._analysis_laboratory_edit = QtGui.QLineEdit()
-#         self._analysis_year_edit = QtGui.QLineEdit()
-#         self._analysis_month_edit = QtGui.QLineEdit()
-#         self._analysis_day_edit = QtGui.QLineEdit()
-#         self._analysed_by_edit = QtGui.QLineEdit()
-#         self._sample_comment_edit = QtGui.QLineEdit()
-
         metadata_dict['sample_name'] = unicode(self._current_sample)
         metadata_dict['sample_id'] = unicode(self._sample_id_edit.text())
         year = unicode(self._sample_year_edit.text())
@@ -474,9 +426,7 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         metadata_dict['water_depth_m'] = unicode(self._water_depth_m_edit.text())
         metadata_dict['sampler_type_code'] = unicode(self._sampler_type_code_list.currentText())
         metadata_dict['sampled_volume_l'] = unicode(self._sampled_volume_l_edit.text())
-        
         metadata_dict['net_type_code'] = unicode(self._net_type_code_list.currentText())        
-        
         metadata_dict['sampler_area_m2'] = unicode(self._sampler_area_m2_edit.text())
         metadata_dict['net_mesh_size_um'] = unicode(self._net_mesh_size_um_edit.text())
         metadata_dict['wire_angle_deg'] = unicode(self._wire_angle_deg_edit.text())
@@ -532,7 +482,6 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         self._latitude_dd.setText(unicode(metadata_dict.get('sample_latitude_dd', '')))
         self._longitude_dd.setText(unicode(metadata_dict.get('sample_longitude_dd', '')))
         #       
-#         self._latlong_format_list.setText(metadata_dict.get('latlong_format_list', ''))
         self._sample_min_depth_m_edit.setText(metadata_dict.get('sample_min_depth_m', ''))
         self._sample_max_depth_m_edit.setText(metadata_dict.get('sample_max_depth_m', ''))
         self._water_depth_m_edit.setText(metadata_dict.get('water_depth_m', ''))

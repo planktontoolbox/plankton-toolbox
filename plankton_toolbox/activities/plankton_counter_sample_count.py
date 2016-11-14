@@ -37,7 +37,6 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
 
     def load_data(self):
         """ Called at startup. """
-        #
         # Load common parts.
         self._update_select_specieslist_combo()             
         self._update_selected_specieslist(None) 
@@ -65,7 +64,7 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         self._current_sample_object.save_sample_data()
         # Update info method steps and counting areas.
         methodstep = unicode(self._selectmethodstep_list.currentText())
-        maxcountarea = unicode(self._countareanumber_list.count())
+        maxcountarea = unicode(self._countareanumber_edit.text())
         info_dict = {}
         if methodstep:
             info_dict['last_used_method_step'] = methodstep
@@ -88,11 +87,13 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         # Transects or views.
         self._countareatype_edit = KeyPressQLineEdit(self)
         self._countareatype_edit.setEnabled(False)
-        self._countareanumber_list = QtGui.QComboBox(self)
-        self._countareanumber_list.setMinimumWidth(60)
-        self._countareanumber_list.addItems(['1']) 
+        self._countareanumber_edit = QtGui.QLineEdit(self)
+        self._countareanumber_edit.setMinimumWidth(50)
+        self._countareanumber_edit.setText('1') 
         self._addcountarea_button = KeyPressQPushButton(' Add count area ', self)
         self._addcountarea_button.clicked.connect(self._add_count_area)
+        self._removecountarea_button = KeyPressQPushButton(' Remove count area ', self)
+        self._removecountarea_button.clicked.connect(self._remove_count_area)
         self._locktaxa_button = KeyPressQPushButton('Lock taxa...', self)
         self._locktaxa_button.clicked.connect(self._lock_taxa)
         self._coefficient_edit = KeyPressQLineEdit(self)
@@ -100,11 +101,7 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         # Species and species info.
         self._scientific_name_edit = KeyPressQLineEdit(self)
         self._scientific_name_edit.textChanged.connect(self._selected_species_changed)
-        
-        
         self._scientific_name_edit.textEdited.connect(self._selected_species_edited)
-        
-        
         self._scientific_full_name_edit = KeyPressQLineEdit(self)
         self._scientific_full_name_edit.setEnabled(False)
         self._scientific_full_name_edit.textChanged.connect(self._species_full_name_changed)
@@ -119,7 +116,6 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         self._speciessizeclass_list.addItems(['']) 
         self._speciessizeclass_list.currentIndexChanged.connect(self._size_class_changed)
         # Count number.
-#         self._infospecieslocked_label = QtGui.QLabel('<i>TEST: No species selected</i>') # 'No species selected', 'Selected species in locked.'
         self._countedunits_edit = KeyPressQSpinBox(self)
         self._countedunits_edit.setRange(0, 999999999)
         self._countedunits_edit.valueChanged.connect(self._counted_value_changed)
@@ -231,8 +227,6 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         # Layout. Column 1A. Methods.
         countgrid = QtGui.QGridLayout()
         gridrow = 0
-        countgrid.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 1) # Add space.
-        gridrow += 1
         countgrid.addWidget(utils_qt.LeftAlignedQLabel('<b>Method steps</b>'), gridrow, 0, 1, 1)
         gridrow += 1
         countgrid.addWidget(utils_qt.RightAlignedQLabel('Method step:'), gridrow, 0, 1, 1)
@@ -243,12 +237,13 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         countgrid.addWidget(self._countareatype_edit, gridrow, 1, 1, 3)
         gridrow += 1
         countgrid.addWidget(utils_qt.RightAlignedQLabel('Count area number:'), gridrow, 0, 1, 1)
-        countgrid.addWidget(self._countareanumber_list, gridrow, 1, 1, 1)
+        countgrid.addWidget(self._countareanumber_edit, gridrow, 1, 1, 1)
         countgrid.addWidget(self._addcountarea_button, gridrow, 2, 1, 1)
-        countgrid.addWidget(self._locktaxa_button, gridrow, 3, 1, 1)
+        countgrid.addWidget(self._removecountarea_button, gridrow, 3, 1, 1)
         gridrow += 1
         countgrid.addWidget(utils_qt.RightAlignedQLabel('Coefficient:'), gridrow, 0, 1, 1)
         countgrid.addWidget(self._coefficient_edit, gridrow, 1, 1, 2)
+        countgrid.addWidget(self._locktaxa_button, gridrow, 3, 1, 1)
         #
         # Layout. Column 1B. Species info. 
         gridrow += 1
@@ -386,11 +381,6 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
     
     def _selected_species_changed(self, new):
         """ """
-        # Clear other fields.
-#         self._speciessizeclass_list.setCurrentIndex(0)
-#         self._speciessizeclass_list.clear()
-#         self._taxon_sflag_list.setCurrentIndex(0)
-#         self._taxon_cf_list.setCurrentIndex(0)
         # Add content to size class list base on BVOL info.
         scientific_name = unicode(self._scientific_name_edit.text())
         # Get alternatives for size classes.
@@ -403,7 +393,6 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         self._speciessizeclass_list.clear()
         self._speciessizeclass_list.addItems([''] + sizes)
             
-    
     def _selected_species_edited(self, new):
         """ """
         scientific_name = unicode(self._scientific_name_edit.text())
@@ -434,27 +423,7 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
     
     def _counted_value_changed(self, value):
         """ """
-
         self._update_sample_row()
-        
-#         info_dict = self._current_sample_method_step_fields
-#         # From fields in this tab widget.
-#         info_dict['scientific_name'] = unicode(self._scientific_name_edit.text())
-#         info_dict['size_class'] = unicode(self._speciessizeclass_list.currentText())
-#         info_dict['method_step'] = unicode(self._selectmethodstep_list.currentText())
-#         info_dict['count_area_number'] = unicode(self._countareanumber_list.currentText())
-#         info_dict['coefficient'] = unicode(self._coefficient_edit.text())
-#         #
-#         value = unicode(self._countedunits_edit.value())
-#         try:
-#             self._current_sample_object.update_counted_value_in_core(info_dict, value)
-#         except Exception as e:
-#             toolbox_utils.Logging().error('Failed to store changes. ' + unicode(e))
-#             QtGui.QMessageBox.warning(self, 'Warning', 'Failed to store changes. ' + unicode(e))
-#             # Update to last value.
-#             self._get_sample_row()
-#             #
-#         self._update_summary()
          
     def _counted_clear(self, value):
         """ """
@@ -472,6 +441,8 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
             oldvalue = self._countedunits_edit.value()
             newvalue = oldvalue + value
             self._countedunits_edit.setValue(newvalue)
+        else:
+            QtGui.QApplication.beep()
          
     def _add_1(self): self._counted_add(1)
     def _sub_1(self): self._counted_add(-1)
@@ -522,20 +493,6 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         selectedlist = unicode(self._selectspecieslist_list.currentText())
         self._update_selected_specieslist(selectedlist)
     
-    ### TODO:
-    ### TODO:
-    ### TODO:
-    ### TODO:
-    ### TODO:
-    ### TODO:
-    ### TODO:
-    ### TODO:
-    ### TODO:
-    ### TODO:
-    ### TODO:
-    ### TODO:
-    ### TODO:
-    ### TODO:
     def _selected_species_in_table_changed(self):
         """ """
         self._scientific_name_edit.setText('')
@@ -649,8 +606,7 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
                     if len(row) > 0:
                         rows.append([row])
                 #   
-                plankton_core.PlanktonCounterMethods().create_counting_species_list(specieslistname,
-                                                                                rows)
+                plankton_core.PlanktonCounterMethods().create_counting_species_list(specieslistname, rows)
         #
         self._update_select_specieslist_combo()             
         self._update_selected_specieslist(None) 
@@ -799,7 +755,7 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         info_dict['species_flag_code'] = unicode(self._taxon_sflag_list.currentText())
         info_dict['variable_comment'] = unicode(self._variable_comment_edit.text())
         info_dict['method_step'] = unicode(self._selectmethodstep_list.currentText())
-        info_dict['count_area_number'] = unicode(self._countareanumber_list.currentText())
+        info_dict['count_area_number'] = unicode(self._countareanumber_edit.text())
         info_dict['coefficient'] = unicode(self._coefficient_edit.text())
         #
         self._current_sample_object.update_sample_row(info_dict)
@@ -946,11 +902,11 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         self._countareatype_edit.setText(countareatype)
         # Alternatives: 'Chamber','1/2 chamber','Field of views','Transects','Rectangles'
         if (countareatype == 'Field of views') or (countareatype == 'Transects') or (countareatype == 'Filters'):
-            self._countareanumber_list.setEnabled(True)
+            self._countareanumber_edit.setEnabled(False)
             self._addcountarea_button.setEnabled(True)
             self._locktaxa_button.setEnabled(True)
         else:
-            self._countareanumber_list.setEnabled(False)
+            self._countareanumber_edit.setEnabled(False)
             self._addcountarea_button.setEnabled(False)
             self._locktaxa_button.setEnabled(False)
         #
@@ -968,12 +924,12 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         #
         sample_info_dict = self._current_sample_object.get_sample_info()
         maxcountarea = sample_info_dict.get('max_count_area<+>' + selected_method_step, '1')
-        maxareanumber = int(maxcountarea)
-        self._countareanumber_list.clear()
-        for index in range(maxareanumber):
-            countarea = index + 1
-            self._countareanumber_list.addItem(unicode(countarea))
-        self._countareanumber_list.setCurrentIndex(maxareanumber - 1)
+#         maxareanumber = int(maxcountarea)
+        self._countareanumber_edit.setText(maxcountarea)
+#         for index in range(maxareanumber):
+#             countarea = index + 1
+#             self._countareanumber_edit.addItem(unicode(countarea))
+#         self._countareanumber_edit.setCurrentIndex(maxareanumber - 1)
         #
         self._calculate_coefficient()
         # Update sample row since counting method step changed. 
@@ -993,29 +949,52 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
     
     def _add_count_area(self):
         """ """
-        numberofcountareas = self._countareanumber_list.count()
-        self._countareanumber_list.clear()
-        for index in range(numberofcountareas + 1):
-            countarea = index + 1
-            self._countareanumber_list.addItem(unicode(countarea))
-        #
-        self._countareanumber_list.setCurrentIndex(numberofcountareas)
+        numberofcountareas = self._countareanumber_edit.text()
+        numberofcountareas_int = int(numberofcountareas)
+        self._countareanumber_edit.setText(unicode(numberofcountareas_int + 1))
         #
         self._calculate_coefficient()
         # Update coefficient for all taxa in this method step.
         currentmethodstep = unicode(self._selectmethodstep_list.currentText())
         coefficient = unicode(self._coefficient_edit.text())
-        countareanumber = unicode(self._countareanumber_list.currentText())
+        countareanumber = unicode(self._countareanumber_edit.text())
         self._current_sample_object.update_coeff_for_sample_rows(currentmethodstep, 
                                                                  countareanumber, 
                                                                  coefficient)
         # Save max count area for method step.
         self.save_data()
          
+    def _remove_count_area(self):
+        """ """
+        numberofcountareas = self._countareanumber_edit.text()
+        numberofcountareas_int = int(numberofcountareas)
+        #
+        if numberofcountareas_int == 1: # Last step.
+            box_result =  QtGui.QMessageBox.warning(self, 'Warning', 
+                                         'Do you want to remove all counted species from this method step?', 
+                                         QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Ok)
+            if box_result == QtGui.QMessageBox.Ok:    
+                currentmethodstep = unicode(self._selectmethodstep_list.currentText())
+                self._current_sample_object.delete_rows_in_method_step(currentmethodstep)
+                self._update_summary()
+        else:
+            self._countareanumber_edit.setText(unicode(numberofcountareas_int - 1))
+            #
+            self._calculate_coefficient()
+            # Update coefficient for all taxa in this method step.
+            currentmethodstep = unicode(self._selectmethodstep_list.currentText())
+            coefficient = unicode(self._coefficient_edit.text())
+            countareanumber = unicode(self._countareanumber_edit.text())
+            self._current_sample_object.update_coeff_for_sample_rows(currentmethodstep, 
+                                                                     countareanumber, 
+                                                                     coefficient)
+            # Save max count area for method step.
+            self.save_data()
+         
     def _lock_taxa(self):
         """ """   
         currentmethodstep = unicode(self._selectmethodstep_list.currentText())
-        countareanumber = unicode(self._countareanumber_list.currentText())
+        countareanumber = unicode(self._countareanumber_edit.text())
         dialog = LockTaxaListDialog(self, self._current_sample_object, currentmethodstep, countareanumber)
         dialog.exec_()
         # Update sample row since rows may have been locked. 
@@ -1026,7 +1005,7 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
     def _calculate_coefficient(self):
         """ """
         # Coefficient.
-        valuetxt = unicode(self._countareanumber_list.currentText())
+        valuetxt = unicode(self._countareanumber_edit.text())
         value = int(valuetxt)
         method_dict = self._current_sample_method_step_fields
         coeffoneunittext = method_dict.get('coefficient_one_unit', '0')
@@ -1036,7 +1015,7 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
             self._coefficient_edit.setText(unicode(coeff))
         except:
             self._coefficient_edit.setText('0')
-
+        
     # TODO: ######################################################################################
     # ===== For key press events. =====
     

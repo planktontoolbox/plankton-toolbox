@@ -345,21 +345,30 @@ class Species(object):
         """ Adds info about harmfulness to the species objects. """
         tablefilereader = toolbox_utils.TableFileReader(excel_file_name = excel_file_name)
         #
+        header = tablefilereader.header()
         for row in tablefilereader.rows():
-            scientificname = ''
+            scientific_name = ''
+            accepted_name_usage = ''
             try:
-                scientificname = row[0].strip() # Scientific name.
-                aphiaid = row[1] if row[1].strip() != 'NULL' else '' # Aphia id.
+                row_dict = dict(zip(header, row))
+                scientific_name = row_dict.get('scientific_name', None).strip()
+                accepted_name_usage = row_dict.get('accepted_name_usage', None).strip() # Valid scientific name. 
                 #
-                if scientificname in self._taxa_lookup:
-                    taxon = self._taxa_lookup[scientificname]
-                    taxon['harmful_name'] = scientificname
-                    taxon['harmful'] = True 
-                    taxon['aphia_id'] = aphiaid
-                else:
-                    toolbox_utils.Logging().warning('Scientific name is missing: ' + scientificname + '   (Source: ' + excel_file_name + ')')
+                if scientific_name and (scientific_name in self._taxa_lookup):
+                    print('Harmful: scientific_name: ' + scientific_name)
+                    taxon = self._taxa_lookup[scientific_name]
+                    taxon['harmful_name'] = scientific_name
+                    taxon['harmful'] = True
+                if not (scientific_name == accepted_name_usage): 
+                    if accepted_name_usage and (accepted_name_usage in self._taxa_lookup):
+                        print('Harmful: accepted_name_usage: ' + accepted_name_usage + ' ( scientific_name: ' + scientific_name + ')')
+                        taxon = self._taxa_lookup[accepted_name_usage]
+                        taxon['harmful_name'] = accepted_name_usage
+                        taxon['harmful'] = True 
+#                 else:
+#                     toolbox_utils.Logging().warning('Scientific name is missing: ' + scientific_name + '   (Source: ' + excel_file_name + ')')
             except:
-                toolbox_utils.Logging().warning('Failed when loading harmful algae. File:' + excel_file_name + '  Taxon: ' + scientificname)
+                toolbox_utils.Logging().warning('Failed when loading harmful algae. File:' + excel_file_name + '  Taxon: ' + scientific_name)
 
     def _load_plankton_group_definition(self, excel_file_name):
         """ """

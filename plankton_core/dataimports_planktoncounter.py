@@ -70,7 +70,7 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
             ['variable', 'variable_comment', 'text', 'variable_comment', ''], 
             # From counting_method.txt in sample.
             ['variable', 'counting_method_step', 'text', 'counting_method_step', ''], 
-            ['variable', 'method_step_description', 'text', 'method_step_description', ''], 
+#             ['variable', 'method_step_description', 'text', 'method_step_description', ''], 
             ['variable', 'sampled_volume_ml', 'text', 'sampled_volume_ml', ''], 
             ['variable', 'preservative', 'text', 'preservative', ''], 
             ['variable', 'preservative_volume_ml', 'text', 'preservative_volume_ml', ''], 

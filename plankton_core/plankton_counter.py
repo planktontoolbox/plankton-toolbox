@@ -466,6 +466,12 @@ class PlanktonCounterSample():
                 raise UserWarning('Selected taxon is already counted in another method step.')
 
 
+    def delete_rows_in_method_step(self, current_method_step):
+        """ """
+        for sampleobject in self._sample_rows.values():
+            if sampleobject.get_method_step() == current_method_step:
+                del self._sample_rows[sampleobject.get_key()]
+    
     def update_coeff_for_sample_rows(self, current_method_step, count_area_number, coefficient):
         """ """
         for sampleobject in self._sample_rows.values():
