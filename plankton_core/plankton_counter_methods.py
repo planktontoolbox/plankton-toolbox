@@ -7,6 +7,7 @@
 from __future__ import unicode_literals
 
 import os
+import math
 import toolbox_utils
 import plankton_core
 
@@ -237,6 +238,60 @@ class PlanktonCounterMethod():
                         ]:
                 if key in self._method_step_header:
                     method_dict[key] = field_dict[key]
+            # Recalculate all coefficients.
+            self.calculate_coefficient_one_unit(method_dict)
+                    
+    def calculate_coefficient_one_unit(self, fields_dict):
+        """ """
+        # Clear result.
+        fields_dict['coefficient_one_unit'] = '0'
+        #
+        try:
+            # From analysis method.
+            sampledvolume_ml = fields_dict.get('sampled_volume_ml', 0.0)
+            preservative_volume_ml = fields_dict.get('preservative_volume_ml', 0.0)
+            counted_volume_ml = fields_dict.get('counted_volume_ml', 0.0)
+            chamber_filter_diameter_mm = fields_dict.get('chamber_filter_diameter_mm', 0.0)
+            # From analysis method step.
+            countareatype = fields_dict.get('count_area_type', 0.0)
+            diameterofview_mm = fields_dict.get('diameter_of_view_mm', 0.0)
+            transectrectanglelength_mm = fields_dict.get('transect_rectangle_length_mm', 0.0)
+            transectrectanglewidth_mm = fields_dict.get('transect_rectangle_width_mm', 0.0)
+            #
+            if not chamber_filter_diameter_mm:
+                return
+            if not sampledvolume_ml:
+                return
+            if not counted_volume_ml:
+                return
+            #
+            chamber_filter_area = ((float(chamber_filter_diameter_mm) / 2) ** 2) * math.pi # r2*pi.
+            sampledvolume = float(sampledvolume_ml)
+            counted_volume = float(counted_volume_ml)
+            #
+            try: preservative_volume = float(preservative_volume_ml)
+            except: preservative_volume = 0.0
+            singlearea = 1.0
+            #
+            if countareatype == 'Chamber/filter':
+                singlearea = chamber_filter_area
+            if countareatype == '1/2 Chamber/filter':
+                singlearea = chamber_filter_area * 0.5
+            if countareatype == 'Field of views':
+                singlearea = ((float(diameterofview_mm) / 2) ** 2) * math.pi # r2*pi.
+            if countareatype == 'Transects':
+                singlearea = float(transectrectanglelength_mm) * float(transectrectanglewidth_mm) # l * w.
+            if countareatype == 'Rectangles':
+                singlearea = float(transectrectanglelength_mm) * float(transectrectanglewidth_mm) # l * w.
+            
+            # Calculate coeff.
+            onelitre_ml = 1000.0
+            coeffoneunit = chamber_filter_area * sampledvolume * onelitre_ml / (singlearea * counted_volume * (sampledvolume + preservative_volume))
+            coeffoneunit = int(coeffoneunit + 0.5) # Round.
+            fields_dict['coefficient_one_unit'] = unicode(coeffoneunit)
+        except:
+            pass
+
 
     def save_method_to_file(self, path, filename):
         """ """

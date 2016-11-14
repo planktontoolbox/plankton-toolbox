@@ -379,13 +379,13 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
             else:
                 self._viewsizeclassinfo_checkbox.setChecked(False)
             #
-            self._calculate_coefficient_one_unit()
+##             self._calculate_coefficient_one_unit()
         finally:
             self._dont_update_current_sample_method_flag = False
 
     def _field_changed(self):
         """ """
-        self._calculate_coefficient_one_unit()
+##         self._calculate_coefficient_one_unit()
         self._update_current_sample_method()
 #         # If any field changed, then go back to sample method.
 #         self._selectanalysismethod_list.setCurrentIndex(0)
@@ -424,58 +424,73 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
             fields_dict['view_sizeclass_info'] = 'FALSE'
         #
         self._current_sample_method.update_counting_method_step_fields(fields_dict['counting_method_step'], fields_dict)
+        # Update coefficient field.
+        self._current_sample_method.calculate_coefficient_one_unit(fields_dict)
+        self._coefficient_one_unit_edit.setText(fields_dict.get('coefficient_one_unit', '0'))
+ 
 
-    def _calculate_coefficient_one_unit(self):
-        """ """
-        # Clear result.
-        self._coefficient_one_unit_edit.setText('0')
-        #
-        try:
-            # From analysis method.
-            sampledvolume_ml = unicode(self._sampledvolume_edit.text())
-            preservative_volume_ml = unicode(self._preservative_volume_edit.text())
-            counted_volume_ml = unicode(self._countedvolume_edit.text())
-            chamber_filter_diameter_mm = unicode(self._chamber_filter_diameter_edit.text())
-            # From analysis method step.
-            countareatype = unicode(self._countareatype_list.currentText())
-            diameterofview_mm = unicode(self._viewdiameter_edit.text())
-            transectrectanglelength_mm = unicode(self._transectrectanglelength_edit.text())
-            transectrectanglewidth_mm = unicode(self._transectrectanglewidth_edit.text())
-            #
-            if not chamber_filter_diameter_mm:
-                return
-            if not sampledvolume_ml:
-                return
-            if not counted_volume_ml:
-                return
-            #
-            chamber_filter_area = ((float(chamber_filter_diameter_mm) / 2) ** 2) * math.pi # r2*pi.
-            sampledvolume = float(sampledvolume_ml)
-            counted_volume = float(counted_volume_ml)
-            #
-            try: preservative_volume = float(preservative_volume_ml)
-            except: preservative_volume = 0.0
-            singlearea = 1.0
-            #
-            if countareatype == 'Chamber/filter':
-                singlearea = chamber_filter_area
-            if countareatype == '1/2 Chamber/filter':
-                singlearea = chamber_filter_area * 0.5
-            if countareatype == 'Field of views':
-                singlearea = ((float(diameterofview_mm) / 2) ** 2) * math.pi # r2*pi.
-            if countareatype == 'Transects':
-                singlearea = float(transectrectanglelength_mm) * float(transectrectanglewidth_mm) # l * w.
-            if countareatype == 'Rectangles':
-                singlearea = float(transectrectanglelength_mm) * float(transectrectanglewidth_mm) # l * w.
-            
-            # Calculate coeff.
-            onelitre_ml = 1000.0
-            coeffoneunit = chamber_filter_area * sampledvolume * onelitre_ml / (singlearea * counted_volume * (sampledvolume + preservative_volume))
-            coeffoneunit = int(coeffoneunit + 0.5) # Round.
-            self._coefficient_one_unit_edit.setText(unicode(coeffoneunit))
-        #
-        except:
-            pass
+## Moved to plankton_counte_methods.py
+#     def _calculate_coefficient_one_unit(self, fields_dict):
+#         """ """
+#         # Clear result.
+#         self._coefficient_one_unit_edit.setText('0')
+#         #
+#         try:
+#             # From analysis method.
+# #             sampledvolume_ml = unicode(self._sampledvolume_edit.text())
+# #             preservative_volume_ml = unicode(self._preservative_volume_edit.text())
+# #             counted_volume_ml = unicode(self._countedvolume_edit.text())
+# #             chamber_filter_diameter_mm = unicode(self._chamber_filter_diameter_edit.text())
+# #             # From analysis method step.
+# #             countareatype = unicode(self._countareatype_list.currentText())
+# #             diameterofview_mm = unicode(self._viewdiameter_edit.text())
+# #             transectrectanglelength_mm = unicode(self._transectrectanglelength_edit.text())
+# #             transectrectanglewidth_mm = unicode(self._transectrectanglewidth_edit.text())
+#             sampledvolume_ml = fields_dict.get('sampled_volume_ml', 0.0)
+#             preservative_volume_ml = fields_dict.get('preservative_volume_ml', 0.0)
+#             counted_volume_ml = fields_dict.get('counted_volume_ml', 0.0)
+#             chamber_filter_diameter_mm = fields_dict.get('chamber_filter_diameter_mm', 0.0)
+#             # From analysis method step.
+#             countareatype = fields_dict.get('count_area_type', 0.0)
+#             diameterofview_mm = fields_dict.get('diameter_of_view_mm', 0.0)
+#             transectrectanglelength_mm = fields_dict.get('transect_rectangle_length_mm', 0.0)
+#             transectrectanglewidth_mm = fields_dict.get('transect_rectangle_width_mm', 0.0)
+#             #
+#             if not chamber_filter_diameter_mm:
+#                 return
+#             if not sampledvolume_ml:
+#                 return
+#             if not counted_volume_ml:
+#                 return
+#             #
+#             chamber_filter_area = ((float(chamber_filter_diameter_mm) / 2) ** 2) * math.pi # r2*pi.
+#             sampledvolume = float(sampledvolume_ml)
+#             counted_volume = float(counted_volume_ml)
+#             #
+#             try: preservative_volume = float(preservative_volume_ml)
+#             except: preservative_volume = 0.0
+#             singlearea = 1.0
+#             #
+#             if countareatype == 'Chamber/filter':
+#                 singlearea = chamber_filter_area
+#             if countareatype == '1/2 Chamber/filter':
+#                 singlearea = chamber_filter_area * 0.5
+#             if countareatype == 'Field of views':
+#                 singlearea = ((float(diameterofview_mm) / 2) ** 2) * math.pi # r2*pi.
+#             if countareatype == 'Transects':
+#                 singlearea = float(transectrectanglelength_mm) * float(transectrectanglewidth_mm) # l * w.
+#             if countareatype == 'Rectangles':
+#                 singlearea = float(transectrectanglelength_mm) * float(transectrectanglewidth_mm) # l * w.
+#             
+#             # Calculate coeff.
+#             onelitre_ml = 1000.0
+#             coeffoneunit = chamber_filter_area * sampledvolume * onelitre_ml / (singlearea * counted_volume * (sampledvolume + preservative_volume))
+#             coeffoneunit = int(coeffoneunit + 0.5) # Round.
+# #             self._coefficient_one_unit_edit.setText(unicode(coeffoneunit))
+#             fields_dict['coefficient_one_unit'] = unicode(coeffoneunit)
+#         #
+#         except:
+#             fields_dict['coefficient_one_unit'] = unicode(coeffoneunit)
         
     def _save_analysis_method(self):
         """ """
