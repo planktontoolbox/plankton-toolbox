@@ -156,7 +156,7 @@ class PlanktonCounterMethod():
         #
         self._method_step_header = [
                'counting_method_step',
-               'method_step_description',
+#                'method_step_description',
                'sampled_volume_ml',
                'preservative',
                'preservative_volume_ml',
@@ -228,7 +228,16 @@ class PlanktonCounterMethod():
                 for key in field_dict.keys():
                     if key in self._method_step_header:
                         method_dict[key] = field_dict[key]
-          
+            # Update all rows with filds connected to the whole method.
+            for key in ['sampled_volume_ml', 
+                        'preservative',
+                        'preservative_volume_ml',
+                        'counted_volume_ml',
+                        'chamber_filter_diameter_mm',
+                        ]:
+                if key in self._method_step_header:
+                    method_dict[key] = field_dict[key]
+
     def save_method_to_file(self, path, filename):
         """ """
         tablefilewriter_method = toolbox_utils.TableFileWriter(

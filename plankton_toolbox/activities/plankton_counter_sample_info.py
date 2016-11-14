@@ -173,6 +173,7 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         form1 = QtGui.QGridLayout()
         gridrow = 0
         form1.addWidget(utils_qt.LeftAlignedQLabel('<b>Sampling</b>'), gridrow, 0, 1, 1)
+        form1.addWidget(utils_qt.RightAlignedQLabel(''), gridrow, 1, 1, 10) # Move the rest to left
         gridrow += 1
         form1.addWidget(utils_qt.RightAlignedQLabel('Sample name:'), gridrow, 0, 1, 1)
         form1.addWidget(self._sample_name_edit, gridrow, 1, 1, 2)
@@ -205,8 +206,8 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         hbox.addWidget(self._sampling_series_edit)
         hbox.addStretch(10)
         form1.addLayout(hbox, gridrow, 1, 1, 3)
-        gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel(''), gridrow, 0, 1, 10) # Empty row.
+#         gridrow += 1
+#         form1.addWidget(utils_qt.RightAlignedQLabel(''), gridrow, 0, 1, 10) # Empty row.
         gridrow += 1
         form1.addWidget(utils_qt.RightAlignedQLabel('Project:'), gridrow, 0, 1, 1)
         form1.addWidget(self._project_edit, gridrow, 1, 1, 3)
@@ -233,8 +234,8 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         hbox.addWidget(self._longitude_dd)
         hbox.addStretch(10)
         form1.addLayout(hbox, gridrow, 1, 1, 3)
-        gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel(''), gridrow, 0, 1, 10) # Empty row.
+#         gridrow += 1
+#         form1.addWidget(utils_qt.RightAlignedQLabel(''), gridrow, 0, 1, 10) # Empty row.
         gridrow += 1
         form1.addWidget(utils_qt.RightAlignedQLabel('Sampler type code:'), gridrow, 0, 1, 1)
         form1.addWidget(self._sampler_type_code_list, gridrow, 1, 1, 1)
@@ -289,9 +290,9 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         gridrow += 1
         form1.addWidget(utils_qt.RightAlignedQLabel('Comments:'), gridrow, 0, 1, 1)
         form1.addWidget(self._sample_comment_edit, gridrow, 1, 1, 3)
-        # Empty row.
-        gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel(''), gridrow, 0, 1, 1)
+#         # Empty row.
+#         gridrow += 1
+#         form1.addWidget(utils_qt.RightAlignedQLabel(''), gridrow, 0, 1, 10)
         #
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addWidget(self._clear_sample_info_button)
