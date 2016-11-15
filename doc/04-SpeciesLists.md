@@ -42,7 +42,7 @@ Hint: If you don't want a list to be loaded at start-up, then just add some char
 These files is used to build up the taxonomic hierarchy in Plankton Toolbox. For each scientific name the rank and parent name must be specified.
 
 | **scientific_name** | **rank** | **aphia_id** | **parent_name** |
-|:--------------------|:---------|:-------    --|:----------------|
+|:--------------------|:---------|:-------------|:----------------|
 | Chromista           | Kingdom  | 7            | Biota           |
 
 ### Files with prefix translate_ ###
