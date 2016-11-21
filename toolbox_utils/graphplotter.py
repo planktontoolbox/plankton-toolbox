@@ -301,7 +301,7 @@ class ChartBase(object):
             #
             for value in data_array:
                 try:
-                    value = float(value)
+                    value = float(value.replace(',', '.').replace(' ', ''))
                     float_array.append(value)
                 except:
                     failedconversions_set.add(unicode(value))

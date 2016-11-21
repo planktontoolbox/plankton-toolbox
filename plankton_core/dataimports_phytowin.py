@@ -333,7 +333,7 @@ class ImportPhytowin(plankton_core.DataImportPreparedBase):
             if phytowinsize:
                 try:
                     # Convert from float to int. Excel related problem.
-                    phytowinsize = unicode(int(float(phytowinsize)))
+                    phytowinsize = unicode(int(float(phytowinsize.replace(',', '.'))))
                 except:
                     phytowinsize = u''
                     print(u'loadPhytowinPegMapping, phytowinsize: ' + row[1])
@@ -342,7 +342,7 @@ class ImportPhytowin(plankton_core.DataImportPreparedBase):
             if pegsize:
                 try:
                     # Convert from float to int. Excel related problem.
-                    pegsize = unicode(int(float(pegsize)))
+                    pegsize = unicode(int(float(pegsize.replace(',', '.'))))
                 except:
                     pegsize = u''
                     print(u'loadPhytowinPegMapping, pegsize: ' + row[3])

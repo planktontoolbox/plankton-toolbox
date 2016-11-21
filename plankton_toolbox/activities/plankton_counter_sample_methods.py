@@ -401,21 +401,21 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         fields_dict = {}
         fields_dict['counting_method_step'] = unicode(self._selectmethodstep_table.currentItem().text())
 #         fields_dict['method_step_description'] = unicode(self._methodstepdescription_edit.text())
-        fields_dict['sampled_volume_ml'] = unicode(self._sampledvolume_edit.text())
+        fields_dict['sampled_volume_ml'] = unicode(self._sampledvolume_edit.text()).replace(',', '.').replace(' ', '')
         fields_dict['preservative'] = unicode(self._preservative_list.currentText())
-        fields_dict['preservative_volume_ml'] = unicode(self._preservative_volume_edit.text())
-        fields_dict['counted_volume_ml'] = unicode(self._countedvolume_edit.text())
-        fields_dict['chamber_filter_diameter_mm'] = unicode(self._chamber_filter_diameter_edit.text())
+        fields_dict['preservative_volume_ml'] = unicode(self._preservative_volume_edit.text()).replace(',', '.').replace(' ', '')
+        fields_dict['counted_volume_ml'] = unicode(self._countedvolume_edit.text()).replace(',', '.').replace(' ', '')
+        fields_dict['chamber_filter_diameter_mm'] = unicode(self._chamber_filter_diameter_edit.text()).replace(',', '.').replace(' ', '')
         # 
-        fields_dict['magnification'] = unicode(self._magnification_edit.text())
+        fields_dict['magnification'] = unicode(self._magnification_edit.text()).replace(',', '.').replace(' ', '')
         fields_dict['microscope'] = unicode(self._microscope_edit.text())
           
         fields_dict['count_area_type'] = unicode(self._countareatype_list.currentText())
           
-        fields_dict['diameter_of_view_mm'] = unicode(self._viewdiameter_edit.text())
-        fields_dict['transect_rectangle_length_mm'] = unicode(self._transectrectanglelength_edit.text())
-        fields_dict['transect_rectangle_width_mm'] = unicode(self._transectrectanglewidth_edit.text())
-        fields_dict['coefficient_one_unit'] = unicode(self._coefficient_one_unit_edit.text())
+        fields_dict['diameter_of_view_mm'] = unicode(self._viewdiameter_edit.text()).replace(',', '.').replace(' ', '')
+        fields_dict['transect_rectangle_length_mm'] = unicode(self._transectrectanglelength_edit.text()).replace(',', '.').replace(' ', '')
+        fields_dict['transect_rectangle_width_mm'] = unicode(self._transectrectanglewidth_edit.text()).replace(',', '.').replace(' ', '')
+        fields_dict['coefficient_one_unit'] = unicode(self._coefficient_one_unit_edit.text()).replace(',', '.').replace(' ', '')
         
         fields_dict['counting_species_list'] = unicode(self._counting_species_list.currentText())
         if self._viewsizeclassinfo_checkbox.isChecked():

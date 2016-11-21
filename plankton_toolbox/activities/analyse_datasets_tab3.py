@@ -142,7 +142,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                         aggregatedvariables = {}
                         for variablenode in samplenode.get_children()[:]:
                             newtaxon = None
-                            value = variablenode.get_data('value')
+                            value = variablenode.get_data('value').replace(',', '.').replace(' ', '')
                             # Use values containing valid float data.
                             try:
     #                            value = value.replace(',', '.').replace(' ', '')

@@ -1008,7 +1008,7 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         valuetxt = unicode(self._countareanumber_edit.text())
         value = int(valuetxt)
         method_dict = self._current_sample_method_step_fields
-        coeffoneunittext = method_dict.get('coefficient_one_unit', '0')
+        coeffoneunittext = method_dict.get('coefficient_one_unit', '0').replace(',', '.').replace(' ', '')
         try:
             coeffoneunit = float(coeffoneunittext)
             coeff = int((coeffoneunit / value) + 0.5)

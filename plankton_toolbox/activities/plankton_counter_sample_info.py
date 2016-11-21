@@ -315,17 +315,17 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         long_min = unicode(self._longitude_minute.text()).replace(',', '.')
         #
         try:
-            latitude_dd = float(lat_deg)
+            latitude_dd = float(lat_deg.replace(',', '.').replace(' ', ''))
             if lat_min: 
-                latitude_dd += float(lat_min) / 60
+                latitude_dd += float(lat_min.replace(',', '.').replace(' ', '')) / 60
             latitude_dd = math.floor(latitude_dd*10000)/10000
             self._latitude_dd.setText(unicode(latitude_dd))
         except:
             self._latitude_dd.setText('')
         try:
-            longitude_dd = float(long_deg)
+            longitude_dd = float(long_deg.replace(',', '.').replace(' ', ''))
             if long_min:
-                longitude_dd += float(long_min) / 60
+                longitude_dd += float(long_min.replace(',', '.').replace(' ', '')) / 60
             longitude_dd = math.floor(longitude_dd*10000)/10000
             self._longitude_dd.setText(unicode(longitude_dd))
         except:
@@ -337,7 +337,7 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         long_dd = unicode(self._longitude_dd.text()).replace(',', '.')
         #
         try:
-            value = float(lat_dd)
+            value = float(lat_dd.replace(',', '.').replace(' ', ''))
             value += 0.0000008 # Round (= 0.5 min).
             degrees = math.floor(abs(value))
             minutes = (abs(value) - degrees) * 60
@@ -348,7 +348,7 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
             self._latitude_degree.setText('')
             self._latitude_minute.setText('')
         try:
-            value = float(long_dd)
+            value = float(long_dd.replace(',', '.').replace(' ', ''))
             value += 0.0000008 # Round (= 0.5 min).
             degrees = math.floor(abs(value))
             minutes = (abs(value) - degrees) * 60

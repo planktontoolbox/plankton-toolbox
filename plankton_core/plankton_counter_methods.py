@@ -248,15 +248,15 @@ class PlanktonCounterMethod():
         #
         try:
             # From analysis method.
-            sampledvolume_ml = fields_dict.get('sampled_volume_ml', 0.0)
-            preservative_volume_ml = fields_dict.get('preservative_volume_ml', 0.0)
-            counted_volume_ml = fields_dict.get('counted_volume_ml', 0.0)
-            chamber_filter_diameter_mm = fields_dict.get('chamber_filter_diameter_mm', 0.0)
+            sampledvolume_ml = fields_dict.get('sampled_volume_ml', 0.0).replace(',', '.')
+            preservative_volume_ml = fields_dict.get('preservative_volume_ml', 0.0).replace(',', '.')
+            counted_volume_ml = fields_dict.get('counted_volume_ml', 0.0).replace(',', '.')
+            chamber_filter_diameter_mm = fields_dict.get('chamber_filter_diameter_mm', 0.0).replace(',', '.')
             # From analysis method step.
-            countareatype = fields_dict.get('count_area_type', 0.0)
-            diameterofview_mm = fields_dict.get('diameter_of_view_mm', 0.0)
-            transectrectanglelength_mm = fields_dict.get('transect_rectangle_length_mm', 0.0)
-            transectrectanglewidth_mm = fields_dict.get('transect_rectangle_width_mm', 0.0)
+            countareatype = fields_dict.get('count_area_type', 0.0).replace(',', '.')
+            diameterofview_mm = fields_dict.get('diameter_of_view_mm', 0.0).replace(',', '.')
+            transectrectanglelength_mm = fields_dict.get('transect_rectangle_length_mm', 0.0).replace(',', '.')
+            transectrectanglewidth_mm = fields_dict.get('transect_rectangle_width_mm', 0.0).replace(',', '.')
             #
             if not chamber_filter_diameter_mm:
                 return

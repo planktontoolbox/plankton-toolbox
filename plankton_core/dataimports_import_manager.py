@@ -49,10 +49,10 @@ class ImportManager(object):
         for rowdict in self._importrows:
             if rowdict['node'] == 'info':
                 if rowdict['key'] == 'header_row':
-                    headerrow = int(float(rowdict.get('command', '1')))
+                    headerrow = int(float(rowdict.get('command', '1').replace(',', '.')))
                     if headerrow: headerrow -= 1
                 if rowdict['key'] == 'first_data_row':
-                    datarowsfrom = int(float(rowdict.get('command', '2')))
+                    datarowsfrom = int(float(rowdict.get('command', '2').replace(',', '.')))
                     if datarowsfrom: datarowsfrom -= 1
 
         tablefilereader = toolbox_utils.TableFileReader(text_file_name = filename, 
@@ -98,10 +98,10 @@ class ImportManager(object):
                 if rowdict['key'] == 'excel_sheet_name':
                     sheetname = rowdict.get('Command', None)
                 if rowdict['key'] == 'header_row':
-                    headerrow = int(float(rowdict.get('Command', '1')))
+                    headerrow = int(float(rowdict.get('Command', '1').replace(',', '.')))
                     if headerrow: headerrow -= 1
                 if rowdict['key'] == 'first_data_row':
-                    datarowsfrom = int(float(rowdict.get('Command', '2')))
+                    datarowsfrom = int(float(rowdict.get('Command', '2').replace(',', '.')))
                     if datarowsfrom: datarowsfrom -= 1
 #        for rowdict in self._importrows:
 #            if rowdict['Node'] == 'INFO':

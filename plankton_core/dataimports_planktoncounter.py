@@ -90,9 +90,9 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
             ['variable', 'taxonomist', 'text', 'taxonomist', ''], 
             # Copy parameters.
             ['copy_parameter', '# counted:ind', 'text', 'counted_units'], 
-            ['copy_parameter', 'Abundance:ind/l', 'text', 'abundance_units/l'], 
-            ['copy_parameter', 'Wet weight:mg/m3', 'text', 'volume_mg/m3'], 
-            ['copy_parameter', 'Carbon content:µgC/m3', 'text', 'carbon_ugc/m3'], 
+            ['copy_parameter', 'Abundance:ind/l', 'text', 'abundance_units_l'], 
+            ['copy_parameter', 'Wet weight:mg/m3', 'text', 'volume_mg_m3'], 
+            ['copy_parameter', 'Carbon content:µgC/m3', 'text', 'carbon_ugc_m3'], 
         ]
         #
         self.clear() # 
