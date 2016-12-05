@@ -12,6 +12,7 @@ import plankton_toolbox.activities.plankton_counter_sample_info as plankton_coun
 import plankton_toolbox.activities.plankton_counter_sample_edit as plankton_counter_sample_edit
 import plankton_toolbox.activities.plankton_counter_sample_count as plankton_counter_sample_count
 import plankton_toolbox.activities.plankton_counter_sample_methods as plankton_counter_sample_methods
+# import plankton_toolbox.activities.plankton_counter_sample_methods_OLD as plankton_counter_sample_methods_OLD
 import plankton_core
 
 class PlanktonCounterDialog(QtGui.QDialog):
@@ -100,6 +101,7 @@ class PlanktonCounterDialog(QtGui.QDialog):
         
         
         self._main_tab_widget.addTab(self._content_metadata(), 'Sample info')
+#         self._main_tab_widget.addTab(self._content_methods_OLD(), 'Counting methods OLD')
         self._main_tab_widget.addTab(self._content_methods(), 'Counting methods')
         self._main_tab_widget.addTab(self._content_count(), 'Count sample')
         self._main_tab_widget.addTab(self._content_summary(), 'Sample summary')
@@ -131,6 +133,19 @@ class PlanktonCounterDialog(QtGui.QDialog):
 #         return scrollarea
         return self.metadata_widget
 
+#     def _content_methods_OLD(self):
+#         """ """
+#         self.methods_widget = plankton_counter_sample_methods_OLD.PlanktonCounterSampleMethods(self,
+#                                                            self._current_dataset, 
+#                                                            self._current_sample, 
+#                                                            self._current_sample_object)
+# #         # Add scroll capabilities.
+# #         scrollarea = QtGui.QScrollArea()
+# #         scrollarea.setFrameShape(QtGui.QFrame.NoFrame)
+# #         scrollarea.setWidget(self.methods_widget)
+# #         scrollarea.setWidgetResizable(True)
+# #         return scrollarea
+#         return self.methods_widget
     def _content_methods(self):
         """ """
         self.methods_widget = plankton_counter_sample_methods.PlanktonCounterSampleMethods(self,

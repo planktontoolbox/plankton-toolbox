@@ -156,6 +156,7 @@ class PlanktonCounterMethod():
         self._table_rows = table_rows
         #
         self._method_step_header = [
+               'counting_method',
                'counting_method_step',
 #                'method_step_description',
                'sampled_volume_ml',
@@ -180,12 +181,85 @@ class PlanktonCounterMethod():
             row_dict = dict(zip(table_header, row))
             self._method_dicts.append(row_dict)
         
+
+    
+######    
+    def add_method(self, new_method_dict):
+        """ """
+        if new_method_dict.get('counting_method', ''):
+            # Remove old with the sam name.
+            for index, method_dict in enumerate(self._method_dicts):
+                if method_dict['counting_method'] == new_method_dict['counting_method']:
+                    del self._method_dicts[index]
+            #
+            self._method_dicts.append(new_method_dict)
+######    
+    def delete_method(self, method_name):
+        """ """
+        for index, method_dict in enumerate(self._method_dicts):
+            if method_dict['counting_method'] == method_name:
+                del self._method_dicts[index]
+                return
+######    
+    def get_counting_methods_list(self):
+        """ """
+        countingmethodsteps_set = set() 
+        try:
+            for method_dict in self._method_dicts:
+                if 'counting_method' in method_dict:
+                    if method_dict['counting_method']:
+                        countingmethodsteps_set.add(method_dict['counting_method'])
+        except:
+            pass
+        #
+        return sorted(list(countingmethodsteps_set))
+######    
+    def get_counting_method_fields(self, method_name): 
+        """ """
+        field_dict = {} 
+        try:
+            for method_dict in self._method_dicts:
+                if method_dict['counting_method'] == method_name:
+                    return method_dict
+        except:
+            pass
+        #
+        return field_dict
+######    
+    def update_counting_method_fields(self, method_name, field_dict): 
+        """ """
+        for method_dict in self._method_dicts:
+            if method_dict['counting_method'] == method_name:
+                for key in field_dict.keys():
+                    if key in self._method_header:
+                        method_dict[key] = field_dict[key]
+            # Update all rows with filds connected to the whole method.
+            for key in ['sampled_volume_ml', 
+                        'preservative',
+                        'preservative_volume_ml',
+                        'counted_volume_ml',
+                        'chamber_filter_diameter_mm',
+                        ]:
+                if key in self._method_header:
+                    method_dict[key] = field_dict[key]
+            # Recalculate all coefficients.
+            self.calculate_coefficient_one_unit(method_dict)
+######    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     def add_method_step(self, new_method_step_dict):
         """ """
         if new_method_step_dict.get('counting_method_step', ''):
-            # Remove old with the sam name.
+            # Remove old with the same name.
             for index, method_dict in enumerate(self._method_dicts):
-                if method_dict['counting_method_step'] == new_method_step_dict['counting_method_step']:
+                if method_dict.get('counting_method_step', '') == new_method_step_dict.get('counting_method_step', ''):
                     del self._method_dicts[index]
             #
             self._method_dicts.append(new_method_step_dict)
@@ -193,18 +267,32 @@ class PlanktonCounterMethod():
     def delete_method_step(self, method_step_name):
         """ """
         for index, method_dict in enumerate(self._method_dicts):
-            if method_dict['counting_method_step'] == method_step_name:
+            if method_dict.get('counting_method_step', '') == method_step_name:
                 del self._method_dicts[index]
                 return
 
-    def get_counting_method_steps_list(self):
+    def get_counting_method_list(self):
+        """ """
+        countingmethods_set = set() 
+        try:
+            for method_dict in self._method_dicts:
+                if 'counting_method' in method_dict:
+                    if method_dict['counting_method']:
+                        countingmethods_set.add(method_dict['counting_method'])
+        except:
+            pass
+        #
+        return sorted(list(countingmethods_set))
+    
+    def get_counting_method_steps_list(self, currentmethod = None):
         """ """
         countingmethodsteps_set = set() 
         try:
             for method_dict in self._method_dicts:
                 if 'counting_method_step' in method_dict:
-                    if method_dict['counting_method_step']:
-                        countingmethodsteps_set.add(method_dict['counting_method_step'])
+                    if (currentmethod is None) or (method_dict['counting_method'] == currentmethod):
+                        if method_dict['counting_method_step']:
+                            countingmethodsteps_set.add(method_dict['counting_method_step'])
         except:
             pass
         #
@@ -222,22 +310,23 @@ class PlanktonCounterMethod():
         #
         return field_dict
 
-    def update_counting_method_step_fields(self, method_step_name, field_dict): 
+    def update_counting_method_step_fields(self, method_name, method_step_name, field_dict): 
         """ """
         for method_dict in self._method_dicts:
-            if method_dict['counting_method_step'] == method_step_name:
+            if method_dict.get('counting_method_step', '') == method_step_name:
                 for key in field_dict.keys():
                     if key in self._method_step_header:
                         method_dict[key] = field_dict[key]
-            # Update all rows with filds connected to the whole method.
-            for key in ['sampled_volume_ml', 
-                        'preservative',
-                        'preservative_volume_ml',
-                        'counted_volume_ml',
-                        'chamber_filter_diameter_mm',
-                        ]:
-                if key in self._method_step_header:
-                    method_dict[key] = field_dict[key]
+            # Update all rows with fields connected to the  method.
+            if method_dict['counting_method'] == method_name:
+                for key in ['sampled_volume_ml', 
+                            'preservative',
+                            'preservative_volume_ml',
+                            'counted_volume_ml',
+                            'chamber_filter_diameter_mm',
+                            ]:
+                    if key in self._method_step_header:
+                        method_dict[key] = field_dict[key]
             # Recalculate all coefficients.
             self.calculate_coefficient_one_unit(method_dict)
                     
@@ -293,7 +382,7 @@ class PlanktonCounterMethod():
             pass
 
 
-    def save_method_to_file(self, path, filename):
+    def save_method_config_to_file(self, path, filename):
         """ """
         tablefilewriter_method = toolbox_utils.TableFileWriter(
             file_path = path,
