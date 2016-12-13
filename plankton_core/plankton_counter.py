@@ -205,26 +205,48 @@ class PlanktonCounterSample():
         #
         self._sample_info_dict = {} # <key>: <value>
         self._sample_rows = {} # <row_key>: <SampleRow-object>
+#         self._sample_header = ['scientific_full_name', 
+#                                'taxon_class', 
+#                                'scientific_name', 
+#                                'trophic_type', 
+#                                'size_class', 
+#                                'unit_type', 
+#                                'counted_units', 
+#                                'coefficient', 
+#                                'abundance_units_l', 
+#                                'volume_mm3_l', 
+#                                'carbon_ugc_l', 
+#                                'volume_um3_unit', 
+#                                'carbon_pgc_unit',
+#                                'variable_comment',
+#                                'species_flag_code',
+#                                'cf',
+#                                'method_step',
+#                                'count_area_number',
+#                                'locked_at_area',
+#                                ]
+
         self._sample_header = ['scientific_full_name', 
                                'taxon_class', 
                                'scientific_name', 
-                               'trophic_type', 
                                'size_class', 
-                               'unit_type', 
-                               'counted_units', 
-                               'coefficient', 
-                               'abundance_units_l', 
-                               'volume_mg_m3', 
-                               'carbon_ugc_m3', 
-                               'volume_um3_unit', 
-                               'carbon_pg_unit',
-                               'variable_comment',
-                               'species_flag_code',
-                               'cf',
                                'method_step',
                                'count_area_number',
                                'locked_at_area',
+                               'counted_units', 
+                               'coefficient', 
+                               'abundance_units_l', 
+                               'volume_mm3_l', 
+                               'carbon_ugc_l', 
+                               'volume_um3_unit', 
+                               'carbon_pgc_unit',
+                               'variable_comment',
+                               'trophic_type', 
+                               'unit_type', 
+                               'species_flag_code',
+                               'cf',
                                ]
+
         # Create file writers.
         path = os.path.join(self._dataset_dir_path, self._dataset_name, self._sample_name)
         self._tablefilewriter_sample_data = toolbox_utils.TableFileWriter(
@@ -537,6 +559,7 @@ class PlanktonCounterSample():
         #
         sample_info_header = ['key', 'value']
         sample_info_header_order = [
+                'plankton_toolbox_version',
                 'sample_name',
                 'sample_id',
                 'sample_date',
@@ -637,7 +660,7 @@ class SampleRow():
         except:
             pass
         self._sample_row_dict['volume_um3_unit'] = unicode(self._round_value(self._bvol_volume))
-        self._sample_row_dict['carbon_pg_unit'] = unicode(self._round_value(self._bvol_carbon))
+        self._sample_row_dict['carbon_pgc_unit'] = unicode(self._round_value(self._bvol_carbon))
 
     def get_sample_row_dict(self):
         """ """
@@ -726,19 +749,19 @@ class SampleRow():
             #
             try:
                 value = abundance * self._bvol_volume / 1000000.0
-                self._sample_row_dict['volume_mg_m3'] = unicode(self._round_value(value))
+                self._sample_row_dict['volume_mm3_l'] = unicode(self._round_value(value))
             except:
-                self._sample_row_dict['volume_mg_m3'] = '0.00'
+                self._sample_row_dict['volume_mm3_l'] = '0.00'
             #
             try:
                 value = abundance * self._bvol_carbon / 1000.0
-                self._sample_row_dict['carbon_ugc_m3'] = unicode(self._round_value(value))
+                self._sample_row_dict['carbon_ugc_l'] = unicode(self._round_value(value))
             except:
-                self._sample_row_dict['carbon_ugc_m3'] = '0.00'
+                self._sample_row_dict['carbon_ugc_l'] = '0.00'
         except:
             self._sample_row_dict['abundance_units_l'] = '0.00'
-            self._sample_row_dict['volume_mg_m3'] = '0.00'
-            self._sample_row_dict['carbon_ugc_m3'] = '0.00'
+            self._sample_row_dict['volume_mm3_l'] = '0.00'
+            self._sample_row_dict['carbon_ugc_l'] = '0.00'
             
     def _round_value(self, value, 
                            n = 4): # Number of significant figures.

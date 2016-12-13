@@ -194,7 +194,7 @@ class CreateReportSpecies(object):
             else:
                 result_table.append_row([u'Class', u'Pot. toxic', 
                                          u'Scientific name', u'Size class', u'Sflag', u'Trophic type', u'Unit type'] + 
-                                        [u'Units/L', u'Biovolyme'] * self._numberofsamples) # Two columns per sample.
+                                        [u'Units/L', u'Biovolume'] * self._numberofsamples) # Two columns per sample.
         elif self._reporttype == 'net':
             result_table.append_row([u'Class', u'Pot. toxic', 
                                      u'Scientific name', u'', u'Sflag', u'Trophic type', u'Unit type'] + 

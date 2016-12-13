@@ -17,7 +17,7 @@ import plankton_core
 class PlanktonCounterSampleInfo(QtGui.QWidget):
     """ """
     def __init__(self, parentwidget, dataset, sample, current_sample_object):
-        """ """        
+        """ """   
         self._parentwidget = parentwidget
         self._current_dataset = dataset
         self._current_sample = sample
@@ -397,6 +397,7 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
 
     def _from_fields_to_dict(self, metadata_dict):
         """ """
+        metadata_dict['plankton_toolbox_version'] = utils_qt.__version__
         metadata_dict['sample_name'] = unicode(self._current_sample)
         metadata_dict['sample_id'] = unicode(self._sample_id_edit.text())
         year = unicode(self._sample_year_edit.text())
