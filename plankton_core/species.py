@@ -537,20 +537,29 @@ class Species(object):
             # Fast lookup. Don't do the heavy work more than needed.
             return self._planktongroups_lookup[scientific_name]
         else:
-            for rank in self._planktongroups_ranks_set:
-                renamed_rank = rank
-                if rank.lower() in ['species', 'genus', 'family', 'order', 'class', 'phylum', 'kingdom']:
-                    renamed_rank = 'taxon_' + rank.lower()
-                #
-                if renamed_rank == 'taxon_species':
-                    taxon_on_rank = scientific_name
-                else:
-                    taxon_on_rank = self.get_taxon_value(scientific_name, renamed_rank)
-                #
-                if taxon_on_rank in self._planktongroups_rank_dict[rank]:
-                    planktongroup = self._planktongroups_rank_dict[rank][taxon_on_rank]
-                    self._planktongroups_lookup[scientific_name] = planktongroup
-                    return planktongroup
+            try:
+                # Check classification.
+                taxon_name = scientific_name
+                limit_counter = 0
+                while taxon_name and (limit_counter < 20):
+                    limit_counter += 1
+                    taxon_dict = self.get_taxon_dict(taxon_name)
+                    taxon_name = taxon_dict.get('scientific_name', '')
+                    taxon_rank = taxon_dict.get('rank', '')
+                    parent_name = taxon_dict.get('parent_name', '')
+                    #
+                    if taxon_rank in self._planktongroups_rank_dict.keys():
+                        if taxon_name in self._planktongroups_rank_dict[taxon_rank].keys():
+                            planktongroup = self._planktongroups_rank_dict[taxon_rank][taxon_name]
+                            self._planktongroups_lookup[scientific_name] = planktongroup
+                            return planktongroup
+                    #
+                    if (parent_name == '') or (taxon_name == parent_name):
+                        break
+                    else:
+                        taxon_name = parent_name
+            #
+            except: pass
         #                            
         toolbox_utils.Logging().warning('Not match for Plankton group. "OTHERS" assigned for: ' + scientific_name)
         self._planktongroups_lookup[scientific_name] = 'OTHERS'
