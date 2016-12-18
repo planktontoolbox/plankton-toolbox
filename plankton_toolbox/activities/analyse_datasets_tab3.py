@@ -140,6 +140,7 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                 for visitnode in self._analysisdata.get_data().get_children()[:]: 
                     for samplenode in visitnode.get_children()[:]:
                         aggregatedvariables = {}
+                        trophic_type_set_dict = {} ### TEST
                         for variablenode in samplenode.get_children()[:]:
                             newtaxon = None
                             value = variablenode.get_data('value').replace(',', '.').replace(' ', '')
@@ -194,6 +195,10 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                                 taxontrophic_type = variablenode.get_data('trophic_type')
                                 if taxontrophic_type in selected_trophic_type_list:
                                     taxontrophic_type = selected_trophic_type_text # Concatenated string of ranks.
+                                    ### TEST
+                                    if newtaxon not in trophic_type_set_dict: ### TEST
+                                        trophic_type_set_dict[newtaxon] = set() ### TEST
+                                    trophic_type_set_dict[newtaxon].add(variablenode.get_data('trophic_type')) ### TEST
                                 else:
                                     continue # Phytoplankton only: Use selected trophic_type only, don't use others.  
                                 #
@@ -229,7 +234,8 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                             samplenode.add_child(newvariable)    
                             #
                             newvariable.add_data('scientific_name', newtaxon)
-                            newvariable.add_data('trophic_type', taxontrophic_type)
+                            ### TEST. newvariable.add_data('trophic_type', taxontrophic_type)
+                            newvariable.add_data('trophic_type', '-'.join(sorted(trophic_type_set_dict.get(newtaxon, [])))) ### TEST
                             newvariable.add_data('stage', stage)
                             newvariable.add_data('sex', sex)
                             newvariable.add_data('parameter', parameter)
