@@ -18,22 +18,20 @@ class CreateReportCounted(object):
         self._header_items = [
             'station_name', 
             'sample_date', 
+            'analysis_date', 
             'sample_min_depth_m', 
             'sample_max_depth_m', 
-            #
             'taxon_class', 
             'scientific_name', 
-            'scientific_authority', 
             'species_flag_code', 
-            'size_class', 
+            'scientific_authority', 
             'trophic_type', 
             'harmful', 
             'param_abundance', 
-            'param_biovolume', 
-            #
             'analytical_laboratory', 
-            'analysis_date', 
             'analysed_by', 
+            'size_class', 
+            'param_biovolume', 
             ]
         
         self._translate_header = {
@@ -46,13 +44,13 @@ class CreateReportCounted(object):
             'scientific_name': 'Scientific name', # 'Art/Taxonomisk enhet', # 6
             'species_flag_code': 'Species flag code', # 'Sflag', # 7
             'scientific_authority': 'Authority', # 'Author', # 8
-            'trophic_type': 'Trophi type', # 'Trofigrad', # 9
+            'trophic_type': 'Trophic type', # 'Trofigrad', # 9
             'harmful': 'Pot. toxic', # 'Potentiellt giftig', # 10
             'param_abundance': 'Abundance', # 'Celler/l', # 11
-            'param_biovolume': 'Biovolume', # 'Biovolym (mm3/L)', # 12
             'analytical_laboratory': 'Analytical laboratory', # 'Analys laboratorium', # 13
             'analysed_by': 'Analysed by', # 'Mikroskopist', # 14
             'size_class': 'Size class', # 'Storleksklass (PEG)' # 15
+            'param_biovolume': 'Biovolume (mm3/L)', # 'Biovolym (mm3/L)', # 12
             }
         
         # Used as row key and for sort order.
@@ -181,7 +179,7 @@ class CreateReportCounted(object):
 #             report_row[2] = samplenode.get_data('analysis_date') 
 #             report_row[3] = samplenode.get_data('sample_min_depth_m') 
 #             report_row[4] = samplenode.get_data('sample_max_depth_m') 
-#             report_row[14] = samplenode.get_data('taxonomist') 
+#             report_row[14] = samplenode.get_data('analysed_by') 
 #             #
 #             for variablenode in samplenode.get_children():
 #                 # Clear columns:

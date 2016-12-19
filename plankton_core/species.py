@@ -491,7 +491,10 @@ class Species(object):
                                     sizeclassdict[internalname] = '<ERROR>'
                             #        
                             if numeric == 'numeric':
-                                sizeclassdict[internalname] = value.replace(',', '.').replace(' ', '')
+                                try:
+                                    value = value.replace(',', '.').replace(' ', '') # Try/except if already float.
+                                except: pass
+                                sizeclassdict[internalname] = value
                             else:
                                 sizeclassdict[internalname] = value
                 # Check if exists in self._taxa

@@ -73,7 +73,7 @@ class CreateReportSpecies(object):
                     header_row_3[7 + (sampleindex * self._numberofcolumnspersample)] = samplenode.get_data('sample_min_depth_m')
                     header_row_4[7 + (sampleindex * self._numberofcolumnspersample)] = samplenode.get_data('sample_max_depth_m')
                     header_row_5[7 + (sampleindex * self._numberofcolumnspersample)] = samplenode.get_data('analysis_date')
-                    header_row_6[7 + (sampleindex * self._numberofcolumnspersample)] = samplenode.get_data('taxonomist')
+                    header_row_6[7 + (sampleindex * self._numberofcolumnspersample)] = samplenode.get_data('analysed_by')
                     #
                     sampleindex += 1
         #
@@ -190,11 +190,11 @@ class CreateReportSpecies(object):
             if aggregate_rows:
                 result_table.append_row([u'Class', u'Pot. toxic', 
                                          u'Scientific name', u'', u'Sflag', u'Trophic type', u'Unit type'] + 
-                                        [u'Units/L', u'Biovolym (mm3/L)'] * self._numberofsamples) # Two columns per sample.
+                                        [u'Units/L', u'Biovolume (mm3/L)'] * self._numberofsamples) # Two columns per sample.
             else:
                 result_table.append_row([u'Class', u'Pot. toxic', 
                                          u'Scientific name', u'Size class', u'Sflag', u'Trophic type', u'Unit type'] + 
-                                        [u'Units/L', u'Biovolume'] * self._numberofsamples) # Two columns per sample.
+                                        [u'Units/L', u'Biovolume (mm3/L)'] * self._numberofsamples) # Two columns per sample.
         elif self._reporttype == 'net':
             result_table.append_row([u'Class', u'Pot. toxic', 
                                      u'Scientific name', u'', u'Sflag', u'Trophic type', u'Unit type'] + 

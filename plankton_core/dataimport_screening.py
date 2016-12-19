@@ -22,40 +22,28 @@ class DataImportManager(object):
         """ """
         datasetnode = None
         #
-        if import_format == 'PhytoWin':
-            datasetnode = self._import_phytowin_file(filename)
+#         if import_format == 'PhytoWin':
+#             datasetnode = self._import_phytowin_file(filename)
         #
         return datasetnode
         
-        
-        
-        #                     phytowin.clear()
-#                     phytowin.read_file(filename)
+#     def _import_phytowin_file(self, filename):
+#         """ """
+#         
+#         phytowin = plankton_core.ImportPhytowin()
+#         self._tabledataset = plankton_core.DatasetTable()
+# 
+#         phytowin.clear()
+#         phytowin.read_file(filename)
 # #                     # Used for report 'combined datasets'.
 # #                     phytowin.add_to_table_dataset(self._tabledataset)
-#                     # Add as tree dataset for calculated reports.
-#                     datasetnode = plankton_core.DatasetNode()
-#                     phytowin.add_to_dataset_node(datasetnode)
-#                     # Add to dataset list. (Note:ToolboxDatasets is a wrapper containing the 'datasetListChanged'-signal).
-#                     toolbox_datasets.ToolboxDatasets().add_dataset(datasetnode)
-
-    def _import_phytowin_file(self, filename):
-        """ """
-        
-        phytowin = plankton_core.ImportPhytowin()
-        self._tabledataset = plankton_core.DatasetTable()
-
-        phytowin.clear()
-        phytowin.read_file(filename)
-#                     # Used for report 'combined datasets'.
-#                     phytowin.add_to_table_dataset(self._tabledataset)
-        # Add as tree dataset for calculated reports.
-        datasetnode = plankton_core.DatasetNode()
-        phytowin.add_to_dataset_node(datasetnode)
-        
-        plankton_core.Datasets().add_dataset(datasetnode)
-        
-        return datasetnode
+#         # Add as tree dataset for calculated reports.
+#         datasetnode = plankton_core.DatasetNode()
+#         phytowin.add_to_dataset_node(datasetnode)
+#         
+#         plankton_core.Datasets().add_dataset(datasetnode)
+#         
+#         return datasetnode
         
         
 #         # Add to dataset list. (Note:ToolboxDatasets is a wrapper containing the 'datasetListChanged'-signal).

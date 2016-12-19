@@ -309,7 +309,11 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                         taxonname = '---'
                     parameter = variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')'
                     if parameter == selectedparameter:                        
-                        value = variablenode.get_data('value').replace(',', '.').replace(' ', '')
+                        value = variablenode.get_data('value')
+                        try:
+                            value = value.replace(',', '.').replace(' ', '') # Try/except if already float.
+                        except:
+                            pass
                         try:
                             visit_taxon_dict[visit][taxonname] += float(value)
                         except:
@@ -374,7 +378,11 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                         taxonname = '---'
                     parameter = variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')'
                     if parameter == selectedparameter:                        
-                        value = variablenode.get_data('value').replace(',', '.').replace(' ', '')
+                        value = variablenode.get_data('value')
+                        try:
+                            value = value.replace(',', '.').replace(' ', '') # Try/except if already float.
+                        except:
+                            pass
                         try:
                             taxon_visit_dict[taxonname][visit] += float(value)
                         except:

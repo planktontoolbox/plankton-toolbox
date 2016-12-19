@@ -182,8 +182,8 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
 
                 # Add metadata related to imported file.
                 datasetnode.add_metadata('parser', '-')
-                datasetnode.add_metadata('file_name', dataset_name)
-                datasetnode.add_metadata('file_path', sample_name)
+                datasetnode.add_metadata('file_name', datasetandsample)
+                datasetnode.add_metadata('file_path', '-')
                 datasetnode.add_metadata('import_column', '-')
                 datasetnode.add_metadata('export_column', '-')
             #
@@ -219,7 +219,8 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
 #                                     'Darwin Core Archive - EurOBIS (Not implemented)',
 #                                     'PhytoWin (*.csv)']
         self._predefinedformat_list = ['SHARKweb (*.txt)',
-                                       'Phytoplankton-archive (*.csv)']
+#                                        'Phytoplankton-archive (*.csv)'
+                                       ]
         self._predefined_format_combo.addItems(self._predefinedformat_list)
         
         self._predefined_format_combo.setCurrentIndex(0) # 'SHARKweb (*.txt)'
@@ -255,8 +256,8 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         selectedformat = self._predefined_format_combo.currentText()
         if selectedformat == 'SHARKweb (*.txt)':
             self._load_sharkweb_datasets()
-        elif selectedformat == 'Phytoplankton-archive (*.csv)':
-            self._load_phytowin_datasets()
+#         elif selectedformat == 'Phytoplankton-archive (*.csv)':
+#             self._load_phytowin_datasets()
         else: 
             QtGui.QMessageBox.information(self, "Information", 'Not implemented yet.')
 
@@ -303,63 +304,63 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
             toolbox_utils.Logging().log_all_accumulated_rows()
             toolbox_utils.Logging().log('Importing datasets done. Number of imported datasets: ' + unicode(datasetcount))
 
-    def _load_phytowin_datasets(self):
-        """ """
-        try:
-            toolbox_utils.Logging().log('') # Empty line.
-            toolbox_utils.Logging().log('Importing datasets...')
-            toolbox_utils.Logging().start_accumulated_logging()
-            self._write_to_status_bar('Importing datasets...')
-
-            # Show select file dialog box. Multiple files can be selected.
-            namefilter = 'Phytowin files (*.csv);;All files (*.*)'
-            filenames = QtGui.QFileDialog.getOpenFileNames(
-                                self,
-                                'Load PhytoWin file(s). ',
-                                self._lastusedphytowinfilename,
-                                namefilter)
-            # From QString to unicode.
-            filenames = map(unicode, filenames)
-            # Check if user pressed ok or cancel.
-#             phytowin = plankton_core.ImportPhytowin()
-#             self._tabledataset = plankton_core.DatasetTable()
-            if filenames:
-                for filename in filenames:
-                    self._lastusedphytowinfilename = filename
-
-
-                    datasetnode = plankton_core.DataImportManager().import_dataset_file(filename, 
-                                                                                        import_format = 'PhytoWin')
-                    # Use datasets-wrapper to emit change notification when dataset list is updated.
-                    toolbox_datasets.ToolboxDatasets().emit_change_notification()
-
-
-#                     phytowin.clear()
-#                     phytowin.read_file(filename)
-# #                     # Used for report 'combined datasets'.
-# #                     phytowin.add_to_table_dataset(self._tabledataset)
-#                     # Add as tree dataset for calculated reports.
-#                     datasetnode = plankton_core.DatasetNode()
-#                     phytowin.add_to_dataset_node(datasetnode)
-#                     # Add to dataset list. (Note:ToolboxDatasets is a wrapper containing the 'datasetListChanged'-signal).
-#                     toolbox_datasets.ToolboxDatasets().add_dataset(datasetnode)
-                    # Add metadata related to imported file.
-                    datasetnode.add_metadata('parser', '-')
-                    datasetnode.add_metadata('file_name', os.path.basename(filename))
-                    datasetnode.add_metadata('file_path', filename)
-                    datasetnode.add_metadata('import_column', '-')
-                    datasetnode.add_metadata('export_column', '-')
-            #
-        except Exception as e:
-            toolbox_utils.Logging().error('PhytoWin file import failed on exception: ' + unicode(e))
-            QtGui.QMessageBox.warning(self, 'Text file loading.\n', 
-                                      'PhytoWin file import failed on exception.\n' + unicode(e))
-            raise
-        finally:
-            datasetcount = len(plankton_core.Datasets().get_datasets())
-            self._write_to_status_bar('Imported datasets: ' + unicode(datasetcount))
-            toolbox_utils.Logging().log_all_accumulated_rows()
-            toolbox_utils.Logging().log('Importing datasets done. Number of imported datasets: ' + unicode(datasetcount))
+#     def _load_phytowin_datasets(self):
+#         """ """
+#         try:
+#             toolbox_utils.Logging().log('') # Empty line.
+#             toolbox_utils.Logging().log('Importing datasets...')
+#             toolbox_utils.Logging().start_accumulated_logging()
+#             self._write_to_status_bar('Importing datasets...')
+# 
+#             # Show select file dialog box. Multiple files can be selected.
+#             namefilter = 'Phytowin files (*.csv);;All files (*.*)'
+#             filenames = QtGui.QFileDialog.getOpenFileNames(
+#                                 self,
+#                                 'Load PhytoWin file(s). ',
+#                                 self._lastusedphytowinfilename,
+#                                 namefilter)
+#             # From QString to unicode.
+#             filenames = map(unicode, filenames)
+#             # Check if user pressed ok or cancel.
+# #             phytowin = plankton_core.ImportPhytowin()
+# #             self._tabledataset = plankton_core.DatasetTable()
+#             if filenames:
+#                 for filename in filenames:
+#                     self._lastusedphytowinfilename = filename
+# 
+# 
+#                     datasetnode = plankton_core.DataImportManager().import_dataset_file(filename, 
+#                                                                                         import_format = 'PhytoWin')
+#                     # Use datasets-wrapper to emit change notification when dataset list is updated.
+#                     toolbox_datasets.ToolboxDatasets().emit_change_notification()
+# 
+# 
+# #                     phytowin.clear()
+# #                     phytowin.read_file(filename)
+# # #                     # Used for report 'combined datasets'.
+# # #                     phytowin.add_to_table_dataset(self._tabledataset)
+# #                     # Add as tree dataset for calculated reports.
+# #                     datasetnode = plankton_core.DatasetNode()
+# #                     phytowin.add_to_dataset_node(datasetnode)
+# #                     # Add to dataset list. (Note:ToolboxDatasets is a wrapper containing the 'datasetListChanged'-signal).
+# #                     toolbox_datasets.ToolboxDatasets().add_dataset(datasetnode)
+#                     # Add metadata related to imported file.
+#                     datasetnode.add_metadata('parser', '-')
+#                     datasetnode.add_metadata('file_name', os.path.basename(filename))
+#                     datasetnode.add_metadata('file_path', filename)
+#                     datasetnode.add_metadata('import_column', '-')
+#                     datasetnode.add_metadata('export_column', '-')
+#             #
+#         except Exception as e:
+#             toolbox_utils.Logging().error('PhytoWin file import failed on exception: ' + unicode(e))
+#             QtGui.QMessageBox.warning(self, 'Text file loading.\n', 
+#                                       'PhytoWin file import failed on exception.\n' + unicode(e))
+#             raise
+#         finally:
+#             datasetcount = len(plankton_core.Datasets().get_datasets())
+#             self._write_to_status_bar('Imported datasets: ' + unicode(datasetcount))
+#             toolbox_utils.Logging().log_all_accumulated_rows()
+#             toolbox_utils.Logging().log('Importing datasets done. Number of imported datasets: ' + unicode(datasetcount))
 
         
         

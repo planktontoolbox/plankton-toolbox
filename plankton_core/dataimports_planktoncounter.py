@@ -85,9 +85,9 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
             ['variable', 'coefficient_one_unit', 'text', 'coefficient_one_unit', ''], 
             #
             ['variable', 'coefficient', 'text', 'coefficient', ''], 
-            ['sample', 'analysis_laboratory', 'text', 'analysis_laboratory', ''], 
+            ['sample', 'analytical_laboratory', 'text', 'analytical_laboratory', ''], 
             ['variable', 'analysis_date', 'text', 'analysis_date', ''], 
-            ['variable', 'taxonomist', 'text', 'taxonomist', ''], 
+            ['variable', 'analysed_by', 'text', 'analysed_by', ''], 
             # Copy parameters.
             ['copy_parameter', '# counted:ind', 'text', 'counted_units'], 
             ['copy_parameter', 'Abundance:ind/l', 'text', 'abundance_units_l'], 

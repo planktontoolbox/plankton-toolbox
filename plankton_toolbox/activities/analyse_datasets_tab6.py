@@ -295,19 +295,28 @@ class AnalyseDatasetsTab6(QtGui.QWidget):
         if x_data and (x_selected_type == 'float'):
             for index, item in enumerate(x_data):
                 try:
-                    x_data[index] = float(item.replace(',', '.').replace(' ', ''))
+                    value = item.replace(',', '.').replace(' ', '') # Try/except if already float.
+                except: pass
+                try:
+                    x_data[index] = float(value)
                 except:
                     x_data[index] = 0.0
         if y_data and (y_selected_type == 'float'):
             for index, item in enumerate(y_data):
                 try:
-                    y_data[index] = float(item.replace(',', '.').replace(' ', ''))
+                    value = item.replace(',', '.').replace(' ', '') # Try/except if already float.
+                except: pass
+                try:
+                    y_data[index] = float(value)
                 except:
                     y_data[index] = 0.0
         if z_data and (z_selected_type == 'float'):
             for index, item in enumerate(z_data):
                 try:
-                    z_data[index] = float(item.replace(',', '.').replace(' ', ''))
+                    value = item.replace(',', '.').replace(' ', '') # Try/except if already float.
+                except: pass
+                try:
+                    z_data[index] = float(value)
                 except:
                     z_data[index] = 0.0
         

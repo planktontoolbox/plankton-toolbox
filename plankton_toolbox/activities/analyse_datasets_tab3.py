@@ -143,10 +143,12 @@ class AnalyseDatasetsTab3(QtGui.QWidget):
                         trophic_type_set_dict = {} ### TEST
                         for variablenode in samplenode.get_children()[:]:
                             newtaxon = None
-                            value = variablenode.get_data('value').replace(',', '.').replace(' ', '')
+                            value = variablenode.get_data('value')
+                            try:
+                                value = value.replace(',', '.').replace(' ', '') # Try/except if already float.
+                            except: pass
                             # Use values containing valid float data.
                             try:
-    #                            value = value.replace(',', '.').replace(' ', '')
                                 value = float(value) 
                                 #
                                 if selected_taxon_rank == 'Biota (all levels)':

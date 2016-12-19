@@ -22,7 +22,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
     def __init__(self, name, parentwidget):
         """ """
         self._parent = parentwidget
-        self._lastusedphytowinfilename = ''
+#         self._lastusedphytowinfilename = ''
         self._lastuseddirectory = ''
         self._tableview = None
         self._tabledataset = None
@@ -65,17 +65,17 @@ class CreateReportsActivity(activity_base.ActivityBase):
         contentLayout.addWidget(self._content_save_result())
         return content
         
-    def _content_load_datasets(self):
-        """ """
-        selectdatabox = QtGui.QGroupBox('Load datasets', self)
-        tabWidget = QtGui.QTabWidget()
-        tabWidget.addTab(self._content_phytowin(), 'Phytowin files (*.csv)')
-        # Layout widgets.
-        layout = QtGui.QVBoxLayout()
-        layout.addWidget(tabWidget)
-        selectdatabox.setLayout(layout)        
-        #
-        return selectdatabox
+#     def _content_load_datasets(self):
+#         """ """
+#         selectdatabox = QtGui.QGroupBox('Load datasets', self)
+#         tabWidget = QtGui.QTabWidget()
+#         tabWidget.addTab(self._content_phytowin(), 'Phytowin files (*.csv)')
+#         # Layout widgets.
+#         layout = QtGui.QVBoxLayout()
+#         layout.addWidget(tabWidget)
+#         selectdatabox.setLayout(layout)        
+#         #
+#         return selectdatabox
 
     # === Select datasets ===
     def _content_select_datasets(self):
@@ -124,8 +124,8 @@ class CreateReportsActivity(activity_base.ActivityBase):
                                     'Quantitative (counted): Table format',
                                     'Quantitative (counted): Species list',
                                     'Quantitative (counted): Data Center export',
-                                    'Qualitative (NET samples): Species list',
-                                    'Qualitative (NET samples): Data Center export',
+                                    'Qualitative (NET): Species list',
+                                    'Qualitative (NET): Data Center export',
                                      ])
         #
 # TODO: For development:
@@ -241,11 +241,11 @@ class CreateReportsActivity(activity_base.ActivityBase):
                 toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
                 report = plankton_core.CreateReportToDataCenterShark(report_type = 'counted')
                 self._create_and_view_report(report)
-            elif selectedreport == 'Qualitative (NET samples): Species list':
+            elif selectedreport == 'Qualitative (NET): Species list':
                 toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
                 report = plankton_core.CreateReportSpecies(report_type = 'net')
                 self._create_and_view_report(report)
-            elif selectedreport == 'Qualitative (NET samples): Data Center export':
+            elif selectedreport == 'Qualitative (NET): Data Center export':
                 toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
                 report = plankton_core.CreateReportToDataCenterShark(report_type = 'net')
                 self._create_and_view_report(report)

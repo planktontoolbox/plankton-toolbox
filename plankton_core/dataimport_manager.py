@@ -24,8 +24,8 @@ class DataImportManager(object):
         #
         if import_format == 'SHARKweb':
             self._import_sharkweb_file(datasettopnode, filename)
-        if import_format == 'PhytoWin':
-            self._import_phytowin_file(datasettopnode, filename)
+#         if import_format == 'PhytoWin':
+#             self._import_phytowin_file(datasettopnode, filename)
         if import_format == 'PlanktonCounter':
             self._import_plankton_counter_sample(datasettopnode, dataset_name, sample_name)
         #        
@@ -45,18 +45,18 @@ class DataImportManager(object):
         columnsinfo = sharkweb.create_export_table_info()
         dataset_top_node.set_export_table_columns(columnsinfo)
 
-    def _import_phytowin_file(self, dataset_top_node, file_name):
-        """ """
-        # Create dataset from file content.
-        phytowin = plankton_core.ImportPhytowin()
-        phytowin.read_file(file_name)
-        phytowin.create_tree_dataset(dataset_top_node)
-        # If older names and sizes are used.
-        phytowin.update_species_and_sizes(dataset_top_node)
-
-        # Add export info to dataset.
-        columnsinfo = phytowin.create_export_table_info()
-        dataset_top_node.set_export_table_columns(columnsinfo)
+#     def _import_phytowin_file(self, dataset_top_node, file_name):
+#         """ """
+#         # Create dataset from file content.
+#         phytowin = plankton_core.ImportPhytowin()
+#         phytowin.read_file(file_name)
+#         phytowin.create_tree_dataset(dataset_top_node)
+#         # If older names and sizes are used.
+#         phytowin.update_species_and_sizes(dataset_top_node)
+# 
+#         # Add export info to dataset.
+#         columnsinfo = phytowin.create_export_table_info()
+#         dataset_top_node.set_export_table_columns(columnsinfo)
         
     def _import_plankton_counter_sample(self, dataset_top_node, dataset_name, sample_name):
         """ """

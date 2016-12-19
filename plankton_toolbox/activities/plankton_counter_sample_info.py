@@ -151,7 +151,7 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
 #         self._analysis_date = QtGui.QDateEdit()
 #         self._analysis_date.setCalendarPopup(True)
 #         self._analysis_date.setDisplayFormat('yyyy-MM-dd')
-        self._analysis_laboratory_edit = QtGui.QLineEdit()
+        self._analytical_laboratory_edit = QtGui.QLineEdit()
         self._analysis_year_edit = QtGui.QLineEdit()
         self._analysis_year_edit.setPlaceholderText('yyyy')
         self._analysis_year_edit.setMaximumWidth(60)
@@ -272,8 +272,8 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         gridrow += 1
         form1.addWidget(utils_qt.LeftAlignedQLabel('<b>Analysis</b>'), gridrow, 0, 1, 1)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Analysis laboratory:'), gridrow, 0, 1, 1)
-        form1.addWidget(self._analysis_laboratory_edit, gridrow, 1, 1, 3)
+        form1.addWidget(utils_qt.RightAlignedQLabel('Analytical laboratory:'), gridrow, 0, 1, 1)
+        form1.addWidget(self._analytical_laboratory_edit, gridrow, 1, 1, 3)
         gridrow += 1
         form1.addWidget(utils_qt.RightAlignedQLabel('Analysis. Year'), gridrow, 0, 1, 1)
         hbox = QtGui.QHBoxLayout()
@@ -432,13 +432,13 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         metadata_dict['net_mesh_size_um'] = unicode(self._net_mesh_size_um_edit.text())
         metadata_dict['wire_angle_deg'] = unicode(self._wire_angle_deg_edit.text())
         metadata_dict['net_tow_length_m'] = unicode(self._net_tow_length_m_edit.text())
-        metadata_dict['analysis_laboratory'] = unicode(self._analysis_laboratory_edit.text())
+        metadata_dict['analytical_laboratory'] = unicode(self._analytical_laboratory_edit.text())
         year = unicode(self._analysis_year_edit.text())
         month = unicode(self._analysis_month_edit.text())
         day = unicode(self._analysis_day_edit.text())
         date_tmp = year + '-' + month + '-' + day 
         metadata_dict['analysis_date'] = date_tmp
-        metadata_dict['taxonomist'] = unicode(self._analysed_by_edit.text())
+        metadata_dict['analysed_by'] = unicode(self._analysed_by_edit.text())
         metadata_dict['sample_comment'] = unicode(self._sample_comment_edit.text())
 
     def _from_dict_to_fields(self, metadata_dict):
@@ -505,7 +505,7 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         self._net_mesh_size_um_edit.setText(metadata_dict.get('net_mesh_size_um', ''))
         self._wire_angle_deg_edit.setText(metadata_dict.get('wire_angle_deg', ''))
         self._net_tow_length_m_edit.setText(metadata_dict.get('net_tow_length_m', ''))
-        self._analysis_laboratory_edit.setText(metadata_dict.get('analysis_laboratory', ''))
+        self._analytical_laboratory_edit.setText(metadata_dict.get('analytical_laboratory', ''))
         date_tmp = metadata_dict.get('analysis_date', '')
 #         self._analysis_date.setDate(QtCore.QDate.fromString(date_tmp, 'yyyy-MM-dd'))
         date_tmp = metadata_dict.get('analysis_date', '')
@@ -517,7 +517,7 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
             self._analysis_year_edit.setText('')
             self._analysis_month_edit.setText('')
             self._analysis_day_edit.setText('')
-        self._analysed_by_edit.setText(metadata_dict.get('taxonomist', ''))
+        self._analysed_by_edit.setText(metadata_dict.get('analysed_by', ''))
         self._sample_comment_edit.setText(metadata_dict.get('sample_comment', ''))
                        
 

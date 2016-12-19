@@ -14,7 +14,7 @@ class CreateReportToDataCenterShark(object):
         """ """
         super(CreateReportToDataCenterShark, self).__init__()
         self._reporttype = report_type
-        self._taxaphytowin = None
+#         self._taxaphytowin = None
         # Header for "qualitative" counting.
         self._header_counted_items = [
             'visit_year', # 'MYEAR',

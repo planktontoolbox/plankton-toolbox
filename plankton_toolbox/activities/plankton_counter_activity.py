@@ -567,6 +567,8 @@ class BackupExportImportDialog(QtGui.QDialog):
         self._importfile_edit = QtGui.QLineEdit('')
         self._importfile_button = QtGui.QPushButton('Browse...')
         self._importfile_button.clicked.connect(self._browse_import_files)
+        self._copyold_checkbox = QtGui.QCheckBox('Rename the old toolbox_data before import.')
+        self._copyold_checkbox.setChecked(True)
         self._import_button = QtGui.QPushButton('Import from backup')
         self._import_button.clicked.connect(self._import_from_backup)
         self._importcancel_button = QtGui.QPushButton('Cancel')
@@ -576,8 +578,10 @@ class BackupExportImportDialog(QtGui.QDialog):
         gridrow = 0
         label2 = QtGui.QLabel('Import from backup file:')
         form1.addWidget(label2, gridrow, 0, 1, 1)
-        form1.addWidget(self._importfile_edit, gridrow, 1, 1, 8)
+        form1.addWidget(self._importfile_edit, gridrow, 1, 1, 1)
         form1.addWidget(self._importfile_button, gridrow, 9, 1, 1)
+        gridrow += 1
+        form1.addWidget(self._copyold_checkbox, gridrow, 1, 1, 1)
         gridrow += 1
         form1.addWidget(QtGui.QLabel(''), gridrow, 0, 1, 1) # Empty row.
         #
@@ -614,11 +618,12 @@ class BackupExportImportDialog(QtGui.QDialog):
             dest_dir = 'toolbox_data'
             #
             try:
-                dest_dir_old = dest_dir + '_OLD_' + unicode(datetime.datetime.now().strftime('%Y-%m-%d_%H%M%S'))
-                # Rename 'toolbox_data'.
-                os.rename(dest_dir, dest_dir_old)
+                if self._copyold_checkbox.isChecked():
+                    # Rename 'toolbox_data'.
+                    dest_dir_old = dest_dir + '_OLD_' + unicode(datetime.datetime.now().strftime('%Y-%m-%d_%H%M%S'))
+                    os.rename(dest_dir, dest_dir_old)
                 #
-            except Exception as e:
+            except Exception: ## as e:
                 toolbox_utils.Logging().error('Failed to rename toolbox_data. ') # ...Error: ' + unicode(e))
                 QtGui.QMessageBox.warning(self, 'Warning', 'Failed to rename toolbox_data. ') # ...Error: ' + unicode(e))
             #
@@ -627,6 +632,10 @@ class BackupExportImportDialog(QtGui.QDialog):
                 with zipfile.ZipFile(source_zip_dir_file_name) as zip_file:
     #                 zip_file.extractall(dest_dir)
                     zip_file.extractall('')
+                #
+                QtGui.QMessageBox.information(self, 'Restart Plankton Toolbox', 
+                                              'Please restart Plankton Toolbox to load the new species lists, etc.')
+                
             #
             except Exception as e:
                 toolbox_utils.Logging().error('Failed to import from backup.') # ...Error: ' + unicode(e))
