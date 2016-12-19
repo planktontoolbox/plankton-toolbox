@@ -289,6 +289,8 @@ class TableFileReader():
                     newrow = self._get_row_based_on_columnsbyindex(newrow, columnsbyindex)
                     table_rows.append(newrow)
             #
+            workbook._archive.close()
+            #
             return (table_header, table_rows)
         #  
         except Exception as e:

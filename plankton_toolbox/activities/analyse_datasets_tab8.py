@@ -573,9 +573,9 @@ def primer_report_count_table_sort(s1, s2):
 #         #report_table.append_row(['Klass', 'Pot. giftig', 'Art', 'Sflag'] + ['Förekomst'] * numberofsamples) 
 #         # Counted samples:
 #         if aggregate_rows:
-#             report_table.append_row(['Klass', 'Pot. giftig', 'Art', '', 'Sflag', 'Trofigrad'] + ['Celler/l', 'Biovolym (mm3/L)'] * numberofsamples) # Two columns per sample.
+#             report_table.append_row(['Klass', 'Pot. giftig', 'Art', '', 'Sflag', 'Trofigrad'] + ['Celler/l', 'Biovolume (mm3/L)'] * numberofsamples) # Two columns per sample.
 #         else:
-#             report_table.append_row(['Klass', 'Pot. giftig', 'Art', 'Storleksklass (PEG)', 'Sflag', 'Trofigrad'] + ['Celler/L', 'Biovolym (mm3/L)'] * numberofsamples) # Two columns per sample.
+#             report_table.append_row(['Klass', 'Pot. giftig', 'Art', 'Storleksklass (PEG)', 'Sflag', 'Trofigrad'] + ['Celler/L', 'Biovolume (mm3/L)'] * numberofsamples) # Two columns per sample.
 #         #
 #         for row in species_rows:
 #             if row[0] != 'REMOVE AGGREGATED':

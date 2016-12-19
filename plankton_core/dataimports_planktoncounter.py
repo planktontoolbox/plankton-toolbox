@@ -85,14 +85,14 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
             ['variable', 'coefficient_one_unit', 'text', 'coefficient_one_unit', ''], 
             #
             ['variable', 'coefficient', 'text', 'coefficient', ''], 
-            ['sample', 'analysis_laboratory', 'text', 'analysis_laboratory', ''], 
+            ['sample', 'analytical_laboratory', 'text', 'analytical_laboratory', ''], 
             ['variable', 'analysis_date', 'text', 'analysis_date', ''], 
-            ['variable', 'taxonomist', 'text', 'taxonomist', ''], 
+            ['variable', 'analysed_by', 'text', 'analysed_by', ''], 
             # Copy parameters.
             ['copy_parameter', '# counted:ind', 'text', 'counted_units'], 
-            ['copy_parameter', 'Abundance:ind/l', 'text', 'abundance_units/l'], 
-            ['copy_parameter', 'Wet weight:mg/m3', 'text', 'volume_mg/m3'], 
-            ['copy_parameter', 'Carbon content:µgC/m3', 'text', 'carbon_ugc/m3'], 
+            ['copy_parameter', 'Abundance:ind/l', 'text', 'abundance_units_l'], 
+            ['copy_parameter', 'Biovolume concentration:mm3/l', 'text', 'volume_mm3_l'], 
+            ['copy_parameter', 'Carbon concentration:ugC/l', 'text', 'carbon_ugc_l'], 
         ]
         #
         self.clear() # 

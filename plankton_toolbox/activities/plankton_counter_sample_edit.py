@@ -254,9 +254,9 @@ class ExportSampleDialog(QtGui.QDialog):
 #                 'net_mesh_size_um',
 #                 'wire_angle_deg',
 #                 'net_tow_length_m',
-#                 'analysis_laboratory', 
+#                 'analytical_laboratory', 
 #                 'analysis_date',
-#                 'taxonomist',
+#                 'analysed_by',
 #                 'sample_comment',               
 #                 ]
 #         sample_info_rows = []

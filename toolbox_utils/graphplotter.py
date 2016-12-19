@@ -301,6 +301,9 @@ class ChartBase(object):
             #
             for value in data_array:
                 try:
+                    try:
+                        value = value.replace(',', '.').replace(' ', '') # Try/except if already float.
+                    except: pass
                     value = float(value)
                     float_array.append(value)
                 except:
@@ -850,7 +853,10 @@ class ScatterChart(ChartBase):
                             subplot.xaxis.set_major_formatter(mpl_dates.DateFormatter(x_format))
                         else:
                             subplot.xaxis.set_major_formatter(mpl_dates.DateFormatter('%Y-%m-%d'))
-                        self._figure.autofmt_xdate(bottom = 0.2)   
+                        try:
+                            self._figure.autofmt_xdate(bottom = 0.2)
+                        except:
+                            pass   
 
                 # Legend.
                 self._add_legend(subplot)                

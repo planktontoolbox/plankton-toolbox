@@ -14,6 +14,13 @@ import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_core
 
+__version__ = '' 
+
+def set_version(version):
+        """ """
+        global __version__
+        __version__ = version
+
 class RichTextQLabel(QtGui.QLabel):  
     """ Customized QLabel. Used for informative texts. """
     def __init__(self, parent = None):  

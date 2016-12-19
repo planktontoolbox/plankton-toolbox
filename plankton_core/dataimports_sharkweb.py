@@ -160,6 +160,11 @@ class ImportSharkWeb(plankton_core.DataImportPreparedBase):
                             value = row_dict.get('scientific_name', '')
                             value = plankton_core.Species().get_plankton_group_from_taxon_name(value)
                         except: pass 
+                    if parsinginforow[1] == 'analysed_by':
+                        try:
+                            if not value:
+                                value = row_dict.get('taxonomist', '')
+                        except: pass 
                     # Add at right level.
                     if parsinginforow[0] == 'visit':
                         currentvisit.add_data(parsinginforow[1], value)        

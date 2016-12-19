@@ -21,7 +21,7 @@ class CreateReportStandard(object):
             'sample_latitude_dd', 
             'sample_longitude_dd', 
             'water_depth_m', 
-            'sample_id', 'text', 
+            'sample_id', 
             'sample_min_depth_m', 
             'sample_max_depth_m', 
             'scientific_name', 
@@ -41,6 +41,7 @@ class CreateReportStandard(object):
             'taxon_hierarchy', 
             'sampling_laboratory', 
             'analytical_laboratory', 
+            'analysed_by', 
             ]
     
     def create_report(self, datasets, result_table,

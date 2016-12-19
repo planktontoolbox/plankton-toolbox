@@ -311,6 +311,10 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                     if parameter == selectedparameter:                        
                         value = variablenode.get_data('value')
                         try:
+                            value = value.replace(',', '.').replace(' ', '') # Try/except if already float.
+                        except:
+                            pass
+                        try:
                             visit_taxon_dict[visit][taxonname] += float(value)
                         except:
                             toolbox_utils.Logging().warning('Float conversion (2) failed: Station: ' + visit + 
@@ -375,6 +379,10 @@ class AnalyseDatasetsTab5(QtGui.QWidget):
                     parameter = variablenode.get_data('parameter') + ' (' + variablenode.get_data('unit') + ')'
                     if parameter == selectedparameter:                        
                         value = variablenode.get_data('value')
+                        try:
+                            value = value.replace(',', '.').replace(' ', '') # Try/except if already float.
+                        except:
+                            pass
                         try:
                             taxon_visit_dict[taxonname][visit] += float(value)
                         except:
