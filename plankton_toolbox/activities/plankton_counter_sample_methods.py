@@ -7,7 +7,7 @@
 from __future__ import unicode_literals
 
 import os
-import math
+import time
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
 import plankton_toolbox.toolbox.utils_qt as utils_qt
@@ -34,7 +34,9 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         #
         self.setLayout(self._create_content_methods())
         #
-        self.load_data()
+        # Log available parsers when GUI setup has finished.
+        QtCore.QTimer.singleShot(200, self.load_data)
+#         self.load_data()
         
     def load_data(self):
         """ Load data from method stored in sample. """

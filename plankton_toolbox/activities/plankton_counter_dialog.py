@@ -37,7 +37,7 @@ class PlanktonCounterDialog(QtGui.QDialog):
         self.metadata_widget = None
         self.methods_widget = None
         self.count_widget = None
-        self.summary_widget = None
+        self.sample_data_widget = None
         self._current_tab_index = 0
         #
         self._create_content()
@@ -58,7 +58,7 @@ class PlanktonCounterDialog(QtGui.QDialog):
         elif oldtabindex == 2:
                 self.count_widget.save_data()
         elif oldtabindex == 3:
-                self.summary_widget.clear()
+                self.sample_data_widget.clear()
         #   
         if newtabindex == 0:
             self.metadata_widget.load_data()
@@ -67,7 +67,7 @@ class PlanktonCounterDialog(QtGui.QDialog):
         elif newtabindex == 2:
             self.count_widget.load_data()
         elif newtabindex == 3:
-            self.summary_widget.load_data()
+            self.sample_data_widget.load_data()
 
     def closeEvent(self, event):
         """ Called from Qt when dialog is closed. """
@@ -104,7 +104,7 @@ class PlanktonCounterDialog(QtGui.QDialog):
 #         self._main_tab_widget.addTab(self._content_methods_OLD(), 'Counting methods OLD')
         self._main_tab_widget.addTab(self._content_methods(), 'Counting methods')
         self._main_tab_widget.addTab(self._content_count(), 'Count sample')
-        self._main_tab_widget.addTab(self._content_summary(), 'Sample summary')
+        self._main_tab_widget.addTab(self._content_sample_data(), 'Sample data')
 #         tabWidget.addTab(self._content_export_import(), 'Export/import')
         contentLayout.addWidget(self._content_bottom())
         
@@ -168,13 +168,13 @@ class PlanktonCounterDialog(QtGui.QDialog):
                                                            self._current_sample_object)
         return self.count_widget
 
-    def _content_summary(self):
+    def _content_sample_data(self):
         """ """
-        self.summary_widget = plankton_counter_sample_edit.PlanktonCounterSampleEdit(self, 
+        self.sample_data_widget = plankton_counter_sample_edit.PlanktonCounterSampleEdit(self, 
                                                            self._current_dataset, 
                                                            self._current_sample, 
                                                            self._current_sample_object)
-        return self.summary_widget
+        return self.sample_data_widget
 
     def _content_bottom(self):
         """ """

@@ -270,11 +270,7 @@ class Species(object):
 #                             toolbox_utils.Logging().warning('Size class is missing: ' + scientificname + ' Size: ' + sizeclass + '   (Source: ' + excel_file_name + ')')
                     else:
                         # No sizeclass in indata file. Put on species level.                        
-                        if taxon.get('trophic_type', ''):
-#                             if scientificname == taxon['scientific_name']:
-#                                 toolbox_utils.Logging().warning('Same taxon on multiple rows: ' + scientificname + '   (Source: ' + excel_file_name + ')')
-                            #
-                            taxon['trophic_type'] = trophictype
+                        taxon['trophic_type'] = trophictype
                 else:
 #                     toolbox_utils.Logging().warning('Scientific name is missing: ' + scientificname + '   (Source: ' + excel_file_name + ')')
                     pass
@@ -521,17 +517,18 @@ class Species(object):
         #
         # Trophic_type is set on sizeclass level. Should also be set on species level  
         # if all sizeclasses have the same trophic_type.
-        for taxon in self._taxa.values():
-            try:
-                trophic_type_set = set() 
-                if 'size_classes' in taxon:
-                    for sizeclass in taxon['size_classes']:
-                        trophic_type_set.add(sizeclass.get('bvol_trophic_type', ''))
-                if len(trophic_type_set) == 1:
-                    taxon['bvol_trophic_type'] = list(trophic_type_set)[0]
-
-            except:
-                toolbox_utils.Logging().warning('Failed when loading BVOL data (the trophic type part).')
+# Use separate file for trophic type.
+#         for taxon in self._taxa.values():
+#             try:
+#                 trophic_type_set = set() 
+#                 if 'size_classes' in taxon:
+#                     for sizeclass in taxon['size_classes']:
+#                         trophic_type_set.add(sizeclass.get('bvol_trophic_type', ''))
+#                 if len(trophic_type_set) == 1:
+#                     taxon['bvol_trophic_type'] = list(trophic_type_set)[0]
+# 
+#             except:
+#                 toolbox_utils.Logging().warning('Failed when loading BVOL data (the trophic type part).')
 
     def get_plankton_group_from_taxon_name(self, scientific_name):
         """ This is another way to organize organisms into groups. Other than the traditional classification. """

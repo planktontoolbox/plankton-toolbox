@@ -69,7 +69,7 @@ class CreateReportToDataCenterShark(object):
             'variable_comment', # 'COMNT_VAR',
         ]                  
         # Header for "quantitative" counting.
-        self._header_net_items = [
+        self._header_abundance_class_items = [
             'visit_year', # 'MYEAR',
             'project_code', # 'PROJ',
             'orderer', # 'ORDERER',
@@ -193,7 +193,7 @@ class CreateReportToDataCenterShark(object):
         if self._reporttype == 'counted':
             header_items = self._header_counted_items
         elif self._reporttype == 'net':
-            header_items = self._header_net_items
+            header_items = self._header_abundance_class_items
         # Transleate headers.
         translated_header = []
         for item in header_items:
@@ -259,7 +259,7 @@ class CreateReportToDataCenterShark(object):
                 for item in self._header_counted_items:
                     report_row.append(row_dict.get(item, '')) 
             elif self._reporttype == 'net':
-                for item in self._header_net_items:
+                for item in self._header_abundance_class_items:
                     report_row.append(row_dict.get(item, '')) 
             # Add all rows to result.
             result_table.append_row(report_row)
@@ -317,7 +317,7 @@ class CreateReportToDataCenterShark(object):
 #                             for item in self._header_counted_items:
 #                                 report_row.append(row_dict.get(item, '')) 
 #                         elif self._reporttype == 'net':
-#                             for item in self._header_net_items:
+#                             for item in self._header_abundance_class_items:
 #                                 report_row.append(row_dict.get(item, '')) 
 #                         #
 #                         result_table.append_row(report_row)
