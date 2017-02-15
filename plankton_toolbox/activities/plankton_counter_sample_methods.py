@@ -93,6 +93,17 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
 #         self._selectmethodstep_table.itemClicked.connect(self._select_method_step_changed)
 #         self._methodstepdescription_edit = QtGui.QLineEdit('')
 #         self._methodstepdescription_edit.textEdited.connect(self._field_changed)
+
+
+        # 'qualitative_quantitative'
+        self._methodtype_list = QtGui.QComboBox()
+        self._methodtype_list.addItems(['Quantitative', 
+                                       'Qualitative', 
+                                       'Quantitative and qualitative'])
+        self._methodtype_list.setMaximumWidth(200)
+        self._methodtype_list.currentIndexChanged.connect(self._field_changed)
+
+
         self._sampledvolume_edit = QtGui.QLineEdit('')
         self._sampledvolume_edit.setMaximumWidth(60)
         self._sampledvolume_edit.textEdited.connect(self._field_changed)
@@ -219,6 +230,11 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         gridrow += 1
         grid3.addWidget(utils_qt.RightAlignedQLabel('Chamber/filter diameter (mm):'), gridrow, 0, 1, 1)
         grid3.addWidget(self._chamber_filter_diameter_edit, gridrow, 1, 1, 1)
+
+        gridrow += 1
+        grid3.addWidget(utils_qt.RightAlignedQLabel('Method type:'), gridrow, 0, 1, 1)
+        grid3.addWidget(self._methodtype_list, gridrow, 1, 1, 1)
+        
         gridrow += 1
         grid3.setRowStretch(gridrow, 10)
 
@@ -387,6 +403,17 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
             self._dont_update_current_sample_method_flag = True
             #
 #             self._methodstepdescription_edit.setText(fields_dict.get('method_description', ''))
+
+            #
+            methodtype = fields_dict.get('qualitative_quantitative', '')
+            currentindex = self._methodtype_list.findText(methodtype, QtCore.Qt.MatchFixedString)
+            if currentindex >= 0:
+                self._methodtype_list.setCurrentIndex(currentindex)
+            else:
+                self._methodtype_list.setCurrentIndex(0)
+
+
+            
             self._sampledvolume_edit.setText(fields_dict.get('sampled_volume_ml', ''))
             #
             preservative = fields_dict.get('preservative', '')
@@ -394,7 +421,7 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
             if currentindex >= 0:
                 self._preservative_list.setCurrentIndex(currentindex)
             else:
-                self._preservative_list.setItemText(0, preservative)
+                self._preservative_list.setCurrentIndex(0, preservative)
             #
             self._preservative_volume_edit.setText(fields_dict.get('preservative_volume_ml', ''))
             self._countedvolume_edit.setText(fields_dict.get('counted_volume_ml', ''))
@@ -456,6 +483,18 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
             self._dont_update_current_sample_method_flag = True
             #
 #             self._methodstepdescription_edit.setText(fields_dict.get('method_step_description', ''))
+
+
+            #
+            methodtype = fields_dict.get('qualitative_quantitative', '')
+            currentindex = self._methodtype_list.findText(methodtype, QtCore.Qt.MatchFixedString)
+            if currentindex >= 0:
+                self._methodtype_list.setCurrentIndex(currentindex)
+            else:
+                self._methodtype_list.setCurrentIndex(0)
+
+
+            
             self._sampledvolume_edit.setText(fields_dict.get('sampled_volume_ml', ''))
             #
             preservative = fields_dict.get('preservative', '')
@@ -512,6 +551,11 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         fields_dict['counting_method'] = unicode(self._selectmethod_table.currentItem().text())
         fields_dict['counting_method_step'] = unicode(self._selectmethodstep_table.currentItem().text())
 #         fields_dict['method_step_description'] = unicode(self._methodstepdescription_edit.text())
+
+
+        fields_dict['qualitative_quantitative'] = unicode(self._methodtype_list.currentText())
+        
+        
         fields_dict['sampled_volume_ml'] = unicode(self._sampledvolume_edit.text()).replace(',', '.').replace(' ', '')
         fields_dict['preservative'] = unicode(self._preservative_list.currentText())
         fields_dict['preservative_volume_ml'] = unicode(self._preservative_volume_edit.text()).replace(',', '.').replace(' ', '')

@@ -38,6 +38,10 @@ class PlanktonCounterActivity(activity_base.ActivityBase):
         self.connect(plankton_core.PlanktonCounterManager(), 
                      QtCore.SIGNAL('planktonCounterListChanged'), 
                      self._update_counter_sample_list)
+        
+    def _emit_change_notification(self):
+        """ Emit signal to update GUI lists for available datasets and samples. """
+        plankton_core.PlanktonCounterManager().emit(QtCore.SIGNAL('planktonCounterListChanged'))
 
     def _create_content(self):
         """ """
@@ -74,7 +78,8 @@ class PlanktonCounterActivity(activity_base.ActivityBase):
         self._countsample_button.clicked.connect(self._open_edit_count)               
         #
         self._refresh_button = QtGui.QPushButton('Refresh dataset list')
-        self._refresh_button.clicked.connect(self._update_counter_sample_list)
+#         self._refresh_button.clicked.connect(self._update_counter_sample_list)
+        self._refresh_button.clicked.connect(self._emit_change_notification)
         self._exportimportsamples_button = QtGui.QPushButton('Export/import samples (.xlsx)...')
         self._exportimportsamples_button.clicked.connect(self._export_import_samples)
         self._backup_button = QtGui.QPushButton('Export/import backup (.zip)...')
@@ -189,6 +194,7 @@ class NewDatasetDialog(QtGui.QDialog):
         """ """
         super(NewDatasetDialog, self).__init__(parentwidget)
         self.setWindowTitle("New dataset")
+        self._parentwidget = parentwidget
         self.setLayout(self._content())
 
     def _content(self):  
@@ -230,6 +236,7 @@ class NewSampleDialog(QtGui.QDialog):
         """ """
         self._current_dataset = dataset
         super(NewSampleDialog, self).__init__(parentwidget)
+        self._parentwidget = parentwidget
         self.setWindowTitle("New sample")
         self.setLayout(self._content())
         self._load_dataset_data()
@@ -279,6 +286,8 @@ class NewSampleDialog(QtGui.QDialog):
 #             samplename = unicode(self._sampleid_edit.text()) # Use id.
         #   
         plankton_core.PlanktonCounterManager().create_sample(datasetname, samplename)
+        #
+        self._parentwidget._emit_change_notification()
         #            
         self.accept() # Close dialog box.
 
@@ -374,6 +383,8 @@ class DeleteDialog(QtGui.QDialog):
                 datasetname = unicode(item.text())
                 print(datasetname)
                 plankton_core.PlanktonCounterManager().delete_dataset(datasetname)
+        #
+        self._parentwidget._emit_change_notification()
         #            
         self.accept() # Close dialog box.
 
@@ -464,6 +475,7 @@ class BackupExportImportDialog(QtGui.QDialog):
         """ """
         super(BackupExportImportDialog, self).__init__(parentwidget)
         self.setWindowTitle("Backup export/import")
+        self._parentwidget = parentwidget
         self.setLayout(self._content())
         self.setMinimumSize(600, 200)
         #
@@ -636,23 +648,20 @@ class BackupExportImportDialog(QtGui.QDialog):
                 toolbox_utils.Logging().error('Failed to import from backup.') # ...Error: ' + unicode(e))
                 QtGui.QMessageBox.warning(self, 'Warning', 'Failed to import from backup.') # ...Error: ' + unicode(e))
             #
+            self._parentwidget._emit_change_notification()
+            #
             self.accept() # Close dialog box.
         else:
             QtGui.QApplication.beep()
         
 
-# TODO:
-# TODO:
-# TODO:
-# TODO:
-# TODO:
-# TODO:
 class ExportImportSamplesDialog(QtGui.QDialog):
     """ This dialog is allowed to access private parts in the parent widget. """
     def __init__(self, parentwidget, dataset):
         """ """
         super(ExportImportSamplesDialog, self).__init__(parentwidget)
         self.setWindowTitle("Export/import samples")
+        self._parentwidget = parentwidget
         self.setLayout(self._content())
         self.setMinimumSize(800, 300)
         #
@@ -864,6 +873,8 @@ class ExportImportSamplesDialog(QtGui.QDialog):
         finally:
             toolbox_utils.Logging().log_all_accumulated_rows()  
             toolbox_utils.Logging().log('Importing samples done.')
+        #
+        self._parentwidget._emit_change_notification()
         #            
         self.accept() # Close dialog box.
 
@@ -884,6 +895,7 @@ class ExportImportSamplesDialog(QtGui.QDialog):
 #         """ """
 #         super(ImportExportDatasetDialog, self).__init__(parentwidget)
 #         self.setWindowTitle("Import/export dataset")
+#         self._parentwidget = parentwidget
 #         self.setLayout(self._content())
 #         self.setMinimumSize(800, 300)
 #         #

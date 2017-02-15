@@ -376,7 +376,7 @@ class PlanktonCounterSample():
         #
         totalcounted = 0
         countedspecies = {} # Value for sizeclasses aggregated.
-        abundanceclassspecies = {} # Value for sizeclasses aggregated.
+        size_range_dict = {} # Value for sizeclasses aggregated.
         locked_list = []
         #
         for sampleobject in self._sample_rows.values():
@@ -387,11 +387,6 @@ class PlanktonCounterSample():
             # Count on scientific name. Standard alternative.
             taxon = sampleobject.get_scientific_full_name()
             size = sampleobject.get_size_class()
-            #
-            bvol_size_range = plankton_core.Species().get_bvol_dict(sampleobject.get_scientific_name(), size).get('bvol_size_range', '')
-            bvol_size_range_text = ''
-            if bvol_size_range:
-                bvol_size_range_text = '(' + bvol_size_range + ')'
             # Use the sam key for locked items.
             if sampleobject.is_locked():
                 if size:
@@ -399,52 +394,161 @@ class PlanktonCounterSample():
                 else:
                     locked_list.append(taxon)     
             # Count on class name.
-            if summary_type == 'Counted per class report':
+            if summary_type == 'Counted per classes':
                 taxon = plankton_core.Species().get_taxon_value(taxon, 'taxon_class')
                 if len(taxon) == 0:
                     taxon = '<class unknown>'
             # Count on scientific name and size class.
-            elif summary_type == 'Counted taxa/sizes report':
+            elif summary_type == 'Counted per taxa':
                 if size:
-                    taxon = taxon + ' [' + size + '] ' + bvol_size_range_text
-            elif summary_type == 'Counted taxa/sizes':
+                    taxon = taxon
+            elif summary_type == 'Counted per taxa/sizes':
                 if size:
-                    taxon = taxon + ' [' + size + '] ' + bvol_size_range_text
+                    taxon = taxon + ' [' + size + '] '
             # Create in list, first time only.
             if taxon not in countedspecies:
                 countedspecies[taxon] = 0
             # Add.
             try:
                 abundance_class = sampleobject.get_abundance_class()
-                if abundance_class == '0':
+                if abundance_class in ['', '0']:
                     countedspecies[taxon] += int(sampleobject.get_counted_units())
                     totalcounted += int(sampleobject.get_counted_units())
                 else:
-                    countedspecies[taxon] = abundance_class + ' Abundance class'
+                    if summary_type in ['Counted per taxa', 'Counted per taxa/sizes']:
+                        if abundance_class == '1':
+                            countedspecies[taxon] = '1=Observed'
+                        elif abundance_class == '2':
+                            countedspecies[taxon] = '2=Several cells'
+                        elif abundance_class == '3':
+                            countedspecies[taxon] = '3=1-10%'
+                        elif abundance_class == '4':
+                            countedspecies[taxon] = '4=10-50%'
+                        elif abundance_class == '5':
+                            countedspecies[taxon] = '5=50-100%'
+                    else:
+                        countedspecies[taxon] = 'Qualitative'
             except: pass # If value = ''.
+            #
+            if summary_type in ['Counted per taxa/sizes']:
+                bvol_size_range = plankton_core.Species().get_bvol_dict(sampleobject.get_scientific_name(), size).get('bvol_size_range', '')
+                if bvol_size_range:
+                    size_range_dict[taxon] = '(Size: ' + bvol_size_range + ')'
         #    
-        if (summary_type == 'Counted taxa') or (summary_type == 'Counted taxa/sizes'):
+#         if summary_type in ['Counted per taxa', 'Counted per taxa/sizes']:
+#             for key in sorted(countedspecies):
+#                 summary_data.append(key)
+#         else:
+        summary_data.append('Total counted: ' + unicode(totalcounted))
+        summary_data.append('')
+        if most_counted_sorting == False:
+            # Alphabetical.
             for key in sorted(countedspecies):
-                summary_data.append(key)
+                size_range = ''
+                if key in size_range_dict:
+                    size_range = '    ' + size_range_dict[key]
+                lock_info = ''
+                if key in locked_list:
+                    lock_info = ' [Locked]'
+                
+                summary_data.append(key + ': ' + unicode(countedspecies[key]) + lock_info + size_range)
         else:
-            summary_data.append('Total counted: ' + unicode(totalcounted))
-            summary_data.append('')
-            if most_counted_sorting == False:
-                # Alphabetical.
-                for key in sorted(countedspecies):
-                    lock_info = ''
-                    if key in locked_list:
-                        lock_info = ' [Locked]'
-                    summary_data.append(key + ': ' + unicode(countedspecies[key]) + lock_info)
-            else:
-                # Sort for most counted.
-                for key in sorted(countedspecies, key=countedspecies.get, reverse=True):
-                    lock_info = ''
-                    if key in locked_list:
-                        lock_info = ' [Locked]'
-                    summary_data.append(key + ': ' + unicode(countedspecies[key]) + lock_info)
+            # Sort for most counted.
+            for key in sorted(countedspecies, key=countedspecies.get, reverse=True):
+                size_range = ''
+                if key in size_range_dict:
+                    size_range = ' ' + size_range_dict[key]
+                lock_info = ''
+                if key in locked_list:
+                    lock_info = ' [Locked]'
+                summary_data.append(key + ': ' + unicode(countedspecies[key]) + lock_info + size_range)
         #
         return summary_data
+
+# 'Counted per taxa/sizes', 
+# 'Counted per taxa',
+# 'Counted per classes'
+
+
+
+
+#     def get_taxa_summary(self, summary_type = None, 
+#                                most_counted_sorting = False, 
+#                                method_step = None):
+#         """ """
+#         summary_data = []
+#         #
+#         totalcounted = 0
+#         countedspecies = {} # Value for sizeclasses aggregated.
+#         abundanceclassspecies = {} # Value for sizeclasses aggregated.
+#         locked_list = []
+#         #
+#         for sampleobject in self._sample_rows.values():
+#             # Check method step.
+#             if method_step:
+#                 if not method_step == sampleobject.get_method_step():
+#                     continue
+#             # Count on scientific name. Standard alternative.
+#             taxon = sampleobject.get_scientific_full_name()
+#             size = sampleobject.get_size_class()
+#             #
+#             bvol_size_range = plankton_core.Species().get_bvol_dict(sampleobject.get_scientific_name(), size).get('bvol_size_range', '')
+#             bvol_size_range_text = ''
+#             if bvol_size_range:
+#                 bvol_size_range_text = '(' + bvol_size_range + ')'
+#             # Use the sam key for locked items.
+#             if sampleobject.is_locked():
+#                 if size:
+#                     locked_list.append(taxon + ' [' + size + '] ')     
+#                 else:
+#                     locked_list.append(taxon)     
+#             # Count on class name.
+#             if summary_type == 'Counted per class report':
+#                 taxon = plankton_core.Species().get_taxon_value(taxon, 'taxon_class')
+#                 if len(taxon) == 0:
+#                     taxon = '<class unknown>'
+#             # Count on scientific name and size class.
+#             elif summary_type == 'Counted taxa/sizes report':
+#                 if size:
+#                     taxon = taxon + ' [' + size + '] ' + bvol_size_range_text
+#             elif summary_type == 'Counted taxa/sizes':
+#                 if size:
+#                     taxon = taxon + ' [' + size + '] ' + bvol_size_range_text
+#             # Create in list, first time only.
+#             if taxon not in countedspecies:
+#                 countedspecies[taxon] = 0
+#             # Add.
+#             try:
+#                 abundance_class = sampleobject.get_abundance_class()
+#                 if abundance_class == '0':
+#                     countedspecies[taxon] += int(sampleobject.get_counted_units())
+#                     totalcounted += int(sampleobject.get_counted_units())
+#                 else:
+#                     countedspecies[taxon] = abundance_class + ' Abundance class'
+#             except: pass # If value = ''.
+#         #    
+#         if (summary_type == 'Counted taxa') or (summary_type == 'Counted taxa/sizes'):
+#             for key in sorted(countedspecies):
+#                 summary_data.append(key)
+#         else:
+#             summary_data.append('Total counted: ' + unicode(totalcounted))
+#             summary_data.append('')
+#             if most_counted_sorting == False:
+#                 # Alphabetical.
+#                 for key in sorted(countedspecies):
+#                     lock_info = ''
+#                     if key in locked_list:
+#                         lock_info = ' [Locked]'
+#                     summary_data.append(key + ': ' + unicode(countedspecies[key]) + lock_info)
+#             else:
+#                 # Sort for most counted.
+#                 for key in sorted(countedspecies, key=countedspecies.get, reverse=True):
+#                     lock_info = ''
+#                     if key in locked_list:
+#                         lock_info = ' [Locked]'
+#                     summary_data.append(key + ': ' + unicode(countedspecies[key]) + lock_info)
+#         #
+#         return summary_data
     
     def get_sample_row_dict(self, counted_row_dict):
         """ """
@@ -558,7 +662,7 @@ class PlanktonCounterSample():
         tablefilereader = toolbox_utils.TableFileReader(
                     file_path = '',
                     excel_file_name = excel_file_path,
-                    excel_sheet_name = 'sample_data.txt',                 
+                    excel_sheet_name = 'sample_info.txt',                 
                     )
         sample_header = tablefilereader.header()
         sample_rows = tablefilereader.rows()
@@ -620,6 +724,7 @@ class PlanktonCounterSample():
                 'water_depth_m',
                 'sampler_type_code',
                 'sampled_volume_l',
+                'net_type_code', 
                 'sampler_area_m2',
                 'net_mesh_size_um',
                 'wire_angle_deg',
@@ -651,11 +756,12 @@ class PlanktonCounterSample():
         # Sheet: Summary.
         sampleinfo_worksheet = workbook.create_sheet('Summary')
         sampleinfo_worksheet.title = 'Summary'
-        # Header.
-        sampleinfo_worksheet.append(sample_info_header)
-        # Rows.
-        for row in sample_info_rows:
-            sampleinfo_worksheet.append(row)
+#         # Header.
+#         sampleinfo_worksheet.append(sample_info_header)
+#         # Rows.
+#         for row in sample_info_rows:
+#             sampleinfo_worksheet.append(row)
+        sampleinfo_worksheet.append(['Under development...'])
         
         # Sheet: Table summary.
         sampleinfo_worksheet = workbook.create_sheet('Table summary')
@@ -681,6 +787,13 @@ class PlanktonCounterSample():
         # Rows.
         for row in sample_info_rows:
             sampleinfo_worksheet.append(row)
+        # Extra info for restart of counting session.
+        sampleinfo_worksheet.append(['']) # Empty.
+        for key in sample_info_dict.keys():
+            if key == 'last_used_method_step':
+                sampleinfo_worksheet.append([key, sample_info_dict.get(key, '')])
+            if key.startswith('max_count_area<+>'):
+                sampleinfo_worksheet.append([key, sample_info_dict.get(key, '')])
         # Sheet: Sample data.
         sampledata_worksheet = workbook.create_sheet('sample_data.txt')
         sampledata_worksheet.title = 'sample_data.txt'
@@ -710,12 +823,12 @@ class PlanktonCounterSample():
             ['The file represents one counted plankton sample. It can be used for export and import '],
             ['between different computers running Plankton Toolbox, or as an archive file.'],
             ['Don\'t edit or rename the sheets sample_info.txt, sample_data.txt or '],
-            ['counting_method.txt if the file should be imported to Plankton Toolbox.'],
+            ['counting_method.txt if the file should be imported later to Plankton Toolbox.'],
             [''],
             ['Generated sheets:'],
             ['- Summary: Page containing information in a compact format.'],
             ['- Table summary: Page with generated data in table format.'],
-            ['- sample_info.txt: Copy of the internally used file for information connected to a sample.'],
+            ['- sample_info.txt: Copy of the internally used file for information connected to a sample (metadata).'],
             ['- sample_data.txt: Copy of the internally used file for counted sample rows.'],
             ['- counting_method.txt: Copy of the internally used file for parameters related to the counting method.'],
             ['- README: This text.'],

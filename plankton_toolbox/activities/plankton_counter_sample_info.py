@@ -275,7 +275,7 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         form1.addWidget(utils_qt.RightAlignedQLabel('Analytical laboratory:'), gridrow, 0, 1, 1)
         form1.addWidget(self._analytical_laboratory_edit, gridrow, 1, 1, 3)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Analysis. Year'), gridrow, 0, 1, 1)
+        form1.addWidget(utils_qt.RightAlignedQLabel('Analysis. Year:'), gridrow, 0, 1, 1)
         hbox = QtGui.QHBoxLayout()
         hbox.addWidget(self._analysis_year_edit)
         hbox.addWidget(utils_qt.RightAlignedQLabel('Month:'))
@@ -577,7 +577,7 @@ class CopyFromTemplateDialog(QtGui.QDialog):
                 datasetsample = dataset + ': ' + sample
                 self._datasetsample_dict[datasetsample] = (dataset, sample)
         #
-        self._datasetsample_list.addItems(self._datasetsample_dict.keys())
+        self._datasetsample_list.addItems(sorted(self._datasetsample_dict.keys()))
             
         
     def _copy_sample_info(self):

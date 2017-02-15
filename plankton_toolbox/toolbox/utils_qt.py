@@ -251,7 +251,7 @@ class ToolboxQTableView( QtGui.QTableView):
         self.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
         #self.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         self.setSelectionMode(QtGui.QAbstractItemView.ContiguousSelection)
-        self.verticalHeader().setDefaultSectionSize(18)
+#         self.verticalHeader().setDefaultSectionSize(18)
            
     def clearModel(self):
         """ """
@@ -350,7 +350,7 @@ class ToolboxEditableQTableView( QtGui.QTableView):
         self.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
         #self.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         self.setSelectionMode(QtGui.QAbstractItemView.ContiguousSelection)
-        self.verticalHeader().setDefaultSectionSize(18)
+#         self.verticalHeader().setDefaultSectionSize(18)
         # Default model, data and selection        
         self._tablemodel = ToolboxEditableTableModel()
         self.setModel(self._tablemodel)
