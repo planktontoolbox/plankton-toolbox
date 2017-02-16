@@ -713,6 +713,8 @@ class PlanktonCounterSample():
                 'country_code',
                 'platform_code',
                 'sampling_series',
+                'sampling_laboratory',
+                'orderer',                
                 'project_code',
                 'station_name',
                 'sample_latitude_dm',

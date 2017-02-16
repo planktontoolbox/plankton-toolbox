@@ -856,14 +856,17 @@ class ExportImportSamplesDialog(QtGui.QDialog):
             if filenames:
                 for filename in filenames:
                     # Store selected path. Will be used as default next time.
+                    dir_path = plankton_core.PlanktonCounterManager().get_dataset_dir_path()
                     datasetname = unicode(self._dataset_list.currentText())
                     samplename = os.path.basename(filename).replace('.xlsx', '') 
+                    # Check if overwrite.
+                    if self._replaceoldsamples_checkbox.isChecked() == False:
+                        if os.path.exists(os.path.join(dir_path, datasetname, samplename)):
+                            continue # Don't overwrite if it exists.
                     # Create sample object.
-                    dir_path = plankton_core.PlanktonCounterManager().get_dataset_dir_path()
                     sample_object = plankton_core.PlanktonCounterSample(dir_path, datasetname, samplename)
                     #
                     sample_object.import_sample_from_excel(filename)
-                    
         #
         except Exception as e:
             toolbox_utils.Logging().error('Excel file import failed on exception: ' + unicode(e))

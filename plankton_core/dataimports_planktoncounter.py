@@ -31,7 +31,8 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
             ['visit', 'country_code', 'text', 'country_code', ''], 
             ['visit', 'platform_code', 'text', 'platform_code', ''], 
             ['visit', 'sampling_series', 'text', 'sampling_series', ''], 
-            
+            ['visit', 'sampling_laboratory', 'text', 'sampling_laboratory', ''], 
+            ['visit', 'orderer', 'text', 'orderer', ''], 
             ['visit', 'project_code', 'text', 'project_code', ''], 
             ['visit', 'station_name', 'text', 'station_name', ''], 
             ['visit', 'sample_latitude_dd', 'text', 'sample_latitude_dd', ''], 

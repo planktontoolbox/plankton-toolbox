@@ -7,7 +7,7 @@
 from __future__ import unicode_literals
 
 # import os
-# import datetime
+import datetime
 import math
 import PyQt4.QtGui as QtGui
 import PyQt4.QtCore as QtCore
@@ -82,6 +82,10 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         self._sampling_platform_edit.setMaximumWidth(60)
         self._sampling_series_edit = QtGui.QLineEdit()
         self._sampling_series_edit.setMaximumWidth(80)
+        self._sampling_laboratory_edit = QtGui.QLineEdit()
+        self._sampling_laboratory_edit.setMinimumWidth(200)
+        self._orderer_edit = QtGui.QLineEdit()
+        self._orderer_edit.setMinimumWidth(200)
         self._project_edit = QtGui.QLineEdit()
         self._station_name_edit = QtGui.QLineEdit()
         self._latitude_degree = QtGui.QLineEdit()
@@ -161,6 +165,8 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         self._analysis_day_edit = QtGui.QLineEdit()
         self._analysis_day_edit.setPlaceholderText('dd')
         self._analysis_day_edit.setMaximumWidth(40)
+        self._analysis_today_button = QtGui.QPushButton('Today')
+        self._analysis_today_button.clicked.connect(self.analysis_today)
         self._analysed_by_edit = QtGui.QLineEdit()
         self._sample_comment_edit = QtGui.QLineEdit()
         #
@@ -208,6 +214,14 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         form1.addLayout(hbox, gridrow, 1, 1, 3)
 #         gridrow += 1
 #         form1.addWidget(utils_qt.RightAlignedQLabel(''), gridrow, 0, 1, 10) # Empty row.
+        gridrow += 1
+        form1.addWidget(utils_qt.RightAlignedQLabel('Sampling laboratory:'), gridrow, 0, 1, 1)
+        hbox = QtGui.QHBoxLayout()
+        hbox.addWidget(self._sampling_laboratory_edit)
+        hbox.addWidget(utils_qt.RightAlignedQLabel('Orderer:'))
+        hbox.addWidget(self._orderer_edit)
+        hbox.addStretch(10)
+        form1.addLayout(hbox, gridrow, 1, 1, 3)
         gridrow += 1
         form1.addWidget(utils_qt.RightAlignedQLabel('Project:'), gridrow, 0, 1, 1)
         form1.addWidget(self._project_edit, gridrow, 1, 1, 3)
@@ -282,6 +296,7 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         hbox.addWidget(self._analysis_month_edit)
         hbox.addWidget(utils_qt.RightAlignedQLabel('Day:'))
         hbox.addWidget(self._analysis_day_edit)
+        hbox.addWidget(self._analysis_today_button)
         hbox.addStretch(10)
         form1.addLayout(hbox, gridrow, 1, 1, 3)
         gridrow += 1
@@ -306,7 +321,13 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         #
         return layout
     
-    
+    def analysis_today(self):
+        """ """
+        today = datetime.date.today()
+        self._analysis_year_edit.setText(today.strftime('%Y'))
+        self._analysis_month_edit.setText(today.strftime('%m'))
+        self._analysis_day_edit.setText(today.strftime('%d'))
+
     def _latlong_dm_edited(self):
         """ """
         lat_deg = unicode(self._latitude_degree.text()).replace(',', '.')
@@ -410,6 +431,8 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         metadata_dict['country_code'] = unicode(self._sampling_country_edit.text())
         metadata_dict['platform_code'] = unicode(self._sampling_platform_edit.text())
         metadata_dict['sampling_series'] = unicode(self._sampling_series_edit.text())
+        metadata_dict['sampling_laboratory'] = unicode(self._sampling_laboratory_edit.text())
+        metadata_dict['orderer'] = unicode(self._orderer_edit.text())
         metadata_dict['project_code'] = unicode(self._project_edit.text())
         metadata_dict['station_name'] = unicode(self._station_name_edit.text())
         lat_deg_tmp = unicode(self._latitude_degree.text()).replace(',', '.')
@@ -460,9 +483,10 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
         self._sampling_country_edit.setText(metadata_dict.get('country_code', ''))
         self._sampling_platform_edit.setText(metadata_dict.get('platform_code', ''))
         self._sampling_series_edit.setText(metadata_dict.get('sampling_series', ''))
+        self._sampling_laboratory_edit.setText(metadata_dict.get('sampling_laboratory', ''))
+        self._orderer_edit.setText(metadata_dict.get('orderer', ''))
         self._project_edit.setText(metadata_dict.get('project_code', ''))
         self._station_name_edit.setText(metadata_dict.get('station_name', ''))
-        
         lat_tmp = unicode(metadata_dict.get('sample_latitude_dm', ''))
         long_tmp = unicode(metadata_dict.get('sample_longitude_dm', ''))
         if (len(lat_tmp) > 2) and (' ' in lat_tmp):

@@ -123,9 +123,9 @@ class CreateReportsActivity(activity_base.ActivityBase):
                                     'Standard table format',
                                     'Quantitative (counted): Table format',
                                     'Quantitative (counted): Species list',
-                                    'Quantitative (counted): Data Center export',
                                     'Qualitative (NET): Species list',
-                                    'Qualitative (NET): Data Center export',
+                                    'Quantitative (counted): Data Center export',
+#                                     'Qualitative (NET): Data Center export',
                                      ])
         #
 # TODO: For development:
@@ -237,18 +237,20 @@ class CreateReportsActivity(activity_base.ActivityBase):
                 toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
                 report = plankton_core.CreateReportSpecies(report_type = 'counted')
                 self._create_and_view_report(report)
-            elif selectedreport == 'Quantitative (counted): Data Center export':
-                toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
-                report = plankton_core.CreateReportToDataCenterShark(report_type = 'counted')
-                self._create_and_view_report(report)
             elif selectedreport == 'Qualitative (NET): Species list':
                 toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
                 report = plankton_core.CreateReportSpecies(report_type = 'net')
                 self._create_and_view_report(report)
-            elif selectedreport == 'Qualitative (NET): Data Center export':
+            elif selectedreport == 'Quantitative (counted): Data Center export':
                 toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
-                report = plankton_core.CreateReportToDataCenterShark(report_type = 'net')
+#                 report = plankton_core.CreateReportToDataCenterShark(report_type = 'counted')
+                report = plankton_core.CreateReportToDataCenterShark()
                 self._create_and_view_report(report)
+#             elif selectedreport == 'Qualitative (NET): Data Center export':
+#                 toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
+# #                 report = plankton_core.CreateReportToDataCenterShark(report_type = 'net')
+#                 report = plankton_core.CreateReportToDataCenterShark()
+#                 self._create_and_view_report(report)
             else:
                 raise UserWarning('Sorry, the selected report \ntype is not yet implemented.')
         except UserWarning, e:

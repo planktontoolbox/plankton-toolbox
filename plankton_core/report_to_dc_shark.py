@@ -10,12 +10,11 @@ import plankton_core
 
 class CreateReportToDataCenterShark(object):
     """ """
-    def __init__(self, report_type = 'counted'): # 'counted' or 'net'.):
+    def __init__(self):
         """ """
         super(CreateReportToDataCenterShark, self).__init__()
-        self._reporttype = report_type
-#         self._taxaphytowin = None
-        # Header for "qualitative" counting.
+
+        # Header for combined "quantitative" and "qualitative" counting.
         self._header_counted_items = [
             'visit_year', # 'MYEAR',
             'project_code', # 'PROJ',
@@ -26,6 +25,7 @@ class CreateReportToDataCenterShark(object):
             'positioning_system_code', # 'POSYS',
             'station_name', # 'STATN',
             'platform_code', # 'SHIPC',
+            'sampling_series', # SERIES
             'water_depth_m', # 'WADEP',
             'visit_comment', # 'COMNT_VISIT',
             'wind_direction_code', # 'WINDIR',
@@ -51,6 +51,7 @@ class CreateReportToDataCenterShark(object):
             'species_flag_code', # 'SFLAG',
             'trophic_type', # 'TRPHY',
             'param_counted', # 'COUNTNR', # Parameter.
+            'param_abundance_class', # 'COUNT_CLASS', # Parameter.
             'coefficient', # 'COEFF',
             'param_abundance', # 'CONC_IND_L-1', # Parameter.
             'size_class', # 'SIZCL',
@@ -58,55 +59,12 @@ class CreateReportToDataCenterShark(object):
             'param_biovolume', # 'BIOVOL', # Parameter.
             'quality_flag', # 'QFLAG',
             'analysed_by', # 'TAXNM',
-            'sedimentation_volume_ml', # 'SDVOL',
+            'counted_volume_ml', # 'SDVOL', # sedimentation_volume_ml
             'sedimentation_time_h', # 'SDTIM',
             'magnification', # 'MAGNI',
             'analytical_laboratory', # 'ALABO',
             'analytical_laboratory_accreditated', # 'ACKR_ANA',
             'analysis_date', # 'ANADATE',
-            'method_documentation', # 'METDC',
-            'method_reference_code', # 'REFSK',
-            'variable_comment', # 'COMNT_VAR',
-        ]                  
-        # Header for "quantitative" counting.
-        self._header_abundance_class_items = [
-            'visit_year', # 'MYEAR',
-            'project_code', # 'PROJ',
-            'orderer', # 'ORDERER',
-            'sample_date', # 'SDATE',
-            'sample_latitude_dd', # 'LATIT',
-            'sample_longitude_dd', # 'LONGI',
-            'positioning_system_code', # 'POSYS',
-            'station_name', # 'STATN',
-            'platform_code', # 'SHIPC',
-            'water_depth_m', # 'WADEP',
-            'visit_comment', # 'COMNT_VISIT',
-            'wind_direction_code', # 'WINDIR',
-            'wind_speed_ms', # 'WINSP',
-            'air_temperature_wet_degc', # 'AIRTEMP',
-            'air_pressure_hpa', # 'AIRPRES',
-            'weather_observation_code', # 'WEATH',
-            'cloud_observation_code', # 'CLOUD',
-            'wave_observation_code', # 'WAVES',
-            'ice_observation_code', # 'ICEOB',
-            'secchi_depth_m', # 'SECCHI',
-            'secchi_depth_quality_flag', # 'Q_SECCHI',
-            'sample_id', # 'SMPNO',
-            'sample_min_depth_m', # 'MNDEP',
-            'sample_max_depth_m', # 'MXDEP',
-            'sampling_laboratory', # 'SLABO',
-            'sampling_laboratory_accreditated', # 'ACKR_SMP',
-            'sampler_type_code', # 'SMTYP',
-            'preservative', # 'METFP',
-            'sample_comment', # 'COMNT_SAMP',
-            'scientific_name', # 'LATNM',
-            'species_flag_code', # 'SFLAG',
-            'trophic_type', # 'TRPHY',
-            'param_abundance_class', # 'COUNT_CLASS', # Parameter.
-            'quality_flag', # 'QFLAG',
-            'analysed_by', # 'TAXNM',
-            'analytical_laboratory', # 'ALABO',
-            'analytical_laboratory_accreditated', # 'ACKR_ANA',
             'method_documentation', # 'METDC',
             'method_reference_code', # 'REFSK',
             'variable_comment', # 'COMNT_VAR',
@@ -122,6 +80,7 @@ class CreateReportToDataCenterShark(object):
             'positioning_system_code': 'POSYS',
             'station_name': 'STATN',
             'platform_code': 'SHIPC',
+            'sampling_series':  'SERIES',
             'water_depth_m': 'WADEP',
             'visit_comment': 'COMNT_VISIT',
             'wind_direction_code': 'WINDIR',
@@ -155,7 +114,7 @@ class CreateReportToDataCenterShark(object):
             'param_biovolume': 'BIOVOL', # Parameter.
             'quality_flag': 'QFLAG',
             'analysed_by': 'TAXNM',
-            'sedimentation_volume_ml': 'SDVOL',
+            'counted_volume_ml': 'SDVOL', # sedimentation_volume_ml
             'sedimentation_time_h': 'SDTIM',
             'magnification': 'MAGNI',
             'analytical_laboratory': 'ALABO',
@@ -190,10 +149,7 @@ class CreateReportToDataCenterShark(object):
         if result_table == None:
             raise UserWarning('Result table is missing.')
         # Set header.
-        if self._reporttype == 'counted':
-            header_items = self._header_counted_items
-        elif self._reporttype == 'net':
-            header_items = self._header_abundance_class_items
+        header_items = self._header_counted_items
         # Transleate headers.
         translated_header = []
         for item in header_items:
@@ -235,7 +191,6 @@ class CreateReportToDataCenterShark(object):
                                 report_rows_dict[row_key]['param_biovolume'] = row_dict.get('value', '')
                             if parameter == 'Carbon concentration':
                                 report_rows_dict[row_key]['param_carbonconc'] = row_dict.get('value', '')
-                            # For NET samples.
                             if parameter == 'Abundance class':
                                 report_rows_dict[row_key]['param_abundance_class'] = row_dict.get('value', '')
                             # Complement columns.
@@ -246,78 +201,8 @@ class CreateReportToDataCenterShark(object):
             # Copy items.
             report_row = []
             row_dict = report_rows_dict[key]
-#             for item in self._header_items:
-#                 report_row.append(row_dict.get(item, ''))
-            # Create row by using order in header row.
-            if self._reporttype == 'counted':
-                
-                
-#                 print(unicode(self._header_counted_items))
-#                 print(unicode(row_dict.keys()))
-                
-                
-                for item in self._header_counted_items:
-                    report_row.append(row_dict.get(item, '')) 
-            elif self._reporttype == 'net':
-                for item in self._header_abundance_class_items:
-                    report_row.append(row_dict.get(item, '')) 
+            for item in self._header_counted_items:
+                report_row.append(row_dict.get(item, ''))
             # Add all rows to result.
             result_table.append_row(report_row)
 
-        
-#                         if self._reporttype == 'net':
-#                             # Net samples with conc-class 1-5:
-#                             # Species
-#                             phytowinname = variablenode.get_data('scientific_name', '?')
-#                             parts = phytowinname.split(' ')
-#                             speciesname = ''
-#                             for part in parts:
-#                                 if part not in ['cf.', 'HET', '32', '(cell:', '(width:', '(no']:
-#                                     speciesname += part + ' '
-#                                 else:
-#                                     if part not in ['cf.']:
-#                                         break # Break loop.
-#                             speciesname = speciesname.strip()
-#                             #
-#                             if self._taxaphytowin is not None:
-#                                 pegname, pegsize, sflag = self._taxaphytowin.convert_from_phytowin_to_peg(speciesname, phytowin_size_class = '32')
-#                             else:
-#                                 pegname = speciesname
-#                                 pegsize = ''
-#                                 sflag = ''
-#                             # Check if 'cf.' was included in name. Add to Sflag.
-#                             if 'cf.' in variablenode.get_data('Species', '?'):
-#                                 if sflag:
-#                                     sflag = 'cf., ' + sflag
-#                                 else:
-#                                     sflag = 'cf.'
-#                             #
-#                             taxonname = plankton_core.Species().get_taxon_value(pegname, 'scientific_name')
-#                             trophy = plankton_core.Species().get_bvol_value(pegname, pegsize, 'bvol_trophic_type')
-#                             # If trophy not available for this sizeclass, get it from taxon.
-#                             if not trophy: 
-#                                 trophy = plankton_core.Species().get_taxon_value(pegname, 'bvol_trophic_type')
-#                             #
-#                             row_dict['LATNM'] = pegname
-#                             row_dict['LATNM_DYNTAXA'] = taxonname
-#                             row_dict['SFLAG'] = sflag.lower() if sflag else '' # Lowercase.
-#                             row_dict['TROPHY'] = trophy
-#                             row_dict['COUNTNR'] = '' # Not used for 'net' samples.
-#                             if variablenode.get_data('parameter', '') == 'Abundance class':
-#                                     row_dict['ABUND_CLASS'] = variablenode.get_data('value', '?')
-#                             row_dict['COEFF'] = variablenode.get_data('coefficient', '?')
-#                             row_dict['MAGNI'] = variablenode.get_data('magnification').replace(u"Part counted with ", u"")
-#                             row_dict['SIZCL'] = pegsize
-#                             row_dict['COMNT_VAR'] = samplenode.get_data('sample_comment', '?')
-
-#                         # Create row by using order in header row.
-#                         report_row = []
-#                         
-#                         if self._reporttype == 'counted':
-#                             for item in self._header_counted_items:
-#                                 report_row.append(row_dict.get(item, '')) 
-#                         elif self._reporttype == 'net':
-#                             for item in self._header_abundance_class_items:
-#                                 report_row.append(row_dict.get(item, '')) 
-#                         #
-#                         result_table.append_row(report_row)
