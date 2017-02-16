@@ -1185,15 +1185,6 @@ class KeyPressQListView(QtGui.QListView):
             qKeyEvent.ignore() # Will be propagated.
             super(KeyPressQListView, self).keyPressEvent(qKeyEvent)
 
-#     def mouseReleaseEvent(self, QMouseEvent):
-#     def mousePressEvent(self, qMouseEvent):
-#         """ """
-#         if qMouseEvent.button() == QtCore.Qt.RightButton:         
-#             self._parent._counted_add(1)
-#             qMouseEvent.accept() # Was handled here.
-#         #
-#         qMouseEvent.ignore() # Will be propagated.
-
 
 class KeyPressQListWidget(QtGui.QListWidget):
     """ """
@@ -1211,15 +1202,24 @@ class KeyPressQListWidget(QtGui.QListWidget):
             qKeyEvent.ignore() # Will be propagated.
             super(KeyPressQListWidget, self).keyPressEvent(qKeyEvent)
 
-#     def mouseReleaseEvent(self, QMouseEvent):
-#     def mousePressEvent(self, qMouseEvent):
-#         """ """
-#         if qMouseEvent.button() == QtCore.Qt.RightButton:         
-#             self._parent._counted_add(1)
-#             qMouseEvent.accept() # Was handled here.
-#         #
-#         qMouseEvent.ignore() # Will be propagated.
- 
+    def mousePressEvent(self, qMouseEvent):
+        """ """
+        if qMouseEvent.button() == QtCore.Qt.RightButton:
+            self._parent._counted_add(1)
+            qMouseEvent.accept() # Was handled here.
+        else:
+            qMouseEvent.ignore() # Will be propagated.
+            super(KeyPressQListWidget, self).mousePressEvent(qMouseEvent)
+  
+    def mouseDoubleClickEvent(self, qMouseEvent):
+        """ NOTE: Count 2 on double click. """
+        if qMouseEvent.button() == QtCore.Qt.RightButton:
+            self._parent._counted_add(1)
+#             self._parent._counted_add(2) # NOTE: 2 on double click.
+            qMouseEvent.accept() # Was handled here.
+        else:
+            qMouseEvent.ignore() # Will be propagated.
+            super(KeyPressQListWidget, self).mousePressEvent(qMouseEvent)
   
 class KeyPressQLineEdit(QtGui.QLineEdit):
     """ """
@@ -1260,6 +1260,25 @@ class KeyPressToolboxQTableView(utils_qt.ToolboxQTableView):
         else:
             qKeyEvent.ignore() # Will be propagated.
             super(KeyPressToolboxQTableView, self).keyPressEvent(qKeyEvent)
+
+    def mousePressEvent(self, qMouseEvent):
+        """ """
+        if qMouseEvent.button() == QtCore.Qt.RightButton:         
+            self._parent._counted_add(1)
+            qMouseEvent.accept() # Was handled here.
+        else:
+            qMouseEvent.ignore() # Will be propagated.
+            super(KeyPressToolboxQTableView, self).mousePressEvent(qMouseEvent)
+  
+    def mouseDoubleClickEvent(self, qMouseEvent):
+        """ NOTE: Count 2 on double click. """
+        if qMouseEvent.button() == QtCore.Qt.RightButton:
+            self._parent._counted_add(1)
+#             self._parent._counted_add(2) # NOTE: 2 on double click.
+            qMouseEvent.accept() # Was handled here.
+        else:
+            qMouseEvent.ignore() # Will be propagated.
+            super(KeyPressToolboxQTableView, self).mousePressEvent(qMouseEvent)
  
  
 class KeyPressQSpinBox(QtGui.QSpinBox):

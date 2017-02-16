@@ -755,15 +755,15 @@ class PlanktonCounterSample():
         # Use openpyxl for Excel.
         workbook = openpyxl.Workbook(optimized_write = True)  # Supports big files.
 
-        # Sheet: Summary.
-        sampleinfo_worksheet = workbook.create_sheet('Summary')
-        sampleinfo_worksheet.title = 'Summary'
-#         # Header.
-#         sampleinfo_worksheet.append(sample_info_header)
-#         # Rows.
-#         for row in sample_info_rows:
-#             sampleinfo_worksheet.append(row)
-        sampleinfo_worksheet.append(['Under development...'])
+#         # Sheet: Summary.
+#         sampleinfo_worksheet = workbook.create_sheet('Summary')
+#         sampleinfo_worksheet.title = 'Summary'
+# #         # Header.
+# #         sampleinfo_worksheet.append(sample_info_header)
+# #         # Rows.
+# #         for row in sample_info_rows:
+# #             sampleinfo_worksheet.append(row)
+#         sampleinfo_worksheet.append(['This summary worksheet i under development...'])
         
         # Sheet: Table summary.
         sampleinfo_worksheet = workbook.create_sheet('Table summary')
@@ -828,7 +828,7 @@ class PlanktonCounterSample():
             ['counting_method.txt if the file should be imported later to Plankton Toolbox.'],
             [''],
             ['Generated sheets:'],
-            ['- Summary: Page containing information in a compact format.'],
+            ['- Summary: Page containing information in a compact format. (Under development, not available yet.)'],
             ['- Table summary: Page with generated data in table format.'],
             ['- sample_info.txt: Copy of the internally used file for information connected to a sample (metadata).'],
             ['- sample_data.txt: Copy of the internally used file for counted sample rows.'],
