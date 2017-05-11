@@ -31,7 +31,7 @@ class Species(object):
     
     """
     def __init__(self,
-                 species_directory_path = 'toolbox_data/species/'):
+                 species_directory_path = 'plankton_toolbox_data/species/'):
         # Parameters.
         self._species_directory_path = species_directory_path
         # Taxa files.

@@ -549,7 +549,7 @@ class BackupExportImportDialog(QtGui.QDialog):
         backup_zip_dir_name = unicode(self._backupdir_edit.text())
         backup_zip_file_name = unicode(self._backupzipfilename_edit.text())
         #
-        source_dir = 'toolbox_data'
+        source_dir = 'plankton_toolbox_data'
         source_dir_len = len(source_dir) + 1
         #
         try:
@@ -558,12 +558,12 @@ class BackupExportImportDialog(QtGui.QDialog):
                 for root, dirs, files in os.walk(source_dir):
                     for file_name in files:
                         path_file_name = os.path.join(root, file_name)
-                        zip_file_name = os.path.join('toolbox_data', path_file_name[source_dir_len:])
+                        zip_file_name = os.path.join('plankton_toolbox_data', path_file_name[source_dir_len:])
                         zip_file.write(path_file_name, zip_file_name)
         #
         except Exception as e:
-            toolbox_utils.Logging().error('Failed to backup "toolbox_data". Error: ' + unicode(e))
-            QtGui.QMessageBox.warning(self, 'Warning', 'Failed to backup "toolbox_data". Error: ' + unicode(e))
+            toolbox_utils.Logging().error('Failed to backup "plankton_toolbox_data". Error: ' + unicode(e))
+            QtGui.QMessageBox.warning(self, 'Warning', 'Failed to backup "plankton_toolbox_data". Error: ' + unicode(e))
         #
         self.accept() # Close dialog box.
     
@@ -574,7 +574,7 @@ class BackupExportImportDialog(QtGui.QDialog):
         self._importfile_edit = QtGui.QLineEdit('')
         self._importfile_button = QtGui.QPushButton('Browse...')
         self._importfile_button.clicked.connect(self._browse_import_files)
-        self._copyold_checkbox = QtGui.QCheckBox('Rename the old toolbox_data before import.')
+        self._copyold_checkbox = QtGui.QCheckBox('Rename the old plankton_toolbox_data before import.')
         self._copyold_checkbox.setChecked(True)
         self._import_button = QtGui.QPushButton('Import from backup')
         self._import_button.clicked.connect(self._import_from_backup)
@@ -622,17 +622,17 @@ class BackupExportImportDialog(QtGui.QDialog):
 #         source_filename = 'BACKUP-PlanktonToolbox-ver1.2.0_2016-12-12_203805.zip'
         source_zip_dir_file_name = unicode(self._importfile_edit.text())
         if source_zip_dir_file_name:
-            dest_dir = 'toolbox_data'
+            dest_dir = 'plankton_toolbox_data'
             #
             try:
                 if self._copyold_checkbox.isChecked():
-                    # Rename 'toolbox_data'.
+                    # Rename 'plankton_toolbox_data'.
                     dest_dir_old = dest_dir + '_OLD_' + unicode(datetime.datetime.now().strftime('%Y-%m-%d_%H%M%S'))
                     os.rename(dest_dir, dest_dir_old)
                 #
             except Exception: ## as e:
-                toolbox_utils.Logging().error('Failed to rename toolbox_data. ') # ...Error: ' + unicode(e))
-                QtGui.QMessageBox.warning(self, 'Warning', 'Failed to rename toolbox_data. ') # ...Error: ' + unicode(e))
+                toolbox_utils.Logging().error('Failed to rename plankton_toolbox_data. ') # ...Error: ' + unicode(e))
+                QtGui.QMessageBox.warning(self, 'Warning', 'Failed to rename plankton_toolbox_data. ') # ...Error: ' + unicode(e))
             #
             try:
                 # Extract from zip.

@@ -626,7 +626,7 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
                 if self._currentmethodstep_checkbox.isChecked():
                     currentmethodstep = unicode(self._selectmethodstep_list.currentText())
                 #
-                species_list_rows = self._current_sample_object.get_taxa_summary(summary_type = 'Counted taxa',
+                species_list_rows = self._current_sample_object.get_taxa_summary(summary_type = 'Counted per taxa',
                                                                                  most_counted_sorting = False,
                                                                                  method_step = currentmethodstep)
                 #
@@ -1466,16 +1466,19 @@ class LockTaxaListDialog(QtGui.QDialog):
  
     def _load_data(self):
         """ """
-        species_list_rows = self._current_sample_object.get_taxa_summary(summary_type = 'Counted taxa/sizes',
+        species_list_rows = self._current_sample_object.get_taxa_summary(summary_type = 'Counted per taxa/sizes',
                                                                          most_counted_sorting = False,
                                                                          method_step = self._current_method_step)
         #
         self._counting_species_model.clear()        
-        for species_list_row in species_list_rows:
-            item = QtGui.QStandardItem(species_list_row)
-            item.setCheckState(QtCore.Qt.Unchecked)
-            item.setCheckable(True)
-            self._counting_species_model.appendRow(item)
+        for species_list_row in species_list_rows[1:]:
+            parts = species_list_row.split(':')
+            part = parts[0].strip()
+            if part:
+                item = QtGui.QStandardItem(part)
+                item.setCheckState(QtCore.Qt.Unchecked)
+                item.setCheckable(True)
+                self._counting_species_model.appendRow(item)
              
     def _check_all_rows(self):
         """ """
@@ -1496,10 +1499,7 @@ class LockTaxaListDialog(QtGui.QDialog):
             if item.checkState() == QtCore.Qt.Checked:
                 selectedrow = unicode(item.text())
                 #
-                scientific_name = ''
                 size_class = ''
-#                 parts = selectedrow.split(':')
-#                 parts = parts[0].split('[')
                 parts = selectedrow.split('[')
                 scientific_full_name = parts[0].strip()
                 if len(parts) > 1:

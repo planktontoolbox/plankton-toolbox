@@ -49,7 +49,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
 
     def _load_available_parsers(self):
         """ """
-        self._parser_path = 'toolbox_data/parsers/'
+        self._parser_path = 'plankton_toolbox_data/parsers/'
         self._parser_list = []
         for parserpath in glob.glob(self._parser_path + '*.xlsx'):
             self._parser_list.append(os.path.basename(parserpath))
@@ -58,11 +58,11 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         """ """
         if len(self._parser_list) > 0:
             toolbox_utils.Logging().log('') # Empty line.
-            toolbox_utils.Logging().log('Available dataset parsers (located in "toolbox_data/parsers"):')
+            toolbox_utils.Logging().log('Available dataset parsers (located in "plankton_toolbox_data/parsers"):')
             for parserpath in self._parser_list:
                 toolbox_utils.Logging().log('- ' + os.path.basename(parserpath))
         else:
-            toolbox_utils.Logging().log('No dataset parsers are found in "/toolbox_data/parsers". ')
+            toolbox_utils.Logging().log('No dataset parsers are found in "/plankton_toolbox_data/parsers". ')
 
     def _create_content(self):
         """ """

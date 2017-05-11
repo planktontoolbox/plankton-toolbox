@@ -18,7 +18,7 @@ import plankton_core
 class PlanktonCounterManager(QtCore.QObject):
     """ """
     def __init__(self,
-                 dataset_dir_path = 'toolbox_data/plankton_counter/datasets',
+                 dataset_dir_path = 'plankton_toolbox_counter/datasets',
                  ):
         """ """
         QtCore.QObject.__init__(self)

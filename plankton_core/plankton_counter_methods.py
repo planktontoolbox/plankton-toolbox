@@ -15,9 +15,9 @@ import plankton_core
 class PlanktonCounterMethods():
     """ """
     def __init__(self,
-                 config_dir_path = 'toolbox_data/plankton_counter/config',
-                 methods_methods_dir_path = 'toolbox_data/plankton_counter/config/counting_methods',
-                 methods_species_lists_dir_path = 'toolbox_data/plankton_counter/config/counting_species_lists',
+                 config_dir_path = 'plankton_toolbox_counter/config',
+                 methods_methods_dir_path = 'plankton_toolbox_counter/config/counting_methods',
+                 methods_species_lists_dir_path = 'plankton_toolbox_counter/config/counting_species_lists',
                  ):
         """ """
         self._config_dir_path = config_dir_path
