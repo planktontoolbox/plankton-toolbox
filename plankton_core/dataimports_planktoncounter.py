@@ -178,6 +178,81 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
             if 'counting_method_step' in method_dict:
                 self._sample_method_dict[method_dict['counting_method_step']] = method_dict
 
+
+    
+    
+    
+    
+    
+    def read_excel_file(self, excel_file_path = None):
+        """ """
+        if excel_file_path == None:
+            raise UserWarning('Excel file is missing.')
+        #
+        dir_path = plankton_core.PlanktonCounterManager().get_dataset_dir_path()
+        #
+        if (not excel_file_path) or (not os.path.isfile(excel_file_path)):
+            raise UserWarning('Excel file does not exists.')
+        #
+        self._dataset_metadata = {}
+        self._sample_info = {}
+        self._sample_header = []
+        self._sample_rows = []
+        self._sample_method_dict = {}
+        
+        # Dataset metadata as <key>:<value>.
+#         try:
+#             tablefilereader = toolbox_utils.TableFileReader(
+#                     excel_file_name = excel_file_path, 
+#                     excel_sheet_name = 'dataset_metadata.txt',                
+#                     )
+#             # Merge header and rows. Create dict.
+#             dataset_metadata = [tablefilereader.header()] + tablefilereader.rows()
+#             for row in dataset_metadata:
+#                 if len(row) >= 2:
+#                     self._dataset_metadata[row[0].strip()] = row[1].strip()
+#         except:
+#             pass
+               
+        # Sample info as <key>:<value>. 
+        tablefilereader = toolbox_utils.TableFileReader(
+                    excel_file_name = excel_file_path, 
+                    excel_sheet_name = 'sample_info.txt',                 
+                    )
+        # Merge header and rows. Create dict from ':'-separated rows. 
+        sample_info = [tablefilereader.header()] + tablefilereader.rows()
+        for row in sample_info:
+            if len(row) >= 2:
+                self._sample_info[row[0].strip()] = row[1].strip()
+                
+        # Sample data on table format.
+        tablefilereader = toolbox_utils.TableFileReader(
+                    excel_file_name = excel_file_path, 
+                    excel_sheet_name = 'sample_data.txt', 
+                    )
+        self._sample_header = tablefilereader.header()
+        self._sample_rows = tablefilereader.rows()
+
+        # Sample method on table format.
+        tablefilereader = toolbox_utils.TableFileReader(
+                    excel_file_name = excel_file_path, 
+                    excel_sheet_name = 'counting_method.txt',                 
+                    )
+        self._sample_method_header = tablefilereader.header()
+        self._sample_method_rows = tablefilereader.rows()
+        # Create dictionary with method step as key.
+        self._sample_method_dict = {}
+        for row in self._sample_method_rows:
+            method_dict = dict(zip(self._sample_method_header, row))
+            if 'counting_method_step' in method_dict:
+                self._sample_method_dict[method_dict['counting_method_step']] = method_dict
+
+
+    
+    
+    
+    
+    
     def create_tree_dataset(self, dataset_top_node):    
         """ """
         # Add data to dataset node.
@@ -228,8 +303,11 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
 
             # Get info from sample_method and add to row_dict.
             if 'method_step' in row_dict:
-                method_dict = self._sample_method_dict[row_dict['method_step']]
-                row_dict.update(method_dict) 
+                if row_dict['method_step'] in self._sample_method_dict:
+                    method_dict = self._sample_method_dict[row_dict['method_step']]
+                    row_dict.update(method_dict) 
+                else:
+                    print('DEBUG: Key: "' + row_dict['method_step'] + '" not in sample_method_dict.')
 
             # Get info from row.
             for parsinginforow in self._parsing_info:

@@ -66,7 +66,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         tabWidget = QtGui.QTabWidget()
         tabWidget.addTab(self._content_select_datasets(), 'Select datasets')
         tabWidget.addTab(self._content_structure_screening(), 'Check structure')
-        tabWidget.addTab(self._content_codes_species_screening(), 'Check code lists and species')
+        tabWidget.addTab(self._content_codes_species_screening(), 'Check species') # 'Check code lists and species')
         tabWidget.addTab(self._content_check_column_values(), 'Check column values')
         tabWidget.addTab(self._content_plot_parameters(), 'Plot parameters')
         # Layout widgets.
@@ -335,8 +335,8 @@ class ScreeningActivity(activity_base.ActivityBase):
 #         introlabel_4 = utils_qt.RichTextQLabel()
 #         introlabel_4.setText(help_texts.HelpTexts().getText('ScreeningActivity_sizeclasses'))
         #
-        self._checkcodes_button = QtGui.QPushButton('Check\ncode lists')
-        self.connect(self._checkcodes_button, QtCore.SIGNAL('clicked()'), self._code_list_screening)                
+#         self._checkcodes_button = QtGui.QPushButton('Check\ncode lists')
+#         self.connect(self._checkcodes_button, QtCore.SIGNAL('clicked()'), self._code_list_screening)                
         self._checkspecies_button = QtGui.QPushButton('Check\nspecies')
         self.connect(self._checkspecies_button, QtCore.SIGNAL('clicked()'), self._species_screening) 
         self._checksizeclasses_button = QtGui.QPushButton('Check\nsize classes')
@@ -349,11 +349,11 @@ class ScreeningActivity(activity_base.ActivityBase):
         gridrow = 0
         label1 = QtGui.QLabel('Result:')
         form1.addWidget(label1, gridrow, 1, 1, 1)
-        gridrow += 1
-        form1.addWidget(self._checkcodes_button, gridrow, 0, 1, 1)
-        form1.addWidget(self._codesspeciesresult_list, gridrow, 1, 30, 1)
+#         gridrow += 1
+#         form1.addWidget(self._checkcodes_button, gridrow, 0, 1, 1)
         gridrow += 1
         form1.addWidget(self._checkspecies_button, gridrow, 0, 1, 1)
+        form1.addWidget(self._codesspeciesresult_list, gridrow, 1, 30, 1)
         gridrow += 1
         form1.addWidget(self._checksizeclasses_button, gridrow, 0, 1, 1)
         #
@@ -368,44 +368,44 @@ class ScreeningActivity(activity_base.ActivityBase):
         #
         return widget
 
-    def _code_list_screening(self):
-        """ """
-        # Screening results is also shown in the toolbox log.
-        tool_manager.ToolManager().show_tool_by_name('Toolbox logging')
-        #
-        self._codesspeciesresult_list.clear()
-        #
-        try:
-            toolbox_utils.Logging().log('') # Empty line.
-            toolbox_utils.Logging().log('Code list screening started...')
-            toolbox_utils.Logging().start_accumulated_logging()
-            self._write_to_status_bar('Code list screening in progress...')
-            # Perform screening.
-            codetypes_set = plankton_core.ScreeningManager().code_list_screening(toolbox_datasets.ToolboxDatasets().get_datasets())
-        finally:
-            # Log in result window.
-            self._codesspeciesresult_list.append('Screening was done on these code types: ' + 
-                                              unicode(sorted(codetypes_set)))
-            self._codesspeciesresult_list.append('')
-            #
-            inforows = toolbox_utils.Logging().get_all_info_rows()
-            if inforows:
-                for row in inforows:
-                    self._codesspeciesresult_list.append('- ' + row)                
-            warningrows = toolbox_utils.Logging().getAllWarnings()
-            if warningrows:
-                for row in warningrows:
-                    self._codesspeciesresult_list.append('- ' + row)
-            errorrows = toolbox_utils.Logging().get_all_errors()
-            if errorrows:
-                for row in errorrows:
-                    self._codesspeciesresult_list.append('- ' + row)
-            # Also add to the logging tool.
-            toolbox_utils.Logging().log_all_accumulated_rows()
-            toolbox_utils.Logging().log('Screening was done on these code types: ' + 
-                                    unicode(sorted(codetypes_set)))
-            toolbox_utils.Logging().log('Code list screening done.')
-            self._write_to_status_bar('')
+#     def _code_list_screening(self):
+#         """ """
+#         # Screening results is also shown in the toolbox log.
+#         tool_manager.ToolManager().show_tool_by_name('Toolbox logging')
+#         #
+#         self._codesspeciesresult_list.clear()
+#         #
+#         try:
+#             toolbox_utils.Logging().log('') # Empty line.
+#             toolbox_utils.Logging().log('Code list screening started...')
+#             toolbox_utils.Logging().start_accumulated_logging()
+#             self._write_to_status_bar('Code list screening in progress...')
+#             # Perform screening.
+#             codetypes_set = plankton_core.ScreeningManager().code_list_screening(toolbox_datasets.ToolboxDatasets().get_datasets())
+#         finally:
+#             # Log in result window.
+#             self._codesspeciesresult_list.append('Screening was done on these code types: ' + 
+#                                               unicode(sorted(codetypes_set)))
+#             self._codesspeciesresult_list.append('')
+#             #
+#             inforows = toolbox_utils.Logging().get_all_info_rows()
+#             if inforows:
+#                 for row in inforows:
+#                     self._codesspeciesresult_list.append('- ' + row)                
+#             warningrows = toolbox_utils.Logging().getAllWarnings()
+#             if warningrows:
+#                 for row in warningrows:
+#                     self._codesspeciesresult_list.append('- ' + row)
+#             errorrows = toolbox_utils.Logging().get_all_errors()
+#             if errorrows:
+#                 for row in errorrows:
+#                     self._codesspeciesresult_list.append('- ' + row)
+#             # Also add to the logging tool.
+#             toolbox_utils.Logging().log_all_accumulated_rows()
+#             toolbox_utils.Logging().log('Screening was done on these code types: ' + 
+#                                     unicode(sorted(codetypes_set)))
+#             toolbox_utils.Logging().log('Code list screening done.')
+#             self._write_to_status_bar('')
 
     def _species_screening(self):
         """ """

@@ -100,6 +100,11 @@ class PlanktonCounterManager(QtCore.QObject):
 
     def create_sample(self, dataset_name, sample_name):
         """ Creates a new sample (= a new directory in the dataset directory). """
+        if not dataset_name:
+            dataset_name = 'dummy-dataset'
+        if not sample_name:
+            raise UserWarning('Can\'t create sample. Sample name is missing.')
+        #
         path = os.path.join(self._dataset_dir_path, dataset_name, sample_name)
         # Check if exists.
         if (path) and (not os.path.exists(path)):
@@ -249,6 +254,9 @@ class PlanktonCounterSample():
                                ]
 
         # Create file writers.
+        if not self._dataset_name:
+            self._dataset_name = 'dummy-dataset'
+        #
         path = os.path.join(self._dataset_dir_path, self._dataset_name, self._sample_name)
         self._tablefilewriter_sample_data = toolbox_utils.TableFileWriter(
             file_path = path,

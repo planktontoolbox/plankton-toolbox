@@ -325,6 +325,15 @@ class Species(object):
                 toname = row[1].strip()
                 fromname = row[0].strip()
                 #
+                
+                
+                # Check if from name is a valid name.
+                if fromname in self._taxa_lookup:
+                    toolbox_utils.Logging().warning('Invalid translate (valid taxa in first column): ' + fromname + '   (Source: ' + excel_file_name + ')')
+                    continue
+                
+                
+                #
                 if toname in self._taxa_lookup:
                     taxon = self._taxa_lookup[toname]
                     if not 'synonyms' in self._taxa[toname]:
@@ -335,7 +344,7 @@ class Species(object):
                 else:
                     toolbox_utils.Logging().warning('Scientific name is missing: ' + toname + '   (Source: ' + excel_file_name + ')')
             except:
-                toolbox_utils.Logging().warning('Failed when loading synonym. File:' + excel_file_name + '  From taxon: ' + toname)
+                toolbox_utils.Logging().warning('Failed when loading translates/synonyms. File:' + excel_file_name + '  From taxon: ' + toname)
                     
     def _load_harmful(self, excel_file_name):
         """ Adds info about harmfulness to the species objects. """
@@ -351,13 +360,13 @@ class Species(object):
                 accepted_name_usage = row_dict.get('accepted_name_usage', None).strip() # Valid scientific name. 
                 #
                 if scientific_name and (scientific_name in self._taxa_lookup):
-                    print('Harmful: scientific_name: ' + scientific_name)
+                    # print('Harmful: scientific_name: ' + scientific_name)
                     taxon = self._taxa_lookup[scientific_name]
                     taxon['harmful_name'] = scientific_name
                     taxon['harmful'] = True
                 if not (scientific_name == accepted_name_usage): 
                     if accepted_name_usage and (accepted_name_usage in self._taxa_lookup):
-                        print('Harmful: accepted_name_usage: ' + accepted_name_usage + ' ( scientific_name: ' + scientific_name + ')')
+                        # print('Harmful: accepted_name_usage: ' + accepted_name_usage + ' ( scientific_name: ' + scientific_name + ')')
                         taxon = self._taxa_lookup[accepted_name_usage]
                         taxon['harmful_name'] = accepted_name_usage
                         taxon['harmful'] = True 
