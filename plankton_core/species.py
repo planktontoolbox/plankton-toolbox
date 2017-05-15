@@ -351,13 +351,13 @@ class Species(object):
                 accepted_name_usage = row_dict.get('accepted_name_usage', None).strip() # Valid scientific name. 
                 #
                 if scientific_name and (scientific_name in self._taxa_lookup):
-                    print('Harmful: scientific_name: ' + scientific_name)
+                    # print('Harmful: scientific_name: ' + scientific_name)
                     taxon = self._taxa_lookup[scientific_name]
                     taxon['harmful_name'] = scientific_name
                     taxon['harmful'] = True
                 if not (scientific_name == accepted_name_usage): 
                     if accepted_name_usage and (accepted_name_usage in self._taxa_lookup):
-                        print('Harmful: accepted_name_usage: ' + accepted_name_usage + ' ( scientific_name: ' + scientific_name + ')')
+                        # print('Harmful: accepted_name_usage: ' + accepted_name_usage + ' ( scientific_name: ' + scientific_name + ')')
                         taxon = self._taxa_lookup[accepted_name_usage]
                         taxon['harmful_name'] = accepted_name_usage
                         taxon['harmful'] = True 

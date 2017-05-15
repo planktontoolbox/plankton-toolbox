@@ -82,7 +82,7 @@ class PlanktonCounterActivity(activity_base.ActivityBase):
         self._refresh_button.clicked.connect(self._emit_change_notification)
         self._exportimportsamples_button = QtGui.QPushButton('Export/import samples (.xlsx)...')
         self._exportimportsamples_button.clicked.connect(self._export_import_samples)
-        self._backup_button = QtGui.QPushButton('Export/import backup (.zip)...')
+        self._backup_button = QtGui.QPushButton('Export/import toolbox data (.zip)...')
         self._backup_button.clicked.connect(self._backup_export_import)
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
@@ -474,7 +474,7 @@ class BackupExportImportDialog(QtGui.QDialog):
     def __init__(self, parentwidget):
         """ """
         super(BackupExportImportDialog, self).__init__(parentwidget)
-        self.setWindowTitle("Backup export/import")
+        self.setWindowTitle("Plakton toolbox data export/import")
         self._parentwidget = parentwidget
         self.setLayout(self._content())
         self.setMinimumSize(600, 200)
@@ -557,9 +557,13 @@ class BackupExportImportDialog(QtGui.QDialog):
             with zipfile.ZipFile(backup_dir_file_name, 'w', zipfile.ZIP_DEFLATED) as zip_file:
                 for root, dirs, files in os.walk(source_dir):
                     for file_name in files:
-                        path_file_name = os.path.join(root, file_name)
-                        zip_file_name = os.path.join('plankton_toolbox_data', path_file_name[source_dir_len:])
-                        zip_file.write(path_file_name, zip_file_name)
+                            
+                        print('DEBUG: ' + file_name)
+                            
+                        if (not file_name.startswith('.')) and (not file_name.startswith('~')):                        
+                            path_file_name = os.path.join(root, file_name)
+                            zip_file_name = os.path.join('plankton_toolbox_data', path_file_name[source_dir_len:])
+                            zip_file.write(path_file_name, zip_file_name)
         #
         except Exception as e:
             toolbox_utils.Logging().error('Failed to backup "plankton_toolbox_data". Error: ' + unicode(e))
@@ -631,8 +635,8 @@ class BackupExportImportDialog(QtGui.QDialog):
                     os.rename(dest_dir, dest_dir_old)
                 #
             except Exception: ## as e:
-                toolbox_utils.Logging().error('Failed to rename plankton_toolbox_data. ') # ...Error: ' + unicode(e))
-                QtGui.QMessageBox.warning(self, 'Warning', 'Failed to rename plankton_toolbox_data. ') # ...Error: ' + unicode(e))
+                toolbox_utils.Logging().error('Failed to rename plankton_toolbox_data. Check if files are locked by Excel. ') # ...Error: ' + unicode(e))
+                QtGui.QMessageBox.warning(self, 'Warning', 'Failed to rename plankton_toolbox_data.  Check if files are locked by Excel. ') # ...Error: ' + unicode(e))
             #
             try:
                 # Extract from zip.
@@ -645,8 +649,8 @@ class BackupExportImportDialog(QtGui.QDialog):
                 
             #
             except Exception as e:
-                toolbox_utils.Logging().error('Failed to import from backup.') # ...Error: ' + unicode(e))
-                QtGui.QMessageBox.warning(self, 'Warning', 'Failed to import from backup.') # ...Error: ' + unicode(e))
+                toolbox_utils.Logging().error('Failed to import from backup.  Check if files are locked by Excel. ') # ...Error: ' + unicode(e))
+                QtGui.QMessageBox.warning(self, 'Warning', 'Failed to import from backup.  Check if files are locked by Excel. ') # ...Error: ' + unicode(e))
             #
             self._parentwidget._emit_change_notification()
             #
@@ -823,8 +827,14 @@ class ExportImportSamplesDialog(QtGui.QDialog):
                     # Export path and file name.
                     export_target_dir = unicode(self._browse_export_target_dir.text())
                     export_target_filename = samplename + '.xlsx'
-            #         filepathname = os.path.join(exporttargetdir, exporttargetfilename)
-                    #
+                    filepathname = os.path.join(export_target_dir, export_target_filename)
+                    # Check if it already exists.
+                    if os.path.isfile(filepathname):  
+                        box_result =  QtGui.QMessageBox.warning(self, 'Warning', 
+                                                     'Excel file already exists. Do you want to replace it?', 
+                                                     QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Ok)
+                        if box_result != QtGui.QMessageBox.Ok:
+                            continue
                     # Create sample object.
                     dir_path = plankton_core.PlanktonCounterManager().get_dataset_dir_path()
                     sample_object = plankton_core.PlanktonCounterSample(dir_path, datasetname, samplename)
