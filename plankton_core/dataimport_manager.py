@@ -29,6 +29,9 @@ class DataImportManager(object):
         if import_format == 'PlanktonCounter':
             self._import_plankton_counter_sample(datasettopnode, dataset_name, sample_name)
         #        
+        if import_format == 'PlanktonCounterExcel':
+            self._import_plankton_counter_sample_from_excel(datasettopnode, filename)
+        #        
         if datasettopnode:
             plankton_core.Datasets().add_dataset(datasettopnode)
         #
@@ -63,6 +66,17 @@ class DataImportManager(object):
         # Create dataset from file content.
         counter = plankton_core.ImportPlanktonCounter()
         counter.read_file(dataset_name, sample_name)
+        counter.create_tree_dataset(dataset_top_node)
+
+        # Add export info to dataset.
+        columnsinfo = counter.create_export_table_info()
+        dataset_top_node.set_export_table_columns(columnsinfo)
+
+    def _import_plankton_counter_sample_from_excel(self, dataset_top_node, excel_file_path):
+        """ """
+        # Create dataset from file content.
+        counter = plankton_core.ImportPlanktonCounter()
+        counter.read_excel_file(excel_file_path)
         counter.create_tree_dataset(dataset_top_node)
 
         # Add export info to dataset.

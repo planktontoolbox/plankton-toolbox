@@ -27,7 +27,7 @@ class DevTestTool(tool_base.ToolBase):
         # Settings for the DevTestTool. NOTE: Max 4 is supported.
         self._dev_settings = [
             {   'button_text': 'Phytoplankton',
-                'import_parser_path': 'toolbox_data/parsers/',
+                'import_parser_path': 'plankton_toolbox_data/parsers/',
                 'import_parser': 'sharkweb_phytoplankton_parser.xlsx',
                 'import_column': 'Sharkweb english',
                 'export_column': 'Export english',
@@ -39,7 +39,7 @@ class DevTestTool(tool_base.ToolBase):
 
             },
             {   'button_text': 'Zooplankton',
-                'import_parser_path': 'toolbox_data/parsers/',
+                'import_parser_path': 'plankton_toolbox_data/parsers/',
                 'import_parser': 'sharkweb_zooplankton_parser.xlsx',
                 'import_column': 'SHARKweb english',
                 'export_column': 'Export english',
@@ -51,7 +51,7 @@ class DevTestTool(tool_base.ToolBase):
 
             },
 #             {   'button_text': 'SHARKweb_ZP_2010-2012_en_SHORT',
-#                 'import_parser_path': 'toolbox_data/parsers/',
+#                 'import_parser_path': 'plankton_toolbox_data/parsers/',
 #                 'import_parser': 'SHARKweb_Zooplankton_parser.xlsx',
 #                 'import_column': 'SHARKweb english',
 #                 'export_column': 'Export english',
@@ -63,7 +63,7 @@ class DevTestTool(tool_base.ToolBase):
 # 
 #             },
 #             {   'button_text': 'SHARKweb_ZP_2010-2012_sv_SHORT',
-#                 'import_parser_path': 'toolbox_data/parsers/',
+#                 'import_parser_path': 'plankton_toolbox_data/parsers/',
 #                 'import_parser': 'SHARKweb_Zooplankton_parser.xlsx',
 #                 'import_column': 'SHARKweb swedish',
 #                 'export_column': 'Export swedish',
@@ -75,7 +75,7 @@ class DevTestTool(tool_base.ToolBase):
 # 
 #             },
 #             {   'button_text': 'PTBX_testdata',
-#                 'import_parser_path': 'toolbox_data/parsers/',
+#                 'import_parser_path': 'plankton_toolbox_data/parsers/',
 #                 'import_parser': 'PTBX_testdata_parser.xlsx',
 #                 'import_column': 'Import format',
 #                 'export_column': 'Export format',

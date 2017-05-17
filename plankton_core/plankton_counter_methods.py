@@ -15,9 +15,9 @@ import plankton_core
 class PlanktonCounterMethods():
     """ """
     def __init__(self,
-                 config_dir_path = 'toolbox_data/plankton_counter/config',
-                 methods_methods_dir_path = 'toolbox_data/plankton_counter/config/counting_methods',
-                 methods_species_lists_dir_path = 'toolbox_data/plankton_counter/config/counting_species_lists',
+                 config_dir_path = 'plankton_toolbox_counter/config',
+                 methods_methods_dir_path = 'plankton_toolbox_counter/config/counting_methods',
+                 methods_species_lists_dir_path = 'plankton_toolbox_counter/config/counting_species_lists',
                  ):
         """ """
         self._config_dir_path = config_dir_path
@@ -80,7 +80,8 @@ class PlanktonCounterMethods():
         # Use all prealoaded species.
         if counting_species_file_name == '<all species>':
             species_list_of_list = []
-            for key in sorted(plankton_core.Species().get_taxa_lookup_dict().keys()):
+#             for key in sorted(plankton_core.Species().get_taxa_lookup_dict().keys()):
+            for key in sorted(plankton_core.Species().get_taxa_dict().keys()):
                 species_list_of_list.append([key])
             return ['scientific_name'], species_list_of_list
                 
@@ -159,6 +160,7 @@ class PlanktonCounterMethod():
                'counting_method',
                'counting_method_step',
 #                'method_step_description',
+               'qualitative_quantitative',
                'sampled_volume_ml',
                'preservative',
                'preservative_volume_ml',
@@ -234,7 +236,8 @@ class PlanktonCounterMethod():
                     if key in self._method_header:
                         method_dict[key] = field_dict[key]
             # Update all rows with filds connected to the whole method.
-            for key in ['sampled_volume_ml', 
+            for key in ['qualitative_quantitative',
+                        'sampled_volume_ml', 
                         'preservative',
                         'preservative_volume_ml',
                         'counted_volume_ml',
@@ -319,7 +322,8 @@ class PlanktonCounterMethod():
                         method_dict[key] = field_dict[key]
             # Update all rows with fields connected to the  method.
             if method_dict['counting_method'] == method_name:
-                for key in ['sampled_volume_ml', 
+                for key in ['qualitative_quantitative',
+                            'sampled_volume_ml', 
                             'preservative',
                             'preservative_volume_ml',
                             'counted_volume_ml',
@@ -337,6 +341,9 @@ class PlanktonCounterMethod():
         #
         try:
             # From analysis method.
+            
+            # TODO: 'qualitative_quantitative'.
+            
             sampledvolume_ml = fields_dict.get('sampled_volume_ml', 0.0).replace(',', '.')
             preservative_volume_ml = fields_dict.get('preservative_volume_ml', 0.0).replace(',', '.')
             counted_volume_ml = fields_dict.get('counted_volume_ml', 0.0).replace(',', '.')

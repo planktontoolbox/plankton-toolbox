@@ -31,7 +31,7 @@ class Species(object):
     
     """
     def __init__(self,
-                 species_directory_path = 'toolbox_data/species/'):
+                 species_directory_path = 'plankton_toolbox_data/species/'):
         # Parameters.
         self._species_directory_path = species_directory_path
         # Taxa files.
@@ -270,11 +270,7 @@ class Species(object):
 #                             toolbox_utils.Logging().warning('Size class is missing: ' + scientificname + ' Size: ' + sizeclass + '   (Source: ' + excel_file_name + ')')
                     else:
                         # No sizeclass in indata file. Put on species level.                        
-                        if taxon.get('trophic_type', ''):
-#                             if scientificname == taxon['scientific_name']:
-#                                 toolbox_utils.Logging().warning('Same taxon on multiple rows: ' + scientificname + '   (Source: ' + excel_file_name + ')')
-                            #
-                            taxon['trophic_type'] = trophictype
+                        taxon['trophic_type'] = trophictype
                 else:
 #                     toolbox_utils.Logging().warning('Scientific name is missing: ' + scientificname + '   (Source: ' + excel_file_name + ')')
                     pass
@@ -329,6 +325,15 @@ class Species(object):
                 toname = row[1].strip()
                 fromname = row[0].strip()
                 #
+                
+                
+                # Check if from name is a valid name.
+                if fromname in self._taxa_lookup:
+                    toolbox_utils.Logging().warning('Invalid translate (valid taxa in first column): ' + fromname + '   (Source: ' + excel_file_name + ')')
+                    continue
+                
+                
+                #
                 if toname in self._taxa_lookup:
                     taxon = self._taxa_lookup[toname]
                     if not 'synonyms' in self._taxa[toname]:
@@ -339,7 +344,7 @@ class Species(object):
                 else:
                     toolbox_utils.Logging().warning('Scientific name is missing: ' + toname + '   (Source: ' + excel_file_name + ')')
             except:
-                toolbox_utils.Logging().warning('Failed when loading synonym. File:' + excel_file_name + '  From taxon: ' + toname)
+                toolbox_utils.Logging().warning('Failed when loading translates/synonyms. File:' + excel_file_name + '  From taxon: ' + toname)
                     
     def _load_harmful(self, excel_file_name):
         """ Adds info about harmfulness to the species objects. """
@@ -355,13 +360,13 @@ class Species(object):
                 accepted_name_usage = row_dict.get('accepted_name_usage', None).strip() # Valid scientific name. 
                 #
                 if scientific_name and (scientific_name in self._taxa_lookup):
-                    print('Harmful: scientific_name: ' + scientific_name)
+                    # print('Harmful: scientific_name: ' + scientific_name)
                     taxon = self._taxa_lookup[scientific_name]
                     taxon['harmful_name'] = scientific_name
                     taxon['harmful'] = True
                 if not (scientific_name == accepted_name_usage): 
                     if accepted_name_usage and (accepted_name_usage in self._taxa_lookup):
-                        print('Harmful: accepted_name_usage: ' + accepted_name_usage + ' ( scientific_name: ' + scientific_name + ')')
+                        # print('Harmful: accepted_name_usage: ' + accepted_name_usage + ' ( scientific_name: ' + scientific_name + ')')
                         taxon = self._taxa_lookup[accepted_name_usage]
                         taxon['harmful_name'] = accepted_name_usage
                         taxon['harmful'] = True 
@@ -521,17 +526,18 @@ class Species(object):
         #
         # Trophic_type is set on sizeclass level. Should also be set on species level  
         # if all sizeclasses have the same trophic_type.
-        for taxon in self._taxa.values():
-            try:
-                trophic_type_set = set() 
-                if 'size_classes' in taxon:
-                    for sizeclass in taxon['size_classes']:
-                        trophic_type_set.add(sizeclass.get('bvol_trophic_type', ''))
-                if len(trophic_type_set) == 1:
-                    taxon['bvol_trophic_type'] = list(trophic_type_set)[0]
-
-            except:
-                toolbox_utils.Logging().warning('Failed when loading BVOL data (the trophic type part).')
+# Use separate file for trophic type.
+#         for taxon in self._taxa.values():
+#             try:
+#                 trophic_type_set = set() 
+#                 if 'size_classes' in taxon:
+#                     for sizeclass in taxon['size_classes']:
+#                         trophic_type_set.add(sizeclass.get('bvol_trophic_type', ''))
+#                 if len(trophic_type_set) == 1:
+#                     taxon['bvol_trophic_type'] = list(trophic_type_set)[0]
+# 
+#             except:
+#                 toolbox_utils.Logging().warning('Failed when loading BVOL data (the trophic type part).')
 
     def get_plankton_group_from_taxon_name(self, scientific_name):
         """ This is another way to organize organisms into groups. Other than the traditional classification. """

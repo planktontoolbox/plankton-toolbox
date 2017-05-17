@@ -17,7 +17,7 @@ class CreateReportSpecies(object):
         
     def create_report(self, datasets, result_table,
                       aggregate_rows = False,
-                      net_samples = False):
+                      abundance_class_samples = False):
         """
         Note:
         - Datasets must be of the format used in the modules dataset_tree and datasets_tree. 

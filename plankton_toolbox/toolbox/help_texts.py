@@ -68,7 +68,7 @@ class HelpTexts(object):
 
         <h4>Preloaded data</h4>
         <p>
-        To run the Plankton Toolbox there should be a folder named <b>toolbox_data</b> in the 
+        To run the Plankton Toolbox there should be a folder named <b>plankton_toolbox_data</b> in the 
         same folder as the executable file. It contains species lists, parsers (used for dataset imports)
         and code-lists for screening. These files can be modified by the user and new files can be added 
         if the default set of files can't be used.

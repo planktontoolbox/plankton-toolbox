@@ -153,7 +153,7 @@ class CreateReportCounted(object):
         scientific_authority = plankton_core.Species().get_taxon_value(scientific_name, 'author')
         row_dict['scientific_authority'] = scientific_authority
         harmful = plankton_core.Species().get_taxon_value(scientific_name, 'harmful')
-        row_dict['harmful'] = harmful
+        row_dict['harmful'] = u'X' if harmful else u''
 #         #
 #         countedunits = variablenode.get_data('units')
 #         coeff = variablenode.get_data('coefficient')

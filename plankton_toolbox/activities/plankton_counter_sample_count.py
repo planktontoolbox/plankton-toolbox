@@ -27,13 +27,15 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         self._current_sample_method = None
         self._current_sample_method_step_fields = {}
         self._temporary_disable_update = False
-        self._net_sampler = False
+#         self._abundance_class_sampler = False
         #
         super(PlanktonCounterSampleCount, self).__init__()
         #
         self.setLayout(self._create_content_species_count())
         #
-        self.load_data()
+        # Log available parsers when GUI setup has finished.
+        QtCore.QTimer.singleShot(200, self.load_data)
+#         self.load_data()
 
     def load_data(self):
         """ Called at startup. """
@@ -48,11 +50,11 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         sample_info_dict = self._current_sample_object.get_sample_info()
         methodstep = sample_info_dict.get('last_used_method_step', '')
         self.update_method_step(methodstep)
-        # NET. Conted as abundance classes. 
-        if sample_info_dict.get('sampler_type_code', '') == 'NET (Plankton net)':
-            self._net_sampler = True
-        else:
-            self._net_sampler = False
+#         # NET. Conted as abundance classes. 
+#         if sample_info_dict.get('sampler_type_code', '') == 'NET (Plankton net)':
+#             self._abundance_class_sampler = True
+#         else:
+#             self._abundance_class_sampler = False
         # Summary.
         self._update_summary()
         self._disable_counting_buttons()
@@ -76,7 +78,6 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
  
     def _create_content_species_count(self):
         """ """
-        # TODO: ######################################################################################
         # Column 1: Counting.
         # - Method steps.
         self._selectmethodstep_list = QtGui.QComboBox(self)
@@ -128,9 +129,9 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         self._counted_sub100_button = KeyPressQPushButton('-100', self)
         self._counted_clear_button.setMaximumWidth(45)
         self._counted_add1_button.setMaximumWidth(35)
-        self._counted_add1_button.setToolTip('Shortcut: Space bar')
+        self._counted_add1_button.setToolTip('Shortcut: Space bar or +')
         self._counted_sub1_button.setMaximumWidth(35)
-        self._counted_sub1_button.setToolTip('Shortcut: Backspace')
+        self._counted_sub1_button.setToolTip('Shortcut: Backspace or -')
         self._counted_add10_button.setMaximumWidth(40)
         self._counted_sub10_button.setMaximumWidth(40)
         self._counted_add100_button.setMaximumWidth(45)
@@ -162,11 +163,11 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         self._counted_class3_button.clicked.connect(self._class_3)
         self._counted_class4_button.clicked.connect(self._class_4)
         self._counted_class5_button.clicked.connect(self._class_5)
+        # Comments.
+        self._variable_comment_edit = QtGui.QLineEdit()
         # Dummy button used to catch key press events.
         self._resumecounting_button = KeyPressQPushButton('Resume counting', self) 
         self._resumecounting_button.setMinimumHeight(30)
-        # Comments.
-        self._variable_comment_edit = QtGui.QLineEdit()
 #         self._variable_comment_edit.textChanged.connect(self._comment_changed)
         self._variable_comment_edit.textEdited.connect(self._comment_changed)
         # Net sample. Abindance class 1.5.
@@ -211,7 +212,6 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         self._summary_listview.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
         self._summary_listview.setStyleSheet("QListWidget::item:hover{background-color:#cccccc;}")
         self._summary_listview.itemSelectionChanged.connect(self._selected_species_in_summary_changed)
-  
         self._mostcountedsorted_checkbox = QtGui.QCheckBox('Sort on most counted')
         self._mostcountedsorted_checkbox.setChecked(False)
         self._mostcountedsorted_checkbox.stateChanged.connect(self._update_summary) 
@@ -223,7 +223,26 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         self._deletespecieslists_button = KeyPressQPushButton('Delete counting species lists...', self) 
         self._deletespecieslists_button.clicked.connect(self._delete_species_lists)
         #
-        # TODO: ######################################################################################
+        #
+        # Large text.        
+        bigboldfont = QtGui.QFont('SansSerif', 12, QtGui.QFont.Bold)
+        bigfont = QtGui.QFont('SansSerif', 12)
+        #
+        self._selectmethodstep_list.setFont(bigfont)
+        self._countareatype_edit.setFont(bigfont)
+        self._countareanumber_edit.setFont(bigfont)
+        #
+        self._scientific_name_edit.setFont(bigboldfont)
+        self._scientific_full_name_edit.setFont(bigfont)
+        self._speciessizeclass_list.setFont(bigboldfont)
+        self._countedunits_edit.setFont(bigboldfont)
+        self._abundance_class_list.setFont(bigboldfont)
+        self._summary_listview.setFont(bigfont)
+        self._species_tableview.setFont(bigfont)
+        #
+        self._speciesfilter_edit.setFont(bigboldfont)
+        
+        
         # Layout. Column 1A. Methods.
         countgrid = QtGui.QGridLayout()
         gridrow = 0
@@ -295,7 +314,7 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         #        
         # Layout. Column 1E. Abundance classes. 
         gridrow += 1
-        countgrid.addWidget(utils_qt.RightAlignedQLabel('Abundance class:'), gridrow, 0, 1, 1)
+        countgrid.addWidget(utils_qt.RightAlignedQLabel('Qualitative:'), gridrow, 0, 1, 1)
         countgrid.addWidget(self._abundance_class_list, gridrow, 1, 1, 1)
         abuundansclassbuttons_hbox = QtGui.QHBoxLayout()
         abuundansclassbuttons_hbox.addWidget(self._counted_class1_button)
@@ -308,8 +327,6 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         countgrid.addLayout(abuundansclassbuttons_hbox, gridrow, 2, 1, 5)
         gridrow += 1
         countgrid.addWidget(self._resumecounting_button, gridrow, 1, 1, 6)
-        gridrow += 1
-        countgrid.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 1) # Add space.
         gridrow += 1
         countgrid.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 1) # Add space.
         gridrow += 1
@@ -376,7 +393,6 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         #
         return layout
      
-    # TODO: ######################################################################################
     #===== Methods connected to widgets. =====
     
     def _selected_species_changed(self, new):
@@ -421,9 +437,18 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         """ """
         self._update_scientific_full_name()
     
-    def _counted_value_changed(self, value):
+    def _counted_value_changed(self, value): # TODO:
         """ """
+        self._disable_counting_buttons()
+        # Reset qualitative counting if it was used before.
+        value = self._countedunits_edit.value()
+        if value > 0:
+            if self._abundance_class_list.currentIndex() > 0:
+                self._abundance_class_list.setCurrentIndex(0)
+        # Quantitative.
         self._update_sample_row()
+        #
+        self._enable_counting_buttons()
          
     def _counted_clear(self, value):
         """ """
@@ -459,13 +484,8 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
  
     def _update_summary(self):
         """ """
-        summarytype = 'Counted taxa'
-        if self._summarytype_list.currentText() == 'Counted per taxa':
-            summarytype = 'Counted species report'
-        elif self._summarytype_list.currentText() == 'Counted per taxa/sizes':
-            summarytype = 'Counted taxa/sizes report'
-        elif self._summarytype_list.currentText() == 'Counted per classes':
-            summarytype = 'Counted per class report'
+        summarytype = 'Counted per taxa/sizes'
+        summarytype = self._summarytype_list.currentText()
         mostcountedsorting = False
         if self._mostcountedsorted_checkbox.isChecked():
             mostcountedsorting = True
@@ -484,9 +504,18 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         """ """
         self._update_sample_row()
     
-    def _abundance_class_changed(self):
+    def _abundance_class_changed(self): # TODO:
         """ """
-        self._update_sample_row()
+        self._disable_counting_buttons()
+        # Reset quantitative counting if it was used before.
+        currentIndex = self._abundance_class_list.currentIndex()
+        if currentIndex > 0:
+            if self._countedunits_edit.value() > 0:
+                self._countedunits_edit.setValue(0)
+        # Qualitative.
+        self._update_abundance_class_sample_row()
+        #
+        self._enable_counting_buttons()
     
     def _selected_species_list_changed(self):
         """ """
@@ -546,7 +575,7 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
             text_row = ''
         #
         text_row_parts = text_row.split(':')
-        text_row_parts = text_row_parts[0].split('[')
+        text_row_parts = text_row_parts[0].replace(']', '[').split('[') # Maybe dirty, but...
         scientific_full_name = text_row_parts[0].strip()
         if len(text_row_parts) > 1:
             size_class = text_row_parts[1].strip().strip(']')
@@ -597,7 +626,7 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
                 if self._currentmethodstep_checkbox.isChecked():
                     currentmethodstep = unicode(self._selectmethodstep_list.currentText())
                 #
-                species_list_rows = self._current_sample_object.get_taxa_summary(summary_type = 'Counted taxa',
+                species_list_rows = self._current_sample_object.get_taxa_summary(summary_type = 'Counted per taxa',
                                                                                  most_counted_sorting = False,
                                                                                  method_step = currentmethodstep)
                 #
@@ -622,22 +651,17 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         self._update_selected_specieslist(None)
         
 
-    # TODO: ######################################################################################
-
     def _disable_counting_buttons(self):
         """ """
+        method_type = self._current_sample_method_step_fields.get('qualitative_quantitative', '')
+        #
         self._countedunits_edit.setEnabled(False)
-        self._resumecounting_button.setEnabled(False)
         self._counted_add1_button.setEnabled(False)
         self._counted_sub1_button.setEnabled(False)
         self._counted_add10_button.setEnabled(False)
         self._counted_sub10_button.setEnabled(False)
         self._counted_add100_button.setEnabled(False)
         self._counted_sub100_button.setEnabled(False)
-        if self._net_sampler:
-            self._counted_clear_button.setEnabled(False)
-        else:
-            self._counted_clear_button.setEnabled(True)
         #
         self._abundance_class_list.setEnabled(False)
         self._counted_class1_button.setEnabled(False)
@@ -645,31 +669,39 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         self._counted_class3_button.setEnabled(False)
         self._counted_class4_button.setEnabled(False)
         self._counted_class5_button.setEnabled(False)
-        if self._net_sampler:
+        #
+        if method_type in ['', 'Quantitative', 'Quantitative and qualitative']:
+            self._counted_clear_button.setEnabled(False)
+        else:
+            self._counted_clear_button.setEnabled(True)
+        if method_type in ['Qualitative', 'Quantitative and qualitative']:
             self._counted_class_clear_button.setEnabled(True)
         else:
             self._counted_class_clear_button.setEnabled(False)
     
     def _enable_counting_buttons(self):
         """ """
-        if not self._net_sampler:
-            self._countedunits_edit.setEnabled(True)
-            self._resumecounting_button.setEnabled(True)
-            self._counted_add1_button.setEnabled(True)
-            self._counted_sub1_button.setEnabled(True)
-            self._counted_add10_button.setEnabled(True)
-            self._counted_sub10_button.setEnabled(True)
-            self._counted_add100_button.setEnabled(True)
-            self._counted_sub100_button.setEnabled(True)
-            self._counted_clear_button.setEnabled(True)
-        else: # Net sample.
-            self._abundance_class_list.setEnabled(True)
-            self._counted_class1_button.setEnabled(True)
-            self._counted_class2_button.setEnabled(True)
-            self._counted_class3_button.setEnabled(True)
-            self._counted_class4_button.setEnabled(True)
-            self._counted_class5_button.setEnabled(True)
-            self._counted_class_clear_button.setEnabled(True)
+        method_type = self._current_sample_method_step_fields.get('qualitative_quantitative', '')
+        #
+        if method_type in ['', 'Quantitative', 'Quantitative and qualitative']:
+            if self._abundance_class_list.currentIndex() == 0:
+                self._countedunits_edit.setEnabled(True)
+                self._counted_add1_button.setEnabled(True)
+                self._counted_sub1_button.setEnabled(True)
+                self._counted_add10_button.setEnabled(True)
+                self._counted_sub10_button.setEnabled(True)
+                self._counted_add100_button.setEnabled(True)
+                self._counted_sub100_button.setEnabled(True)
+                self._counted_clear_button.setEnabled(True)
+        if method_type in ['Qualitative', 'Quantitative and qualitative']:
+            if self._countedunits_edit.value() == 0:
+                self._abundance_class_list.setEnabled(True)
+                self._counted_class1_button.setEnabled(True)
+                self._counted_class2_button.setEnabled(True)
+                self._counted_class3_button.setEnabled(True)
+                self._counted_class4_button.setEnabled(True)
+                self._counted_class5_button.setEnabled(True)
+                self._counted_class_clear_button.setEnabled(True)
     
     def _update_scientific_full_name(self):
         """ """
@@ -710,6 +742,7 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
             self._taxon_cf_list.setCurrentIndex(0)
             self._disable_counting_buttons()
             self._countedunits_edit.setValue(0)
+            self._abundance_class_list.setCurrentIndex(0)
             self._variable_comment_edit.setText('')
             return
         # Get data from core.
@@ -718,8 +751,21 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         info_dict['size_class'] = size_class
         sample_row_dict = self._current_sample_object.get_sample_row_dict(info_dict)
         # Update fields.
-        counted_value = int(sample_row_dict.get('counted_units', '0'))
-        self._countedunits_edit.setValue(counted_value)
+        counted_value = 0
+        counted_units = sample_row_dict.get('counted_units', '')
+        abundance_class = sample_row_dict.get('abundance_class', '')
+        if counted_units == '':
+            # Abundance class.
+            self._countedunits_edit.setValue(0)
+            if abundance_class:
+                abundance_class_int = int(abundance_class)
+                self._abundance_class_list.setCurrentIndex(abundance_class_int)
+        else:
+            # Normal count.
+            counted_value = int(counted_units)
+            self._countedunits_edit.setValue(counted_value)
+            self._abundance_class_list.setCurrentIndex(0)
+        #
         self._variable_comment_edit.setText(sample_row_dict.get('variable_comment', ''))
         # Disable counting for taxa/sizes counted in another method step.
         current_method_step = unicode(self._selectmethodstep_list.currentText())
@@ -771,13 +817,44 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
             #
         self._update_summary()
          
-    # TODO: ######################################################################################
+    def _update_abundance_class_sample_row(self):
+        """ """
+        if self._temporary_disable_update:
+            return
+        
+        scientific_full_name = unicode(self._scientific_full_name_edit.text())
+        scientific_name = unicode(self._scientific_name_edit.text())
+        # Get method info.
+        info_dict = self._current_sample_method_step_fields
+        # From fields in this tab widget.
+        info_dict['scientific_full_name'] = scientific_full_name
+        info_dict['scientific_name'] = scientific_name
+        info_dict['size_class'] = unicode(self._speciessizeclass_list.currentText())
+        info_dict['cf'] = unicode(self._taxon_cf_list.currentText())
+        info_dict['species_flag_code'] = unicode(self._taxon_sflag_list.currentText())
+        info_dict['variable_comment'] = unicode(self._variable_comment_edit.text())
+        info_dict['method_step'] = unicode(self._selectmethodstep_list.currentText())
+        info_dict['count_area_number'] = unicode(self._countareanumber_edit.text())
+        info_dict['coefficient'] = '' # Not used for Net samples.
+        self._current_sample_object.update_sample_row(info_dict)
+        #
+        value = unicode(self._abundance_class_list.currentIndex())
+        try:
+            self._current_sample_object.update_abundance_class_in_core(info_dict, value)
+        except Exception as e:
+            toolbox_utils.Logging().error('Failed to store changes. ' + unicode(e))
+            QtGui.QMessageBox.warning(self, 'Warning', 'Failed to store changes. ' + unicode(e))
+            # Update to last value.
+            self._get_sample_row()
+            #
+        self._update_summary()
+         
     # ===== species lists.... =====
     def _update_select_specieslist_combo(self):
         """ """
         self._selectspecieslist_list.clear()
         specieslists = plankton_core.PlanktonCounterMethods().get_counting_species_lists()
-        self._selectspecieslist_list.addItems(['<all species>' ] + specieslists)
+        self._selectspecieslist_list.addItems(['<select>', '<all species>' ] + specieslists)
  
     def _update_selected_specieslist(self, selected_list):
         """ """
@@ -786,7 +863,7 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         #
         if self._viewsizeclassinfo_checkbox.isChecked():
             tablemodel = self._species_tableview.getTableModel()
-            tablemodel.set_header(['Scientific name                 ', 'Size class', 'Cells', 'Trophic type', 'Size info'])
+            tablemodel.set_header(['Scientific name                 ', 'Size class', 'SFlag', 'Cells', 'Trophic type', 'Size info'])
             #
             if selected_list is not None:
                 header, rows = plankton_core.PlanktonCounterMethods().get_counting_species_table(selected_list)
@@ -806,15 +883,17 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
                                 if (usedsizeclasses is not None) and (size not in usedsizeclasses):
                                     continue
                                 #
-                                trophictype = sizeclass_dict.get('bvol_trophic_type', '')
+                                sflag = sizeclass_dict.get('bvol_sflag', '')
+                                trophictype = sizeclass_dict.get('trophic_type', '')
                                 cellsperunit = sizeclass_dict.get('bvol_cells_per_counting_unit', '')
 #                                 volume = sizeclass_dict.get('bvol_calculated_volume_um3', '')
 #                                 carbon = sizeclass_dict.get('bvol_calculated_carbon_pg', '')
                                 sizeinfo = self.generate_size_info_from_dict(sizeclass_dict)
                                 #
-                                tablemodel.append_row([scientific_name, size, cellsperunit, trophictype, sizeinfo])
+                                tablemodel.append_row([scientific_name, size, sflag, cellsperunit, trophictype, sizeinfo])
                         else:
-                                tablemodel.append_row([scientific_name, '', '', '', ''])
+                            trophictype = taxon_dict.get('trophic_type', '')
+                            tablemodel.append_row([scientific_name, '', '', '', trophictype, ''])
         else:
             tablemodel = self._species_tableview.getTableModel()
             tablemodel.set_header(['Scientific name                 ', 'Trophic type'])
@@ -827,7 +906,7 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
                             scientific_name = row[0]
                             #
                             taxon_dict = plankton_core.Species().get_taxon_dict(scientific_name)
-                            trophictype = taxon_dict.get('bvol_trophic_type', '')
+                            trophictype = taxon_dict.get('trophic_type', '')
                             #
                             tablemodel.append_row([scientific_name, trophictype])
                 except:
@@ -839,20 +918,21 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
     def generate_size_info_from_dict(self, sizeclass_dict):
         """ """
         sizeinfolist = []
-        keylist = ['bvol_size_range', 'bvol_length_1_um', 'bvol_length_2_um', 'bvol_width_um', 
-                   'bvol_height_um', 'bvol_diameter_1_um', 'bvol_diameter_2_um']
-        outkeylist = ['Range', 'L1', 'L2', 'bvol_width_um', 
-                      'H', 'D1', 'D2']
+#         keylist = ['bvol_size_range', 'bvol_length_1_um', 'bvol_length_2_um', 'bvol_width_um', 
+#                    'bvol_height_um', 'bvol_diameter_1_um', 'bvol_diameter_2_um']
+#         outkeylist = ['Range', 'L1', 'L2', 'bvol_width_um', 
+#                       'H', 'D1', 'D2']
+        keylist = ['bvol_size_range', 'bvol_calculated_volume_um3']
+        outkeylist = ['Size', 'Volume']
         for index, key in enumerate(keylist):
             if key in sizeclass_dict and sizeclass_dict[key]:
                 sizeinfolist.append(outkeylist[index]+ ': ' + sizeclass_dict[key])
         #
         return ', '.join(sizeinfolist)
 
- 
-    # TODO: ######################################################################################
+
     # ===== Methods.... =====
- 
+
     def _load_counting_method(self):
         """ """
         self._selectmethodstep_list.clear()
@@ -1016,7 +1096,6 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         except:
             self._coefficient_edit.setText('0')
         
-    # TODO: ######################################################################################
     # ===== For key press events. =====
     
     def keyPressEvent(self, qKeyEvent):
@@ -1030,14 +1109,24 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
  
     def handle_key_press_event(self, qKeyEvent):
         """ """
-        if qKeyEvent.key() == QtCore.Qt.Key_Space: 
+        if qKeyEvent.key() == QtCore.Qt.Key_Plus: 
             self._counted_add(1)  
+            return True
+        elif qKeyEvent.key() == QtCore.Qt.Key_Space: 
+            self._counted_add(1)  
+            return True
+#         elif qKeyEvent.key() == QtCore.Qt.RightButton: # Mouse right button.
+#             self._counted_add(1)  
+#             return True
+        #
+        elif qKeyEvent.key() == QtCore.Qt.Key_Minus: 
+            self._counted_add(-1)
             return True
         elif qKeyEvent.key() == QtCore.Qt.Key_Backspace: 
             self._counted_add(-1)
             return True
+        #
         elif qKeyEvent.key() == QtCore.Qt.Key_Escape: 
-#             print('Key_Escape...')
             self._parentwidget.close()  
             return True
         #
@@ -1095,8 +1184,8 @@ class KeyPressQListView(QtGui.QListView):
         else:
             qKeyEvent.ignore() # Will be propagated.
             super(KeyPressQListView, self).keyPressEvent(qKeyEvent)
- 
-  
+
+
 class KeyPressQListWidget(QtGui.QListWidget):
     """ """
     def __init__(self, parent):
@@ -1112,7 +1201,25 @@ class KeyPressQListWidget(QtGui.QListWidget):
         else:
             qKeyEvent.ignore() # Will be propagated.
             super(KeyPressQListWidget, self).keyPressEvent(qKeyEvent)
- 
+
+    def mousePressEvent(self, qMouseEvent):
+        """ """
+        if qMouseEvent.button() == QtCore.Qt.RightButton:
+            self._parent._counted_add(1)
+            qMouseEvent.accept() # Was handled here.
+        else:
+            qMouseEvent.ignore() # Will be propagated.
+            super(KeyPressQListWidget, self).mousePressEvent(qMouseEvent)
+  
+    def mouseDoubleClickEvent(self, qMouseEvent):
+        """ NOTE: Count 2 on double click. """
+        if qMouseEvent.button() == QtCore.Qt.RightButton:
+            self._parent._counted_add(1)
+#             self._parent._counted_add(2) # NOTE: 2 on double click.
+            qMouseEvent.accept() # Was handled here.
+        else:
+            qMouseEvent.ignore() # Will be propagated.
+            super(KeyPressQListWidget, self).mousePressEvent(qMouseEvent)
   
 class KeyPressQLineEdit(QtGui.QLineEdit):
     """ """
@@ -1153,6 +1260,25 @@ class KeyPressToolboxQTableView(utils_qt.ToolboxQTableView):
         else:
             qKeyEvent.ignore() # Will be propagated.
             super(KeyPressToolboxQTableView, self).keyPressEvent(qKeyEvent)
+
+    def mousePressEvent(self, qMouseEvent):
+        """ """
+        if qMouseEvent.button() == QtCore.Qt.RightButton:         
+            self._parent._counted_add(1)
+            qMouseEvent.accept() # Was handled here.
+        else:
+            qMouseEvent.ignore() # Will be propagated.
+            super(KeyPressToolboxQTableView, self).mousePressEvent(qMouseEvent)
+  
+    def mouseDoubleClickEvent(self, qMouseEvent):
+        """ NOTE: Count 2 on double click. """
+        if qMouseEvent.button() == QtCore.Qt.RightButton:
+            self._parent._counted_add(1)
+#             self._parent._counted_add(2) # NOTE: 2 on double click.
+            qMouseEvent.accept() # Was handled here.
+        else:
+            qMouseEvent.ignore() # Will be propagated.
+            super(KeyPressToolboxQTableView, self).mousePressEvent(qMouseEvent)
  
  
 class KeyPressQSpinBox(QtGui.QSpinBox):
@@ -1340,16 +1466,19 @@ class LockTaxaListDialog(QtGui.QDialog):
  
     def _load_data(self):
         """ """
-        species_list_rows = self._current_sample_object.get_taxa_summary(summary_type = 'Counted taxa/sizes',
+        species_list_rows = self._current_sample_object.get_taxa_summary(summary_type = 'Counted per taxa/sizes',
                                                                          most_counted_sorting = False,
                                                                          method_step = self._current_method_step)
         #
         self._counting_species_model.clear()        
-        for species_list_row in species_list_rows:
-            item = QtGui.QStandardItem(species_list_row)
-            item.setCheckState(QtCore.Qt.Unchecked)
-            item.setCheckable(True)
-            self._counting_species_model.appendRow(item)
+        for species_list_row in species_list_rows[1:]:
+            parts = species_list_row.split(':')
+            part = parts[0].strip()
+            if part:
+                item = QtGui.QStandardItem(part)
+                item.setCheckState(QtCore.Qt.Unchecked)
+                item.setCheckable(True)
+                self._counting_species_model.appendRow(item)
              
     def _check_all_rows(self):
         """ """
@@ -1370,10 +1499,7 @@ class LockTaxaListDialog(QtGui.QDialog):
             if item.checkState() == QtCore.Qt.Checked:
                 selectedrow = unicode(item.text())
                 #
-                scientific_name = ''
                 size_class = ''
-#                 parts = selectedrow.split(':')
-#                 parts = parts[0].split('[')
                 parts = selectedrow.split('[')
                 scientific_full_name = parts[0].strip()
                 if len(parts) > 1:

@@ -12,10 +12,10 @@ import plankton_core
 @toolbox_utils.singleton
 class ScreeningManager(object):
     """ """
-    def __init__(self,
-                 codelist_filenames = ['toolbox_data/code_lists/screening_code_list.xlsx']):
+    def __init__(self):
+#                  codelist_filenames = ['toolbox_data/code_lists/screening_code_list.xlsx']):
         # Parameters.
-        self._codelist_filenames = codelist_filenames 
+#         self._codelist_filenames = codelist_filenames 
         # Local storage.
         self._codelist = {} # Main dictionary.
         # Run (only done once because the class is declared as singleton).
@@ -39,9 +39,9 @@ class ScreeningManager(object):
         """ """
         try:
             self._clear()
-            # Create codelist from files.
-            for excelfilename in self._codelist_filenames:
-                self._load_code_lists(excelfilename)                
+#             # Create codelist from files.
+#             for excelfilename in self._codelist_filenames:
+#                 self._load_code_lists(excelfilename)                
         #
         except Exception as e:
             toolbox_utils.Logging().error('Failed when loading code lists. Exception: ' + unicode(e))
@@ -55,58 +55,58 @@ class ScreeningManager(object):
 #        out.close()
 #        # end DEBUG.
         
-    def _load_code_lists(self, excel_file_name):
-        """ """
-        # Get data from Excel file.
-        tabledataset = plankton_core.DatasetTable()
-        toolbox_utils.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
-        #
-        for row in tabledataset.get_rows():
-            codetype = row[0]
-            # Internally code types are lowercase and words are separated by underscore.
-            codetype = codetype.lower().replace(' ', '_')
-            code = row[1]
-            #
-            if codetype:
-                if codetype not in self._codelist:
-                    self._codelist[codetype] = []
-                self._codelist[codetype].append(code)
+#     def _load_code_lists(self, excel_file_name):
+#         """ """
+#         # Get data from Excel file.
+#         tabledataset = plankton_core.DatasetTable()
+#         toolbox_utils.ExcelFiles().readToTableDataset(tabledataset, excel_file_name)
+#         #
+#         for row in tabledataset.get_rows():
+#             codetype = row[0]
+#             # Internally code types are lowercase and words are separated by underscore.
+#             codetype = codetype.lower().replace(' ', '_')
+#             code = row[1]
+#             #
+#             if codetype:
+#                 if codetype not in self._codelist:
+#                     self._codelist[codetype] = []
+#                 self._codelist[codetype].append(code)
 
-    def code_list_screening(self, datasets):
-        """ """
-        # Checked code types should be returned to caller.
-        checked_codetypes_set = set()
-        #
-        for dataset in datasets:
-            #
-            for visitnode in dataset.get_children():
-                #
-                data_dict = visitnode.get_data_dict()
-                for key in data_dict:
-                    if key in self.get_code_types():
-                        checked_codetypes_set.add(key)
-                        if data_dict[key] not in self.get_codes(key):
-                            toolbox_utils.Logging().warning('Visit level. Code is not valid.  Code type: ' + unicode(key) + '  Code: ' + unicode(data_dict[key]))
-                #
-                for samplenode in visitnode.get_children():
-                    #
-                    data_dict = samplenode.get_data_dict()
-                    for key in data_dict:
-                        if key in self.get_code_types():
-                            checked_codetypes_set.add(key)
-                            if data_dict[key] not in self.get_codes(key):
-                                toolbox_utils.Logging().warning('Sample level. Code is not valid.  Code type: ' + unicode(key) + '  Code: ' + unicode(data_dict[key]))
-                    #                        
-                    for variablenode in samplenode.get_children():
-                        #
-                        data_dict = variablenode.get_data_dict()
-                        for key in data_dict:
-                            if key in self.get_code_types():
-                                checked_codetypes_set.add(key)
-                                if data_dict[key] not in self.get_codes(key):
-                                    toolbox_utils.Logging().warning('Variable level. Code is not valid.  Code type: ' + unicode(key) + '  Code: ' + unicode(data_dict[key]))
-        # Returns set of checked code types.
-        return checked_codetypes_set
+#     def code_list_screening(self, datasets):
+#         """ """
+#         # Checked code types should be returned to caller.
+#         checked_codetypes_set = set()
+#         #
+#         for dataset in datasets:
+#             #
+#             for visitnode in dataset.get_children():
+#                 #
+#                 data_dict = visitnode.get_data_dict()
+#                 for key in data_dict:
+#                     if key in self.get_code_types():
+#                         checked_codetypes_set.add(key)
+#                         if data_dict[key] not in self.get_codes(key):
+#                             toolbox_utils.Logging().warning('Visit level. Code is not valid.  Code type: ' + unicode(key) + '  Code: ' + unicode(data_dict[key]))
+#                 #
+#                 for samplenode in visitnode.get_children():
+#                     #
+#                     data_dict = samplenode.get_data_dict()
+#                     for key in data_dict:
+#                         if key in self.get_code_types():
+#                             checked_codetypes_set.add(key)
+#                             if data_dict[key] not in self.get_codes(key):
+#                                 toolbox_utils.Logging().warning('Sample level. Code is not valid.  Code type: ' + unicode(key) + '  Code: ' + unicode(data_dict[key]))
+#                     #                        
+#                     for variablenode in samplenode.get_children():
+#                         #
+#                         data_dict = variablenode.get_data_dict()
+#                         for key in data_dict:
+#                             if key in self.get_code_types():
+#                                 checked_codetypes_set.add(key)
+#                                 if data_dict[key] not in self.get_codes(key):
+#                                     toolbox_utils.Logging().warning('Variable level. Code is not valid.  Code type: ' + unicode(key) + '  Code: ' + unicode(data_dict[key]))
+#         # Returns set of checked code types.
+#         return checked_codetypes_set
 
     def species_screening(self, datasets):
         """ """

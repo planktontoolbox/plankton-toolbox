@@ -47,8 +47,8 @@ def plankton_toolbox_application():
     except:
         pass
 
-#     app.setWindowIcon(QtGui.QIcon('toolbox_data/img/plankton_toolbox_icon.ico'))
-    app.setWindowIcon(QtGui.QIcon('toolbox_data/img/plankton_toolbox_icon.png'))
+#     app.setWindowIcon(QtGui.QIcon('plankton_toolbox_data/img/plankton_toolbox_icon.ico'))
+    app.setWindowIcon(QtGui.QIcon('plankton_toolbox_data/img/plankton_toolbox_icon.png'))
     # Style, colours, etc.
     utils_qt.set_app_style_sheet(app)
     # Create application and start the main event loop. 

@@ -84,7 +84,7 @@ from __future__ import unicode_literals
 #         #
 #         self.clear() # 
 #         #
-#         self._phytowin_to_peg_filename = 'toolbox_data/species/phytowin_translate_sizeclasses.xlsx'
+#         self._phytowin_to_peg_filename = 'plankton_toolbox_data/species/phytowin_translate_sizeclasses.xlsx'
 #         try:
 #             self._load_phytowin_species_and_sizes_mapping()
 #         except:

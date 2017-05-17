@@ -7,6 +7,7 @@
 from __future__ import unicode_literals
 
 import os
+# import ntpath
 import datetime
 import zipfile
 import PyQt4.QtGui as QtGui
@@ -37,6 +38,10 @@ class PlanktonCounterActivity(activity_base.ActivityBase):
         self.connect(plankton_core.PlanktonCounterManager(), 
                      QtCore.SIGNAL('planktonCounterListChanged'), 
                      self._update_counter_sample_list)
+        
+    def _emit_change_notification(self):
+        """ Emit signal to update GUI lists for available datasets and samples. """
+        plankton_core.PlanktonCounterManager().emit(QtCore.SIGNAL('planktonCounterListChanged'))
 
     def _create_content(self):
         """ """
@@ -68,31 +73,34 @@ class PlanktonCounterActivity(activity_base.ActivityBase):
         self._newsample_button = QtGui.QPushButton('New sample...')        
         self._newsample_button.clicked.connect(self._new_sample)
         self._deletesample_button = QtGui.QPushButton('Delete...')
-        self._backup_button = QtGui.QPushButton('Backup export/import...')
-        self._backup_button.clicked.connect(self._backup_export_import)
-# TODO: Not finished yet...
-#         self._exportsamples_button = QtGui.QPushButton('Import/export...')
-#         self._exportsamples_button.clicked.connect(self._import_export_samples)
-#         self._exportdatasets_button = QtGui.QPushButton('Import/export datasets...')
-#         self._exportdatasets_button.clicked.connect(self._import_export_datasets)
         self._deletesample_button.clicked.connect(self._delete_datasets_and_sample)               
         self._countsample_button = QtGui.QPushButton('Edit/count sample...')
         self._countsample_button.clicked.connect(self._open_edit_count)               
+        #
+        self._refresh_button = QtGui.QPushButton('Refresh dataset list')
+#         self._refresh_button.clicked.connect(self._update_counter_sample_list)
+        self._refresh_button.clicked.connect(self._emit_change_notification)
+        self._exportimportsamples_button = QtGui.QPushButton('Export/import samples (.xlsx)...')
+        self._exportimportsamples_button.clicked.connect(self._export_import_samples)
+        self._backup_button = QtGui.QPushButton('Export/import toolbox data (.zip)...')
+        self._backup_button.clicked.connect(self._backup_export_import)
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addWidget(self._newdataset_button)
         hbox1.addWidget(self._newsample_button)
         hbox1.addWidget(self._deletesample_button)
         hbox1.addWidget(self._countsample_button)
-# TODO: Not finished yet...
-#         hbox1.addWidget(self._exportsamples_button)
-#         hbox1.addWidget(self._exportdatasets_button)
         hbox1.addStretch(10)
-        hbox1.addWidget(self._backup_button)
+        hbox2 = QtGui.QHBoxLayout()
+        hbox2.addWidget(self._refresh_button)
+        hbox2.addWidget(self._exportimportsamples_button)
+        hbox2.addWidget(self._backup_button)
+        hbox2.addStretch(10)
         #
         layout = QtGui.QVBoxLayout()
         layout.addWidget(self._counter_samples_listview)
         layout.addLayout(hbox1)
+        layout.addLayout(hbox2)
         widget.setLayout(layout)                
         #
         return widget
@@ -124,21 +132,13 @@ class PlanktonCounterActivity(activity_base.ActivityBase):
             self._current_dataset = None
             self._update_counter_sample_list()
             
-# # TODO: Not finished yet...
-#     def _import_export_samples(self):
-#         """ """
-#         my_dialog = ImportExportSamplesDialog(self)
-#         if my_dialog.exec_():
-#             self._current_dataset = None
-#             self._update_counter_sample_list()
-# # TODO: Not finished yet...
-#     def _import_export_datasets(self):
-#         """ """
-#         my_dialog = ImportExportDatasetDialog(self)
-#         if my_dialog.exec_():
-#             self._current_dataset = None
-#             self._update_counter_sample_list()            
-
+    def _export_import_samples(self):
+        """ """
+        my_dialog = ExportImportSamplesDialog(self, self._current_dataset)
+        if my_dialog.exec_():
+            self._current_dataset = None
+            self._update_counter_sample_list()
+            
     def _selected_sample_changed(self):
         """ """
         self._current_dataset = None
@@ -194,6 +194,7 @@ class NewDatasetDialog(QtGui.QDialog):
         """ """
         super(NewDatasetDialog, self).__init__(parentwidget)
         self.setWindowTitle("New dataset")
+        self._parentwidget = parentwidget
         self.setLayout(self._content())
 
     def _content(self):  
@@ -235,6 +236,7 @@ class NewSampleDialog(QtGui.QDialog):
         """ """
         self._current_dataset = dataset
         super(NewSampleDialog, self).__init__(parentwidget)
+        self._parentwidget = parentwidget
         self.setWindowTitle("New sample")
         self.setLayout(self._content())
         self._load_dataset_data()
@@ -284,6 +286,8 @@ class NewSampleDialog(QtGui.QDialog):
 #             samplename = unicode(self._sampleid_edit.text()) # Use id.
         #   
         plankton_core.PlanktonCounterManager().create_sample(datasetname, samplename)
+        #
+        self._parentwidget._emit_change_notification()
         #            
         self.accept() # Close dialog box.
 
@@ -379,6 +383,8 @@ class DeleteDialog(QtGui.QDialog):
                 datasetname = unicode(item.text())
                 print(datasetname)
                 plankton_core.PlanktonCounterManager().delete_dataset(datasetname)
+        #
+        self._parentwidget._emit_change_notification()
         #            
         self.accept() # Close dialog box.
 
@@ -468,7 +474,8 @@ class BackupExportImportDialog(QtGui.QDialog):
     def __init__(self, parentwidget):
         """ """
         super(BackupExportImportDialog, self).__init__(parentwidget)
-        self.setWindowTitle("Backup export/import")
+        self.setWindowTitle("Plakton toolbox data export/import")
+        self._parentwidget = parentwidget
         self.setLayout(self._content())
         self.setMinimumSize(600, 200)
         #
@@ -542,7 +549,7 @@ class BackupExportImportDialog(QtGui.QDialog):
         backup_zip_dir_name = unicode(self._backupdir_edit.text())
         backup_zip_file_name = unicode(self._backupzipfilename_edit.text())
         #
-        source_dir = 'toolbox_data'
+        source_dir = 'plankton_toolbox_data'
         source_dir_len = len(source_dir) + 1
         #
         try:
@@ -550,13 +557,17 @@ class BackupExportImportDialog(QtGui.QDialog):
             with zipfile.ZipFile(backup_dir_file_name, 'w', zipfile.ZIP_DEFLATED) as zip_file:
                 for root, dirs, files in os.walk(source_dir):
                     for file_name in files:
-                        path_file_name = os.path.join(root, file_name)
-                        zip_file_name = os.path.join('toolbox_data', path_file_name[source_dir_len:])
-                        zip_file.write(path_file_name, zip_file_name)
+                            
+                        print('DEBUG: ' + file_name)
+                            
+                        if (not file_name.startswith('.')) and (not file_name.startswith('~')):                        
+                            path_file_name = os.path.join(root, file_name)
+                            zip_file_name = os.path.join('plankton_toolbox_data', path_file_name[source_dir_len:])
+                            zip_file.write(path_file_name, zip_file_name)
         #
         except Exception as e:
-            toolbox_utils.Logging().error('Failed to backup "toolbox_data". Error: ' + unicode(e))
-            QtGui.QMessageBox.warning(self, 'Warning', 'Failed to backup "toolbox_data". Error: ' + unicode(e))
+            toolbox_utils.Logging().error('Failed to backup "plankton_toolbox_data". Error: ' + unicode(e))
+            QtGui.QMessageBox.warning(self, 'Warning', 'Failed to backup "plankton_toolbox_data". Error: ' + unicode(e))
         #
         self.accept() # Close dialog box.
     
@@ -567,7 +578,7 @@ class BackupExportImportDialog(QtGui.QDialog):
         self._importfile_edit = QtGui.QLineEdit('')
         self._importfile_button = QtGui.QPushButton('Browse...')
         self._importfile_button.clicked.connect(self._browse_import_files)
-        self._copyold_checkbox = QtGui.QCheckBox('Rename the old toolbox_data before import.')
+        self._copyold_checkbox = QtGui.QCheckBox('Rename the old plankton_toolbox_data before import.')
         self._copyold_checkbox.setChecked(True)
         self._import_button = QtGui.QPushButton('Import from backup')
         self._import_button.clicked.connect(self._import_from_backup)
@@ -615,17 +626,17 @@ class BackupExportImportDialog(QtGui.QDialog):
 #         source_filename = 'BACKUP-PlanktonToolbox-ver1.2.0_2016-12-12_203805.zip'
         source_zip_dir_file_name = unicode(self._importfile_edit.text())
         if source_zip_dir_file_name:
-            dest_dir = 'toolbox_data'
+            dest_dir = 'plankton_toolbox_data'
             #
             try:
                 if self._copyold_checkbox.isChecked():
-                    # Rename 'toolbox_data'.
+                    # Rename 'plankton_toolbox_data'.
                     dest_dir_old = dest_dir + '_OLD_' + unicode(datetime.datetime.now().strftime('%Y-%m-%d_%H%M%S'))
                     os.rename(dest_dir, dest_dir_old)
                 #
             except Exception: ## as e:
-                toolbox_utils.Logging().error('Failed to rename toolbox_data. ') # ...Error: ' + unicode(e))
-                QtGui.QMessageBox.warning(self, 'Warning', 'Failed to rename toolbox_data. ') # ...Error: ' + unicode(e))
+                toolbox_utils.Logging().error('Failed to rename plankton_toolbox_data. Check if files are locked by Excel. ') # ...Error: ' + unicode(e))
+                QtGui.QMessageBox.warning(self, 'Warning', 'Failed to rename plankton_toolbox_data.  Check if files are locked by Excel. ') # ...Error: ' + unicode(e))
             #
             try:
                 # Extract from zip.
@@ -638,13 +649,256 @@ class BackupExportImportDialog(QtGui.QDialog):
                 
             #
             except Exception as e:
-                toolbox_utils.Logging().error('Failed to import from backup.') # ...Error: ' + unicode(e))
-                QtGui.QMessageBox.warning(self, 'Warning', 'Failed to import from backup.') # ...Error: ' + unicode(e))
+                toolbox_utils.Logging().error('Failed to import from backup.  Check if files are locked by Excel. ') # ...Error: ' + unicode(e))
+                QtGui.QMessageBox.warning(self, 'Warning', 'Failed to import from backup.  Check if files are locked by Excel. ') # ...Error: ' + unicode(e))
+            #
+            self._parentwidget._emit_change_notification()
             #
             self.accept() # Close dialog box.
         else:
             QtGui.QApplication.beep()
         
+
+class ExportImportSamplesDialog(QtGui.QDialog):
+    """ This dialog is allowed to access private parts in the parent widget. """
+    def __init__(self, parentwidget, dataset):
+        """ """
+        super(ExportImportSamplesDialog, self).__init__(parentwidget)
+        self.setWindowTitle("Export/import samples")
+        self._parentwidget = parentwidget
+        self.setLayout(self._content())
+        self.setMinimumSize(800, 300)
+        #
+        self._current_dataset = dataset
+        #
+        self._load_sample_list()
+        self._load_dataset_list()
+  
+    def _load_sample_list(self):
+        """ """
+        self._samples_model.clear()        
+        for datasetname in plankton_core.PlanktonCounterManager().get_dataset_names():
+            item = QtGui.QStandardItem('Dataset: ' + datasetname)
+            self._samples_model.appendRow(item)
+            # Samples.
+            for samplename in plankton_core.PlanktonCounterManager().get_sample_names(datasetname):
+                item = QtGui.QStandardItem(samplename)
+                item.setCheckState(QtCore.Qt.Unchecked)
+                item.setCheckable(True)
+                self._samples_model.appendRow(item)
+
+    def _load_dataset_list(self):
+        """ """
+        for datasetname in plankton_core.PlanktonCounterManager().get_dataset_names():
+            self._dataset_list.addItem(datasetname)
+        #
+        if self._current_dataset:
+            currentindex = self._dataset_list.findText(self._current_dataset, QtCore.Qt.MatchFixedString)
+            if currentindex >= 0:
+                self._dataset_list.setCurrentIndex(currentindex)
+    
+    def _content(self):
+        """ """
+        tabWidget = QtGui.QTabWidget()
+        tabWidget.addTab(self._content_export(), 'Export samples')
+        tabWidget.addTab(self._content_import(), 'Import samples')
+        #
+        layout = QtGui.QVBoxLayout()
+        layout.addWidget(tabWidget, 10)
+        #
+        return layout                
+   
+    def _content_export(self):
+        """ """
+        widget = QtGui.QWidget()
+        #
+        self._browse_export_target_dir = QtGui.QLineEdit('')
+        self._exportdir_button = QtGui.QPushButton('Browse...')
+        self._exportdir_button.clicked.connect(self._browse_export_dir)
+        #  
+        samples_listview = QtGui.QListView()
+        self._samples_model = QtGui.QStandardItemModel()
+        samples_listview.setModel(self._samples_model)
+        #
+        clearall_button = utils_qt.ClickableQLabel('Clear all')
+        self.connect(clearall_button, QtCore.SIGNAL('clicked()'), self._uncheck_all_samples)                
+        markall_button = utils_qt.ClickableQLabel('Mark all')
+        self.connect(markall_button, QtCore.SIGNAL('clicked()'), self._check_all_samples)                
+        delete_button = QtGui.QPushButton('Export marked sample(s)')
+        delete_button.clicked.connect(self._export_marked_samples)               
+        cancel_button = QtGui.QPushButton('Cancel')
+        cancel_button.clicked.connect(self.reject) # Close dialog box.               
+        # Layout widgets.
+        form1 = QtGui.QGridLayout()
+        gridrow = 0
+        label2 = QtGui.QLabel('Export to directory:')
+        form1.addWidget(label2, gridrow, 0, 1, 1)
+        form1.addWidget(self._browse_export_target_dir, gridrow, 1, 1, 8)
+        form1.addWidget(self._exportdir_button, gridrow, 9, 1, 1)
+        #
+        hbox1 = QtGui.QHBoxLayout()
+        hbox1.addWidget(clearall_button)
+        hbox1.addWidget(markall_button)
+        hbox1.addStretch(10)
+        #
+        hbox2 = QtGui.QHBoxLayout()
+        hbox2.addStretch(10)
+        hbox2.addWidget(delete_button)
+        hbox2.addWidget(cancel_button)
+        #
+        layout = QtGui.QVBoxLayout()
+        layout.addLayout(form1)
+        layout.addWidget(samples_listview, 10)
+        layout.addLayout(hbox1)
+        layout.addLayout(hbox2)
+        #
+        widget.setLayout(layout)
+        #
+        return widget                
+    
+    def _browse_export_dir(self):
+        """ """
+        dirdialog = QtGui.QFileDialog(self)
+        dirdialog.setFileMode(QtGui.QFileDialog.Directory)
+        dirdialog.setOptions(QtGui.QFileDialog.ShowDirsOnly)
+        dirdialog.setDirectory(unicode(self._browse_export_target_dir.text()))
+        dirpath = dirdialog.getExistingDirectory()
+        if dirpath:
+            self._browse_export_target_dir.setText(dirpath)
+    
+    def _check_all_samples(self):
+        """ """
+        for rowindex in range(self._samples_model.rowCount()):
+            item = self._samples_model.item(rowindex, 0)
+            if item.isCheckable ():
+                item.setCheckState(QtCore.Qt.Checked)
+    
+    def _uncheck_all_samples(self):
+        """ """
+        for rowindex in range(self._samples_model.rowCount()):
+            item = self._samples_model.item(rowindex, 0)
+            if item.isCheckable ():
+                item.setCheckState(QtCore.Qt.Unchecked)
+    
+    def _content_import(self):
+        """ """
+        widget = QtGui.QWidget()
+        
+        self._dataset_list = QtGui.QComboBox(self)        
+        self._replaceoldsamples_checkbox = QtGui.QCheckBox('Replace samples with same name.')
+        self._replaceoldsamples_checkbox.setChecked(True)
+        importsamples_button = QtGui.QPushButton('Import sample(s)...')
+        importsamples_button.clicked.connect(self._import_samples)               
+        cancel_button = QtGui.QPushButton('Cancel')
+        cancel_button.clicked.connect(self.reject) # Close dialog box.               
+        # Layout widgets.
+        formlayout = QtGui.QFormLayout()
+#         formlayout.addRow('Sample id:', self._sampleid_edit)
+        formlayout.addRow('Target dataset:', self._dataset_list)
+        formlayout.addRow('', self._replaceoldsamples_checkbox)
+        #
+        hbox1 = QtGui.QHBoxLayout()
+        hbox1.addStretch(10)
+        hbox1.addWidget(importsamples_button)
+        hbox1.addWidget(cancel_button)
+        #
+        layout = QtGui.QVBoxLayout()
+        layout.addLayout(formlayout)
+        layout.addStretch(10)
+        layout.addLayout(hbox1)
+        #
+        widget.setLayout(layout)
+        #
+        return widget
+    
+    def _export_marked_samples(self):
+        """ """
+        datasetname = None
+        samplename = None
+        for rowindex in range(self._samples_model.rowCount()):
+            item = self._samples_model.item(rowindex, 0)
+            if unicode(item.text()).startswith('Dataset: '):
+                datasetname = unicode(item.text()).replace('Dataset: ', '')
+            if item.checkState() == QtCore.Qt.Checked:
+                samplename = unicode(item.text())
+                print('DEBUG: ' + datasetname + '   ' + samplename)
+                
+                try:
+                    # Export path and file name.
+                    export_target_dir = unicode(self._browse_export_target_dir.text())
+                    export_target_filename = samplename + '.xlsx'
+                    filepathname = os.path.join(export_target_dir, export_target_filename)
+                    # Check if it already exists.
+                    if os.path.isfile(filepathname):  
+                        box_result =  QtGui.QMessageBox.warning(self, 'Warning', 
+                                                     'Excel file already exists. Do you want to replace it?', 
+                                                     QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Ok)
+                        if box_result != QtGui.QMessageBox.Ok:
+                            continue
+                    # Create sample object.
+                    dir_path = plankton_core.PlanktonCounterManager().get_dataset_dir_path()
+                    sample_object = plankton_core.PlanktonCounterSample(dir_path, datasetname, samplename)
+                    #
+                    sample_object.export_sample_to_excel(export_target_dir, export_target_filename)
+                #        
+                except Exception as e:
+                    toolbox_utils.Logging().error('Failed to export sample. ' + unicode(e))
+                    QtGui.QMessageBox.warning(self, 'Warning', 'Failed to export sample. ' + unicode(e))
+        #            
+        self.accept() # Close dialog box.
+    
+    def _import_samples(self):
+        """ """
+        try:
+            toolbox_utils.Logging().log('') # Empty line.
+            toolbox_utils.Logging().log('Import sample...')
+            toolbox_utils.Logging().start_accumulated_logging()
+            # Show select file dialog box. Multiple files can be selected.
+            namefilter = 'Excel files (*.xlsx);;All files (*.*)'
+            filenames = QtGui.QFileDialog.getOpenFileNames(
+                                self,
+                                'Import sample(s)',
+                                '', # self._last_used_excelfile_name,
+                                namefilter)
+            # From QString to unicode.
+            filenames = map(unicode, filenames)
+            # Check if user pressed ok or cancel.
+            if filenames:
+                for filename in filenames:
+                    # Store selected path. Will be used as default next time.
+                    dir_path = plankton_core.PlanktonCounterManager().get_dataset_dir_path()
+                    datasetname = unicode(self._dataset_list.currentText())
+                    samplename = os.path.basename(filename).replace('.xlsx', '') 
+                    # Check if overwrite.
+                    if self._replaceoldsamples_checkbox.isChecked() == False:
+                        if os.path.exists(os.path.join(dir_path, datasetname, samplename)):
+                            continue # Don't overwrite if it exists.
+                    # Create sample object.
+                    sample_object = plankton_core.PlanktonCounterSample(dir_path, datasetname, samplename)
+                    #
+                    sample_object.import_sample_from_excel(filename)
+        #
+        except Exception as e:
+            toolbox_utils.Logging().error('Excel file import failed on exception: ' + unicode(e))
+            QtGui.QMessageBox.warning(self, 'Excel file loading.\n', 
+                                      'Excel file import failed on exception.\n' + unicode(e))
+            raise
+        finally:
+            toolbox_utils.Logging().log_all_accumulated_rows()  
+            toolbox_utils.Logging().log('Importing samples done.')
+        #
+        self._parentwidget._emit_change_notification()
+        #            
+        self.accept() # Close dialog box.
+
+
+
+# TODO:
+# TODO:
+# TODO:
+# TODO:
+# TODO:
+# TODO:
 
 # ===========================================
 # === NOTE: Save this for the future use. ===
@@ -654,11 +908,12 @@ class BackupExportImportDialog(QtGui.QDialog):
 #         """ """
 #         super(ImportExportDatasetDialog, self).__init__(parentwidget)
 #         self.setWindowTitle("Import/export dataset")
+#         self._parentwidget = parentwidget
 #         self.setLayout(self._content())
 #         self.setMinimumSize(800, 300)
 #         #
 #         self._update_export_dataset_list()
-#  
+#   
 #     def _content(self):
 #         """ """
 #         tabWidget = QtGui.QTabWidget()
@@ -670,7 +925,7 @@ class BackupExportImportDialog(QtGui.QDialog):
 #         layout.addWidget(tabWidget, 10)
 #         #
 #         return layout                
-#   
+#    
 #     def _content_import(self):
 #         """ """
 #         widget = QtGui.QWidget()
@@ -714,7 +969,7 @@ class BackupExportImportDialog(QtGui.QDialog):
 #         widget.setLayout(layout)
 #         #
 #         return widget
-#      
+#       
 #     def _browse_source(self):
 #         """ """
 #         dirdialog = QtGui.QFileDialog(self)
@@ -729,11 +984,11 @@ class BackupExportImportDialog(QtGui.QDialog):
 #             self._importsourcefile_edit.setText(unicode(filepath))
 #             head, tail = os.path.split(unicode(filepath))
 #             self._importtargetdatasetname_edit.setText(tail.replace('.zip', ''))
-#      
+#       
 #     def _import_dataset(self):
 #         """ """
 #         QtGui.QMessageBox.information(self, "Information", 'Not implemented yet.')        
-#          
+#           
 #     def _content_export(self):
 #         """ """
 #         widget = QtGui.QWidget()
@@ -749,7 +1004,7 @@ class BackupExportImportDialog(QtGui.QDialog):
 #         self._exporttargetdir_button = QtGui.QPushButton('Browse...')
 #         self._exporttargetdir_button.clicked.connect(self._browse_target_dir)
 #         self._exporttargetfilename_edit = QtGui.QLineEdit('')
-#          
+#           
 #         self._publish_checkbox = QtGui.QCheckBox('Publish dataset')
 #         self._publishtarget_list = QtGui.QComboBox()
 #         self._publishtarget_list.addItems(['<select>',
@@ -758,7 +1013,7 @@ class BackupExportImportDialog(QtGui.QDialog):
 #                                            ])
 #         self._publishuser_edit = QtGui.QLineEdit('')
 #         self._publishpassword_edit = QtGui.QLineEdit('')
-#          
+#           
 #         self._export_button = QtGui.QPushButton('Export/publish')
 #         self._export_button.clicked.connect(self._export_dataset)
 #         self._exportcancel_button = QtGui.QPushButton('Cancel')
@@ -814,14 +1069,14 @@ class BackupExportImportDialog(QtGui.QDialog):
 #         widget.setLayout(layout)
 #         #
 #         return widget
-#  
+#   
 #     def _update_export_dataset_list(self):
 #         """ """
 #         self._datasettoexport_list.clear()        
 #         self._datasettoexport_list.addItems(['<select>'])
 #         for datasetname in plankton_core.PlanktonCounterManager().get_dataset_names():
 #             self._datasettoexport_list.addItem(datasetname)
-#          
+#           
 #     def _dataset_changed(self):
 #         """ """
 #         index = self._datasettoexport_list.currentIndex()
@@ -836,7 +1091,7 @@ class BackupExportImportDialog(QtGui.QDialog):
 #             self._exporttargetfilename_edit.setText(datasetname)
 #         else:
 #             self._exporttargetfilename_edit.setText('')
-#  
+#   
 #     def _browse_target_dir(self):
 #         """ """
 #         dirdialog = QtGui.QFileDialog(self)
@@ -846,11 +1101,11 @@ class BackupExportImportDialog(QtGui.QDialog):
 #         dirpath = dirdialog.getExistingDirectory()
 #         if dirpath:
 #             self._exporttargetdir_edit.setText(dirpath)
-#      
+#       
 #     def _export_dataset(self):
 #         """ """
 #         QtGui.QMessageBox.information(self, "Information", 'Not implemented yet.')
-#          
+#           
 #     def _content_publish(self):
 #         """ """
 #         widget = QtGui.QWidget()

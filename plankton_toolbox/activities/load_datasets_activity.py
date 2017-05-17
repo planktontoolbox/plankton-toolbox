@@ -35,6 +35,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         #
         self._lastusedsharkwebfilename = ''
         self._lastusedphytowinfilename = ''
+        self._lastusedplanktoncounterfilename = ''
         # Initialize parent (self._create_content will be called).
         super(LoadDatasetsActivity, self).__init__(name, parentwidget)
         # Log available parsers when GUI setup has finished.
@@ -49,7 +50,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
 
     def _load_available_parsers(self):
         """ """
-        self._parser_path = 'toolbox_data/parsers/'
+        self._parser_path = 'plankton_toolbox_data/parsers/'
         self._parser_list = []
         for parserpath in glob.glob(self._parser_path + '*.xlsx'):
             self._parser_list.append(os.path.basename(parserpath))
@@ -58,11 +59,11 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         """ """
         if len(self._parser_list) > 0:
             toolbox_utils.Logging().log('') # Empty line.
-            toolbox_utils.Logging().log('Available dataset parsers (located in "toolbox_data/parsers"):')
+            toolbox_utils.Logging().log('Available dataset parsers (located in "plankton_toolbox_data/parsers"):')
             for parserpath in self._parser_list:
                 toolbox_utils.Logging().log('- ' + os.path.basename(parserpath))
         else:
-            toolbox_utils.Logging().log('No dataset parsers are found in "/toolbox_data/parsers". ')
+            toolbox_utils.Logging().log('No dataset parsers are found in "/plankton_toolbox_data/parsers". ')
 
     def _create_content(self):
         """ """
@@ -86,7 +87,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         selectdatabox = QtGui.QGroupBox('Import datasets/datafiles', self)
         tabWidget = QtGui.QTabWidget()
         tabWidget.addTab(self._content_predefined_formats(), 'Predefined formats')
-        tabWidget.addTab(self._content_plankton_counter(), 'Plankton counter datasets')
+        tabWidget.addTab(self._content_plankton_counter(), 'Plankton counter samples')
         tabWidget.addTab(self._content_textfile(), 'Parsers - Text file (*.txt)')
         tabWidget.addTab(self._content_xlsx(), 'Parsers - Excel files (*.xlsx)')
         # Layout widgets.
@@ -218,7 +219,8 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
 #                                     'Darwin Core Archive (Not implemented)',
 #                                     'Darwin Core Archive - EurOBIS (Not implemented)',
 #                                     'PhytoWin (*.csv)']
-        self._predefinedformat_list = ['SHARKweb (*.txt)',
+        self._predefinedformat_list = ['Plankton counter sample(s) (*.xlsx)', 
+                                       'SHARKweb download(s) (*.txt)',
 #                                        'Phytoplankton-archive (*.csv)'
                                        ]
         self._predefined_format_combo.addItems(self._predefinedformat_list)
@@ -254,12 +256,57 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
     def _import_predefined_datasets(self):
         """ """
         selectedformat = self._predefined_format_combo.currentText()
-        if selectedformat == 'SHARKweb (*.txt)':
+        if selectedformat == 'Plankton counter sample(s) (*.xlsx)':
+            self._load_plankton_counter_excel()
+        elif selectedformat == 'SHARKweb download(s) (*.txt)':
             self._load_sharkweb_datasets()
 #         elif selectedformat == 'Phytoplankton-archive (*.csv)':
 #             self._load_phytowin_datasets()
         else: 
             QtGui.QMessageBox.information(self, "Information", 'Not implemented yet.')
+
+    def _load_plankton_counter_excel(self):
+        """ """
+        try:
+            toolbox_utils.Logging().log('') # Empty line.
+            toolbox_utils.Logging().log('Importing datasets...')
+            toolbox_utils.Logging().start_accumulated_logging()
+            self._write_to_status_bar('Importing datasets...')
+
+            # Show select file dialog box. Multiple files can be selected.
+            namefilter = 'Plankton counter samples (*.xlsx);;All files (*.*)'
+            filenames = QtGui.QFileDialog.getOpenFileNames(
+                                self,
+                                'Load plankton counter sample file(s). ',
+                                self._lastusedplanktoncounterfilename,
+                                namefilter)
+            # From QString to unicode.
+            filenames = map(unicode, filenames)
+            # Check if user pressed ok or cancel.
+            if filenames:
+                for filename in filenames:
+                    self._lastusedplanktoncounterfilename = filename
+                    datasetnode = plankton_core.DataImportManager().import_dataset_file(filename, 
+                                                                                        import_format = 'PlanktonCounterExcel')
+                    # Use datasets-wrapper to emit change notification when dataset list is updated.
+                    toolbox_datasets.ToolboxDatasets().emit_change_notification()
+                    # Add metadata related to imported file.
+                    datasetnode.add_metadata('parser', '-')
+                    datasetnode.add_metadata('file_name', os.path.basename(filename))
+                    datasetnode.add_metadata('file_path', filename)
+                    datasetnode.add_metadata('import_column', '-')
+                    datasetnode.add_metadata('export_column', '-')
+            #
+        except Exception as e:
+            toolbox_utils.Logging().error('SHARKweb file import failed on exception: ' + unicode(e))
+            QtGui.QMessageBox.warning(self, 'Text file loading.\n', 
+                                      'SHARKweb file import failed on exception.\n' + unicode(e))
+            raise
+        finally:
+            datasetcount = len(plankton_core.Datasets().get_datasets())
+            self._write_to_status_bar('Imported datasets: ' + unicode(datasetcount))
+            toolbox_utils.Logging().log_all_accumulated_rows()
+            toolbox_utils.Logging().log('Importing datasets done. Number of imported datasets: ' + unicode(datasetcount))
 
     def _load_sharkweb_datasets(self):
         """ """
