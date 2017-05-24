@@ -1466,17 +1466,19 @@ class LockTaxaListDialog(QtGui.QDialog):
  
     def _load_data(self):
         """ """
-        species_list_rows = self._current_sample_object.get_taxa_summary(summary_type = 'Counted per taxa/sizes',
-                                                                         most_counted_sorting = False,
-                                                                         method_step = self._current_method_step)
+        taxa_lock_list = self._current_sample_object.get_locked_taxa(method_step = self._current_method_step)
         #
         self._counting_species_model.clear()        
-        for species_list_row in species_list_rows[1:]:
-            parts = species_list_row.split(':')
-            part = parts[0].strip()
-            if part:
-                item = QtGui.QStandardItem(part)
-                item.setCheckState(QtCore.Qt.Unchecked)
+        for (taxon, size, is_locked) in sorted(taxa_lock_list):
+            if taxon:
+                taxon_size = taxon
+                if size:
+                    taxon_size += ' [' + size + ']' 
+                item = QtGui.QStandardItem(taxon_size)
+                if is_locked:
+                    item.setCheckState(QtCore.Qt.Checked)
+                else:
+                    item.setCheckState(QtCore.Qt.Unchecked)
                 item.setCheckable(True)
                 self._counting_species_model.appendRow(item)
              
@@ -1495,17 +1497,39 @@ class LockTaxaListDialog(QtGui.QDialog):
     def _execute_marked_rows(self):
         """ """
         for rowindex in range(self._counting_species_model.rowCount()):
+            #
             item = self._counting_species_model.item(rowindex, 0)
+            selectedrow = unicode(item.text())
+            #
+            size_class = ''
+            parts = selectedrow.split('[')
+            scientific_full_name = parts[0].strip()
+            if len(parts) > 1:
+                size_class = parts[1].strip().strip(']')
+            #
             if item.checkState() == QtCore.Qt.Checked:
-                selectedrow = unicode(item.text())
-                #
-                size_class = ''
-                parts = selectedrow.split('[')
-                scientific_full_name = parts[0].strip()
-                if len(parts) > 1:
-                    size_class = parts[1].strip().strip(']')
-                #
-                self._current_sample_object.lock_taxa(scientific_full_name, size_class, self._count_area)
+                self._current_sample_object.lock_taxa(scientific_full_name, size_class, 
+                                                      locked_at_count_area=self._count_area)
+            else:
+                self._current_sample_object.lock_taxa(scientific_full_name, size_class, 
+                                                      locked_at_count_area='')
         #            
         self.accept() # Close dialog box.
+
+#     def _execute_marked_rows(self):
+#         """ """
+#         for rowindex in range(self._counting_species_model.rowCount()):
+#             item = self._counting_species_model.item(rowindex, 0)
+#             if item.checkState() == QtCore.Qt.Checked:
+#                 selectedrow = unicode(item.text())
+#                 #
+#                 size_class = ''
+#                 parts = selectedrow.split('[')
+#                 scientific_full_name = parts[0].strip()
+#                 if len(parts) > 1:
+#                     size_class = parts[1].strip().strip(']')
+#                 #
+#                 self._current_sample_object.lock_taxa(scientific_full_name, size_class, self._count_area)
+#         #            
+#         self.accept() # Close dialog box.
 

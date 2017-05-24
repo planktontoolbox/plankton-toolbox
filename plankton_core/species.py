@@ -520,6 +520,12 @@ class Species(object):
                         for key in taxondict.keys():
                             speciesobject[key] = taxondict[key]
                     #
+                    
+                    # Check if size class already exists.
+                    for old_sizeclassdict in speciesobject['size_classes']:
+                        if old_sizeclassdict.get('bvol_size_class', '') == sizeclassdict.get('bvol_size_class', ''):
+                            toolbox_utils.Logging().warning('Size-class already exists for: ' + scientificname + '   Size: ' + sizeclassdict.get('bvol_size_class', '') + '   (Source: ' + excel_file_name + ')')
+                    #
                     speciesobject['size_classes'].append(sizeclassdict)
             except:
                 toolbox_utils.Logging().warning('Failed when loading BVOL data.')

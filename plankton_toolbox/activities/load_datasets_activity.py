@@ -225,7 +225,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                                        ]
         self._predefined_format_combo.addItems(self._predefinedformat_list)
         
-        self._predefined_format_combo.setCurrentIndex(0) # 'SHARKweb (*.txt)'
+        self._predefined_format_combo.setCurrentIndex(0) # 0 = 'Plankton counter sample(s) (*.xlsx)'
         
         # Load dataset.
         self._predefined_getdataset_button = QtGui.QPushButton('Import datasets/datafiles...')
@@ -298,9 +298,9 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
                     datasetnode.add_metadata('export_column', '-')
             #
         except Exception as e:
-            toolbox_utils.Logging().error('SHARKweb file import failed on exception: ' + unicode(e))
+            toolbox_utils.Logging().error('Plankton counter sample import failed on exception: ' + unicode(e))
             QtGui.QMessageBox.warning(self, 'Text file loading.\n', 
-                                      'SHARKweb file import failed on exception.\n' + unicode(e))
+                                      'Plankton counter sample import failed on exception.\n' + unicode(e))
             raise
         finally:
             datasetcount = len(plankton_core.Datasets().get_datasets())

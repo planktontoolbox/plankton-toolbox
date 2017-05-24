@@ -27,7 +27,7 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         #
         super(PlanktonCounterSampleMethods, self).__init__()
         #
-        self._selectanalysismethod_list = None
+        self._selectdefaultmethod_list = None
         self._selectmethod_list = None
         self._selectmethod_table = None
         self._selectmethodstep_table = None
@@ -40,11 +40,11 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         
     def load_data(self):
         """ Load data from method stored in sample. """
-        self._update_analysis_method_list()
+        self._update_default_method_list()
         self._update_counting_species_list()
         self._load_current_sample_method()
-#         self._select_analysis_method_changed()
-        self._reset_analysis_method_values()
+#         self._select_default_method_changed()
+        self._reset_default_method_values()
         
     def save_data(self):
         """ Save data to method stored in sample. """
@@ -70,15 +70,15 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         
     def _create_content_methods(self):
         """ """
-        # Stored analysis methods.
-        self._selectanalysismethod_list = QtGui.QComboBox(self)
-#         self._selectanalysismethod_list.addItems(['<method for current sample>']) 
-        self._selectanalysismethod_list.addItems(['<select>']) 
-#         self._selectanalysismethod_list.currentIndexChanged.connect(self._select_analysis_method_changed)
-        self._analysismethod_copy_button = QtGui.QPushButton('Copy values from selected setup')
-        self._analysismethod_copy_button.clicked.connect(self._copy_analysis_method_values)
-        self._analysismethod_reset_button = QtGui.QPushButton('Reset to used values for this sample')
-        self._analysismethod_reset_button.clicked.connect(self._reset_analysis_method_values)
+        # Stored default methods.
+        self._selectdefaultmethod_list = QtGui.QComboBox(self)
+#         self._selectdefaultmethod_list.addItems(['<method for current sample>']) 
+        self._selectdefaultmethod_list.addItems(['<select>']) 
+#         self._selectdefaultmethod_list.currentIndexChanged.connect(self._select_default_method_changed)
+        self._defaultmethod_copy_button = QtGui.QPushButton('Copy values from selected setup')
+        self._defaultmethod_copy_button.clicked.connect(self._copy_default_method_values)
+        self._defaultmethod_reset_button = QtGui.QPushButton('Reset to used values for this sample')
+        self._defaultmethod_reset_button.clicked.connect(self._reset_default_method_values)
         # Stored methods.
         self._selectmethod_table = QtGui.QListWidget(self) # utils_qt.ToolboxQTableView(self)
         self._selectmethod_table.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
@@ -171,12 +171,12 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         self._deletemethodsteps_method_button = QtGui.QPushButton('Delete method step(s)...')
         self._deletemethodsteps_method_button.clicked.connect(self._delete_method_steps)
         
-        self._saveanalysis_method_button = QtGui.QPushButton('Save changes to selected default method setup')
-        self._saveanalysis_method_button.clicked.connect(self._save_analysis_method)
-        self._saveasanalysis_method_button = QtGui.QPushButton('Save method setup as...')
-        self._saveasanalysis_method_button.clicked.connect(self._save_as_analysis_method)
-        self._deleteanalysis_method_button = QtGui.QPushButton('Delete default method setup(s)...')
-        self._deleteanalysis_method_button.clicked.connect(self._analysis_method_delete)
+#         self._savedefault_method_button = QtGui.QPushButton('Save changes to selected default method setup')
+#         self._savedefault_method_button.clicked.connect(self._save_default_method)
+        self._saveasdefault_method_button = QtGui.QPushButton('Save as default method setup...')
+        self._saveasdefault_method_button.clicked.connect(self._save_as_default_method)
+        self._deletedefault_method_button = QtGui.QPushButton('Delete default method setup(s)...')
+        self._deletedefault_method_button.clicked.connect(self._default_method_delete)
 
         # Layout widgets.
         
@@ -188,11 +188,11 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         grid1.addWidget(QtGui.QLabel(''), gridrow, 1, 1, 1) # Add space.
         gridrow += 1
         grid1.addWidget(utils_qt.RightAlignedQLabel('Default method setup:'), gridrow, 0, 1, 1)
-        grid1.addWidget(self._selectanalysismethod_list, gridrow, 1, 1, 2)
+        grid1.addWidget(self._selectdefaultmethod_list, gridrow, 1, 1, 2)
         gridrow += 1
         hbox = QtGui.QHBoxLayout()
-        hbox.addWidget(self._analysismethod_copy_button)
-        hbox.addWidget(self._analysismethod_reset_button)
+        hbox.addWidget(self._defaultmethod_copy_button)
+        hbox.addWidget(self._defaultmethod_reset_button)
         hbox.addStretch(10)
         grid1.addLayout(hbox, gridrow, 1, 1, 2)
         gridrow += 1
@@ -293,30 +293,30 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         hbox2.addWidget(self._addmethodstep_button)
         hbox2.addWidget(self._deletemethodsteps_method_button)
         hbox2.addStretch(1)
-        hbox2.addWidget(self._saveanalysis_method_button)
-        hbox2.addWidget(self._saveasanalysis_method_button)
-        hbox2.addWidget(self._deleteanalysis_method_button)
+#         hbox2.addWidget(self._savedefault_method_button)
+        hbox2.addWidget(self._saveasdefault_method_button)
+        hbox2.addWidget(self._deletedefault_method_button)
         hbox2.addStretch(10)
         #
         layout = QtGui.QVBoxLayout()
         layout.addLayout(grid1)
         layout.addLayout(hbox1)
         layout.addStretch(100)
-        layout.addWidget(utils_qt.LeftAlignedQLabel('<b>Manage counting method setups:</b>'))
+        layout.addWidget(utils_qt.LeftAlignedQLabel('<b>Manage counting methods:</b>'))
         layout.addLayout(hbox2)
         #
         return layout       
         
-    def _update_analysis_method_list(self):
+    def _update_default_method_list(self):
         """ """
-        self._selectanalysismethod_list.clear()
+        self._selectdefaultmethod_list.clear()
         #
-        analysismethods = plankton_core.PlanktonCounterMethods().get_analysis_method_list()
-        if len(analysismethods) > 0:
-            self._selectanalysismethod_list.addItems(['<select>'] + analysismethods)
-#             self._selectanalysismethod_list.addItems(analysismethods)
+        defaultmethods = plankton_core.PlanktonCounterMethods().get_default_method_list()
+        if len(defaultmethods) > 0:
+            self._selectdefaultmethod_list.addItems(['<select>'] + defaultmethods)
+#             self._selectdefaultmethod_list.addItems(defaultmethods)
         else:
-            self._selectanalysismethod_list.addItems(['<not available>'])            
+            self._selectdefaultmethod_list.addItems(['<not available>'])            
             
     def _update_counting_species_list(self):
         """ """
@@ -327,20 +327,20 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         else:
             self._counting_species_list.addItems(['<not available>'])        
         
-    def _copy_analysis_method_values(self):
+    def _copy_default_method_values(self):
         """ """
         self._selectmethod_table.clear()
         self._selectmethodstep_table.clear()
         self._update_method_step_fields({}) # Clear.
         #
-        if self._selectanalysismethod_list.currentIndex() == 0:
+        if self._selectdefaultmethod_list.currentIndex() == 0:
             self._load_current_sample_method()
         else:
-            selectedanalysismethod = unicode(self._selectanalysismethod_list.currentText())
+            selecteddefaultmethod = unicode(self._selectdefaultmethod_list.currentText())
             try:
                 path = plankton_core.PlanktonCounterMethods().get_methods_dir_path()
                 header, rows = plankton_core.PlanktonCounterMethods().get_counting_method_table(
-                                                                    path, selectedanalysismethod + '.txt')      
+                                                                    path, selecteddefaultmethod + '.txt')      
                 self._current_sample_method = plankton_core.PlanktonCounterMethod(header, rows)
             except:
                 self._current_sample_method = plankton_core.PlanktonCounterMethod([], [])
@@ -373,7 +373,7 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
             self._selectmethodstep_table.addItems(['<not available>'])
             self._selectmethodstep_table.setCurrentRow(0)
 
-    def _reset_analysis_method_values(self):
+    def _reset_default_method_values(self):
         """ """
         self._selectmethod_table.clear()
         self._selectmethodstep_table.clear()
@@ -421,7 +421,7 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
             if currentindex >= 0:
                 self._preservative_list.setCurrentIndex(currentindex)
             else:
-                self._preservative_list.setCurrentIndex(0, preservative)
+                self._preservative_list.setCurrentIndex(0)
             #
             self._preservative_volume_edit.setText(fields_dict.get('preservative_volume_ml', ''))
             self._countedvolume_edit.setText(fields_dict.get('counted_volume_ml', ''))
@@ -537,7 +537,7 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
 ##         self._calculate_coefficient_one_unit()
         self._update_current_sample_method()
 #         # If any field changed, then go back to sample method.
-#         self._selectanalysismethod_list.setCurrentIndex(0)
+#         self._selectdefaultmethod_list.setCurrentIndex(0)
 
     def _update_current_sample_method(self):
         """ Get info for both method and method step. """
@@ -593,12 +593,12 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
 #         self._coefficient_one_unit_edit.setText('0')
 #         #
 #         try:
-#             # From analysis method.
+#             # From default method.
 # #             sampledvolume_ml = unicode(self._sampledvolume_edit.text())
 # #             preservative_volume_ml = unicode(self._preservative_volume_edit.text())
 # #             counted_volume_ml = unicode(self._countedvolume_edit.text())
 # #             chamber_filter_diameter_mm = unicode(self._chamber_filter_diameter_edit.text())
-# #             # From analysis method step.
+# #             # From default method step.
 # #             countareatype = unicode(self._countareatype_list.currentText())
 # #             diameterofview_mm = unicode(self._viewdiameter_edit.text())
 # #             transectrectanglelength_mm = unicode(self._transectrectanglelength_edit.text())
@@ -607,7 +607,7 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
 #             preservative_volume_ml = fields_dict.get('preservative_volume_ml', 0.0)
 #             counted_volume_ml = fields_dict.get('counted_volume_ml', 0.0)
 #             chamber_filter_diameter_mm = fields_dict.get('chamber_filter_diameter_mm', 0.0)
-#             # From analysis method step.
+#             # From default method step.
 #             countareatype = fields_dict.get('count_area_type', 0.0)
 #             diameterofview_mm = fields_dict.get('diameter_of_view_mm', 0.0)
 #             transectrectanglelength_mm = fields_dict.get('transect_rectangle_length_mm', 0.0)
@@ -649,27 +649,27 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
 #         except:
 #             fields_dict['coefficient_one_unit'] = unicode(coeffoneunit)
         
-    def _save_analysis_method(self):
-        """ """
-        if self._current_sample_method is None:
-            return
-        #
-        self._update_current_sample_method()
-        #
-        if self._selectanalysismethod_list.currentIndex() == 0:
-            self._save_method_to_current_sample()
-        else:
-            selectedanalysismethod = unicode(self._selectanalysismethod_list.currentText())
-            path = plankton_core.PlanktonCounterMethods().get_methods_dir_path()
-            self._current_sample_method.save_method_config_to_file(path, selectedanalysismethod + '.txt')
-            # Also save to current sample.
-            self._save_method_to_current_sample()
+#     def _save_default_method(self):
+#         """ """
+#         if self._current_sample_method is None:
+#             return
+#         #
+#         self._update_current_sample_method()
+#         #
+#         if self._selectdefaultmethod_list.currentIndex() == 0:
+#             self._save_method_to_current_sample()
+#         else:
+#             selecteddefaultmethod = unicode(self._selectdefaultmethod_list.currentText())
+#             path = plankton_core.PlanktonCounterMethods().get_methods_dir_path()
+#             self._current_sample_method.save_method_config_to_file(path, selecteddefaultmethod + '.txt')
+#             # Also save to current sample.
+#             self._save_method_to_current_sample()
 #####
 #     def _add_method(self):
 #         """ """
 #         old_method = ''
-#         if self._selectanalysismethod_list.currentIndex() > 0:
-#             old_method = unicode(self._selectanalysismethod_list.currentText())
+#         if self._selectdefaultmethod_list.currentIndex() > 0:
+#             old_method = unicode(self._selectdefaultmethod_list.currentText())
 #         current_method = unicode(self._selectmethod_table.currentItem().text())
 #         #
 #         dialog = AddMethodDialog(self, self._current_sample_method, current_method)
@@ -678,19 +678,19 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
 #                 path = plankton_core.PlanktonCounterMethods().get_methods_dir_path()
 #                 self._current_sample_method.save_method_config_to_file(path, old_method + '.txt')
 #             #
-#             self._update_analysis_method_list()
+#             self._update_default_method_list()
 #             #
-#             currentindex = self._selectanalysismethod_list.findText(old_method, QtCore.Qt.MatchFixedString)
+#             currentindex = self._selectdefaultmethod_list.findText(old_method, QtCore.Qt.MatchFixedString)
 #             if currentindex >= 0:
-#                 self._selectanalysismethod_list.setCurrentIndex(currentindex)
+#                 self._selectdefaultmethod_list.setCurrentIndex(currentindex)
 #             #
 #             self._update_method_table()
             
     def _add_method_step(self):
         """ """
         old_method = ''
-        if self._selectanalysismethod_list.currentIndex() > 0:
-            old_method = unicode(self._selectanalysismethod_list.currentText())
+        if self._selectdefaultmethod_list.currentIndex() > 0:
+            old_method = unicode(self._selectdefaultmethod_list.currentText())
         current_method = unicode(self._selectmethod_table.currentItem().text())
         current_method_step = unicode(self._selectmethodstep_table.currentItem().text())
         #
@@ -700,11 +700,11 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
                 path = plankton_core.PlanktonCounterMethods().get_methods_dir_path()
                 self._current_sample_method.save_method_config_to_file(path, old_method + '.txt')
             #
-            self._update_analysis_method_list()
+            self._update_default_method_list()
             #
-            currentindex = self._selectanalysismethod_list.findText(old_method, QtCore.Qt.MatchFixedString)
+            currentindex = self._selectdefaultmethod_list.findText(old_method, QtCore.Qt.MatchFixedString)
             if currentindex >= 0:
-                self._selectanalysismethod_list.setCurrentIndex(currentindex)
+                self._selectdefaultmethod_list.setCurrentIndex(currentindex)
             #
             self._update_method_table()
             self._update_method_step_table()
@@ -712,8 +712,8 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
     def _delete_method_steps(self):
         """ """
         old_method = ''
-        if self._selectanalysismethod_list.currentIndex() > 0:
-            old_method = unicode(self._selectanalysismethod_list.currentText())
+        if self._selectdefaultmethod_list.currentIndex() > 0:
+            old_method = unicode(self._selectdefaultmethod_list.currentText())
         #
         dialog = DeleteMethodStepsDialog(self, self._current_sample_method)
         if dialog.exec_():
@@ -721,16 +721,16 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
                 path = plankton_core.PlanktonCounterMethods().get_methods_dir_path()
                 self._current_sample_method.save_method_config_to_file(path, old_method + '.txt')
             #
-            self._update_analysis_method_list()
+            self._update_default_method_list()
             #
-            currentindex = self._selectanalysismethod_list.findText(old_method, QtCore.Qt.MatchFixedString)
+            currentindex = self._selectdefaultmethod_list.findText(old_method, QtCore.Qt.MatchFixedString)
             if currentindex >= 0:
-                self._selectanalysismethod_list.setCurrentIndex(currentindex)
+                self._selectdefaultmethod_list.setCurrentIndex(currentindex)
             #
             self._update_method_table()
             self._update_method_step_table()
             
-    def _save_as_analysis_method(self):
+    def _save_as_default_method(self):
         """ """
         if self._current_sample_method is None:
             return
@@ -738,27 +738,27 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         self._update_current_sample_method()
         #
         old_name = ''
-        if self._selectanalysismethod_list.currentIndex() > 0:
-            old_name = unicode(self._selectanalysismethod_list.currentText())
+        if self._selectdefaultmethod_list.currentIndex() > 0:
+            old_name = unicode(self._selectdefaultmethod_list.currentText())
         #
-        dialog = SaveAnalysismethodAsDialog(self, old_name)
+        dialog = SaveDefaultMethodAsDialog(self, old_name)
         if dialog.exec_():
             new_name = dialog.get_new_name()
             if new_name:
                 path = plankton_core.PlanktonCounterMethods().get_methods_dir_path()
                 self._current_sample_method.save_method_config_to_file(path, new_name + '.txt')
                 #
-                self._update_analysis_method_list()
+                self._update_default_method_list()
                 #
-                currentindex = self._selectanalysismethod_list.findText(new_name, QtCore.Qt.MatchFixedString)
+                currentindex = self._selectdefaultmethod_list.findText(new_name, QtCore.Qt.MatchFixedString)
                 if currentindex >= 0:
-                    self._selectanalysismethod_list.setCurrentIndex(currentindex)
+                    self._selectdefaultmethod_list.setCurrentIndex(currentindex)
 
-    def _analysis_method_delete(self):
+    def _default_method_delete(self):
         """ """
-        dialog = DeleteAnalysisMethodDialog(self)
+        dialog = DeleteDefaultMethodDialog(self)
         if dialog.exec_():
-            self._update_analysis_method_list()
+            self._update_default_method_list()
 
 
 #####
@@ -948,18 +948,19 @@ class DeleteMethodStepsDialog(QtGui.QDialog):
             if item.checkState() == QtCore.Qt.Checked:
                 selectedname = unicode(item.text())
                 self._current_sample_method.delete_method_step(selectedname)
-        #            
+        #
         self.accept() # Close dialog box.
  
-class SaveAnalysismethodAsDialog(QtGui.QDialog):
+class SaveDefaultMethodAsDialog(QtGui.QDialog):
     """ """
     def __init__(self, parentwidget, old_name):
         """ """
         self._old_name = old_name
         self._new_name = ''
-        super(SaveAnalysismethodAsDialog, self).__init__(parentwidget)
-        self.setWindowTitle("Save analysis method as")
+        super(SaveDefaultMethodAsDialog, self).__init__(parentwidget)
+        self.setWindowTitle("Save as default method setup")
         self.setLayout(self._content())
+        self._load_data()
 
     def get_new_name(self):
         """ """
@@ -967,59 +968,176 @@ class SaveAnalysismethodAsDialog(QtGui.QDialog):
 
     def _content(self):
         """ """
-        self._new_name_edit = QtGui.QLineEdit(self._old_name)
-        self._new_name_edit.setMinimumWidth(400)
-        save_button = QtGui.QPushButton('Save')
-        save_button.clicked.connect(self._save)               
+        self._default_methods_setups = QtGui.QComboBox(self)        
+        self._default_methods_setups.setMinimumWidth(300)
+        updatemethodsetup_button = QtGui.QPushButton('Update selected default method setup')
+        updatemethodsetup_button.clicked.connect(self._update)               
+        #
+        self._new_default_method_edit = QtGui.QLineEdit('')
+        self._new_default_method_edit.setMinimumWidth(300)
+        createmethodsetup_button = QtGui.QPushButton('Create new default method setup')
+        createmethodsetup_button.clicked.connect(self._save)               
         cancel_button = QtGui.QPushButton('Cancel')
         cancel_button.clicked.connect(self.reject) # Close dialog box.               
         # Layout widgets.
         formlayout = QtGui.QFormLayout()
-        formlayout.addRow('New analysis method name:', self._new_name_edit)
-        
+#         formlayout.addRow('Sample id:', self._sampleid_edit)
+        formlayout.addRow('Select default method setup:', self._default_methods_setups)
+        formlayout.addRow('', updatemethodsetup_button)
+        formlayout.addRow('', QtGui.QLabel(''))
+        formlayout.addRow('New default method setup name:', self._new_default_method_edit)
+        formlayout.addRow('', createmethodsetup_button)
+        formlayout.addRow('', QtGui.QLabel(''))
+        #
         hbox1 = QtGui.QHBoxLayout()
-        hbox1.addStretch(10)
-        hbox1.addWidget(save_button)
-        hbox1.addWidget(cancel_button)
+#         hbox1.addStretch(10)
+        hbox1.addWidget(QtGui.QLabel('Select default method setup:'))
+        hbox1.addWidget(self._default_methods_setups)
+        #
+        hbox2 = QtGui.QHBoxLayout()
+        hbox2.addStretch(10)
+        hbox2.addWidget(updatemethodsetup_button)
+        #
+        hbox3 = QtGui.QHBoxLayout()
+#         hbox3.addStretch(10)
+        hbox3.addWidget(QtGui.QLabel('New default method setup name:'))
+        hbox3.addWidget(self._new_default_method_edit)
+        #
+        hbox4 = QtGui.QHBoxLayout()
+        hbox4.addStretch(10)
+        hbox4.addWidget(createmethodsetup_button)
+        #
+        hbox5 = QtGui.QHBoxLayout()
+        hbox5.addStretch(10)
+        hbox5.addWidget(cancel_button)
         #
         layout = QtGui.QVBoxLayout()
-        layout.addLayout(formlayout, 10)
         layout.addLayout(hbox1)
+        layout.addLayout(hbox2)
+        layout.addLayout(hbox3)
+        layout.addLayout(hbox4)
+        layout.addLayout(hbox5)
         #
-        return layout                
+        return layout
 
+    def _load_data(self):
+        """ """
+        defaultmethods = plankton_core.PlanktonCounterMethods().get_default_method_list()
+        defaultmethods = ['<select>'] + sorted(defaultmethods)
+        self._default_methods_setups.addItems(defaultmethods)
+
+    def _update(self):
+        """ """
+        self._new_name = unicode(self._default_methods_setups.currentText())
+        #            
+        if self._new_name != '<select>':
+            self.accept() # Close dialog box and process the update after.
+        else:
+            QtGui.QMessageBox.warning(self, 'Default method setup.\n', 
+                          'No "default method setup" is selected. Please try again.')
+    
     def _save(self):
         """ """
-        self._new_name = unicode(self._new_name_edit.text())
+        self._new_name = unicode(self._new_default_method_edit.text())
         #            
-        self.accept() # Close dialog box.
+        if self._new_name:
+            self.accept() # Close dialog box and process the update after.
+        else:
+            QtGui.QMessageBox.warning(self, 'Default method setup.\n', 
+                          'New name for the "default method setup" is missing. Please try again.')
 
 
-class DeleteAnalysisMethodDialog(QtGui.QDialog):
+
+
+# class NewSampleDialog(QtGui.QDialog):
+#     """ This dialog is allowed to access private parts in the parent widget. """
+#     def __init__(self, parentwidget, dataset):
+#         """ """
+#         self._current_dataset = dataset
+#         super(NewSampleDialog, self).__init__(parentwidget)
+#         self._parentwidget = parentwidget
+#         self.setWindowTitle("New sample")
+#         self.setLayout(self._content())
+#         self._load_dataset_data()
+# 
+#     def _content(self):
+#         """ """
+#         self._dataset_list = QtGui.QComboBox(self)        
+#         self._samplename_edit = QtGui.QLineEdit('')
+#         self._samplename_edit.setMinimumWidth(400)
+#         createsample_button = QtGui.QPushButton('Create sample')
+#         createsample_button.clicked.connect(self._create_sample)               
+#         cancel_button = QtGui.QPushButton('Cancel')
+#         cancel_button.clicked.connect(self.reject) # Close dialog box.               
+#         # Layout widgets.
+#         formlayout = QtGui.QFormLayout()
+# #         formlayout.addRow('Sample id:', self._sampleid_edit)
+#         formlayout.addRow('Dataset:', self._dataset_list)
+#         formlayout.addRow('Sample name:', self._samplename_edit)
+#         formlayout.addRow('', QtGui.QLabel('Example: Släggö_2016-06-01_0-10m_Net'))
+#         #
+#         hbox1 = QtGui.QHBoxLayout()
+#         hbox1.addStretch(10)
+#         hbox1.addWidget(createsample_button)
+#         hbox1.addWidget(cancel_button)
+#         #
+#         layout = QtGui.QVBoxLayout()
+#         layout.addLayout(formlayout, 10)
+#         layout.addLayout(hbox1)
+#         #
+#         return layout                
+# 
+#     def _load_dataset_data(self):
+#         """ """
+#         for datasetname in plankton_core.PlanktonCounterManager().get_dataset_names():
+#             self._dataset_list.addItem(datasetname)
+#         #
+#         if self._current_dataset:
+#             currentindex = self._dataset_list.findText(self._current_dataset, QtCore.Qt.MatchFixedString)
+#             if currentindex >= 0:
+#                 self._dataset_list.setCurrentIndex(currentindex)
+# 
+#     def _create_sample(self):
+#         """ """
+#         datasetname = unicode(self._dataset_list.currentText())
+#         samplename = unicode(self._samplename_edit.text())
+# #         if len(samplename) == 0:
+# #             samplename = unicode(self._sampleid_edit.text()) # Use id.
+#         #   
+#         plankton_core.PlanktonCounterManager().create_sample(datasetname, samplename)
+#         #
+#         self._parentwidget._emit_change_notification()
+#         #            
+#         self.accept() # Close dialog box.
+
+
+
+
+class DeleteDefaultMethodDialog(QtGui.QDialog):
     """  """
     def __init__(self, parentwidget):
         """ """
         self._parentwidget = parentwidget
-        super(DeleteAnalysisMethodDialog, self).__init__(parentwidget)
-        self.setWindowTitle('Delete analysis method(s)')
+        super(DeleteDefaultMethodDialog, self).__init__(parentwidget)
+        self.setWindowTitle('Delete default method(s)')
         self.setLayout(self._content())
         self.setMinimumSize(500, 500)
         self._load_data()
 
     def _content(self):
         """ """  
-        analysis_methods_listview = QtGui.QListView()
-        self._analysis_methods_model = QtGui.QStandardItemModel()
-        analysis_methods_listview.setModel(self._analysis_methods_model)
+        default_methods_listview = QtGui.QListView()
+        self._default_methods_model = QtGui.QStandardItemModel()
+        default_methods_listview.setModel(self._default_methods_model)
 
         clearall_button = utils_qt.ClickableQLabel('Clear all')
-        self.connect(clearall_button, QtCore.SIGNAL('clicked()'), self._uncheck_all_analysis_methods)                
+        self.connect(clearall_button, QtCore.SIGNAL('clicked()'), self._uncheck_all_default_methods)
         markall_button = utils_qt.ClickableQLabel('Mark all')
-        self.connect(markall_button, QtCore.SIGNAL('clicked()'), self._check_all_analysis_methods)                
+        self.connect(markall_button, QtCore.SIGNAL('clicked()'), self._check_all_default_methods)
         delete_button = QtGui.QPushButton('Delete marked sample(s)')
-        delete_button.clicked.connect(self._delete_marked_analysis_methods)               
+        delete_button.clicked.connect(self._delete_marked_default_methods)
         cancel_button = QtGui.QPushButton('Cancel')
-        cancel_button.clicked.connect(self.reject) # Close dialog box.               
+        cancel_button.clicked.connect(self.reject) # Close dialog box.
         # Layout widgets.
         hbox1 = QtGui.QHBoxLayout()
         hbox1.addWidget(clearall_button)
@@ -1032,7 +1150,7 @@ class DeleteAnalysisMethodDialog(QtGui.QDialog):
         hbox2.addWidget(cancel_button)
         #
         layout = QtGui.QVBoxLayout()
-        layout.addWidget(analysis_methods_listview, 10)
+        layout.addWidget(default_methods_listview, 10)
         layout.addLayout(hbox1)
         layout.addLayout(hbox2)
         
@@ -1040,31 +1158,31 @@ class DeleteAnalysisMethodDialog(QtGui.QDialog):
 
     def _load_data(self):
         """ """
-        analysismethods = plankton_core.PlanktonCounterMethods().get_analysis_method_list()
+        defaultmethods = plankton_core.PlanktonCounterMethods().get_default_method_list()
 
-        self._analysis_methods_model.clear()        
-        for analysismethod in analysismethods:
-            item = QtGui.QStandardItem(analysismethod)
+        self._default_methods_model.clear()        
+        for defaultmethod in defaultmethods:
+            item = QtGui.QStandardItem(defaultmethod)
             item.setCheckState(QtCore.Qt.Unchecked)
             item.setCheckable(True)
-            self._analysis_methods_model.appendRow(item)
+            self._default_methods_model.appendRow(item)
             
-    def _check_all_analysis_methods(self):
+    def _check_all_default_methods(self):
         """ """
-        for rowindex in range(self._analysis_methods_model.rowCount()):
-            item = self._analysis_methods_model.item(rowindex, 0)
+        for rowindex in range(self._default_methods_model.rowCount()):
+            item = self._default_methods_model.item(rowindex, 0)
             item.setCheckState(QtCore.Qt.Checked)
             
-    def _uncheck_all_analysis_methods(self):
+    def _uncheck_all_default_methods(self):
         """ """
-        for rowindex in range(self._analysis_methods_model.rowCount()):
-            item = self._analysis_methods_model.item(rowindex, 0)
+        for rowindex in range(self._default_methods_model.rowCount()):
+            item = self._default_methods_model.item(rowindex, 0)
             item.setCheckState(QtCore.Qt.Unchecked)
 
-    def _delete_marked_analysis_methods(self):
+    def _delete_marked_default_methods(self):
         """ """
-        for rowindex in range(self._analysis_methods_model.rowCount()):
-            item = self._analysis_methods_model.item(rowindex, 0)
+        for rowindex in range(self._default_methods_model.rowCount()):
+            item = self._default_methods_model.item(rowindex, 0)
             if item.checkState() == QtCore.Qt.Checked:
                 selectedname = unicode(item.text())
                 plankton_core.PlanktonCounterMethods().delete_counting_method(selectedname)

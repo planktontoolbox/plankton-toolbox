@@ -101,7 +101,7 @@ class PlanktonCounterManager(QtCore.QObject):
     def create_sample(self, dataset_name, sample_name):
         """ Creates a new sample (= a new directory in the dataset directory). """
         if not dataset_name:
-            dataset_name = 'dummy-dataset'
+            dataset_name = 'Default-dataset'
         if not sample_name:
             raise UserWarning('Can\'t create sample. Sample name is missing.')
         #
@@ -255,7 +255,7 @@ class PlanktonCounterSample():
 
         # Create file writers.
         if not self._dataset_name:
-            self._dataset_name = 'dummy-dataset'
+            self._dataset_name = 'Default-dataset'
         #
         path = os.path.join(self._dataset_dir_path, self._dataset_name, self._sample_name)
         self._tablefilewriter_sample_data = toolbox_utils.TableFileWriter(
@@ -395,7 +395,7 @@ class PlanktonCounterSample():
             # Count on scientific name. Standard alternative.
             taxon = sampleobject.get_scientific_full_name()
             size = sampleobject.get_size_class()
-            # Use the sam key for locked items.
+            # Use the same key for locked items.
             if sampleobject.is_locked():
                 if size:
                     locked_list.append(taxon + ' [' + size + '] ')     
@@ -558,6 +558,48 @@ class PlanktonCounterSample():
 #         #
 #         return summary_data
     
+    
+    
+    def get_locked_taxa(self, method_step = None):
+        """ """
+        species_locked_list = []
+        #
+        for sampleobject in self._sample_rows.values():
+            # Check method step.
+            if method_step:
+                if not method_step == sampleobject.get_method_step():
+                    continue
+            # 
+            taxon = sampleobject.get_scientific_full_name()
+            size = sampleobject.get_size_class()
+            # 
+            if sampleobject.is_locked():
+                species_locked_list.append([taxon, size, True])
+            else:
+                species_locked_list.append([taxon, size, False])   
+        #
+        return species_locked_list
+    
+    def lock_taxa(self, scientific_full_name, size_class, locked_at_count_area):
+        """ """
+        search_dict = {}
+        search_dict['scientific_full_name'] = scientific_full_name
+        search_dict['size_class'] = size_class
+        samplerowkey = SampleRow(search_dict).get_key()
+        if samplerowkey in self._sample_rows:
+            self._sample_rows[samplerowkey].set_lock(locked_at_count_area)
+
+#     def lock_taxa(self, scientific_full_name, size_class, 
+#                         locked=False, locked_at_count_area=None):
+#         """ """
+#         for sampleobject in self._sample_rows.values():
+#             #
+#             if sampleobject.get_scientific_full_name() == scientific_full_name:
+#                 if locked:
+#                     sampleobject.set_lock(locked_at_count_area)
+#                 else:
+#                     sampleobject.set_unlock()
+    
     def get_sample_row_dict(self, counted_row_dict):
         """ """
         samplerowkey = SampleRow(counted_row_dict).get_key()
@@ -655,15 +697,6 @@ class PlanktonCounterSample():
                     sampleobject.set_count_area_number(count_area_number)
                     sampleobject.set_coefficient(coefficient)
     
-    def lock_taxa(self, scientific_full_name, size_class, locked_at_count_area):
-        """ """
-        search_dict = {}
-        search_dict['scientific_full_name'] = scientific_full_name
-        search_dict['size_class'] = size_class
-        samplerowkey = SampleRow(search_dict).get_key()
-        if samplerowkey in self._sample_rows:
-            self._sample_rows[samplerowkey].set_lock(locked_at_count_area)
-
     def import_sample_from_excel(self, excel_file_path):
         """ Import from Excel. """
         # Sample info.
@@ -920,6 +953,10 @@ class SampleRow():
     def set_lock(self, locked_at_count_area):
         """ """
         self._sample_row_dict['locked_at_area'] = locked_at_count_area
+
+    def set_unlock(self):
+        """ """
+        self._sample_row_dict['locked_at_area'] = ''
 
     def is_locked(self):
         """ """
