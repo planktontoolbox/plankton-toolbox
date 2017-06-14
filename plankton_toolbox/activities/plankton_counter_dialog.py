@@ -55,6 +55,8 @@ class PlanktonCounterDialog(QtGui.QDialog):
                 self.metadata_widget.save_data()
         elif oldtabindex == 1:
                 self.methods_widget.save_data()
+                self.count_widget.load_data()
+                self.count_widget.save_data()
         elif oldtabindex == 2:
                 self.count_widget.save_data()
         elif oldtabindex == 3:
@@ -97,8 +99,6 @@ class PlanktonCounterDialog(QtGui.QDialog):
         scrollarea.setWidgetResizable(True)
 
         contentLayout.addWidget(scrollarea)
-#         contentLayout.addWidget(self._main_tab_widget)
-        
         
         self._main_tab_widget.addTab(self._content_metadata(), 'Sample info')
 #         self._main_tab_widget.addTab(self._content_methods_OLD(), 'Counting methods OLD')
@@ -107,14 +107,6 @@ class PlanktonCounterDialog(QtGui.QDialog):
         self._main_tab_widget.addTab(self._content_sample_data(), 'Sample data')
 #         tabWidget.addTab(self._content_export_import(), 'Export/import')
         contentLayout.addWidget(self._content_bottom())
-        
-        
-        
-#         # TODO: DEBUG......
-#         self._main_tab_widget.setCurrentIndex(2)
-        
-        
-        
         
         # Detect tab selecteion changes.
         self._main_tab_widget.currentChanged.connect(self._tab_in_tabwidget_changed)
@@ -133,19 +125,6 @@ class PlanktonCounterDialog(QtGui.QDialog):
 #         return scrollarea
         return self.metadata_widget
 
-#     def _content_methods_OLD(self):
-#         """ """
-#         self.methods_widget = plankton_counter_sample_methods_OLD.PlanktonCounterSampleMethods(self,
-#                                                            self._current_dataset, 
-#                                                            self._current_sample, 
-#                                                            self._current_sample_object)
-# #         # Add scroll capabilities.
-# #         scrollarea = QtGui.QScrollArea()
-# #         scrollarea.setFrameShape(QtGui.QFrame.NoFrame)
-# #         scrollarea.setWidget(self.methods_widget)
-# #         scrollarea.setWidgetResizable(True)
-# #         return scrollarea
-#         return self.methods_widget
     def _content_methods(self):
         """ """
         self.methods_widget = plankton_counter_sample_methods.PlanktonCounterSampleMethods(self,

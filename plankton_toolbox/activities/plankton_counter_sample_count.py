@@ -27,7 +27,6 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         self._current_sample_method = None
         self._current_sample_method_step_fields = {}
         self._temporary_disable_update = False
-#         self._abundance_class_sampler = False
         #
         super(PlanktonCounterSampleCount, self).__init__()
         #
@@ -35,7 +34,6 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         #
         # Log available parsers when GUI setup has finished.
         QtCore.QTimer.singleShot(200, self.load_data)
-#         self.load_data()
 
     def load_data(self):
         """ Called at startup. """
@@ -50,11 +48,6 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         sample_info_dict = self._current_sample_object.get_sample_info()
         methodstep = sample_info_dict.get('last_used_method_step', '')
         self.update_method_step(methodstep)
-#         # NET. Conted as abundance classes. 
-#         if sample_info_dict.get('sampler_type_code', '') == 'NET (Plankton net)':
-#             self._abundance_class_sampler = True
-#         else:
-#             self._abundance_class_sampler = False
         # Summary.
         self._update_summary()
         self._disable_counting_buttons()
@@ -63,6 +56,7 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
 
     def save_data(self):
         """ Called at shutdown and when needed. """
+        self._current_sample_object.recalculate_coefficient(self._current_sample_method)
         self._current_sample_object.save_sample_data()
         # Update info method steps and counting areas.
         methodstep = unicode(self._selectmethodstep_list.currentText())
@@ -1038,9 +1032,11 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         currentmethodstep = unicode(self._selectmethodstep_list.currentText())
         coefficient = unicode(self._coefficient_edit.text())
         countareanumber = unicode(self._countareanumber_edit.text())
+        
         self._current_sample_object.update_coeff_for_sample_rows(currentmethodstep, 
                                                                  countareanumber, 
                                                                  coefficient)
+        
         # Save max count area for method step.
         self.save_data()
          
@@ -1070,6 +1066,8 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
                                                                      coefficient)
             # Save max count area for method step.
             self.save_data()
+        #
+        self._update_summary()
          
     def _lock_taxa(self):
         """ """   
@@ -1442,8 +1440,8 @@ class LockTaxaListDialog(QtGui.QDialog):
         self.connect(clearall_button, QtCore.SIGNAL('clicked()'), self._uncheck_all_rows)                
         markall_button = utils_qt.ClickableQLabel('Mark all')
         self.connect(markall_button, QtCore.SIGNAL('clicked()'), self._check_all_rows)                
-        delete_button = QtGui.QPushButton('Lock marked taxa')
-        delete_button.clicked.connect(self._execute_marked_rows)               
+        lock_button = QtGui.QPushButton('Lock/unlock taxa')
+        lock_button.clicked.connect(self._execute_marked_rows)               
         cancel_button = QtGui.QPushButton('Cancel')
         cancel_button.clicked.connect(self.reject) # Close dialog box.               
         # Layout widgets.
@@ -1454,7 +1452,7 @@ class LockTaxaListDialog(QtGui.QDialog):
         #
         hbox2 = QtGui.QHBoxLayout()
         hbox2.addStretch(10)
-        hbox2.addWidget(delete_button)
+        hbox2.addWidget(lock_button)
         hbox2.addWidget(cancel_button)
         #
         layout = QtGui.QVBoxLayout()
@@ -1508,28 +1506,12 @@ class LockTaxaListDialog(QtGui.QDialog):
                 size_class = parts[1].strip().strip(']')
             #
             if item.checkState() == QtCore.Qt.Checked:
+                # Only lock unlocked taxa.
                 self._current_sample_object.lock_taxa(scientific_full_name, size_class, 
                                                       locked_at_count_area=self._count_area)
             else:
-                self._current_sample_object.lock_taxa(scientific_full_name, size_class, 
-                                                      locked_at_count_area='')
+                self._current_sample_object.unlock_taxa(scientific_full_name, size_class,
+                                                        self._count_area)
         #            
         self.accept() # Close dialog box.
-
-#     def _execute_marked_rows(self):
-#         """ """
-#         for rowindex in range(self._counting_species_model.rowCount()):
-#             item = self._counting_species_model.item(rowindex, 0)
-#             if item.checkState() == QtCore.Qt.Checked:
-#                 selectedrow = unicode(item.text())
-#                 #
-#                 size_class = ''
-#                 parts = selectedrow.split('[')
-#                 scientific_full_name = parts[0].strip()
-#                 if len(parts) > 1:
-#                     size_class = parts[1].strip().strip(']')
-#                 #
-#                 self._current_sample_object.lock_taxa(scientific_full_name, size_class, self._count_area)
-#         #            
-#         self.accept() # Close dialog box.
 

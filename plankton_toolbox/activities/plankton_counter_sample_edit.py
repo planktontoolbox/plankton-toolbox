@@ -114,9 +114,6 @@ class PlanktonCounterSampleEdit(QtGui.QWidget):
         for row in rows:
             if len(''.join(row)) > 0:
                 self._sampletable_table.append_row(row)
-#         # Add some extra rows to be used when adding rows.
-#         self._sampletable_table.append_row(['', ''])
-#         self._sampletable_table.append_row(['', ''])
         #                                                       
         self._sampletable_editable.setTableModel(self._sampletable_table)
         self._sampletable_editable.resizeColumnsToContents()
@@ -127,6 +124,8 @@ class PlanktonCounterSampleEdit(QtGui.QWidget):
         rows = self._sampletable_table.get_rows()
         # 
         self._current_sample_object.update_all_sample_rows(header, rows)
+        #
+        self._current_sample_object.recalculate_sample_data(self._current_sample_method)
         self._current_sample_object.save_sample_data()
         #
         self._load_edit_table()
@@ -137,9 +136,6 @@ class PlanktonCounterSampleEdit(QtGui.QWidget):
         if dialog.exec_():
             pass
         
-# TODO:
-# TODO:
-# TODO:
 
 class ExportSampleDialog(QtGui.QDialog):
     """ """
@@ -226,81 +222,3 @@ class ExportSampleDialog(QtGui.QDialog):
             toolbox_utils.Logging().error('Failed to export sample. ' + unicode(e))
             QtGui.QMessageBox.warning(self, 'Warning', 'Failed to export sample. ' + unicode(e))
         
-#         # Prepare sample info header and rows.
-#         sample_info_dict = self._current_sample_object.get_sample_info()
-#         #
-#         sample_info_header = ['key', 'value']
-#         sample_info_header_order = [
-#                 'sample_name',
-#                 'sample_id',
-#                 'sample_date',
-#                 'sample_time',
-#                 'visit_year',
-#                 'country_code',
-#                 'platform_code',
-#                 'sampling_series',
-#                 'project_code',
-#                 'station_name',
-#                 'sample_latitude_dm',
-#                 'sample_longitude_dm',
-#                 'sample_latitude_dd',
-#                 'sample_longitude_dd',
-#                 'sample_min_depth_m',
-#                 'sample_max_depth_m',
-#                 'water_depth_m',
-#                 'sampler_type_code',
-#                 'sampled_volume_l',
-#                 'sampler_area_m2',
-#                 'net_mesh_size_um',
-#                 'wire_angle_deg',
-#                 'net_tow_length_m',
-#                 'analytical_laboratory', 
-#                 'analysis_date',
-#                 'analysed_by',
-#                 'sample_comment',               
-#                 ]
-#         sample_info_rows = []
-#         for header_item in sample_info_header_order:
-#             row = []
-#             sample_info_rows.append([header_item, sample_info_dict.get(header_item, '')])
-#         
-#         # Prepare sample info header and rows.
-#         sample_data_header = self._current_sample_object.get_header()
-#         sample_data_rows = self._current_sample_object.get_rows()
-#         
-#         # Prepare sample info header and rows.
-#         sample_method_header = []
-#         sample_method_rows = []
-#         sample_path = self._current_sample_object.get_dir_path()
-#         if os.path.exists(os.path.join(sample_path, 'counting_method.txt')):
-#             sample_method_header, sample_method_rows = plankton_core.PlanktonCounterMethods().get_counting_method_table(
-#                                                 sample_path, 'counting_method.txt')        
-# 
-#         # Use openpyxl for Excel.
-#         workbook = openpyxl.Workbook(optimized_write = True)  # Supports big files.
-#         sampleinfo_worksheet = workbook.create_sheet(0)
-#         sampleinfo_worksheet.title = 'Sample info'
-#         # Header.
-#         sampleinfo_worksheet.append(sample_info_header)
-#         # Rows.
-#         for row in sample_info_rows:
-#             sampleinfo_worksheet.append(row)
-#         #
-#         sampledata_worksheet = workbook.create_sheet(1)
-#         sampledata_worksheet.title = 'Sample data'
-#         # Header.
-#         sampledata_worksheet.append(sample_data_header)
-#         # Rows.
-#         for row in sample_data_rows:
-#             sampledata_worksheet.append(row)
-#         #
-#         samplemethod_worksheet = workbook.create_sheet(2)
-#         samplemethod_worksheet.title = 'Sample method'
-#         # Header.
-#         samplemethod_worksheet.append(sample_method_header)
-#         # Rows.
-#         for row in sample_method_rows:
-#             samplemethod_worksheet.append(row)
-#         # Save to file.   
-#         workbook.save(filepathname)
-
