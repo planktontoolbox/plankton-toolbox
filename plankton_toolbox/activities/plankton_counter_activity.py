@@ -556,10 +556,8 @@ class BackupExportImportDialog(QtGui.QDialog):
             backup_dir_file_name = os.path.join(backup_zip_dir_name, backup_zip_file_name)
             with zipfile.ZipFile(backup_dir_file_name, 'w', zipfile.ZIP_DEFLATED) as zip_file:
                 for root, dirs, files in os.walk(source_dir):
-                    for file_name in files:
-                            
-                        print('DEBUG: ' + file_name)
-                            
+                    for file_name in files:   
+                        #print('DEBUG: ' + file_name)    
                         if (not file_name.startswith('.')) and (not file_name.startswith('~')):                        
                             path_file_name = os.path.join(root, file_name)
                             zip_file_name = os.path.join('plankton_toolbox_data', path_file_name[source_dir_len:])
@@ -821,8 +819,7 @@ class ExportImportSamplesDialog(QtGui.QDialog):
                 datasetname = unicode(item.text()).replace('Dataset: ', '')
             if item.checkState() == QtCore.Qt.Checked:
                 samplename = unicode(item.text())
-                print('DEBUG: ' + datasetname + '   ' + samplename)
-                
+                #print('DEBUG: ' + datasetname + '   ' + samplename)
                 try:
                     # Export path and file name.
                     export_target_dir = unicode(self._browse_export_target_dir.text())

@@ -43,7 +43,7 @@ class PlanktonCounterMethods():
 
     # === Counting methods ===
 
-    def get_analysis_method_list(self):
+    def get_default_method_list(self):
         """ Returns a list with counting methods. """
         methods = []
         for methodfile in os.listdir(self._methods_dir_path):
@@ -340,7 +340,7 @@ class PlanktonCounterMethod():
         fields_dict['coefficient_one_unit'] = '0'
         #
         try:
-            # From analysis method.
+            # From default method.
             
             # TODO: 'qualitative_quantitative'.
             
@@ -348,7 +348,7 @@ class PlanktonCounterMethod():
             preservative_volume_ml = fields_dict.get('preservative_volume_ml', 0.0).replace(',', '.')
             counted_volume_ml = fields_dict.get('counted_volume_ml', 0.0).replace(',', '.')
             chamber_filter_diameter_mm = fields_dict.get('chamber_filter_diameter_mm', 0.0).replace(',', '.')
-            # From analysis method step.
+            # From default method step.
             countareatype = fields_dict.get('count_area_type', 0.0).replace(',', '.')
             diameterofview_mm = fields_dict.get('diameter_of_view_mm', 0.0).replace(',', '.')
             transectrectanglelength_mm = fields_dict.get('transect_rectangle_length_mm', 0.0).replace(',', '.')
