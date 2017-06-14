@@ -1039,6 +1039,8 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         
         # Save max count area for method step.
         self.save_data()
+        #
+        self._update_summary()
          
     def _remove_count_area(self):
         """ """
