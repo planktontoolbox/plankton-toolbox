@@ -423,6 +423,22 @@ class PlanktonCounterSample():
                 abundance_class = sampleobject.get_abundance_class()
                 if abundance_class in ['', '0']:
                     countedspecies[taxon] += int(sampleobject.get_counted_units())
+
+                    
+                    
+                    # TODO:
+                    # TODO:
+                    # TODO:
+                    countedspecies[taxon] = sampleobject.get_counted_units()
+                    counted_units_list = sampleobject.get_counted_units_list()
+                    if ';' in counted_units_list:
+                        last_transect_units = counted_units_list.split(';')[-1]
+                        countedspecies[taxon] = sampleobject.get_counted_units() + '/' + last_transect_units
+                    # TODO:
+                    # TODO:
+                    # TODO:
+                    
+                    
                     totalcounted += int(sampleobject.get_counted_units())
                 else:
                     if summary_type in ['Counted per taxa', 'Counted per taxa/sizes']:
