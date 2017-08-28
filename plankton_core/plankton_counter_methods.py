@@ -382,7 +382,8 @@ class PlanktonCounterMethod():
             
             # Calculate coeff.
             onelitre_ml = 1000.0
-            coeffoneunit = chamber_filter_area * sampledvolume * onelitre_ml / (singlearea * counted_volume * (sampledvolume + preservative_volume))
+            ### TEST: coeffoneunit = chamber_filter_area * sampledvolume * onelitre_ml / (singlearea * counted_volume * (sampledvolume + preservative_volume))
+            coeffoneunit = chamber_filter_area * (sampledvolume + preservative_volume) * onelitre_ml / (singlearea * counted_volume * sampledvolume)
             coeffoneunit = int(coeffoneunit + 0.5) # Round.
             fields_dict['coefficient_one_unit'] = unicode(coeffoneunit)
         except:
