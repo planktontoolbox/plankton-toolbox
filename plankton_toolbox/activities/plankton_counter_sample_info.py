@@ -538,9 +538,10 @@ class PlanktonCounterSampleInfo(QtGui.QWidget):
             self._analysis_month_edit.setText(date_tmp[5:7])
             self._analysis_day_edit.setText(date_tmp[8:10])
         else:
-            self._analysis_year_edit.setText('')
-            self._analysis_month_edit.setText('')
-            self._analysis_day_edit.setText('')
+            self.analysis_today()
+#             self._analysis_year_edit.setText('')
+#             self._analysis_month_edit.setText('')
+#             self._analysis_day_edit.setText('')
         self._analysed_by_edit.setText(metadata_dict.get('analysed_by', ''))
         self._sample_comment_edit.setText(metadata_dict.get('sample_comment', ''))
                        

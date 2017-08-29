@@ -78,7 +78,8 @@ class PlanktonCounterMethods():
     def get_counting_species_table(self, counting_species_file_name):
         """ """
         # Use all prealoaded species.
-        if counting_species_file_name == '<all species>':
+        if counting_species_file_name == '<valid taxa>':
+#         if counting_species_file_name == '<all species>':
             species_list_of_list = []
 #             for key in sorted(plankton_core.Species().get_taxa_lookup_dict().keys()):
             for key in sorted(plankton_core.Species().get_taxa_dict().keys()):

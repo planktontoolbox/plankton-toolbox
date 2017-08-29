@@ -212,9 +212,16 @@ class ExportSampleDialog(QtGui.QDialog):
             # Export path and file name.
             export_target_dir = unicode(self._exporttargetdir_edit.text())
             export_target_filename = unicode(self._exporttargetfilename_edit.text())
-    #         filepathname = os.path.join(exporttargetdir, exporttargetfilename)
-            #
-            self._current_sample_object.export_sample_to_excel(export_target_dir, export_target_filename)
+#             filepathname = os.path.join(exporttargetdir, exporttargetfilename)
+            # Warning.
+            if os.path.exists(os.path.join(export_target_dir, export_target_filename)):
+                box_result =  QtGui.QMessageBox.warning(self, 'Warning', 
+                                             'Excel file already exists. Do you want ro replace it?', 
+                                             QtGui.QMessageBox.Cancel, QtGui.QMessageBox.Ok)
+                if box_result == QtGui.QMessageBox.Ok:
+                    self._current_sample_object.export_sample_to_excel(export_target_dir, export_target_filename)    
+            else:
+                self._current_sample_object.export_sample_to_excel(export_target_dir, export_target_filename)
             #            
             self.accept() # Close dialog box.
         #        
