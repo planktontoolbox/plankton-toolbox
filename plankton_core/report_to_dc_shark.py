@@ -49,6 +49,7 @@ class CreateReportToDataCenterShark(object):
             'sample_comment', # 'COMNT_SAMP',
             'scientific_name', # 'LATNM',
             'species_flag_code', # 'SFLAG',
+            'cf', # 'CF',
             'trophic_type', # 'TRPHY',
             'param_counted', # 'COUNTNR', # Parameter.
             'param_abundance_class', # 'COUNT_CLASS', # Parameter.
@@ -104,6 +105,7 @@ class CreateReportToDataCenterShark(object):
             'sample_comment': 'COMNT_SAMP',
             'scientific_name': 'LATNM',
             'species_flag_code': 'SFLAG',
+            'cf': 'CF',
             'trophic_type': 'TRPHY',
             'param_counted': 'COUNTNR', # Parameter.
             'coefficient': 'COEFF',
@@ -133,6 +135,7 @@ class CreateReportToDataCenterShark(object):
             'sample_max_depth_m', 
             'scientific_name', 
             'species_flag_code', 
+            'cf', 
             'size_class', 
            ]
             

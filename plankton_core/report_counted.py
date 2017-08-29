@@ -24,6 +24,7 @@ class CreateReportCounted(object):
             'taxon_class', 
             'scientific_name', 
             'species_flag_code', 
+            'cf', 
             'scientific_authority', 
             'trophic_type', 
             'harmful', 
@@ -43,6 +44,7 @@ class CreateReportCounted(object):
             'taxon_class': 'Class', # 'Klass', # 5
             'scientific_name': 'Scientific name', # 'Art/Taxonomisk enhet', # 6
             'species_flag_code': 'Species flag code', # 'Sflag', # 7
+            'cf': 'Cf', # 'Sflag', # 7
             'scientific_authority': 'Authority', # 'Author', # 8
             'trophic_type': 'Trophic type', # 'Trofigrad', # 9
             'harmful': 'Pot. toxic', # 'Potentiellt giftig', # 10
@@ -61,6 +63,7 @@ class CreateReportCounted(object):
             'sample_max_depth_m', 
             'scientific_name', 
             'species_flag_code', 
+            'cf', 
             'size_class', 
            ]
             

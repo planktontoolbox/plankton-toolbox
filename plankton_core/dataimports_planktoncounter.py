@@ -56,7 +56,8 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
             #
             ['variable', 'scientific_full_name', 'text', 'scientific_full_name', None], # Internal use only. 
             ['variable', 'scientific_name', 'text', 'scientific_name', ''], 
-            ['variable', 'species_flag_code', 'text', 'species_flag_code', ''], # TODO: Add cf.
+            ['variable', 'species_flag_code', 'text', 'species_flag_code', ''],
+            ['variable', 'cf', 'text', 'cf', ''],
             ['variable', 'size_class', 'text', 'size_class', ''], 
             ['variable', 'unit_type', 'text', 'unit_type', ''], 
 #             ['variable', 'reported_trophic_type', 'text', 'trophic_type', None], # Internal use only. 

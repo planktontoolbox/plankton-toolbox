@@ -125,7 +125,7 @@ class PlanktonCounterSampleEdit(QtGui.QWidget):
         # 
         self._current_sample_object.update_all_sample_rows(header, rows)
         #
-        self._current_sample_object.recalculate_sample_data(self._current_sample_method)
+#         self._current_sample_object.recalculate_sample_data(self._current_sample_method)
         self._current_sample_object.save_sample_data()
         #
         self._load_edit_table()

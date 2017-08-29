@@ -7,7 +7,6 @@
 from __future__ import unicode_literals
 
 import toolbox_utils
-import plankton_core
 import os.path
 from numpy import rank
 
@@ -227,16 +226,6 @@ class Species(object):
             toolbox_utils.Logging().error('Failed when loading species data: ' + unicode(e))            
             raise
             
-#        # Used for DEBUG:
-#        import locale
-#        import codecs
-#        import json
-#        fileencoding = locale.getpreferredencoding()
-#        out = codecs.open('DEBUG_species_list.txt', mode = 'w', encoding = fileencoding)
-#        out.write(json.dumps(self._taxa, encoding = 'utf8', sort_keys=True, indent=4))
-#        out.close()
-#        # DEBUG end.
-
     def _load_trophic_types(self, excel_file_name):
         """ Adds trophic type info to the species objects. """
         tablefilereader = toolbox_utils.TableFileReader(excel_file_name = excel_file_name)
@@ -259,7 +248,7 @@ class Species(object):
                                     if sizeclassdict.get('trophic_type', ''):
                                         if scientificname == taxon['scientific_name']:
 #                                             toolbox_utils.Logging().warning('Same taxon/size on multiple rows: ' + scientificname + ' Size: ' + sizeclass + '   (Source: ' + excel_file_name + ')')
-                                            sizeclassfound = True
+#                                             sizeclassfound = True
                                             break
                                     #
                                     sizeclassdict['trophic_type'] = trophictype
@@ -529,21 +518,6 @@ class Species(object):
                     speciesobject['size_classes'].append(sizeclassdict)
             except:
                 toolbox_utils.Logging().warning('Failed when loading BVOL data.')
-        #
-        # Trophic_type is set on sizeclass level. Should also be set on species level  
-        # if all sizeclasses have the same trophic_type.
-# Use separate file for trophic type.
-#         for taxon in self._taxa.values():
-#             try:
-#                 trophic_type_set = set() 
-#                 if 'size_classes' in taxon:
-#                     for sizeclass in taxon['size_classes']:
-#                         trophic_type_set.add(sizeclass.get('bvol_trophic_type', ''))
-#                 if len(trophic_type_set) == 1:
-#                     taxon['bvol_trophic_type'] = list(trophic_type_set)[0]
-# 
-#             except:
-#                 toolbox_utils.Logging().warning('Failed when loading BVOL data (the trophic type part).')
 
     def get_plankton_group_from_taxon_name(self, scientific_name):
         """ This is another way to organize organisms into groups. Other than the traditional classification. """
