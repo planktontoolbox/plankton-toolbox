@@ -106,6 +106,15 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         self._taxon_cf_list = QtGui.QComboBox(self)
         self._taxon_cf_list.addItems(['', 'cf. (species)', 'cf. (genus)']) 
         self._taxon_cf_list.currentIndexChanged.connect(self._species_cf_flag_changed)
+
+
+
+#         self._trophic_type_list = QtGui.QComboBox(self)
+#         self._trophic_type_list.addItems(['NS', 'AU', 'HT', 'MX']) 
+# #         self._trophic_type_list.currentIndexChanged.connect(self._trophic_type_changed)
+
+        
+        
         # Sizeclass.
         self._speciessizeclass_list = QtGui.QComboBox(self)
         self._speciessizeclass_list.addItems(['']) 
@@ -278,6 +287,12 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         sp_spp_hbox.addWidget(self._taxon_sflag_list)
         sp_spp_hbox.addWidget(utils_qt.RightAlignedQLabel('Cf.:'))
         sp_spp_hbox.addWidget(self._taxon_cf_list)
+
+        
+#         sp_spp_hbox.addWidget(utils_qt.RightAlignedQLabel('Trophic type:'))
+#         sp_spp_hbox.addWidget(self._trophic_type_list)
+
+        
         sp_spp_hbox.addStretch(10)        
         countgrid.addLayout(sp_spp_hbox, gridrow, 1, 1, 3)
         gridrow += 1
@@ -413,6 +428,11 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         self._speciessizeclass_list.setCurrentIndex(0)
         self._taxon_sflag_list.setCurrentIndex(0)
         self._taxon_cf_list.setCurrentIndex(0)
+
+        
+#         self._trophic_type_list.setCurrentIndex(0)
+
+        
         self._scientific_full_name_edit.setText(scientific_name)
     
     def _size_class_changed(self):
@@ -537,6 +557,11 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         self._speciessizeclass_list.setCurrentIndex(0)
         self._taxon_sflag_list.setCurrentIndex(0)
         self._taxon_cf_list.setCurrentIndex(0)
+        
+        
+#         self._trophic_type_list.setCurrentIndex(0)
+        
+        
         # Get selected rows as indexes. Convert to base model if proxy model is used.
         proxyindexes = self._species_tableview.selectedIndexes()
         if len(proxyindexes) > 0:
@@ -560,6 +585,26 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
             currentindex = self._speciessizeclass_list.findText(size_class, QtCore.Qt.MatchFixedString)
             if currentindex >= 0:
                 self._speciessizeclass_list.setCurrentIndex(currentindex)
+            
+            
+##### Move this...            
+#             # Trophic type.
+#             size_class_dict = plankton_core.Species().get_bvol_dict(scientific_name, size_class)
+#             trophic_type = size_class_dict.get('trophic_type', '')
+#             if not trophic_type:
+#                 taxon_dict = plankton_core.Species().get_taxon_dict(scientific_name)
+#                 trophic_type = taxon_dict.get('trophic_type', '')
+#             
+#             if trophic_type in ['', 'NS']:
+#                 trophic_type = self._trophic_type_list.setEnabled(True)
+#             if trophic_type in ['AU', 'HT', 'MX']:
+#                 self._trophic_type_list.setEnabled(False)
+#                 currentindex = self._trophic_type_list.findText(trophic_type, QtCore.Qt.MatchFixedString)
+#                 if currentindex >= 0:
+#                     self._trophic_type_list.setCurrentIndex(currentindex)
+##### ...move this.            
+            
+            
             #
             self._update_scientific_full_name()
     
@@ -612,6 +657,14 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         currentindex = self._taxon_cf_list.findText(cf_flag, QtCore.Qt.MatchFixedString)
         if currentindex >= 0:
             self._taxon_cf_list.setCurrentIndex(currentindex)
+
+        
+#         # Trophic type list.
+#         currentindex = self._trophic_type_list.findText(cf_flag, QtCore.Qt.MatchFixedString)
+#         if currentindex >= 0:
+#             self._trophic_type_list.setCurrentIndex(currentindex)
+        
+        
         # Species SFLAG list.
         currentindex = self._taxon_sflag_list.findText(spp_flag, QtCore.Qt.MatchFixedString)
         if currentindex >= 0:
@@ -747,6 +800,11 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         if scientific_full_name == '':
             self._taxon_sflag_list.setCurrentIndex(0)
             self._taxon_cf_list.setCurrentIndex(0)
+            
+            
+#             self._trophic_type_list.setCurrentIndex(0)
+            
+            
             self._disable_counting_buttons()
             self._countedunits_edit.setValue(0)
             self._abundance_class_list.setCurrentIndex(0)
@@ -805,6 +863,11 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         info_dict['scientific_name'] = scientific_name
         info_dict['size_class'] = unicode(self._speciessizeclass_list.currentText())
         info_dict['cf'] = unicode(self._taxon_cf_list.currentText())
+        
+        
+#         info_dict['trophic_type'] = unicode(self._trophic_type_list.currentText())
+        
+        
         info_dict['species_flag_code'] = unicode(self._taxon_sflag_list.currentText())
         info_dict['variable_comment'] = unicode(self._variable_comment_edit.text())
         info_dict['method_step'] = unicode(self._selectmethodstep_list.currentText())
@@ -838,6 +901,11 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         info_dict['scientific_name'] = scientific_name
         info_dict['size_class'] = unicode(self._speciessizeclass_list.currentText())
         info_dict['cf'] = unicode(self._taxon_cf_list.currentText())
+        
+        
+#         info_dict['trophic_type'] = unicode(self._trophic_type_list.currentText())
+        
+        
         info_dict['species_flag_code'] = unicode(self._taxon_sflag_list.currentText())
         info_dict['variable_comment'] = unicode(self._variable_comment_edit.text())
         info_dict['method_step'] = unicode(self._selectmethodstep_list.currentText())

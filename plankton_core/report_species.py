@@ -44,8 +44,8 @@ class CreateReportSpecies(object):
             raise UserWarning('Unknown report type.')
         
         # Set header.
-        self._numberofcolumns = 7 + (self._numberofsamples * self._numberofcolumnspersample)
-        result_table.set_header([u''] * (7 + self._numberofsamples * self._numberofcolumnspersample)) # Note: Header is not used.
+        self._numberofcolumns = 8 + (self._numberofsamples * self._numberofcolumnspersample)
+        result_table.set_header([u''] * (8 + self._numberofsamples * self._numberofcolumnspersample)) # Note: Header is not used.
         #
         # Part 1: Create header rows with columns for sample related data.
         #
@@ -55,12 +55,12 @@ class CreateReportSpecies(object):
         header_row_4 = [''] * self._numberofcolumns 
         header_row_5 = [''] * self._numberofcolumns 
         header_row_6 = [''] * self._numberofcolumns 
-        header_row_1[6] = u'Station:'
-        header_row_2[6] = u'Sampling date:'
-        header_row_3[6] = u'Min. depth:'
-        header_row_4[6] = u'Max. depth:'
-        header_row_5[6] = u'Analysis date:'
-        header_row_6[6] = u'Analysed by:'
+        header_row_1[7] = u'Station:'
+        header_row_2[7] = u'Sampling date:'
+        header_row_3[7] = u'Min. depth:'
+        header_row_4[7] = u'Max. depth:'
+        header_row_5[7] = u'Analysis date:'
+        header_row_6[7] = u'Analysed by:'
         #
         # Iterate over file to create columns.
         sampleindex = 0
@@ -68,12 +68,12 @@ class CreateReportSpecies(object):
             for visitnode in dataset.get_children():
                 for samplenode in visitnode.get_children():
                     #
-                    header_row_1[7 + (sampleindex * self._numberofcolumnspersample)] = visitnode.get_data('station_name')
-                    header_row_2[7 + (sampleindex * self._numberofcolumnspersample)] = visitnode.get_data('sample_date')
-                    header_row_3[7 + (sampleindex * self._numberofcolumnspersample)] = samplenode.get_data('sample_min_depth_m')
-                    header_row_4[7 + (sampleindex * self._numberofcolumnspersample)] = samplenode.get_data('sample_max_depth_m')
-                    header_row_5[7 + (sampleindex * self._numberofcolumnspersample)] = samplenode.get_data('analysis_date')
-                    header_row_6[7 + (sampleindex * self._numberofcolumnspersample)] = samplenode.get_data('analysed_by')
+                    header_row_1[8 + (sampleindex * self._numberofcolumnspersample)] = visitnode.get_data('station_name')
+                    header_row_2[8 + (sampleindex * self._numberofcolumnspersample)] = visitnode.get_data('sample_date')
+                    header_row_3[8 + (sampleindex * self._numberofcolumnspersample)] = samplenode.get_data('sample_min_depth_m')
+                    header_row_4[8 + (sampleindex * self._numberofcolumnspersample)] = samplenode.get_data('sample_max_depth_m')
+                    header_row_5[8 + (sampleindex * self._numberofcolumnspersample)] = samplenode.get_data('analysis_date')
+                    header_row_6[8 + (sampleindex * self._numberofcolumnspersample)] = samplenode.get_data('analysed_by')
                     #
                     sampleindex += 1
         #
@@ -91,7 +91,11 @@ class CreateReportSpecies(object):
                 
                     for variablenode in samplenode.get_children():
                         #  
-                        taxonandsize = variablenode.get_data('scientific_name') + ':' + variablenode.get_data(u'size_class')
+                        taxonandsize = variablenode.get_data('scientific_name') + ':' + \
+                                       variablenode.get_data(u'size_class') + ':' + \
+                                       variablenode.get_data(u'species_flag_code') + ':' + \
+                                       variablenode.get_data(u'cf') + ':' + \
+                                       variablenode.get_data(u'trophic_type') 
                         #
                         parameter = variablenode.get_data('parameter')
                         value = variablenode.get_data('value')
@@ -121,26 +125,30 @@ class CreateReportSpecies(object):
             taxonandsize = phytowinnameandsize.split(':')
             scientificname = taxonandsize[0]
             sizeclass = taxonandsize[1]
+            sflag = taxonandsize[2]
+            cf = taxonandsize[3]
+            trophic_type = taxonandsize[4]
             # Get extra info.
             taxonclass = plankton_core.Species().get_taxon_value(scientificname, u'taxon_class')
             harmful = plankton_core.Species().get_taxon_value(scientificname, u'harmful')
             unit_type = plankton_core.Species().get_bvol_value(scientificname, sizeclass, u'bvol_unit')
-            trophic_type = plankton_core.Species().get_bvol_value(scientificname, sizeclass, u'bvol_trophic_type')
-            if not trophic_type:
-                trophic_type = plankton_core.Species().get_taxon_value(scientificname, u'bvol_trophic_type')
+            # trophic_type = plankton_core.Species().get_bvol_value(scientificname, sizeclass, u'trophic_type')
+            # if not trophic_type:
+            #     trophic_type = plankton_core.Species().get_taxon_value(scientificname, u'trophic_type')
             #
             # Put the row together.
-            row = [''] * (7 + (self._numberofcolumns * self._numberofcolumnspersample))
+            row = [''] * (8 + (self._numberofcolumns * self._numberofcolumnspersample))
             row[0] = taxonclass
             row[1] = u'X' if harmful else u''
             row[2] = scientificname
             row[3] = sizeclass
-#             row[4] = sflag.lower() if sflag else '' # Lowercase.
-            row[5] = trophic_type
-            row[6] = unit_type 
+            row[4] = sflag.lower() if sflag else '' # Lowercase.
+            row[5] = cf.lower() if cf else '' # Lowercase.
+            row[6] = trophic_type
+            row[7] = unit_type 
             #
             for index, value in enumerate(parameter_values_dict[phytowinnameandsize]):
-                row[7 + (index)] = value
+                row[8 + (index)] = value
             # Add the row the report.
             species_rows.append(row)
             
@@ -160,7 +168,7 @@ class CreateReportSpecies(object):
                             if oldrow[5] == row[5]: # Column 5: Trophy may differ for Unicells etc.
                                 sampleindex = 0
                                 while sampleindex < self._numberofsamples:
-                                    abundcol = 7 + (sampleindex * self._numberofcolumnspersample)
+                                    abundcol = 8 + (sampleindex * self._numberofcolumnspersample)
                                     volumecol = abundcol + 1
                                     if row[abundcol] and oldrow[abundcol]:
                                         row[abundcol] = unicode(int(row[abundcol]) + int(oldrow[abundcol]))
@@ -189,15 +197,15 @@ class CreateReportSpecies(object):
         if self._reporttype == 'counted':
             if aggregate_rows:
                 result_table.append_row([u'Class', u'Pot. toxic', 
-                                         u'Scientific name', u'', u'Sflag', u'Trophic type', u'Unit type'] + 
+                                         u'Scientific name', u'', u'Sflag', u'Cf', u'Trophic type', u'Unit type'] + 
                                         [u'Units/L', u'Biovolume (mm3/L)'] * self._numberofsamples) # Two columns per sample.
             else:
                 result_table.append_row([u'Class', u'Pot. toxic', 
-                                         u'Scientific name', u'Size class', u'Sflag', u'Trophic type', u'Unit type'] + 
+                                         u'Scientific name', u'Size class', u'Sflag', u'Cf', u'Trophic type', u'Unit type'] + 
                                         [u'Units/L', u'Biovolume (mm3/L)'] * self._numberofsamples) # Two columns per sample.
         elif self._reporttype == 'net':
             result_table.append_row([u'Class', u'Pot. toxic', 
-                                     u'Scientific name', u'', u'Sflag', u'Trophic type', u'Unit type'] + 
+                                     u'Scientific name', u'', u'Sflag', u'Cf', u'Trophic type', u'Unit type'] + 
                                     [u'Occurrence'] * self._numberofsamples) # Two columns per sample.
         #
         for row in species_rows:
@@ -208,7 +216,7 @@ class CreateReportSpecies(object):
 def report_count_table_sort(s1, s2):
     """ """
     # Sort order: Class and scientific name.
-    columnsortorder = [0, 2, 3, 5] # Class, species, size class and trophy.
+    columnsortorder = [0, 2, 3, 6] # Class, species, size class and trophy.
     #
     for index in columnsortorder:
         s1item = s1[index]

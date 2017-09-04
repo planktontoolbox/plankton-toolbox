@@ -26,6 +26,7 @@ class CreateReportStandard(object):
             'sample_max_depth_m', 
             'scientific_name', 
             'species_flag_code', 
+            'cf', 
             'size_class', #'text', 
             'trophic_type', 
             'parameter', 
