@@ -16,7 +16,7 @@ import plankton_toolbox.tools.peg_browser_tool as peg_browser_tool
 import plankton_toolbox.tools.harmful_plankton_browser_tool as harmful_plankton_browser_tool
 import plankton_toolbox.tools.taxon_facts_tool as taxon_facts_tool
 import plankton_toolbox.tools.taxon_images_tool as taxon_images_tool
-import plankton_toolbox.tools.species_tool as species_tool
+#import plankton_toolbox.tools.species_tool as species_tool
 
 import plankton_toolbox.tools.graphplotter_tool as graphplotter_tool
 
