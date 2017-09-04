@@ -78,7 +78,8 @@ class PlanktonCounterMethods():
     def get_counting_species_table(self, counting_species_file_name):
         """ """
         # Use all prealoaded species.
-        if counting_species_file_name == '<all species>':
+        if counting_species_file_name == '<valid taxa>':
+#         if counting_species_file_name == '<all species>':
             species_list_of_list = []
 #             for key in sorted(plankton_core.Species().get_taxa_lookup_dict().keys()):
             for key in sorted(plankton_core.Species().get_taxa_dict().keys()):
@@ -382,7 +383,8 @@ class PlanktonCounterMethod():
             
             # Calculate coeff.
             onelitre_ml = 1000.0
-            coeffoneunit = chamber_filter_area * sampledvolume * onelitre_ml / (singlearea * counted_volume * (sampledvolume + preservative_volume))
+            ### TEST: coeffoneunit = chamber_filter_area * sampledvolume * onelitre_ml / (singlearea * counted_volume * (sampledvolume + preservative_volume))
+            coeffoneunit = chamber_filter_area * (sampledvolume + preservative_volume) * onelitre_ml / (singlearea * counted_volume * sampledvolume)
             coeffoneunit = int(coeffoneunit + 0.5) # Round.
             fields_dict['coefficient_one_unit'] = unicode(coeffoneunit)
         except:

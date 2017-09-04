@@ -177,7 +177,8 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         #
         # Column 2: Species lists for counting.
         self._selectspecieslist_list = KeyPressQComboBox(self)
-        self._selectspecieslist_list.addItems(['<all species>'])
+        self._selectspecieslist_list.addItems(['<valid taxa>'])
+#         self._selectspecieslist_list.addItems(['<all species>'])
         self._selectspecieslist_list.currentIndexChanged.connect(self._selected_species_list_changed)
         # 
         self._species_tableview = KeyPressToolboxQTableView(self, filter_column_index = 0)
@@ -463,6 +464,18 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         else:
             QtGui.QApplication.beep()
          
+    def _abundance_class_add(self, value):
+        """ """
+        if self._abundance_class_list.isEnabled():
+            oldindex = self._abundance_class_list.currentIndex()
+            newindex = oldindex + value
+            if (newindex >= 0) and (newindex <= 5): 
+                self._abundance_class_list.setCurrentIndex(newindex)
+            else:
+                QtGui.QApplication.beep()
+        else:
+            QtGui.QApplication.beep()
+
     def _add_1(self): self._counted_add(1)
     def _sub_1(self): self._counted_add(-1)
     def _add_10(self): self._counted_add(10)
@@ -848,7 +861,8 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         """ """
         self._selectspecieslist_list.clear()
         specieslists = plankton_core.PlanktonCounterMethods().get_counting_species_lists()
-        self._selectspecieslist_list.addItems(['<select>', '<all species>' ] + specieslists)
+        self._selectspecieslist_list.addItems(['<select>', '<valid taxa>' ] + specieslists)
+#         self._selectspecieslist_list.addItems(['<select>', '<all species>' ] + specieslists)
  
     def _update_selected_specieslist(self, selected_list):
         """ """
@@ -1110,20 +1124,20 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
     def handle_key_press_event(self, qKeyEvent):
         """ """
         if qKeyEvent.key() == QtCore.Qt.Key_Plus: 
-            self._counted_add(1)  
+            self.add_to_counted_or_abundant_class(1)  
             return True
         elif qKeyEvent.key() == QtCore.Qt.Key_Space: 
-            self._counted_add(1)  
+            self.add_to_counted_or_abundant_class(1)  
             return True
 #         elif qKeyEvent.key() == QtCore.Qt.RightButton: # Mouse right button.
 #             self._counted_add(1)  
 #             return True
         #
         elif qKeyEvent.key() == QtCore.Qt.Key_Minus: 
-            self._counted_add(-1)
+            self.add_to_counted_or_abundant_class(-1)
             return True
         elif qKeyEvent.key() == QtCore.Qt.Key_Backspace: 
-            self._counted_add(-1)
+            self.add_to_counted_or_abundant_class(-1)
             return True
         #
         elif qKeyEvent.key() == QtCore.Qt.Key_Escape: 
@@ -1132,6 +1146,13 @@ class PlanktonCounterSampleCount(QtGui.QWidget):
         #
         return False
  
+    def add_to_counted_or_abundant_class(self, value):
+        """ """
+        if self._countedunits_edit.isEnabled():
+            self._counted_add(value)  
+        elif self._abundance_class_list.isEnabled():
+            self._abundance_class_add(value)  
+        
  
 # === Subclasses of Qt widgets. ===
  

@@ -386,6 +386,7 @@ class PlanktonCounterSample():
         #
         totalcounted = 0
         countedspecies = {} # Value for sizeclasses aggregated.
+        countedspecies_text = {} # Value for sizeclasses aggregated.
         size_range_dict = {} # Value for sizeclasses aggregated.
         locked_list = []
         #
@@ -418,42 +419,45 @@ class PlanktonCounterSample():
             # Create in list, first time only.
             if taxon not in countedspecies:
                 countedspecies[taxon] = 0
+                countedspecies_text[taxon] = '0'
             # Add.
             try:
                 abundance_class = sampleobject.get_abundance_class()
-                if abundance_class in ['', '0']:
+                if abundance_class in ['', 0]:
+                    # Quantitative.
                     countedspecies[taxon] += int(sampleobject.get_counted_units())
+                    countedspecies_text[taxon] = unicode(countedspecies[taxon])
+                    
+                    totalcounted += int(sampleobject.get_counted_units())
 
-                    
-                    
-                    # TODO:
-                    # TODO:
-                    # TODO:
-                    countedspecies[taxon] = sampleobject.get_counted_units()
                     counted_units_list = sampleobject.get_counted_units_list()
                     if ';' in counted_units_list:
                         last_transect_units = counted_units_list.split(';')[-1]
-                        countedspecies[taxon] = sampleobject.get_counted_units() + '/' + last_transect_units
-                    # TODO:
-                    # TODO:
-                    # TODO:
-                    
-                    
-                    totalcounted += int(sampleobject.get_counted_units())
+                        countedspecies_text[taxon] = unicode(countedspecies[taxon]) + '/' + last_transect_units
                 else:
+                    # Qualitative.
                     if summary_type in ['Counted per taxa', 'Counted per taxa/sizes']:
-                        if abundance_class == '1':
-                            countedspecies[taxon] = '1=Observed'
-                        elif abundance_class == '2':
-                            countedspecies[taxon] = '2=Several cells'
-                        elif abundance_class == '3':
-                            countedspecies[taxon] = '3=1-10%'
-                        elif abundance_class == '4':
-                            countedspecies[taxon] = '4=10-50%'
-                        elif abundance_class == '5':
-                            countedspecies[taxon] = '5=50-100%'
+                        if countedspecies[taxon] == 0:
+                            if abundance_class == '1':
+                                countedspecies[taxon] = 1
+                                countedspecies_text[taxon] = '1=Observed'
+                            elif abundance_class == '2':
+                                countedspecies[taxon] = 2
+                                countedspecies_text[taxon] = '2=Several cells'
+                            elif abundance_class == '3':
+                                countedspecies[taxon] = 3
+                                countedspecies_text[taxon] = '3=1-10%'
+                            elif abundance_class == '4':
+                                countedspecies[taxon] = 4
+                                countedspecies_text[taxon] = '4=10-50%'
+                            elif abundance_class == '5':
+                                countedspecies[taxon] = 5
+                                countedspecies_text[taxon] = '5=50-100%'
+                        else:
+                            countedspecies[taxon] = 1
+                            countedspecies_text[taxon] = '<Qualitative>'
                     else:
-                        countedspecies[taxon] = 'Qualitative'
+                        countedspecies_text[taxon] = '<Qualitative>'
             except: pass # If value = ''.
             #
             if summary_type in ['Counted per taxa/sizes']:
@@ -473,7 +477,7 @@ class PlanktonCounterSample():
                 if key in locked_list:
                     lock_info = ' [Locked]'
                 
-                summary_data.append(key + ': ' + unicode(countedspecies[key]) + lock_info + size_range)
+                summary_data.append(key + ': ' + unicode(countedspecies_text[key]) + lock_info + size_range)
         else:
             # Sort for most counted.
             for key in sorted(countedspecies, key=countedspecies.get, reverse=True):
@@ -483,7 +487,7 @@ class PlanktonCounterSample():
                 lock_info = ''
                 if key in locked_list:
                     lock_info = ' [Locked]'
-                summary_data.append(key + ': ' + unicode(countedspecies[key]) + lock_info + size_range)
+                summary_data.append(key + ': ' + unicode(countedspecies_text[key]) + lock_info + size_range)
         #
         return summary_data
 
@@ -829,8 +833,14 @@ class SampleRow():
         self._taxon_dict = plankton_core.Species().get_taxon_dict(self._scientific_name)
         self._size_class_dict = plankton_core.Species().get_bvol_dict(self._scientific_name, self._size_class)
         self._sample_row_dict['taxon_class'] = self._taxon_dict.get('taxon_class', '')
-        self._sample_row_dict['trophic_type'] = self._size_class_dict.get('bvol_trophic_type', '')
         self._sample_row_dict['unit_type'] = self._size_class_dict.get('bvol_unit', '')
+        # Trophic type.
+        if not self._sample_row_dict.get('trophic_type', ''):
+            trophic_type = self._size_class_dict.get('trophic_type', '')
+            if not trophic_type:
+                trophic_type = self._taxon_dict.get('trophic_type', '')
+            if trophic_type:
+                self._sample_row_dict['trophic_type'] = trophic_type
         #
         self._bvol_volume = 0.0
         self._bvol_carbon = 0.0

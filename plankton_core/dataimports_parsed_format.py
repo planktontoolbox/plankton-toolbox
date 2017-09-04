@@ -163,9 +163,9 @@ class ParsedFormat(plankton_core.FormatBase):
         scientific_name = unicode(scientific_name)
         size_class = unicode(size_class)
         reported_trophic_type = unicode(reported_trophic_type)
-        value = plankton_core.Species().get_bvol_value(scientific_name, size_class, 'bvol_trophic_type')
+        value = plankton_core.Species().get_bvol_value(scientific_name, size_class, 'trophic_type')
         if not value:
-            value = plankton_core.Species().get_taxon_value(scientific_name, 'bvol_trophic_type')
+            value = plankton_core.Species().get_taxon_value(scientific_name, 'trophic_type')
         if not value:
             value = reported_trophic_type
         #   

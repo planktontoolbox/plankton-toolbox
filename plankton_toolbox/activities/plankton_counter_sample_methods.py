@@ -156,7 +156,8 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         self._coefficient_one_unit_edit.setEnabled(False)
 
         self._counting_species_list = QtGui.QComboBox()
-        self._counting_species_list.addItems(['<all species>'])
+        self._counting_species_list.addItems(['<valid taxa>'])
+#         self._counting_species_list.addItems(['<all species>'])
         self._counting_species_list.currentIndexChanged.connect(self._field_changed)
         self._viewsizeclassinfo_checkbox = QtGui.QCheckBox('View sizeclass info')
         self._viewsizeclassinfo_checkbox.setChecked(True) 
@@ -323,7 +324,8 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
         self._counting_species_list.clear()
         specieslists = plankton_core.PlanktonCounterMethods().get_counting_species_lists()
         if len(specieslists) > 0:
-            self._counting_species_list.addItems(['<all species>'] + specieslists)
+            self._counting_species_list.addItems(['<valid taxa>'] + specieslists)
+#             self._counting_species_list.addItems(['<all species>'] + specieslists)
         else:
             self._counting_species_list.addItems(['<not available>'])        
         
@@ -438,7 +440,8 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
             self._transectrectanglewidth_edit.setText(fields_dict.get('transect_rectangle_width_mm', ''))
             self._coefficient_one_unit_edit.setText(fields_dict.get('coefficient_one_unit', ''))
             #
-            comboindex = self._counting_species_list.findText(fields_dict.get('counting_species_list', '<all species>'))
+            comboindex = self._counting_species_list.findText(fields_dict.get('counting_species_list', '<valid taxa>'))
+#             comboindex = self._counting_species_list.findText(fields_dict.get('counting_species_list', '<all species>'))
             self._counting_species_list.setCurrentIndex(comboindex)
             #
             combostate = fields_dict.get('view_sizeclass_info', 'FALSE')
@@ -519,7 +522,8 @@ class PlanktonCounterSampleMethods(QtGui.QWidget):
             self._transectrectanglewidth_edit.setText(fields_dict.get('transect_rectangle_width_mm', ''))
             self._coefficient_one_unit_edit.setText(fields_dict.get('coefficient_one_unit', ''))
             #
-            comboindex = self._counting_species_list.findText(fields_dict.get('counting_species_list', '<all species>'))
+            comboindex = self._counting_species_list.findText(fields_dict.get('counting_species_list', '<valid taxa>'))
+#             comboindex = self._counting_species_list.findText(fields_dict.get('counting_species_list', '<all species>'))
             self._counting_species_list.setCurrentIndex(comboindex)
             #
             combostate = fields_dict.get('view_sizeclass_info', 'FALSE')
