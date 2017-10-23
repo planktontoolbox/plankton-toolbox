@@ -1015,7 +1015,8 @@ class SampleRow():
             self._sample_row_dict['abundance_units_l'] = unicode(self._round_value(abundance))
             #
             try:
-                value = abundance * self._bvol_volume / 1000000.0
+                ### value = abundance * self._bvol_volume / 1000000.0
+                value = abundance * self._bvol_volume / 1000000000.0
                 self._sample_row_dict['volume_mm3_l'] = unicode(self._round_value(value))
             except:
                 self._sample_row_dict['volume_mm3_l'] = '0.00'
