@@ -154,8 +154,8 @@ class MainWindow(QtWidgets.QMainWindow):
         dock.setObjectName('Activities and tools selector')
         dock.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea)
         dock.setFeatures(QtWidgets.QDockWidget.NoDockWidgetFeatures)
-        # dock.setFeatures(QtGui.QDockWidget.DockWidgetFloatable | 
-        #                  QtGui.QDockWidget.DockWidgetMovable)
+        # dock.setFeatures(QtWidgets.QDockWidget.DockWidgetFloatable | 
+        #                  QtWidgets.QDockWidget.DockWidgetMovable)
         self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
         # Widget to create space and layout for two groupboxes.
         content = QtWidgets.QWidget()
@@ -166,7 +166,7 @@ class MainWindow(QtWidgets.QMainWindow):
         dock.setWidget(widget)        
         # Add scroll.
         mainscroll = QtWidgets.QScrollArea()
-        ### mainscroll.setFrameShape(QtGui.QFrame.NoFrame)
+        ### mainscroll.setFrameShape(QtWidgets.QFrame.NoFrame)
         mainscroll.setWidget(content)
         mainscroll.setWidgetResizable(True)
         mainlayout = QtWidgets.QVBoxLayout()
@@ -196,9 +196,9 @@ class MainWindow(QtWidgets.QMainWindow):
             activity.set_main_menu_button(button)
             activitiesvbox.addWidget(button) # Adds to stack.                  
             # The activity is called to select stack item by object, not index.
-#             self.connect(button, QtCore.SIGNAL('clicked()'), button.markAsSelected)
+#             self.connect(button.clicked(button.markAsSelected)
             button.activity_menu_label_clicked.connect(button.markAsSelected)
-#             self.connect(button, QtCore.SIGNAL('clicked()'), activity.show_in_main_window)
+#             self.connect(button.clicked(activity.show_in_main_window)
             button.activity_menu_label_clicked.connect(activity.show_in_main_window)
             # Create one layer in the stacked activity widget.
             self._activitystack.addWidget(activity)
@@ -213,15 +213,15 @@ class MainWindow(QtWidgets.QMainWindow):
             showhidehbox.addWidget(button_hide)
             showhidehbox.addStretch(10)
             toolsvbox.addLayout(showhidehbox)
-#             self.connect(button, QtCore.SIGNAL('clicked()'), tool.show_tool) 
+#             self.connect(button.clicked(tool.show_tool) 
             button.label_clicked.connect(tool.show_tool)
-#             self.connect(button_hide, QtCore.SIGNAL('clicked()'), tool.hide_tool) 
+#             self.connect(button_hide.clicked(tool.hide_tool) 
             button_hide.label_clicked.connect(tool.hide_tool)
         #
         # Button to hide all tools.
         button = app_framework.ClickableQLabel(' (Hide all)')
         toolsvbox.addWidget(button)
-#         self.connect(button, QtCore.SIGNAL('clicked()'), self._hideAllTools) 
+#         self.connect(button.clicked(self._hideAllTools) 
         button.label_clicked.connect(self._hideAllTools)
         #
         toolsvbox.addStretch(10)
@@ -258,7 +258,7 @@ class MainWindow(QtWidgets.QMainWindow):
         stacked layout, QStackedLayout, where the pages are selected from
         the activities group box. 
         """
-###        self._activityheader = QtGui.QLabel('<b>Activity not selected...</b>", self)
+###        self._activityheader = QtWidgets.QLabel('<b>Activity not selected...</b>", self)
 ###        self._activityheader.setAlignment(QtCore.Qt.AlignHCenter)
         self._activitystack = QtWidgets.QStackedLayout()        
         # Layout widgets.

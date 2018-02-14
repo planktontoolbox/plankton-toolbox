@@ -23,9 +23,9 @@ class ToolManager(object):
 
     def init_tools(self):
         """ Tool activator. """
-        # The log tool should be loaded before other tools.
-        self._toollist.append(app_tools.LogTool('Application log', self._parent))
-        self._toollist.append(app_tools.TemplateTool('Test tool (template)', self._parent))
+        self._toollist.append(app_tools.DatasetViewerTool('Dataset viewer', self._parent))
+        self._toollist.append(app_tools.GraphPlotterTool('Graph plotter', self._parent))
+        self._toollist.append(app_tools.LogTool('Toolbox logging', self._parent))
 
     def get_tool_by_name(self, object_name):
         """ Returns the tool. """

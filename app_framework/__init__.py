@@ -1,7 +1,11 @@
 
 from .patterns import singleton
 
+from .toolbox_datasets import ToolboxDatasets
+
 from .utils_qt import *
+
+from .app_sync import AppSync
 
 from .app_logging import Logging
 

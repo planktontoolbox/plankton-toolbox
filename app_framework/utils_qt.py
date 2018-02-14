@@ -12,6 +12,8 @@ from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 
+import plankton_core
+
 class RichTextQLabel(QtWidgets.QLabel):
     """ Customized QLabel. Used for informative texts. """
     def __init__(self, parent = None):  
@@ -230,7 +232,7 @@ class ToolboxQTableView(QtWidgets.QTableView):
     def __init__(self, parent = None, filter_column_index = None):
         """ """
         QtWidgets.QTableView.__init__(self, parent)
-# TODO:        self._tablemodel = ToolboxTableModel(modeldata = app_core.DatasetTable()) 
+        self._tablemodel = ToolboxTableModel(modeldata = plankton_core.DatasetTable()) 
         self._selectionmodel = None # Created below.
         # Connect models.
         if filter_column_index is None:
@@ -253,7 +255,7 @@ class ToolboxQTableView(QtWidgets.QTableView):
         # Default setup for tables.
         self.setAlternatingRowColors(True)
         self.setHorizontalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
-        #self.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        #self.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.setSelectionMode(QtWidgets.QAbstractItemView.ContiguousSelection)
 #         self.verticalHeader().setDefaultSectionSize(18)
            
@@ -272,7 +274,7 @@ class ToolboxQTableView(QtWidgets.QTableView):
     def getTableModel(self):
         """ """
         return self._tablemodel.getModeldata()
-          
+        
     def setTableModel(self, tablemodeldata):
         """ """
         self._tablemodel.setModeldata(tablemodeldata)
@@ -351,7 +353,7 @@ class ToolboxEditableQTableView( QtWidgets.QTableView):
         # Default setup for tables.
         self.setAlternatingRowColors(True)
         self.setHorizontalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
-        #self.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        #self.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.setSelectionMode(QtWidgets.QAbstractItemView.ContiguousSelection)
         # Default model, data and selection        
         self._tablemodel = ToolboxEditableTableModel()
@@ -410,7 +412,10 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
     def setModeldata(self, tablemodeldata):
         """ """
         self._modeldata = tablemodeldata
-        self.reset() 
+#         self.reset()
+        self.beginResetModel();
+        self._modeldata.clear();
+        self.endResetModel(); 
 
     def headerData(self, section, orientation, role = QtCore.Qt.DisplayRole):
         """ Overridden abstract method. """

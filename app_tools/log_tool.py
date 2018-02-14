@@ -42,8 +42,8 @@ class LogTool(app_framework.ToolBase):
         self._limit_edit.setMaximumWidth(60)        
         self._clear_button = QtWidgets.QPushButton('Clear log')
         self._clear_button.clicked.connect(self._clear_log)              
-#        self._openlogfile_button = QtGui.QPushButton('Open log file')
-#        self.connect(self._openlogfile_button, QtCore.SIGNAL('clicked()'), self._openLogFile)      
+#        self._openlogfile_button = QtWidgets.QPushButton('Open log file')
+#        self._openlogfile_button.clicked(self._openLogFile)      
         # Layout.
         layout = QtWidgets.QHBoxLayout()
         limit_label = QtWidgets.QLabel('Number of displayed rows: ')
@@ -59,7 +59,7 @@ class LogTool(app_framework.ToolBase):
         """ """
         # Active widgets and connections.
         self._logarea = QtWidgets.QListWidget(self)
-##        self._logarea = QtGui.QTextEdit(self)
+##        self._logarea = QtWidgets.QTextEdit(self)
         self._logarea.setMinimumHeight(20)
         self._logarea.setMinimumWidth(100)
         # Layout.

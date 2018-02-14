@@ -1,4 +1,6 @@
 
 from .log_tool import LogTool
 
-from .template_tool import TemplateTool
+from .dataset_viewer_tool import DatasetViewerTool
+
+from .graphplotter_tool import GraphPlotterTool
