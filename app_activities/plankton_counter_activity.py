@@ -8,22 +8,24 @@ import os
 # import ntpath
 import datetime
 import zipfile
+from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
-import plankton_toolbox.toolbox.utils_qt as utils_qt
-import plankton_toolbox.activities.activity_base as activity_base
-import plankton_toolbox.activities.plankton_counter_dialog as plankton_counter_dialog
+# import plankton_toolbox.toolbox.utils_qt as utils_qt
+# import plankton_toolbox.activities.activity_base as activity_base
+# import plankton_toolbox.activities.plankton_counter_dialog as plankton_counter_dialog
 import plankton_core
 import toolbox_utils
+import app_framework
 
-class PlanktonCounterActivity(activity_base.ActivityBase):
+class PlanktonCounterActivity(app_framework.ActivityBase):
     """ """
     
     def __init__(self, name, parentwidget):
         """ """
         self._current_dataset = None
         self._current_sample = None
-        self._counter_samples_model = QtWidgets.QStandardItemModel()
+        self._counter_samples_model = QtGui.QStandardItemModel()
         # Initialize parent (self._create_content will be called).
         super(PlanktonCounterActivity, self).__init__(name, parentwidget)
         # Update lists for datasets and samples.
@@ -33,9 +35,7 @@ class PlanktonCounterActivity(activity_base.ActivityBase):
             index = self._counter_samples_model.createIndex(0, 0)
             self._counter_samples_listview.setCurrentIndex(index)
         # Update plankton counter datasets when changes occured.
-        self.connect(plankton_core.PlanktonCounterManager(), 
-                     QtCore.SIGNAL('planktonCounterListChanged'), 
-                     self._update_counter_sample_list)
+        plankton_core.PlanktonCounterManager().planktonCounterListChanged.connect(self._update_counter_sample_list)
         
     def _emit_change_notification(self):
         """ Emit signal to update GUI lists for available datasets and samples. """
@@ -62,26 +62,26 @@ class PlanktonCounterActivity(activity_base.ActivityBase):
         self._counter_samples_listview.setModel(self._counter_samples_model)
         self._counter_samples_listview.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self._counter_samples_selection_model = self._counter_samples_listview.selectionModel()
-        self._counter_samples_selection_model.selectionChanged._selected_sample_changed)
+        self._counter_samples_selection_model.selectionChanged.connect(self._selected_sample_changed)
         #
-        self._counter_samples_listview.doubleClicked._open_edit_count)
+        self._counter_samples_listview.doubleClicked.connect(self._open_edit_count)
         #
         self._newdataset_button = QtWidgets.QPushButton('New dataset...')        
-        self._newdataset_button.clicked._new_datasets)
+        self._newdataset_button.clicked.connect(self._new_datasets)
         self._newsample_button = QtWidgets.QPushButton('New sample...')        
-        self._newsample_button.clicked._new_sample)
+        self._newsample_button.clicked.connect(self._new_sample)
         self._deletesample_button = QtWidgets.QPushButton('Delete...')
-        self._deletesample_button.clicked._delete_datasets_and_sample)               
+        self._deletesample_button.clicked.connect(self._delete_datasets_and_sample)               
         self._countsample_button = QtWidgets.QPushButton('Edit/count sample...')
-        self._countsample_button.clicked._open_edit_count)               
+        self._countsample_button.clicked.connect(self._open_edit_count)               
         #
         self._refresh_button = QtWidgets.QPushButton('Refresh dataset list')
-#         self._refresh_button.clicked._update_counter_sample_list)
-        self._refresh_button.clicked._emit_change_notification)
+#         self._refresh_button.clicked.connect(self._update_counter_sample_list)
+        self._refresh_button.clicked.connect(self._emit_change_notification)
         self._exportimportsamples_button = QtWidgets.QPushButton('Export/import samples (.xlsx)...')
-        self._exportimportsamples_button.clicked._export_import_samples)
+        self._exportimportsamples_button.clicked.connect(self._export_import_samples)
         self._backup_button = QtWidgets.QPushButton('Export/import toolbox data (.zip)...')
-        self._backup_button.clicked._backup_export_import)
+        self._backup_button.clicked.connect(self._backup_export_import)
         # Layout widgets.
         hbox1 = QtWidgets.QHBoxLayout()
         hbox1.addWidget(self._newdataset_button)
@@ -200,9 +200,9 @@ class NewDatasetDialog(QtWidgets.QDialog):
         self._datasetname_edit = QtWidgets.QLineEdit('')
         self._datasetname_edit.setMinimumWidth(400)
         createdataset_button = QtWidgets.QPushButton('Create dataset')
-        createdataset_button.clicked._create_dataset)               
+        createdataset_button.clicked.connect(self._create_dataset)               
         cancel_button = QtWidgets.QPushButton('Cancel')
-        cancel_button.clicked.reject) # Close dialog box.               
+        cancel_button.clicked.connect(self.reject) # Close dialog box.               
         # Layout widgets.
         formlayout = QtWidgets.QFormLayout()
         formlayout.addRow('Dataset name:', self._datasetname_edit)
@@ -245,9 +245,9 @@ class NewSampleDialog(QtWidgets.QDialog):
         self._samplename_edit = QtWidgets.QLineEdit('')
         self._samplename_edit.setMinimumWidth(400)
         createsample_button = QtWidgets.QPushButton('Create sample')
-        createsample_button.clicked._create_sample)               
+        createsample_button.clicked.connect(self._create_sample)               
         cancel_button = QtWidgets.QPushButton('Cancel')
-        cancel_button.clicked.reject) # Close dialog box.               
+        cancel_button.clicked.connect(self.reject) # Close dialog box.               
         # Layout widgets.
         formlayout = QtWidgets.QFormLayout()
 #         formlayout.addRow('Sample id:', self._sampleid_edit)
@@ -321,17 +321,17 @@ class DeleteDialog(QtWidgets.QDialog):
         widget = QtWidgets.QWidget()
         #  
         datasets_listview = QtWidgets.QListView()
-        self._datasets_model = QtWidgets.QStandardItemModel()
+        self._datasets_model = QtGui.QStandardItemModel()
         datasets_listview.setModel(self._datasets_model)
 
         clearall_button = app_framework.ClickableQLabel('Clear all')
-        self.connect(clearall_button.clicked(self._uncheck_all_datasets)                
+        clearall_button.clicked.connect(self._uncheck_all_datasets)                
         markall_button = app_framework.ClickableQLabel('Mark all')
-        self.connect(markall_button.clicked(self._check_all_datasets)                
+        markall_button.clicked.connect(self._check_all_datasets)                
         delete_button = QtWidgets.QPushButton('Delete marked dataset(s)')
-        delete_button.clicked._delete_marked_datasets)               
+        delete_button.clicked.connect(self._delete_marked_datasets)               
         cancel_button = QtWidgets.QPushButton('Cancel')
-        cancel_button.clicked.reject) # Close dialog box.               
+        cancel_button.clicked.connect(self.reject) # Close dialog box.               
         # Layout widgets.
         hbox1 = QtWidgets.QHBoxLayout()
         hbox1.addWidget(clearall_button)
@@ -356,7 +356,7 @@ class DeleteDialog(QtWidgets.QDialog):
         """ """
         self._datasets_model.clear()        
         for datasetname in plankton_core.PlanktonCounterManager().get_dataset_names():
-            item = QtWidgets.QStandardItem(datasetname)
+            item = QtGui.QStandardItem(datasetname)
             item.setCheckState(QtCore.Qt.Unchecked)
             item.setCheckable(True)
             self._datasets_model.appendRow(item)
@@ -393,17 +393,17 @@ class DeleteDialog(QtWidgets.QDialog):
         widget = QtWidgets.QWidget()
         #  
         samples_listview = QtWidgets.QListView()
-        self._samples_model = QtWidgets.QStandardItemModel()
+        self._samples_model = QtGui.QStandardItemModel()
         samples_listview.setModel(self._samples_model)
         #
         clearall_button = app_framework.ClickableQLabel('Clear all')
-        self.connect(clearall_button.clicked(self._uncheck_all_samples)                
+        clearall_button.clicked.connect(self._uncheck_all_samples)                
         markall_button = app_framework.ClickableQLabel('Mark all')
-        self.connect(markall_button.clicked(self._check_all_samples)                
+        markall_button.clicked.connect(self._check_all_samples)                
         delete_button = QtWidgets.QPushButton('Delete marked sample(s)')
-        delete_button.clicked._delete_marked_samples)               
+        delete_button.clicked.connect(self._delete_marked_samples)               
         cancel_button = QtWidgets.QPushButton('Cancel')
-        cancel_button.clicked.reject) # Close dialog box.               
+        cancel_button.clicked.connect(self.reject) # Close dialog box.               
         # Layout widgets.
         hbox1 = QtWidgets.QHBoxLayout()
         hbox1.addWidget(clearall_button)
@@ -428,11 +428,11 @@ class DeleteDialog(QtWidgets.QDialog):
         """ """
         self._samples_model.clear()        
         for datasetname in plankton_core.PlanktonCounterManager().get_dataset_names():
-            item = QtWidgets.QStandardItem('Dataset: ' + datasetname)
+            item = QtGui.QStandardItem('Dataset: ' + datasetname)
             self._samples_model.appendRow(item)
             # Samples.
             for samplename in plankton_core.PlanktonCounterManager().get_sample_names(datasetname):
-                item = QtWidgets.QStandardItem(samplename)
+                item = QtGui.QStandardItem(samplename)
                 item.setCheckState(QtCore.Qt.Unchecked)
                 item.setCheckable(True)
                 self._samples_model.appendRow(item)
@@ -500,12 +500,12 @@ class BackupExportImportDialog(QtWidgets.QDialog):
            
         self._backupdir_edit = QtWidgets.QLineEdit('')
         self._backupdir_button = QtWidgets.QPushButton('Browse...')
-        self._backupdir_button.clicked._browse_backup_dir)
+        self._backupdir_button.clicked.connect(self._browse_backup_dir)
         self._backupzipfilename_edit = QtWidgets.QLineEdit('')
         self._backup_button = QtWidgets.QPushButton('Backup')
-        self._backup_button.clicked._backup)
+        self._backup_button.clicked.connect(self._backup)
         self._backupcancel_button = QtWidgets.QPushButton('Cancel')
-        self._backupcancel_button.clicked.reject)
+        self._backupcancel_button.clicked.connec(self.reject)
         # Layout widgets.
         form1 = QtWidgets.QGridLayout()
         gridrow = 0
@@ -573,13 +573,13 @@ class BackupExportImportDialog(QtWidgets.QDialog):
         #  
         self._importfile_edit = QtWidgets.QLineEdit('')
         self._importfile_button = QtWidgets.QPushButton('Browse...')
-        self._importfile_button.clicked._browse_import_files)
+        self._importfile_button.clicked.connect(self._browse_import_files)
         self._copyold_checkbox = QtWidgets.QCheckBox('Rename the old plankton_toolbox_data before import.')
         self._copyold_checkbox.setChecked(True)
         self._import_button = QtWidgets.QPushButton('Import from backup')
-        self._import_button.clicked._import_from_backup)
+        self._import_button.clicked.connect(self._import_from_backup)
         self._importcancel_button = QtWidgets.QPushButton('Cancel')
-        self._importcancel_button.clicked.reject)
+        self._importcancel_button.clicked.connec(self.reject)
         # Layout widgets.
         form1 = QtWidgets.QGridLayout()
         gridrow = 0
@@ -710,20 +710,20 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
         #
         self._browse_export_target_dir = QtWidgets.QLineEdit('')
         self._exportdir_button = QtWidgets.QPushButton('Browse...')
-        self._exportdir_button.clicked._browse_export_dir)
+        self._exportdir_button.clicked.connect(self._browse_export_dir)
         #  
         samples_listview = QtWidgets.QListView()
-        self._samples_model = QtWidgets.QStandardItemModel()
+        self._samples_model = QtGui.QStandardItemModel()
         samples_listview.setModel(self._samples_model)
         #
         clearall_button = app_framework.ClickableQLabel('Clear all')
-        self.connect(clearall_button.clicked(self._uncheck_all_samples)                
+        clearall_button.clicked.connect(self._uncheck_all_samples)                
         markall_button = app_framework.ClickableQLabel('Mark all')
-        self.connect(markall_button.clicked(self._check_all_samples)                
+        markall_button.clicked.connect(self._check_all_samples)                
         delete_button = QtWidgets.QPushButton('Export marked sample(s)')
-        delete_button.clicked._export_marked_samples)               
+        delete_button.clicked.connect(self._export_marked_samples)               
         cancel_button = QtWidgets.QPushButton('Cancel')
-        cancel_button.clicked.reject) # Close dialog box.               
+        cancel_button.clicked.connect(self.reject) # Close dialog box.               
         # Layout widgets.
         form1 = QtWidgets.QGridLayout()
         gridrow = 0
@@ -784,9 +784,9 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
         self._replaceoldsamples_checkbox = QtWidgets.QCheckBox('Replace samples with same name.')
         self._replaceoldsamples_checkbox.setChecked(True)
         importsamples_button = QtWidgets.QPushButton('Import sample(s)...')
-        importsamples_button.clicked._import_samples)               
+        importsamples_button.clicked.connect(self._import_samples)               
         cancel_button = QtWidgets.QPushButton('Cancel')
-        cancel_button.clicked.reject) # Close dialog box.               
+        cancel_button.clicked.connect(self.reject) # Close dialog box.               
         # Layout widgets.
         formlayout = QtWidgets.QFormLayout()
 #         formlayout.addRow('Sample id:', self._sampleid_edit)
@@ -931,10 +931,10 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
 #         self._importsourcetype_list.setCurrentIndex(1)
 #         self._importsourcefile_edit = QtWidgets.QLineEdit('')
 #         self._importsourcefile_button = QtWidgets.QPushButton('Browse...')
-#         self._importsourcefile_button.clicked._browse_source)
+#         self._importsourcefile_button.clicked.connect(self._browse_source)
 #         self._importtargetdatasetname_edit = QtWidgets.QLineEdit('')        
 #         self._import_button = QtWidgets.QPushButton('Import')
-#         self._import_button.clicked._import_dataset)
+#         self._import_button.clicked.connect(self._import_dataset)
 #         self._importcancel_button = QtWidgets.QPushButton('Cancel')
 #         self._importcancel_button.clicked.reject)
 #         # Layout widgets.
@@ -997,7 +997,7 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
 #         self._exportsourcetype_list.setCurrentIndex(1)
 #         self._exporttargetdir_edit = QtWidgets.QLineEdit('')
 #         self._exporttargetdir_button = QtWidgets.QPushButton('Browse...')
-#         self._exporttargetdir_button.clicked._browse_target_dir)
+#         self._exporttargetdir_button.clicked.connect(self._browse_target_dir)
 #         self._exporttargetfilename_edit = QtWidgets.QLineEdit('')
 #           
 #         self._publish_checkbox = QtWidgets.QCheckBox('Publish dataset')
@@ -1010,7 +1010,7 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
 #         self._publishpassword_edit = QtWidgets.QLineEdit('')
 #           
 #         self._export_button = QtWidgets.QPushButton('Export/publish')
-#         self._export_button.clicked._export_dataset)
+#         self._export_button.clicked.connect(self._export_dataset)
 #         self._exportcancel_button = QtWidgets.QPushButton('Cancel')
 #         self._exportcancel_button.clicked.reject)
 #         # Layout widgets.

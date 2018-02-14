@@ -76,7 +76,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         self._selectmethodstep_list.addItems(['<not available>']) 
         self._selectmethodstep_list.currentIndexChanged._select_method_step_changed)
         self._nextmethodstep_button = KeyPressQPushButton('Next step', self)
-        self._nextmethodstep_button.clicked._next_method_step)
+        self._nextmethodstep_button.clicked.connect(self._next_method_step)
         # Transects or views.
         self._countareatype_edit = KeyPressQLineEdit(self)
         self._countareatype_edit.setEnabled(False)
@@ -84,11 +84,11 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         self._countareanumber_edit.setMinimumWidth(50)
         self._countareanumber_edit.setText('1') 
         self._addcountarea_button = KeyPressQPushButton(' Add count area ', self)
-        self._addcountarea_button.clicked._add_count_area)
+        self._addcountarea_button.clicked.connect(self._add_count_area)
         self._removecountarea_button = KeyPressQPushButton(' Remove count area ', self)
-        self._removecountarea_button.clicked._remove_count_area)
+        self._removecountarea_button.clicked.connect(self._remove_count_area)
         self._locktaxa_button = KeyPressQPushButton('Lock taxa...', self)
-        self._locktaxa_button.clicked._lock_taxa)
+        self._locktaxa_button.clicked.connect(self._lock_taxa)
         self._coefficient_edit = KeyPressQLineEdit(self)
         self._coefficient_edit.setEnabled(False)
         # Species and species info.
@@ -137,17 +137,17 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         self._counted_sub10_button.setMaximumWidth(40)
         self._counted_add100_button.setMaximumWidth(45)
         self._counted_sub100_button.setMaximumWidth(45)
-        self._counted_clear_button.clicked._counted_clear)
-        self._counted_add1_button.clicked._add_1)
-        self._counted_sub1_button.clicked._sub_1)
-        self._counted_add10_button.clicked._add_10)
-        self._counted_sub10_button.clicked._sub_10)
-        self._counted_add100_button.clicked._add_100)
-        self._counted_sub100_button.clicked._sub_100)
+        self._counted_clear_button.clicked.connect(self._counted_clear)
+        self._counted_add1_button.clicked.connect(self._add_1)
+        self._counted_sub1_button.clicked.connect(self._sub_1)
+        self._counted_add10_button.clicked.connect(self._add_10)
+        self._counted_sub10_button.clicked.connect(self._sub_10)
+        self._counted_add100_button.clicked.connect(self._add_100)
+        self._counted_sub100_button.clicked.connect(self._sub_100)
         # Counted, for net samples.
         self._counted_class_clear_button = KeyPressQPushButton('Clear', self)
         self._counted_class_clear_button.setMaximumWidth(45)
-        self._counted_class_clear_button.clicked._counted_class_clear)
+        self._counted_class_clear_button.clicked.connect(self._counted_class_clear)
         self._counted_class1_button = KeyPressQPushButton('1', self)
         self._counted_class2_button = KeyPressQPushButton('2', self)
         self._counted_class3_button = KeyPressQPushButton('3', self)
@@ -159,11 +159,11 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         self._counted_class3_button.setMaximumWidth(35)
         self._counted_class4_button.setMaximumWidth(35)
         self._counted_class5_button.setMaximumWidth(35)
-        self._counted_class1_button.clicked._class_1)
-        self._counted_class2_button.clicked._class_2)
-        self._counted_class3_button.clicked._class_3)
-        self._counted_class4_button.clicked._class_4)
-        self._counted_class5_button.clicked._class_5)
+        self._counted_class1_button.clicked.connect(self._class_1)
+        self._counted_class2_button.clicked.connect(self._class_2)
+        self._counted_class3_button.clicked.connect(self._class_3)
+        self._counted_class4_button.clicked.connect(self._class_4)
+        self._counted_class5_button.clicked.connect(self._class_5)
         # Comments.
         self._variable_comment_edit = QtWidgets.QLineEdit()
         # Dummy button used to catch key press events.
@@ -196,7 +196,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         self._speciesfilter_edit = KeyPressQLineEdit(self)
         self._speciesfilter_edit.textChanged._species_tableview.onFilterTextChanged)
         self._speciesfilterclear_button = KeyPressQPushButton('Clear', self)
-        self._speciesfilterclear_button.clicked._species_filter_clear)
+        self._speciesfilterclear_button.clicked.connect(self._species_filter_clear)
         # Checkbox for sizeclass info.
         self._viewsizeclassinfo_checkbox = QtWidgets.QCheckBox('View sizeclass info')
         self._viewsizeclassinfo_checkbox.setChecked(True)
@@ -221,9 +221,9 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         self._currentmethodstep_checkbox.setChecked(True)
         self._currentmethodstep_checkbox.stateChanged._update_summary) 
         self._saveasspecieslist_button = KeyPressQPushButton('Save as counting species list...', self) 
-        self._saveasspecieslist_button.clicked._save_as_species_list)
+        self._saveasspecieslist_button.clicked.connect(self._save_as_species_list)
         self._deletespecieslists_button = KeyPressQPushButton('Delete counting species lists...', self) 
-        self._deletespecieslists_button.clicked._delete_species_lists)
+        self._deletespecieslists_button.clicked.connect(self._delete_species_lists)
         #
         #
         # Large text.        
@@ -1403,7 +1403,7 @@ class SaveAsCountingSpeciesListDialog(QtWidgets.QDialog):
         self._new_name_edit = QtWidgets.QLineEdit('')
         self._new_name_edit.setMinimumWidth(400)
         save_button = QtWidgets.QPushButton('Save')
-        save_button.clicked._save)               
+        save_button.clicked.connect(self._save)               
         cancel_button = QtWidgets.QPushButton('Cancel')
         cancel_button.clicked.reject) # Close dialog box.               
         # Layout widgets.
@@ -1446,11 +1446,11 @@ class DeleteCountingSpeciesListDialog(QtWidgets.QDialog):
         counting_species_listview.setModel(self._counting_species_model)
  
         clearall_button = app_framework.ClickableQLabel('Clear all')
-        self.connect(clearall_button.clicked(self._uncheck_all_rows)                
+        clearall_button.clicked.connect(self._uncheck_all_rows)                
         markall_button = app_framework.ClickableQLabel('Mark all')
-        self.connect(markall_button.clicked(self._check_all_rows)                
+        markall_button.clicked.connect(self._check_all_rows)                
         delete_button = QtWidgets.QPushButton('Delete marked counting specis list(s)')
-        delete_button.clicked._delete_marked_rows)               
+        delete_button.clicked.connect(self._delete_marked_rows)               
         cancel_button = QtWidgets.QPushButton('Cancel')
         cancel_button.clicked.reject) # Close dialog box.               
         # Layout widgets.
@@ -1526,11 +1526,11 @@ class LockTaxaListDialog(QtWidgets.QDialog):
         counting_species_listview.setModel(self._counting_species_model)
  
         clearall_button = app_framework.ClickableQLabel('Clear all')
-        self.connect(clearall_button.clicked(self._uncheck_all_rows)                
+        clearall_button.clicked.connect(self._uncheck_all_rows)                
         markall_button = app_framework.ClickableQLabel('Mark all')
-        self.connect(markall_button.clicked(self._check_all_rows)                
+        markall_button.clicked.connect(self._check_all_rows)                
         lock_button = QtWidgets.QPushButton('Lock/unlock taxa')
-        lock_button.clicked._execute_marked_rows)               
+        lock_button.clicked.connect(self._execute_marked_rows)               
         cancel_button = QtWidgets.QPushButton('Cancel')
         cancel_button.clicked.reject) # Close dialog box.               
         # Layout widgets.

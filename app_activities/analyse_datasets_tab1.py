@@ -4,6 +4,7 @@
 # Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
+from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 #import datetime
@@ -14,6 +15,7 @@ import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
 
 import toolbox_utils
 import plankton_core
+import app_framework
 
 class AnalyseDatasetsTab1(QtWidgets.QWidget):
     """ """
@@ -46,12 +48,10 @@ class AnalyseDatasetsTab1(QtWidgets.QWidget):
         loaded_datasets_listview = QtWidgets.QListView()
 #         loaded_datasets_listview.setMaximumHeight(80)
 #        view.setMinimumWidth(500)
-        self._loaded_datasets_model = QtWidgets.QStandardItemModel()
+        self._loaded_datasets_model = QtGui.QStandardItemModel()
         loaded_datasets_listview.setModel(self._loaded_datasets_model)
         # Listen for changes in the toolbox dataset list.
-        self.connect(app_framework.ToolboxDatasets(), 
-                     QtCore.SIGNAL('datasetListChanged'), 
-                     self._update_imported_dataset_list)
+        app_framework.ToolboxDatasets().datasetListChanged.connect(self._update_imported_dataset_list)
         #
         self._clearanalysisdata_button = QtWidgets.QPushButton('Clear analysis data')
         self._clearanalysisdata_button.clicked(self._clear_analysis_data)                
@@ -76,7 +76,7 @@ class AnalyseDatasetsTab1(QtWidgets.QWidget):
         """ """
         self._loaded_datasets_model.clear()        
         for rowindex, dataset in enumerate(app_framework.ToolboxDatasets().get_datasets()):
-            item = QtWidgets.QStandardItem('Import-' + unicode(rowindex + 1) + 
+            item = QtGui.QStandardItem('Import-' + unicode(rowindex + 1) + 
                                        '.   Source: ' + dataset.get_metadata('file_name'))
             item.setCheckState(QtCore.Qt.Checked)
 #            item.setCheckState(QtCore.Qt.Unchecked)

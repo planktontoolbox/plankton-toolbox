@@ -5,17 +5,15 @@
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import os
+from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 
-import plankton_toolbox.toolbox.utils_qt as utils_qt
-import plankton_toolbox.activities.activity_base as activity_base
-import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
-
 import toolbox_utils
 import plankton_core
+import app_framework
 
-class CreateReportsActivity(activity_base.ActivityBase):
+class CreateReportsActivity(app_framework.ActivityBase):
     """ """
     def __init__(self, name, parentwidget):
         """ """
@@ -28,9 +26,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
         # Initialize parent.
         super(CreateReportsActivity, self).__init__(name, parentwidget)
         # Listen for changes in the toolbox dataset list.
-        self.connect(app_framework.ToolboxDatasets(), 
-                     QtCore.SIGNAL('datasetListChanged'), 
-                     self.update)
+        app_framework.ToolboxDatasets().datasetListChanged.connect(self.update)
         #
         self._empty_dataset_table = plankton_core.DatasetTable()
 
@@ -39,7 +35,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
         # Selectable list of loaded datasets.
         self._loaded_datasets_model.clear()        
         for rowindex, dataset in enumerate(app_framework.ToolboxDatasets().get_datasets()):
-            item = QtWidgets.QStandardItem('Import-' + unicode(rowindex + 1) + 
+            item = QtGui.QStandardItem('Import-' + unicode(rowindex + 1) + 
                                        '.   Source: ' + dataset.get_metadata('file_name'))
             item.setCheckState(QtCore.Qt.Checked)
 #            item.setCheckState(QtCore.Qt.Unchecked)
@@ -81,7 +77,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
         widget = QtWidgets.QGroupBox('Select datasets', self)        
         #
         loaded_datasets_listview = QtWidgets.QListView()
-        self._loaded_datasets_model = QtWidgets.QStandardItemModel()
+        self._loaded_datasets_model = QtGui.QStandardItemModel()
         loaded_datasets_listview.setModel(self._loaded_datasets_model)
         #
         self._cleara_metadata_button = app_framework.ClickableQLabel('Clear all')
@@ -129,7 +125,7 @@ class CreateReportsActivity(activity_base.ActivityBase):
 # TODO: For development:
 #         self._report_list.setCurrentIndex(4) # TODO:
         #
-        self._report_list.currentIndexChanged(int)'), self._report_list_changed)            
+        self._report_list.currentIndexChanged.connect(self._report_list_changed)            
         #
 #         self._debuginfo_checkbox = QtWidgets.QCheckBox('View debug info')
 #         self._debuginfo_checkbox.setChecked(False)
@@ -251,15 +247,15 @@ class CreateReportsActivity(activity_base.ActivityBase):
 #                 self._create_and_view_report(report)
             else:
                 raise UserWarning('Sorry, the selected report \ntype is not yet implemented.')
-        except UserWarning, e:
+        except UserWarning as e:
             toolbox_utils.Logging().error('UserWarning: ' + unicode(e))
             QtWidgets.QMessageBox.warning(self, 'Warning', unicode(e))
             raise
-        except (IOError, OSError), e:
+        except (IOError, OSError) as e:
             toolbox_utils.Logging().error('Error: ' + unicode(e))
             QtWidgets.QMessageBox.warning(self, 'Error', unicode(e))
             raise
-        except Exception, e:
+        except Exception as e:
             toolbox_utils.Logging().error('Failed on exception: ' + unicode(e))
             QtWidgets.QMessageBox.warning(self, 'Exception', unicode(e))
             raise

@@ -6,8 +6,8 @@
 
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
-import plankton_toolbox.tools.tool_base as tool_base
-import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
+# import plankton_toolbox.tools.tool_base as tool_base
+# import plankton_toolbox.toolbox.toolbox_settings as toolbox_settings
 
 class ToolboxSettingsTool(tool_base.ToolBase):
     """
@@ -33,7 +33,7 @@ class ToolboxSettingsTool(tool_base.ToolBase):
         contentLayout.addLayout(self._content_buttons())
         contentLayout.addStretch(5)
         # Used when toolbox settings has changed.        
-        self.connect(toolbox_settings.ToolboxSettings().settingsChanged'), self._update)
+        toolbox_settings.ToolboxSettings().settingsChanged.connect(self._update)
         #
         self._update()
 

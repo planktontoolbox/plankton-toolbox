@@ -35,7 +35,7 @@ class DyntaxaBrowserTool(tool_base.ToolBase):
         contentLayout.addLayout(self._content_dyntaxa_item())
         contentLayout.addLayout(self._content_dyntaxa_control())
         # Used when toolbox resource has changed.        
-        self.connect(toolbox_resources.ToolboxResources().dyntaxaResourceLoaded'), self._dyntaxa_refresh)
+        toolbox_resources.ToolboxResources().dyntaxaResourceLoaded.connect(self._dyntaxa_refresh)
 
     def _content_taxon_list(self):
         """ """
@@ -46,8 +46,8 @@ class DyntaxaBrowserTool(tool_base.ToolBase):
         self._model = DyntaxaTableModel(self._dyntaxa_object)
         self._tableView.setTableModel(self._model)
         #
-        self._tableView.getSelectionModel().currentChanged(QModelIndex, QModelIndex)'), self._show_item_info)
-        self._tableView.getSelectionModel().selectionChanged(QModelIndex, QModelIndex)'), self._show_item_info)
+        self._tableView.getSelectionModel().currentChanged.connect(self._show_item_info)
+        self._tableView.getSelectionModel().selectionChanged.connect(self._show_item_info)
         #
         return layout
     

@@ -65,7 +65,7 @@ class PegBrowserTool(tool_base.ToolBase):
         contentLayout.addLayout(self._content_peg_item())
         contentLayout.addLayout(self._content_dyntaxa_control())
         # Used when toolbox resource has changed.        
-        self.connect(toolbox_resources.ToolboxResources().pegResourceLoaded'), self._peg_refresh)
+        toolbox_resources.ToolboxResources().pegResourceLoaded.connect(self._peg_refresh)
 
     def _content_taxon_list(self):
         """ """

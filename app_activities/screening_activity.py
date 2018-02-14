@@ -4,18 +4,15 @@
 # Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
+from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
-import plankton_toolbox.toolbox.utils_qt as utils_qt
-import plankton_toolbox.activities.activity_base as activity_base
-import plankton_toolbox.tools.tool_manager as tool_manager
-import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
-# import plankton_toolbox.toolbox.help_texts as help_texts
 
 import toolbox_utils
 import plankton_core
+import app_framework
 
-class ScreeningActivity(activity_base.ActivityBase):
+class ScreeningActivity(app_framework.ActivityBase):
     """ Used for screening of content of loaded datasets. """
     
     def __init__(self, name, parentwidget):
@@ -24,9 +21,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         # initialization since the base class calls _create_content().
         super(ScreeningActivity, self).__init__(name, parentwidget)
         # Listen for changes in the toolbox dataset list.
-        self.connect(app_framework.ToolboxDatasets(), 
-                     QtCore.SIGNAL('datasetListChanged'), 
-                     self.update)
+        app_framework.ToolboxDatasets().datasetListChanged.connect(self.update)
         # Data object used for plotting.
         self._graph_plot_data = None
 
@@ -35,7 +30,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         # Selectable list of loaded datasets.
         self._loaded_datasets_model.clear()        
         for rowindex, dataset in enumerate(app_framework.ToolboxDatasets().get_datasets()):
-            item = QtWidgets.QStandardItem('Import-' + unicode(rowindex + 1) + 
+            item = QtGui.QStandardItem('Import-' + unicode(rowindex + 1) + 
                                        '.   Source: ' + dataset.get_metadata('file_name'))
             item.setCheckState(QtCore.Qt.Checked)
 #            item.setCheckState(QtCore.Qt.Unchecked)
@@ -80,7 +75,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         widget = QtWidgets.QWidget()
         #
         loaded_datasets_listview = QtWidgets.QListView()
-        self._loaded_datasets_model = QtWidgets.QStandardItemModel()
+        self._loaded_datasets_model = QtGui.QStandardItemModel()
         loaded_datasets_listview.setModel(self._loaded_datasets_model)
         #
         self._clear_metadata_button = app_framework.ClickableQLabel('Clear all')
@@ -492,7 +487,7 @@ class ScreeningActivity(activity_base.ActivityBase):
         self._column_list.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContents)
         self._column_list.setEnabled(False)
         #
-        self._column_list.currentIndexChanged(int)'), self._update_column_content)                
+        self._column_list.currentIndexChanged.connect(self._update_column_content)                
         # Column content.
 ##        self._content_list = app_framework.SelectableQListView()
 ##        self._content_list = QtWidgets.QListWidget()
@@ -614,8 +609,8 @@ class ScreeningActivity(activity_base.ActivityBase):
         #
         clearall_label = app_framework.ClickableQLabel('Clear all')
         markall_label = app_framework.ClickableQLabel('Mark all')
-        self.connect(clearall_label.clicked(self._parameter_list.uncheckAll)                
-        self.connect(markall_label.clicked(self._parameter_list.checkAll)                
+        clearall_label.clicked.connect(self._parameter_list.uncheckAll)                
+        markall_label.clicked.connect(self._parameter_list.checkAll)                
         #
         self._plotparameters_button = QtWidgets.QPushButton('Plot parameter values')
         self._plotparameters_button.clicked(self._plot_screening)                

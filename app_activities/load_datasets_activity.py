@@ -10,18 +10,12 @@ import locale
 
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
-import plankton_toolbox.tools.tool_manager as tool_manager
-import plankton_toolbox.toolbox.utils_qt as utils_qt
-import plankton_toolbox.activities.activity_base as activity_base
-#import plankton_toolbox.core.monitoring.monitoring_files as monitoring_files
-import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
-import plankton_toolbox.toolbox.toolbox_sync as toolbox_sync
-# import plankton_toolbox.toolbox.help_texts as help_texts
 
 import toolbox_utils
 import plankton_core
+import app_framework
 
-class LoadDatasetsActivity(activity_base.ActivityBase):
+class LoadDatasetsActivity(app_framework.ActivityBase):
     """ """
     def __init__(self, name, parentwidget):
         """ """
@@ -42,9 +36,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         # Update plankton counter datasets. 
         self._counter_update_dataset_list()
         # Update plankton counter datasets when changes occured.
-        self.connect(plankton_core.PlanktonCounterManager(), 
-             QtCore.SIGNAL('planktonCounterListChanged'), 
-             self._counter_update_dataset_list)
+        plankton_core.PlanktonCounterManager().planktonCounterListChanged.connect(self._counter_update_dataset_list)
 
     def _load_available_parsers(self):
         """ """
@@ -421,14 +413,14 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         self._textfile_parser_list = QtWidgets.QComboBox()
         self._textfile_parser_list.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContents)
         self._textfile_parser_list.addItems(["<select>"])
-        self._textfile_parser_list.currentIndexChanged(int)'), self._textfile_parser_selected)                
+        self._textfile_parser_list.currentIndexChanged.connect(self._textfile_parser_selected)                
         # - Add available dataset parsers.
         self._textfile_parser_list.addItems(self._parser_list)                
         # - Select import column:
         self._textfile_importcolumn_list = QtWidgets.QComboBox()
         self._textfile_importcolumn_list.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContents)
         self._textfile_importcolumn_list.addItems(["<no parser selected>"])        
-        self._textfile_importcolumn_list.currentIndexChanged(int)'), self._textfile_import_column_selected)                
+        self._textfile_importcolumn_list.currentIndexChanged.connect(self._textfile_import_column_selected)                
         # - Select export column:
         self._textfile_exportcolumn_list = QtWidgets.QComboBox()
         self._textfile_exportcolumn_list.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContents)
@@ -590,7 +582,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         self._excel_parser_list = QtWidgets.QComboBox()
         self._excel_parser_list.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContents)
         self._excel_parser_list.addItems(["<select>"])
-        self._excel_parser_list.currentIndexChanged(int)'), self._excel_parser_selected)                
+        self._excel_parser_list.currentIndexChanged.connect(self._excel_parser_selected)                
         # - Add available dataset parsers.
         self._excel_parser_list.addItems(self._parser_list)                
         # - Select import column:
@@ -732,12 +724,10 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         self._datasets_table.resizeColumnsToContents()
         
         # Listen for changes in the toolbox dataset list.
-        self.connect(app_framework.ToolboxDatasets(), 
-             QtCore.SIGNAL('datasetListChanged'), 
-             self._update_dataset_list)
+        app_framework.ToolboxDatasets().datasetListChanged.connect(self._update_dataset_list)
         # Connection for selected row.
-        self._datasets_table.clicked._selection_changed)
-        self._datasets_table.doubleClicked._view_dataset)
+        self._datasets_table.clicked.connect(self._selection_changed)
+        self._datasets_table.doubleClicked.connect(self._view_dataset)
                         
         # Buttons.
         self._unloadalldatasets_button = QtWidgets.QPushButton('Remove all datasets')
@@ -748,7 +738,7 @@ class LoadDatasetsActivity(activity_base.ActivityBase):
         # Button connections.
         self._unloadalldatasets_button.clicked(self._unload_all_datasets)                
         self._unloadmarkeddatasets_button.clicked(self._unload_marked_datasets)                
-        self._viewdataset_checkbox.stateChanged._selection_changed)
+        self._viewdataset_checkbox.stateChanged.connect(self._selection_changed)
         # Layout widgets.
         buttonlayout = QtWidgets.QHBoxLayout()
         buttonlayout.addWidget(self._unloadalldatasets_button)

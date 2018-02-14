@@ -52,7 +52,7 @@ class TemplateActivity(app_framework.ActivityBase):
         """ """
         # Active widgets and connections.
         self._testbutton = QtWidgets.QPushButton('Write info to log')
-        self._testbutton.clicked._test)                
+        self._testbutton.clicked.connect(self._test)                
         # Layout.
         layout = QtWidgets.QHBoxLayout()
         layout.addStretch(5)

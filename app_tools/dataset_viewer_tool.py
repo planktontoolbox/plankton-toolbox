@@ -40,29 +40,14 @@ class DatasetViewerTool(app_framework.ToolBase):
         contentLayout.addLayout(self._content_select_dataset())
         contentLayout.addLayout(self._content_result_table())
         contentLayout.addWidget(self._content_save_result())
-        # Listen for changes in the toolbox dataset list.
-        
-        
-        
-#         self.connect(app_framework.ToolboxDatasets(), 
-#                      QtCore.SIGNAL('datasetListChanged'), 
-#                      self._update_dataset_list)
-        app_framework.ToolboxDatasets().datasetListChanged.connect(self._update_dataset_list)
 
+        # Listen for changes in the toolbox dataset list.
+        app_framework.ToolboxDatasets().datasetListChanged.connect(self._update_dataset_list)
         
         # Allow synch is confusing. Activate again when used in more tools.                       
         # (Currently used in the other way, controlled by a checkbox in load_datasets_activity.)                       
         # Listen for changes in the toolbox sync.
-
-        
-        
-#         self.connect(toolbox_sync.ToolboxSync(), 
-#                      QtCore.SIGNAL('toolboxSyncSelectedRow'), 
-#                      self._set_selected_dataset)
         app_framework.AppSync().selected_row_changed.connect(self._set_selected_dataset)
-
-
-
 
     def _content_select_dataset(self):
         """ """

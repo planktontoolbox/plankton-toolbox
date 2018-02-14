@@ -196,9 +196,7 @@ class MainWindow(QtWidgets.QMainWindow):
             activity.set_main_menu_button(button)
             activitiesvbox.addWidget(button) # Adds to stack.                  
             # The activity is called to select stack item by object, not index.
-#             self.connect(button.clicked(button.markAsSelected)
             button.activity_menu_label_clicked.connect(button.markAsSelected)
-#             self.connect(button.clicked(activity.show_in_main_window)
             button.activity_menu_label_clicked.connect(activity.show_in_main_window)
             # Create one layer in the stacked activity widget.
             self._activitystack.addWidget(activity)
@@ -213,15 +211,12 @@ class MainWindow(QtWidgets.QMainWindow):
             showhidehbox.addWidget(button_hide)
             showhidehbox.addStretch(10)
             toolsvbox.addLayout(showhidehbox)
-#             self.connect(button.clicked(tool.show_tool) 
             button.label_clicked.connect(tool.show_tool)
-#             self.connect(button_hide.clicked(tool.hide_tool) 
             button_hide.label_clicked.connect(tool.hide_tool)
         #
         # Button to hide all tools.
         button = app_framework.ClickableQLabel(' (Hide all)')
         toolsvbox.addWidget(button)
-#         self.connect(button.clicked(self._hideAllTools) 
         button.label_clicked.connect(self._hideAllTools)
         #
         toolsvbox.addStretch(10)

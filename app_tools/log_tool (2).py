@@ -39,7 +39,7 @@ class LogTool(tool_base.ToolBase):
         self._limit_edit.setMaximumWidth(60)        
         self._clear_button = QtWidgets.QPushButton('Clear log')
         ###self._clear_button.clicked(self._clear_log) 
-        self._clear_button.clicked._clear_log) 
+        self._clear_button.clicked.connect(self._clear_log) 
              
 #        self._openlogfile_button = QtWidgets.QPushButton('Open log file')
 #        self._openlogfile_button.clicked(self._openLogFile)      

@@ -88,9 +88,9 @@ class PlanktonCounterSampleEdit(QtWidgets.QWidget):
         """ """
         widget = QtWidgets.QWidget()
         self._exportsamplereport_button = QtWidgets.QPushButton('Export sample (.xlsx)...')
-        self._exportsamplereport_button.clicked._save_sample_report)
+        self._exportsamplereport_button.clicked.connect(self._save_sample_report)
         self._save_button = QtWidgets.QPushButton('Save edited changes')
-        self._save_button.clicked._save_edit_table)
+        self._save_button.clicked.connect(self._save_edit_table)
         #
         layout = QtWidgets.QHBoxLayout()
         layout.addWidget(self._exportsamplereport_button)
@@ -159,11 +159,11 @@ class ExportSampleDialog(QtWidgets.QDialog):
         widget = QtWidgets.QWidget()
         self._exporttargetdir_edit = QtWidgets.QLineEdit('')
         self._exporttargetdir_button = QtWidgets.QPushButton('Browse...')
-        self._exporttargetdir_button.clicked._browse_target_dir)
+        self._exporttargetdir_button.clicked.connect(self._browse_target_dir)
         self._exporttargetfilename_edit = QtWidgets.QLineEdit(self._current_sample + '.xlsx')
         
         self._export_button = QtWidgets.QPushButton('Export')
-        self._export_button.clicked._export_dataset)
+        self._export_button.clicked.connect(self._export_dataset)
         self._exportcancel_button = QtWidgets.QPushButton('Cancel')
         self._exportcancel_button.clicked.reject)
         # Layout widgets.

@@ -74,9 +74,9 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         self._selectdefaultmethod_list.addItems(['<select>']) 
 #         self._selectdefaultmethod_list.currentIndexChanged._select_default_method_changed)
         self._defaultmethod_copy_button = QtWidgets.QPushButton('Copy values from selected setup')
-        self._defaultmethod_copy_button.clicked._copy_default_method_values)
+        self._defaultmethod_copy_button.clicked.connect(self._copy_default_method_values)
         self._defaultmethod_reset_button = QtWidgets.QPushButton('Reset to used values for this sample')
-        self._defaultmethod_reset_button.clicked._reset_default_method_values)
+        self._defaultmethod_reset_button.clicked.connect(self._reset_default_method_values)
         # Stored methods.
         self._selectmethod_table = QtWidgets.QListWidget(self) # utils_qt.ToolboxQTableView(self)
         self._selectmethod_table.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
@@ -163,19 +163,19 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
 
         # Buttons.
 #         self._addmethod_button = QtWidgets.QPushButton('Add method...')
-#         self._addmethod_button.clicked._add_method)
+#         self._addmethod_button.clicked.connect(self._add_method)
 
         self._addmethodstep_button = QtWidgets.QPushButton('Add method/method step...')
-        self._addmethodstep_button.clicked._add_method_step)
+        self._addmethodstep_button.clicked.connect(self._add_method_step)
         self._deletemethodsteps_method_button = QtWidgets.QPushButton('Delete method step(s)...')
-        self._deletemethodsteps_method_button.clicked._delete_method_steps)
+        self._deletemethodsteps_method_button.clicked.connect(self._delete_method_steps)
         
 #         self._savedefault_method_button = QtWidgets.QPushButton('Save changes to selected default method setup')
-#         self._savedefault_method_button.clicked._save_default_method)
+#         self._savedefault_method_button.clicked.connect(self._save_default_method)
         self._saveasdefault_method_button = QtWidgets.QPushButton('Save as default method setup...')
-        self._saveasdefault_method_button.clicked._save_as_default_method)
+        self._saveasdefault_method_button.clicked.connect(self._save_as_default_method)
         self._deletedefault_method_button = QtWidgets.QPushButton('Delete default method setup(s)...')
-        self._deletedefault_method_button.clicked._default_method_delete)
+        self._deletedefault_method_button.clicked.connect(self._default_method_delete)
 
         # Layout widgets.
         
@@ -787,7 +787,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
 # #         self._copycontent_checkbox.setChecked(True) 
 # 
 #         save_button = QtWidgets.QPushButton('Save')
-#         save_button.clicked._save)               
+#         save_button.clicked.connect(self._save)               
 #         cancel_button = QtWidgets.QPushButton('Cancel')
 #         cancel_button.clicked.reject) # Close dialog box.               
 #         # Layout widgets.
@@ -843,7 +843,7 @@ class AddMethodStepDialog(QtWidgets.QDialog):
         self._copycontent_checkbox.setChecked(True) 
 
         save_button = QtWidgets.QPushButton('Save')
-        save_button.clicked._save)               
+        save_button.clicked.connect(self._save)               
         cancel_button = QtWidgets.QPushButton('Cancel')
         cancel_button.clicked.reject) # Close dialog box.               
         # Layout widgets.
@@ -895,11 +895,11 @@ class DeleteMethodStepsDialog(QtWidgets.QDialog):
         methodsteps_listview.setModel(self._methodsteps_model)
  
         clearall_button = app_framework.ClickableQLabel('Clear all')
-        self.connect(clearall_button.clicked(self._uncheck_all_rows)                
+        clearall_button.clicked.connect(self._uncheck_all_rows)                
         markall_button = app_framework.ClickableQLabel('Mark all')
-        self.connect(markall_button.clicked(self._check_all_rows)                
+        markall_button.clicked.connect(self._check_all_rows)                
         delete_button = QtWidgets.QPushButton('Delete marked method step(s)')
-        delete_button.clicked._delete_marked_rows)               
+        delete_button.clicked.connect(self._delete_marked_rows)               
         cancel_button = QtWidgets.QPushButton('Cancel')
         cancel_button.clicked.reject) # Close dialog box.               
         # Layout widgets.
@@ -973,12 +973,12 @@ class SaveDefaultMethodAsDialog(QtWidgets.QDialog):
         self._default_methods_setups = QtWidgets.QComboBox(self)        
         self._default_methods_setups.setMinimumWidth(300)
         updatemethodsetup_button = QtWidgets.QPushButton('Update selected default method setup')
-        updatemethodsetup_button.clicked._update)               
+        updatemethodsetup_button.clicked.connect(self._update)               
         #
         self._new_default_method_edit = QtWidgets.QLineEdit('')
         self._new_default_method_edit.setMinimumWidth(300)
         createmethodsetup_button = QtWidgets.QPushButton('Create new default method setup')
-        createmethodsetup_button.clicked._save)               
+        createmethodsetup_button.clicked.connect(self._save)               
         cancel_button = QtWidgets.QPushButton('Cancel')
         cancel_button.clicked.reject) # Close dialog box.               
         # Layout widgets.
@@ -1068,7 +1068,7 @@ class SaveDefaultMethodAsDialog(QtWidgets.QDialog):
 #         self._samplename_edit = QtWidgets.QLineEdit('')
 #         self._samplename_edit.setMinimumWidth(400)
 #         createsample_button = QtWidgets.QPushButton('Create sample')
-#         createsample_button.clicked._create_sample)               
+#         createsample_button.clicked.connect(self._create_sample)               
 #         cancel_button = QtWidgets.QPushButton('Cancel')
 #         cancel_button.clicked.reject) # Close dialog box.               
 #         # Layout widgets.
@@ -1133,11 +1133,11 @@ class DeleteDefaultMethodDialog(QtWidgets.QDialog):
         default_methods_listview.setModel(self._default_methods_model)
 
         clearall_button = app_framework.ClickableQLabel('Clear all')
-        self.connect(clearall_button.clicked(self._uncheck_all_default_methods)
+        clearall_button.clicked.connect(self._uncheck_all_default_methods)
         markall_button = app_framework.ClickableQLabel('Mark all')
-        self.connect(markall_button.clicked(self._check_all_default_methods)
+        markall_button.clicked.connect(self._check_all_default_methods)
         delete_button = QtWidgets.QPushButton('Delete marked sample(s)')
-        delete_button.clicked._delete_marked_default_methods)
+        delete_button.clicked.connect(self._delete_marked_default_methods)
         cancel_button = QtWidgets.QPushButton('Cancel')
         cancel_button.clicked.reject) # Close dialog box.
         # Layout widgets.

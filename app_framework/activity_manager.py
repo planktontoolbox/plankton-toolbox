@@ -24,6 +24,15 @@ class ActivityManager(object):
     def init_activities(self):
         """ Activity activator. """
         self._activitylist.append(app_activities.StartActivity('Welcome', self._parent))
+        self._activitylist.append(app_activities.PlanktonCounterActivity('Plankton counter', self._parent))
+        self._activitylist.append(app_activities.LoadDatasetsActivity('Dataset manager', self._parent))
+        self._activitylist.append(app_activities.ScreeningActivity('Dataset screening', self._parent))
+        self._activitylist.append(app_activities.CreateReportsActivity('Dataset reports', self._parent))
+        self._activitylist.append(app_activities.AnalyseDatasetsActivity('Dataset analysis', self._parent))
+
+#         self._activitylist.append(template_activity.TemplateActivity('(Activity template)', self._parent))
+
+
 #         self._activitylist.append(app_activities.TestActivity('Test activity (template)', self._parent))
     
     def show_activity_by_name(self, object_name):

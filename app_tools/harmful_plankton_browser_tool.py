@@ -39,7 +39,7 @@ class HarmfulPlanktonBrowserTool(tool_base.ToolBase):
         contentLayout.addLayout(self._content_item())
         contentLayout.addLayout(self._content_control())
         # Used when toolbox resource has changed.        
-        self.connect(toolbox_resources.ToolboxResources().harmfulPlanktonResourceLoaded'), self._harmful_plankton_refresh)
+        toolbox_resources.ToolboxResources().harmfulPlanktonResourceLoaded.connect(self._harmful_plankton_refresh)
 
     def _content_taxon_list(self):
         """ """

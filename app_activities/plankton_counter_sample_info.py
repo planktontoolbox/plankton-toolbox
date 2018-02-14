@@ -55,7 +55,7 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
         self._sample_name_edit = QtWidgets.QLineEdit()
         self._sample_name_edit.setEnabled(False)
         self._change_sample_name_button = QtWidgets.QPushButton(' Change name... ')
-        self._change_sample_name_button.clicked._change_sample_name)
+        self._change_sample_name_button.clicked.connect(self._change_sample_name)
         self._sample_id_edit = QtWidgets.QLineEdit()
 #         self._sample_date = QtWidgets.QDateEdit()
 #         self._sample_date.setCalendarPopup(True)
@@ -171,7 +171,7 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
         self._clear_sample_info_button = QtWidgets.QPushButton('Clear')
         self._clear_sample_info_button.clicked.clear_sample_info_selected)
         self._copyfromsample_button = QtWidgets.QPushButton('Copy from sample...')
-        self._copyfromsample_button.clicked._copy_sample_info_from)
+        self._copyfromsample_button.clicked.connect(self._copy_sample_info_from)
 
         # Layout widgets.
         form1 = QtWidgets.QGridLayout()
@@ -572,7 +572,7 @@ class CopyFromTemplateDialog(QtWidgets.QDialog):
         self._datasetsample_list = QtWidgets.QComboBox(self)
         self._datasetsample_list.addItems(['<select>'])
         copysampleinfo_button = QtWidgets.QPushButton('Copy sample info')
-        copysampleinfo_button.clicked._copy_sample_info)               
+        copysampleinfo_button.clicked.connect(self._copy_sample_info)               
         cancel_button = QtWidgets.QPushButton('Cancel')
         cancel_button.clicked.reject) # Close dialog box.               
         # Layout widgets.
@@ -636,7 +636,7 @@ class RenameSampleDialog(QtWidgets.QDialog):
         self._newsamplename_edit = QtWidgets.QLineEdit(self._old_sample_name)
         self._newsamplename_edit.setMinimumWidth(400)
         createsample_button = QtWidgets.QPushButton(' Rename sample ')
-        createsample_button.clicked._rename_sample)               
+        createsample_button.clicked.connect(self._rename_sample)               
         cancel_button = QtWidgets.QPushButton('Cancel')
         cancel_button.clicked.reject) # Close dialog box.               
         # Layout widgets.

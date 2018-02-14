@@ -20,8 +20,9 @@ import plankton_toolbox.activities.analyse_datasets_tab8 as tab8
 
 import toolbox_utils
 import plankton_core
+import app_framework
 
-class AnalyseDatasetsActivity(activity_base.ActivityBase):
+class AnalyseDatasetsActivity(app_framework.ActivityBase):
     """
     """
     def __init__(self, name, parentwidget):
@@ -114,7 +115,7 @@ class AnalyseDatasetsActivity(activity_base.ActivityBase):
                                       "Statistical data",
                                       "Export data",
                                       "Hide data (to increase performance)"])
-        self._viewdata_list.currentIndexChanged(int)'), self._view_data_list_changed)                
+        self._viewdata_list.currentIndexChanged.connect(self._view_data_list_changed)                
         #
         self._numberofrows_label = QtWidgets.QLabel('Number of rows: 0')
         #

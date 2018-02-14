@@ -7,11 +7,12 @@
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 # import plankton_toolbox.tools.tool_manager as tool_manager
-import plankton_toolbox.toolbox.utils_qt as utils_qt
+# import plankton_toolbox.toolbox.utils_qt as utils_qt
 # import plankton_toolbox.toolbox.help_texts as help_texts
 
 import toolbox_utils
 import plankton_core
+import app_framework
 
 class AnalyseDatasetsTab8(QtWidgets.QWidget):
     """ """
@@ -54,8 +55,8 @@ class AnalyseDatasetsTab8(QtWidgets.QWidget):
         self._parameter_list = app_framework.SelectableQListView()       
         clearall_label = app_framework.ClickableQLabel('Clear all')
         markall_label = app_framework.ClickableQLabel('Mark all')
-        self.connect(clearall_label.clicked(self._parameter_list.uncheckAll)                
-        self.connect(markall_label.clicked(self._parameter_list.checkAll)                
+        clearall_label.clicked.connect(self._parameter_list.uncheckAll)                
+        markall_label.clicked.connect(self._parameter_list.checkAll)                
         # Predefined reports.
         self._report_1_button = QtWidgets.QPushButton('PRIMER')
         self._report_1_button.clicked(self._create_report_1)                

@@ -60,8 +60,8 @@ class AnalyseDatasetsTab2(QtWidgets.QWidget):
         #
         clearall_label = app_framework.ClickableQLabel('Clear all')
         markall_label = app_framework.ClickableQLabel('Mark all')
-        self.connect(clearall_label.clicked(self._content_listview.uncheckAll)                
-        self.connect(markall_label.clicked(self._content_listview.checkAll)                
+        clearall_label.clicked.connect(self._content_listview.uncheckAll)                
+        markall_label.clicked.connect(self._content_listview.checkAll)                
         #
         self._keepdata_button = QtWidgets.QPushButton('Keep marked data')
         self._keepdata_button.clicked(self._keep_data)                
