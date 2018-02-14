@@ -1,5 +1,0 @@
-  * [Introduction](01-Introduction.md)
-  * [User guide](02-UserGuide.md)
-  * [Datasets and parsers](03-DatasetsAndParsers.md)
-  * [Species lists, etc.](04-SpeciesLists.md)
-  * [For developers](05-ForDevelopers.md)
