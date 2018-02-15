@@ -4,7 +4,6 @@
 # Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
-import string
 import plankton_core
 
 class DataImportPreparedBase(object):

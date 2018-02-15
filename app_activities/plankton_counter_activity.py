@@ -125,10 +125,14 @@ class PlanktonCounterActivity(app_framework.ActivityBase):
             
     def _backup_export_import(self):
         """ """
-        my_dialog = BackupExportImportDialog(self)
-        if my_dialog.exec_():
-            self._current_dataset = None
-            self._update_counter_sample_list()
+        try:
+            my_dialog = BackupExportImportDialog(self)
+            if my_dialog.exec_():
+                self._current_dataset = None
+                self._update_counter_sample_list()
+        except Exception as e:
+            print('DEBUG: Exception: ', e)
+            raise
             
     def _export_import_samples(self):
         """ """
@@ -177,14 +181,19 @@ class PlanktonCounterActivity(app_framework.ActivityBase):
             QtWidgets.QMessageBox.warning(self, "Warning", 'No sample is selected. Please try again.')
             return       
         #
-        dialog = app_activities.PlanktonCounterDialog(self, self._current_dataset, self._current_sample)
+#         dialog = app_activities.PlanktonCounterDialog(self, self._current_dataset, self._current_sample)
 #         if dialog.exec_():
 #             self._update_counter_sample_list()
         try:
+            dialog = app_activities.PlanktonCounterDialog(self, self._current_dataset, self._current_sample)
+        except Exception as e:
+            print('DEBUG: Exception: ' + e.message)
+            raise
+        try:
             dialog.exec_()
         except Exception as e:
-            print('EXCEPTION: ' + e.message)
-
+            print('DEBUG: Exception: ' + e.message)
+            raise
 
 class NewDatasetDialog(QtWidgets.QDialog):
     """ This dialog is allowed to access private parts in the parent widget. """
@@ -195,7 +204,7 @@ class NewDatasetDialog(QtWidgets.QDialog):
         self._parentwidget = parentwidget
         self.setLayout(self._content())
 
-    def _content(self):  
+    def _content(self):
         """ """
         self._datasetname_edit = QtWidgets.QLineEdit('')
         self._datasetname_edit.setMinimumWidth(400)
@@ -505,7 +514,7 @@ class BackupExportImportDialog(QtWidgets.QDialog):
         self._backup_button = QtWidgets.QPushButton('Backup')
         self._backup_button.clicked.connect(self._backup)
         self._backupcancel_button = QtWidgets.QPushButton('Cancel')
-        self._backupcancel_button.clicked.connec(self.reject)
+        self._backupcancel_button.clicked.connect(self.reject)
         # Layout widgets.
         form1 = QtWidgets.QGridLayout()
         gridrow = 0
@@ -579,7 +588,7 @@ class BackupExportImportDialog(QtWidgets.QDialog):
         self._import_button = QtWidgets.QPushButton('Import from backup')
         self._import_button.clicked.connect(self._import_from_backup)
         self._importcancel_button = QtWidgets.QPushButton('Cancel')
-        self._importcancel_button.clicked.connec(self.reject)
+        self._importcancel_button.clicked.connect(self.reject)
         # Layout widgets.
         form1 = QtWidgets.QGridLayout()
         gridrow = 0

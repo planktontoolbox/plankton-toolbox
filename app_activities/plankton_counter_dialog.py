@@ -18,9 +18,13 @@ class PlanktonCounterDialog(QtWidgets.QDialog):
         self._current_sample = sample
         # Create sample object.
         dir_path = plankton_core.PlanktonCounterManager().get_dataset_dir_path()
-        self._current_sample_object = plankton_core.PlanktonCounterSample(dir_path,
-                                                                         self._current_dataset,
-                                                                         self._current_sample)
+        try: 
+            self._current_sample_object = plankton_core.PlanktonCounterSample(dir_path,
+                                                                             self._current_dataset,
+                                                                             self._current_sample)
+        except Exception as e:
+            print('DEBUG: Exception: ', e)
+            raise
         #
         super(PlanktonCounterDialog, self).__init__(parentwidget)
         self.setWindowTitle("Plankton counter")

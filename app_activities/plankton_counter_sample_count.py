@@ -6,7 +6,6 @@
 
 import os
 import time
-import string
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore

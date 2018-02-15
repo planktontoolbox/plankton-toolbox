@@ -179,7 +179,7 @@ class ImportManager(object):
         if self._import_column:
 #            self.addMetadata('Import column', self._import_column)
             self._importrows = []
-            for rowindex in xrange(0, tabledata.get_row_count()):
+            for rowindex in range(0, tabledata.get_row_count()):
                 importcolumndata = tabledata.get_data_item_by_column_name(rowindex, self._import_column)
                 if importcolumndata:
                     nodelevel = tabledata.get_data_item(rowindex, 0)
@@ -191,7 +191,7 @@ class ImportManager(object):
         if self._export_column:
 #            self.addMetadata('Export column', self._export_column)
             self._columnsinfo = []
-            for rowindex in xrange(0, tabledata.get_row_count()):
+            for rowindex in range(0, tabledata.get_row_count()):
                 exportcolumndata = tabledata.get_data_item_by_column_name(rowindex, self._export_column)
                 if exportcolumndata:
                     nodelevel = tabledata.get_data_item(rowindex, 0)

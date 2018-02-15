@@ -4,7 +4,6 @@
 # Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
-import string
 # import toolbox_utils
 # import plankton_core
 
@@ -20,7 +19,7 @@ class DataImportUtils(object):
         # Remove 'cf.'
         if ' cf. '.upper() in (' ' + new_scientific_name + ' ').upper():  
             parts = new_scientific_name.split(' ')
-            parts = map(string.strip, parts) # Remove white characters.
+            parts = map(str.strip, parts) # Remove white characters.
             speciesname = ''
             for part in parts:
                 if part not in ['cf.', 'CF.', 'cf', 'CF']:
@@ -43,7 +42,7 @@ class DataImportUtils(object):
         if (' sp.'.upper() in (new_scientific_name + ' ').upper()) or \
            (' sp '.upper() in (new_scientific_name + ' ').upper()):  
             parts = new_scientific_name.split(' ')
-            parts = map(string.strip, parts) # Remove white characters.
+            parts = map(str.strip, parts) # Remove white characters.
             speciesname = ''
             for part in parts:
                 if part not in ['sp.', 'SP.', 'sp', 'SP']:
@@ -66,7 +65,7 @@ class DataImportUtils(object):
         if (' spp.'.upper() in (new_scientific_name + ' ').upper()) or \
            (' spp '.upper() in (new_scientific_name + ' ').upper()):  
             parts = new_scientific_name.split(' ')
-            parts = map(string.strip, parts) # Remove white characters.
+            parts = map(str.strip, parts) # Remove white characters.
             speciesname = ''
             for part in parts:
                 if part not in ['spp.', 'SPP.', 'spp', 'SPP']:
