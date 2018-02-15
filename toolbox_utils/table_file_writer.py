@@ -104,8 +104,8 @@ class TableFileWriter():
             out.write(self._field_delimiter.join(table_header) + self._row_delimiter)
             # Rows.
             for row in table_rows:
-                # Convert to unicode if floats or integers occurs.
-                outrow = [unicode(rowpart) for rowpart in row] 
+                # Convert to str if floats or integers occurs.
+                outrow = [str(rowpart) for rowpart in row] 
                 out.write(self._field_delimiter.join(outrow) + self._row_delimiter)
         except Exception as e:
             print('Failed to write to text file: ' + filepathname )
@@ -142,14 +142,14 @@ class TableFileWriter():
             worksheet.append(table_header)
             # Rows.
             for row in table_rows:
-                # Convert to unicode if floats or integers occurs.
-                outrow = [unicode(rowpart) for rowpart in row] 
+                # Convert to str if floats or integers occurs.
+                outrow = [str(rowpart) for rowpart in row] 
                 worksheet.append(outrow)
             # Save to file.   
             workbook.save(filepathname)
         #
         except Exception as e:
-            msg = 'Failed to write to file: ' + filepathname + '. Exception: ' + unicode(e)
+            msg = 'Failed to write to file: ' + filepathname + '. Exception: ' + str(e)
             print(msg)
             raise
 

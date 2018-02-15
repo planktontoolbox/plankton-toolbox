@@ -8,9 +8,9 @@ import os
 import datetime
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
-import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_core
 import toolbox_utils
+import app_framework
 
 class PlanktonCounterSampleEdit(QtWidgets.QWidget):
     """ """
@@ -165,7 +165,7 @@ class ExportSampleDialog(QtWidgets.QDialog):
         self._export_button = QtWidgets.QPushButton('Export')
         self._export_button.clicked.connect(self._export_dataset)
         self._exportcancel_button = QtWidgets.QPushButton('Cancel')
-        self._exportcancel_button.clicked.reject)
+        self._exportcancel_button.clicked.connect(self.reject)
         # Layout widgets.
         form1 = QtWidgets.QGridLayout()
         gridrow = 0
@@ -199,7 +199,7 @@ class ExportSampleDialog(QtWidgets.QDialog):
         dirdialog = QtWidgets.QFileDialog(self)
         dirdialog.setFileMode(QtWidgets.QFileDialog.Directory)
         dirdialog.setOptions(QtWidgets.QFileDialog.ShowDirsOnly)
-        dirdialog.setDirectory(unicode(self._exporttargetdir_edit.text()))
+        dirdialog.setDirectory(str(self._exporttargetdir_edit.text()))
         dirpath = dirdialog.getExistingDirectory()
         if dirpath:
             self._exporttargetdir_edit.setText(dirpath)
@@ -208,8 +208,8 @@ class ExportSampleDialog(QtWidgets.QDialog):
         """ """
         try:
             # Export path and file name.
-            export_target_dir = unicode(self._exporttargetdir_edit.text())
-            export_target_filename = unicode(self._exporttargetfilename_edit.text())
+            export_target_dir = str(self._exporttargetdir_edit.text())
+            export_target_filename = str(self._exporttargetfilename_edit.text())
 #             filepathname = os.path.join(exporttargetdir, exporttargetfilename)
             # Warning.
             if os.path.exists(os.path.join(export_target_dir, export_target_filename)):
@@ -224,6 +224,6 @@ class ExportSampleDialog(QtWidgets.QDialog):
             self.accept() # Close dialog box.
         #        
         except Exception as e:
-            toolbox_utils.Logging().error('Failed to export sample. ' + unicode(e))
-            QtWidgets.QMessageBox.warning(self, 'Warning', 'Failed to export sample. ' + unicode(e))
+            toolbox_utils.Logging().error('Failed to export sample. ' + str(e))
+            QtWidgets.QMessageBox.warning(self, 'Warning', 'Failed to export sample. ' + str(e))
         

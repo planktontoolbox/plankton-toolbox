@@ -11,10 +11,6 @@ import numpy
 
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
-# import plankton_toolbox.tools.tool_manager as tool_manager
-# import plankton_toolbox.toolbox.utils_qt as utils_qt
-# import plankton_toolbox.toolbox.help_texts as help_texts
-import plankton_toolbox.tools.tool_manager as tool_manager
 
 import toolbox_utils
 import plankton_core
@@ -76,13 +72,13 @@ class AnalyseDatasetsTab7(QtWidgets.QWidget):
         self._splitby_taxon_checkbox.setChecked(False) 
         # - View data.
         self._viewdata_button = QtWidgets.QPushButton('View data')
-        self._viewdata_button.clicked(self._view_data)                
+        self._viewdata_button.clicked.connect(self._view_data)                
         # - Calculate statistics.
         self._calcstatistics_button = QtWidgets.QPushButton('Calculate statistics')
-        self._calcstatistics_button.clicked(self._calc_stats)                
+        self._calcstatistics_button.clicked.connect(self._calc_stats)                
         # - Plot graph.
         self._plotgraphs_button = QtWidgets.QPushButton('Plot graph')
-        self._plotgraphs_button.clicked(self._plot_graph)                
+        self._plotgraphs_button.clicked.connect(self._plot_graph)                
 
         # Layout widgets.
         form1 = QtWidgets.QGridLayout()
@@ -138,7 +134,7 @@ class AnalyseDatasetsTab7(QtWidgets.QWidget):
         if not analysisdata:
             return # Can't create a report from an empty dataset.
         # Which parameter is selected?
-        selectedparameter = unicode(self._parameter_list.currentText())
+        selectedparameter = str(self._parameter_list.currentText())
         # Split by.
         split_on_year = self._splitby_year_checkbox.isChecked()
         split_on_season = self._splitby_season_checkbox.isChecked()
@@ -205,8 +201,8 @@ class AnalyseDatasetsTab7(QtWidgets.QWidget):
             visitdate = visitnode.get_data('sample_date')
             visitstation = visitnode.get_data('station_name')
             visitvisit = visitstation + ' ' + visitdate 
-            visityear = unicode(visitdate[0:4])
-            visitmonth = unicode(visitdate[5:7])
+            visityear = str(visitdate[0:4])
+            visitmonth = str(visitdate[5:7])
             visitseason = ''
             if visitmonth in ['12', '01','02']:
                 visitseason = 'Dec-Jan-Feb'
@@ -218,8 +214,8 @@ class AnalyseDatasetsTab7(QtWidgets.QWidget):
                 visitseason = 'Sep-Oct-Nov'
             #
             for samplenode in visitnode.get_children():
-                sample_min_depth_m = unicode(samplenode.get_data('sample_min_depth_m'))
-                sample_max_depth_m = unicode(samplenode.get_data('sample_max_depth_m'))
+                sample_min_depth_m = str(samplenode.get_data('sample_min_depth_m'))
+                sample_max_depth_m = str(samplenode.get_data('sample_max_depth_m'))
                 sampleminmaxdepth = sample_min_depth_m + '-' + sample_max_depth_m   
                 # Iterate over sample content. 
                 # Note: Create a level between sample and variabel.
@@ -293,8 +289,8 @@ class AnalyseDatasetsTab7(QtWidgets.QWidget):
                 maxvalue = '<ERROR>'
                 countedvalues = len(data_list)
                 #
-                print(', '.join(map(unicode, data_list))) # Print data.
-                print 'Error in calc statistics: ' + e # Print exception.            
+                print(', '.join(map(str, data_list))) # Print data.
+                print('Error in calc statistics: ' + e) # Print exception.            
             # Create row.
             report_row = []
             report_row.append(selectedparameter)
@@ -327,7 +323,7 @@ class AnalyseDatasetsTab7(QtWidgets.QWidget):
         if not analysisdata:
             return # Can't create a report from an empty dataset.
         # Which parameter is selected?
-        selectedparameter = unicode(self._parameter_list.currentText())
+        selectedparameter = str(self._parameter_list.currentText())
         # Split by.
         split_on_year = self._splitby_year_checkbox.isChecked()
         split_on_season = self._splitby_season_checkbox.isChecked()
@@ -377,8 +373,8 @@ class AnalyseDatasetsTab7(QtWidgets.QWidget):
             visitdate = visitnode.get_data('sample_date')
             visitstation = visitnode.get_data('station_name')
             visitvisit = visitstation + ' ' + visitdate 
-            visityear = unicode(visitdate[0:4])
-            visitmonth = unicode(visitdate[5:7])
+            visityear = str(visitdate[0:4])
+            visitmonth = str(visitdate[5:7])
             visitseason = ''
             if visitmonth in ['12', '01','02']:
                 visitseason = 'Dec-Jan-Feb'
@@ -390,8 +386,8 @@ class AnalyseDatasetsTab7(QtWidgets.QWidget):
                 visitseason = 'Sep-Oct-Nov'
             #
             for samplenode in visitnode.get_children():
-                sample_min_depth_m = unicode(samplenode.get_data('sample_min_depth_m'))
-                sample_max_depth_m = unicode(samplenode.get_data('sample_max_depth_m'))
+                sample_min_depth_m = str(samplenode.get_data('sample_min_depth_m'))
+                sample_max_depth_m = str(samplenode.get_data('sample_max_depth_m'))
                 sampleminmaxdepth = sample_min_depth_m + '-' + sample_max_depth_m   
                 # Iterate over sample content. 
                 # Note: Create a level between sample and variabel.
@@ -498,7 +494,7 @@ class AnalyseDatasetsTab7(QtWidgets.QWidget):
         if not analysisdata:
             return # Can't create a report from an empty dataset.
         # Which parameter is selected?
-        selectedparameter = unicode(self._parameter_list.currentText())
+        selectedparameter = str(self._parameter_list.currentText())
         # Split by.
         split_on_year = self._splitby_year_checkbox.isChecked()
         split_on_season = self._splitby_season_checkbox.isChecked()
@@ -544,8 +540,8 @@ class AnalyseDatasetsTab7(QtWidgets.QWidget):
             visitdate = visitnode.get_data('sample_date')
             visitstation = visitnode.get_data('station_name')
             visitvisit = visitstation + ' ' + visitdate 
-            visityear = unicode(visitdate[0:4])
-            visitmonth = unicode(visitdate[5:7])
+            visityear = str(visitdate[0:4])
+            visitmonth = str(visitdate[5:7])
             visitseason = ''
             if visitmonth in ['12', '01','02']:
                 visitseason = 'Dec-Jan-Feb'
@@ -557,8 +553,8 @@ class AnalyseDatasetsTab7(QtWidgets.QWidget):
                 visitseason = 'Sep-Oct-Nov'
             #
             for samplenode in visitnode.get_children():
-                sample_min_depth_m = unicode(samplenode.get_data('sample_min_depth_m'))
-                sample_max_depth_m = unicode(samplenode.get_data('sample_max_depth_m'))
+                sample_min_depth_m = str(samplenode.get_data('sample_min_depth_m'))
+                sample_max_depth_m = str(samplenode.get_data('sample_max_depth_m'))
                 sampleminmaxdepth = sample_min_depth_m + '-' + sample_max_depth_m   
                 # Iterate over sample content. 
                 # Note: Create a level between sample and variabel.
@@ -609,4 +605,4 @@ class AnalyseDatasetsTab7(QtWidgets.QWidget):
             for key in sorted(data_dict.keys()):
                 self._graph_plot_data.add_plot(plot_name = key, y_array = data_dict[key])
         except UserWarning as e:
-            QtWidgets.QMessageBox.warning(self, 'Warning', unicode(e))
+            QtWidgets.QMessageBox.warning(self, 'Warning', str(e))

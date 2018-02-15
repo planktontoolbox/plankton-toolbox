@@ -201,7 +201,7 @@
 #                     try:
 #                         value = dateutil.parser.parse(sample_date)
 #                         if value:
-#                             sample_date = unicode(value.strftime('%Y-%m-%d'))
+#                             sample_date = str(value.strftime('%Y-%m-%d'))
 #                     except:
 #                         toolbox_utils.Logging().warning('Parser: Failed to convert to date: ' + sample_date)
 #                     #
@@ -331,7 +331,7 @@
 #             if phytowinsize:
 #                 try:
 #                     # Convert from float to int. Excel related problem.
-#                     phytowinsize = unicode(int(float(phytowinsize.replace(',', '.'))))
+#                     phytowinsize = str(int(float(phytowinsize.replace(',', '.'))))
 #                 except:
 #                     phytowinsize = u''
 #                     print(u'loadPhytowinPegMapping, phytowinsize: ' + row[1])
@@ -340,7 +340,7 @@
 #             if pegsize:
 #                 try:
 #                     # Convert from float to int. Excel related problem.
-#                     pegsize = unicode(int(float(pegsize.replace(',', '.'))))
+#                     pegsize = str(int(float(pegsize.replace(',', '.'))))
 #                 except:
 #                     pegsize = u''
 #                     print(u'loadPhytowinPegMapping, pegsize: ' + row[3])

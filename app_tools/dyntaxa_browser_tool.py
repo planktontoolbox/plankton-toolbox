@@ -93,7 +93,7 @@ class DyntaxaBrowserTool(tool_base.ToolBase):
         """ """
         # Active widgets and connections.
         self._loadresource_button = QtWidgets.QPushButton('Load Dyntaxa resource')
-        self._loadresource_button.clicked(self._load_resource)                
+        self._loadresource_button.clicked.connect(self._load_resource)                
         # Layout widgets.
         layout = QtWidgets.QHBoxLayout()
         layout.addStretch(5)
@@ -139,12 +139,12 @@ class DyntaxaBrowserTool(tool_base.ToolBase):
 #        self._order_label.setText(taxon.get('Order', '-'))
 #        #
 #        sizeclass = self._dyntaxa_object.getNameAndSizeList()[index.row()][1]
-#        self._size_class_label.setText('<b>' + unicode(sizeclass.get('Size class', '-')) + '</b>')
+#        self._size_class_label.setText('<b>' + str(sizeclass.get('Size class', '-')) + '</b>')
 #        self._trophic_type_label.setText(sizeclass.get('Trophic type', '-'))
 #        self._shape_label.setText(sizeclass.get('Geometric shape', '-'))
 #        self._formula_label.setText(sizeclass.get('Formula', '-'))
-#        self._volume_label.setText(unicode(sizeclass.get('Calculated volume, um3', '-')))
-#        self._carbon_label.setText(unicode(sizeclass.get('Calculated Carbon pg/counting unit', '-')))
+#        self._volume_label.setText(str(sizeclass.get('Calculated volume, um3', '-')))
+#        self._carbon_label.setText(str(sizeclass.get('Calculated Carbon pg/counting unit', '-')))
 
     def _load_resource(self):
         """ """

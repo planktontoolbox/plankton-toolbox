@@ -6,12 +6,9 @@
 
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
-import plankton_toolbox.activities.plankton_counter_sample_info as plankton_counter_sample_info
-import plankton_toolbox.activities.plankton_counter_sample_edit as plankton_counter_sample_edit
-import plankton_toolbox.activities.plankton_counter_sample_count as plankton_counter_sample_count
-import plankton_toolbox.activities.plankton_counter_sample_methods as plankton_counter_sample_methods
-# import plankton_toolbox.activities.plankton_counter_sample_methods_OLD as plankton_counter_sample_methods_OLD
+
 import plankton_core
+import app_activities
 
 class PlanktonCounterDialog(QtWidgets.QDialog):
     """ """
@@ -107,11 +104,11 @@ class PlanktonCounterDialog(QtWidgets.QDialog):
         contentLayout.addWidget(self._content_bottom())
         
         # Detect tab selecteion changes.
-        self._main_tab_widget.currentChanged._tab_in_tabwidget_changed)
+        self._main_tab_widget.currentChanged.connect(self._tab_in_tabwidget_changed)
 
     def _content_metadata(self):
         """ """
-        self.metadata_widget = plankton_counter_sample_info.PlanktonCounterSampleInfo(self, 
+        self.metadata_widget = app_activities.PlanktonCounterSampleInfo(self, 
                                                            self._current_dataset, 
                                                            self._current_sample, 
                                                            self._current_sample_object)
@@ -125,7 +122,7 @@ class PlanktonCounterDialog(QtWidgets.QDialog):
 
     def _content_methods(self):
         """ """
-        self.methods_widget = plankton_counter_sample_methods.PlanktonCounterSampleMethods(self,
+        self.methods_widget = app_activities.PlanktonCounterSampleMethods(self,
                                                            self._current_dataset, 
                                                            self._current_sample, 
                                                            self._current_sample_object)
@@ -139,7 +136,7 @@ class PlanktonCounterDialog(QtWidgets.QDialog):
 
     def _content_count(self):
         """ """
-        self.count_widget = plankton_counter_sample_count.PlanktonCounterSampleCount(self, 
+        self.count_widget = app_activities.PlanktonCounterSampleCount(self, 
                                                            self._current_dataset, 
                                                            self._current_sample, 
                                                            self._current_sample_object)
@@ -147,7 +144,7 @@ class PlanktonCounterDialog(QtWidgets.QDialog):
 
     def _content_sample_data(self):
         """ """
-        self.sample_data_widget = plankton_counter_sample_edit.PlanktonCounterSampleEdit(self, 
+        self.sample_data_widget = app_activities.PlanktonCounterSampleEdit(self, 
                                                            self._current_dataset, 
                                                            self._current_sample, 
                                                            self._current_sample_object)
@@ -158,7 +155,7 @@ class PlanktonCounterDialog(QtWidgets.QDialog):
         widget = QtWidgets.QWidget()
         #
         self._close_button = QtWidgets.QPushButton('Close plankton counter')
-        self._close_button.clicked.close)
+        self._close_button.clicked.connect(self.close)
         #
         layout = QtWidgets.QHBoxLayout()
         layout.addStretch(10)

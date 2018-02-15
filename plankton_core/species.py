@@ -55,7 +55,7 @@ class Species(object):
             # Only done once since the class is declared as singleton.
             self._load_all_data()
         except Exception as e:
-            toolbox_utils.Logging().error('Failed when loading species related files: ' + unicode(e))            
+            toolbox_utils.Logging().error('Failed when loading species related files: ' + str(e))            
             raise
 
     def get_taxa_dict(self):
@@ -87,7 +87,7 @@ class Species(object):
             speciesobject = self._taxa_lookup[scientific_name]
             if 'size_classes' in speciesobject:
                 for sizeclassobject in speciesobject['size_classes']:
-                    if sizeclassobject.get('bvol_size_class', '') == unicode(size_class):
+                    if sizeclassobject.get('bvol_size_class', '') == str(size_class):
                         return sizeclassobject
         #
         return {}
@@ -98,7 +98,7 @@ class Species(object):
             speciesobject = self._taxa_lookup[scientific_name]
             if 'size_classes' in speciesobject:
                 for sizeclassobject in speciesobject['size_classes']:
-                    if sizeclassobject.get('bvol_size_class', '') == unicode(size_class):
+                    if sizeclassobject.get('bvol_size_class', '') == str(size_class):
                         return sizeclassobject.get(key, '')
         #
         return '' 
@@ -221,7 +221,7 @@ class Species(object):
             self._precalculate_data()
         #
         except Exception as e:
-            toolbox_utils.Logging().error('Failed when loading species data: ' + unicode(e))            
+            toolbox_utils.Logging().error('Failed when loading species data: ' + str(e))            
             raise
             
     def _load_trophic_types(self, excel_file_name):
@@ -477,8 +477,8 @@ class Species(object):
                         elif level == 'size_class':
                             if (internalname == 'bvol_size_class'):
                                 try:
-                                    # Convert from float to integer and back to unicode. Excel related problem.
-                                    sizeclassdict[internalname] = unicode(int(float(value)))
+                                    # Convert from float to integer and back to str. Excel related problem.
+                                    sizeclassdict[internalname] = str(int(float(value)))
                                 except:
                                     sizeclassdict[internalname] = '<ERROR>'
                             #        

@@ -55,13 +55,13 @@ class AnalyseDatasetsTab8(QtWidgets.QWidget):
         self._parameter_list = app_framework.SelectableQListView()       
         clearall_label = app_framework.ClickableQLabel('Clear all')
         markall_label = app_framework.ClickableQLabel('Mark all')
-        clearall_label.clicked.connect(self._parameter_list.uncheckAll)                
-        markall_label.clicked.connect(self._parameter_list.checkAll)                
+        clearall_label.label_clicked.connect(self._parameter_list.uncheckAll)                
+        markall_label.label_clicked.connect(self._parameter_list.checkAll)                
         # Predefined reports.
         self._report_1_button = QtWidgets.QPushButton('PRIMER')
-        self._report_1_button.clicked(self._create_report_1)                
+        self._report_1_button.clicked.connect(self._create_report_1)                
         self._report_2_button = QtWidgets.QPushButton('Zooplankton: Abundance m2 and m3, length median and mean')
-        self._report_2_button.clicked(self._create_report_2)                
+        self._report_2_button.clicked.connect(self._create_report_2)                
 
         # Layout widgets.
         form1 = QtWidgets.QGridLayout()
@@ -159,10 +159,10 @@ class AnalyseDatasetsTab8(QtWidgets.QWidget):
         #
         # Part 1: Create header rows with columns for sample related data.
         #
-        header_row_1 = [unicode()] * numberofcolumns 
-        header_row_2 = [unicode()] * numberofcolumns 
-        header_row_3 = [unicode()] * numberofcolumns 
-        header_row_4 = [unicode()] * numberofcolumns 
+        header_row_1 = [str()] * numberofcolumns 
+        header_row_2 = [str()] * numberofcolumns 
+        header_row_3 = [str()] * numberofcolumns 
+        header_row_4 = [str()] * numberofcolumns 
         header_row_1[5] = 'Station name:'
         header_row_2[5] = 'Date:'
         header_row_3[5] = 'Sample min depth:'
@@ -196,9 +196,9 @@ class AnalyseDatasetsTab8(QtWidgets.QWidget):
                         stage = variable.get_data('stage')
                         sex = variable.get_data('sex')
                         #
-                        taxon_key = unicode(scientific_name) + ':' + unicode(size_class) + ':' + unicode(trophic_type) + ':' + unicode(stage) + ':' + unicode(sex)
+                        taxon_key = str(scientific_name) + ':' + str(size_class) + ':' + str(trophic_type) + ':' + str(stage) + ':' + str(sex)
                         if taxon_key not in taxon_values_dict:
-                            taxon_values_dict[taxon_key] = [unicode()] * (numberofsamples * numberofparameters) # Add new value list.
+                            taxon_values_dict[taxon_key] = [str()] * (numberofsamples * numberofparameters) # Add new value list.
                         #
                         for paramindex, param in enumerate(parameters):
                             parameter = variable.get_data('parameter')
@@ -404,12 +404,12 @@ def primer_report_count_table_sort(s1, s2):
 #         #
 #         # Part 1: Create header rows with columns for sample related data.
 #         #
-#         header_row_1 = [unicode()] * numberofcolumns 
-#         header_row_2 = [unicode()] * numberofcolumns 
-#         header_row_3 = [unicode()] * numberofcolumns 
-#         header_row_4 = [unicode()] * numberofcolumns 
-#         header_row_5 = [unicode()] * numberofcolumns 
-#         header_row_6 = [unicode()] * numberofcolumns 
+#         header_row_1 = [str()] * numberofcolumns 
+#         header_row_2 = [str()] * numberofcolumns 
+#         header_row_3 = [str()] * numberofcolumns 
+#         header_row_4 = [str()] * numberofcolumns 
+#         header_row_5 = [str()] * numberofcolumns 
+#         header_row_6 = [str()] * numberofcolumns 
 #         header_row_1[5] = 'Station:'
 #         header_row_2[5] = 'Provtagningsdatum:'
 #         header_row_3[5] = 'Min. djup:'
@@ -453,7 +453,7 @@ def primer_report_count_table_sort(s1, s2):
 #                 if species_sample_dict.has_key(phytowinnameandsize):
 #                     species_sample_dict[phytowinnameandsize][datasetindex] = abundance
 #                 else:
-#                     species_sample_dict[phytowinnameandsize] = [unicode()] * numberofsamples # Add new value list.
+#                     species_sample_dict[phytowinnameandsize] = [str()] * numberofsamples # Add new value list.
 #                     species_sample_dict[phytowinnameandsize][datasetindex] = abundance
 #         #
 #         # Part 3: Create the species rows in the report.        
@@ -508,7 +508,7 @@ def primer_report_count_table_sort(s1, s2):
 #             if show_debug_info:
 #                 taxonname = taxonname + ' [' + phytowinnameandsize + ']'
 #             # Put the row together.
-#             row = [unicode()] * (numberofcolumns * 2)
+#             row = [str()] * (numberofcolumns * 2)
 #             row[0] = taxonclass
 #             row[1] = 'X' if harmful else ''
 #             row[2] = taxonname
@@ -525,7 +525,7 @@ def primer_report_count_table_sort(s1, s2):
 #                         calculatedvolume = float(volume) * float(abund) / 1000000000. # Should be mm3/l (2012-12-12) 
 #                         volumestring = format(calculatedvolume, '.8f').replace('.', ',')
 #                     except:
-#                         volumestring = 'ERROR' + ' [' + unicode(abund) + ' * ' + unicode(volume) + ' / 1000000000]'
+#                         volumestring = 'ERROR' + ' [' + str(abund) + ' * ' + str(volume) + ' / 1000000000]'
 #                 row[6 + (index * 2) + 1] = volumestring
 #             # Add the row the report.
 #             species_rows.append(row)
@@ -549,10 +549,10 @@ def primer_report_count_table_sort(s1, s2):
 #                                     abundcol = 6 + (sampleindex * 2)
 #                                     volumecol = abundcol + 1
 #                                     if row[abundcol] and oldrow[abundcol]:
-#                                         row[abundcol] = unicode(int(row[abundcol]) + int(oldrow[abundcol]))
+#                                         row[abundcol] = str(int(row[abundcol]) + int(oldrow[abundcol]))
 #                                         oldrow[0] = 'REMOVE AGGREGATED' #
 #                                     if row[volumecol] and oldrow[volumecol]:
-#                                         row[volumecol] = unicode(float(row[volumecol].replace(',', '.')) + float(oldrow[volumecol].replace(',', '.'))).replace('.', ',')
+#                                         row[volumecol] = str(float(row[volumecol].replace(',', '.')) + float(oldrow[volumecol].replace(',', '.'))).replace('.', ',')
 #                                         oldrow[0] = 'REMOVE AGGREGATED' #
 #                                     #
 #                                     sampleindex += 1     

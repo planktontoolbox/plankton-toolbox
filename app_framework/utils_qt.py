@@ -269,7 +269,9 @@ class ToolboxQTableView(QtWidgets.QTableView):
     def resetModel(self):
         """ Used to repaint. """
         if self._tablemodel:
-            self._tablemodel.reset()
+            self._tablemodel.beginResetModel()
+            self._tablemodel.getModeldata().clear()
+            self._tablemodel.endResetModel()
           
     def getTableModel(self):
         """ """

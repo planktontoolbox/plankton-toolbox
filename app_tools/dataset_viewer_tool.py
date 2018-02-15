@@ -112,7 +112,7 @@ class DatasetViewerTool(app_framework.ToolBase):
         self._selectdataset_list.addItems(["<select dataset>"])
         
         for rowindex, dataset in enumerate(app_framework.ToolboxDatasets().get_datasets()):
-            self._selectdataset_list.addItems(['Import-' + unicode(rowindex + 1)])
+            self._selectdataset_list.addItems(['Import-' + str(rowindex + 1)])
 
     def _view_dataset(self, index):
         """ """
@@ -140,7 +140,7 @@ class DatasetViewerTool(app_framework.ToolBase):
                 self._refresh_result_table()
         #
         if self._tableview.getTableModel():
-            self._numberofrows_label.setText('Number of rows: ' + unicode(self._tableview.getTableModel().get_row_count()))
+            self._numberofrows_label.setText('Number of rows: ' + str(self._tableview.getTableModel().get_row_count()))
         else:
             self._numberofrows_label.setText('Number of rows: 0')
     
@@ -159,7 +159,7 @@ class DatasetViewerTool(app_framework.ToolBase):
                             'Export dataset',
                             self._lastuseddirectory,
                             namefilter)
-            filename = unicode(filename) # QString to unicode.
+            filename = str(filename) # QString to str.
             # Check if user pressed ok or cancel.
             if filename:
                 self._lastuseddirectory = os.path.dirname(filename)
@@ -181,10 +181,10 @@ class DatasetViewerTool(app_framework.ToolBase):
         table_dataset = self._tableview.getTableModel()
         if table_dataset:
             # Header.
-            clipboardstring = field_separator.join(map(unicode, table_dataset.get_header())).strip() + row_separator
+            clipboardstring = field_separator.join(map(str, table_dataset.get_header())).strip() + row_separator
             # Rows.
             for row in table_dataset.get_rows():
-                clipboardstring += field_separator.join(map(unicode, row)).strip() + row_separator
+                clipboardstring += field_separator.join(map(str, row)).strip() + row_separator
         #
         clipboard.setText(clipboardstring)
 

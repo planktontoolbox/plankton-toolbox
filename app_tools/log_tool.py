@@ -43,7 +43,7 @@ class LogTool(app_framework.ToolBase):
         self._clear_button = QtWidgets.QPushButton('Clear log')
         self._clear_button.clicked.connect(self._clear_log)              
 #        self._openlogfile_button = QtWidgets.QPushButton('Open log file')
-#        self._openlogfile_button.clicked(self._openLogFile)      
+#        self._openlogfile_button.clicked.connect(self._openLogFile)      
         # Layout.
         layout = QtWidgets.QHBoxLayout()
         limit_label = QtWidgets.QLabel('Number of displayed rows: ')

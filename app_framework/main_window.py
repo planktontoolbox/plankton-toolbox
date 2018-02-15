@@ -11,6 +11,7 @@ from PyQt5 import QtCore
 
 import app_core
 import app_framework
+import app_activities
 import app_tools
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -50,10 +51,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self._activity = None
         self._createCentralWidget()
         # Set up activities and tools.
-        self._toolmanager = app_framework.ToolManager()
+        self._toolmanager = app_tools.ToolManager()
         self._toolmanager.set_parent(self)
         self._toolmanager.init_tools()
-        self._activitymanager = app_framework.ActivityManager()
+        self._activitymanager = app_activities.ActivityManager()
         self._activitymanager.set_parent(self)
         self._activitymanager.init_activities()
         # Add tools to selector.
@@ -89,7 +90,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.resize(size)
         self.move(position)        
         # Tell the user.
-        app_framework.ToolManager().show_tool_by_name('Application log') # Show the log tool if hidden.
+        app_tools.ToolManager().show_tool_by_name('Application log') # Show the log tool if hidden.
 
         # Load resources when the main event loop has started.
 #         if app_framework.ToolboxSettings().get_value('Resources:Load at startup'):

@@ -73,5 +73,10 @@ def set_version(version):
         global __version__
         __version__ = version
 
+def get_version(version):
+        """ """
+        global __version__
+        return __version__
+
 
 

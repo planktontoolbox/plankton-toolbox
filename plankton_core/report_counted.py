@@ -108,7 +108,7 @@ class CreateReportCounted(object):
                             for item in self._row_key_items:
                                 if row_key: row_key += '<+>'
                                 try:
-                                    row_key += unicode(row_dict.get(item, ''))
+                                    row_key += str(row_dict.get(item, ''))
                                 except:
                                     pass
                             # Add to dict if first time.
@@ -262,7 +262,7 @@ class CreateReportCounted(object):
 #                 if show_debug_info:
 #                     report_row[6] = taxonname + ' [' + phytowinname + ' : ' + phytowinsize + ']'
 #                     try:
-#                         report_row[11] = unicode(int(countedunits) * int(coeff)) + \
+#                         report_row[11] = str(int(countedunits) * int(coeff)) + \
 #                                          ' [' + countedunits + ' * ' + coeff + ']'
 #                     except:
 #                         report_row[11] = 'ERROR' + ' [' + countedunits + ' * ' + coeff + ']'
@@ -290,10 +290,10 @@ class CreateReportCounted(object):
 #                     if row[6]: # Don't aggregate if species is missing.
 #                         if oldrow[1:8] == row[1:8]:
 #                             if row[11] and oldrow[11]:
-#                                 row[11] = unicode(int(row[11]) + int(oldrow[11]))
+#                                 row[11] = str(int(row[11]) + int(oldrow[11]))
 #                                 oldrow[0] = 'REMOVE AGGREGATED' #
 #                             if row[12] and oldrow[12]:
-#                                 row[12] = unicode(float(row[12].replace(',', '.')) + float(oldrow[12].replace(',', '.'))).replace('.', ',')
+#                                 row[12] = str(float(row[12].replace(',', '.')) + float(oldrow[12].replace(',', '.'))).replace('.', ',')
 #                                 oldrow[0] = 'REMOVE AGGREGATED' #
 #                 oldrow = row
 # 

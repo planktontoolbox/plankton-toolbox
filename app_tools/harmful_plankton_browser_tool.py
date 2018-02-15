@@ -75,9 +75,9 @@ class HarmfulPlanktonBrowserTool(tool_base.ToolBase):
         """ """
         # Active widgets and connections.
         self._loadresource_button = QtWidgets.QPushButton('Load harmful plankton resource')
-        self._loadresource_button.clicked(self._load_resource)                
+        self._loadresource_button.clicked.connect(self._load_resource)                
         self._openmarinespecies = QtWidgets.QPushButton('Open marinespecies.org')
-        self._openmarinespecies.clicked(self._open_marine_species)                
+        self._openmarinespecies.clicked.connect(self._open_marine_species)                
         # Layout widgets.
         layout = QtWidgets.QHBoxLayout()
         layout.addWidget(self._openmarinespecies)
@@ -98,7 +98,7 @@ class HarmfulPlanktonBrowserTool(tool_base.ToolBase):
         self._marinespecies_url = \
                 'http://www.marinespecies.org/' + \
                 'hab/aphia.php?p=taxdetails&id=' + \
-                unicode(taxon['Aphia id'])
+                str(taxon['Aphia id'])
 
 
     def _open_marine_species(self):

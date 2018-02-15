@@ -7,20 +7,11 @@
 import os.path
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
-import plankton_toolbox.activities.activity_base as activity_base
-import plankton_toolbox.toolbox.utils_qt as utils_qt
-import plankton_toolbox.activities.analyse_datasets_tab1 as tab1
-import plankton_toolbox.activities.analyse_datasets_tab2 as tab2
-import plankton_toolbox.activities.analyse_datasets_tab3 as tab3
-import plankton_toolbox.activities.analyse_datasets_tab4 as tab4
-import plankton_toolbox.activities.analyse_datasets_tab5 as tab5
-import plankton_toolbox.activities.analyse_datasets_tab6 as tab6
-import plankton_toolbox.activities.analyse_datasets_tab7 as tab7
-import plankton_toolbox.activities.analyse_datasets_tab8 as tab8
 
 import toolbox_utils
 import plankton_core
 import app_framework
+import app_activities
 
 class AnalyseDatasetsActivity(app_framework.ActivityBase):
     """
@@ -35,14 +26,14 @@ class AnalyseDatasetsActivity(app_framework.ActivityBase):
         # Filename used when saving data to file.
         self._lastuseddirectory = '.'
         # Create tab widgets.
-        self._tab1widget = tab1.AnalyseDatasetsTab1()
-        self._tab2widget = tab2.AnalyseDatasetsTab2()
-        self._tab3widget = tab3.AnalyseDatasetsTab3()
-        self._tab4widget = tab4.AnalyseDatasetsTab4()
-        self._tab5widget = tab5.AnalyseDatasetsTab5()
-        self._tab6widget = tab6.AnalyseDatasetsTab6()
-        self._tab7widget = tab7.AnalyseDatasetsTab7()
-        self._tab8widget = tab8.AnalyseDatasetsTab8()
+        self._tab1widget = app_activities.analyse_datasets_tab1.AnalyseDatasetsTab1()
+        self._tab2widget = app_activities.analyse_datasets_tab2.AnalyseDatasetsTab2()
+        self._tab3widget = app_activities.analyse_datasets_tab3.AnalyseDatasetsTab3()
+        self._tab4widget = app_activities.analyse_datasets_tab4.AnalyseDatasetsTab4()
+        self._tab5widget = app_activities.analyse_datasets_tab5.AnalyseDatasetsTab5()
+        self._tab6widget = app_activities.analyse_datasets_tab6.AnalyseDatasetsTab6()
+        self._tab7widget = app_activities.analyse_datasets_tab7.AnalyseDatasetsTab7()
+        self._tab8widget = app_activities.analyse_datasets_tab8.AnalyseDatasetsTab8()
         # 
         self._tab1widget.set_main_activity(self)
         self._tab2widget.set_main_activity(self)
@@ -121,11 +112,11 @@ class AnalyseDatasetsActivity(app_framework.ActivityBase):
         #
 #        self._hidedata_checkbox = QtWidgets.QCheckBox('Hide data')
 #        self._hidedata_checkbox.setChecked(False)
-#        self._hidedata_checkbox.clicked(self._view_hide_data_changed)                
+#        self._hidedata_checkbox.clicked.connect(self._view_hide_data_changed)                
         #
         self._refreshfiltereddata_button = QtWidgets.QPushButton('Refresh filtered data') # TODO:
         self._refreshfiltereddata_button.hide()
-        self._refreshfiltereddata_button.clicked(self._refresh_filtered_data)                
+        self._refreshfiltereddata_button.clicked.connect(self._refresh_filtered_data)                
         #
         self._tableview = app_framework.ToolboxQTableView()
         # Layout widgets.
@@ -169,12 +160,12 @@ class AnalyseDatasetsActivity(app_framework.ActivityBase):
         saveresultbox = QtWidgets.QGroupBox('Export data', self)
         # Active widgets and connections.
         self._copytoclipboard_button = QtWidgets.QPushButton('Copy to clipboard')
-        self._copytoclipboard_button.clicked(self._copy_to_clipboard)                
+        self._copytoclipboard_button.clicked.connect(self._copy_to_clipboard)                
         self._saveformat_list = QtWidgets.QComboBox()
         self._saveformat_list.addItems(["Tab delimited text file (*.txt)",
                                          "Excel file (*.xlsx)"])
         self._savedataset_button = QtWidgets.QPushButton('Save...')
-        self._savedataset_button.clicked(self._save_analysis_data)                
+        self._savedataset_button.clicked.connect(self._save_analysis_data)                
         # Layout widgets.
         hbox1 = QtWidgets.QHBoxLayout()
         hbox1.addWidget(self._copytoclipboard_button)
@@ -249,7 +240,7 @@ class AnalyseDatasetsActivity(app_framework.ActivityBase):
             self._refresh_viewed_data_table()
         #
         if self._tableview.getTableModel():
-            self._numberofrows_label.setText('Number of rows: ' + unicode(self._tableview.getTableModel().get_row_count()))
+            self._numberofrows_label.setText('Number of rows: ' + str(self._tableview.getTableModel().get_row_count()))
         else:
             self._numberofrows_label.setText('Number of rows: 0')
 
@@ -274,7 +265,7 @@ class AnalyseDatasetsActivity(app_framework.ActivityBase):
                             'Export dataset',
                             self._lastuseddirectory,
                             namefilter)
-            filename = unicode(filename) # QString to unicode.
+            filename = str(filename) # QString to str.
             # Check if user pressed ok or cancel.
             if filename:
                 self._lastuseddirectory = os.path.dirname(filename)
@@ -296,10 +287,10 @@ class AnalyseDatasetsActivity(app_framework.ActivityBase):
         table_dataset = self._tableview.getTableModel()
         if table_dataset:
             # Header.
-            clipboardstring = field_separator.join(map(unicode, table_dataset.get_header())) + row_separator
+            clipboardstring = field_separator.join(map(str, table_dataset.get_header())) + row_separator
             # Rows.
             for row in table_dataset.get_rows():
-                clipboardstring += field_separator.join(map(unicode, row)) + row_separator
+                clipboardstring += field_separator.join(map(str, row)) + row_separator
         #
         clipboard.setText(clipboardstring)
 

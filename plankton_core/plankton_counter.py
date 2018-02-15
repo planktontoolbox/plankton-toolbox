@@ -15,6 +15,8 @@ import plankton_core
 @toolbox_utils.singleton
 class PlanktonCounterManager(QtCore.QObject):
     """ """
+    planktonCounterListChanged = QtCore.pyqtSignal()
+    
     def __init__(self,
                  dataset_dir_path = 'plankton_toolbox_counter/datasets',
                  ):
@@ -33,7 +35,7 @@ class PlanktonCounterManager(QtCore.QObject):
 
     def _emit_change_notification(self):
         """ Emit signal to update GUI lists for available datasets and samples. """
-        self.emit(QtCore.SIGNAL('planktonCounterListChanged'))
+        self.planktonCounterListChanged.emit()
     
     # === Datasets ===
     
@@ -156,7 +158,7 @@ class PlanktonCounterManager(QtCore.QObject):
                     )
         # Merge header and rows.
         self._current_dataset_metadata = [tablefilereader.header()] + tablefilereader.rows()
-#         print('Dataset metadata: ' + unicode(self._current_dataset_metadata))
+#         print('Dataset metadata: ' + str(self._current_dataset_metadata))
 
     def write_dataset_metadata(self, dataset_name):
         """ """
@@ -173,7 +175,7 @@ class PlanktonCounterManager(QtCore.QObject):
 #                     )
 #         # Merge header and rows.
 #         self._current_sampling_info = [tablefilereader.header()] + tablefilereader.rows()
-# #         print('Sampling info: ' + unicode(self._current_sampling_info))
+# #         print('Sampling info: ' + str(self._current_sampling_info))
 
     # === Import/Export ===
     
@@ -364,7 +366,7 @@ class PlanktonCounterSample():
                 number_of_areas = int(locked_at_area)
             #
             coefficient = int((coefficient_one_unit / number_of_areas) + 0.5)
-            sampleobject.set_coefficient(unicode(coefficient))
+            sampleobject.set_coefficient(str(coefficient))
             # 
             sampleobject._calculate_values()
 
@@ -424,14 +426,14 @@ class PlanktonCounterSample():
                 if abundance_class in ['', 0]:
                     # Quantitative.
                     countedspecies[taxon] += int(sampleobject.get_counted_units())
-                    countedspecies_text[taxon] = unicode(countedspecies[taxon])
+                    countedspecies_text[taxon] = str(countedspecies[taxon])
                     
                     totalcounted += int(sampleobject.get_counted_units())
 
                     counted_units_list = sampleobject.get_counted_units_list()
                     if ';' in counted_units_list:
                         last_transect_units = counted_units_list.split(';')[-1]
-                        countedspecies_text[taxon] = unicode(countedspecies[taxon]) + '/' + last_transect_units
+                        countedspecies_text[taxon] = str(countedspecies[taxon]) + '/' + last_transect_units
                 else:
                     # Qualitative.
                     if summary_type in ['Counted per taxa', 'Counted per taxa/sizes']:
@@ -463,7 +465,7 @@ class PlanktonCounterSample():
                 if bvol_size_range:
                     size_range_dict[taxon] = '(Size: ' + bvol_size_range + ')'
         #    
-        summary_data.append('Total counted: ' + unicode(totalcounted))
+        summary_data.append('Total counted: ' + str(totalcounted))
         summary_data.append('')
         if most_counted_sorting == False:
             # Alphabetical.
@@ -475,7 +477,7 @@ class PlanktonCounterSample():
                 if key in locked_list:
                     lock_info = ' [Locked]'
                 
-                summary_data.append(key + ': ' + unicode(countedspecies_text[key]) + lock_info + size_range)
+                summary_data.append(key + ': ' + str(countedspecies_text[key]) + lock_info + size_range)
         else:
             # Sort for most counted.
             for key in sorted(countedspecies, key=countedspecies.get, reverse=True):
@@ -485,7 +487,7 @@ class PlanktonCounterSample():
                 lock_info = ''
                 if key in locked_list:
                     lock_info = ' [Locked]'
-                summary_data.append(key + ': ' + unicode(countedspecies_text[key]) + lock_info + size_range)
+                summary_data.append(key + ': ' + str(countedspecies_text[key]) + lock_info + size_range)
         #
         return summary_data
 
@@ -847,8 +849,8 @@ class SampleRow():
             self._bvol_carbon = float(self._size_class_dict.get('bvol_calculated_carbon_pg', '0').replace(',', '.'))
         except:
             pass
-        self._sample_row_dict['volume_um3_unit'] = unicode(self._round_value(self._bvol_volume))
-        self._sample_row_dict['carbon_pgc_unit'] = unicode(self._round_value(self._bvol_carbon))
+        self._sample_row_dict['volume_um3_unit'] = str(self._round_value(self._bvol_volume))
+        self._sample_row_dict['carbon_pgc_unit'] = str(self._round_value(self._bvol_carbon))
 
     def get_sample_row_dict(self):
         """ """
@@ -926,9 +928,9 @@ class SampleRow():
             counted_units_list = counted_units_list[:count_area_number] 
             # Recalculate when areas are removed.
             calculated_value = sum(counted_units_list)
-            self._sample_row_dict['counted_units'] = unicode(calculated_value)
+            self._sample_row_dict['counted_units'] = str(calculated_value)
         #
-        self._sample_row_dict['counted_units_list'] = ';'.join(unicode(x) for x in counted_units_list)
+        self._sample_row_dict['counted_units_list'] = ';'.join(str(x) for x in counted_units_list)
         # print('DEBUG: add count area: ' + self._sample_row_dict['counted_units_list'])
     
     def set_coefficient(self, coefficient):
@@ -970,7 +972,7 @@ class SampleRow():
                 value_for_area = int(value) 
             counted_units_list[(count_area_number - 1)] += value_for_area
         #
-        self._sample_row_dict['counted_units_list'] = ';'.join(unicode(x) for x in counted_units_list)
+        self._sample_row_dict['counted_units_list'] = ';'.join(str(x) for x in counted_units_list)
         #
         #print('DEBUG: ' + self._sample_row_dict['counted_units_list'])
     
@@ -1010,18 +1012,18 @@ class SampleRow():
             counted = float(counted_txt.replace(',', '.'))
             coefficient = float(coefficient_txt.replace(',', '.'))
             abundance = counted * coefficient
-            self._sample_row_dict['abundance_units_l'] = unicode(self._round_value(abundance))
+            self._sample_row_dict['abundance_units_l'] = str(self._round_value(abundance))
             #
             try:
                 ### value = abundance * self._bvol_volume / 1000000.0
                 value = abundance * self._bvol_volume / 1000000000.0
-                self._sample_row_dict['volume_mm3_l'] = unicode(self._round_value(value))
+                self._sample_row_dict['volume_mm3_l'] = str(self._round_value(value))
             except:
                 self._sample_row_dict['volume_mm3_l'] = '0.00'
             #
             try:
                 value = abundance * self._bvol_carbon / 1000.0
-                self._sample_row_dict['carbon_ugc_l'] = unicode(self._round_value(value))
+                self._sample_row_dict['carbon_ugc_l'] = str(self._round_value(value))
             except:
                 self._sample_row_dict['carbon_ugc_l'] = '0.00'
         except:

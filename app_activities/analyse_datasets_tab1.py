@@ -7,11 +7,6 @@
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
-#import datetime
-# import copy
-# import plankton_toolbox.toolbox.utils_qt as utils_qt
-import plankton_toolbox.toolbox.toolbox_datasets as toolbox_datasets
-# import plankton_toolbox.toolbox.help_texts as help_texts
 
 import toolbox_utils
 import plankton_core
@@ -54,9 +49,9 @@ class AnalyseDatasetsTab1(QtWidgets.QWidget):
         app_framework.ToolboxDatasets().datasetListChanged.connect(self._update_imported_dataset_list)
         #
         self._clearanalysisdata_button = QtWidgets.QPushButton('Clear analysis data')
-        self._clearanalysisdata_button.clicked(self._clear_analysis_data)                
+        self._clearanalysisdata_button.clicked.connect(self._clear_analysis_data)                
         self._copydatasets_button = QtWidgets.QPushButton('Load marked dataset(s) for analysis')
-        self._copydatasets_button.clicked(self._copy_datasets_for_analysis)                
+        self._copydatasets_button.clicked.connect(self._copy_datasets_for_analysis)                
         # Layout widgets.
         hbox1 = QtWidgets.QHBoxLayout()
         hbox1.addWidget(self._clearanalysisdata_button)
@@ -76,7 +71,7 @@ class AnalyseDatasetsTab1(QtWidgets.QWidget):
         """ """
         self._loaded_datasets_model.clear()        
         for rowindex, dataset in enumerate(app_framework.ToolboxDatasets().get_datasets()):
-            item = QtGui.QStandardItem('Import-' + unicode(rowindex + 1) + 
+            item = QtGui.QStandardItem('Import-' + str(rowindex + 1) + 
                                        '.   Source: ' + dataset.get_metadata('file_name'))
             item.setCheckState(QtCore.Qt.Checked)
 #            item.setCheckState(QtCore.Qt.Unchecked)
@@ -117,8 +112,8 @@ class AnalyseDatasetsTab1(QtWidgets.QWidget):
             self._main_activity.update_viewed_data_and_tabs() 
         #
         except UserWarning as e:
-            toolbox_utils.Logging().error('Failed to copy data for analysis. ' + unicode(e))
-            QtWidgets.QMessageBox.warning(self._main_activity, 'Warning', 'Failed to copy data for analysis. ' + unicode(e))
+            toolbox_utils.Logging().error('Failed to copy data for analysis. ' + str(e))
+            QtWidgets.QMessageBox.warning(self._main_activity, 'Warning', 'Failed to copy data for analysis. ' + str(e))
         finally:
             toolbox_utils.Logging().log_all_accumulated_rows()
             toolbox_utils.Logging().log('Copy datasets for analysis is done.')

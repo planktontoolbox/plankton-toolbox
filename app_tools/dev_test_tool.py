@@ -109,13 +109,13 @@ class DevTestTool(tool_base.ToolBase):
         for index, settings_item in enumerate(self._dev_settings):
             self._testbutton = QtWidgets.QPushButton(settings_item['button_text'])
             if index == 0:
-                self._testbutton.clicked(self._test_0)   
+                self._testbutton.clicked.connect(self._test_0)   
             if index == 1:
-                self._testbutton.clicked(self._test_1)   
+                self._testbutton.clicked.connect(self._test_1)   
             if index == 2:
-                self._testbutton.clicked(self._test_2)   
+                self._testbutton.clicked.connect(self._test_2)   
             if index == 3:
-                self._testbutton.clicked(self._test_3)   
+                self._testbutton.clicked.connect(self._test_3)   
             layout.addWidget(self._testbutton)
         #
         layout.addStretch(5)

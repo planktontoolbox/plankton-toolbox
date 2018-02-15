@@ -140,7 +140,7 @@ class TableFileReader():
         #         
         if len(dictionary) == 0:            
             print('Failed to create dictionary. Keyindex/valueindex: ' + 
-                   unicode(keyindex) + '/' + unicode(valueindex))            
+                   str(keyindex) + '/' + str(valueindex))            
         #
         return dictionary
         
@@ -174,8 +174,8 @@ class TableFileReader():
             for rowindex, row in enumerate(infile):
                 if (self._data_rows_to is not None) and (rowindex > self._data_rows_to):
                     break # Break loop if data_row_to is defined and exceeded.
-                # Convert to unicode.
-                row = unicode(row, self._encoding, self._encoding_error_handling)
+                # Convert to str.
+                row = str(row, self._encoding, self._encoding_error_handling)
                 if rowindex == self._header_row:
                     # Header.
                     fielddelimiter = self._get_field_delimiter(row)
@@ -268,7 +268,7 @@ class TableFileReader():
                         if value == None:
                             newrow.append('')
                         else:
-                            newrow.append(unicode(value).strip())
+                            newrow.append(str(value).strip())
                     #
                     columnsbyindex = self._prepare_columnsbyindex(newrow)
                     table_header = self._get_row_based_on_columnsbyindex(newrow, columnsbyindex)
@@ -280,7 +280,7 @@ class TableFileReader():
                         if value == None:
                             newrow.append('')
                         else:
-                            newrow.append(unicode(value).strip())
+                            newrow.append(str(value).strip())
                     #
                     if len(''.join(newrow)) == 0:
                         continue # Don't add empty rows.
@@ -292,7 +292,7 @@ class TableFileReader():
             return (table_header, table_rows)
         #  
         except Exception as e:
-            msg = 'Failed to read from file. File name: ' + filename + '. Exception: ' + unicode(e)
+            msg = 'Failed to read from file. File name: ' + filename + '. Exception: ' + str(e)
             print(msg)
             raise
 
@@ -322,8 +322,8 @@ class TableFileReader():
                     for rowindex, row in enumerate(zipentry):
                         if (self._data_rows_to is not None) and (rowindex > self._data_rows_to):
                             break # Break loop if data_row_to is defined and exceeded.
-                        # Convert to unicode.
-                        row = unicode(row, self._encoding, self._encoding_error_handling)
+                        # Convert to str.
+                        row = str(row, self._encoding, self._encoding_error_handling)
                         if rowindex == self._header_row:
                             # Header.
                             fielddelimiter = self._get_field_delimiter(row)
@@ -338,7 +338,7 @@ class TableFileReader():
                             table_rows.append(self._get_row_based_on_columnsbyindex(row, columnsbyindex))
             #
             except Exception as e:
-                msg = 'Can\'t read zip file. Entry name: ' + self._zip_file_entry + '. Exception: ' + unicode(e)
+                msg = 'Can\'t read zip file. Entry name: ' + self._zip_file_entry + '. Exception: ' + str(e)
                 print(msg)
                 raise UserWarning(msg)
             #
@@ -372,14 +372,14 @@ if __name__ == "__main__":
     #                 select_columns_by_index = [1, 0],
                     select_columns_by_name = ['bbb', 'aaa'],
                      )
-        print('Header: ' + unicode(tablefilereader.header()))
-        print('Rows:   ' + unicode(tablefilereader.rows()))
+        print('Header: ' + str(tablefilereader.header()))
+        print('Rows:   ' + str(tablefilereader.rows()))
         testdict = tablefilereader.create_dictionary(key_column_by_name = 'aaa', value_column_by_name = 'bbb')
-        print('Dict by name: ' + unicode(testdict))
+        print('Dict by name: ' + str(testdict))
         testdict = tablefilereader.create_dictionary(key_column_by_index = 1, value_column_by_index = 0)
-        print('Dict by index: ' + unicode(testdict))
+        print('Dict by index: ' + str(testdict))
     except Exception as e:
-        print('Test failed: ' + unicode(e))
+        print('Test failed: ' + str(e))
 
     print('\n=== TEST: Excel files. ===')
     try:
@@ -389,14 +389,14 @@ if __name__ == "__main__":
                     select_columns_by_index = [1, 0],
     #                 select_columns_by_name = ['bbb', 'aaa'],
                     )
-        print('Header: ' + unicode(tablefilereader.header()))
-        print('Rows:   ' + unicode(tablefilereader.rows()))
+        print('Header: ' + str(tablefilereader.header()))
+        print('Rows:   ' + str(tablefilereader.rows()))
         testdict = tablefilereader.create_dictionary(key_column_by_name = 'aaa', value_column_by_name = 'bbb')
-        print('Dict by name: ' + unicode(testdict))    #
+        print('Dict by name: ' + str(testdict))    #
         testdict = tablefilereader.create_dictionary(key_column_by_index = 1, value_column_by_index = 0)
-        print('Dict by index: ' + unicode(testdict))
+        print('Dict by index: ' + str(testdict))
     except Exception as e:
-        print('Test failed: ' + unicode(e))
+        print('Test failed: ' + str(e))
 
     print('\n=== TEST: Zip files. ===')
     try:
@@ -407,12 +407,12 @@ if __name__ == "__main__":
     #                 select_columns_by_index = [1, 0],
                     select_columns_by_name = ['aaa', 'bbb', 'eee', 'ccc'], # Column 'eee' not in file.
                     )
-        print('Header: ' + unicode(tablefilereader.header()))
-        print('Rows:   ' + unicode(tablefilereader.rows()))
+        print('Header: ' + str(tablefilereader.header()))
+        print('Rows:   ' + str(tablefilereader.rows()))
         testdict = tablefilereader.create_dictionary(key_column_by_name = 'aaa', value_column_by_name = 'ccc')
-        print('Dict by name:  ' + unicode(testdict))
+        print('Dict by name:  ' + str(testdict))
         testdict = tablefilereader.create_dictionary(key_column_by_index = 0, value_column_by_index = 2)
-        print('Dict by index: ' + unicode(testdict))
+        print('Dict by index: ' + str(testdict))
     except Exception as e:
-        print('Test failed: ' + unicode(e))
+        print('Test failed: ' + str(e))
 

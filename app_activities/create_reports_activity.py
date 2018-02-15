@@ -35,7 +35,7 @@ class CreateReportsActivity(app_framework.ActivityBase):
         # Selectable list of loaded datasets.
         self._loaded_datasets_model.clear()        
         for rowindex, dataset in enumerate(app_framework.ToolboxDatasets().get_datasets()):
-            item = QtGui.QStandardItem('Import-' + unicode(rowindex + 1) + 
+            item = QtGui.QStandardItem('Import-' + str(rowindex + 1) + 
                                        '.   Source: ' + dataset.get_metadata('file_name'))
             item.setCheckState(QtCore.Qt.Checked)
 #            item.setCheckState(QtCore.Qt.Unchecked)
@@ -81,9 +81,9 @@ class CreateReportsActivity(app_framework.ActivityBase):
         loaded_datasets_listview.setModel(self._loaded_datasets_model)
         #
         self._cleara_metadata_button = app_framework.ClickableQLabel('Clear all')
-        self._cleara_metadata_button.clicked(self._uncheck_all_datasets)                
+        self._cleara_metadata_button.label_clicked.connect(self._uncheck_all_datasets)                
         self._markall_button = app_framework.ClickableQLabel('Mark all')
-        self._markall_button.clicked(self._check_all_datasets)                
+        self._markall_button.label_clicked.connect(self._check_all_datasets)                
         # Layout widgets.
         hbox1 = QtWidgets.QHBoxLayout()
         hbox1.addWidget(self._cleara_metadata_button)
@@ -135,7 +135,7 @@ class CreateReportsActivity(app_framework.ActivityBase):
         self._aggregate_checkbox.setEnabled(False)
         #
         self._createreport_button = QtWidgets.QPushButton('Create report')
-        self._createreport_button.clicked(self._create_pw_report)                
+        self._createreport_button.clicked.connect(self._create_pw_report)                
         # Layout widgets.
         hbox1 = QtWidgets.QHBoxLayout()
         hbox1.addWidget(QtWidgets.QLabel('Report type:'))
@@ -186,14 +186,14 @@ class CreateReportsActivity(app_framework.ActivityBase):
         saveresultbox = QtWidgets.QGroupBox('Save report', self)
         # Active widgets and connections.
         self._copytoclipboard_button = QtWidgets.QPushButton('Copy to clipboard')
-        self._copytoclipboard_button.clicked(self._copy_to_clipboard)                
+        self._copytoclipboard_button.clicked.connect(self._copy_to_clipboard)                
         self._saveformat_list = QtWidgets.QComboBox()
         #
         self._saveformat_list.addItems(['Tab delimited text file (*.txt)',
                                          'Excel file (*.xlsx)'])
         self._saveformat_list.setCurrentIndex(1) # Excel file as default.
         self._savedataset_button = QtWidgets.QPushButton('Save as...')
-        self._savedataset_button.clicked(self._save_data)                
+        self._savedataset_button.clicked.connect(self._save_data)                
         # Layout widgets.
         hbox1 = QtWidgets.QHBoxLayout()
         hbox1.addWidget(self._copytoclipboard_button)
@@ -248,16 +248,16 @@ class CreateReportsActivity(app_framework.ActivityBase):
             else:
                 raise UserWarning('Sorry, the selected report \ntype is not yet implemented.')
         except UserWarning as e:
-            toolbox_utils.Logging().error('UserWarning: ' + unicode(e))
-            QtWidgets.QMessageBox.warning(self, 'Warning', unicode(e))
+            toolbox_utils.Logging().error('UserWarning: ' + str(e))
+            QtWidgets.QMessageBox.warning(self, 'Warning', str(e))
             raise
         except (IOError, OSError) as e:
-            toolbox_utils.Logging().error('Error: ' + unicode(e))
-            QtWidgets.QMessageBox.warning(self, 'Error', unicode(e))
+            toolbox_utils.Logging().error('Error: ' + str(e))
+            QtWidgets.QMessageBox.warning(self, 'Error', str(e))
             raise
         except Exception as e:
-            toolbox_utils.Logging().error('Failed on exception: ' + unicode(e))
-            QtWidgets.QMessageBox.warning(self, 'Exception', unicode(e))
+            toolbox_utils.Logging().error('Failed on exception: ' + str(e))
+            QtWidgets.QMessageBox.warning(self, 'Exception', str(e))
             raise
         finally:
             toolbox_utils.Logging().log_all_accumulated_rows()    
@@ -300,7 +300,7 @@ class CreateReportsActivity(app_framework.ActivityBase):
                             'Save dataset',
                             self._lastuseddirectory,
                             namefilter)
-            filename = unicode(filename) # QString to unicode.
+            filename = str(filename) # QString to str.
             # Check if user pressed ok or cancel.
             if filename:
                 self._lastuseddirectory = os.path.dirname(filename)
@@ -334,10 +334,10 @@ class CreateReportsActivity(app_framework.ActivityBase):
         table_dataset = self._tableview.getTableModel()
         if table_dataset:
             # Header.
-            clipboardstring = field_separator.join(map(unicode, table_dataset.get_header())).strip() + row_separator
+            clipboardstring = field_separator.join(map(str, table_dataset.get_header())).strip() + row_separator
             # Rows.
             for row in table_dataset.get_rows():
-                clipboardstring += field_separator.join(map(unicode, row)).strip() + row_separator
+                clipboardstring += field_separator.join(map(str, row)).strip() + row_separator
         #
         clipboard.setText(clipboardstring)
         

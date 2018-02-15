@@ -31,7 +31,7 @@ class FormatSingleFile(plankton_core.ParsedFormat):
                 parsercommand = parserrow.get('command', '')
                 if parsercommand:         
                     #
-                    parsercommand = unicode(self.replace_method_keywords(parsercommand, parsernode, view_format))    
+                    parsercommand = str(self.replace_method_keywords(parsercommand, parsernode, view_format))    
                     #
                     if parsernode == 'dataset':
                         commandstring = 'dataset.add_data("' + parserkey + '", ' + parsercommand + ')'

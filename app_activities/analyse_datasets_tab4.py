@@ -6,11 +6,10 @@
 
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
-import plankton_toolbox.toolbox.utils_qt as utils_qt
-# import plankton_toolbox.toolbox.help_texts as help_texts
 
 import toolbox_utils
 import plankton_core
+import app_framework
 
 class AnalyseDatasetsTab4(QtWidgets.QWidget):
     """ """
@@ -90,20 +89,20 @@ class AnalyseDatasetsTab4(QtWidgets.QWidget):
         clicklabel12 = app_framework.ClickableQLabel('Mark all')
         clicklabel13 = app_framework.ClickableQLabel('Clear all')
         clicklabel14 = app_framework.ClickableQLabel('Mark all')
-        clicklabel1.clicked.connect(self._stations_listview.uncheckAll)                
-        clicklabel2.clicked.connect(self._stations_listview.checkAll)                
-        clicklabel3.clicked.connect(self._months_listview.uncheckAll)                
-        clicklabel4.clicked.connect(self._months_listview.checkAll)                
-        clicklabel5.clicked.connect(self._visits_listview.uncheckAll)                
-        clicklabel6.clicked.connect(self._visits_listview.checkAll)                
-        clicklabel7.clicked.connect(self._minmaxdepth_listview.uncheckAll)                
-        clicklabel8.clicked.connect(self._minmaxdepth_listview.checkAll)                
-        clicklabel9.clicked.connect(self._taxon_listview.uncheckAll)                
-        clicklabel10.clicked.connect(self._taxon_listview.checkAll)                
-        clicklabel11.clicked.connect(self._trophic_type_listview.uncheckAll)                
-        clicklabel12.clicked.connect(self._trophic_type_listview.checkAll)                
-        clicklabel13.clicked.connect(self._lifestage_listview.uncheckAll)                
-        clicklabel14.clicked.connect(self._lifestage_listview.checkAll)                
+        clicklabel1.label_clicked.connect(self._stations_listview.uncheckAll)                
+        clicklabel2.label_clicked.connect(self._stations_listview.checkAll)                
+        clicklabel3.label_clicked.connect(self._months_listview.uncheckAll)                
+        clicklabel4.label_clicked.connect(self._months_listview.checkAll)                
+        clicklabel5.label_clicked.connect(self._visits_listview.uncheckAll)                
+        clicklabel6.label_clicked.connect(self._visits_listview.checkAll)                
+        clicklabel7.label_clicked.connect(self._minmaxdepth_listview.uncheckAll)                
+        clicklabel8.label_clicked.connect(self._minmaxdepth_listview.checkAll)                
+        clicklabel9.label_clicked.connect(self._taxon_listview.uncheckAll)                
+        clicklabel10.label_clicked.connect(self._taxon_listview.checkAll)                
+        clicklabel11.label_clicked.connect(self._trophic_type_listview.uncheckAll)                
+        clicklabel12.label_clicked.connect(self._trophic_type_listview.checkAll)                
+        clicklabel13.label_clicked.connect(self._lifestage_listview.uncheckAll)                
+        clicklabel14.label_clicked.connect(self._lifestage_listview.checkAll)                
         # Layout widgets.
         form1 = QtWidgets.QGridLayout()
         gridrow = 0
@@ -180,11 +179,11 @@ class AnalyseDatasetsTab4(QtWidgets.QWidget):
         for visitnode in analysisdata.get_children():
             station_set.add(visitnode.get_data('station_name'))
             visitmonth_set.add(visitnode.get_data('visit_month'))
-            visit_set.add(unicode(visitnode.get_data('station_name')) + ' : ' + unicode(visitnode.get_data('sample_date')))
+            visit_set.add(str(visitnode.get_data('station_name')) + ' : ' + str(visitnode.get_data('sample_date')))
             startdate = min(startdate, visitnode.get_data('sample_date'))
             enddate = max(enddate, visitnode.get_data('sample_date'))
             for samplenode in visitnode.get_children():
-                depthstring = unicode(samplenode.get_data('sample_min_depth_m')) + '-' + unicode(samplenode.get_data('sample_max_depth_m'))
+                depthstring = str(samplenode.get_data('sample_min_depth_m')) + '-' + str(samplenode.get_data('sample_max_depth_m'))
                 minmaxdepth_set.add(depthstring)
                 for variablenode in samplenode.get_children():
                     taxon_set.add(variablenode.get_data('scientific_name'))
@@ -211,8 +210,8 @@ class AnalyseDatasetsTab4(QtWidgets.QWidget):
         """ """
         self._analysisdata.clear_filter()
         
-        self._analysisdata.set_filter_item('start_date', unicode(self._startdate_edit.text()))
-        self._analysisdata.set_filter_item('end_date', unicode(self._enddate_edit.text()))
+        self._analysisdata.set_filter_item('start_date', str(self._startdate_edit.text()))
+        self._analysisdata.set_filter_item('end_date', str(self._enddate_edit.text()))
         self._analysisdata.set_filter_item('stations', self._stations_listview.getSelectedDataList())
         self._analysisdata.set_filter_item('visit_months', self._months_listview.getSelectedDataList())
         self._analysisdata.set_filter_item('visits', self._visits_listview.getSelectedDataList())

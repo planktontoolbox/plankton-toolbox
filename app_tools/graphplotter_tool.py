@@ -107,10 +107,10 @@ class GraphPlotterTool(app_framework.ToolBase):
         self._editable_listview.resizeColumnsToContents()
         #                
         self._resetsettings_button = QtWidgets.QPushButton('Reset')
-#        self._resetsettings_button.clicked(self._resetSettings)                
+#        self._resetsettings_button.clicked.connect(self._resetSettings)                
         #                
         self._applysettings_button = QtWidgets.QPushButton('Apply')
-#        self._applysettings_button.clicked(self._applySettings)                
+#        self._applysettings_button.clicked.connect(self._applySettings)                
         # Layout.
         form = QtWidgets.QFormLayout()
         form.addRow('Test 1:', self._timeseriesforat_edit)
@@ -219,10 +219,10 @@ class GraphPlotterTool(app_framework.ToolBase):
 #         self.plotdatainfo_textedit = QtWidgets.QTextEdit()
 #         self.plotdatalist_textedit = QtWidgets.QTextEdit()
 #         self._resetplotdata_button = QtWidgets.QPushButton('Reset')
-#         self._resetplotdata_button.clicked(self._reset_labels)                
+#         self._resetplotdata_button.clicked.connect(self._reset_labels)                
 #         #                
 #         self._applyplotdata_button = QtWidgets.QPushButton('Apply')
-#         self._applyplotdata_button.clicked(self._applyLabelsJson)                
+#         self._applyplotdata_button.clicked.connect(self._applyLabelsJson)                
 #         # Layout.
 #         hbox = QtWidgets.QHBoxLayout()
 #         hbox.addStretch(5)
@@ -323,7 +323,7 @@ class GraphPlotterTool(app_framework.ToolBase):
             else:
                 self._ylogscale_checkbox.setEnabled(True)
             # User selections.
-            selectedchart = unicode(self._charttype_list.currentText())
+            selectedchart = str(self._charttype_list.currentText())
             combined = self._combined_checkbox.isChecked()
             stacked = self._stacked_checkbox.isChecked()
             ylogscale = self._ylogscale_checkbox.isChecked()
@@ -366,11 +366,11 @@ class GraphPlotterTool(app_framework.ToolBase):
                 self._canvas.draw()
         #    
         except UserWarning as e:
-            QtWidgets.QMessageBox.warning(self, "Warning", unicode(e))
-            toolbox_utils.Logging().warning(unicode(e))
+            QtWidgets.QMessageBox.warning(self, "Warning", str(e))
+            toolbox_utils.Logging().warning(str(e))
         except Exception as e:
-            QtWidgets.QMessageBox.warning(self, "Error", unicode(e))
-            toolbox_utils.Logging().error(unicode(e))
+            QtWidgets.QMessageBox.warning(self, "Error", str(e))
+            toolbox_utils.Logging().error(str(e))
             raise
 
     def _reset_labels(self):
@@ -421,23 +421,23 @@ class GraphPlotterTool(app_framework.ToolBase):
         """ """
         # The graph part.
         plotdatainfo = self._plotdata.get_plot_data_info()
-        plotdatainfo['title'] = unicode(self._title_edit.text())  
-        plotdatainfo['x_label'] = unicode(self._xlabel_edit.text())
-        plotdatainfo['x_type'] = unicode(self._xtype_edit.text())
-        plotdatainfo['x_format'] = unicode(self._xformat_edit.text())
-        plotdatainfo['y_label'] = unicode(self._ylabel_edit.text())
-        plotdatainfo['y_type'] = unicode(self._ytype_edit.text())
-        plotdatainfo['y_format'] = unicode(self._yformat_edit.text())
-        plotdatainfo['z_label'] = unicode(self._zlabel_edit.text())
-        plotdatainfo['z_type'] = unicode(self._ztype_edit.text())
-        plotdatainfo['z_format'] = unicode(self._zformat_edit.text())
+        plotdatainfo['title'] = str(self._title_edit.text())  
+        plotdatainfo['x_label'] = str(self._xlabel_edit.text())
+        plotdatainfo['x_type'] = str(self._xtype_edit.text())
+        plotdatainfo['x_format'] = str(self._xformat_edit.text())
+        plotdatainfo['y_label'] = str(self._ylabel_edit.text())
+        plotdatainfo['y_type'] = str(self._ytype_edit.text())
+        plotdatainfo['y_format'] = str(self._yformat_edit.text())
+        plotdatainfo['z_label'] = str(self._zlabel_edit.text())
+        plotdatainfo['z_type'] = str(self._ztype_edit.text())
+        plotdatainfo['z_format'] = str(self._zformat_edit.text())
         # Plots.
         plotlist = self._plotdata.get_plot_list()
         for index, row in enumerate(self._plotlabels_table.get_rows()):
-            plotlist[index]['plot_name'] = unicode(row[0])
-            plotlist[index]['x_label'] = unicode(row[1])
-            plotlist[index]['y_label'] = unicode(row[2])
-            plotlist[index]['z_label'] = unicode(row[3])
+            plotlist[index]['plot_name'] = str(row[0])
+            plotlist[index]['x_label'] = str(row[1])
+            plotlist[index]['y_label'] = str(row[2])
+            plotlist[index]['z_label'] = str(row[3])
         #
         self. _reset_labels()
         # Update chart.
@@ -450,11 +450,11 @@ class GraphPlotterTool(app_framework.ToolBase):
 #         # Tab: Edit data (JSON). For development.
 #         if self._plotdata:
 #             self._plotdata.setPlotDataInfo(
-#                                 json.loads(unicode(self.plotdatainfo_textedit.toPlainText()), 
+#                                 json.loads(str(self.plotdatainfo_textedit.toPlainText()), 
 #                                            encoding = 'utf8'))
 #             #
 #             self._plotdata.setPlotList(
-#                                 json.loads(unicode(self.plotdatalist_textedit.toPlainText()), 
+#                                 json.loads(str(self.plotdatalist_textedit.toPlainText()), 
 #                                            encoding = 'utf8'))
 #         #
 #         self. _reset_labels()

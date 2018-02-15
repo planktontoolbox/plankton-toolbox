@@ -284,7 +284,7 @@ class ChartBase(object):
                     value = int(value)
                     integer_array.append(value)
                 except:
-                    failedconversions_set.add(unicode(value))
+                    failedconversions_set.add(str(value))
                     integer_array.append(int('nan'))
             #
             if len(failedconversions_set) > 0:
@@ -305,7 +305,7 @@ class ChartBase(object):
                     value = float(value)
                     float_array.append(value)
                 except:
-                    failedconversions_set.add(unicode(value))
+                    failedconversions_set.add(str(value))
                     float_array.append(float('nan'))
             #
             if len(failedconversions_set) > 0:
@@ -327,7 +327,7 @@ class ChartBase(object):
                         time = datetime.datetime.strptime(timestring, '%Y-%m-%d %H:%M:%S')
                     datetime_array.append(time)
                 except:
-                    failedconversions_set.add(unicode(timestring))
+                    failedconversions_set.add(str(timestring))
             #
             if len(failedconversions_set) > 0:
                 toolbox_utils.Logging().warning('GraphPlotter.ChartBase: These values could not be converted to date or datetime: "' + 
@@ -996,7 +996,7 @@ class PieChart(ChartBase):
                     for index, item in enumerate(y_array):
                         try:
                             if not numpy.isnan(item):
-                                x_labels.append(unicode(x_array[index])) # Labels should be text.
+                                x_labels.append(str(x_array[index])) # Labels should be text.
                                 y_cleaned.append(y_array[index])
                         except:
                             pass

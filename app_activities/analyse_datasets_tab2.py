@@ -6,12 +6,10 @@
 
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
-# import plankton_toolbox.tools.tool_manager as tool_manager
-import plankton_toolbox.toolbox.utils_qt as utils_qt
-# import plankton_toolbox.toolbox.help_texts as help_texts
 
 import toolbox_utils
 import plankton_core
+import app_framework
 
 class AnalyseDatasetsTab2(QtWidgets.QWidget):
     """ """
@@ -53,20 +51,20 @@ class AnalyseDatasetsTab2(QtWidgets.QWidget):
         self._column_list.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContents)
         self._column_list.setEnabled(False)
         #
-        self._column_list.currentIndexChanged(int)'), self._update_column_content)                
+        self._column_list.currentIndexChanged.connect(self._update_column_content)                
         # Column content.
         self._content_listview = app_framework.SelectableQListView()
 #         self._content_listview.setMaximumHeight(100)
         #
         clearall_label = app_framework.ClickableQLabel('Clear all')
         markall_label = app_framework.ClickableQLabel('Mark all')
-        clearall_label.clicked.connect(self._content_listview.uncheckAll)                
-        markall_label.clicked.connect(self._content_listview.checkAll)                
+        clearall_label.label_clicked.connect(self._content_listview.uncheckAll)                
+        markall_label.label_clicked.connect(self._content_listview.checkAll)                
         #
         self._keepdata_button = QtWidgets.QPushButton('Keep marked data')
-        self._keepdata_button.clicked(self._keep_data)                
+        self._keepdata_button.clicked.connect(self._keep_data)                
         self._removedata_button = QtWidgets.QPushButton('Remove marked data')
-        self._removedata_button.clicked(self._remove_data)                
+        self._removedata_button.clicked.connect(self._remove_data)                
         # Layout widgets.
         form1 = QtWidgets.QGridLayout()
         gridrow = 0
@@ -100,7 +98,7 @@ class AnalyseDatasetsTab2(QtWidgets.QWidget):
             return # Empty data.
         #
         columncontent_set = set()
-        selectedcolumn = unicode(self._column_list.currentText())
+        selectedcolumn = str(self._column_list.currentText())
         # Search for export column corresponding model element.
         nodelevel = ''
         key = ''
@@ -112,14 +110,14 @@ class AnalyseDatasetsTab2(QtWidgets.QWidget):
         #
         if nodelevel == 'dataset':
             if key in analysisdata.get_data_dict().keys():
-                columncontent_set.add(unicode(analysisdata.get_data(key)))
+                columncontent_set.add(str(analysisdata.get_data(key)))
             else:
                 columncontent_set.add('') # Add empty field.
         #    
         for visitnode in analysisdata.get_children():
             if nodelevel == 'visit':
                 if key in visitnode.get_data_dict().keys():
-                    columncontent_set.add(unicode(visitnode.get_data(key)))
+                    columncontent_set.add(str(visitnode.get_data(key)))
                 else:
                     columncontent_set.add('') # Add empty field.
                 continue    
@@ -127,7 +125,7 @@ class AnalyseDatasetsTab2(QtWidgets.QWidget):
             for samplenode in visitnode.get_children():
                 if nodelevel == 'sample':
                     if key in samplenode.get_data_dict().keys():
-                        columncontent_set.add(unicode(samplenode.get_data(key)))
+                        columncontent_set.add(str(samplenode.get_data(key)))
                     else:
                         columncontent_set.add('') # Add empty field.
                     continue    
@@ -135,7 +133,7 @@ class AnalyseDatasetsTab2(QtWidgets.QWidget):
                 for variablenode in samplenode.get_children():
                     if nodelevel == 'variable':
                         if key in variablenode.get_data_dict().keys():
-                            columncontent_set.add(unicode(variablenode.get_data(key)))
+                            columncontent_set.add(str(variablenode.get_data(key)))
                         else:
                             columncontent_set.add('') # Add empty field.
                         continue    
@@ -148,7 +146,7 @@ class AnalyseDatasetsTab2(QtWidgets.QWidget):
 
     def _remove_data(self, keep_data = False):
         """ """
-        selectedcolumn = unicode(self._column_list.currentText())
+        selectedcolumn = str(self._column_list.currentText())
         #
         if keep_data == False:
             markedcontent = self._content_listview.getSelectedDataList()

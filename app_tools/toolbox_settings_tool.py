@@ -81,9 +81,9 @@ class ToolboxSettingsTool(tool_base.ToolBase):
         self._restoredefault_button = QtWidgets.QPushButton('Restore defaults')
         self._restore_button = QtWidgets.QPushButton('Restore')
         self._save_button = QtWidgets.QPushButton('Save')
-        self._restoredefault_button.clicked(self._restore_default)                
-        self._restore_button.clicked(self._cancel)                
-        self._save_button.clicked(self._save)                
+        self._restoredefault_button.clicked.connect(self._restore_default)                
+        self._restore_button.clicked.connect(self._cancel)                
+        self._save_button.clicked.connect(self._save)                
         # Layout widgets.
         layout = QtWidgets.QHBoxLayout()
         layout.addStretch()
@@ -125,10 +125,10 @@ class ToolboxSettingsTool(tool_base.ToolBase):
     
     def _save(self):
         """ """
-        toolbox_settings.ToolboxSettings().set_value('General:Decimal delimiter', unicode(self._delimiter_edit.text()))
-        toolbox_settings.ToolboxSettings().set_value('Resources:Dyntaxa:Filepath', unicode(self._dyntaxafilepath_edit.text()))
-        toolbox_settings.ToolboxSettings().set_value('Resources:PEG:Filepath', unicode(self._pegfilepath_edit.text()))
-        toolbox_settings.ToolboxSettings().set_value('Resources:Harmful plankton:Filepath', unicode(self._iocfilepath_edit.text()))
+        toolbox_settings.ToolboxSettings().set_value('General:Decimal delimiter', str(self._delimiter_edit.text()))
+        toolbox_settings.ToolboxSettings().set_value('Resources:Dyntaxa:Filepath', str(self._dyntaxafilepath_edit.text()))
+        toolbox_settings.ToolboxSettings().set_value('Resources:PEG:Filepath', str(self._pegfilepath_edit.text()))
+        toolbox_settings.ToolboxSettings().set_value('Resources:Harmful plankton:Filepath', str(self._iocfilepath_edit.text()))
         if self._loadresources_checkbox.checkState() == QtCore.Qt.Checked:
             toolbox_settings.ToolboxSettings().set_value('Resources:Load at startup', True)
         else:

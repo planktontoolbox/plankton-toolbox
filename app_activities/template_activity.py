@@ -59,7 +59,7 @@ class TemplateActivity(activity_base.ActivityBase):
         """ """
         # Active widgets and connections.
         self._testbutton = QtWidgets.QPushButton('Write name to log')
-        self._testbutton.clicked(self._test)                
+        self._testbutton.clicked.connect(self._test)                
         # Layout.
         layout = QtWidgets.QHBoxLayout()
         layout.addStretch(5)
@@ -69,5 +69,5 @@ class TemplateActivity(activity_base.ActivityBase):
 
     def _test(self):
         """ """
-        toolbox_utils.Logging().log('Name: ' + unicode(self._nameedit.text()))
+        toolbox_utils.Logging().log('Name: ' + str(self._nameedit.text()))
         

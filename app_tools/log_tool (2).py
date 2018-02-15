@@ -38,11 +38,11 @@ class LogTool(tool_base.ToolBase):
         self._limit_edit = QtWidgets.QLineEdit('1000')
         self._limit_edit.setMaximumWidth(60)        
         self._clear_button = QtWidgets.QPushButton('Clear log')
-        ###self._clear_button.clicked(self._clear_log) 
+        ###self._clear_button.clicked.connect(self._clear_log) 
         self._clear_button.clicked.connect(self._clear_log) 
              
 #        self._openlogfile_button = QtWidgets.QPushButton('Open log file')
-#        self._openlogfile_button.clicked(self._openLogFile)      
+#        self._openlogfile_button.clicked.connect(self._openLogFile)      
         # Layout.
         layout = QtWidgets.QHBoxLayout()
         limit_label = QtWidgets.QLabel('Number of displayed rows: ')
@@ -76,7 +76,7 @@ class LogTool(tool_base.ToolBase):
 ##        self._logarea.ensureCursorVisible()
         # Remove oldest lines if max exceeded.
         try:
-            maxrows = int(unicode(self._limit_edit.text())) 
+            maxrows = int(str(self._limit_edit.text())) 
             if maxrows > 0:
                 while self._logarea.count() > maxrows:
                     self._logarea.takeItem(0)

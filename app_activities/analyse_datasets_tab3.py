@@ -6,11 +6,10 @@
 
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
-import plankton_toolbox.toolbox.utils_qt as utils_qt
-# import plankton_toolbox.toolbox.help_texts as help_texts
 
 import toolbox_utils
 import plankton_core
+import app_framework
 
 class AnalyseDatasetsTab3(QtWidgets.QWidget):
     """ """
@@ -71,13 +70,13 @@ class AnalyseDatasetsTab3(QtWidgets.QWidget):
 #         self._lifestage_listview.setMaximumHeight(80)
         # Buttons.
         self._aggregatedata_button = QtWidgets.QPushButton('Aggregate data')
-        self._aggregatedata_button.clicked(self._aggregate_data)
+        self._aggregatedata_button.clicked.connect(self._aggregate_data)
         #
         self._reloaddata_button = QtWidgets.QPushButton('Reload analysis data (no clean up)')
-        self._reloaddata_button.clicked(self._main_activity._tab1widget._copy_datasets_for_analysis)
+        self._reloaddata_button.clicked.connect(self._main_activity._tab1widget._copy_datasets_for_analysis)
         #               
         self._addmissingtaxa_button = QtWidgets.QPushButton('Add 0 for not observed')
-        self._addmissingtaxa_button.clicked(self._add_missing_taxa)                
+        self._addmissingtaxa_button.clicked.connect(self._add_missing_taxa)                
         # Layout widgets.
         form1 = QtWidgets.QGridLayout()
         gridrow = 0
@@ -129,7 +128,7 @@ class AnalyseDatasetsTab3(QtWidgets.QWidget):
             toolbox_utils.Logging().start_accumulated_logging()
             try:
             #
-                selected_taxon_rank = unicode(self._aggregate_rank_list.currentText())
+                selected_taxon_rank = str(self._aggregate_rank_list.currentText())
                 selected_trophic_type_list = self._trophic_type_listview.getSelectedDataList()
                 selected_trophic_type_text = '-'.join(selected_trophic_type_list) 
                 selected_lifestage_list = self._lifestage_listview.getSelectedDataList()
@@ -223,7 +222,7 @@ class AnalyseDatasetsTab3(QtWidgets.QWidget):
                                     aggregatedvariables[agg_tuple] = value
                             except:
                                 if variablenode.get_data('value'):
-                                    toolbox_utils.Logging().warning('Value is not a valid float: ' + unicode(variablenode.get_data('value')))
+                                    toolbox_utils.Logging().warning('Value is not a valid float: ' + str(variablenode.get_data('value')))
                         #Remove all variables for this sample.
                         samplenode.remove_all_children()
                         # Add the new aggregated variables instead.  
@@ -252,8 +251,8 @@ class AnalyseDatasetsTab3(QtWidgets.QWidget):
                 #
                 self._main_activity.update_viewed_data_and_tabs()    
             except UserWarning as e:
-                toolbox_utils.Logging().error('Failed to aggregate data. ' + unicode(e))
-                QtWidgets.QMessageBox.warning(self._main_activity, 'Warning', 'Failed to aggregate data. ' + unicode(e))
+                toolbox_utils.Logging().error('Failed to aggregate data. ' + str(e))
+                QtWidgets.QMessageBox.warning(self._main_activity, 'Warning', 'Failed to aggregate data. ' + str(e))
         finally:
             toolbox_utils.Logging().log_all_accumulated_rows()
             toolbox_utils.Logging().log('Aggregation of data is done.')
@@ -271,7 +270,7 @@ class AnalyseDatasetsTab3(QtWidgets.QWidget):
             for samplenode in visitnode.get_children():
                 for variablenode in samplenode.get_children():
                     #
-                    trophic_type_set.add(unicode(variablenode.get_data('trophic_type')))
+                    trophic_type_set.add(str(variablenode.get_data('trophic_type')))
                     #
                     lifestage = variablenode.get_data('stage')
                     if variablenode.get_data('sex'):
@@ -295,8 +294,8 @@ class AnalyseDatasetsTab3(QtWidgets.QWidget):
             #
             self._main_activity.update_viewed_data_and_tabs()    
         except UserWarning as e:
-            toolbox_utils.Logging().error('Failed to add 0 for not observed. ' + unicode(e))
-            QtWidgets.QMessageBox.warning(self._main_activity, 'Warning', 'Failed to add 0 for not observed. ' + unicode(e))
+            toolbox_utils.Logging().error('Failed to add 0 for not observed. ' + str(e))
+            QtWidgets.QMessageBox.warning(self._main_activity, 'Warning', 'Failed to add 0 for not observed. ' + str(e))
         finally:
             toolbox_utils.Logging().log_all_accumulated_rows()
             toolbox_utils.Logging().log('Add 0 for not observed is done.')

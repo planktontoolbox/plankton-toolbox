@@ -30,7 +30,7 @@ class ScreeningActivity(app_framework.ActivityBase):
         # Selectable list of loaded datasets.
         self._loaded_datasets_model.clear()        
         for rowindex, dataset in enumerate(app_framework.ToolboxDatasets().get_datasets()):
-            item = QtGui.QStandardItem('Import-' + unicode(rowindex + 1) + 
+            item = QtGui.QStandardItem('Import-' + str(rowindex + 1) + 
                                        '.   Source: ' + dataset.get_metadata('file_name'))
             item.setCheckState(QtCore.Qt.Checked)
 #            item.setCheckState(QtCore.Qt.Unchecked)
@@ -79,9 +79,9 @@ class ScreeningActivity(app_framework.ActivityBase):
         loaded_datasets_listview.setModel(self._loaded_datasets_model)
         #
         self._clear_metadata_button = app_framework.ClickableQLabel('Clear all')
-        self._clear_metadata_button.clicked(self._uncheck_all_datasets)                
+        self._clear_metadata_button.label_clicked.connect(self._uncheck_all_datasets)                
         self._markall_button = app_framework.ClickableQLabel('Mark all')
-        self._markall_button.clicked(self._check_all_datasets)                
+        self._markall_button.label_clicked.connect(self._check_all_datasets)                
         # Layout widgets.
         hbox1 = QtWidgets.QHBoxLayout()
         hbox1.addWidget(self._clear_metadata_button)
@@ -116,14 +116,14 @@ class ScreeningActivity(app_framework.ActivityBase):
 #         introlabel.setText(help_texts.HelpTexts().getText('ScreeningActivity_intro_0'))
         #
         self._checkdatasets_button = QtWidgets.QPushButton('View\ndatasets')
-        self._checkdatasets_button.clicked(self._check_datasets)                
+        self._checkdatasets_button.clicked.connect(self._check_datasets)                
         self._checkvisits_button = QtWidgets.QPushButton('View\nsampling events')
-        self._checkvisits_button.clicked(self._check_visits) 
+        self._checkvisits_button.clicked.connect(self._check_visits) 
         self._checksamples_button = QtWidgets.QPushButton('View\nsamples')
-        self._checksamples_button.clicked(self._check_samples) 
+        self._checksamples_button.clicked.connect(self._check_samples) 
         #                
         self._checkduplicates_button = QtWidgets.QPushButton('Scan for\nduplicates')
-        self._checkduplicates_button.clicked(self._scan_for_duplicates)                
+        self._checkduplicates_button.clicked.connect(self._scan_for_duplicates)                
 
         # Result content.
         self._structureresult_list = QtWidgets.QTextEdit()
@@ -176,9 +176,9 @@ class ScreeningActivity(app_framework.ActivityBase):
                             countsamples += 1
                             countvariables += len(samplenode.get_children())
                     #
-                    row = '   - Sampling events: ' + unicode(countvisits) + \
-                          ', samples: ' + unicode(countsamples) + \
-                          ', variable rows: ' + unicode(countvariables) 
+                    row = '   - Sampling events: ' + str(countvisits) + \
+                          ', samples: ' + str(countsamples) + \
+                          ', variable rows: ' + str(countvariables) 
                     self._structureresult_list.append(row)
 
     def _check_visits(self):
@@ -209,8 +209,8 @@ class ScreeningActivity(app_framework.ActivityBase):
                             countsamples += 1
                             countvariables += len(samplenode.get_children())
                         #
-                        row = '      - Samples: ' + unicode(countsamples) + \
-                          ', variable rows: ' + unicode(countvariables) 
+                        row = '      - Samples: ' + str(countsamples) + \
+                          ', variable rows: ' + str(countvariables) 
                         self._structureresult_list.append(row)
 
     def _check_samples(self):
@@ -228,17 +228,17 @@ class ScreeningActivity(app_framework.ActivityBase):
                     self._structureresult_list.append(row)
                     for visitnode in dataset.get_children():
                         row = '   - Sampling event: ' + \
-                              unicode(visitnode.get_data('station_name')) + ' ' + \
-                              unicode(visitnode.get_data('sample_date'))
+                              str(visitnode.get_data('station_name')) + ' ' + \
+                              str(visitnode.get_data('sample_date'))
                         self._structureresult_list.append(row)
                         for samplenode in visitnode.get_children():
                             row = '      - Sample: ' + \
-                                  unicode(samplenode.get_data('sample_min_depth_m')) + '-' + \
-                                  unicode(samplenode.get_data('sample_max_depth_m'))
+                                  str(samplenode.get_data('sample_min_depth_m')) + '-' + \
+                                  str(samplenode.get_data('sample_max_depth_m'))
                             self._structureresult_list.append(row)
                             countvariables = len(samplenode.get_children())
                             #
-                            row = '         - Variable rows: ' + unicode(countvariables) 
+                            row = '         - Variable rows: ' + str(countvariables) 
                             self._structureresult_list.append(row)
                             #
                             parameter_set = set()
@@ -256,11 +256,11 @@ class ScreeningActivity(app_framework.ActivityBase):
                                 if taxonname:
                                     taxonname_set.add(taxonname)
                                     taxonsizestagesex_set.add(taxonname + '+' + sizeclass + '+' + stage + '+' + sex)
-                            row = '         - Unique parameters/units: ' + unicode(len(parameter_set)) 
+                            row = '         - Unique parameters/units: ' + str(len(parameter_set)) 
                             self._structureresult_list.append(row)
-                            row = '         - Unique taxon names: ' + unicode(len(taxonname_set)) 
+                            row = '         - Unique taxon names: ' + str(len(taxonname_set)) 
                             self._structureresult_list.append(row)
-                            row = '         - Unique taxon-names/size-classes/stages/sex: ' + unicode(len(taxonsizestagesex_set)) 
+                            row = '         - Unique taxon-names/size-classes/stages/sex: ' + str(len(taxonsizestagesex_set)) 
                             self._structureresult_list.append(row)
 
     def _scan_for_duplicates(self):
@@ -282,20 +282,20 @@ class ScreeningActivity(app_framework.ActivityBase):
                     #
                     dataset_descr = dataset.get_metadata('file_name')
                     for visitnode in dataset.get_children():
-                        visit_descr = unicode(visitnode.get_data('station_name')) + ', ' + \
-                                      unicode(visitnode.get_data('sample_date'))
+                        visit_descr = str(visitnode.get_data('station_name')) + ', ' + \
+                                      str(visitnode.get_data('sample_date'))
                         for samplenode in visitnode.get_children():
-                            sample_descr = unicode(samplenode.get_data('sample_min_depth_m')) + '-' + \
-                                           unicode(samplenode.get_data('sample_max_depth_m'))
+                            sample_descr = str(samplenode.get_data('sample_min_depth_m')) + '-' + \
+                                           str(samplenode.get_data('sample_max_depth_m'))
                             check_duplicates_list = [] # Duplicates can occur inside one sample.
                             sample_description = dataset_descr + ', ' + visit_descr + ', ' + sample_descr
                             for variablenode in samplenode.get_children():
-                                scientific_name = unicode(variablenode.get_data('scientific_name'))
-                                size_class = unicode(variablenode.get_data('size_class'))
-                                stage = unicode(variablenode.get_data('stage'))
-                                sex = unicode(variablenode.get_data('sex'))
-                                parameter = unicode(variablenode.get_data('parameter'))
-                                unit = unicode(variablenode.get_data('unit'))
+                                scientific_name = str(variablenode.get_data('scientific_name'))
+                                size_class = str(variablenode.get_data('size_class'))
+                                stage = str(variablenode.get_data('stage'))
+                                sex = str(variablenode.get_data('sex'))
+                                parameter = str(variablenode.get_data('parameter'))
+                                unit = str(variablenode.get_data('unit'))
                                 #
                                 unique_items = (scientific_name, size_class, stage, sex, parameter, unit)
                                 if unique_items in check_duplicates_list:
@@ -329,11 +329,11 @@ class ScreeningActivity(app_framework.ActivityBase):
 #         introlabel_4.setText(help_texts.HelpTexts().getText('ScreeningActivity_sizeclasses'))
         #
 #         self._checkcodes_button = QtWidgets.QPushButton('Check\ncode lists')
-#         self._checkcodes_button.clicked(self._code_list_screening)                
+#         self._checkcodes_button.clicked.connect(self._code_list_screening)                
         self._checkspecies_button = QtWidgets.QPushButton('Check\nspecies')
-        self._checkspecies_button.clicked(self._species_screening) 
+        self._checkspecies_button.clicked.connect(self._species_screening) 
         self._checksizeclasses_button = QtWidgets.QPushButton('Check\nsize classes')
-        self._checksizeclasses_button.clicked(self._bvol_screening) 
+        self._checksizeclasses_button.clicked.connect(self._bvol_screening) 
 
         # Result content.
         self._codesspeciesresult_list = QtWidgets.QTextEdit()
@@ -378,7 +378,7 @@ class ScreeningActivity(app_framework.ActivityBase):
 #         finally:
 #             # Log in result window.
 #             self._codesspeciesresult_list.append('Screening was done on these code types: ' + 
-#                                               unicode(sorted(codetypes_set)))
+#                                               str(sorted(codetypes_set)))
 #             self._codesspeciesresult_list.append('')
 #             #
 #             inforows = toolbox_utils.Logging().get_all_info_rows()
@@ -396,7 +396,7 @@ class ScreeningActivity(app_framework.ActivityBase):
 #             # Also add to the logging tool.
 #             toolbox_utils.Logging().log_all_accumulated_rows()
 #             toolbox_utils.Logging().log('Screening was done on these code types: ' + 
-#                                     unicode(sorted(codetypes_set)))
+#                                     str(sorted(codetypes_set)))
 #             toolbox_utils.Logging().log('Code list screening done.')
 #             self._write_to_status_bar('')
 
@@ -417,7 +417,7 @@ class ScreeningActivity(app_framework.ActivityBase):
         finally:
             # Log in result window.
 #             self._codesspeciesresult_list.append('Screening was done on these code types: ' + 
-#                                               unicode(sorted(codetypes_set)))
+#                                               str(sorted(codetypes_set)))
 #             self._codesspeciesresult_list.append('')
             #
             inforows = toolbox_utils.Logging().get_all_info_rows()
@@ -454,7 +454,7 @@ class ScreeningActivity(app_framework.ActivityBase):
         finally:
             # Log in result window.
 #             self._codesspeciesresult_list.append('Screening was done on these code types: ' + 
-#                                               unicode(sorted(codetypes_set)))
+#                                               str(sorted(codetypes_set)))
 #             self._codesspeciesresult_list.append('')
             #
             inforows = toolbox_utils.Logging().get_all_info_rows()
@@ -541,7 +541,7 @@ class ScreeningActivity(app_framework.ActivityBase):
             return # Empty data.
         #
         columncontent_set = set()
-        selectedcolumn = unicode(self._column_list.currentText())
+        selectedcolumn = str(self._column_list.currentText())
         # Search for export column corresponding model element.
         nodelevel = ''
         key = ''
@@ -565,14 +565,14 @@ class ScreeningActivity(app_framework.ActivityBase):
                 #
                 if nodelevel == 'dataset':
                     if key in dataset.get_data_dict().keys():
-                        columncontent_set.add(unicode(dataset.get_data(key)))
+                        columncontent_set.add(str(dataset.get_data(key)))
                     else:
                         columncontent_set.add('') # Add empty field.
                 #
                 for visitnode in dataset.get_children():
                     if nodelevel == 'visit':
                         if key in visitnode.get_data_dict().keys():
-                            columncontent_set.add(unicode(visitnode.get_data(key)))
+                            columncontent_set.add(str(visitnode.get_data(key)))
                         else:
                             columncontent_set.add('') # Add empty field.
                         continue    
@@ -580,7 +580,7 @@ class ScreeningActivity(app_framework.ActivityBase):
                     for samplenode in visitnode.get_children():
                         if nodelevel == 'sample':
                             if key in samplenode.get_data_dict().keys():
-                                columncontent_set.add(unicode(samplenode.get_data(key)))
+                                columncontent_set.add(str(samplenode.get_data(key)))
                             else:
                                 columncontent_set.add('') # Add empty field.
                             continue    
@@ -588,7 +588,7 @@ class ScreeningActivity(app_framework.ActivityBase):
                         for variablenode in samplenode.get_children():
                             if nodelevel == 'variable':
                                 if key in variablenode.get_data_dict().keys():
-                                    columncontent_set.add(unicode(variablenode.get_data(key)))
+                                    columncontent_set.add(str(variablenode.get_data(key)))
                                 else:
                                     columncontent_set.add('') # Add empty field.
                                 continue    
@@ -609,13 +609,13 @@ class ScreeningActivity(app_framework.ActivityBase):
         #
         clearall_label = app_framework.ClickableQLabel('Clear all')
         markall_label = app_framework.ClickableQLabel('Mark all')
-        clearall_label.clicked.connect(self._parameter_list.uncheckAll)                
-        markall_label.clicked.connect(self._parameter_list.checkAll)                
+        clearall_label.label_clicked.connect(self._parameter_list.uncheckAll)                
+        markall_label.label_clicked.connect(self._parameter_list.checkAll)                
         #
         self._plotparameters_button = QtWidgets.QPushButton('Plot parameter values')
-        self._plotparameters_button.clicked(self._plot_screening)                
+        self._plotparameters_button.clicked.connect(self._plot_screening)                
         self._plotparameterperdate_button = QtWidgets.QPushButton('Plot parameters values per date')
-        self._plotparameterperdate_button.clicked(self._plot_screening_per_date)                
+        self._plotparameterperdate_button.clicked.connect(self._plot_screening_per_date)                
         # Layout widgets.
         form1 = QtWidgets.QGridLayout()
         gridrow = 0
@@ -707,7 +707,7 @@ class ScreeningActivity(app_framework.ActivityBase):
         try:
             self._graph_plot_data.add_plot(plot_name = parameter, y_array = yarray)
         except UserWarning as e:
-            QtWidgets.QMessageBox.warning(self, "Warning", unicode(e))
+            QtWidgets.QMessageBox.warning(self, "Warning", str(e))
 
     def _plot_screening_per_date(self):
         """ """
@@ -760,5 +760,5 @@ class ScreeningActivity(app_framework.ActivityBase):
         try:
             self._graph_plot_data.add_plot(plot_name = parameter, x_array = xarray, y_array = yarray)
         except UserWarning as e:
-            QtWidgets.QMessageBox.warning(self, "Warning", unicode(e))
+            QtWidgets.QMessageBox.warning(self, "Warning", str(e))
 

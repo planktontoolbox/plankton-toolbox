@@ -6,9 +6,6 @@
 
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
-import plankton_toolbox.tools.tool_manager as tool_manager
-# import plankton_toolbox.toolbox.utils_qt as utils_qt
-# import plankton_toolbox.toolbox.help_texts as help_texts
 
 import toolbox_utils
 import plankton_core
@@ -56,17 +53,17 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
         #
         # Predefined graphs.
         self._addplot_1_button = QtWidgets.QPushButton('Time series')
-        self._addplot_1_button.clicked(self._add_plot_1)                
+        self._addplot_1_button.clicked.connect(self._add_plot_1)                
         self._addplot_1_subplot_button = QtWidgets.QPushButton('Add plot')
-        self._addplot_1_subplot_button.clicked(self._add_sub_plot_1)                
+        self._addplot_1_subplot_button.clicked.connect(self._add_sub_plot_1)                
         self._addplot_2_button = QtWidgets.QPushButton('Seasonal cycle')
-        self._addplot_2_button.clicked(self._add_plot_2)                
+        self._addplot_2_button.clicked.connect(self._add_plot_2)                
         self._addplot_2_subplot_button = QtWidgets.QPushButton('Add plot')
-        self._addplot_2_subplot_button.clicked(self._add_sub_plot_2)                
+        self._addplot_2_subplot_button.clicked.connect(self._add_sub_plot_2)                
         self._addplot_3_button = QtWidgets.QPushButton('Values for taxa / station and date')
-        self._addplot_3_button.clicked(self._add_plot_3)                
+        self._addplot_3_button.clicked.connect(self._add_plot_3)                
         self._addplot_4_button = QtWidgets.QPushButton('Values for station and date / taxa')
-        self._addplot_4_button.clicked(self._add_plot_4)                
+        self._addplot_4_button.clicked.connect(self._add_plot_4)                
 
         # Layout widgets.
         form1 = QtWidgets.QGridLayout()
@@ -106,7 +103,7 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
         if not analysisdata:
             return # Can't plot from empty dataset
         # Which parameter is selected?
-        selectedparameter = unicode(self._parameter_list.currentText())
+        selectedparameter = str(self._parameter_list.currentText())
         # 
         if not subplot_only:
             self._plotdata = toolbox_utils.GraphPlotData(
@@ -137,7 +134,7 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
         if not analysisdata:
             return # Can't plot from empty dataset
         # Which parameter is selected?
-        selectedparameter = unicode(self._parameter_list.currentText())
+        selectedparameter = str(self._parameter_list.currentText())
         # 
         if not subplot_only:
             self._plotdata = toolbox_utils.GraphPlotData(
@@ -168,7 +165,7 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
         if not analysisdata:
             return # Can't plot from empty dataset
         # Which parameter is selected?
-        selectedparameter = unicode(self._parameter_list.currentText())
+        selectedparameter = str(self._parameter_list.currentText())
         # 
         plotdata = toolbox_utils.GraphPlotData(
 #                                 title = 'Values for taxa / station and date', 
@@ -196,7 +193,7 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
         if not analysisdata:
             return # Can't plot from empty dataset
         # Which parameter is selected?
-        selectedparameter = unicode(self._parameter_list.currentText())
+        selectedparameter = str(self._parameter_list.currentText())
         # 
         plotdata = toolbox_utils.GraphPlotData(
                                 title = selectedparameter, 
@@ -234,8 +231,8 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
                              y_array = value_list, 
                              x_label = '',
                              y_label = '')
-        except UserWarning, e:
-            QtWidgets.QMessageBox.warning(self._main_activity, 'Warning', unicode(e))
+        except UserWarning as e:
+            QtWidgets.QMessageBox.warning(self._main_activity, 'Warning', str(e))
 
 
     def _create_plot_data_for_seasonal_cycle(self, selectedparameter, dataset, plotdata):
@@ -249,7 +246,7 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
             # Replace year with '0000' seasonal cycle.
             date = visitnode.get_data('sample_date')
             try: 
-                date = unicode('2000' + date[4:])
+                date = str('2000' + date[4:])
             except:
                 continue # Skip to the next if date is invalid.
             #
@@ -268,7 +265,7 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
                              x_label = '',
                              y_label = '')
         except UserWarning as e:
-            QtWidgets.QMessageBox.warning(self._main_activity, 'Warning', unicode(e))
+            QtWidgets.QMessageBox.warning(self._main_activity, 'Warning', str(e))
     
     def _add_plot_aaaaaaaaa(self, selectedparameter, dataset, plotdata):
         """ """
@@ -277,7 +274,7 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
         taxon_set = set()
         for visitnode in dataset.get_children():
             #
-            visit_set.add(unicode(visitnode.get_data('station_name')) + ' : ' + unicode(visitnode.get_data('sample_date'))) # Station name
+            visit_set.add(str(visitnode.get_data('station_name')) + ' : ' + str(visitnode.get_data('sample_date'))) # Station name
             #
             for samplenode in visitnode.get_children():
                 #
@@ -297,7 +294,7 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
         # Step 3: Fill with data.
         for visitnode in dataset.get_children():
             #
-            visit = (unicode(visitnode.get_data('station_name')) + ' : ' + unicode(visitnode.get_data('sample_date')))
+            visit = (str(visitnode.get_data('station_name')) + ' : ' + str(visitnode.get_data('sample_date')))
             for samplenode in visitnode.get_children():
                 #
                 for variablenode in samplenode.get_children():
@@ -318,7 +315,7 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
                             toolbox_utils.Logging().warning('Float conversion (2) failed: Station: ' + visit + 
                                    ' Taxon name: ' + taxonname + 
                                    ' Parameter: ' + selectedparameter + 
-                                   ' Value: ' + unicode(variablenode.get_data('value')))
+                                   ' Value: ' + str(variablenode.get_data('value')))
                             ###raise        
         # Step 4: Reorganize.
         visit_list = sorted(visit_set)
@@ -336,7 +333,7 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
                                     x_label = '',
                                     y_label = selectedparameter)
             except UserWarning as e:
-                QtWidgets.QMessageBox.warning(self._main_activity, 'Warning', unicode(e))
+                QtWidgets.QMessageBox.warning(self._main_activity, 'Warning', str(e))
 
     def _add_plot_bbbbbbbbb(self, selectedparameter, dataset, plotdata):
         """ """
@@ -345,7 +342,7 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
         taxon_set = set()
         for visitnode in dataset.get_children():
             #
-            visit_set.add(unicode(visitnode.get_data('station_name')) + ' : ' + unicode(visitnode.get_data('sample_date'))) # Station name
+            visit_set.add(str(visitnode.get_data('station_name')) + ' : ' + str(visitnode.get_data('sample_date'))) # Station name
             #
             for samplenode in visitnode.get_children():
                 #
@@ -366,7 +363,7 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
         # Step 3: Fill with data.
         for visitnode in dataset.get_children():
             #
-            visit = (unicode(visitnode.get_data('station_name')) + ' : ' + unicode(visitnode.get_data('sample_date')))
+            visit = (str(visitnode.get_data('station_name')) + ' : ' + str(visitnode.get_data('sample_date')))
             for samplenode in visitnode.get_children():
                 #
                 for variablenode in samplenode.get_children():
@@ -387,7 +384,7 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
                             toolbox_utils.Logging().warning('Float conversion failed: Visit: ' + visit + 
                                    ' Taxon name: ' + taxonname + 
                                    ' Parameter: ' + selectedparameter + 
-                                   ' Value: ' + unicode(variablenode.get_data('value')))
+                                   ' Value: ' + str(variablenode.get_data('value')))
                             ###raise        
         # Step 4: Reorganize.
         visit_list = sorted(visit_set)
@@ -405,5 +402,5 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
                                     x_label = '',
                                     y_label = selectedparameter)
             except UserWarning as e:
-                QtWidgets.QMessageBox.warning(self._main_activity, 'Warning', unicode(e))
+                QtWidgets.QMessageBox.warning(self._main_activity, 'Warning', str(e))
 

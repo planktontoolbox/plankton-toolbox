@@ -179,7 +179,7 @@ class CreateReportToDataCenterShark(object):
                             row_key = ''
                             for item in self._row_key_items:
                                 if row_key: row_key += '<+>'
-                                row_key += unicode(row_dict.get(item, ''))
+                                row_key += str(row_dict.get(item, ''))
                             # Add to dict if first time.
                             if row_key not in report_rows_dict:
                                 report_rows_dict[row_key] = row_dict

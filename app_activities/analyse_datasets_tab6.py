@@ -6,9 +6,6 @@
 
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
-import plankton_toolbox.tools.tool_manager as tool_manager
-# import plankton_toolbox.toolbox.utils_qt as utils_qt
-# import plankton_toolbox.toolbox.help_texts as help_texts
 
 import toolbox_utils
 import plankton_core
@@ -87,7 +84,7 @@ class AnalyseDatasetsTab6(QtWidgets.QWidget):
                                                "Two variables (X and Y)", 
                                                "Three variables (X, Y and Z)"])
         self._numberofvariables_list.setCurrentIndex(1)
-        self._numberofvariables_list.currentIndexChanged(int)'), self._clear_plot_data)                
+        self._numberofvariables_list.currentIndexChanged.connect(self._clear_plot_data)                
         # - Select column for x-axis:
         self._x_axis_column_list = QtWidgets.QComboBox()
         self._x_axis_column_list.setMinimumContentsLength(20)
@@ -97,7 +94,7 @@ class AnalyseDatasetsTab6(QtWidgets.QWidget):
         self._x_axis_parameter_list.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContents)
         self._x_axistype_list = QtWidgets.QComboBox()
         self._x_axistype_list.addItems(self._type_list_values)
-        self._x_axis_column_list.currentIndexChanged(int)'), self._update_enabled_disabled_and_types)                
+        self._x_axis_column_list.currentIndexChanged.connect(self._update_enabled_disabled_and_types)                
         # - Select column for y-axis:
         self._y_axis_column_list = QtWidgets.QComboBox()
         self._y_axis_column_list.setMinimumContentsLength(20)
@@ -107,7 +104,7 @@ class AnalyseDatasetsTab6(QtWidgets.QWidget):
         self._y_axis_parameter_list.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContents)
         self._y_axistype_list = QtWidgets.QComboBox()
         self._y_axistype_list.addItems(self._type_list_values)
-        self._y_axis_column_list.currentIndexChanged(int)'), self._update_enabled_disabled_and_types)                
+        self._y_axis_column_list.currentIndexChanged.connect(self._update_enabled_disabled_and_types)                
         # - Select column for z-axis:
         self._z_axis_column_list = QtWidgets.QComboBox()
         self._z_axis_column_list.setMinimumContentsLength(20)
@@ -117,13 +114,13 @@ class AnalyseDatasetsTab6(QtWidgets.QWidget):
         self._z_axis_parameter_list.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContents)
         self._z_axistype_list = QtWidgets.QComboBox()
         self._z_axistype_list.addItems(self._type_list_values)
-        self._z_axis_column_list.currentIndexChanged(int)'), self._update_enabled_disabled_and_types)                
+        self._z_axis_column_list.currentIndexChanged.connect(self._update_enabled_disabled_and_types)                
         # Clear data object.
         self._newgraph_button = QtWidgets.QPushButton('New graph')
-        self._newgraph_button.clicked(self._new_graph_and_plot_data)                
+        self._newgraph_button.clicked.connect(self._new_graph_and_plot_data)                
         # Add subplot data to the Graph plotter tool.
         self._addsubplotdata_button = QtWidgets.QPushButton('Add plot to graph')
-        self._addsubplotdata_button.clicked(self._add_subplot_data)                
+        self._addsubplotdata_button.clicked.connect(self._add_subplot_data)                
 
         # Layout widgets.
         #
@@ -224,9 +221,9 @@ class AnalyseDatasetsTab6(QtWidgets.QWidget):
             self._z_axis_parameter_list.setEnabled(False)
         # Autoselect types.
         if self._analysisdata.get_data():
-            x_selected_column = unicode(self._x_axis_column_list.currentText())
-            y_selected_column = unicode(self._y_axis_column_list.currentText())
-            z_selected_column = unicode(self._z_axis_column_list.currentText())
+            x_selected_column = str(self._x_axis_column_list.currentText())
+            y_selected_column = str(self._y_axis_column_list.currentText())
+            z_selected_column = str(self._z_axis_column_list.currentText())
             #
             if x_selected_column == 'parameter:':
                 self._x_axistype_list.setCurrentIndex(0)
@@ -261,17 +258,17 @@ class AnalyseDatasetsTab6(QtWidgets.QWidget):
         graphtool = tool_manager.ToolManager().get_tool_by_name('Graph plotter')
         #
         # Selected columns.
-        x_selected_column = unicode(self._x_axis_column_list.currentText())
-        y_selected_column = unicode(self._y_axis_column_list.currentText())
-        z_selected_column = unicode(self._z_axis_column_list.currentText())
+        x_selected_column = str(self._x_axis_column_list.currentText())
+        y_selected_column = str(self._y_axis_column_list.currentText())
+        z_selected_column = str(self._z_axis_column_list.currentText())
         # Selected parameters.
-        x_selected_param = unicode(self._x_axis_parameter_list.currentText())
-        y_selected_param = unicode(self._y_axis_parameter_list.currentText())
-        z_selected_param = unicode(self._z_axis_parameter_list.currentText())
+        x_selected_param = str(self._x_axis_parameter_list.currentText())
+        y_selected_param = str(self._y_axis_parameter_list.currentText())
+        z_selected_param = str(self._z_axis_parameter_list.currentText())
         # Selected types.
-        x_selected_type = unicode(self._x_axistype_list.currentText())
-        y_selected_type = unicode(self._y_axistype_list.currentText())
-        z_selected_type = unicode(self._z_axistype_list.currentText())
+        x_selected_type = str(self._x_axistype_list.currentText())
+        y_selected_type = str(self._y_axistype_list.currentText())
+        z_selected_type = str(self._z_axistype_list.currentText())
         #
         plotdatainfo = self._graph_plot_data.get_plot_data_info()
         #
@@ -332,7 +329,7 @@ class AnalyseDatasetsTab6(QtWidgets.QWidget):
                              z_label = z_selected_column if z_selected_column != 'parameter:' else z_selected_param,
                              z_array = z_data) 
         except UserWarning as e:
-            QtWidgets.QMessageBox.warning(self._main_activity, 'Warning', unicode(e))
+            QtWidgets.QMessageBox.warning(self._main_activity, 'Warning', str(e))
 
         # View in Graph plotter tool.
         graphtool.set_plot_data(self._graph_plot_data)
@@ -348,19 +345,19 @@ class AnalyseDatasetsTab6(QtWidgets.QWidget):
             return # Can't plot from empty dataset
         
         # Selected columns.
-        x_column = unicode(self._x_axis_column_list.currentText())
-        y_column = unicode(self._y_axis_column_list.currentText())
-        z_column = unicode(self._z_axis_column_list.currentText())
+        x_column = str(self._x_axis_column_list.currentText())
+        y_column = str(self._y_axis_column_list.currentText())
+        z_column = str(self._z_axis_column_list.currentText())
         # Selected parameters.
         x_param = None
         y_param = None
         z_param = None
         if x_column == 'parameter:':
-            x_param = unicode(self._x_axis_parameter_list.currentText())
+            x_param = str(self._x_axis_parameter_list.currentText())
         if y_column == 'parameter:':
-            y_param = unicode(self._y_axis_parameter_list.currentText())
+            y_param = str(self._y_axis_parameter_list.currentText())
         if z_column == 'parameter:':
-            z_param = unicode(self._z_axis_parameter_list.currentText())
+            z_param = str(self._z_axis_parameter_list.currentText())
             
         # Check exports columns backwards. Export columns are declared in the dataset import parser files.
         x_visit_key = None

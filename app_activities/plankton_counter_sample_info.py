@@ -9,8 +9,8 @@ import datetime
 import math
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
-import plankton_toolbox.toolbox.utils_qt as utils_qt
 import plankton_core
+import app_framework
 
 class PlanktonCounterSampleInfo(QtWidgets.QWidget):
     """ """
@@ -89,28 +89,28 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
         self._latitude_degree = QtWidgets.QLineEdit()
         self._latitude_degree.setPlaceholderText('dd')
         self._latitude_degree.setMaximumWidth(40)
-        self._latitude_degree.textEdited._latlong_dm_edited)
+        self._latitude_degree.textEdited.connect(self._latlong_dm_edited)
         self._latitude_minute = QtWidgets.QLineEdit()
         self._latitude_minute.setPlaceholderText('mm.mm')
         self._latitude_minute.setMaximumWidth(80)
-        self._latitude_minute.textEdited._latlong_dm_edited)
+        self._latitude_minute.textEdited.connect(self._latlong_dm_edited)
         self._longitude_degree = QtWidgets.QLineEdit()
         self._longitude_degree.setPlaceholderText('dd')
         self._longitude_degree.setMaximumWidth(40)
-        self._longitude_degree.textEdited._latlong_dm_edited)
+        self._longitude_degree.textEdited.connect(self._latlong_dm_edited)
         self._longitude_minute = QtWidgets.QLineEdit()
         self._longitude_minute.setPlaceholderText('mm.mm')
         self._longitude_minute.setMaximumWidth(80)
-        self._longitude_minute.textEdited._latlong_dm_edited)
+        self._longitude_minute.textEdited.connect(self._latlong_dm_edited)
 
         self._latitude_dd = QtWidgets.QLineEdit()
         self._latitude_dd.setPlaceholderText('dd.dddd')
         self._latitude_dd.setMaximumWidth(100)
-        self._latitude_dd.textEdited._latlong_dd_edited)
+        self._latitude_dd.textEdited.connect(self._latlong_dd_edited)
         self._longitude_dd = QtWidgets.QLineEdit()
         self._longitude_dd.setPlaceholderText('dd.dddd')
         self._longitude_dd.setMaximumWidth(100)
-        self._longitude_dd.textEdited._latlong_dd_edited)
+        self._longitude_dd.textEdited.connect(self._latlong_dd_edited)
 
         self._sample_min_depth_m_edit = QtWidgets.QLineEdit()
         self._sample_min_depth_m_edit.setMaximumWidth(60)
@@ -164,148 +164,148 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
         self._analysis_day_edit.setPlaceholderText('dd')
         self._analysis_day_edit.setMaximumWidth(40)
         self._analysis_today_button = QtWidgets.QPushButton('Today')
-        self._analysis_today_button.clicked.analysis_today)
+        self._analysis_today_button.clicked.connect(self.analysis_today)
         self._analysed_by_edit = QtWidgets.QLineEdit()
         self._sample_comment_edit = QtWidgets.QLineEdit()
         #
         self._clear_sample_info_button = QtWidgets.QPushButton('Clear')
-        self._clear_sample_info_button.clicked.clear_sample_info_selected)
+        self._clear_sample_info_button.clicked.connect(self.clear_sample_info_selected)
         self._copyfromsample_button = QtWidgets.QPushButton('Copy from sample...')
         self._copyfromsample_button.clicked.connect(self._copy_sample_info_from)
 
         # Layout widgets.
         form1 = QtWidgets.QGridLayout()
         gridrow = 0
-        form1.addWidget(utils_qt.LeftAlignedQLabel('<b>Sampling</b>'), gridrow, 0, 1, 1)
-        form1.addWidget(utils_qt.RightAlignedQLabel(''), gridrow, 1, 1, 10) # Move the rest to left
+        form1.addWidget(app_framework.LeftAlignedQLabel('<b>Sampling</b>'), gridrow, 0, 1, 1)
+        form1.addWidget(app_framework.RightAlignedQLabel(''), gridrow, 1, 1, 10) # Move the rest to left
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Sample name:'), gridrow, 0, 1, 1)
+        form1.addWidget(app_framework.RightAlignedQLabel('Sample name:'), gridrow, 0, 1, 1)
         form1.addWidget(self._sample_name_edit, gridrow, 1, 1, 2)
         form1.addWidget(self._change_sample_name_button, gridrow, 3, 1, 1)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Sample id:'), gridrow, 0, 1, 1)
+        form1.addWidget(app_framework.RightAlignedQLabel('Sample id:'), gridrow, 0, 1, 1)
         form1.addWidget(self._sample_id_edit, gridrow, 1, 1, 3)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Sampling: Year:'), gridrow, 0, 1, 1)
+        form1.addWidget(app_framework.RightAlignedQLabel('Sampling: Year:'), gridrow, 0, 1, 1)
         hbox = QtWidgets.QHBoxLayout()
         hbox.addWidget(self._sample_year_edit)
-        hbox.addWidget(utils_qt.RightAlignedQLabel('Month:'))
+        hbox.addWidget(app_framework.RightAlignedQLabel('Month:'))
         hbox.addWidget(self._visit_month_edit)
-        hbox.addWidget(utils_qt.RightAlignedQLabel('Day:'))
+        hbox.addWidget(app_framework.RightAlignedQLabel('Day:'))
         hbox.addWidget(self._sample_day_edit)
-        hbox.addWidget(utils_qt.RightAlignedQLabel('Sampling time (UTC):'))
+        hbox.addWidget(app_framework.RightAlignedQLabel('Sampling time (UTC):'))
         hbox.addWidget(self._sample_time_edit)
         hbox.addStretch(10)
         form1.addLayout(hbox, gridrow, 1, 1, 3)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('ICES metadata:'), gridrow, 0, 1, 1)
+        form1.addWidget(app_framework.RightAlignedQLabel('ICES metadata:'), gridrow, 0, 1, 1)
         hbox = QtWidgets.QHBoxLayout()
-        hbox.addWidget(utils_qt.RightAlignedQLabel('Year:'))
+        hbox.addWidget(app_framework.RightAlignedQLabel('Year:'))
         hbox.addWidget(self._sampling_year_edit)
-        hbox.addWidget(utils_qt.RightAlignedQLabel('Country code:'))
+        hbox.addWidget(app_framework.RightAlignedQLabel('Country code:'))
         hbox.addWidget(self._sampling_country_edit)
-        hbox.addWidget(utils_qt.RightAlignedQLabel('Platform code:'))
+        hbox.addWidget(app_framework.RightAlignedQLabel('Platform code:'))
         hbox.addWidget(self._sampling_platform_edit)
-        hbox.addWidget(utils_qt.RightAlignedQLabel('Series:'))
+        hbox.addWidget(app_framework.RightAlignedQLabel('Series:'))
         hbox.addWidget(self._sampling_series_edit)
         hbox.addStretch(10)
         form1.addLayout(hbox, gridrow, 1, 1, 3)
 #         gridrow += 1
-#         form1.addWidget(utils_qt.RightAlignedQLabel(''), gridrow, 0, 1, 10) # Empty row.
+#         form1.addWidget(app_framework.RightAlignedQLabel(''), gridrow, 0, 1, 10) # Empty row.
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Sampling laboratory:'), gridrow, 0, 1, 1)
+        form1.addWidget(app_framework.RightAlignedQLabel('Sampling laboratory:'), gridrow, 0, 1, 1)
         hbox = QtWidgets.QHBoxLayout()
         hbox.addWidget(self._sampling_laboratory_edit)
-        hbox.addWidget(utils_qt.RightAlignedQLabel('Orderer:'))
+        hbox.addWidget(app_framework.RightAlignedQLabel('Orderer:'))
         hbox.addWidget(self._orderer_edit)
         hbox.addStretch(10)
         form1.addLayout(hbox, gridrow, 1, 1, 3)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Project:'), gridrow, 0, 1, 1)
+        form1.addWidget(app_framework.RightAlignedQLabel('Project:'), gridrow, 0, 1, 1)
         form1.addWidget(self._project_edit, gridrow, 1, 1, 3)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Station name:'), gridrow, 0, 1, 1)
+        form1.addWidget(app_framework.RightAlignedQLabel('Station name:'), gridrow, 0, 1, 1)
         form1.addWidget(self._station_name_edit, gridrow, 1, 1, 3)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Latitude, degree:'), gridrow, 0, 1, 1)
+        form1.addWidget(app_framework.RightAlignedQLabel('Latitude, degree:'), gridrow, 0, 1, 1)
         hbox = QtWidgets.QHBoxLayout()
         hbox.addWidget(self._latitude_degree)
-        hbox.addWidget(utils_qt.RightAlignedQLabel('minute:'))
+        hbox.addWidget(app_framework.RightAlignedQLabel('minute:'))
         hbox.addWidget(self._latitude_minute)
-        hbox.addWidget(utils_qt.RightAlignedQLabel('Longitude, degree:'))
+        hbox.addWidget(app_framework.RightAlignedQLabel('Longitude, degree:'))
         hbox.addWidget(self._longitude_degree)
-        hbox.addWidget(utils_qt.RightAlignedQLabel('minute:'))
+        hbox.addWidget(app_framework.RightAlignedQLabel('minute:'))
         hbox.addWidget(self._longitude_minute)
         hbox.addStretch(10)
         form1.addLayout(hbox, gridrow, 1, 1, 3)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Latitude, decimal:'), gridrow, 0, 1, 1)
+        form1.addWidget(app_framework.RightAlignedQLabel('Latitude, decimal:'), gridrow, 0, 1, 1)
         hbox = QtWidgets.QHBoxLayout()
         hbox.addWidget(self._latitude_dd)
-        hbox.addWidget(utils_qt.RightAlignedQLabel('Longitude, decimal:'))
+        hbox.addWidget(app_framework.RightAlignedQLabel('Longitude, decimal:'))
         hbox.addWidget(self._longitude_dd)
         hbox.addStretch(10)
         form1.addLayout(hbox, gridrow, 1, 1, 3)
 #         gridrow += 1
-#         form1.addWidget(utils_qt.RightAlignedQLabel(''), gridrow, 0, 1, 10) # Empty row.
+#         form1.addWidget(app_framework.RightAlignedQLabel(''), gridrow, 0, 1, 10) # Empty row.
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Sampler type code:'), gridrow, 0, 1, 1)
+        form1.addWidget(app_framework.RightAlignedQLabel('Sampler type code:'), gridrow, 0, 1, 1)
         form1.addWidget(self._sampler_type_code_list, gridrow, 1, 1, 1)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Sample min depth (m):'), gridrow, 0, 1, 1)
+        form1.addWidget(app_framework.RightAlignedQLabel('Sample min depth (m):'), gridrow, 0, 1, 1)
         hbox = QtWidgets.QHBoxLayout()
         hbox.addWidget(self._sample_min_depth_m_edit)
-        hbox.addWidget(utils_qt.RightAlignedQLabel('Sample max depth (m):'))
+        hbox.addWidget(app_framework.RightAlignedQLabel('Sample max depth (m):'))
         hbox.addWidget(self._sample_max_depth_m_edit)
-        hbox.addWidget(utils_qt.RightAlignedQLabel('Water depth (m):'))
+        hbox.addWidget(app_framework.RightAlignedQLabel('Water depth (m):'))
         hbox.addWidget(self._water_depth_m_edit)
         hbox.addStretch(10)
         form1.addLayout(hbox, gridrow, 1, 1, 3)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Sampled volume (L):'), gridrow, 0, 1, 1)
+        form1.addWidget(app_framework.RightAlignedQLabel('Sampled volume (L):'), gridrow, 0, 1, 1)
         form1.addWidget(self._sampled_volume_l_edit, gridrow, 1, 1, 1)
         gridrow += 1
-        form1.addWidget(utils_qt.LeftAlignedQLabel('<b>Net sampling</b>'), gridrow, 0, 1, 1)
+        form1.addWidget(app_framework.LeftAlignedQLabel('<b>Net sampling</b>'), gridrow, 0, 1, 1)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Net type code:'), gridrow, 0, 1, 1)
+        form1.addWidget(app_framework.RightAlignedQLabel('Net type code:'), gridrow, 0, 1, 1)
         form1.addWidget(self._net_type_code_list, gridrow, 1, 1, 1)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Sampler area (m2):'), gridrow, 0, 1, 1)
+        form1.addWidget(app_framework.RightAlignedQLabel('Sampler area (m2):'), gridrow, 0, 1, 1)
         hbox = QtWidgets.QHBoxLayout()
         hbox.addWidget(self._sampler_area_m2_edit)
-        hbox.addWidget(utils_qt.RightAlignedQLabel('Mesh size (µm):'))
+        hbox.addWidget(app_framework.RightAlignedQLabel('Mesh size (µm):'))
         hbox.addWidget(self._net_mesh_size_um_edit)
-        hbox.addWidget(utils_qt.RightAlignedQLabel('Wire angle (deg):'))
+        hbox.addWidget(app_framework.RightAlignedQLabel('Wire angle (deg):'))
         hbox.addWidget(self._wire_angle_deg_edit)
-        hbox.addWidget(utils_qt.RightAlignedQLabel('Tow length (m):'))
+        hbox.addWidget(app_framework.RightAlignedQLabel('Tow length (m):'))
         hbox.addWidget(self._net_tow_length_m_edit)
         hbox.addStretch(10)
         form1.addLayout(hbox, gridrow, 1, 1, 3)
         gridrow += 1
-        form1.addWidget(utils_qt.LeftAlignedQLabel('<b>Analysis</b>'), gridrow, 0, 1, 1)
+        form1.addWidget(app_framework.LeftAlignedQLabel('<b>Analysis</b>'), gridrow, 0, 1, 1)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Analytical laboratory:'), gridrow, 0, 1, 1)
+        form1.addWidget(app_framework.RightAlignedQLabel('Analytical laboratory:'), gridrow, 0, 1, 1)
         form1.addWidget(self._analytical_laboratory_edit, gridrow, 1, 1, 3)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Analysis. Year:'), gridrow, 0, 1, 1)
+        form1.addWidget(app_framework.RightAlignedQLabel('Analysis. Year:'), gridrow, 0, 1, 1)
         hbox = QtWidgets.QHBoxLayout()
         hbox.addWidget(self._analysis_year_edit)
-        hbox.addWidget(utils_qt.RightAlignedQLabel('Month:'))
+        hbox.addWidget(app_framework.RightAlignedQLabel('Month:'))
         hbox.addWidget(self._analysis_month_edit)
-        hbox.addWidget(utils_qt.RightAlignedQLabel('Day:'))
+        hbox.addWidget(app_framework.RightAlignedQLabel('Day:'))
         hbox.addWidget(self._analysis_day_edit)
         hbox.addWidget(self._analysis_today_button)
         hbox.addStretch(10)
         form1.addLayout(hbox, gridrow, 1, 1, 3)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Analysed by:'), gridrow, 0, 1, 1)
+        form1.addWidget(app_framework.RightAlignedQLabel('Analysed by:'), gridrow, 0, 1, 1)
         form1.addWidget(self._analysed_by_edit, gridrow, 1, 1, 3)
         gridrow += 1
-        form1.addWidget(utils_qt.RightAlignedQLabel('Comments:'), gridrow, 0, 1, 1)
+        form1.addWidget(app_framework.RightAlignedQLabel('Comments:'), gridrow, 0, 1, 1)
         form1.addWidget(self._sample_comment_edit, gridrow, 1, 1, 3)
 #         # Empty row.
 #         gridrow += 1
-#         form1.addWidget(utils_qt.RightAlignedQLabel(''), gridrow, 0, 1, 10)
+#         form1.addWidget(app_framework.RightAlignedQLabel(''), gridrow, 0, 1, 10)
         #
         hbox1 = QtWidgets.QHBoxLayout()
         hbox1.addWidget(self._clear_sample_info_button)
@@ -328,17 +328,17 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
 
     def _latlong_dm_edited(self):
         """ """
-        lat_deg = unicode(self._latitude_degree.text()).replace(',', '.')
-        lat_min = unicode(self._latitude_minute.text()).replace(',', '.')
-        long_deg = unicode(self._longitude_degree.text()).replace(',', '.')
-        long_min = unicode(self._longitude_minute.text()).replace(',', '.')
+        lat_deg = str(self._latitude_degree.text()).replace(',', '.')
+        lat_min = str(self._latitude_minute.text()).replace(',', '.')
+        long_deg = str(self._longitude_degree.text()).replace(',', '.')
+        long_min = str(self._longitude_minute.text()).replace(',', '.')
         #
         try:
             latitude_dd = float(lat_deg.replace(',', '.').replace(' ', ''))
             if lat_min: 
                 latitude_dd += float(lat_min.replace(',', '.').replace(' ', '')) / 60
             latitude_dd = math.floor(latitude_dd*10000)/10000
-            self._latitude_dd.setText(unicode(latitude_dd))
+            self._latitude_dd.setText(str(latitude_dd))
         except:
             self._latitude_dd.setText('')
         try:
@@ -346,14 +346,14 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
             if long_min:
                 longitude_dd += float(long_min.replace(',', '.').replace(' ', '')) / 60
             longitude_dd = math.floor(longitude_dd*10000)/10000
-            self._longitude_dd.setText(unicode(longitude_dd))
+            self._longitude_dd.setText(str(longitude_dd))
         except:
             self._longitude_dd.setText('')
         
     def _latlong_dd_edited(self):
         """ """
-        lat_dd = unicode(self._latitude_dd.text()).replace(',', '.')
-        long_dd = unicode(self._longitude_dd.text()).replace(',', '.')
+        lat_dd = str(self._latitude_dd.text()).replace(',', '.')
+        long_dd = str(self._longitude_dd.text()).replace(',', '.')
         #
         try:
             value = float(lat_dd.replace(',', '.').replace(' ', ''))
@@ -361,8 +361,8 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
             degrees = math.floor(abs(value))
             minutes = (abs(value) - degrees) * 60
             minutes = math.floor(minutes*100)/100
-            self._latitude_degree.setText(unicode(int(degrees)))
-            self._latitude_minute.setText(unicode(minutes))
+            self._latitude_degree.setText(str(int(degrees)))
+            self._latitude_minute.setText(str(minutes))
         except:
             self._latitude_degree.setText('')
             self._latitude_minute.setText('')
@@ -372,8 +372,8 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
             degrees = math.floor(abs(value))
             minutes = (abs(value) - degrees) * 60
             minutes = math.floor(minutes*100)/100
-            self._longitude_degree.setText(unicode(int(degrees)))
-            self._longitude_minute.setText(unicode(minutes))
+            self._longitude_degree.setText(str(int(degrees)))
+            self._longitude_minute.setText(str(minutes))
         except:
             self._longitude_degree.setText('')
             self._longitude_minute.setText('')
@@ -416,51 +416,51 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
 
     def _from_fields_to_dict(self, metadata_dict):
         """ """
-        metadata_dict['plankton_toolbox_version'] = app_framework.__version__
-        metadata_dict['sample_name'] = unicode(self._current_sample)
-        metadata_dict['sample_id'] = unicode(self._sample_id_edit.text())
-        year = unicode(self._sample_year_edit.text())
-        month = unicode(self._visit_month_edit.text())
-        day = unicode(self._sample_day_edit.text())
+        metadata_dict['plankton_toolbox_version'] = app_framework.get_version() # __version__
+        metadata_dict['sample_name'] = str(self._current_sample)
+        metadata_dict['sample_id'] = str(self._sample_id_edit.text())
+        year = str(self._sample_year_edit.text())
+        month = str(self._visit_month_edit.text())
+        day = str(self._sample_day_edit.text())
         date_tmp = year + '-' + month + '-' + day 
         metadata_dict['sample_date'] = date_tmp
-        metadata_dict['sample_time'] = unicode(self._sample_time_edit.text())
-        metadata_dict['visit_year'] = unicode(self._sampling_year_edit.text())
-        metadata_dict['country_code'] = unicode(self._sampling_country_edit.text())
-        metadata_dict['platform_code'] = unicode(self._sampling_platform_edit.text())
-        metadata_dict['sampling_series'] = unicode(self._sampling_series_edit.text())
-        metadata_dict['sampling_laboratory'] = unicode(self._sampling_laboratory_edit.text())
-        metadata_dict['orderer'] = unicode(self._orderer_edit.text())
-        metadata_dict['project_code'] = unicode(self._project_edit.text())
-        metadata_dict['station_name'] = unicode(self._station_name_edit.text())
-        lat_deg_tmp = unicode(self._latitude_degree.text()).replace(',', '.')
-        lat_min_tmp = unicode(self._latitude_minute.text()).replace(',', '.')
-        long_deg_tmp = unicode(self._longitude_degree.text()).replace(',', '.')
-        long_min_tmp = unicode(self._longitude_minute.text()).replace(',', '.')
-        lat_dd_tmp = unicode(self._latitude_dd.text()).replace(',', '.')
-        long_dd_tmp = unicode(self._longitude_dd.text()).replace(',', '.')
+        metadata_dict['sample_time'] = str(self._sample_time_edit.text())
+        metadata_dict['visit_year'] = str(self._sampling_year_edit.text())
+        metadata_dict['country_code'] = str(self._sampling_country_edit.text())
+        metadata_dict['platform_code'] = str(self._sampling_platform_edit.text())
+        metadata_dict['sampling_series'] = str(self._sampling_series_edit.text())
+        metadata_dict['sampling_laboratory'] = str(self._sampling_laboratory_edit.text())
+        metadata_dict['orderer'] = str(self._orderer_edit.text())
+        metadata_dict['project_code'] = str(self._project_edit.text())
+        metadata_dict['station_name'] = str(self._station_name_edit.text())
+        lat_deg_tmp = str(self._latitude_degree.text()).replace(',', '.')
+        lat_min_tmp = str(self._latitude_minute.text()).replace(',', '.')
+        long_deg_tmp = str(self._longitude_degree.text()).replace(',', '.')
+        long_min_tmp = str(self._longitude_minute.text()).replace(',', '.')
+        lat_dd_tmp = str(self._latitude_dd.text()).replace(',', '.')
+        long_dd_tmp = str(self._longitude_dd.text()).replace(',', '.')
         metadata_dict['sample_latitude_dm'] = lat_deg_tmp + ' ' + lat_min_tmp
         metadata_dict['sample_longitude_dm'] = long_deg_tmp + ' ' + long_min_tmp
         metadata_dict['sample_latitude_dd'] = lat_dd_tmp
         metadata_dict['sample_longitude_dd'] = long_dd_tmp
-        metadata_dict['sample_min_depth_m'] = unicode(self._sample_min_depth_m_edit.text())
-        metadata_dict['sample_max_depth_m'] = unicode(self._sample_max_depth_m_edit.text())
-        metadata_dict['water_depth_m'] = unicode(self._water_depth_m_edit.text())
-        metadata_dict['sampler_type_code'] = unicode(self._sampler_type_code_list.currentText())
-        metadata_dict['sampled_volume_l'] = unicode(self._sampled_volume_l_edit.text())
-        metadata_dict['net_type_code'] = unicode(self._net_type_code_list.currentText())        
-        metadata_dict['sampler_area_m2'] = unicode(self._sampler_area_m2_edit.text())
-        metadata_dict['net_mesh_size_um'] = unicode(self._net_mesh_size_um_edit.text())
-        metadata_dict['wire_angle_deg'] = unicode(self._wire_angle_deg_edit.text())
-        metadata_dict['net_tow_length_m'] = unicode(self._net_tow_length_m_edit.text())
-        metadata_dict['analytical_laboratory'] = unicode(self._analytical_laboratory_edit.text())
-        year = unicode(self._analysis_year_edit.text())
-        month = unicode(self._analysis_month_edit.text())
-        day = unicode(self._analysis_day_edit.text())
+        metadata_dict['sample_min_depth_m'] = str(self._sample_min_depth_m_edit.text())
+        metadata_dict['sample_max_depth_m'] = str(self._sample_max_depth_m_edit.text())
+        metadata_dict['water_depth_m'] = str(self._water_depth_m_edit.text())
+        metadata_dict['sampler_type_code'] = str(self._sampler_type_code_list.currentText())
+        metadata_dict['sampled_volume_l'] = str(self._sampled_volume_l_edit.text())
+        metadata_dict['net_type_code'] = str(self._net_type_code_list.currentText())        
+        metadata_dict['sampler_area_m2'] = str(self._sampler_area_m2_edit.text())
+        metadata_dict['net_mesh_size_um'] = str(self._net_mesh_size_um_edit.text())
+        metadata_dict['wire_angle_deg'] = str(self._wire_angle_deg_edit.text())
+        metadata_dict['net_tow_length_m'] = str(self._net_tow_length_m_edit.text())
+        metadata_dict['analytical_laboratory'] = str(self._analytical_laboratory_edit.text())
+        year = str(self._analysis_year_edit.text())
+        month = str(self._analysis_month_edit.text())
+        day = str(self._analysis_day_edit.text())
         date_tmp = year + '-' + month + '-' + day 
         metadata_dict['analysis_date'] = date_tmp
-        metadata_dict['analysed_by'] = unicode(self._analysed_by_edit.text())
-        metadata_dict['sample_comment'] = unicode(self._sample_comment_edit.text())
+        metadata_dict['analysed_by'] = str(self._analysed_by_edit.text())
+        metadata_dict['sample_comment'] = str(self._sample_comment_edit.text())
 
     def _from_dict_to_fields(self, metadata_dict):
         """ """
@@ -485,8 +485,8 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
         self._orderer_edit.setText(metadata_dict.get('orderer', ''))
         self._project_edit.setText(metadata_dict.get('project_code', ''))
         self._station_name_edit.setText(metadata_dict.get('station_name', ''))
-        lat_tmp = unicode(metadata_dict.get('sample_latitude_dm', ''))
-        long_tmp = unicode(metadata_dict.get('sample_longitude_dm', ''))
+        lat_tmp = str(metadata_dict.get('sample_latitude_dm', ''))
+        long_tmp = str(metadata_dict.get('sample_longitude_dm', ''))
         if (len(lat_tmp) > 2) and (' ' in lat_tmp):
             lat_deg_min = lat_tmp.split(' ') 
             self._latitude_degree.setText(lat_deg_min[0])
@@ -502,8 +502,8 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
             self._longitude_degree.setText('')
             self._longitude_minute.setText('')
         #
-        self._latitude_dd.setText(unicode(metadata_dict.get('sample_latitude_dd', '')))
-        self._longitude_dd.setText(unicode(metadata_dict.get('sample_longitude_dd', '')))
+        self._latitude_dd.setText(str(metadata_dict.get('sample_latitude_dd', '')))
+        self._longitude_dd.setText(str(metadata_dict.get('sample_longitude_dd', '')))
         #       
         self._sample_min_depth_m_edit.setText(metadata_dict.get('sample_min_depth_m', ''))
         self._sample_max_depth_m_edit.setText(metadata_dict.get('sample_max_depth_m', ''))
@@ -574,7 +574,7 @@ class CopyFromTemplateDialog(QtWidgets.QDialog):
         copysampleinfo_button = QtWidgets.QPushButton('Copy sample info')
         copysampleinfo_button.clicked.connect(self._copy_sample_info)               
         cancel_button = QtWidgets.QPushButton('Cancel')
-        cancel_button.clicked.reject) # Close dialog box.               
+        cancel_button.clicked.connect(self.reject) # Close dialog box.               
         # Layout widgets.
         formlayout = QtWidgets.QFormLayout()
 #         formlayout.addRow('Sample id:', self._sampleid_edit)
@@ -605,7 +605,7 @@ class CopyFromTemplateDialog(QtWidgets.QDialog):
         
     def _copy_sample_info(self):
         """ """
-        selectedtext = unicode(self._datasetsample_list.currentText())
+        selectedtext = str(self._datasetsample_list.currentText())
         if selectedtext in self._datasetsample_dict:
             datasetsample = self._datasetsample_dict[selectedtext]
             self._dataset = datasetsample[0]
@@ -638,7 +638,7 @@ class RenameSampleDialog(QtWidgets.QDialog):
         createsample_button = QtWidgets.QPushButton(' Rename sample ')
         createsample_button.clicked.connect(self._rename_sample)               
         cancel_button = QtWidgets.QPushButton('Cancel')
-        cancel_button.clicked.reject) # Close dialog box.               
+        cancel_button.clicked.connect(self.reject) # Close dialog box.               
         # Layout widgets.
         formlayout = QtWidgets.QFormLayout()#         formlayout.addRow('Sample id:', self._sampleid_edit)
         formlayout.addRow('New sample name:', self._newsamplename_edit)
@@ -656,7 +656,7 @@ class RenameSampleDialog(QtWidgets.QDialog):
 
     def _rename_sample(self):
         """ """
-        self._new_sample_name = unicode(self._newsamplename_edit.text())
+        self._new_sample_name = str(self._newsamplename_edit.text())
         #            
         self.accept() # Close dialog box.
 

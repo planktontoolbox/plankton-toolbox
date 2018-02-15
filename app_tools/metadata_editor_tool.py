@@ -49,7 +49,7 @@ class MetadataEditorTool(tool_base.ToolBase):
         """ """
         # Active widgets and connections.
         self._testbutton = QtWidgets.QPushButton('Write name to log')
-        self._testbutton.clicked(self._test)   
+        self._testbutton.clicked.connect(self._test)   
         # Active widgets and connections.
         layout = QtWidgets.QHBoxLayout()
         layout.addStretch(5)
@@ -59,4 +59,4 @@ class MetadataEditorTool(tool_base.ToolBase):
 
     def _test(self):
         """ """
-        self._write_to_log('Name: ' + unicode(self._nameedit.text()))
+        self._write_to_log('Name: ' + str(self._nameedit.text()))

@@ -63,7 +63,7 @@ class ImportManager(object):
             tabledataset.append_row(row)
         #
         toolbox_utils.Logging().info('Loading file. Header content: ' +  
-                                 unicode(tabledataset.get_header()))
+                                 str(tabledataset.get_header()))
         
         # Phase 2: Parse the table and create a corresponding tree structure.
         targetdataset = plankton_core.DatasetNode()
@@ -122,7 +122,7 @@ class ImportManager(object):
             tabledataset.append_row(row)
         #
         toolbox_utils.Logging().info('Loading file. Header content: ' +  
-                                 unicode(tabledataset.get_header()))
+                                 str(tabledataset.get_header()))
 
         # Phase 2: Parse the table and create a corresponding tree structure.
         targetdataset = plankton_core.DatasetNode()
