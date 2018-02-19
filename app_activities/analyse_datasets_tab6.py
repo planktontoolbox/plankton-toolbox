@@ -291,7 +291,8 @@ class AnalyseDatasetsTab6(QtWidgets.QWidget):
             for index, item in enumerate(x_data):
                 try:
                     value = item.replace(',', '.').replace(' ', '') # Try/except if already float.
-                except: pass
+                except: 
+                    pass
                 try:
                     x_data[index] = float(value)
                 except:
@@ -300,7 +301,8 @@ class AnalyseDatasetsTab6(QtWidgets.QWidget):
             for index, item in enumerate(y_data):
                 try:
                     value = item.replace(',', '.').replace(' ', '') # Try/except if already float.
-                except: pass
+                except: 
+                    pass
                 try:
                     y_data[index] = float(value)
                 except:
@@ -309,7 +311,8 @@ class AnalyseDatasetsTab6(QtWidgets.QWidget):
             for index, item in enumerate(z_data):
                 try:
                     value = item.replace(',', '.').replace(' ', '') # Try/except if already float.
-                except: pass
+                except: 
+                    pass
                 try:
                     z_data[index] = float(value)
                 except:

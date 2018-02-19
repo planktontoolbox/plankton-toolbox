@@ -388,31 +388,39 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
 
     def _copy_sample_info_from(self):
         """ """
-        dialog = CopyFromTemplateDialog(self)
-        if dialog.exec_():
-            dataset = dialog.get_dataset()
-            sample = dialog.get_sample()
-            if dataset and sample:
-                dir_path = plankton_core.PlanktonCounterManager().get_dataset_dir_path()
-                sample_object = plankton_core.PlanktonCounterSample(dir_path,
-                                                               dataset, 
-                                                               sample)
-                metadata_dict = sample_object.get_sample_info()
-                self._from_dict_to_fields(metadata_dict)
+        try:
+            dialog = CopyFromTemplateDialog(self)
+            if dialog.exec_():
+                dataset = dialog.get_dataset()
+                sample = dialog.get_sample()
+                if dataset and sample:
+                    dir_path = plankton_core.PlanktonCounterManager().get_dataset_dir_path()
+                    sample_object = plankton_core.PlanktonCounterSample(dir_path,
+                                                                   dataset, 
+                                                                   sample)
+                    metadata_dict = sample_object.get_sample_info()
+                    self._from_dict_to_fields(metadata_dict)
+        except Exception as e:
+            print('DEBUG: Exception: ', e)
+            raise
 
     def _change_sample_name(self):
         """ """
-        self.save_data()
-        dialog = RenameSampleDialog(self, self._current_sample)
-        if dialog.exec_():
-            new_sample_name = dialog.get_new_sample_name()
-            if new_sample_name:
-                self.save_data()
-                plankton_core.PlanktonCounterManager().rename_sample(self._current_dataset, 
-                                                                     self._current_sample,
-                                                                     new_sample_name)
-                # Close dialog.
-                self._parentwidget.reject()
+        try:
+            self.save_data()
+            dialog = RenameSampleDialog(self, self._current_sample)
+            if dialog.exec_():
+                new_sample_name = dialog.get_new_sample_name()
+                if new_sample_name:
+                    self.save_data()
+                    plankton_core.PlanktonCounterManager().rename_sample(self._current_dataset, 
+                                                                         self._current_sample,
+                                                                         new_sample_name)
+                    # Close dialog.
+                    self._parentwidget.reject()
+        except Exception as e:
+            print('DEBUG: Exception: ', e)
+            raise
 
     def _from_fields_to_dict(self, metadata_dict):
         """ """

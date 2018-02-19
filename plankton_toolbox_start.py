@@ -11,7 +11,9 @@ __version__ = '1.3.0'
 # Backend must be defined before other matplotlib imports.
 import matplotlib
 matplotlib.use('Qt5agg')
-
+# Import to make PyInstaller be aware of the libs.
+import openpyxl
+import numpy
 # Plankton toolbox desktop application framework.
 import app_framework
 

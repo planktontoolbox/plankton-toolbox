@@ -105,23 +105,35 @@ class PlanktonCounterActivity(app_framework.ActivityBase):
     
     def _new_datasets(self):
         """ """        
-        my_dialog = NewDatasetDialog(self)
-        if my_dialog.exec_():
-            self._current_dataset = None
-            self._current_sample = None
-            self._update_counter_sample_list()
+        try:        
+            my_dialog = NewDatasetDialog(self)
+            if my_dialog.exec_():
+                self._current_dataset = None
+                self._current_sample = None
+                self._update_counter_sample_list()
+        except Exception as e:
+            print('DEBUG: Exception: ', e)
+            raise
 
     def _new_sample(self):
         """ """
-        dialog = NewSampleDialog(self, self._current_dataset)
-        if dialog.exec_():
-            self._update_counter_sample_list()
+        try:        
+            dialog = NewSampleDialog(self, self._current_dataset)
+            if dialog.exec_():
+                self._update_counter_sample_list()
+        except Exception as e:
+            print('DEBUG: Exception: ', e)
+            raise
             
     def _delete_datasets_and_sample(self):
-        """ """        
-        dialog = DeleteDialog(self)
-        if dialog.exec_():
-            self._update_counter_sample_list()
+        """ """
+        try:        
+            dialog = DeleteDialog(self)
+            if dialog.exec_():
+                self._update_counter_sample_list()
+        except Exception as e:
+            print('DEBUG: Exception: ', e)
+            raise
             
     def _backup_export_import(self):
         """ """
@@ -136,10 +148,14 @@ class PlanktonCounterActivity(app_framework.ActivityBase):
             
     def _export_import_samples(self):
         """ """
-        my_dialog = ExportImportSamplesDialog(self, self._current_dataset)
-        if my_dialog.exec_():
-            self._current_dataset = None
-            self._update_counter_sample_list()
+        try:
+            my_dialog = ExportImportSamplesDialog(self, self._current_dataset)
+            if my_dialog.exec_():
+                self._current_dataset = None
+                self._update_counter_sample_list()
+        except Exception as e:
+            print('DEBUG: Exception: ', e)
+            raise
             
     def _selected_sample_changed(self):
         """ """
@@ -186,10 +202,6 @@ class PlanktonCounterActivity(app_framework.ActivityBase):
 #             self._update_counter_sample_list()
         try:
             dialog = app_activities.PlanktonCounterDialog(self, self._current_dataset, self._current_sample)
-        except Exception as e:
-            print('DEBUG: Exception: ' + e.message)
-            raise
-        try:
             dialog.exec_()
         except Exception as e:
             print('DEBUG: Exception: ' + e.message)

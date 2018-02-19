@@ -272,10 +272,12 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
         sample_date = visitnode.get_data('sample_date', '')
         try:
             visitnode.add_data('visit_year', sample_date[0:4])
-        except: pass      
+        except: 
+            pass      
         try:
             visitnode.add_data('visit_month', sample_date[5:7])        
-        except: pass 
+        except: 
+            pass 
              
         # Create sample node and add data. Note: Only one sample in each file. 
         samplenode = plankton_core.SampleNode()

@@ -301,7 +301,8 @@ class ChartBase(object):
                 try:
                     try:
                         value = value.replace(',', '.').replace(' ', '') # Try/except if already float.
-                    except: pass
+                    except: 
+                        pass
                     value = float(value)
                     float_array.append(value)
                 except:

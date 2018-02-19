@@ -130,9 +130,13 @@ class PlanktonCounterSampleEdit(QtWidgets.QWidget):
         
     def _save_sample_report(self):
         """ """
-        dialog = ExportSampleDialog(self, self._current_sample, self._current_sample_object)
-        if dialog.exec_():
-            pass
+        try:
+            dialog = ExportSampleDialog(self, self._current_sample, self._current_sample_object)
+            if dialog.exec_():
+                pass
+        except Exception as e:
+            print('DEBUG: Exception: ', e)
+            raise
         
 
 class ExportSampleDialog(QtWidgets.QDialog):

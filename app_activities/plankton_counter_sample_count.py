@@ -677,34 +677,42 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
 
     def _save_as_species_list(self):
         """ """
-        dialog = SaveAsCountingSpeciesListDialog(self)
-        if dialog.exec_():
-            specieslistname = dialog.get_new_name()
-            if specieslistname:
-                currentmethodstep = None
-                if self._currentmethodstep_checkbox.isChecked():
-                    currentmethodstep = str(self._selectmethodstep_list.currentText())
-                #
-                species_list_rows = self._current_sample_object.get_taxa_summary(summary_type = 'Counted per taxa',
-                                                                                 most_counted_sorting = False,
-                                                                                 method_step = currentmethodstep)
-                #
-                rows = []
-                for row in species_list_rows:
-                    if len(row) > 0:
-                        rows.append([row])
-                #   
-                plankton_core.PlanktonCounterMethods().create_counting_species_list(specieslistname, rows)
+        try:
+            dialog = SaveAsCountingSpeciesListDialog(self)
+            if dialog.exec_():
+                specieslistname = dialog.get_new_name()
+                if specieslistname:
+                    currentmethodstep = None
+                    if self._currentmethodstep_checkbox.isChecked():
+                        currentmethodstep = str(self._selectmethodstep_list.currentText())
+                    #
+                    species_list_rows = self._current_sample_object.get_taxa_summary(summary_type = 'Counted per taxa',
+                                                                                     most_counted_sorting = False,
+                                                                                     method_step = currentmethodstep)
+                    #
+                    rows = []
+                    for row in species_list_rows:
+                        if len(row) > 0:
+                            rows.append([row])
+                    #   
+                    plankton_core.PlanktonCounterMethods().create_counting_species_list(specieslistname, rows)
+        except Exception as e:
+            print('DEBUG: Exception: ', e)
+            raise
         #
         self._update_select_specieslist_combo()             
         self._update_selected_specieslist(None) 
              
     def _delete_species_lists(self):
         """ """
-        dialog = DeleteCountingSpeciesListDialog(self)
-        if dialog.exec_():
-            self._update_select_specieslist_combo()             
-            self._update_selected_specieslist(None) 
+        try:
+            dialog = DeleteCountingSpeciesListDialog(self)
+            if dialog.exec_():
+                self._update_select_specieslist_combo()             
+                self._update_selected_specieslist(None) 
+        except Exception as e:
+            print('DEBUG: Exception: ', e)
+            raise
         #
         self._update_select_specieslist_combo()             
         self._update_selected_specieslist(None)
@@ -1154,10 +1162,14 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
          
     def _lock_taxa(self):
         """ """   
-        currentmethodstep = str(self._selectmethodstep_list.currentText())
-        countareanumber = str(self._countareanumber_edit.text())
-        dialog = LockTaxaListDialog(self, self._current_sample_object, currentmethodstep, countareanumber)
-        dialog.exec_()
+        try:
+            currentmethodstep = str(self._selectmethodstep_list.currentText())
+            countareanumber = str(self._countareanumber_edit.text())
+            dialog = LockTaxaListDialog(self, self._current_sample_object, currentmethodstep, countareanumber)
+            dialog.exec_()
+        except Exception as e:
+            print('DEBUG: Exception: ', e)
+            raise
         # Update sample row since rows may have been locked. 
         self._get_sample_row()
         #

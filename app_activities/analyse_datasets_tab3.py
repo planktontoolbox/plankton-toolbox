@@ -143,7 +143,8 @@ class AnalyseDatasetsTab3(QtWidgets.QWidget):
                             value = variablenode.get_data('value')
                             try:
                                 value = value.replace(',', '.').replace(' ', '') # Try/except if already float.
-                            except: pass
+                            except: 
+                                pass
                             # Use values containing valid float data.
                             try:
                                 value = float(value) 

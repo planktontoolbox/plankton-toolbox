@@ -696,20 +696,24 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         current_method = str(self._selectmethod_table.currentItem().text())
         current_method_step = str(self._selectmethodstep_table.currentItem().text())
         #
-        dialog = AddMethodStepDialog(self, self._current_sample_method, current_method, current_method_step)
-        if dialog.exec_():
-            if old_method:
-                path = plankton_core.PlanktonCounterMethods().get_methods_dir_path()
-                self._current_sample_method.save_method_config_to_file(path, old_method + '.txt')
-            #
-            self._update_default_method_list()
-            #
-            currentindex = self._selectdefaultmethod_list.findText(old_method, QtCore.Qt.MatchFixedString)
-            if currentindex >= 0:
-                self._selectdefaultmethod_list.setCurrentIndex(currentindex)
-            #
-            self._update_method_table()
-            self._update_method_step_table()
+        try:
+            dialog = AddMethodStepDialog(self, self._current_sample_method, current_method, current_method_step)
+            if dialog.exec_():
+                if old_method:
+                    path = plankton_core.PlanktonCounterMethods().get_methods_dir_path()
+                    self._current_sample_method.save_method_config_to_file(path, old_method + '.txt')
+                #
+                self._update_default_method_list()
+                #
+                currentindex = self._selectdefaultmethod_list.findText(old_method, QtCore.Qt.MatchFixedString)
+                if currentindex >= 0:
+                    self._selectdefaultmethod_list.setCurrentIndex(currentindex)
+                #
+                self._update_method_table()
+                self._update_method_step_table()
+        except Exception as e:
+            print('DEBUG: Exception: ', e)
+            raise
 
     def _delete_method_steps(self):
         """ """
@@ -717,20 +721,24 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         if self._selectdefaultmethod_list.currentIndex() > 0:
             old_method = str(self._selectdefaultmethod_list.currentText())
         #
-        dialog = DeleteMethodStepsDialog(self, self._current_sample_method)
-        if dialog.exec_():
-            if old_method:
-                path = plankton_core.PlanktonCounterMethods().get_methods_dir_path()
-                self._current_sample_method.save_method_config_to_file(path, old_method + '.txt')
-            #
-            self._update_default_method_list()
-            #
-            currentindex = self._selectdefaultmethod_list.findText(old_method, QtCore.Qt.MatchFixedString)
-            if currentindex >= 0:
-                self._selectdefaultmethod_list.setCurrentIndex(currentindex)
-            #
-            self._update_method_table()
-            self._update_method_step_table()
+        try:
+            dialog = DeleteMethodStepsDialog(self, self._current_sample_method)
+            if dialog.exec_():
+                if old_method:
+                    path = plankton_core.PlanktonCounterMethods().get_methods_dir_path()
+                    self._current_sample_method.save_method_config_to_file(path, old_method + '.txt')
+                #
+                self._update_default_method_list()
+                #
+                currentindex = self._selectdefaultmethod_list.findText(old_method, QtCore.Qt.MatchFixedString)
+                if currentindex >= 0:
+                    self._selectdefaultmethod_list.setCurrentIndex(currentindex)
+                #
+                self._update_method_table()
+                self._update_method_step_table()
+        except Exception as e:
+            print('DEBUG: Exception: ', e)
+            raise
             
     def _save_as_default_method(self):
         """ """
@@ -743,24 +751,32 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         if self._selectdefaultmethod_list.currentIndex() > 0:
             old_name = str(self._selectdefaultmethod_list.currentText())
         #
-        dialog = SaveDefaultMethodAsDialog(self, old_name)
-        if dialog.exec_():
-            new_name = dialog.get_new_name()
-            if new_name:
-                path = plankton_core.PlanktonCounterMethods().get_methods_dir_path()
-                self._current_sample_method.save_method_config_to_file(path, new_name + '.txt')
-                #
-                self._update_default_method_list()
-                #
-                currentindex = self._selectdefaultmethod_list.findText(new_name, QtCore.Qt.MatchFixedString)
-                if currentindex >= 0:
-                    self._selectdefaultmethod_list.setCurrentIndex(currentindex)
+        try:
+            dialog = SaveDefaultMethodAsDialog(self, old_name)
+            if dialog.exec_():
+                new_name = dialog.get_new_name()
+                if new_name:
+                    path = plankton_core.PlanktonCounterMethods().get_methods_dir_path()
+                    self._current_sample_method.save_method_config_to_file(path, new_name + '.txt')
+                    #
+                    self._update_default_method_list()
+                    #
+                    currentindex = self._selectdefaultmethod_list.findText(new_name, QtCore.Qt.MatchFixedString)
+                    if currentindex >= 0:
+                        self._selectdefaultmethod_list.setCurrentIndex(currentindex)
+        except Exception as e:
+            print('DEBUG: Exception: ', e)
+            raise
 
     def _default_method_delete(self):
         """ """
-        dialog = DeleteDefaultMethodDialog(self)
-        if dialog.exec_():
-            self._update_default_method_list()
+        try:
+            dialog = DeleteDefaultMethodDialog(self)
+            if dialog.exec_():
+                self._update_default_method_list()
+        except Exception as e:
+            print('DEBUG: Exception: ', e)
+            raise
 
 
 #####

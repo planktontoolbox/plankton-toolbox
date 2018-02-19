@@ -485,7 +485,8 @@ class Species(object):
                             if numeric == 'numeric':
                                 try:
                                     value = value.replace(',', '.').replace(' ', '') # Try/except if already float.
-                                except: pass
+                                except: 
+                                    pass
                                 sizeclassdict[internalname] = value
                             else:
                                 sizeclassdict[internalname] = value
@@ -546,7 +547,8 @@ class Species(object):
                     else:
                         taxon_name = parent_name
             #
-            except: pass
+            except: 
+                pass
         #                            
         toolbox_utils.Logging().warning('Not match for Plankton group. "OTHERS" assigned for: ' + scientific_name)
         self._planktongroups_lookup[scientific_name] = 'OTHERS'

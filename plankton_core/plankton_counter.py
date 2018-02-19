@@ -458,7 +458,8 @@ class PlanktonCounterSample():
                             countedspecies_text[taxon] = '<Qualitative>'
                     else:
                         countedspecies_text[taxon] = '<Qualitative>'
-            except: pass # If value = ''.
+            except: 
+                pass # If value = ''.
             #
             if summary_type in ['Counted per taxa/sizes']:
                 bvol_size_range = plankton_core.Species().get_bvol_dict(sampleobject.get_scientific_name(), size).get('bvol_size_range', '')
