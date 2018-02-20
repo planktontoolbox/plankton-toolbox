@@ -175,8 +175,16 @@ class TableFileReader():
                 if (self._data_rows_to is not None) and (rowindex > self._data_rows_to):
                     break # Break loop if data_row_to is defined and exceeded.
                 # Convert to str.
+
+
+
 #                 row = str(row, self._encoding, self._encoding_error_handling)
-                row = row.encode(self._encoding, self._encoding_error_handling).decode()
+#                 row = row.encode(self._encoding, self._encoding_error_handling).decode('UTF-16')
+#                 row = str(row.encode(self._encoding, self._encoding_error_handling))
+##                row = str(row, encoding=self._encoding, errors=self._encoding_error_handling)
+
+                
+                
                 if rowindex == self._header_row:
                     # Header.
                     fielddelimiter = self._get_field_delimiter(row)
