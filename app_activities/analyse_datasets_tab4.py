@@ -4,6 +4,7 @@
 # Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
+import sys
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 
@@ -21,30 +22,50 @@ class AnalyseDatasetsTab4(QtWidgets.QWidget):
 
     def set_main_activity(self, main_activity):
         """ """
-        self._main_activity = main_activity
-        self._analysisdata = main_activity.get_analysis_data()
+        try:
+            self._main_activity = main_activity
+            self._analysisdata = main_activity.get_analysis_data()
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
                 
     def clear(self):
         """ """
-        self._startdate_edit.clear()
-        self._enddate_edit.clear()
-        self._stations_listview.clear()
-        self._months_listview.clear()
-        self._visits_listview.clear()
-        self._minmaxdepth_listview.clear()
-        self._taxon_listview.clear()
-        self._trophic_type_listview.clear()
+        try:
+            self._startdate_edit.clear()
+            self._enddate_edit.clear()
+            self._stations_listview.clear()
+            self._months_listview.clear()
+            self._visits_listview.clear()
+            self._minmaxdepth_listview.clear()
+            self._taxon_listview.clear()
+            self._trophic_type_listview.clear()
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def update(self):
         """ """
-        self.clear()        
-        self._update_filter_alternatives()
+        try:
+            self.clear()        
+            self._update_filter_alternatives()
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def update_filter(self):
         """ Call this before filtered analysis data is created. 
             (It is too complicated to implement automatic update on each change in the filter.)
         """
-        self._update_filter()
+        try:
+            self._update_filter()
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     # ===== TAB: Select data ===== 
     def content_select_data(self):
@@ -162,61 +183,70 @@ class AnalyseDatasetsTab4(QtWidgets.QWidget):
 
     def _update_filter_alternatives(self):
         """ """
-        analysisdata = self._analysisdata.get_data()
-        if not analysisdata:
-            return # Empty data.
+        try:
+            analysisdata = self._analysisdata.get_data()
+            if not analysisdata:
+                return # Empty data.
+            #
+            startdate = '9999-99-99'
+            enddate = '0000-00-00'
+            station_set = set()
+            visitmonth_set = set()
+            visit_set = set()
+            minmaxdepth_set = set()
+            taxon_set = set()
+            trophic_type_set = set()
+            lifestage_set = set()
+            #
+            for visitnode in analysisdata.get_children():
+                station_set.add(visitnode.get_data('station_name'))
+                visitmonth_set.add(visitnode.get_data('visit_month'))
+                visit_set.add(str(visitnode.get_data('station_name')) + ' : ' + str(visitnode.get_data('sample_date')))
+                startdate = min(startdate, visitnode.get_data('sample_date'))
+                enddate = max(enddate, visitnode.get_data('sample_date'))
+                for samplenode in visitnode.get_children():
+                    depthstring = str(samplenode.get_data('sample_min_depth_m')) + '-' + str(samplenode.get_data('sample_max_depth_m'))
+                    minmaxdepth_set.add(depthstring)
+                    for variablenode in samplenode.get_children():
+                        taxon_set.add(variablenode.get_data('scientific_name'))
+                        #
+                        trophic_type_set.add(variablenode.get_data('trophic_type'))
+                        #
+                        lifestage = variablenode.get_data('stage')
+                        if variablenode.get_data('sex'):
+                            lifestage += '/' + variablenode.get_data('sex')
+                        lifestage_set.add(lifestage)
+            # Start date and end date.
+            self._startdate_edit.setText(startdate)
+            self._enddate_edit.setText(enddate)
+            # Selection lists.
+            self._stations_listview.setList(sorted(station_set))
+            self._months_listview.setList(sorted(visitmonth_set))
+            self._visits_listview.setList(sorted(visit_set))
+            self._minmaxdepth_listview.setList(sorted(minmaxdepth_set))
+            self._taxon_listview.setList(sorted(taxon_set))
+            self._trophic_type_listview.setList(sorted(trophic_type_set))
+            self._lifestage_listview.setList(sorted(lifestage_set))
         #
-        startdate = '9999-99-99'
-        enddate = '0000-00-00'
-        station_set = set()
-        visitmonth_set = set()
-        visit_set = set()
-        minmaxdepth_set = set()
-        taxon_set = set()
-        trophic_type_set = set()
-        lifestage_set = set()
-        #
-        for visitnode in analysisdata.get_children():
-            station_set.add(visitnode.get_data('station_name'))
-            visitmonth_set.add(visitnode.get_data('visit_month'))
-            visit_set.add(str(visitnode.get_data('station_name')) + ' : ' + str(visitnode.get_data('sample_date')))
-            startdate = min(startdate, visitnode.get_data('sample_date'))
-            enddate = max(enddate, visitnode.get_data('sample_date'))
-            for samplenode in visitnode.get_children():
-                depthstring = str(samplenode.get_data('sample_min_depth_m')) + '-' + str(samplenode.get_data('sample_max_depth_m'))
-                minmaxdepth_set.add(depthstring)
-                for variablenode in samplenode.get_children():
-                    taxon_set.add(variablenode.get_data('scientific_name'))
-                    #
-                    trophic_type_set.add(variablenode.get_data('trophic_type'))
-                    #
-                    lifestage = variablenode.get_data('stage')
-                    if variablenode.get_data('sex'):
-                        lifestage += '/' + variablenode.get_data('sex')
-                    lifestage_set.add(lifestage)
-        # Start date and end date.
-        self._startdate_edit.setText(startdate)
-        self._enddate_edit.setText(enddate)
-        # Selection lists.
-        self._stations_listview.setList(sorted(station_set))
-        self._months_listview.setList(sorted(visitmonth_set))
-        self._visits_listview.setList(sorted(visit_set))
-        self._minmaxdepth_listview.setList(sorted(minmaxdepth_set))
-        self._taxon_listview.setList(sorted(taxon_set))
-        self._trophic_type_listview.setList(sorted(trophic_type_set))
-        self._lifestage_listview.setList(sorted(lifestage_set))
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     def _update_filter(self):
         """ """
-        self._analysisdata.clear_filter()
-        
-        self._analysisdata.set_filter_item('start_date', str(self._startdate_edit.text()))
-        self._analysisdata.set_filter_item('end_date', str(self._enddate_edit.text()))
-        self._analysisdata.set_filter_item('stations', self._stations_listview.getSelectedDataList())
-        self._analysisdata.set_filter_item('visit_months', self._months_listview.getSelectedDataList())
-        self._analysisdata.set_filter_item('visits', self._visits_listview.getSelectedDataList())
-        self._analysisdata.set_filter_item('min_max_depth_m', self._minmaxdepth_listview.getSelectedDataList())
-        self._analysisdata.set_filter_item('scientific_name', self._taxon_listview.getSelectedDataList())
-        self._analysisdata.set_filter_item('trophic_type', self._trophic_type_listview.getSelectedDataList())
-        self._analysisdata.set_filter_item('life_stage', self._lifestage_listview.getSelectedDataList())
+        try:
+            self._analysisdata.clear_filter()
+            self._analysisdata.set_filter_item('start_date', str(self._startdate_edit.text()))
+            self._analysisdata.set_filter_item('end_date', str(self._enddate_edit.text()))
+            self._analysisdata.set_filter_item('stations', self._stations_listview.getSelectedDataList())
+            self._analysisdata.set_filter_item('visit_months', self._months_listview.getSelectedDataList())
+            self._analysisdata.set_filter_item('visits', self._visits_listview.getSelectedDataList())
+            self._analysisdata.set_filter_item('min_max_depth_m', self._minmaxdepth_listview.getSelectedDataList())
+            self._analysisdata.set_filter_item('scientific_name', self._taxon_listview.getSelectedDataList())
+            self._analysisdata.set_filter_item('trophic_type', self._trophic_type_listview.getSelectedDataList())
+            self._analysisdata.set_filter_item('life_stage', self._lifestage_listview.getSelectedDataList())
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         

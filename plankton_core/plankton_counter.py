@@ -946,7 +946,7 @@ class SampleRow():
     
     def get_counted_units(self):
         """ """
-        countedunits = self._sample_row_dict.get('counted_units', '0')
+        countedunits = int(self._sample_row_dict.get('counted_units', '0'))
         #
         return countedunits
     

@@ -4,6 +4,7 @@
 # Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
+import sys
 import os.path
 import glob
 import locale
@@ -15,6 +16,7 @@ from PyQt5 import QtCore
 import toolbox_utils
 import plankton_core
 import app_framework
+import app_tools
 
 class LoadDatasetsActivity(app_framework.ActivityBase):
     """ """
@@ -41,20 +43,30 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
 
     def _load_available_parsers(self):
         """ """
-        self._parser_path = 'plankton_toolbox_data/parsers/'
-        self._parser_list = []
-        for parserpath in glob.glob(self._parser_path + '*.xlsx'):
-            self._parser_list.append(os.path.basename(parserpath))
+        try:
+            self._parser_path = 'plankton_toolbox_data/parsers/'
+            self._parser_list = []
+            for parserpath in glob.glob(self._parser_path + '*.xlsx'):
+                self._parser_list.append(os.path.basename(parserpath))
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _log_available_parsers(self):
         """ """
-        if len(self._parser_list) > 0:
-            toolbox_utils.Logging().log('') # Empty line.
-            toolbox_utils.Logging().log('Available dataset parsers (located in "plankton_toolbox_data/parsers"):')
-            for parserpath in self._parser_list:
-                toolbox_utils.Logging().log('- ' + os.path.basename(parserpath))
-        else:
-            toolbox_utils.Logging().log('No dataset parsers are found in "/plankton_toolbox_data/parsers". ')
+        try:
+            if len(self._parser_list) > 0:
+                toolbox_utils.Logging().log('') # Empty line.
+                toolbox_utils.Logging().log('Available dataset parsers (located in "plankton_toolbox_data/parsers"):')
+                for parserpath in self._parser_list:
+                    toolbox_utils.Logging().log('- ' + os.path.basename(parserpath))
+            else:
+                toolbox_utils.Logging().log('No dataset parsers are found in "/plankton_toolbox_data/parsers". ')
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _create_content(self):
         """ """
@@ -74,19 +86,24 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
     
     def _content_load_dataset(self):
         """ """
-        # Active widgets and connections.
-        selectdatabox = QtWidgets.QGroupBox('Import datasets/datafiles', self)
-        tabWidget = QtWidgets.QTabWidget()
-        tabWidget.addTab(self._content_predefined_formats(), 'Predefined formats')
-        tabWidget.addTab(self._content_plankton_counter(), 'Plankton counter samples')
-        tabWidget.addTab(self._content_textfile(), 'Parsers - Text file (*.txt)')
-        tabWidget.addTab(self._content_xlsx(), 'Parsers - Excel files (*.xlsx)')
-        # Layout widgets.
-        layout = QtWidgets.QVBoxLayout()
-        layout.addWidget(tabWidget)
-        selectdatabox.setLayout(layout)        
+        try:
+            # Active widgets and connections.
+            selectdatabox = QtWidgets.QGroupBox('Import datasets/datafiles', self)
+            tabWidget = QtWidgets.QTabWidget()
+            tabWidget.addTab(self._content_predefined_formats(), 'Predefined formats')
+            tabWidget.addTab(self._content_plankton_counter(), 'Plankton counter samples')
+            tabWidget.addTab(self._content_textfile(), 'Parsers - Text file (*.txt)')
+            tabWidget.addTab(self._content_xlsx(), 'Parsers - Excel files (*.xlsx)')
+            # Layout widgets.
+            layout = QtWidgets.QVBoxLayout()
+            layout.addWidget(tabWidget)
+            selectdatabox.setLayout(layout)        
+            #
+            return selectdatabox
         #
-        return selectdatabox
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     # ===== PLANKTON COUNTER DATASETS ======
     def _content_plankton_counter(self):
@@ -120,75 +137,95 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
 
     def _counter_update_dataset_list(self):
         """ """
-        self._counter_datasets_model.clear()
-        for datasetname in sorted(plankton_core.PlanktonCounterManager().get_dataset_names()):
-            for samplename in sorted(plankton_core.PlanktonCounterManager().get_sample_names(datasetname)):
-                item = QtGui.QStandardItem(datasetname + ': ' + samplename)
-                item.setCheckState(QtCore.Qt.Unchecked)
-                item.setCheckable(True)
-                self._counter_datasets_model.appendRow(item)
+        try:
+            self._counter_datasets_model.clear()
+            for datasetname in sorted(plankton_core.PlanktonCounterManager().get_dataset_names()):
+                for samplename in sorted(plankton_core.PlanktonCounterManager().get_sample_names(datasetname)):
+                    item = QtGui.QStandardItem(datasetname + ': ' + samplename)
+                    item.setCheckState(QtCore.Qt.Unchecked)
+                    item.setCheckable(True)
+                    self._counter_datasets_model.appendRow(item)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     def _counter_check_all_datasets(self):
         """ """
-        for rowindex in range(self._counter_datasets_model.rowCount()):
-            item = self._counter_datasets_model.item(rowindex, 0)
-            item.setCheckState(QtCore.Qt.Checked)
+        try:
+            for rowindex in range(self._counter_datasets_model.rowCount()):
+                item = self._counter_datasets_model.item(rowindex, 0)
+                item.setCheckState(QtCore.Qt.Checked)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     def _counter_uncheck_all_datasets(self):
         """ """
-        for rowindex in range(self._counter_datasets_model.rowCount()):
-            item = self._counter_datasets_model.item(rowindex, 0)
-            item.setCheckState(QtCore.Qt.Unchecked)
+        try:
+            for rowindex in range(self._counter_datasets_model.rowCount()):
+                item = self._counter_datasets_model.item(rowindex, 0)
+                item.setCheckState(QtCore.Qt.Unchecked)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _counter_import_counter_datasets(self):
         """ """
-        # Create a list with selected datasets.
-        selectedsamples = []
-        for rowindex in range(self._counter_datasets_model.rowCount()):
-            item = self._counter_datasets_model.item(rowindex, 0)
-            if item.checkState() == QtCore.Qt.Checked:        
-                selectedsamples.append(str(item.text()))
-        #
-        if len(selectedsamples) == 0:
-            return
-        #            
         try:
-            toolbox_utils.Logging().log('') # Empty line.
-            toolbox_utils.Logging().log('Importing datasets...')
-            toolbox_utils.Logging().start_accumulated_logging()
-            self._write_to_status_bar('Importing datasets...')
-
-            for datasetandsample in selectedsamples:
-                datasetandsamplepair = datasetandsample.split(':')
-                dataset_name = datasetandsamplepair[0].strip()
-                sample_name = datasetandsamplepair[1].strip()
-            
-#                 print('DEBUG: dataset_name: ' + dataset_name)
-#                 print('DEBUG: sample_name: ' + sample_name)
-
-                datasetnode = plankton_core.DataImportManager().import_dataset_file(dataset_name = dataset_name, 
-                                                                                    sample_name = sample_name, 
-                                                                                    import_format = 'PlanktonCounter')
-                # Use datasets-wrapper to emit change notification when dataset list is updated.
-                app_framework.ToolboxDatasets().emit_change_notification()
-
-                # Add metadata related to imported file.
-                datasetnode.add_metadata('parser', '-')
-                datasetnode.add_metadata('file_name', datasetandsample)
-                datasetnode.add_metadata('file_path', '-')
-                datasetnode.add_metadata('import_column', '-')
-                datasetnode.add_metadata('export_column', '-')
+            # Create a list with selected datasets.
+            selectedsamples = []
+            for rowindex in range(self._counter_datasets_model.rowCount()):
+                item = self._counter_datasets_model.item(rowindex, 0)
+                if item.checkState() == QtCore.Qt.Checked:        
+                    selectedsamples.append(str(item.text()))
             #
+            if len(selectedsamples) == 0:
+                return
+            #            
+            try:
+                toolbox_utils.Logging().log('') # Empty line.
+                toolbox_utils.Logging().log('Importing datasets...')
+                toolbox_utils.Logging().start_accumulated_logging()
+                self._write_to_status_bar('Importing datasets...')
+    
+                for datasetandsample in selectedsamples:
+                    datasetandsamplepair = datasetandsample.split(':')
+                    dataset_name = datasetandsamplepair[0].strip()
+                    sample_name = datasetandsamplepair[1].strip()
+                
+    #                 print('DEBUG: dataset_name: ' + dataset_name)
+    #                 print('DEBUG: sample_name: ' + sample_name)
+    
+                    datasetnode = plankton_core.DataImportManager().import_dataset_file(dataset_name = dataset_name, 
+                                                                                        sample_name = sample_name, 
+                                                                                        import_format = 'PlanktonCounter')
+                    # Use datasets-wrapper to emit change notification when dataset list is updated.
+                    app_framework.ToolboxDatasets().emit_change_notification()
+    
+                    # Add metadata related to imported file.
+                    datasetnode.add_metadata('parser', '-')
+                    datasetnode.add_metadata('file_name', datasetandsample)
+                    datasetnode.add_metadata('file_path', '-')
+                    datasetnode.add_metadata('import_column', '-')
+                    datasetnode.add_metadata('export_column', '-')
+                #
+            except Exception as e:
+                toolbox_utils.Logging().error('Plankton conter file import failed on exception: ' + str(e))
+                QtWidgets.QMessageBox.warning(self, 'Plankton conter file loading.\n', 
+                                          'Plankton conter file import failed on exception.\n' + str(e))
+                raise
+            finally:
+                datasetcount = len(plankton_core.Datasets().get_datasets())
+                self._write_to_status_bar('Imported datasets: ' + str(datasetcount))
+                toolbox_utils.Logging().log_all_accumulated_rows()
+                toolbox_utils.Logging().log('Importing datasets done. Number of imported datasets: ' + str(datasetcount))
+        #
         except Exception as e:
-            toolbox_utils.Logging().error('Plankton conter file import failed on exception: ' + str(e))
-            QtWidgets.QMessageBox.warning(self, 'Plankton conter file loading.\n', 
-                                      'Plankton conter file import failed on exception.\n' + str(e))
-            raise
-        finally:
-            datasetcount = len(plankton_core.Datasets().get_datasets())
-            self._write_to_status_bar('Imported datasets: ' + str(datasetcount))
-            toolbox_utils.Logging().log_all_accumulated_rows()
-            toolbox_utils.Logging().log('Importing datasets done. Number of imported datasets: ' + str(datasetcount))
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
             
             
@@ -246,101 +283,116 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         
     def _import_predefined_datasets(self):
         """ """
-        selectedformat = self._predefined_format_combo.currentText()
-        if selectedformat == 'Plankton counter sample(s) (*.xlsx)':
-            self._load_plankton_counter_excel()
-        elif selectedformat == 'SHARKweb download(s) (*.txt)':
-            self._load_sharkweb_datasets()
-#         elif selectedformat == 'Phytoplankton-archive (*.csv)':
-#             self._load_phytowin_datasets()
-        else: 
-            QtWidgets.QMessageBox.information(self, "Information", 'Not implemented yet.')
+        try:
+            selectedformat = self._predefined_format_combo.currentText()
+            if selectedformat == 'Plankton counter sample(s) (*.xlsx)':
+                self._load_plankton_counter_excel()
+            elif selectedformat == 'SHARKweb download(s) (*.txt)':
+                self._load_sharkweb_datasets()
+    #         elif selectedformat == 'Phytoplankton-archive (*.csv)':
+    #             self._load_phytowin_datasets()
+            else: 
+                QtWidgets.QMessageBox.information(self, "Information", 'Not implemented yet.')
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _load_plankton_counter_excel(self):
         """ """
         try:
-            toolbox_utils.Logging().log('') # Empty line.
-            toolbox_utils.Logging().log('Importing datasets...')
-            toolbox_utils.Logging().start_accumulated_logging()
-            self._write_to_status_bar('Importing datasets...')
-
-            # Show select file dialog box. Multiple files can be selected.
-            namefilter = 'Plankton counter samples (*.xlsx);;All files (*.*)'
-            filenames = QtWidgets.QFileDialog.getOpenFileNames(
-                                self,
-                                'Load plankton counter sample file(s). ',
-                                self._lastusedplanktoncounterfilename,
-                                namefilter)
-            # From QString to str.
-            filenames = map(str, filenames)
-            # Check if user pressed ok or cancel.
-            if filenames:
-                for filename in filenames:
-                    self._lastusedplanktoncounterfilename = filename
-                    datasetnode = plankton_core.DataImportManager().import_dataset_file(filename, 
-                                                                                        import_format = 'PlanktonCounterExcel')
-                    # Use datasets-wrapper to emit change notification when dataset list is updated.
-                    app_framework.ToolboxDatasets().emit_change_notification()
-                    # Add metadata related to imported file.
-                    datasetnode.add_metadata('parser', '-')
-                    datasetnode.add_metadata('file_name', os.path.basename(filename))
-                    datasetnode.add_metadata('file_path', filename)
-                    datasetnode.add_metadata('import_column', '-')
-                    datasetnode.add_metadata('export_column', '-')
-            #
+            try:
+                toolbox_utils.Logging().log('') # Empty line.
+                toolbox_utils.Logging().log('Importing datasets...')
+                toolbox_utils.Logging().start_accumulated_logging()
+                self._write_to_status_bar('Importing datasets...')
+    
+                # Show select file dialog box. Multiple files can be selected.
+                namefilter = 'Plankton counter samples (*.xlsx);;All files (*.*)'
+                filenames = QtWidgets.QFileDialog.getOpenFileNames(
+                                    self,
+                                    'Load plankton counter sample file(s). ',
+                                    self._lastusedplanktoncounterfilename,
+                                    namefilter)
+                # From QString to str.
+                filenames = map(str, filenames)
+                # Check if user pressed ok or cancel.
+                if filenames:
+                    for filename in filenames:
+                        self._lastusedplanktoncounterfilename = filename
+                        datasetnode = plankton_core.DataImportManager().import_dataset_file(filename, 
+                                                                                            import_format = 'PlanktonCounterExcel')
+                        # Use datasets-wrapper to emit change notification when dataset list is updated.
+                        app_framework.ToolboxDatasets().emit_change_notification()
+                        # Add metadata related to imported file.
+                        datasetnode.add_metadata('parser', '-')
+                        datasetnode.add_metadata('file_name', os.path.basename(filename))
+                        datasetnode.add_metadata('file_path', filename)
+                        datasetnode.add_metadata('import_column', '-')
+                        datasetnode.add_metadata('export_column', '-')
+                #
+            except Exception as e:
+                toolbox_utils.Logging().error('Plankton counter sample import failed on exception: ' + str(e))
+                QtWidgets.QMessageBox.warning(self, 'Text file loading.\n', 
+                                          'Plankton counter sample import failed on exception.\n' + str(e))
+                raise
+            finally:
+                datasetcount = len(plankton_core.Datasets().get_datasets())
+                self._write_to_status_bar('Imported datasets: ' + str(datasetcount))
+                toolbox_utils.Logging().log_all_accumulated_rows()
+                toolbox_utils.Logging().log('Importing datasets done. Number of imported datasets: ' + str(datasetcount))
+        #
         except Exception as e:
-            toolbox_utils.Logging().error('Plankton counter sample import failed on exception: ' + str(e))
-            QtWidgets.QMessageBox.warning(self, 'Text file loading.\n', 
-                                      'Plankton counter sample import failed on exception.\n' + str(e))
-            raise
-        finally:
-            datasetcount = len(plankton_core.Datasets().get_datasets())
-            self._write_to_status_bar('Imported datasets: ' + str(datasetcount))
-            toolbox_utils.Logging().log_all_accumulated_rows()
-            toolbox_utils.Logging().log('Importing datasets done. Number of imported datasets: ' + str(datasetcount))
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _load_sharkweb_datasets(self):
         """ """
         try:
-            toolbox_utils.Logging().log('') # Empty line.
-            toolbox_utils.Logging().log('Importing datasets...')
-            toolbox_utils.Logging().start_accumulated_logging()
-            self._write_to_status_bar('Importing datasets...')
-
-            # Show select file dialog box. Multiple files can be selected.
-            namefilter = 'SHARKweb files (*.txt);;All files (*.*)'
-            filenames = QtWidgets.QFileDialog.getOpenFileNames(
-                                self,
-                                'Load SHARKweb file(s). ',
-                                self._lastusedsharkwebfilename,
-                                namefilter)
-            # From QString to str.
-            filenames = map(str, filenames)
-            # Check if user pressed ok or cancel.
-            if filenames:
-                for filename in filenames:
-                    self._lastusedsharkwebfilename = filename
-                    datasetnode = plankton_core.DataImportManager().import_dataset_file(filename, 
-                                                                                        import_format = 'SHARKweb')
-                    # Use datasets-wrapper to emit change notification when dataset list is updated.
-                    app_framework.ToolboxDatasets().emit_change_notification()
-                    # Add metadata related to imported file.
-                    datasetnode.add_metadata('parser', '-')
-                    datasetnode.add_metadata('file_name', os.path.basename(filename))
-                    datasetnode.add_metadata('file_path', filename)
-                    datasetnode.add_metadata('import_column', '-')
-                    datasetnode.add_metadata('export_column', '-')
-            #
+            try:
+                toolbox_utils.Logging().log('') # Empty line.
+                toolbox_utils.Logging().log('Importing datasets...')
+                toolbox_utils.Logging().start_accumulated_logging()
+                self._write_to_status_bar('Importing datasets...')
+    
+                # Show select file dialog box. Multiple files can be selected.
+                namefilter = 'SHARKweb files (*.txt);;All files (*.*)'
+                filenames = QtWidgets.QFileDialog.getOpenFileNames(
+                                    self,
+                                    'Load SHARKweb file(s). ',
+                                    self._lastusedsharkwebfilename,
+                                    namefilter)
+                # From QString to str.
+                filenames = map(str, filenames)
+                # Check if user pressed ok or cancel.
+                if filenames:
+                    for filename in filenames:
+                        self._lastusedsharkwebfilename = filename
+                        datasetnode = plankton_core.DataImportManager().import_dataset_file(filename, 
+                                                                                            import_format = 'SHARKweb')
+                        # Use datasets-wrapper to emit change notification when dataset list is updated.
+                        app_framework.ToolboxDatasets().emit_change_notification()
+                        # Add metadata related to imported file.
+                        datasetnode.add_metadata('parser', '-')
+                        datasetnode.add_metadata('file_name', os.path.basename(filename))
+                        datasetnode.add_metadata('file_path', filename)
+                        datasetnode.add_metadata('import_column', '-')
+                        datasetnode.add_metadata('export_column', '-')
+                #
+            except Exception as e:
+                toolbox_utils.Logging().error('SHARKweb file import failed on exception: ' + str(e))
+                QtWidgets.QMessageBox.warning(self, 'Text file loading.\n', 
+                                          'SHARKweb file import failed on exception.\n' + str(e))
+                raise
+            finally:
+                datasetcount = len(plankton_core.Datasets().get_datasets())
+                self._write_to_status_bar('Imported datasets: ' + str(datasetcount))
+                toolbox_utils.Logging().log_all_accumulated_rows()
+                toolbox_utils.Logging().log('Importing datasets done. Number of imported datasets: ' + str(datasetcount))
+        #
         except Exception as e:
-            toolbox_utils.Logging().error('SHARKweb file import failed on exception: ' + str(e))
-            QtWidgets.QMessageBox.warning(self, 'Text file loading.\n', 
-                                      'SHARKweb file import failed on exception.\n' + str(e))
-            raise
-        finally:
-            datasetcount = len(plankton_core.Datasets().get_datasets())
-            self._write_to_status_bar('Imported datasets: ' + str(datasetcount))
-            toolbox_utils.Logging().log_all_accumulated_rows()
-            toolbox_utils.Logging().log('Importing datasets done. Number of imported datasets: ' + str(datasetcount))
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
 #     def _load_phytowin_datasets(self):
 #         """ """
@@ -475,101 +527,116 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         
     def _textfile_parser_selected(self, selected_row):
         """ """
-        if (selected_row > 0) and (selected_row <= len(self._parser_list)):
-            toolbox_utils.Logging().log('Selected parser: ' + str(self._parser_list[selected_row - 1]))
-#            tabledata = plankton_core.DatasetTable()
-#             toolbox_utils.ExcelFiles().readToTableDataset(tabledata, 
-#                                                  file_name = self._parser_path + self._parser_list[selected_row - 1])            
-            tablereader = toolbox_utils.TableFileReader(file_path = self._parser_path, 
-                                                        excel_file_name = self._parser_list[selected_row - 1])
-            self._textfile_importcolumn_list.clear()
-            self._textfile_exportcolumn_list.clear()
-            header = tablereader.header()
-            for row in tablereader.rows():
-                if (row[0] == 'info') and (row[1] == 'column_type'):
-                    for index, item in enumerate(row):
-                        if item == 'import':
-                            self._textfile_importcolumn_list.addItems([header[index]])
-                        if item == 'export':
-                            self._textfile_exportcolumn_list.addItems([header[index]])
-        else:
-            self._textfile_importcolumn_list.clear()
-            self._textfile_importcolumn_list.addItems(['<no parser selected>'])
-            self._textfile_exportcolumn_list.clear()
-            self._textfile_exportcolumn_list.addItems(['<no parser selected>'])
+        try:
+            if (selected_row > 0) and (selected_row <= len(self._parser_list)):
+                toolbox_utils.Logging().log('Selected parser: ' + str(self._parser_list[selected_row - 1]))
+    #            tabledata = plankton_core.DatasetTable()
+    #             toolbox_utils.ExcelFiles().readToTableDataset(tabledata, 
+    #                                                  file_name = self._parser_path + self._parser_list[selected_row - 1])            
+                tablereader = toolbox_utils.TableFileReader(file_path = self._parser_path, 
+                                                            excel_file_name = self._parser_list[selected_row - 1])
+                self._textfile_importcolumn_list.clear()
+                self._textfile_exportcolumn_list.clear()
+                header = tablereader.header()
+                for row in tablereader.rows():
+                    if (row[0] == 'info') and (row[1] == 'column_type'):
+                        for index, item in enumerate(row):
+                            if item == 'import':
+                                self._textfile_importcolumn_list.addItems([header[index]])
+                            if item == 'export':
+                                self._textfile_exportcolumn_list.addItems([header[index]])
+            else:
+                self._textfile_importcolumn_list.clear()
+                self._textfile_importcolumn_list.addItems(['<no parser selected>'])
+                self._textfile_exportcolumn_list.clear()
+                self._textfile_exportcolumn_list.addItems(['<no parser selected>'])
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _textfile_import_column_selected(self, selected_row):
         """ """
-        # Reset. 
-        self._textfile_encoding_list.setCurrentIndex(0)
+        try:
+            # Reset. 
+            self._textfile_encoding_list.setCurrentIndex(0)
+            #
+            selectedimportcolumn = str(self._textfile_importcolumn_list.currentText())
+            # Read parser file.
+    #         tabledata = plankton_core.DatasetTable()
+    #         toolbox_utils.ExcelFiles().readToTableDataset(tabledata, 
+    #                                 file_name = self._parser_path + self._parser_list[self._textfile_parser_list.currentIndex() - 1])
+            tablereader = toolbox_utils.TableFileReader(file_path = self._parser_path, 
+                                                        excel_file_name = self._parser_list[self._textfile_parser_list.currentIndex() - 1])
+            header = tablereader.header()
+            for index, headeritem in enumerate(header):
+                if headeritem == selectedimportcolumn:
+                    for row in tablereader.rows():
+                        if (row[0] == 'info') and (row[1] == 'character_encoding'):
+                            if row[index] and (row[index] in self._encodings_list):
+                                self._textfile_encoding_list.setCurrentIndex(self._encodings_list.index(row[index]))
         #
-        selectedimportcolumn = str(self._textfile_importcolumn_list.currentText())
-        # Read parser file.
-#         tabledata = plankton_core.DatasetTable()
-#         toolbox_utils.ExcelFiles().readToTableDataset(tabledata, 
-#                                 file_name = self._parser_path + self._parser_list[self._textfile_parser_list.currentIndex() - 1])
-        tablereader = toolbox_utils.TableFileReader(file_path = self._parser_path, 
-                                                    excel_file_name = self._parser_list[self._textfile_parser_list.currentIndex() - 1])
-        header = tablereader.header()
-        for index, headeritem in enumerate(header):
-            if headeritem == selectedimportcolumn:
-                for row in tablereader.rows():
-                    if (row[0] == 'info') and (row[1] == 'character_encoding'):
-                        if row[index] and (row[index] in self._encodings_list):
-                            self._textfile_encoding_list.setCurrentIndex(self._encodings_list.index(row[index]))
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _load_text_files(self):
         """ """
         try:
-            toolbox_utils.Logging().log('') # Empty line.
-            toolbox_utils.Logging().log('Importing datasets...')
-            toolbox_utils.Logging().start_accumulated_logging()
-            self._write_to_status_bar('Importing datasets...')
-            # Show select file dialog box. Multiple files can be selected.
-            namefilter = 'Text files (*.txt);;All files (*.*)'
-            filenames = QtWidgets.QFileDialog.getOpenFileNames(
-                                self,
-                                'Import dataset(s)',
-                                self._last_used_textfile_name,
-                                namefilter)
-            # From QString to str.
-            filenames = map(str, filenames)
-            # Check if user pressed ok or cancel.
-            self._tabledataset = plankton_core.DatasetTable()
-            if filenames:
-                for filename in filenames:
-                    # Store selected path. Will be used as default next time.
-                    self._last_used_textfile_name = filename
-                    # Text files may have strange encodings.
-                    if str(self._textfile_encoding_list.currentText()) == '<platform default>':
-                        textfileencoding = locale.getpreferredencoding()
-                    else:
-                        textfileencoding = str(self._textfile_encoding_list.currentText())                        
-                    # Set up for import file parsing.
-                    importmanager = plankton_core.ImportManager(self._parser_path + str(self._textfile_parser_list.currentText()),
-                                                     str(self._textfile_importcolumn_list.currentText()),
-                                                     str(self._textfile_exportcolumn_list.currentText()))
-                    # Import and parse file.
-                    dataset = importmanager.import_text_file(filename, textfileencoding)
-                    # Add metadata related to imported file.
-                    dataset.add_metadata('parser', self._parser_path + str(self._textfile_parser_list.currentText()))
-                    dataset.add_metadata('file_name', os.path.basename(filename))
-                    dataset.add_metadata('file_path', filename)
-                    dataset.add_metadata('import_column', str(self._textfile_importcolumn_list.currentText()))
-                    dataset.add_metadata('export_column', str(self._textfile_exportcolumn_list.currentText()))
-                    # Add to dataset list. (Note:ToolboxDatasets is a wrapper containing the 'datasetListChanged'-signal).
-                    app_framework.ToolboxDatasets().add_dataset(dataset)
-            #
+            try:
+                toolbox_utils.Logging().log('') # Empty line.
+                toolbox_utils.Logging().log('Importing datasets...')
+                toolbox_utils.Logging().start_accumulated_logging()
+                self._write_to_status_bar('Importing datasets...')
+                # Show select file dialog box. Multiple files can be selected.
+                namefilter = 'Text files (*.txt);;All files (*.*)'
+                filenames = QtWidgets.QFileDialog.getOpenFileNames(
+                                    self,
+                                    'Import dataset(s)',
+                                    self._last_used_textfile_name,
+                                    namefilter)
+                # From QString to str.
+                filenames = map(str, filenames)
+                # Check if user pressed ok or cancel.
+                self._tabledataset = plankton_core.DatasetTable()
+                if filenames:
+                    for filename in filenames:
+                        # Store selected path. Will be used as default next time.
+                        self._last_used_textfile_name = filename
+                        # Text files may have strange encodings.
+                        if str(self._textfile_encoding_list.currentText()) == '<platform default>':
+                            textfileencoding = locale.getpreferredencoding()
+                        else:
+                            textfileencoding = str(self._textfile_encoding_list.currentText())                        
+                        # Set up for import file parsing.
+                        importmanager = plankton_core.ImportManager(self._parser_path + str(self._textfile_parser_list.currentText()),
+                                                         str(self._textfile_importcolumn_list.currentText()),
+                                                         str(self._textfile_exportcolumn_list.currentText()))
+                        # Import and parse file.
+                        dataset = importmanager.import_text_file(filename, textfileencoding)
+                        # Add metadata related to imported file.
+                        dataset.add_metadata('parser', self._parser_path + str(self._textfile_parser_list.currentText()))
+                        dataset.add_metadata('file_name', os.path.basename(filename))
+                        dataset.add_metadata('file_path', filename)
+                        dataset.add_metadata('import_column', str(self._textfile_importcolumn_list.currentText()))
+                        dataset.add_metadata('export_column', str(self._textfile_exportcolumn_list.currentText()))
+                        # Add to dataset list. (Note:ToolboxDatasets is a wrapper containing the 'datasetListChanged'-signal).
+                        app_framework.ToolboxDatasets().add_dataset(dataset)
+                #
+            except Exception as e:
+                toolbox_utils.Logging().error('Text file import failed on exception: ' + str(e))
+                QtWidgets.QMessageBox.warning(self, 'Text file loading.\n', 
+                                          'Text file import failed on exception.\n' + str(e))
+                raise
+            finally:
+                datasetcount = len(plankton_core.Datasets().get_datasets())
+                self._write_to_status_bar('Imported datasets: ' + str(datasetcount))
+                toolbox_utils.Logging().log_all_accumulated_rows()
+                toolbox_utils.Logging().log('Importing datasets done. Number of imported datasets: ' + str(datasetcount))
+        #
         except Exception as e:
-            toolbox_utils.Logging().error('Text file import failed on exception: ' + str(e))
-            QtWidgets.QMessageBox.warning(self, 'Text file loading.\n', 
-                                      'Text file import failed on exception.\n' + str(e))
-            raise
-        finally:
-            datasetcount = len(plankton_core.Datasets().get_datasets())
-            self._write_to_status_bar('Imported datasets: ' + str(datasetcount))
-            toolbox_utils.Logging().log_all_accumulated_rows()
-            toolbox_utils.Logging().log('Importing datasets done. Number of imported datasets: ' + str(datasetcount))
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     # ===== EXCEL FILES ======
     def _content_xlsx(self):
@@ -630,77 +697,87 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
 
     def _excel_parser_selected(self, selected_row):
         """ """
-        if (selected_row > 0) and (selected_row <= len(self._parser_list)):
-            toolbox_utils.Logging().log('Selected parser: ' + str(self._parser_list[selected_row - 1]))
-            
-#             tabledata = plankton_core.DatasetTable()
-#             toolbox_utils.ExcelFiles().readToTableDataset(tabledata, 
-#                                                  file_name = self._parser_path + self._parser_list[selected_row - 1])
-            tablereader = toolbox_utils.TableFileReader(file_path = self._parser_path, 
-                                                        excel_file_name = self._parser_list[selected_row - 1])
-            self._excel_importcolumn_list.clear()
-            self._excel_exportcolumn_list.clear()
-            header = tablereader.header()
-            for row in tablereader.rows():
-                if (row[0] == 'info') and (row[1] == 'column_type'):
-                    for index, item in enumerate(row):
-                        if item == 'import':
-                            self._excel_importcolumn_list.addItems([header[index]])
-                        if item == 'export':
-                            self._excel_exportcolumn_list.addItems([header[index]])
-        else:
-            self._excel_importcolumn_list.clear()
-            self._excel_importcolumn_list.addItems(['no parser selected'])
-            self._excel_exportcolumn_list.clear()
-            self._excel_exportcolumn_list.addItems(['no parser selected'])
+        try:
+            if (selected_row > 0) and (selected_row <= len(self._parser_list)):
+                toolbox_utils.Logging().log('Selected parser: ' + str(self._parser_list[selected_row - 1]))
+                
+    #             tabledata = plankton_core.DatasetTable()
+    #             toolbox_utils.ExcelFiles().readToTableDataset(tabledata, 
+    #                                                  file_name = self._parser_path + self._parser_list[selected_row - 1])
+                tablereader = toolbox_utils.TableFileReader(file_path = self._parser_path, 
+                                                            excel_file_name = self._parser_list[selected_row - 1])
+                self._excel_importcolumn_list.clear()
+                self._excel_exportcolumn_list.clear()
+                header = tablereader.header()
+                for row in tablereader.rows():
+                    if (row[0] == 'info') and (row[1] == 'column_type'):
+                        for index, item in enumerate(row):
+                            if item == 'import':
+                                self._excel_importcolumn_list.addItems([header[index]])
+                            if item == 'export':
+                                self._excel_exportcolumn_list.addItems([header[index]])
+            else:
+                self._excel_importcolumn_list.clear()
+                self._excel_importcolumn_list.addItems(['no parser selected'])
+                self._excel_exportcolumn_list.clear()
+                self._excel_exportcolumn_list.addItems(['no parser selected'])
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _load_excel_file(self):
         """ """
         try:
-            toolbox_utils.Logging().log('') # Empty line.
-            toolbox_utils.Logging().log('Importing datasets...')
-            toolbox_utils.Logging().start_accumulated_logging()
-            self._write_to_status_bar('Importing datasets...')
-            # Show select file dialog box. Multiple files can be selected.
-            namefilter = 'Excel files (*.xlsx);;All files (*.*)'
-            filenames = QtWidgets.QFileDialog.getOpenFileNames(
-                                self,
-                                'Import dataset(s)',
-                                self._last_used_excelfile_name,
-                                namefilter)
-            # From QString to str.
-            filenames = map(str, filenames)
-            # Check if user pressed ok or cancel.
-            self._tabledataset = plankton_core.DatasetTable()
-            if filenames:
-                for filename in filenames:
-                    # Store selected path. Will be used as default next time.
-                    self._last_used_excelfile_name = filename
-                    # Set up for import file parsing.
-                    importmanager = plankton_core.ImportManager(self._parser_path + str(self._excel_parser_list.currentText()),
-                                                     str(self._excel_importcolumn_list.currentText()),
-                                                     str(self._excel_exportcolumn_list.currentText()))
-                    # Import and parse file.
-                    dataset = importmanager.import_excel_file(filename)
-                    # Add metadata related to imported file.
-                    dataset.add_metadata('parser', self._parser_path + str(self._excel_parser_list.currentText()))
-                    dataset.add_metadata('file_name', os.path.basename(filename))
-                    dataset.add_metadata('file_path', filename)
-                    dataset.add_metadata('import_column', str(self._excel_importcolumn_list.currentText()))
-                    dataset.add_metadata('export_column', str(self._excel_exportcolumn_list.currentText()))
-                    # Add to dataset list. (Note:ToolboxDatasets is a wrapper containing the 'datasetListChanged'-signal).
-                    app_framework.ToolboxDatasets().add_dataset(dataset)
+            try:
+                toolbox_utils.Logging().log('') # Empty line.
+                toolbox_utils.Logging().log('Importing datasets...')
+                toolbox_utils.Logging().start_accumulated_logging()
+                self._write_to_status_bar('Importing datasets...')
+                # Show select file dialog box. Multiple files can be selected.
+                namefilter = 'Excel files (*.xlsx);;All files (*.*)'
+                filenames = QtWidgets.QFileDialog.getOpenFileNames(
+                                    self,
+                                    'Import dataset(s)',
+                                    self._last_used_excelfile_name,
+                                    namefilter)
+                # From QString to str.
+                filenames = map(str, filenames)
+                # Check if user pressed ok or cancel.
+                self._tabledataset = plankton_core.DatasetTable()
+                if filenames:
+                    for filename in filenames:
+                        # Store selected path. Will be used as default next time.
+                        self._last_used_excelfile_name = filename
+                        # Set up for import file parsing.
+                        importmanager = plankton_core.ImportManager(self._parser_path + str(self._excel_parser_list.currentText()),
+                                                         str(self._excel_importcolumn_list.currentText()),
+                                                         str(self._excel_exportcolumn_list.currentText()))
+                        # Import and parse file.
+                        dataset = importmanager.import_excel_file(filename)
+                        # Add metadata related to imported file.
+                        dataset.add_metadata('parser', self._parser_path + str(self._excel_parser_list.currentText()))
+                        dataset.add_metadata('file_name', os.path.basename(filename))
+                        dataset.add_metadata('file_path', filename)
+                        dataset.add_metadata('import_column', str(self._excel_importcolumn_list.currentText()))
+                        dataset.add_metadata('export_column', str(self._excel_exportcolumn_list.currentText()))
+                        # Add to dataset list. (Note:ToolboxDatasets is a wrapper containing the 'datasetListChanged'-signal).
+                        app_framework.ToolboxDatasets().add_dataset(dataset)
+            #
+            except Exception as e:
+                toolbox_utils.Logging().error('Excel file import failed on exception: ' + str(e))
+                QtWidgets.QMessageBox.warning(self, 'Excel file loading.\n', 
+                                          'Excel file import failed on exception.\n' + str(e))
+                raise
+            finally:
+                datasetcount = len(plankton_core.Datasets().get_datasets())
+                self._write_to_status_bar('Imported datasets: ' + str(datasetcount))
+                toolbox_utils.Logging().log_all_accumulated_rows()  
+                toolbox_utils.Logging().log('Importing datasets done. Number of loaded datasets: ' + str(datasetcount))
         #
         except Exception as e:
-            toolbox_utils.Logging().error('Excel file import failed on exception: ' + str(e))
-            QtWidgets.QMessageBox.warning(self, 'Excel file loading.\n', 
-                                      'Excel file import failed on exception.\n' + str(e))
-            raise
-        finally:
-            datasetcount = len(plankton_core.Datasets().get_datasets())
-            self._write_to_status_bar('Imported datasets: ' + str(datasetcount))
-            toolbox_utils.Logging().log_all_accumulated_rows()  
-            toolbox_utils.Logging().log('Importing datasets done. Number of loaded datasets: ' + str(datasetcount))
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     # ===== LOADED DATASETS =====    
     def _content_loaded_datasets(self):
@@ -758,63 +835,87 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
 
     def _unload_all_datasets(self):
         """ """
-        app_framework.ToolboxDatasets().clear()
+        try:
+            app_framework.ToolboxDatasets().clear()
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _unload_marked_datasets(self):
         # Remove datasets, start with the last one. 
-        rowcount = self._datasets_table.getTableModel().get_row_count()
-        for rowindex in range(rowcount):
-            index = rowcount - rowindex - 1
-            if self._datasets_table.getSelectionModel().isSelected(self._datasets_table._tablemodel.createIndex(index, 0)): # Check if selected by user.
-                app_framework.ToolboxDatasets().remove_dataset_by_index(index)
+        try:
+            rowcount = self._datasets_table.getTableModel().get_row_count()
+            for rowindex in range(rowcount):
+                index = rowcount - rowindex - 1
+                if self._datasets_table.getSelectionModel().isSelected(self._datasets_table._tablemodel.createIndex(index, 0)): # Check if selected by user.
+                    app_framework.ToolboxDatasets().remove_dataset_by_index(index)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _update_dataset_list(self):
         """ """
-        self._datasets_table.getTableModel().clear_rows()
-        for rowindex, dataset in enumerate(app_framework.ToolboxDatasets().get_datasets()):
-            # Get content info depending on dataset type.
-#             datasettype = '',
-            contentinfo = ''
-            if isinstance(dataset, plankton_core.DatasetTable):
-#                 datasettype = 'Table dataset'
-                contentinfo = 'Rows: ' + str(len(dataset.get_rows())) + '. '
-            elif isinstance(dataset, plankton_core.DatasetNode):
-#                 datasettype = 'Tree dataset'
-                visitcount, samplecound, variablecount = dataset.get_counters()
-                contentinfo = 'Visits: ' + str(visitcount) + ', ' + \
-                              'samples: ' + str(samplecound) + ', ' + \
-                              'variables: ' + str(variablecount) + '. '
-#             else:
-#                 datasettype = 'Unspecified'
-
-            # Add row 
-            self._datasets_table.getTableModel().append_row(
-                ['Import-' + str(rowindex + 1),
-#                  datasettype,
-                 contentinfo,
-                 dataset.get_metadata('file_name'),
-                 dataset.get_metadata('file_path'),
-                 dataset.get_metadata('parser'),
-                 dataset.get_metadata('import_column'),
-                 dataset.get_metadata('export_column')])
-            #
-        self._datasets_table.resetModel()
-        self._datasets_table.resizeColumnsToContents()
-
+        try:
+            self._datasets_table.getTableModel().clear_rows()
+            for rowindex, dataset in enumerate(app_framework.ToolboxDatasets().get_datasets()):
+                # Get content info depending on dataset type.
+    #             datasettype = '',
+                contentinfo = ''
+                if isinstance(dataset, plankton_core.DatasetTable):
+    #                 datasettype = 'Table dataset'
+                    contentinfo = 'Rows: ' + str(len(dataset.get_rows())) + '. '
+                elif isinstance(dataset, plankton_core.DatasetNode):
+    #                 datasettype = 'Tree dataset'
+                    visitcount, samplecound, variablecount = dataset.get_counters()
+                    contentinfo = 'Visits: ' + str(visitcount) + ', ' + \
+                                  'samples: ' + str(samplecound) + ', ' + \
+                                  'variables: ' + str(variablecount) + '. '
+    #             else:
+    #                 datasettype = 'Unspecified'
+    
+                # Add row 
+                self._datasets_table.getTableModel().append_row(
+                    ['Import-' + str(rowindex + 1),
+    #                  datasettype,
+                     contentinfo,
+                     dataset.get_metadata('file_name'),
+                     dataset.get_metadata('file_path'),
+                     dataset.get_metadata('parser'),
+                     dataset.get_metadata('import_column'),
+                     dataset.get_metadata('export_column')])
+                #
+            self._datasets_table.resetModel()
+            self._datasets_table.resizeColumnsToContents()
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
     
     def _selection_changed(self):
         """ """
-        if self._viewdataset_checkbox.isChecked():
-            self._view_dataset()
+        try:
+            if self._viewdataset_checkbox.isChecked():
+                self._view_dataset()
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _view_dataset(self):
         """ """
-        modelIndex = self._datasets_table.getSelectionModel().currentIndex()
-        if modelIndex.isValid():
-            # View tool.
-            app_framework.ToolManager().show_tool_by_name('Dataset viewer') # Show tool if hidden.
-            # graphtool = tool_manager.ToolManager().getToolByName('Dataset viewer')
-            app_framework.AppSync().set_row_index('dataset', modelIndex.row())
+        try:
+            modelIndex = self._datasets_table.getSelectionModel().currentIndex()
+            if modelIndex.isValid():
+                # View tool.
+                app_tools.ToolManager().show_tool_by_name('Dataset viewer') # Show tool if hidden.
+                # graphtool = tool_manager.ToolManager().getToolByName('Dataset viewer')
+                app_framework.AppSync().set_row_index('dataset', modelIndex.row())
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     
 class DatasetTableData(object):

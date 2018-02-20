@@ -5,10 +5,12 @@
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 # import os
+import sys
 import datetime
 import math
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
+
 import plankton_core
 import app_framework
 
@@ -29,26 +31,41 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
 
     def load_data(self):
         """ """
-        self.clear_sample_info()
+        try:
+            self.clear_sample_info()
+            #
+            sample_info_dict = self._current_sample_object.get_sample_info()
+            #                                                       
+            self._from_dict_to_fields(sample_info_dict)
         #
-        sample_info_dict = self._current_sample_object.get_sample_info()
-        #                                                       
-        self._from_dict_to_fields(sample_info_dict)
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def save_data(self):
         """ """
-        # Get info from sample object if the count module have added config info.
-        sample_info_dict = self._current_sample_object.get_sample_info()
-        # 
-        self._from_fields_to_dict(sample_info_dict)
-        # 
-        self._current_sample_object.set_sample_info(sample_info_dict)
-        self._current_sample_object.save_sample_info()
+        try:
+            # Get info from sample object if the count module have added config info.
+            sample_info_dict = self._current_sample_object.get_sample_info()
+            # 
+            self._from_fields_to_dict(sample_info_dict)
+            # 
+            self._current_sample_object.set_sample_info(sample_info_dict)
+            self._current_sample_object.save_sample_info()
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def clear_sample_info(self):
         """ """
-        empty_dict = {}
-        self._from_dict_to_fields(empty_dict)
+        try:
+            empty_dict = {}
+            self._from_dict_to_fields(empty_dict)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _create_content_sample_info(self):
         """ """
@@ -321,70 +338,90 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
     
     def analysis_today(self):
         """ """
-        today = datetime.date.today()
-        self._analysis_year_edit.setText(today.strftime('%Y'))
-        self._analysis_month_edit.setText(today.strftime('%m'))
-        self._analysis_day_edit.setText(today.strftime('%d'))
+        try:
+            today = datetime.date.today()
+            self._analysis_year_edit.setText(today.strftime('%Y'))
+            self._analysis_month_edit.setText(today.strftime('%m'))
+            self._analysis_day_edit.setText(today.strftime('%d'))
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _latlong_dm_edited(self):
         """ """
-        lat_deg = str(self._latitude_degree.text()).replace(',', '.')
-        lat_min = str(self._latitude_minute.text()).replace(',', '.')
-        long_deg = str(self._longitude_degree.text()).replace(',', '.')
-        long_min = str(self._longitude_minute.text()).replace(',', '.')
+        try:
+            lat_deg = str(self._latitude_degree.text()).replace(',', '.')
+            lat_min = str(self._latitude_minute.text()).replace(',', '.')
+            long_deg = str(self._longitude_degree.text()).replace(',', '.')
+            long_min = str(self._longitude_minute.text()).replace(',', '.')
+            #
+            try:
+                latitude_dd = float(lat_deg.replace(',', '.').replace(' ', ''))
+                if lat_min: 
+                    latitude_dd += float(lat_min.replace(',', '.').replace(' ', '')) / 60
+                latitude_dd = math.floor(latitude_dd*10000)/10000
+                self._latitude_dd.setText(str(latitude_dd))
+            except:
+                self._latitude_dd.setText('')
+            try:
+                longitude_dd = float(long_deg.replace(',', '.').replace(' ', ''))
+                if long_min:
+                    longitude_dd += float(long_min.replace(',', '.').replace(' ', '')) / 60
+                longitude_dd = math.floor(longitude_dd*10000)/10000
+                self._longitude_dd.setText(str(longitude_dd))
+            except:
+                self._longitude_dd.setText('')
         #
-        try:
-            latitude_dd = float(lat_deg.replace(',', '.').replace(' ', ''))
-            if lat_min: 
-                latitude_dd += float(lat_min.replace(',', '.').replace(' ', '')) / 60
-            latitude_dd = math.floor(latitude_dd*10000)/10000
-            self._latitude_dd.setText(str(latitude_dd))
-        except:
-            self._latitude_dd.setText('')
-        try:
-            longitude_dd = float(long_deg.replace(',', '.').replace(' ', ''))
-            if long_min:
-                longitude_dd += float(long_min.replace(',', '.').replace(' ', '')) / 60
-            longitude_dd = math.floor(longitude_dd*10000)/10000
-            self._longitude_dd.setText(str(longitude_dd))
-        except:
-            self._longitude_dd.setText('')
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _latlong_dd_edited(self):
         """ """
-        lat_dd = str(self._latitude_dd.text()).replace(',', '.')
-        long_dd = str(self._longitude_dd.text()).replace(',', '.')
+        try:
+            lat_dd = str(self._latitude_dd.text()).replace(',', '.')
+            long_dd = str(self._longitude_dd.text()).replace(',', '.')
+            #
+            try:
+                value = float(lat_dd.replace(',', '.').replace(' ', ''))
+                value += 0.0000008 # Round (= 0.5 min).
+                degrees = math.floor(abs(value))
+                minutes = (abs(value) - degrees) * 60
+                minutes = math.floor(minutes*100)/100
+                self._latitude_degree.setText(str(int(degrees)))
+                self._latitude_minute.setText(str(minutes))
+            except:
+                self._latitude_degree.setText('')
+                self._latitude_minute.setText('')
+            try:
+                value = float(long_dd.replace(',', '.').replace(' ', ''))
+                value += 0.0000008 # Round (= 0.5 min).
+                degrees = math.floor(abs(value))
+                minutes = (abs(value) - degrees) * 60
+                minutes = math.floor(minutes*100)/100
+                self._longitude_degree.setText(str(int(degrees)))
+                self._longitude_minute.setText(str(minutes))
+            except:
+                self._longitude_degree.setText('')
+                self._longitude_minute.setText('')
         #
-        try:
-            value = float(lat_dd.replace(',', '.').replace(' ', ''))
-            value += 0.0000008 # Round (= 0.5 min).
-            degrees = math.floor(abs(value))
-            minutes = (abs(value) - degrees) * 60
-            minutes = math.floor(minutes*100)/100
-            self._latitude_degree.setText(str(int(degrees)))
-            self._latitude_minute.setText(str(minutes))
-        except:
-            self._latitude_degree.setText('')
-            self._latitude_minute.setText('')
-        try:
-            value = float(long_dd.replace(',', '.').replace(' ', ''))
-            value += 0.0000008 # Round (= 0.5 min).
-            degrees = math.floor(abs(value))
-            minutes = (abs(value) - degrees) * 60
-            minutes = math.floor(minutes*100)/100
-            self._longitude_degree.setText(str(int(degrees)))
-            self._longitude_minute.setText(str(minutes))
-        except:
-            self._longitude_degree.setText('')
-            self._longitude_minute.setText('')
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
     
     def clear_sample_info_selected(self):
         """ """
-        box_result = QtWidgets.QMessageBox.warning(self, 'Warning', 
-                                     'Do you want to clear all sample information?', 
-                                     QtWidgets.QMessageBox.Cancel, QtWidgets.QMessageBox.Ok)
-        if box_result == QtWidgets.QMessageBox.Ok:
-            self.clear_sample_info()
+        try:
+            box_result = QtWidgets.QMessageBox.warning(self, 'Warning', 
+                                         'Do you want to clear all sample information?', 
+                                         QtWidgets.QMessageBox.Cancel, QtWidgets.QMessageBox.Ok)
+            if box_result == QtWidgets.QMessageBox.Ok:
+                self.clear_sample_info()
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _copy_sample_info_from(self):
         """ """
@@ -400,9 +437,10 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
                                                                    sample)
                     metadata_dict = sample_object.get_sample_info()
                     self._from_dict_to_fields(metadata_dict)
+        #
         except Exception as e:
-            print('DEBUG: Exception: ', e)
-            raise
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _change_sample_name(self):
         """ """
@@ -418,139 +456,149 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
                                                                          new_sample_name)
                     # Close dialog.
                     self._parentwidget.reject()
+        #
         except Exception as e:
-            print('DEBUG: Exception: ', e)
-            raise
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _from_fields_to_dict(self, metadata_dict):
         """ """
-        metadata_dict['plankton_toolbox_version'] = app_framework.get_version() # __version__
-        metadata_dict['sample_name'] = str(self._current_sample)
-        metadata_dict['sample_id'] = str(self._sample_id_edit.text())
-        year = str(self._sample_year_edit.text())
-        month = str(self._visit_month_edit.text())
-        day = str(self._sample_day_edit.text())
-        date_tmp = year + '-' + month + '-' + day 
-        metadata_dict['sample_date'] = date_tmp
-        metadata_dict['sample_time'] = str(self._sample_time_edit.text())
-        metadata_dict['visit_year'] = str(self._sampling_year_edit.text())
-        metadata_dict['country_code'] = str(self._sampling_country_edit.text())
-        metadata_dict['platform_code'] = str(self._sampling_platform_edit.text())
-        metadata_dict['sampling_series'] = str(self._sampling_series_edit.text())
-        metadata_dict['sampling_laboratory'] = str(self._sampling_laboratory_edit.text())
-        metadata_dict['orderer'] = str(self._orderer_edit.text())
-        metadata_dict['project_code'] = str(self._project_edit.text())
-        metadata_dict['station_name'] = str(self._station_name_edit.text())
-        lat_deg_tmp = str(self._latitude_degree.text()).replace(',', '.')
-        lat_min_tmp = str(self._latitude_minute.text()).replace(',', '.')
-        long_deg_tmp = str(self._longitude_degree.text()).replace(',', '.')
-        long_min_tmp = str(self._longitude_minute.text()).replace(',', '.')
-        lat_dd_tmp = str(self._latitude_dd.text()).replace(',', '.')
-        long_dd_tmp = str(self._longitude_dd.text()).replace(',', '.')
-        metadata_dict['sample_latitude_dm'] = lat_deg_tmp + ' ' + lat_min_tmp
-        metadata_dict['sample_longitude_dm'] = long_deg_tmp + ' ' + long_min_tmp
-        metadata_dict['sample_latitude_dd'] = lat_dd_tmp
-        metadata_dict['sample_longitude_dd'] = long_dd_tmp
-        metadata_dict['sample_min_depth_m'] = str(self._sample_min_depth_m_edit.text())
-        metadata_dict['sample_max_depth_m'] = str(self._sample_max_depth_m_edit.text())
-        metadata_dict['water_depth_m'] = str(self._water_depth_m_edit.text())
-        metadata_dict['sampler_type_code'] = str(self._sampler_type_code_list.currentText())
-        metadata_dict['sampled_volume_l'] = str(self._sampled_volume_l_edit.text())
-        metadata_dict['net_type_code'] = str(self._net_type_code_list.currentText())        
-        metadata_dict['sampler_area_m2'] = str(self._sampler_area_m2_edit.text())
-        metadata_dict['net_mesh_size_um'] = str(self._net_mesh_size_um_edit.text())
-        metadata_dict['wire_angle_deg'] = str(self._wire_angle_deg_edit.text())
-        metadata_dict['net_tow_length_m'] = str(self._net_tow_length_m_edit.text())
-        metadata_dict['analytical_laboratory'] = str(self._analytical_laboratory_edit.text())
-        year = str(self._analysis_year_edit.text())
-        month = str(self._analysis_month_edit.text())
-        day = str(self._analysis_day_edit.text())
-        date_tmp = year + '-' + month + '-' + day 
-        metadata_dict['analysis_date'] = date_tmp
-        metadata_dict['analysed_by'] = str(self._analysed_by_edit.text())
-        metadata_dict['sample_comment'] = str(self._sample_comment_edit.text())
+        try:
+            metadata_dict['plankton_toolbox_version'] = app_framework.get_version() # __version__
+            metadata_dict['sample_name'] = str(self._current_sample)
+            metadata_dict['sample_id'] = str(self._sample_id_edit.text())
+            year = str(self._sample_year_edit.text())
+            month = str(self._visit_month_edit.text())
+            day = str(self._sample_day_edit.text())
+            date_tmp = year + '-' + month + '-' + day 
+            metadata_dict['sample_date'] = date_tmp
+            metadata_dict['sample_time'] = str(self._sample_time_edit.text())
+            metadata_dict['visit_year'] = str(self._sampling_year_edit.text())
+            metadata_dict['country_code'] = str(self._sampling_country_edit.text())
+            metadata_dict['platform_code'] = str(self._sampling_platform_edit.text())
+            metadata_dict['sampling_series'] = str(self._sampling_series_edit.text())
+            metadata_dict['sampling_laboratory'] = str(self._sampling_laboratory_edit.text())
+            metadata_dict['orderer'] = str(self._orderer_edit.text())
+            metadata_dict['project_code'] = str(self._project_edit.text())
+            metadata_dict['station_name'] = str(self._station_name_edit.text())
+            lat_deg_tmp = str(self._latitude_degree.text()).replace(',', '.')
+            lat_min_tmp = str(self._latitude_minute.text()).replace(',', '.')
+            long_deg_tmp = str(self._longitude_degree.text()).replace(',', '.')
+            long_min_tmp = str(self._longitude_minute.text()).replace(',', '.')
+            lat_dd_tmp = str(self._latitude_dd.text()).replace(',', '.')
+            long_dd_tmp = str(self._longitude_dd.text()).replace(',', '.')
+            metadata_dict['sample_latitude_dm'] = lat_deg_tmp + ' ' + lat_min_tmp
+            metadata_dict['sample_longitude_dm'] = long_deg_tmp + ' ' + long_min_tmp
+            metadata_dict['sample_latitude_dd'] = lat_dd_tmp
+            metadata_dict['sample_longitude_dd'] = long_dd_tmp
+            metadata_dict['sample_min_depth_m'] = str(self._sample_min_depth_m_edit.text())
+            metadata_dict['sample_max_depth_m'] = str(self._sample_max_depth_m_edit.text())
+            metadata_dict['water_depth_m'] = str(self._water_depth_m_edit.text())
+            metadata_dict['sampler_type_code'] = str(self._sampler_type_code_list.currentText())
+            metadata_dict['sampled_volume_l'] = str(self._sampled_volume_l_edit.text())
+            metadata_dict['net_type_code'] = str(self._net_type_code_list.currentText())        
+            metadata_dict['sampler_area_m2'] = str(self._sampler_area_m2_edit.text())
+            metadata_dict['net_mesh_size_um'] = str(self._net_mesh_size_um_edit.text())
+            metadata_dict['wire_angle_deg'] = str(self._wire_angle_deg_edit.text())
+            metadata_dict['net_tow_length_m'] = str(self._net_tow_length_m_edit.text())
+            metadata_dict['analytical_laboratory'] = str(self._analytical_laboratory_edit.text())
+            year = str(self._analysis_year_edit.text())
+            month = str(self._analysis_month_edit.text())
+            day = str(self._analysis_day_edit.text())
+            date_tmp = year + '-' + month + '-' + day 
+            metadata_dict['analysis_date'] = date_tmp
+            metadata_dict['analysed_by'] = str(self._analysed_by_edit.text())
+            metadata_dict['sample_comment'] = str(self._sample_comment_edit.text())
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _from_dict_to_fields(self, metadata_dict):
         """ """
-        self._sample_name_edit.setText(self._current_sample)
-        self._sample_id_edit.setText(metadata_dict.get('sample_id', ''))
-#         self._sample_date.setDate(QtCore.QDate.fromString(date_tmp, 'yyyy-MM-dd'))
-        date_tmp = metadata_dict.get('sample_date', '')
-        if len(date_tmp) >= 10:
-            self._sample_year_edit.setText(date_tmp[0:4])
-            self._visit_month_edit.setText(date_tmp[5:7])
-            self._sample_day_edit.setText(date_tmp[8:10])
-        else:
-            self._sample_year_edit.setText('')
-            self._visit_month_edit.setText('')
-            self._sample_day_edit.setText('')
-        self._sample_time_edit.setText(metadata_dict.get('sample_time', ''))
-        self._sampling_year_edit.setText(metadata_dict.get('visit_year', ''))
-        self._sampling_country_edit.setText(metadata_dict.get('country_code', ''))
-        self._sampling_platform_edit.setText(metadata_dict.get('platform_code', ''))
-        self._sampling_series_edit.setText(metadata_dict.get('sampling_series', ''))
-        self._sampling_laboratory_edit.setText(metadata_dict.get('sampling_laboratory', ''))
-        self._orderer_edit.setText(metadata_dict.get('orderer', ''))
-        self._project_edit.setText(metadata_dict.get('project_code', ''))
-        self._station_name_edit.setText(metadata_dict.get('station_name', ''))
-        lat_tmp = str(metadata_dict.get('sample_latitude_dm', ''))
-        long_tmp = str(metadata_dict.get('sample_longitude_dm', ''))
-        if (len(lat_tmp) > 2) and (' ' in lat_tmp):
-            lat_deg_min = lat_tmp.split(' ') 
-            self._latitude_degree.setText(lat_deg_min[0])
-            self._latitude_minute.setText(lat_deg_min[1])
-        else:
-            self._latitude_degree.setText('')
-            self._latitude_minute.setText('')
-        if (len(long_tmp) > 2) and (' ' in long_tmp):
-            long_deg_min = long_tmp.split(' ') 
-            self._longitude_degree.setText(long_deg_min[0])
-            self._longitude_minute.setText(long_deg_min[1])
-        else:
-            self._longitude_degree.setText('')
-            self._longitude_minute.setText('')
+        try:
+            self._sample_name_edit.setText(self._current_sample)
+            self._sample_id_edit.setText(metadata_dict.get('sample_id', ''))
+    #         self._sample_date.setDate(QtCore.QDate.fromString(date_tmp, 'yyyy-MM-dd'))
+            date_tmp = metadata_dict.get('sample_date', '')
+            if len(date_tmp) >= 10:
+                self._sample_year_edit.setText(date_tmp[0:4])
+                self._visit_month_edit.setText(date_tmp[5:7])
+                self._sample_day_edit.setText(date_tmp[8:10])
+            else:
+                self._sample_year_edit.setText('')
+                self._visit_month_edit.setText('')
+                self._sample_day_edit.setText('')
+            self._sample_time_edit.setText(metadata_dict.get('sample_time', ''))
+            self._sampling_year_edit.setText(metadata_dict.get('visit_year', ''))
+            self._sampling_country_edit.setText(metadata_dict.get('country_code', ''))
+            self._sampling_platform_edit.setText(metadata_dict.get('platform_code', ''))
+            self._sampling_series_edit.setText(metadata_dict.get('sampling_series', ''))
+            self._sampling_laboratory_edit.setText(metadata_dict.get('sampling_laboratory', ''))
+            self._orderer_edit.setText(metadata_dict.get('orderer', ''))
+            self._project_edit.setText(metadata_dict.get('project_code', ''))
+            self._station_name_edit.setText(metadata_dict.get('station_name', ''))
+            lat_tmp = str(metadata_dict.get('sample_latitude_dm', ''))
+            long_tmp = str(metadata_dict.get('sample_longitude_dm', ''))
+            if (len(lat_tmp) > 2) and (' ' in lat_tmp):
+                lat_deg_min = lat_tmp.split(' ') 
+                self._latitude_degree.setText(lat_deg_min[0])
+                self._latitude_minute.setText(lat_deg_min[1])
+            else:
+                self._latitude_degree.setText('')
+                self._latitude_minute.setText('')
+            if (len(long_tmp) > 2) and (' ' in long_tmp):
+                long_deg_min = long_tmp.split(' ') 
+                self._longitude_degree.setText(long_deg_min[0])
+                self._longitude_minute.setText(long_deg_min[1])
+            else:
+                self._longitude_degree.setText('')
+                self._longitude_minute.setText('')
+            #
+            self._latitude_dd.setText(str(metadata_dict.get('sample_latitude_dd', '')))
+            self._longitude_dd.setText(str(metadata_dict.get('sample_longitude_dd', '')))
+            #       
+            self._sample_min_depth_m_edit.setText(metadata_dict.get('sample_min_depth_m', ''))
+            self._sample_max_depth_m_edit.setText(metadata_dict.get('sample_max_depth_m', ''))
+            self._water_depth_m_edit.setText(metadata_dict.get('water_depth_m', ''))
+            sampler_type_code = metadata_dict.get('sampler_type_code', '')
+            currentindex = self._sampler_type_code_list.findText(sampler_type_code, QtCore.Qt.MatchFixedString)
+            if currentindex >= 0:
+                self._sampler_type_code_list.setCurrentIndex(currentindex)
+            else:
+                self._sampler_type_code_list.setItemText(0, sampler_type_code)
+            self._sampled_volume_l_edit.setText(metadata_dict.get('sampled_volume_l', ''))
+    
+            net_type_code = metadata_dict.get('net_type_code', '')
+            currentindex = self._net_type_code_list.findText(net_type_code, QtCore.Qt.MatchFixedString)
+            if currentindex >= 0:
+                self._net_type_code_list.setCurrentIndex(currentindex)
+            else:
+                self._net_type_code_list.setItemText(0, sampler_type_code)
+            
+            self._sampler_area_m2_edit.setText(metadata_dict.get('sampler_area_m2', ''))
+            self._net_mesh_size_um_edit.setText(metadata_dict.get('net_mesh_size_um', ''))
+            self._wire_angle_deg_edit.setText(metadata_dict.get('wire_angle_deg', ''))
+            self._net_tow_length_m_edit.setText(metadata_dict.get('net_tow_length_m', ''))
+            self._analytical_laboratory_edit.setText(metadata_dict.get('analytical_laboratory', ''))
+            date_tmp = metadata_dict.get('analysis_date', '')
+    #         self._analysis_date.setDate(QtCore.QDate.fromString(date_tmp, 'yyyy-MM-dd'))
+            date_tmp = metadata_dict.get('analysis_date', '')
+            if len(date_tmp) >= 10:
+                self._analysis_year_edit.setText(date_tmp[0:4])
+                self._analysis_month_edit.setText(date_tmp[5:7])
+                self._analysis_day_edit.setText(date_tmp[8:10])
+            else:
+                self.analysis_today()
+    #             self._analysis_year_edit.setText('')
+    #             self._analysis_month_edit.setText('')
+    #             self._analysis_day_edit.setText('')
+            self._analysed_by_edit.setText(metadata_dict.get('analysed_by', ''))
+            self._sample_comment_edit.setText(metadata_dict.get('sample_comment', ''))
         #
-        self._latitude_dd.setText(str(metadata_dict.get('sample_latitude_dd', '')))
-        self._longitude_dd.setText(str(metadata_dict.get('sample_longitude_dd', '')))
-        #       
-        self._sample_min_depth_m_edit.setText(metadata_dict.get('sample_min_depth_m', ''))
-        self._sample_max_depth_m_edit.setText(metadata_dict.get('sample_max_depth_m', ''))
-        self._water_depth_m_edit.setText(metadata_dict.get('water_depth_m', ''))
-        sampler_type_code = metadata_dict.get('sampler_type_code', '')
-        currentindex = self._sampler_type_code_list.findText(sampler_type_code, QtCore.Qt.MatchFixedString)
-        if currentindex >= 0:
-            self._sampler_type_code_list.setCurrentIndex(currentindex)
-        else:
-            self._sampler_type_code_list.setItemText(0, sampler_type_code)
-        self._sampled_volume_l_edit.setText(metadata_dict.get('sampled_volume_l', ''))
-
-        net_type_code = metadata_dict.get('net_type_code', '')
-        currentindex = self._net_type_code_list.findText(net_type_code, QtCore.Qt.MatchFixedString)
-        if currentindex >= 0:
-            self._net_type_code_list.setCurrentIndex(currentindex)
-        else:
-            self._net_type_code_list.setItemText(0, sampler_type_code)
-        
-        self._sampler_area_m2_edit.setText(metadata_dict.get('sampler_area_m2', ''))
-        self._net_mesh_size_um_edit.setText(metadata_dict.get('net_mesh_size_um', ''))
-        self._wire_angle_deg_edit.setText(metadata_dict.get('wire_angle_deg', ''))
-        self._net_tow_length_m_edit.setText(metadata_dict.get('net_tow_length_m', ''))
-        self._analytical_laboratory_edit.setText(metadata_dict.get('analytical_laboratory', ''))
-        date_tmp = metadata_dict.get('analysis_date', '')
-#         self._analysis_date.setDate(QtCore.QDate.fromString(date_tmp, 'yyyy-MM-dd'))
-        date_tmp = metadata_dict.get('analysis_date', '')
-        if len(date_tmp) >= 10:
-            self._analysis_year_edit.setText(date_tmp[0:4])
-            self._analysis_month_edit.setText(date_tmp[5:7])
-            self._analysis_day_edit.setText(date_tmp[8:10])
-        else:
-            self.analysis_today()
-#             self._analysis_year_edit.setText('')
-#             self._analysis_month_edit.setText('')
-#             self._analysis_day_edit.setText('')
-        self._analysed_by_edit.setText(metadata_dict.get('analysed_by', ''))
-        self._sample_comment_edit.setText(metadata_dict.get('sample_comment', ''))
-                       
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
 class CopyFromTemplateDialog(QtWidgets.QDialog):
     """ This dialog is allowed to access private parts in the parent widget. """
@@ -569,11 +617,21 @@ class CopyFromTemplateDialog(QtWidgets.QDialog):
 
     def get_dataset(self):
         """ """
-        return self._dataset
+        try:
+            return self._dataset
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
     
     def get_sample(self):
         """ """
-        return self._sample
+        try:
+            return self._sample
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
        
     def _content(self):
         """ """
@@ -601,28 +659,38 @@ class CopyFromTemplateDialog(QtWidgets.QDialog):
     
     def _load_dataset_and_samples(self):
         """ """
-        datasets = plankton_core.PlanktonCounterManager().get_dataset_names()
-        for dataset in datasets:
-            samples = plankton_core.PlanktonCounterManager().get_sample_names(dataset)
-            for sample in samples:
-                datasetsample = dataset + ': ' + sample
-                self._datasetsample_dict[datasetsample] = (dataset, sample)
+        try:
+            datasets = plankton_core.PlanktonCounterManager().get_dataset_names()
+            for dataset in datasets:
+                samples = plankton_core.PlanktonCounterManager().get_sample_names(dataset)
+                for sample in samples:
+                    datasetsample = dataset + ': ' + sample
+                    self._datasetsample_dict[datasetsample] = (dataset, sample)
+            #
+            self._datasetsample_list.addItems(sorted(self._datasetsample_dict.keys()))
         #
-        self._datasetsample_list.addItems(sorted(self._datasetsample_dict.keys()))
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
         
     def _copy_sample_info(self):
         """ """
-        selectedtext = str(self._datasetsample_list.currentText())
-        if selectedtext in self._datasetsample_dict:
-            datasetsample = self._datasetsample_dict[selectedtext]
-            self._dataset = datasetsample[0]
-            self._sample = datasetsample[1]
-        else:
-            self._dataset = ''
-            self._sample = ''            
+        try:
+            selectedtext = str(self._datasetsample_list.currentText())
+            if selectedtext in self._datasetsample_dict:
+                datasetsample = self._datasetsample_dict[selectedtext]
+                self._dataset = datasetsample[0]
+                self._sample = datasetsample[1]
+            else:
+                self._dataset = ''
+                self._sample = ''            
+            #
+            self.accept() # Close dialog box.
         #
-        self.accept() # Close dialog box.
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
 
 class RenameSampleDialog(QtWidgets.QDialog):
@@ -664,7 +732,12 @@ class RenameSampleDialog(QtWidgets.QDialog):
 
     def _rename_sample(self):
         """ """
-        self._new_sample_name = str(self._newsamplename_edit.text())
-        #            
-        self.accept() # Close dialog box.
+        try:
+            self._new_sample_name = str(self._newsamplename_edit.text())
+            #            
+            self.accept() # Close dialog box.
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 

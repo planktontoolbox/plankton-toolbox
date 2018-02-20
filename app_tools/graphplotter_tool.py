@@ -4,6 +4,7 @@
 # Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
+import sys
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 # import plankton_toolbox.toolbox.utils_qt as utils_qt
@@ -34,24 +35,34 @@ class GraphPlotterTool(app_framework.ToolBase):
         
     def clear_plot_data(self):
         """ """
-        self.set_plot_data(None)
+        try:
+            self.set_plot_data(None)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def set_plot_data(self, plot_data):
         """ """
-        self._figure.clear()
-        self._canvas.draw()
-        #
-        if plot_data:
-            if isinstance(plot_data, toolbox_utils.GraphPlotData):
-                self._plotdata = plot_data
+        try:
+            self._figure.clear()
+            self._canvas.draw()
+            #
+            if plot_data:
+                if isinstance(plot_data, toolbox_utils.GraphPlotData):
+                    self._plotdata = plot_data
+                else:
+                    # Invalid type. 
+                    self._plotdata = None
             else:
-                # Invalid type. 
                 self._plotdata = None
-        else:
-            self._plotdata = None
+            #
+            self._reset_labels()
+            self._draw_embedded_chart()
         #
-        self._reset_labels()
-        self._draw_embedded_chart()
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def set_chart_selection(self, 
                           chart = 'Line chart', # Line chart, Bar chart, Scatter chart, Pie chart, Map chart.
@@ -59,12 +70,17 @@ class GraphPlotterTool(app_framework.ToolBase):
                           stacked = False,
                           y_log_scale = False):
         """ """
-        comboindex = self._charttype_list.findText(chart)
-        if comboindex >= 0:  self._charttype_list.setCurrentIndex(comboindex)
+        try:
+            comboindex = self._charttype_list.findText(chart)
+            if comboindex >= 0:  self._charttype_list.setCurrentIndex(comboindex)
+            #
+            self._combined_checkbox.setChecked(combined)
+            self._stacked_checkbox.setChecked(stacked)
+            self._ylogscale_checkbox.setChecked(y_log_scale)
         #
-        self._combined_checkbox.setChecked(combined)
-        self._stacked_checkbox.setChecked(stacked)
-        self._ylogscale_checkbox.setChecked(y_log_scale)
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _create_content(self):
         """ """
@@ -300,150 +316,170 @@ class GraphPlotterTool(app_framework.ToolBase):
         
     def _draw_embedded_chart(self):
         """ """
-        self._draw_chart(embedded = True)
+        try:
+            self._draw_chart(embedded = True)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _draw_chart(self, embedded = True):
         """ """
         try:
-            if embedded:
-                # Draw embedded in Qt.
-                figure = self._figure
-            else:
-                # Use matplotlib.pyplot for drawing.
-                figure = None
-            # Adjust visibility of checkboxes, etc.
-            if self._combined_checkbox.isChecked():
-                self._stacked_checkbox.setEnabled(True)
-            else:
-                self._stacked_checkbox.setChecked(False)
-                self._stacked_checkbox.setEnabled(False)
-            if self._stacked_checkbox.isChecked():
-                self._ylogscale_checkbox.setChecked(False)
-                self._ylogscale_checkbox.setEnabled(False)
-            else:
-                self._ylogscale_checkbox.setEnabled(True)
-            # User selections.
-            selectedchart = str(self._charttype_list.currentText())
-            combined = self._combined_checkbox.isChecked()
-            stacked = self._stacked_checkbox.isChecked()
-            ylogscale = self._ylogscale_checkbox.isChecked()
-            #
-            if embedded:
-                self._figure.clear()
-                self._canvas.draw()
-            #
-            if not self._plotdata:
-                return
-            # Draw selected chart.
-            if selectedchart == 'Line chart':
-                self._current_chart = toolbox_utils.LineChart(self._plotdata, figure = figure)
-                self._current_chart.plot_chart(combined = combined, stacked = stacked, y_log_scale = ylogscale)        
-                self._canvas.draw()
-            #
-            if selectedchart == 'Bar chart':
-                self._current_chart = toolbox_utils.BarChart(self._plotdata, figure = figure)
-                self._current_chart.plot_chart(combined = combined, stacked = stacked, y_log_scale = ylogscale)                
-                self._canvas.draw()
-            #
-            if selectedchart == 'Scatter chart':
-                self._current_chart = toolbox_utils.ScatterChart(self._plotdata, figure = figure)
-                self._current_chart.plot_chart(combined = combined, y_log_scale = ylogscale)                
-                self._canvas.draw()
-            #
-            if selectedchart == 'Pie chart':
-                self._current_chart = toolbox_utils.PieChart(self._plotdata, figure = figure)
-                self._current_chart.plot_chart()        
-                self._canvas.draw()
-            #
-            if selectedchart == 'Boxplot chart':
-                self._current_chart = toolbox_utils.BoxPlotChart(self._plotdata, figure = figure)
-                self._current_chart.plot_chart(y_log_scale = ylogscale)        
-                self._canvas.draw()
-            #
-            if selectedchart == 'Map chart':
-                self._current_chart = toolbox_utils.MapChart(self._plotdata, figure = figure)
-                self._current_chart.plot_chart()        
-                self._canvas.draw()
-        #    
-        except UserWarning as e:
-            QtWidgets.QMessageBox.warning(self, "Warning", str(e))
-            toolbox_utils.Logging().warning(str(e))
+            try:
+                if embedded:
+                    # Draw embedded in Qt.
+                    figure = self._figure
+                else:
+                    # Use matplotlib.pyplot for drawing.
+                    figure = None
+                # Adjust visibility of checkboxes, etc.
+                if self._combined_checkbox.isChecked():
+                    self._stacked_checkbox.setEnabled(True)
+                else:
+                    self._stacked_checkbox.setChecked(False)
+                    self._stacked_checkbox.setEnabled(False)
+                if self._stacked_checkbox.isChecked():
+                    self._ylogscale_checkbox.setChecked(False)
+                    self._ylogscale_checkbox.setEnabled(False)
+                else:
+                    self._ylogscale_checkbox.setEnabled(True)
+                # User selections.
+                selectedchart = str(self._charttype_list.currentText())
+                combined = self._combined_checkbox.isChecked()
+                stacked = self._stacked_checkbox.isChecked()
+                ylogscale = self._ylogscale_checkbox.isChecked()
+                #
+                if embedded:
+                    self._figure.clear()
+                    self._canvas.draw()
+                #
+                if not self._plotdata:
+                    return
+                # Draw selected chart.
+                if selectedchart == 'Line chart':
+                    self._current_chart = toolbox_utils.LineChart(self._plotdata, figure = figure)
+                    self._current_chart.plot_chart(combined = combined, stacked = stacked, y_log_scale = ylogscale)        
+                    self._canvas.draw()
+                #
+                if selectedchart == 'Bar chart':
+                    self._current_chart = toolbox_utils.BarChart(self._plotdata, figure = figure)
+                    self._current_chart.plot_chart(combined = combined, stacked = stacked, y_log_scale = ylogscale)                
+                    self._canvas.draw()
+                #
+                if selectedchart == 'Scatter chart':
+                    self._current_chart = toolbox_utils.ScatterChart(self._plotdata, figure = figure)
+                    self._current_chart.plot_chart(combined = combined, y_log_scale = ylogscale)                
+                    self._canvas.draw()
+                #
+                if selectedchart == 'Pie chart':
+                    self._current_chart = toolbox_utils.PieChart(self._plotdata, figure = figure)
+                    self._current_chart.plot_chart()        
+                    self._canvas.draw()
+                #
+                if selectedchart == 'Boxplot chart':
+                    self._current_chart = toolbox_utils.BoxPlotChart(self._plotdata, figure = figure)
+                    self._current_chart.plot_chart(y_log_scale = ylogscale)        
+                    self._canvas.draw()
+                #
+                if selectedchart == 'Map chart':
+                    self._current_chart = toolbox_utils.MapChart(self._plotdata, figure = figure)
+                    self._current_chart.plot_chart()        
+                    self._canvas.draw()
+            #    
+            except UserWarning as e:
+                QtWidgets.QMessageBox.warning(self, "Warning", str(e))
+                toolbox_utils.Logging().warning(str(e))
+            except Exception as e:
+                QtWidgets.QMessageBox.warning(self, "Error", str(e))
+                toolbox_utils.Logging().error(str(e))
+                raise
+        #
         except Exception as e:
-            QtWidgets.QMessageBox.warning(self, "Error", str(e))
-            toolbox_utils.Logging().error(str(e))
-            raise
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _reset_labels(self):
         """ """
-        self._plotlabels_table.clear_rows()
-        if self._plotdata:
-            # The graph part.
-            plotdatainfo = self._plotdata.get_plot_data_info()
-            self._title_edit.setText(plotdatainfo['title'])
-            self._xlabel_edit.setText(plotdatainfo['x_label'])
-            self._xtype_edit.setText(plotdatainfo['x_type'])
-            self._xformat_edit.setText(plotdatainfo['x_format'])
-            self._ylabel_edit.setText(plotdatainfo['y_label'])
-            self._ytype_edit.setText(plotdatainfo['y_type'])
-            self._yformat_edit.setText(plotdatainfo['y_format'])
-            self._zlabel_edit.setText(plotdatainfo['z_label'])
-            self._ztype_edit.setText(plotdatainfo['z_type'])
-            self._zformat_edit.setText(plotdatainfo['z_format'])
-            # Plots.             
-            for plot in self._plotdata.get_plot_list():
-                row = []
-                row.append(plot['plot_name'])
-                row.append(plot['x_label'])
-                row.append(plot['y_label'])
-                row.append(plot['z_label'])
-                self._plotlabels_table.append_row(row)
-
-#         self._plotlabels_editable.setTableModel(self._plotlabels_table)
-        self._plotlabels_editable.resetModel() # Model data has changed.
-        self._plotlabels_editable.resizeColumnsToContents()
-
-            
-#             # Tab: Edit data (JSON). For development.
-#             self.plotdatainfo_textedit.setText(
-#                        json.dumps(self._plotdata.get_plot_data_info(), 
-#                                   encoding = 'utf8', 
-#                                   sort_keys=True, indent=4))
-#             self.plotdatalist_textedit.setText(
-#                        json.dumps(self._plotdata.get_plot_list(), 
-#                                   encoding = 'utf8', 
-#                                   sort_keys=True, indent=4))
-#         else:
-#             # Tab: Edit data (JSON). For development. 
-#             self.plotdatainfo_textedit.setText('')
-#             self.plotdatalist_textedit.setText('')
+        try:
+            self._plotlabels_table.clear_rows()
+            if self._plotdata:
+                # The graph part.
+                plotdatainfo = self._plotdata.get_plot_data_info()
+                self._title_edit.setText(plotdatainfo['title'])
+                self._xlabel_edit.setText(plotdatainfo['x_label'])
+                self._xtype_edit.setText(plotdatainfo['x_type'])
+                self._xformat_edit.setText(plotdatainfo['x_format'])
+                self._ylabel_edit.setText(plotdatainfo['y_label'])
+                self._ytype_edit.setText(plotdatainfo['y_type'])
+                self._yformat_edit.setText(plotdatainfo['y_format'])
+                self._zlabel_edit.setText(plotdatainfo['z_label'])
+                self._ztype_edit.setText(plotdatainfo['z_type'])
+                self._zformat_edit.setText(plotdatainfo['z_format'])
+                # Plots.             
+                for plot in self._plotdata.get_plot_list():
+                    row = []
+                    row.append(plot['plot_name'])
+                    row.append(plot['x_label'])
+                    row.append(plot['y_label'])
+                    row.append(plot['z_label'])
+                    self._plotlabels_table.append_row(row)
+    
+    #         self._plotlabels_editable.setTableModel(self._plotlabels_table)
+            self._plotlabels_editable.resetModel() # Model data has changed.
+            self._plotlabels_editable.resizeColumnsToContents()
+    
+                
+    #             # Tab: Edit data (JSON). For development.
+    #             self.plotdatainfo_textedit.setText(
+    #                        json.dumps(self._plotdata.get_plot_data_info(), 
+    #                                   encoding = 'utf8', 
+    #                                   sort_keys=True, indent=4))
+    #             self.plotdatalist_textedit.setText(
+    #                        json.dumps(self._plotdata.get_plot_list(), 
+    #                                   encoding = 'utf8', 
+    #                                   sort_keys=True, indent=4))
+    #         else:
+    #             # Tab: Edit data (JSON). For development. 
+    #             self.plotdatainfo_textedit.setText('')
+    #             self.plotdatalist_textedit.setText('')
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     def _apply_labels(self):
         """ """
-        # The graph part.
-        plotdatainfo = self._plotdata.get_plot_data_info()
-        plotdatainfo['title'] = str(self._title_edit.text())  
-        plotdatainfo['x_label'] = str(self._xlabel_edit.text())
-        plotdatainfo['x_type'] = str(self._xtype_edit.text())
-        plotdatainfo['x_format'] = str(self._xformat_edit.text())
-        plotdatainfo['y_label'] = str(self._ylabel_edit.text())
-        plotdatainfo['y_type'] = str(self._ytype_edit.text())
-        plotdatainfo['y_format'] = str(self._yformat_edit.text())
-        plotdatainfo['z_label'] = str(self._zlabel_edit.text())
-        plotdatainfo['z_type'] = str(self._ztype_edit.text())
-        plotdatainfo['z_format'] = str(self._zformat_edit.text())
-        # Plots.
-        plotlist = self._plotdata.get_plot_list()
-        for index, row in enumerate(self._plotlabels_table.get_rows()):
-            plotlist[index]['plot_name'] = str(row[0])
-            plotlist[index]['x_label'] = str(row[1])
-            plotlist[index]['y_label'] = str(row[2])
-            plotlist[index]['z_label'] = str(row[3])
+        try:
+            # The graph part.
+            plotdatainfo = self._plotdata.get_plot_data_info()
+            plotdatainfo['title'] = str(self._title_edit.text())  
+            plotdatainfo['x_label'] = str(self._xlabel_edit.text())
+            plotdatainfo['x_type'] = str(self._xtype_edit.text())
+            plotdatainfo['x_format'] = str(self._xformat_edit.text())
+            plotdatainfo['y_label'] = str(self._ylabel_edit.text())
+            plotdatainfo['y_type'] = str(self._ytype_edit.text())
+            plotdatainfo['y_format'] = str(self._yformat_edit.text())
+            plotdatainfo['z_label'] = str(self._zlabel_edit.text())
+            plotdatainfo['z_type'] = str(self._ztype_edit.text())
+            plotdatainfo['z_format'] = str(self._zformat_edit.text())
+            # Plots.
+            plotlist = self._plotdata.get_plot_list()
+            for index, row in enumerate(self._plotlabels_table.get_rows()):
+                plotlist[index]['plot_name'] = str(row[0])
+                plotlist[index]['x_label'] = str(row[1])
+                plotlist[index]['y_label'] = str(row[2])
+                plotlist[index]['z_label'] = str(row[3])
+            #
+            self. _reset_labels()
+            # Update chart.
+            self._draw_embedded_chart()
+            
+            self._tabWidget.setCurrentIndex(0) # Go back to graph view.
         #
-        self. _reset_labels()
-        # Update chart.
-        self._draw_embedded_chart()
-        
-        self._tabWidget.setCurrentIndex(0) # Go back to graph view.
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
 #     def _applyLabelsJson(self):
 #         """ """
@@ -463,7 +499,12 @@ class GraphPlotterTool(app_framework.ToolBase):
 
     def _save_chart_to_file(self):
         """ """
-        if self._plotdata:
-            # Use matplotlib.pyplot for drawing.
-            self._draw_chart(embedded = False)
+        try:
+            if self._plotdata:
+                # Use matplotlib.pyplot for drawing.
+                self._draw_chart(embedded = False)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 

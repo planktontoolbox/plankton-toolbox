@@ -4,6 +4,7 @@
 # Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
+import sys
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 
@@ -21,23 +22,38 @@ class AnalyseDatasetsTab2(QtWidgets.QWidget):
 
     def set_main_activity(self, main_activity):
         """ """
-        self._main_activity = main_activity
-        self._analysisdata = main_activity.get_analysis_data()
+        try:
+            self._main_activity = main_activity
+            self._analysisdata = main_activity.get_analysis_data()
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
                 
     def clear(self):
         """ """
-        self._column_list.clear()
-        self._column_list.setEnabled(False)
+        try:
+            self._column_list.clear()
+            self._column_list.setEnabled(False)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def update(self):
         """ """
-        self.clear()
-        analysisdata = self._analysisdata.get_data()
-        if analysisdata:        
-            # For tab "Generic graphs".        
-            self._column_list.addItems([item['header'] for item in analysisdata.get_export_table_columns()])
-            #  Make combo-boxes visible.
-            self._column_list.setEnabled(True)
+        try:
+            self.clear()
+            analysisdata = self._analysisdata.get_data()
+            if analysisdata:        
+                # For tab "Generic graphs".        
+                self._column_list.addItems([item['header'] for item in analysisdata.get_export_table_columns()])
+                #  Make combo-boxes visible.
+                self._column_list.setEnabled(True)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     # ===== TAB: Prepare data ===== 
     def content_prepare_data(self):
@@ -92,67 +108,82 @@ class AnalyseDatasetsTab2(QtWidgets.QWidget):
 
     def _update_column_content(self, selected_row):
         """ """
-        analysisdata = self._analysisdata.get_data()
-        if not analysisdata:
-            self._content_listview.clear()
-            return # Empty data.
-        #
-        columncontent_set = set()
-        selectedcolumn = str(self._column_list.currentText())
-        # Search for export column corresponding model element.
-        nodelevel = ''
-        key = ''
-        for info_dict in analysisdata.get_export_table_columns():
-            if info_dict['header'] == selectedcolumn:
-                nodelevel = info_dict['node']
-                key = info_dict['key']
-                break # Break loop.
-        #
-        if nodelevel == 'dataset':
-            if key in analysisdata.get_data_dict().keys():
-                columncontent_set.add(str(analysisdata.get_data(key)))
-            else:
-                columncontent_set.add('') # Add empty field.
-        #    
-        for visitnode in analysisdata.get_children():
-            if nodelevel == 'visit':
-                if key in visitnode.get_data_dict().keys():
-                    columncontent_set.add(str(visitnode.get_data(key)))
+        try:
+            analysisdata = self._analysisdata.get_data()
+            if not analysisdata:
+                self._content_listview.clear()
+                return # Empty data.
+            #
+            columncontent_set = set()
+            selectedcolumn = str(self._column_list.currentText())
+            # Search for export column corresponding model element.
+            nodelevel = ''
+            key = ''
+            for info_dict in analysisdata.get_export_table_columns():
+                if info_dict['header'] == selectedcolumn:
+                    nodelevel = info_dict['node']
+                    key = info_dict['key']
+                    break # Break loop.
+            #
+            if nodelevel == 'dataset':
+                if key in analysisdata.get_data_dict().keys():
+                    columncontent_set.add(str(analysisdata.get_data(key)))
                 else:
                     columncontent_set.add('') # Add empty field.
-                continue    
-            #
-            for samplenode in visitnode.get_children():
-                if nodelevel == 'sample':
-                    if key in samplenode.get_data_dict().keys():
-                        columncontent_set.add(str(samplenode.get_data(key)))
+            #    
+            for visitnode in analysisdata.get_children():
+                if nodelevel == 'visit':
+                    if key in visitnode.get_data_dict().keys():
+                        columncontent_set.add(str(visitnode.get_data(key)))
                     else:
                         columncontent_set.add('') # Add empty field.
                     continue    
                 #
-                for variablenode in samplenode.get_children():
-                    if nodelevel == 'variable':
-                        if key in variablenode.get_data_dict().keys():
-                            columncontent_set.add(str(variablenode.get_data(key)))
+                for samplenode in visitnode.get_children():
+                    if nodelevel == 'sample':
+                        if key in samplenode.get_data_dict().keys():
+                            columncontent_set.add(str(samplenode.get_data(key)))
                         else:
                             columncontent_set.add('') # Add empty field.
                         continue    
-            # Content list.
-        self._content_listview.setList(sorted(columncontent_set))
+                    #
+                    for variablenode in samplenode.get_children():
+                        if nodelevel == 'variable':
+                            if key in variablenode.get_data_dict().keys():
+                                columncontent_set.add(str(variablenode.get_data(key)))
+                            else:
+                                columncontent_set.add('') # Add empty field.
+                            continue    
+                # Content list.
+            self._content_listview.setList(sorted(columncontent_set))
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _keep_data(self):
         """ """        
-        self._remove_data(keep_data = True)
+        try:
+            self._remove_data(keep_data = True)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _remove_data(self, keep_data = False):
         """ """
-        selectedcolumn = str(self._column_list.currentText())
+        try:
+            selectedcolumn = str(self._column_list.currentText())
+            #
+            if keep_data == False:
+                markedcontent = self._content_listview.getSelectedDataList()
+            else:
+                markedcontent = self._content_listview.getNotSelectedDataList() # Note: "Not-selected" list.       
+            #
+            self._analysisdata.remove_data(selectedcolumn, markedcontent)
+            #
+            self._main_activity.update_viewed_data_and_tabs()    
         #
-        if keep_data == False:
-            markedcontent = self._content_listview.getSelectedDataList()
-        else:
-            markedcontent = self._content_listview.getNotSelectedDataList() # Note: "Not-selected" list.       
-        #
-        self._analysisdata.remove_data(selectedcolumn, markedcontent)
-        #
-        self._main_activity.update_viewed_data_and_tabs()    
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))

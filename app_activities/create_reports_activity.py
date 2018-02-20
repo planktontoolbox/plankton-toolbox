@@ -5,6 +5,7 @@
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import os
+import sys
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
@@ -32,15 +33,20 @@ class CreateReportsActivity(app_framework.ActivityBase):
 
     def update(self):
         """ """
-        # Selectable list of loaded datasets.
-        self._loaded_datasets_model.clear()        
-        for rowindex, dataset in enumerate(app_framework.ToolboxDatasets().get_datasets()):
-            item = QtGui.QStandardItem('Import-' + str(rowindex + 1) + 
-                                       '.   Source: ' + dataset.get_metadata('file_name'))
-            item.setCheckState(QtCore.Qt.Checked)
-#            item.setCheckState(QtCore.Qt.Unchecked)
-            item.setCheckable(True)
-            self._loaded_datasets_model.appendRow(item)
+        try:
+            # Selectable list of loaded datasets.
+            self._loaded_datasets_model.clear()        
+            for rowindex, dataset in enumerate(app_framework.ToolboxDatasets().get_datasets()):
+                item = QtGui.QStandardItem('Import-' + str(rowindex + 1) + 
+                                           '.   Source: ' + dataset.get_metadata('file_name'))
+                item.setCheckState(QtCore.Qt.Checked)
+    #            item.setCheckState(QtCore.Qt.Unchecked)
+                item.setCheckable(True)
+                self._loaded_datasets_model.appendRow(item)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _create_content(self):
         """ """
@@ -99,74 +105,93 @@ class CreateReportsActivity(app_framework.ActivityBase):
 
     def _check_all_datasets(self):
         """ """
-        for rowindex in range(self._loaded_datasets_model.rowCount()):
-            item = self._loaded_datasets_model.item(rowindex, 0)
-            item.setCheckState(QtCore.Qt.Checked)
+        try:
+            for rowindex in range(self._loaded_datasets_model.rowCount()):
+                item = self._loaded_datasets_model.item(rowindex, 0)
+                item.setCheckState(QtCore.Qt.Checked)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     def _uncheck_all_datasets(self):
         """ """
-        for rowindex in range(self._loaded_datasets_model.rowCount()):
-            item = self._loaded_datasets_model.item(rowindex, 0)
-            item.setCheckState(QtCore.Qt.Unchecked)
+        try:
+            for rowindex in range(self._loaded_datasets_model.rowCount()):
+                item = self._loaded_datasets_model.item(rowindex, 0)
+                item.setCheckState(QtCore.Qt.Unchecked)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _content_pw_report(self):
         """ """
-        createreportbox = QtWidgets.QGroupBox('Create report', self)        
-        self._report_list = QtWidgets.QComboBox()
-        self._report_list.addItems([
-                                    'Standard table format',
-                                    'Quantitative (counted): Table format',
-                                    'Quantitative (counted): Species list',
-                                    'Qualitative (NET): Species list',
-                                    'Quantitative (counted): Data Center export',
-#                                     'Qualitative (NET): Data Center export',
-                                     ])
+        try:
+            createreportbox = QtWidgets.QGroupBox('Create report', self)        
+            self._report_list = QtWidgets.QComboBox()
+            self._report_list.addItems([
+                                        'Standard table format',
+                                        'Quantitative (counted): Table format',
+                                        'Quantitative (counted): Species list',
+                                        'Qualitative (NET): Species list',
+                                        'Quantitative (counted): Data Center export',
+    #                                     'Qualitative (NET): Data Center export',
+                                         ])
+            #
+    # TODO: For development:
+    #         self._report_list.setCurrentIndex(4) # TODO:
+            #
+            self._report_list.currentIndexChanged.connect(self._report_list_changed)            
+            #
+    #         self._debuginfo_checkbox = QtWidgets.QCheckBox('View debug info')
+    #         self._debuginfo_checkbox.setChecked(False)
+            #
+            self._aggregate_checkbox = QtWidgets.QCheckBox('Aggregate similar rows')
+            self._aggregate_checkbox.setChecked(False)
+            self._aggregate_checkbox.setEnabled(False)
+            #
+            self._createreport_button = QtWidgets.QPushButton('Create report')
+            self._createreport_button.clicked.connect(self._create_pw_report)                
+            # Layout widgets.
+            hbox1 = QtWidgets.QHBoxLayout()
+            hbox1.addWidget(QtWidgets.QLabel('Report type:'))
+            hbox1.addWidget(self._report_list)
+    #         hbox1.addWidget(self._debuginfo_checkbox)
+            hbox1.addWidget(self._aggregate_checkbox)
+            hbox1.addStretch(5)
+            #
+            hbox2 = QtWidgets.QHBoxLayout()
+    #         hbox2.addStretch(5)
+            hbox2.addWidget(self._createreport_button)
+            hbox2.addStretch(5)
+            #
+            reportlayout = QtWidgets.QVBoxLayout()
+            reportlayout.addLayout(hbox1)
+            reportlayout.addWidget(QtWidgets.QLabel('  ')) # Add space.
+            reportlayout.addLayout(hbox2)
+            #
+            createreportbox.setLayout(reportlayout)
+            #
+            return createreportbox
         #
-# TODO: For development:
-#         self._report_list.setCurrentIndex(4) # TODO:
-        #
-        self._report_list.currentIndexChanged.connect(self._report_list_changed)            
-        #
-#         self._debuginfo_checkbox = QtWidgets.QCheckBox('View debug info')
-#         self._debuginfo_checkbox.setChecked(False)
-        #
-        self._aggregate_checkbox = QtWidgets.QCheckBox('Aggregate similar rows')
-        self._aggregate_checkbox.setChecked(False)
-        self._aggregate_checkbox.setEnabled(False)
-        #
-        self._createreport_button = QtWidgets.QPushButton('Create report')
-        self._createreport_button.clicked.connect(self._create_pw_report)                
-        # Layout widgets.
-        hbox1 = QtWidgets.QHBoxLayout()
-        hbox1.addWidget(QtWidgets.QLabel('Report type:'))
-        hbox1.addWidget(self._report_list)
-#         hbox1.addWidget(self._debuginfo_checkbox)
-        hbox1.addWidget(self._aggregate_checkbox)
-        hbox1.addStretch(5)
-        #
-        hbox2 = QtWidgets.QHBoxLayout()
-#         hbox2.addStretch(5)
-        hbox2.addWidget(self._createreport_button)
-        hbox2.addStretch(5)
-        #
-        reportlayout = QtWidgets.QVBoxLayout()
-        reportlayout.addLayout(hbox1)
-        reportlayout.addWidget(QtWidgets.QLabel('  ')) # Add space.
-        reportlayout.addLayout(hbox2)
-        #
-        createreportbox.setLayout(reportlayout)
-        #
-        return createreportbox
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _report_list_changed(self):
         """ """
-#         reportindex = self._report_list.currentIndex()
-#         if (reportindex == 4) or (reportindex == 5):
-#             self._aggregate_checkbox.setEnabled(True)
-#         else:
-#             self._aggregate_checkbox.setEnabled(False)
-        self._aggregate_checkbox.setEnabled(False)
-        
+        try:
+    #         reportindex = self._report_list.currentIndex()
+    #         if (reportindex == 4) or (reportindex == 5):
+    #             self._aggregate_checkbox.setEnabled(True)
+    #         else:
+    #             self._aggregate_checkbox.setEnabled(False)
+            self._aggregate_checkbox.setEnabled(False)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))        
         
     def _content_preview(self):
         """ """
@@ -209,136 +234,161 @@ class CreateReportsActivity(app_framework.ActivityBase):
 
     def _create_pw_report(self):
         """ """
-        toolbox_utils.Logging().log('PW reports started...')
-        toolbox_utils.Logging().start_accumulated_logging()
         try:
-            selectedreport = self._report_list.currentText()
-            #
-            if selectedreport == 'Standard table format':
-                toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
-                report = plankton_core.CreateReportStandard()
-                self._create_and_view_report(report)
-#                 # Note: This report was prepared during data file import.
-#                 # Preview result.
-#                 if self._tabledataset:
-#                     self._tableview.setTableModel(self._tabledataset)
-#                     self._tableview.resizeColumnsToContents()
-            elif selectedreport == 'Quantitative (counted): Table format':
-                toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
-                report = plankton_core.CreateReportCounted()
-                self._create_and_view_report(report)
-            elif selectedreport == 'Quantitative (counted): Species list':
-                toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
-                report = plankton_core.CreateReportSpecies(report_type = 'counted')
-                self._create_and_view_report(report)
-            elif selectedreport == 'Qualitative (NET): Species list':
-                toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
-                report = plankton_core.CreateReportSpecies(report_type = 'net')
-                self._create_and_view_report(report)
-            elif selectedreport == 'Quantitative (counted): Data Center export':
-                toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
-#                 report = plankton_core.CreateReportToDataCenterShark(report_type = 'counted')
-                report = plankton_core.CreateReportToDataCenterShark()
-                self._create_and_view_report(report)
-#             elif selectedreport == 'Qualitative (NET): Data Center export':
-#                 toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
-# #                 report = plankton_core.CreateReportToDataCenterShark(report_type = 'net')
-#                 report = plankton_core.CreateReportToDataCenterShark()
-#                 self._create_and_view_report(report)
-            else:
-                raise UserWarning('Sorry, the selected report \ntype is not yet implemented.')
-        except UserWarning as e:
-            toolbox_utils.Logging().error('UserWarning: ' + str(e))
-            QtWidgets.QMessageBox.warning(self, 'Warning', str(e))
-            raise
-        except (IOError, OSError) as e:
-            toolbox_utils.Logging().error('Error: ' + str(e))
-            QtWidgets.QMessageBox.warning(self, 'Error', str(e))
-            raise
+            toolbox_utils.Logging().log('PW reports started...')
+            toolbox_utils.Logging().start_accumulated_logging()
+            try:
+                selectedreport = self._report_list.currentText()
+                #
+                if selectedreport == 'Standard table format':
+                    toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
+                    report = plankton_core.CreateReportStandard()
+                    self._create_and_view_report(report)
+    #                 # Note: This report was prepared during data file import.
+    #                 # Preview result.
+    #                 if self._tabledataset:
+    #                     self._tableview.setTableModel(self._tabledataset)
+    #                     self._tableview.resizeColumnsToContents()
+                elif selectedreport == 'Quantitative (counted): Table format':
+                    toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
+                    report = plankton_core.CreateReportCounted()
+                    self._create_and_view_report(report)
+                elif selectedreport == 'Quantitative (counted): Species list':
+                    toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
+                    report = plankton_core.CreateReportSpecies(report_type = 'counted')
+                    self._create_and_view_report(report)
+                elif selectedreport == 'Qualitative (NET): Species list':
+                    toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
+                    report = plankton_core.CreateReportSpecies(report_type = 'net')
+                    self._create_and_view_report(report)
+                elif selectedreport == 'Quantitative (counted): Data Center export':
+                    toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
+    #                 report = plankton_core.CreateReportToDataCenterShark(report_type = 'counted')
+                    report = plankton_core.CreateReportToDataCenterShark()
+                    self._create_and_view_report(report)
+    #             elif selectedreport == 'Qualitative (NET): Data Center export':
+    #                 toolbox_utils.Logging().log('Selected report: ' + selectedreport + '.')
+    # #                 report = plankton_core.CreateReportToDataCenterShark(report_type = 'net')
+    #                 report = plankton_core.CreateReportToDataCenterShark()
+    #                 self._create_and_view_report(report)
+                else:
+                    raise UserWarning('Sorry, the selected report \ntype is not yet implemented.')
+            except UserWarning as e:
+                toolbox_utils.Logging().error('UserWarning: ' + str(e))
+                QtWidgets.QMessageBox.warning(self, 'Warning', str(e))
+                raise
+            except (IOError, OSError) as e:
+                toolbox_utils.Logging().error('Error: ' + str(e))
+                QtWidgets.QMessageBox.warning(self, 'Error', str(e))
+                raise
+            except Exception as e:
+                toolbox_utils.Logging().error('Failed on exception: ' + str(e))
+                QtWidgets.QMessageBox.warning(self, 'Exception', str(e))
+                raise
+            finally:
+                toolbox_utils.Logging().log_all_accumulated_rows()    
+                toolbox_utils.Logging().log('PW reports finished.\r\n')
+        #
         except Exception as e:
-            toolbox_utils.Logging().error('Failed on exception: ' + str(e))
-            QtWidgets.QMessageBox.warning(self, 'Exception', str(e))
-            raise
-        finally:
-            toolbox_utils.Logging().log_all_accumulated_rows()    
-            toolbox_utils.Logging().log('PW reports finished.\r\n')
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _create_and_view_report(self, report):
         """ """
-        # Reset and redraw before loading new content.
-        self._tableview.setTableModel(self._empty_dataset_table)
-        self._tableview.resetModel() # Model data has changed.
-        self._tableview.resizeColumnsToContents()
-        # Create a list with selected datasets.
-        datasets = []
-        for rowindex, dataset in enumerate(app_framework.ToolboxDatasets().get_datasets()):
-            item = self._loaded_datasets_model.item(rowindex, 0)
-            if item.checkState() == QtCore.Qt.Checked:        
-                datasets.append(dataset)
-        # Preview result.
-        result_table = plankton_core.DatasetTable()
-        report.create_report(datasets, result_table,
-#                             show_debug_info = self._debuginfo_checkbox.checkState(),
-                            aggregate_rows = self._aggregate_checkbox.checkState())
-        # Preview result.
-        self._tableview.setTableModel(result_table)
-        self._tableview.resetModel() # Model data has changed.
-        self._tableview.resizeColumnsToContents()
+        try:
+            # Reset and redraw before loading new content.
+            self._tableview.setTableModel(self._empty_dataset_table)
+            self._tableview.resetModel() # Model data has changed.
+            self._tableview.resizeColumnsToContents()
+            # Create a list with selected datasets.
+            datasets = []
+            for rowindex, dataset in enumerate(app_framework.ToolboxDatasets().get_datasets()):
+                item = self._loaded_datasets_model.item(rowindex, 0)
+                if item.checkState() == QtCore.Qt.Checked:        
+                    datasets.append(dataset)
+            # Preview result.
+            result_table = plankton_core.DatasetTable()
+            report.create_report(datasets, result_table,
+    #                             show_debug_info = self._debuginfo_checkbox.checkState(),
+                                aggregate_rows = self._aggregate_checkbox.checkState())
+            # Preview result.
+            self._tableview.setTableModel(result_table)
+            self._tableview.resetModel() # Model data has changed.
+            self._tableview.resizeColumnsToContents()
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
     
     def _save_data(self):
         """ """
-#         if self._tableview.getTableModel().getModeldata():
-        if self._tableview.getTableModel():
-            # Show select file dialog box.
-            namefilter = 'All files (*.*)'
-            if self._saveformat_list.currentIndex() == 1: # Xlsx file.
-                namefilter = 'Excel files (*.xlsx);;All files (*.*)'
-            else:
-                namefilter = 'Text files (*.txt);;All files (*.*)'
-            filename = QtWidgets.QFileDialog.getSaveFileName(
-                            self,
-                            'Save dataset',
-                            self._lastuseddirectory,
-                            namefilter)
-            filename = str(filename) # QString to str.
-            # Check if user pressed ok or cancel.
-            if filename:
-                self._lastuseddirectory = os.path.dirname(filename)
-                if self._saveformat_list.currentIndex() == 0: # Text file.
-                    self._save_as_file(text_file_name = filename)
-                elif self._saveformat_list.currentIndex() == 1: # Excel file.
-                    self._save_as_file(excel_file_name = filename)
+        try:
+    #         if self._tableview.getTableModel().getModeldata():
+            if self._tableview.getTableModel():
+                # Show select file dialog box.
+                namefilter = 'All files (*.*)'
+                if self._saveformat_list.currentIndex() == 1: # Xlsx file.
+                    namefilter = 'Excel files (*.xlsx);;All files (*.*)'
+                else:
+                    namefilter = 'Text files (*.txt);;All files (*.*)'
+                filename = QtWidgets.QFileDialog.getSaveFileName(
+                                self,
+                                'Save dataset',
+                                self._lastuseddirectory,
+                                namefilter)
+                filename = str(filename) # QString to str.
+                # Check if user pressed ok or cancel.
+                if filename:
+                    self._lastuseddirectory = os.path.dirname(filename)
+                    if self._saveformat_list.currentIndex() == 0: # Text file.
+                        self._save_as_file(text_file_name = filename)
+                    elif self._saveformat_list.currentIndex() == 1: # Excel file.
+                        self._save_as_file(excel_file_name = filename)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
     
     def _save_as_file(self, text_file_name = None, excel_file_name = None):
         """ """
-        tablefilewriter = toolbox_utils.TableFileWriter(
-                                file_path = '', # Is included in the file names below.
-                                text_file_name = text_file_name,                 
-                                excel_file_name = excel_file_name,                 
-                                )
+        try:
+            tablefilewriter = toolbox_utils.TableFileWriter(
+                                    file_path = '', # Is included in the file names below.
+                                    text_file_name = text_file_name,                 
+                                    excel_file_name = excel_file_name,                 
+                                    )
+            #
+    #         table_dataset = self._tableview.getTableModel().getModeldata()
+            table_dataset = self._tableview.getTableModel()
+            #
+            tablefilewriter.write_file(table_dataset.get_header(), 
+                                       table_dataset.get_rows())
         #
-#         table_dataset = self._tableview.getTableModel().getModeldata()
-        table_dataset = self._tableview.getTableModel()
-        #
-        tablefilewriter.write_file(table_dataset.get_header(), 
-                                   table_dataset.get_rows())
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _copy_to_clipboard(self):
         """ """
-        clipboard = QtWidgets.QApplication.clipboard()
-        field_separator = '\t'
-        row_separator = '\r\n'
-        clipboardstring = ''
+        try:
+            clipboard = QtWidgets.QApplication.clipboard()
+            field_separator = '\t'
+            row_separator = '\r\n'
+            clipboardstring = ''
+            #
+    #         table_dataset = self._tableview.getTableModel().getModeldata()
+            table_dataset = self._tableview.getTableModel()
+            if table_dataset:
+                # Header.
+                clipboardstring = field_separator.join(map(str, table_dataset.get_header())).strip() + row_separator
+                # Rows.
+                for row in table_dataset.get_rows():
+                    clipboardstring += field_separator.join(map(str, row)).strip() + row_separator
+            #
+            clipboard.setText(clipboardstring)
         #
-#         table_dataset = self._tableview.getTableModel().getModeldata()
-        table_dataset = self._tableview.getTableModel()
-        if table_dataset:
-            # Header.
-            clipboardstring = field_separator.join(map(str, table_dataset.get_header())).strip() + row_separator
-            # Rows.
-            for row in table_dataset.get_rows():
-                clipboardstring += field_separator.join(map(str, row)).strip() + row_separator
-        #
-        clipboard.setText(clipboardstring)
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
  

@@ -4,11 +4,14 @@
 # Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
+import sys
 from PyQt5 import QtWidgets
+from PyQt5 import QtGui
 from PyQt5 import QtCore
-import plankton_toolbox.tools.tool_base as tool_base
 
-class TaxonImagesTool(tool_base.ToolBase):
+import app_framework
+
+class TaxonImagesTool(app_framework.ToolBase):
     """
     """
     
@@ -37,8 +40,8 @@ class TaxonImagesTool(tool_base.ToolBase):
         label.setAlignment(QtCore.Qt.AlignHCenter)
         imagelabel = QtWidgets.QLabel()
         imagelabel.setAlignment(QtCore.Qt.AlignHCenter)
-        image = QtWidgets.QImage('../planktondata/cache/images/Incertae_sedis.jpg')
-        imagelabel.setPixmap(QtWidgets.QPixmap.fromImage(image))
+        image = QtGui.QImage('../planktondata/cache/images/Incertae_sedis.jpg')
+        imagelabel.setPixmap(QtGui.QPixmap.fromImage(image))
         layout.addWidget(label)
         layout.addWidget(imagelabel)
         #
@@ -46,4 +49,9 @@ class TaxonImagesTool(tool_base.ToolBase):
     
     def _test(self):
         """ """
-        self._write_to_log('Name: ' + str(self._nameedit.text()))
+        try:
+            self._write_to_log('Name: ' + str(self._nameedit.text()))
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))

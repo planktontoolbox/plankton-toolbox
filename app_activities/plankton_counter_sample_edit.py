@@ -5,9 +5,9 @@
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import os
-import datetime
+import sys
 from PyQt5 import QtWidgets
-from PyQt5 import QtCore
+
 import plankton_core
 import toolbox_utils
 import app_framework
@@ -29,17 +29,32 @@ class PlanktonCounterSampleEdit(QtWidgets.QWidget):
 
     def load_data(self):
         """ """
-        self._load_edit_table()
+        try:
+            self._load_edit_table()
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def save_data(self):
         """ """
-#         self._save_edit_table() # Don't save when tab in plankton_counter_dialog changed.
+#         try:
+#         # self._save_edit_table() # Don't save when tab in plankton_counter_dialog changed.
+#         #
+#         except Exception as e:
+#             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+#             app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def clear(self):
         """ """
-        self._sampletable_table.clear()
-        self._sampletable_editable.setTableModel(self._sampletable_table)
-        self._sampletable_editable.resizeColumnsToContents()
+        try:
+            self._sampletable_table.clear()
+            self._sampletable_editable.setTableModel(self._sampletable_table)
+            self._sampletable_editable.resizeColumnsToContents()
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _create_content_sample_edit(self):
         """ """
@@ -105,28 +120,38 @@ class PlanktonCounterSampleEdit(QtWidgets.QWidget):
     
     def _load_edit_table(self):
         """ """
-        self.clear()
+        try:
+            self.clear()
+            #
+            header, rows = self._current_sample_object.get_sample_header_and_rows()
+            self._sampletable_table.set_header(header)
+            for row in rows:
+                if len(''.join(row)) > 0:
+                    self._sampletable_table.append_row(row)
+            #                                                       
+            self._sampletable_editable.setTableModel(self._sampletable_table)
+            self._sampletable_editable.resizeColumnsToContents()
         #
-        header, rows = self._current_sample_object.get_sample_header_and_rows()
-        self._sampletable_table.set_header(header)
-        for row in rows:
-            if len(''.join(row)) > 0:
-                self._sampletable_table.append_row(row)
-        #                                                       
-        self._sampletable_editable.setTableModel(self._sampletable_table)
-        self._sampletable_editable.resizeColumnsToContents()
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _save_edit_table(self):
         """ """
-        header = self._sampletable_table.get_header()
-        rows = self._sampletable_table.get_rows()
-        # 
-        self._current_sample_object.update_all_sample_rows(header, rows)
+        try:
+            header = self._sampletable_table.get_header()
+            rows = self._sampletable_table.get_rows()
+            # 
+            self._current_sample_object.update_all_sample_rows(header, rows)
+            #
+    #         self._current_sample_object.recalculate_sample_data(self._current_sample_method)
+            self._current_sample_object.save_sample_data()
+            #
+            self._load_edit_table()
         #
-#         self._current_sample_object.recalculate_sample_data(self._current_sample_method)
-        self._current_sample_object.save_sample_data()
-        #
-        self._load_edit_table()
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _save_sample_report(self):
         """ """
@@ -135,8 +160,8 @@ class PlanktonCounterSampleEdit(QtWidgets.QWidget):
             if dialog.exec_():
                 pass
         except Exception as e:
-            print('DEBUG: Exception: ', e)
-            raise
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
 
 class ExportSampleDialog(QtWidgets.QDialog):
@@ -200,13 +225,18 @@ class ExportSampleDialog(QtWidgets.QDialog):
         
     def _browse_target_dir(self):
         """ """
-        dirdialog = QtWidgets.QFileDialog(self)
-        dirdialog.setFileMode(QtWidgets.QFileDialog.Directory)
-        dirdialog.setOptions(QtWidgets.QFileDialog.ShowDirsOnly)
-        dirdialog.setDirectory(str(self._exporttargetdir_edit.text()))
-        dirpath = dirdialog.getExistingDirectory()
-        if dirpath:
-            self._exporttargetdir_edit.setText(dirpath)
+        try:
+            dirdialog = QtWidgets.QFileDialog(self)
+            dirdialog.setFileMode(QtWidgets.QFileDialog.Directory)
+            dirdialog.setOptions(QtWidgets.QFileDialog.ShowDirsOnly)
+            dirdialog.setDirectory(str(self._exporttargetdir_edit.text()))
+            dirpath = dirdialog.getExistingDirectory()
+            if dirpath:
+                self._exporttargetdir_edit.setText(dirpath)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
     
     def _export_dataset(self):
         """ """
@@ -230,4 +260,6 @@ class ExportSampleDialog(QtWidgets.QDialog):
         except Exception as e:
             toolbox_utils.Logging().error('Failed to export sample. ' + str(e))
             QtWidgets.QMessageBox.warning(self, 'Warning', 'Failed to export sample. ' + str(e))
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         

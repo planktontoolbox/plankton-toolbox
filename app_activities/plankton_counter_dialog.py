@@ -7,8 +7,10 @@
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 
+import sys
 import plankton_core
 import app_activities
+import app_framework
 
 class PlanktonCounterDialog(QtWidgets.QDialog):
     """ """
@@ -18,13 +20,9 @@ class PlanktonCounterDialog(QtWidgets.QDialog):
         self._current_sample = sample
         # Create sample object.
         dir_path = plankton_core.PlanktonCounterManager().get_dataset_dir_path()
-        try: 
-            self._current_sample_object = plankton_core.PlanktonCounterSample(dir_path,
-                                                                             self._current_dataset,
-                                                                             self._current_sample)
-        except Exception as e:
-            print('DEBUG: Exception: ', e)
-            raise
+        self._current_sample_object = plankton_core.PlanktonCounterSample(dir_path,
+                                                                         self._current_dataset,
+                                                                         self._current_sample)
         #
         super(PlanktonCounterDialog, self).__init__(parentwidget)
         self.setWindowTitle("Plankton counter")
@@ -43,41 +41,51 @@ class PlanktonCounterDialog(QtWidgets.QDialog):
 
     def _tab_in_tabwidget_changed(self):
         """ Used to update the edit table when tab is activated/deactivated. """
-        oldtabindex = self._current_tab_index
-        newtabindex = self._main_tab_widget.currentIndex()
-        self._current_tab_index = newtabindex
-        #
-        if oldtabindex == newtabindex:
-            return
-        #
-        if oldtabindex == 0:
-                self.metadata_widget.save_data()
-        elif oldtabindex == 1:
-                self.methods_widget.save_data()
+        try:
+            oldtabindex = self._current_tab_index
+            newtabindex = self._main_tab_widget.currentIndex()
+            self._current_tab_index = newtabindex
+            #
+            if oldtabindex == newtabindex:
+                return
+            #
+            if oldtabindex == 0:
+                    self.metadata_widget.save_data()
+            elif oldtabindex == 1:
+                    self.methods_widget.save_data()
+                    self.count_widget.load_data()
+                    self.count_widget.save_data()
+            elif oldtabindex == 2:
+                    self.count_widget.save_data()
+            elif oldtabindex == 3:
+                    self.sample_data_widget.clear()
+            #   
+            if newtabindex == 0:
+                self.metadata_widget.load_data()
+            elif newtabindex == 1:
+                self.methods_widget.load_data()
+            elif newtabindex == 2:
                 self.count_widget.load_data()
-                self.count_widget.save_data()
-        elif oldtabindex == 2:
-                self.count_widget.save_data()
-        elif oldtabindex == 3:
-                self.sample_data_widget.clear()
-        #   
-        if newtabindex == 0:
-            self.metadata_widget.load_data()
-        elif newtabindex == 1:
-            self.methods_widget.load_data()
-        elif newtabindex == 2:
-            self.count_widget.load_data()
-        elif newtabindex == 3:
-            self.sample_data_widget.load_data()
+            elif newtabindex == 3:
+                self.sample_data_widget.load_data()
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def closeEvent(self, event):
         """ Called from Qt when dialog is closed. """
-        # Save content.
-        self.metadata_widget.save_data()
-        self.methods_widget.save_data()
-        self.count_widget.save_data()
+        try:
+            # Save content.
+            self.metadata_widget.save_data()
+            self.methods_widget.save_data()
+            self.count_widget.save_data()
+            #
+            self.reject()
         #
-        self.reject()
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _create_content(self):
         """ """
@@ -170,10 +178,15 @@ class PlanktonCounterDialog(QtWidgets.QDialog):
         
     def keyPressEvent(self, qKeyEvent):
         """ Overridden from base class. """
-        if qKeyEvent.key() == QtCore.Qt.Key_Escape: 
-            self.closeEvent(qKeyEvent)  
-            qKeyEvent.accept() # Was handled here.
-        else:
-            qKeyEvent.ignore() # Will be propagated.
-            super(PlanktonCounterDialog, self).keyPressEvent(qKeyEvent)
+        try:
+            if qKeyEvent.key() == QtCore.Qt.Key_Escape: 
+                self.closeEvent(qKeyEvent)  
+                qKeyEvent.accept() # Was handled here.
+            else:
+                qKeyEvent.ignore() # Will be propagated.
+                super(PlanktonCounterDialog, self).keyPressEvent(qKeyEvent)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 

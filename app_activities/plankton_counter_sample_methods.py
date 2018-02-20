@@ -5,10 +5,12 @@
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import os
+import sys
 import time
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
+
 import plankton_core
 import app_framework
 
@@ -38,33 +40,53 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         
     def load_data(self):
         """ Load data from method stored in sample. """
-        self._update_default_method_list()
-        self._update_counting_species_list()
-        self._load_current_sample_method()
-#         self._select_default_method_changed()
-        self._reset_default_method_values()
+        try:
+            self._update_default_method_list()
+            self._update_counting_species_list()
+            self._load_current_sample_method()
+    #         self._select_default_method_changed()
+            self._reset_default_method_values()
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def save_data(self):
         """ Save data to method stored in sample. """
-        self._save_method_to_current_sample()
+        try:
+            self._save_method_to_current_sample()
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _load_current_sample_method(self):
         """ """
-        sample_path = self._current_sample_object.get_dir_path()
-        if os.path.exists(os.path.join(sample_path, 'counting_method.txt')):
-            header, rows = plankton_core.PlanktonCounterMethods().get_counting_method_table(
-                                                sample_path, 'counting_method.txt')        
-            self._current_sample_method = plankton_core.PlanktonCounterMethod(header, rows)
-        else:
-            self._current_sample_method = plankton_core.PlanktonCounterMethod([], [])
+        try:
+            sample_path = self._current_sample_object.get_dir_path()
+            if os.path.exists(os.path.join(sample_path, 'counting_method.txt')):
+                header, rows = plankton_core.PlanktonCounterMethods().get_counting_method_table(
+                                                    sample_path, 'counting_method.txt')        
+                self._current_sample_method = plankton_core.PlanktonCounterMethod(header, rows)
+            else:
+                self._current_sample_method = plankton_core.PlanktonCounterMethod([], [])
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _save_method_to_current_sample(self):
         """ """
-        if self._current_sample_method is None:
-            return
+        try:
+            if self._current_sample_method is None:
+                return
+            #
+            sample_path = self._current_sample_object.get_dir_path()
+            self._current_sample_method.save_method_config_to_file(sample_path, 'counting_method.txt')
         #
-        sample_path = self._current_sample_object.get_dir_path()
-        self._current_sample_method.save_method_config_to_file(sample_path, 'counting_method.txt')
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _create_content_methods(self):
         """ """
@@ -308,284 +330,346 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         
     def _update_default_method_list(self):
         """ """
-        self._selectdefaultmethod_list.clear()
+        try:
+            self._selectdefaultmethod_list.clear()
+            #
+            defaultmethods = plankton_core.PlanktonCounterMethods().get_default_method_list()
+            if len(defaultmethods) > 0:
+                self._selectdefaultmethod_list.addItems(['<select>'] + defaultmethods)
+    #             self._selectdefaultmethod_list.addItems(defaultmethods)
+            else:
+                self._selectdefaultmethod_list.addItems(['<not available>'])            
         #
-        defaultmethods = plankton_core.PlanktonCounterMethods().get_default_method_list()
-        if len(defaultmethods) > 0:
-            self._selectdefaultmethod_list.addItems(['<select>'] + defaultmethods)
-#             self._selectdefaultmethod_list.addItems(defaultmethods)
-        else:
-            self._selectdefaultmethod_list.addItems(['<not available>'])            
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     def _update_counting_species_list(self):
         """ """
-        self._counting_species_list.clear()
-        specieslists = plankton_core.PlanktonCounterMethods().get_counting_species_lists()
-        if len(specieslists) > 0:
-            self._counting_species_list.addItems(['<valid taxa>'] + specieslists)
-#             self._counting_species_list.addItems(['<all species>'] + specieslists)
-        else:
-            self._counting_species_list.addItems(['<not available>'])        
+        try:
+            self._counting_species_list.clear()
+            specieslists = plankton_core.PlanktonCounterMethods().get_counting_species_lists()
+            if len(specieslists) > 0:
+                self._counting_species_list.addItems(['<valid taxa>'] + specieslists)
+    #             self._counting_species_list.addItems(['<all species>'] + specieslists)
+            else:
+                self._counting_species_list.addItems(['<not available>'])        
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _copy_default_method_values(self):
         """ """
-        self._selectmethod_table.clear()
-        self._selectmethodstep_table.clear()
-        self._update_method_step_fields({}) # Clear.
+        try:
+            self._selectmethod_table.clear()
+            self._selectmethodstep_table.clear()
+            self._update_method_step_fields({}) # Clear.
+            #
+            if self._selectdefaultmethod_list.currentIndex() == 0:
+                self._load_current_sample_method()
+            else:
+                selecteddefaultmethod = str(self._selectdefaultmethod_list.currentText())
+                try:
+                    path = plankton_core.PlanktonCounterMethods().get_methods_dir_path()
+                    header, rows = plankton_core.PlanktonCounterMethods().get_counting_method_table(
+                                                                        path, selecteddefaultmethod + '.txt')      
+                    self._current_sample_method = plankton_core.PlanktonCounterMethod(header, rows)
+                except:
+                    self._current_sample_method = plankton_core.PlanktonCounterMethod([], [])
+            #
+            self._update_method_table()
+            self._update_method_step_table()
         #
-        if self._selectdefaultmethod_list.currentIndex() == 0:
-            self._load_current_sample_method()
-        else:
-            selecteddefaultmethod = str(self._selectdefaultmethod_list.currentText())
-            try:
-                path = plankton_core.PlanktonCounterMethods().get_methods_dir_path()
-                header, rows = plankton_core.PlanktonCounterMethods().get_counting_method_table(
-                                                                    path, selecteddefaultmethod + '.txt')      
-                self._current_sample_method = plankton_core.PlanktonCounterMethod(header, rows)
-            except:
-                self._current_sample_method = plankton_core.PlanktonCounterMethod([], [])
-        #
-        self._update_method_table()
-        self._update_method_step_table()
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+
 #####        
     def _update_method_table(self):
         """ """
-        self._selectmethod_table.clear()
+        try:
+            self._selectmethod_table.clear()
+            #
+            countingmethods = self._current_sample_method.get_counting_methods_list()
+            if len(countingmethods) > 0:
+                self._selectmethod_table.addItems(countingmethods)
+                self._selectmethod_table.setCurrentRow(0)
+            else:
+                self._selectmethod_table.addItems(['<not available>'])
+                self._selectmethod_table.setCurrentRow(0)
         #
-        countingmethods = self._current_sample_method.get_counting_methods_list()
-        if len(countingmethods) > 0:
-            self._selectmethod_table.addItems(countingmethods)
-            self._selectmethod_table.setCurrentRow(0)
-        else:
-            self._selectmethod_table.addItems(['<not available>'])
-            self._selectmethod_table.setCurrentRow(0)
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _update_method_step_table(self):
         """ """
-        self._selectmethodstep_table.clear()
+        try:
+            self._selectmethodstep_table.clear()
+            #
+            currentmethod = str(self._selectmethod_table.currentItem().text())
+            countingmethods = self._current_sample_method.get_counting_method_steps_list(currentmethod)
+            if len(countingmethods) > 0:
+                self._selectmethodstep_table.addItems(countingmethods)
+                self._selectmethodstep_table.setCurrentRow(0)
+            else:
+                self._selectmethodstep_table.addItems(['<not available>'])
+                self._selectmethodstep_table.setCurrentRow(0)
         #
-        currentmethod = str(self._selectmethod_table.currentItem().text())
-        countingmethods = self._current_sample_method.get_counting_method_steps_list(currentmethod)
-        if len(countingmethods) > 0:
-            self._selectmethodstep_table.addItems(countingmethods)
-            self._selectmethodstep_table.setCurrentRow(0)
-        else:
-            self._selectmethodstep_table.addItems(['<not available>'])
-            self._selectmethodstep_table.setCurrentRow(0)
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _reset_default_method_values(self):
         """ """
-        self._selectmethod_table.clear()
-        self._selectmethodstep_table.clear()
+        try:
+            self._selectmethod_table.clear()
+            self._selectmethodstep_table.clear()
+            #
+            self._load_current_sample_method()
+            #
+            countingmethods = self._current_sample_method.get_counting_method_list()
+            if len(countingmethods) > 0:
+                self._selectmethod_table.addItems(countingmethods)
+                self._selectmethod_table.setCurrentRow(0)
+            else:
+                self._selectmethod_table.addItems(['<not available>'])
+                self._selectmethod_table.setCurrentRow(0)
+            #
+            currentmethod = str(self._selectmethod_table.currentItem().text())
+            countingmethods = self._current_sample_method.get_counting_method_steps_list(currentmethod)
+            if len(countingmethods) > 0:
+                self._selectmethodstep_table.addItems(countingmethods)
+                self._selectmethodstep_table.setCurrentRow(0)
+            else:
+                self._selectmethodstep_table.addItems(['<not available>'])
+                self._selectmethodstep_table.setCurrentRow(0)
         #
-        self._load_current_sample_method()
-        #
-        countingmethods = self._current_sample_method.get_counting_method_list()
-        if len(countingmethods) > 0:
-            self._selectmethod_table.addItems(countingmethods)
-            self._selectmethod_table.setCurrentRow(0)
-        else:
-            self._selectmethod_table.addItems(['<not available>'])
-            self._selectmethod_table.setCurrentRow(0)
-        #
-        currentmethod = str(self._selectmethod_table.currentItem().text())
-        countingmethods = self._current_sample_method.get_counting_method_steps_list(currentmethod)
-        if len(countingmethods) > 0:
-            self._selectmethodstep_table.addItems(countingmethods)
-            self._selectmethodstep_table.setCurrentRow(0)
-        else:
-            self._selectmethodstep_table.addItems(['<not available>'])
-            self._selectmethodstep_table.setCurrentRow(0)
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+
 #####
     def _update_method_fields(self, fields_dict):
         """ """
         try:
-            self._dont_update_current_sample_method_flag = True
-            #
-#             self._methodstepdescription_edit.setText(fields_dict.get('method_description', ''))
-
-            #
-            methodtype = fields_dict.get('qualitative_quantitative', '')
-            currentindex = self._methodtype_list.findText(methodtype, QtCore.Qt.MatchFixedString)
-            if currentindex >= 0:
-                self._methodtype_list.setCurrentIndex(currentindex)
-            else:
-                self._methodtype_list.setCurrentIndex(0)
-
-
-            
-            self._sampledvolume_edit.setText(fields_dict.get('sampled_volume_ml', ''))
-            #
-            preservative = fields_dict.get('preservative', '')
-            currentindex = self._preservative_list.findText(preservative, QtCore.Qt.MatchFixedString)
-            if currentindex >= 0:
-                self._preservative_list.setCurrentIndex(currentindex)
-            else:
-                self._preservative_list.setCurrentIndex(0)
-            #
-            self._preservative_volume_edit.setText(fields_dict.get('preservative_volume_ml', ''))
-            self._countedvolume_edit.setText(fields_dict.get('counted_volume_ml', ''))
-            self._chamber_filter_diameter_edit.setText(fields_dict.get('chamber_filter_diameter_mm', ''))
-            #
-            self._magnification_edit.setText(fields_dict.get('magnification', ''))
-            self._microscope_edit.setText(fields_dict.get('microscope', ''))
-            #
-            comboindex = self._countareatype_list.findText(fields_dict.get('count_area_type', '<select>'))
-            self._countareatype_list.setCurrentIndex(comboindex)
-            #
-            self._viewdiameter_edit.setText(fields_dict.get('diameter_of_view_mm', ''))
-            self._transectrectanglelength_edit.setText(fields_dict.get('transect_rectangle_length_mm', ''))
-            self._transectrectanglewidth_edit.setText(fields_dict.get('transect_rectangle_width_mm', ''))
-            self._coefficient_one_unit_edit.setText(fields_dict.get('coefficient_one_unit', ''))
-            #
-            comboindex = self._counting_species_list.findText(fields_dict.get('counting_species_list', '<valid taxa>'))
-#             comboindex = self._counting_species_list.findText(fields_dict.get('counting_species_list', '<all species>'))
-            self._counting_species_list.setCurrentIndex(comboindex)
-            #
-            combostate = fields_dict.get('view_sizeclass_info', 'FALSE')
-            if combostate.upper() == 'TRUE':
-                self._viewsizeclassinfo_checkbox.setChecked(True)
-            else:
-                self._viewsizeclassinfo_checkbox.setChecked(False)
-            #
-##             self._calculate_coefficient_one_unit()
-        finally:
-            self._dont_update_current_sample_method_flag = False
+            try:
+                self._dont_update_current_sample_method_flag = True
+                #
+    #             self._methodstepdescription_edit.setText(fields_dict.get('method_description', ''))
+    
+                #
+                methodtype = fields_dict.get('qualitative_quantitative', '')
+                currentindex = self._methodtype_list.findText(methodtype, QtCore.Qt.MatchFixedString)
+                if currentindex >= 0:
+                    self._methodtype_list.setCurrentIndex(currentindex)
+                else:
+                    self._methodtype_list.setCurrentIndex(0)
+    
+    
+                
+                self._sampledvolume_edit.setText(fields_dict.get('sampled_volume_ml', ''))
+                #
+                preservative = fields_dict.get('preservative', '')
+                currentindex = self._preservative_list.findText(preservative, QtCore.Qt.MatchFixedString)
+                if currentindex >= 0:
+                    self._preservative_list.setCurrentIndex(currentindex)
+                else:
+                    self._preservative_list.setCurrentIndex(0)
+                #
+                self._preservative_volume_edit.setText(fields_dict.get('preservative_volume_ml', ''))
+                self._countedvolume_edit.setText(fields_dict.get('counted_volume_ml', ''))
+                self._chamber_filter_diameter_edit.setText(fields_dict.get('chamber_filter_diameter_mm', ''))
+                #
+                self._magnification_edit.setText(fields_dict.get('magnification', ''))
+                self._microscope_edit.setText(fields_dict.get('microscope', ''))
+                #
+                comboindex = self._countareatype_list.findText(fields_dict.get('count_area_type', '<select>'))
+                self._countareatype_list.setCurrentIndex(comboindex)
+                #
+                self._viewdiameter_edit.setText(fields_dict.get('diameter_of_view_mm', ''))
+                self._transectrectanglelength_edit.setText(fields_dict.get('transect_rectangle_length_mm', ''))
+                self._transectrectanglewidth_edit.setText(fields_dict.get('transect_rectangle_width_mm', ''))
+                self._coefficient_one_unit_edit.setText(fields_dict.get('coefficient_one_unit', ''))
+                #
+                comboindex = self._counting_species_list.findText(fields_dict.get('counting_species_list', '<valid taxa>'))
+    #             comboindex = self._counting_species_list.findText(fields_dict.get('counting_species_list', '<all species>'))
+                self._counting_species_list.setCurrentIndex(comboindex)
+                #
+                combostate = fields_dict.get('view_sizeclass_info', 'FALSE')
+                if combostate.upper() == 'TRUE':
+                    self._viewsizeclassinfo_checkbox.setChecked(True)
+                else:
+                    self._viewsizeclassinfo_checkbox.setChecked(False)
+                #
+    ##             self._calculate_coefficient_one_unit()
+            finally:
+                self._dont_update_current_sample_method_flag = False
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 #####
     def _select_method_changed(self):
         """ """
-        if self._current_sample_method is None:
-            return
+        try:
+            if self._current_sample_method is None:
+                return
+            #
+            self._update_method_fields({}) # Clear.
+            #
+            selectedmethod = str(self._selectmethod_table.currentItem().text())
+            #
+            fields_dict = self._current_sample_method.get_counting_method_fields(selectedmethod)
+            self._update_method_fields(fields_dict)
+            #
+            self._update_method_step_table()
         #
-        self._update_method_fields({}) # Clear.
-        #
-        selectedmethod = str(self._selectmethod_table.currentItem().text())
-        #
-        fields_dict = self._current_sample_method.get_counting_method_fields(selectedmethod)
-        self._update_method_fields(fields_dict)
-        #
-        self._update_method_step_table()
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _select_method_step_changed(self):
         """ """
-        if self._current_sample_method is None:
-            return
+        try:
+            if self._current_sample_method is None:
+                return
+            #
+            self._update_method_step_fields({}) # Clear.
+            #
+            selectedmethodstep = str(self._selectmethodstep_table.currentItem().text())
+            #
+            fields_dict = self._current_sample_method.get_counting_method_step_fields(selectedmethodstep)
+            self._update_method_step_fields(fields_dict)
         #
-        self._update_method_step_fields({}) # Clear.
-        #
-        selectedmethodstep = str(self._selectmethodstep_table.currentItem().text())
-        #
-        fields_dict = self._current_sample_method.get_counting_method_step_fields(selectedmethodstep)
-        self._update_method_step_fields(fields_dict)
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _update_method_step_fields(self, fields_dict):
         """ """
         try:
-            self._dont_update_current_sample_method_flag = True
-            #
-#             self._methodstepdescription_edit.setText(fields_dict.get('method_step_description', ''))
-
-
-            #
-            methodtype = fields_dict.get('qualitative_quantitative', '')
-            currentindex = self._methodtype_list.findText(methodtype, QtCore.Qt.MatchFixedString)
-            if currentindex >= 0:
-                self._methodtype_list.setCurrentIndex(currentindex)
-            else:
-                self._methodtype_list.setCurrentIndex(0)
-
-
-            
-            self._sampledvolume_edit.setText(fields_dict.get('sampled_volume_ml', ''))
-            #
-            preservative = fields_dict.get('preservative', '')
-            currentindex = self._preservative_list.findText(preservative, QtCore.Qt.MatchFixedString)
-            if currentindex >= 0:
-                self._preservative_list.setCurrentIndex(currentindex)
-            else:
-                self._preservative_list.setItemText(0, preservative)
-            #
-            self._preservative_volume_edit.setText(fields_dict.get('preservative_volume_ml', ''))
-            self._countedvolume_edit.setText(fields_dict.get('counted_volume_ml', ''))
-            self._chamber_filter_diameter_edit.setText(fields_dict.get('chamber_filter_diameter_mm', ''))
-            #
-            self._magnification_edit.setText(fields_dict.get('magnification', ''))
-            self._microscope_edit.setText(fields_dict.get('microscope', ''))
-            #
-            comboindex = self._countareatype_list.findText(fields_dict.get('count_area_type', '<select>'))
-            self._countareatype_list.setCurrentIndex(comboindex)
-            #
-            self._viewdiameter_edit.setText(fields_dict.get('diameter_of_view_mm', ''))
-            self._transectrectanglelength_edit.setText(fields_dict.get('transect_rectangle_length_mm', ''))
-            self._transectrectanglewidth_edit.setText(fields_dict.get('transect_rectangle_width_mm', ''))
-            self._coefficient_one_unit_edit.setText(fields_dict.get('coefficient_one_unit', ''))
-            #
-            comboindex = self._counting_species_list.findText(fields_dict.get('counting_species_list', '<valid taxa>'))
-#             comboindex = self._counting_species_list.findText(fields_dict.get('counting_species_list', '<all species>'))
-            self._counting_species_list.setCurrentIndex(comboindex)
-            #
-            combostate = fields_dict.get('view_sizeclass_info', 'FALSE')
-            if combostate.upper() == 'TRUE':
-                self._viewsizeclassinfo_checkbox.setChecked(True)
-            else:
-                self._viewsizeclassinfo_checkbox.setChecked(False)
-            #
-##             self._calculate_coefficient_one_unit()
-        finally:
-            self._dont_update_current_sample_method_flag = False
+            try:
+                self._dont_update_current_sample_method_flag = True
+                #
+    #             self._methodstepdescription_edit.setText(fields_dict.get('method_step_description', ''))
+    
+    
+                #
+                methodtype = fields_dict.get('qualitative_quantitative', '')
+                currentindex = self._methodtype_list.findText(methodtype, QtCore.Qt.MatchFixedString)
+                if currentindex >= 0:
+                    self._methodtype_list.setCurrentIndex(currentindex)
+                else:
+                    self._methodtype_list.setCurrentIndex(0)
+    
+    
+                
+                self._sampledvolume_edit.setText(fields_dict.get('sampled_volume_ml', ''))
+                #
+                preservative = fields_dict.get('preservative', '')
+                currentindex = self._preservative_list.findText(preservative, QtCore.Qt.MatchFixedString)
+                if currentindex >= 0:
+                    self._preservative_list.setCurrentIndex(currentindex)
+                else:
+                    self._preservative_list.setItemText(0, preservative)
+                #
+                self._preservative_volume_edit.setText(fields_dict.get('preservative_volume_ml', ''))
+                self._countedvolume_edit.setText(fields_dict.get('counted_volume_ml', ''))
+                self._chamber_filter_diameter_edit.setText(fields_dict.get('chamber_filter_diameter_mm', ''))
+                #
+                self._magnification_edit.setText(fields_dict.get('magnification', ''))
+                self._microscope_edit.setText(fields_dict.get('microscope', ''))
+                #
+                comboindex = self._countareatype_list.findText(fields_dict.get('count_area_type', '<select>'))
+                self._countareatype_list.setCurrentIndex(comboindex)
+                #
+                self._viewdiameter_edit.setText(fields_dict.get('diameter_of_view_mm', ''))
+                self._transectrectanglelength_edit.setText(fields_dict.get('transect_rectangle_length_mm', ''))
+                self._transectrectanglewidth_edit.setText(fields_dict.get('transect_rectangle_width_mm', ''))
+                self._coefficient_one_unit_edit.setText(fields_dict.get('coefficient_one_unit', ''))
+                #
+                comboindex = self._counting_species_list.findText(fields_dict.get('counting_species_list', '<valid taxa>'))
+    #             comboindex = self._counting_species_list.findText(fields_dict.get('counting_species_list', '<all species>'))
+                self._counting_species_list.setCurrentIndex(comboindex)
+                #
+                combostate = fields_dict.get('view_sizeclass_info', 'FALSE')
+                if combostate.upper() == 'TRUE':
+                    self._viewsizeclassinfo_checkbox.setChecked(True)
+                else:
+                    self._viewsizeclassinfo_checkbox.setChecked(False)
+                #
+    ##             self._calculate_coefficient_one_unit()
+            finally:
+                self._dont_update_current_sample_method_flag = False
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _field_changed(self):
         """ """
-##         self._calculate_coefficient_one_unit()
-        self._update_current_sample_method()
-#         # If any field changed, then go back to sample method.
-#         self._selectdefaultmethod_list.setCurrentIndex(0)
+        try:
+    ##         self._calculate_coefficient_one_unit()
+            self._update_current_sample_method()
+    #         # If any field changed, then go back to sample method.
+    #         self._selectdefaultmethod_list.setCurrentIndex(0)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _update_current_sample_method(self):
         """ Get info for both method and method step. """
-        if self._dont_update_current_sample_method_flag:
-            return
-        # Method.
-        if not self._current_sample_method:
-            return 
+        try:
+            if self._dont_update_current_sample_method_flag:
+                return
+            # Method.
+            if not self._current_sample_method:
+                return 
+            #
+            fields_dict = {}
+            fields_dict['counting_method'] = str(self._selectmethod_table.currentItem().text())
+            fields_dict['counting_method_step'] = str(self._selectmethodstep_table.currentItem().text())
+    #         fields_dict['method_step_description'] = str(self._methodstepdescription_edit.text())
+    
+    
+            fields_dict['qualitative_quantitative'] = str(self._methodtype_list.currentText())
+            
+            
+            fields_dict['sampled_volume_ml'] = str(self._sampledvolume_edit.text()).replace(',', '.').replace(' ', '')
+            fields_dict['preservative'] = str(self._preservative_list.currentText())
+            fields_dict['preservative_volume_ml'] = str(self._preservative_volume_edit.text()).replace(',', '.').replace(' ', '')
+            fields_dict['counted_volume_ml'] = str(self._countedvolume_edit.text()).replace(',', '.').replace(' ', '')
+            fields_dict['chamber_filter_diameter_mm'] = str(self._chamber_filter_diameter_edit.text()).replace(',', '.').replace(' ', '')
+            # 
+            fields_dict['magnification'] = str(self._magnification_edit.text()).replace(',', '.').replace(' ', '')
+            fields_dict['microscope'] = str(self._microscope_edit.text())
+              
+            fields_dict['count_area_type'] = str(self._countareatype_list.currentText())
+              
+            fields_dict['diameter_of_view_mm'] = str(self._viewdiameter_edit.text()).replace(',', '.').replace(' ', '')
+            fields_dict['transect_rectangle_length_mm'] = str(self._transectrectanglelength_edit.text()).replace(',', '.').replace(' ', '')
+            fields_dict['transect_rectangle_width_mm'] = str(self._transectrectanglewidth_edit.text()).replace(',', '.').replace(' ', '')
+            fields_dict['coefficient_one_unit'] = str(self._coefficient_one_unit_edit.text()).replace(',', '.').replace(' ', '')
+            
+            fields_dict['counting_species_list'] = str(self._counting_species_list.currentText())
+            if self._viewsizeclassinfo_checkbox.isChecked():
+                fields_dict['view_sizeclass_info'] = 'TRUE'
+            else:
+                fields_dict['view_sizeclass_info'] = 'FALSE'
+            #
+            counting_method = fields_dict['counting_method']
+            counting_method_step = fields_dict['counting_method_step']
+            self._current_sample_method.update_counting_method_step_fields(counting_method, counting_method_step, fields_dict)
+            # Update coefficient field.
+            self._current_sample_method.calculate_coefficient_one_unit(fields_dict)
+            self._coefficient_one_unit_edit.setText(fields_dict.get('coefficient_one_unit', '0'))
         #
-        fields_dict = {}
-        fields_dict['counting_method'] = str(self._selectmethod_table.currentItem().text())
-        fields_dict['counting_method_step'] = str(self._selectmethodstep_table.currentItem().text())
-#         fields_dict['method_step_description'] = str(self._methodstepdescription_edit.text())
-
-
-        fields_dict['qualitative_quantitative'] = str(self._methodtype_list.currentText())
-        
-        
-        fields_dict['sampled_volume_ml'] = str(self._sampledvolume_edit.text()).replace(',', '.').replace(' ', '')
-        fields_dict['preservative'] = str(self._preservative_list.currentText())
-        fields_dict['preservative_volume_ml'] = str(self._preservative_volume_edit.text()).replace(',', '.').replace(' ', '')
-        fields_dict['counted_volume_ml'] = str(self._countedvolume_edit.text()).replace(',', '.').replace(' ', '')
-        fields_dict['chamber_filter_diameter_mm'] = str(self._chamber_filter_diameter_edit.text()).replace(',', '.').replace(' ', '')
-        # 
-        fields_dict['magnification'] = str(self._magnification_edit.text()).replace(',', '.').replace(' ', '')
-        fields_dict['microscope'] = str(self._microscope_edit.text())
-          
-        fields_dict['count_area_type'] = str(self._countareatype_list.currentText())
-          
-        fields_dict['diameter_of_view_mm'] = str(self._viewdiameter_edit.text()).replace(',', '.').replace(' ', '')
-        fields_dict['transect_rectangle_length_mm'] = str(self._transectrectanglelength_edit.text()).replace(',', '.').replace(' ', '')
-        fields_dict['transect_rectangle_width_mm'] = str(self._transectrectanglewidth_edit.text()).replace(',', '.').replace(' ', '')
-        fields_dict['coefficient_one_unit'] = str(self._coefficient_one_unit_edit.text()).replace(',', '.').replace(' ', '')
-        
-        fields_dict['counting_species_list'] = str(self._counting_species_list.currentText())
-        if self._viewsizeclassinfo_checkbox.isChecked():
-            fields_dict['view_sizeclass_info'] = 'TRUE'
-        else:
-            fields_dict['view_sizeclass_info'] = 'FALSE'
-        #
-        counting_method = fields_dict['counting_method']
-        counting_method_step = fields_dict['counting_method_step']
-        self._current_sample_method.update_counting_method_step_fields(counting_method, counting_method_step, fields_dict)
-        # Update coefficient field.
-        self._current_sample_method.calculate_coefficient_one_unit(fields_dict)
-        self._coefficient_one_unit_edit.setText(fields_dict.get('coefficient_one_unit', '0'))
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
  
 
 ## Moved to plankton_counte_methods.py
@@ -690,38 +774,43 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
             
     def _add_method_step(self):
         """ """
-        old_method = ''
-        if self._selectdefaultmethod_list.currentIndex() > 0:
-            old_method = str(self._selectdefaultmethod_list.currentText())
-        current_method = str(self._selectmethod_table.currentItem().text())
-        current_method_step = str(self._selectmethodstep_table.currentItem().text())
-        #
         try:
-            dialog = AddMethodStepDialog(self, self._current_sample_method, current_method, current_method_step)
-            if dialog.exec_():
-                if old_method:
-                    path = plankton_core.PlanktonCounterMethods().get_methods_dir_path()
-                    self._current_sample_method.save_method_config_to_file(path, old_method + '.txt')
-                #
-                self._update_default_method_list()
-                #
-                currentindex = self._selectdefaultmethod_list.findText(old_method, QtCore.Qt.MatchFixedString)
-                if currentindex >= 0:
-                    self._selectdefaultmethod_list.setCurrentIndex(currentindex)
-                #
-                self._update_method_table()
-                self._update_method_step_table()
+            old_method = ''
+            if self._selectdefaultmethod_list.currentIndex() > 0:
+                old_method = str(self._selectdefaultmethod_list.currentText())
+            current_method = str(self._selectmethod_table.currentItem().text())
+            current_method_step = str(self._selectmethodstep_table.currentItem().text())
+            #
+            try:
+                dialog = AddMethodStepDialog(self, self._current_sample_method, current_method, current_method_step)
+                if dialog.exec_():
+                    if old_method:
+                        path = plankton_core.PlanktonCounterMethods().get_methods_dir_path()
+                        self._current_sample_method.save_method_config_to_file(path, old_method + '.txt')
+                    #
+                    self._update_default_method_list()
+                    #
+                    currentindex = self._selectdefaultmethod_list.findText(old_method, QtCore.Qt.MatchFixedString)
+                    if currentindex >= 0:
+                        self._selectdefaultmethod_list.setCurrentIndex(currentindex)
+                    #
+                    self._update_method_table()
+                    self._update_method_step_table()
+            except Exception as e:
+                debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+                app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+        #
         except Exception as e:
-            print('DEBUG: Exception: ', e)
-            raise
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _delete_method_steps(self):
         """ """
-        old_method = ''
-        if self._selectdefaultmethod_list.currentIndex() > 0:
-            old_method = str(self._selectdefaultmethod_list.currentText())
-        #
         try:
+            old_method = ''
+            if self._selectdefaultmethod_list.currentIndex() > 0:
+                old_method = str(self._selectdefaultmethod_list.currentText())
+            #
             dialog = DeleteMethodStepsDialog(self, self._current_sample_method)
             if dialog.exec_():
                 if old_method:
@@ -736,22 +825,23 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
                 #
                 self._update_method_table()
                 self._update_method_step_table()
+        #
         except Exception as e:
-            print('DEBUG: Exception: ', e)
-            raise
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     def _save_as_default_method(self):
         """ """
-        if self._current_sample_method is None:
-            return
-        #
-        self._update_current_sample_method()
-        #
-        old_name = ''
-        if self._selectdefaultmethod_list.currentIndex() > 0:
-            old_name = str(self._selectdefaultmethod_list.currentText())
-        #
         try:
+            if self._current_sample_method is None:
+                return
+            #
+            self._update_current_sample_method()
+            #
+            old_name = ''
+            if self._selectdefaultmethod_list.currentIndex() > 0:
+                old_name = str(self._selectdefaultmethod_list.currentText())
+            #
             dialog = SaveDefaultMethodAsDialog(self, old_name)
             if dialog.exec_():
                 new_name = dialog.get_new_name()
@@ -765,8 +855,8 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
                     if currentindex >= 0:
                         self._selectdefaultmethod_list.setCurrentIndex(currentindex)
         except Exception as e:
-            print('DEBUG: Exception: ', e)
-            raise
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _default_method_delete(self):
         """ """
@@ -775,8 +865,8 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
             if dialog.exec_():
                 self._update_default_method_list()
         except Exception as e:
-            print('DEBUG: Exception: ', e)
-            raise
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
 
 #####
@@ -881,15 +971,20 @@ class AddMethodStepDialog(QtWidgets.QDialog):
  
     def _save(self):
         """ """
-        new_method_step_dict = {}
-        if self._copycontent_checkbox.isChecked():
-            new_method_step_dict.update(self._current_sample_method.get_counting_method_step_fields(self._current_method_step))
+        try:
+            new_method_step_dict = {}
+            if self._copycontent_checkbox.isChecked():
+                new_method_step_dict.update(self._current_sample_method.get_counting_method_step_fields(self._current_method_step))
+            #
+            new_method_step_dict['counting_method'] = str(self._new_method_edit.text())
+            new_method_step_dict['counting_method_step'] = str(self._new_method_step_edit.text())
+            self._current_sample_method.add_method_step(new_method_step_dict)          
+            #            
+            self.accept() # Close dialog box.
         #
-        new_method_step_dict['counting_method'] = str(self._new_method_edit.text())
-        new_method_step_dict['counting_method_step'] = str(self._new_method_step_edit.text())
-        self._current_sample_method.add_method_step(new_method_step_dict)          
-        #            
-        self.accept() # Close dialog box.
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
  
  
 class DeleteMethodStepsDialog(QtWidgets.QDialog):
@@ -938,36 +1033,56 @@ class DeleteMethodStepsDialog(QtWidgets.QDialog):
  
     def _load_data(self):
         """ """
-        methodstepslists = self._current_sample_method.get_counting_method_steps_list()
- 
-        self._methodsteps_model.clear()        
-        for methodstep in methodstepslists:
-            item = QtGui.QStandardItem(methodstep)
-            item.setCheckState(QtCore.Qt.Unchecked)
-            item.setCheckable(True)
-            self._methodsteps_model.appendRow(item)
+        try:
+            methodstepslists = self._current_sample_method.get_counting_method_steps_list()
+     
+            self._methodsteps_model.clear()        
+            for methodstep in methodstepslists:
+                item = QtGui.QStandardItem(methodstep)
+                item.setCheckState(QtCore.Qt.Unchecked)
+                item.setCheckable(True)
+                self._methodsteps_model.appendRow(item)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
              
     def _check_all_rows(self):
         """ """
-        for rowindex in range(self._methodsteps_model.rowCount()):
-            item = self._methodsteps_model.item(rowindex, 0)
-            item.setCheckState(QtCore.Qt.Checked)
+        try:
+            for rowindex in range(self._methodsteps_model.rowCount()):
+                item = self._methodsteps_model.item(rowindex, 0)
+                item.setCheckState(QtCore.Qt.Checked)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
              
     def _uncheck_all_rows(self):
         """ """
-        for rowindex in range(self._methodsteps_model.rowCount()):
-            item = self._methodsteps_model.item(rowindex, 0)
-            item.setCheckState(QtCore.Qt.Unchecked)
+        try:
+            for rowindex in range(self._methodsteps_model.rowCount()):
+                item = self._methodsteps_model.item(rowindex, 0)
+                item.setCheckState(QtCore.Qt.Unchecked)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
  
     def _delete_marked_rows(self):
         """ """
-        for rowindex in range(self._methodsteps_model.rowCount()):
-            item = self._methodsteps_model.item(rowindex, 0)
-            if item.checkState() == QtCore.Qt.Checked:
-                selectedname = str(item.text())
-                self._current_sample_method.delete_method_step(selectedname)
+        try:
+            for rowindex in range(self._methodsteps_model.rowCount()):
+                item = self._methodsteps_model.item(rowindex, 0)
+                if item.checkState() == QtCore.Qt.Checked:
+                    selectedname = str(item.text())
+                    self._current_sample_method.delete_method_step(selectedname)
+            #
+            self.accept() # Close dialog box.
         #
-        self.accept() # Close dialog box.
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
  
 class SaveDefaultMethodAsDialog(QtWidgets.QDialog):
     """ """
@@ -1040,30 +1155,44 @@ class SaveDefaultMethodAsDialog(QtWidgets.QDialog):
 
     def _load_data(self):
         """ """
-        defaultmethods = plankton_core.PlanktonCounterMethods().get_default_method_list()
-        defaultmethods = ['<select>'] + sorted(defaultmethods)
-        self._default_methods_setups.addItems(defaultmethods)
+        try:
+            defaultmethods = plankton_core.PlanktonCounterMethods().get_default_method_list()
+            defaultmethods = ['<select>'] + sorted(defaultmethods)
+            self._default_methods_setups.addItems(defaultmethods)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _update(self):
         """ """
-        self._new_name = str(self._default_methods_setups.currentText())
-        #            
-        if self._new_name != '<select>':
-            self.accept() # Close dialog box and process the update after.
-        else:
-            QtWidgets.QMessageBox.warning(self, 'Default method setup.\n', 
-                          'No "default method setup" is selected. Please try again.')
+        try:
+            self._new_name = str(self._default_methods_setups.currentText())
+            #            
+            if self._new_name != '<select>':
+                self.accept() # Close dialog box and process the update after.
+            else:
+                QtWidgets.QMessageBox.warning(self, 'Default method setup.\n', 
+                              'No "default method setup" is selected. Please try again.')
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
     
     def _save(self):
         """ """
-        self._new_name = str(self._new_default_method_edit.text())
-        #            
-        if self._new_name:
-            self.accept() # Close dialog box and process the update after.
-        else:
-            QtWidgets.QMessageBox.warning(self, 'Default method setup.\n', 
-                          'New name for the "default method setup" is missing. Please try again.')
-
+        try:
+            self._new_name = str(self._new_default_method_edit.text())
+            #            
+            if self._new_name:
+                self.accept() # Close dialog box and process the update after.
+            else:
+                QtWidgets.QMessageBox.warning(self, 'Default method setup.\n', 
+                              'New name for the "default method setup" is missing. Please try again.')
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
 
 
@@ -1176,34 +1305,54 @@ class DeleteDefaultMethodDialog(QtWidgets.QDialog):
 
     def _load_data(self):
         """ """
-        defaultmethods = plankton_core.PlanktonCounterMethods().get_default_method_list()
-
-        self._default_methods_model.clear()        
-        for defaultmethod in defaultmethods:
-            item = QtGui.QStandardItem(defaultmethod)
-            item.setCheckState(QtCore.Qt.Unchecked)
-            item.setCheckable(True)
-            self._default_methods_model.appendRow(item)
+        try:
+            defaultmethods = plankton_core.PlanktonCounterMethods().get_default_method_list()
+    
+            self._default_methods_model.clear()        
+            for defaultmethod in defaultmethods:
+                item = QtGui.QStandardItem(defaultmethod)
+                item.setCheckState(QtCore.Qt.Unchecked)
+                item.setCheckable(True)
+                self._default_methods_model.appendRow(item)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     def _check_all_default_methods(self):
         """ """
-        for rowindex in range(self._default_methods_model.rowCount()):
-            item = self._default_methods_model.item(rowindex, 0)
-            item.setCheckState(QtCore.Qt.Checked)
+        try:
+            for rowindex in range(self._default_methods_model.rowCount()):
+                item = self._default_methods_model.item(rowindex, 0)
+                item.setCheckState(QtCore.Qt.Checked)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     def _uncheck_all_default_methods(self):
         """ """
-        for rowindex in range(self._default_methods_model.rowCount()):
-            item = self._default_methods_model.item(rowindex, 0)
-            item.setCheckState(QtCore.Qt.Unchecked)
+        try:
+            for rowindex in range(self._default_methods_model.rowCount()):
+                item = self._default_methods_model.item(rowindex, 0)
+                item.setCheckState(QtCore.Qt.Unchecked)
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _delete_marked_default_methods(self):
         """ """
-        for rowindex in range(self._default_methods_model.rowCount()):
-            item = self._default_methods_model.item(rowindex, 0)
-            if item.checkState() == QtCore.Qt.Checked:
-                selectedname = str(item.text())
-                plankton_core.PlanktonCounterMethods().delete_counting_method(selectedname)
-        #            
-        self.accept() # Close dialog box.
+        try:
+            for rowindex in range(self._default_methods_model.rowCount()):
+                item = self._default_methods_model.item(rowindex, 0)
+                if item.checkState() == QtCore.Qt.Checked:
+                    selectedname = str(item.text())
+                    plankton_core.PlanktonCounterMethods().delete_counting_method(selectedname)
+            #            
+            self.accept() # Close dialog box.
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 

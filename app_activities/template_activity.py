@@ -4,15 +4,15 @@
 # Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
+import sys
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
-import plankton_toolbox.toolbox.utils_qt as utils_qt
-import plankton_toolbox.activities.activity_base as activity_base
 
 import toolbox_utils
 import plankton_core
+import app_framework
 
-class TemplateActivity(activity_base.ActivityBase):
+class TemplateActivity(app_framework.ActivityBase):
     """
     Template class for new activities.
     """
@@ -49,9 +49,8 @@ class TemplateActivity(activity_base.ActivityBase):
         layout.addRow('&Email:', self._emailedit)
         layout.addRow('&Projects:', self._customerlist)
         # Test data.
-        self._customerlist.addItems(QtCore.QStringList()
-            << '<First project.>'
-            << '<Second project.>')
+        self._customerlist.addItem('<First project.>')
+        self._customerlist.addItem('<Second project.>')
         #
         return layout
 
@@ -69,5 +68,10 @@ class TemplateActivity(activity_base.ActivityBase):
 
     def _test(self):
         """ """
-        toolbox_utils.Logging().log('Name: ' + str(self._nameedit.text()))
+        try:
+            toolbox_utils.Logging().log('Name: ' + str(self._nameedit.text()))
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         

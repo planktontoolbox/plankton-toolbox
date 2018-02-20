@@ -4,15 +4,9 @@
 # Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
+import sys
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
-
-from matplotlib import path
-from matplotlib import pyplot
-import numpy as np
- 
-# import cartopy.crs as ccrs
-# from cartopy.io.img_tiles import OSM
 
 import app_framework
 
@@ -75,5 +69,10 @@ class TemplateTool(app_framework.ToolBase):
 
     def _test(self):
         """ """
-        app_framework.Logging().log('Name: ' + str(self._emailedit.text()))
+        try:
+            app_framework.Logging().log('Name: ' + str(self._emailedit.text()))
+        #
+        except Exception as e:
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
