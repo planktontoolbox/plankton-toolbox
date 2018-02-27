@@ -4,6 +4,7 @@
 # Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
+import operator
 import plankton_core
 
 class CreateReportSpecies(object):
@@ -151,7 +152,8 @@ class CreateReportSpecies(object):
             species_rows.append(row)
             
         # Sort the outdata list before writing to file. 
-        species_rows.sort(report_count_table_sort) # Sort function defined below.
+        # Sort order: Class, species, size and trophy.
+        species_rows.sort(key=operator.itemgetter(0, 2, 3, 6))
         
         #
         # Aggregate values. Same species and trophy but different size classes will be aggregated.

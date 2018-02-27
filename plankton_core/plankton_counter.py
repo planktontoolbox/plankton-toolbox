@@ -726,7 +726,8 @@ class PlanktonCounterSample():
                                                 sample_path, 'counting_method.txt')        
 
         # Use openpyxl for Excel.
-        workbook = openpyxl.Workbook(optimized_write = True)  # Supports big files.
+#         workbook = openpyxl.Workbook(optimized_write = True)  # Supports big files.
+        workbook = openpyxl.Workbook(write_only  = True)  # Supports big files.
 
 #         # Sheet: Summary.
 #         sampleinfo_worksheet = workbook.create_sheet('Summary')

@@ -270,7 +270,7 @@ class ToolboxQTableView(QtWidgets.QTableView):
         """ Used to repaint. """
         if self._tablemodel:
             self._tablemodel.beginResetModel()
-            self._tablemodel.getModeldata().clear()
+#             self._tablemodel.getModeldata().clear()
             self._tablemodel.endResetModel()
           
     def getTableModel(self):
@@ -322,7 +322,10 @@ class ToolboxTableModel(QtCore.QAbstractTableModel):
     def setModeldata(self, tablemodeldata):
         """ """
         self._modeldata = tablemodeldata
-        self.reset() 
+#         self.reset() 
+#         self.beginResetModel();
+# #         self._modeldata.clear();
+#         self.endResetModel(); 
 
     def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
         """ Overridden abstract method. """
@@ -415,9 +418,9 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
         """ """
         self._modeldata = tablemodeldata
 #         self.reset()
-        self.beginResetModel();
-        self._modeldata.clear();
-        self.endResetModel(); 
+#         self.beginResetModel();
+# #         self._modeldata.clear();
+#         self.endResetModel(); 
 
     def headerData(self, section, orientation, role = QtCore.Qt.DisplayRole):
         """ Overridden abstract method. """

@@ -5,6 +5,7 @@
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import sys
+import operator
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 
@@ -259,7 +260,13 @@ class AnalyseDatasetsTab8(QtWidgets.QWidget):
                 taxon_rows.append(row)
                  
             # Sort the outdata list before writing to file. 
-            taxon_rows.sort(primer_report_count_table_sort) # Note: Sort function defined below.        
+            # Sort order: 
+            # - 0: scientific_name
+            # - 1: size_class
+            # - 2: trophic_type
+            # - 3: stage
+            # - 4: sex
+            taxon_rows.sort(key=operator.itemgetter(0, 1, 2, 3, 4))  
             #
             # Part 4: Put all parts together and add to result table.
             # 
@@ -369,27 +376,27 @@ class AnalyseDatasetsTab8(QtWidgets.QWidget):
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
             app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
-# Sort function for the result table.
-def primer_report_count_table_sort(s1, s2):
-    """ """
-    # Sort order: 
-    # - 0: scientific_name
-    # - 1: size_class
-    # - 2: trophic_type
-    # - 3: stage
-    # - 4: sex
-    columnsortorder = [0, 1, 2, 3, 4]
-    #
-    for index in columnsortorder:
-        s1item = s1[index]
-        s2item = s2[index]
-        # Empty strings should be at the end.
-        if (s1item != '') and (s2item == ''): return -1
-        if (s1item == '') and (s2item != ''): return 1
-        if s1item < s2item: return -1
-        if s1item > s2item: return 1
-    #
-    return 0 # All are equal.
+# # Sort function for the result table.
+# def primer_report_count_table_sort(s1, s2):
+#     """ """
+#     # Sort order: 
+#     # - 0: scientific_name
+#     # - 1: size_class
+#     # - 2: trophic_type
+#     # - 3: stage
+#     # - 4: sex
+#     columnsortorder = [0, 1, 2, 3, 4]
+#     #
+#     for index in columnsortorder:
+#         s1item = s1[index]
+#         s2item = s2[index]
+#         # Empty strings should be at the end.
+#         if (s1item != '') and (s2item == ''): return -1
+#         if (s1item == '') and (s2item != ''): return 1
+#         if s1item < s2item: return -1
+#         if s1item > s2item: return 1
+#     #
+#     return 0 # All are equal.
 
 
 ##########################################################################

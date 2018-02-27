@@ -309,7 +309,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
     
                 # Show select file dialog box. Multiple files can be selected.
                 namefilter = 'Plankton counter samples (*.xlsx);;All files (*.*)'
-                filenames = QtWidgets.QFileDialog.getOpenFileNames(
+                filenames, _ = QtWidgets.QFileDialog.getOpenFileNames(
                                     self,
                                     'Load plankton counter sample file(s). ',
                                     self._lastusedplanktoncounterfilename,
@@ -357,7 +357,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
     
                 # Show select file dialog box. Multiple files can be selected.
                 namefilter = 'SHARKweb files (*.txt);;All files (*.*)'
-                filenames = QtWidgets.QFileDialog.getOpenFileNames(
+                filenames, _ = QtWidgets.QFileDialog.getOpenFileNames(
                                     self,
                                     'Load SHARKweb file(s). ',
                                     self._lastusedsharkwebfilename,
@@ -590,7 +590,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
                 self._write_to_status_bar('Importing datasets...')
                 # Show select file dialog box. Multiple files can be selected.
                 namefilter = 'Text files (*.txt);;All files (*.*)'
-                filenames = QtWidgets.QFileDialog.getOpenFileNames(
+                filenames, _ = QtWidgets.QFileDialog.getOpenFileNames(
                                     self,
                                     'Import dataset(s)',
                                     self._last_used_textfile_name,
@@ -736,7 +736,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
                 self._write_to_status_bar('Importing datasets...')
                 # Show select file dialog box. Multiple files can be selected.
                 namefilter = 'Excel files (*.xlsx);;All files (*.*)'
-                filenames = QtWidgets.QFileDialog.getOpenFileNames(
+                filenames, _ = QtWidgets.QFileDialog.getOpenFileNames(
                                     self,
                                     'Import dataset(s)',
                                     self._last_used_excelfile_name,

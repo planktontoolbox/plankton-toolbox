@@ -331,7 +331,7 @@ class CreateReportsActivity(app_framework.ActivityBase):
                     namefilter = 'Excel files (*.xlsx);;All files (*.*)'
                 else:
                     namefilter = 'Text files (*.txt);;All files (*.*)'
-                filename = QtWidgets.QFileDialog.getSaveFileName(
+                filename, _ = QtWidgets.QFileDialog.getSaveFileName(
                                 self,
                                 'Save dataset',
                                 self._lastuseddirectory,

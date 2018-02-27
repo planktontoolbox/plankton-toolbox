@@ -136,7 +136,8 @@ class TableFileWriter():
             self._encoding = locale.getpreferredencoding()
         #
         try:
-            workbook = openpyxl.Workbook(optimized_write = True)  # Supports big files.
+#             workbook = openpyxl.Workbook(optimized_write = True)  # Supports big files.
+            workbook = openpyxl.Workbook(write_only = True)  # Supports big files.
             worksheet = workbook.create_sheet()
             # Header.
             worksheet.append(table_header)

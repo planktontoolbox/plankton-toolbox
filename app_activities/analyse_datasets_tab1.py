@@ -51,11 +51,11 @@ class AnalyseDatasetsTab1(QtWidgets.QWidget):
 #         introlabel = app_framework.RichTextQLabel()
 #         introlabel.setText(help_texts.HelpTexts().getText('AnalyseDatasetsTab1_intro'))
         #
-        loaded_datasets_listview = QtWidgets.QListView()
+        self._loaded_datasets_listview = QtWidgets.QListView()
 #         loaded_datasets_listview.setMaximumHeight(80)
 #        view.setMinimumWidth(500)
         self._loaded_datasets_model = QtGui.QStandardItemModel()
-        loaded_datasets_listview.setModel(self._loaded_datasets_model)
+        self._loaded_datasets_listview.setModel(self._loaded_datasets_model)
         # Listen for changes in the toolbox dataset list.
         app_framework.ToolboxDatasets().datasetListChanged.connect(self._update_imported_dataset_list)
         #
@@ -71,11 +71,15 @@ class AnalyseDatasetsTab1(QtWidgets.QWidget):
         #
         layout = QtWidgets.QVBoxLayout()
 #         layout.addWidget(introlabel)
-        layout.addWidget(loaded_datasets_listview, 10)
+        layout.addWidget(self._loaded_datasets_listview, 10)
 #         layout.addStretch(5)
         layout.addLayout(hbox1)
         self.setLayout(layout)                
         #
+        
+        self._loaded_datasets_listview.show() #############################################################
+        
+        
         return self
 
     def _update_imported_dataset_list(self):
@@ -89,6 +93,8 @@ class AnalyseDatasetsTab1(QtWidgets.QWidget):
     #            item.setCheckState(QtCore.Qt.Unchecked)
                 item.setCheckable(True)
                 self._loaded_datasets_model.appendRow(item)
+            #
+            self._loaded_datasets_listview.repaint() #############################################################
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)

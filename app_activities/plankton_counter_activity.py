@@ -1000,7 +1000,7 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
                 toolbox_utils.Logging().start_accumulated_logging()
                 # Show select file dialog box. Multiple files can be selected.
                 namefilter = 'Excel files (*.xlsx);;All files (*.*)'
-                filenames = QtWidgets.QFileDialog.getOpenFileNames(
+                filenames, _ = QtWidgets.QFileDialog.getOpenFileNames(
                                     self,
                                     'Import sample(s)',
                                     '', # self._last_used_excelfile_name,

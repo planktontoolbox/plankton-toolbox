@@ -4,6 +4,7 @@
 # Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
+import sys
 import toolbox_utils
 import os.path
 from numpy import rank
@@ -56,6 +57,8 @@ class Species(object):
             self._load_all_data()
         except Exception as e:
             toolbox_utils.Logging().error('Failed when loading species related files: ' + str(e))            
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             raise
 
     def get_taxa_dict(self):

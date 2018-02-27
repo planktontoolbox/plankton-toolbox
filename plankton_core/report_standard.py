@@ -4,6 +4,8 @@
 # Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
+import operator
+
 class CreateReportStandard(object):
     """ """
     def __init__(self):
@@ -79,23 +81,7 @@ class CreateReportStandard(object):
                         #
                         result_table.append_row(report_row)
         #
-        result_table.get_rows().sort(report_table_sort)
 
-
-# Sort function for the result table.
-def report_table_sort(s1, s2):
-    """ """
-    # Sort order: Station, date min depth, max depth and scientific name.
-    columnsortorder = [0, 1, 3,] 
-    #
-    for index in columnsortorder:
-        s1item = s1[index]
-        s2item = s2[index]
-        # Empty strings should be at the end.
-        if (s1item != '') and (s2item == ''): return -1
-        if (s1item == '') and (s2item != ''): return 1
-        if s1item < s2item: return -1
-        if s1item > s2item: return 1
-    #
-    return 0 # All are equal.
+        # Sort order: Station, date, min depth, max depth, scientific name, size.        
+        result_table.get_rows().sort(key=operator.itemgetter(3, 1, 9, 10, 11, 13))
 

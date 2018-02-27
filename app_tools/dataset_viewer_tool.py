@@ -160,7 +160,7 @@ class DatasetViewerTool(app_framework.ToolBase):
                     namefilter = 'Excel files (*.xlsx);;All files (*.*)'
                 else:
                     namefilter = 'Text files (*.txt);;All files (*.*)'
-                filename = QtWidgets.QFileDialog.getSaveFileName(
+                filename, _ = QtWidgets.QFileDialog.getSaveFileName(
                                 self,
                                 'Export dataset',
                                 self._lastuseddirectory,

@@ -657,9 +657,9 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
                 species_index = self._species_tableview._tablemodel.createIndex(index.row(), 0)
                 sizeclass_index = self._species_tableview._tablemodel.createIndex(index.row(), 1)
                 sflag_index = self._species_tableview._tablemodel.createIndex(index.row(), 2)
-                scientific_name = str(self._species_tableview._tablemodel.data(species_index).toString())
-                size_class = str(self._species_tableview._tablemodel.data(sizeclass_index).toString())
-                species_flag = str(self._species_tableview._tablemodel.data(sflag_index).toString())
+                scientific_name = self._species_tableview._tablemodel.data(species_index).toString()
+                size_class = str(self._species_tableview._tablemodel.data(sizeclass_index))
+                species_flag = str(self._species_tableview._tablemodel.data(sflag_index))
                 #
                 # Update name and size in pair.
                 self._scientific_name_edit.setText(scientific_name)

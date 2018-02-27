@@ -252,19 +252,25 @@ class TableFileReader():
         self._columnsbyindex = None
         #
         try:
-            workbook = openpyxl.load_workbook(filename, use_iterators = True) # Supports big files.
+#             workbook = openpyxl.load_workbook(filename, use_iterators = True) # Supports big files.
+            workbook = openpyxl.load_workbook(filename, read_only = True) # Supports big files.
             if workbook == None:
                 raise UserWarning('Can\'t read Excel (.xlsx) file.')
             worksheet = None
+            #
             if self._excel_sheet_name:
                 # 
-                if self._excel_sheet_name in workbook.get_sheet_names():
-                    worksheet = workbook.get_sheet_by_name(name = self._excel_sheet_name)
+#                 if self._excel_sheet_name in workbook.get_sheet_names():
+#                     worksheet = workbook.get_sheet_by_name(name = self._excel_sheet_name)
+                if self._excel_sheet_name in workbook.sheetnames:
+                    worksheet = workbook[self._excel_sheet_name]
                 else:
                     raise UserWarning('Excel sheet ' + self._excel_sheet_name + ' not available.')      
             else:
                 # Use the first sheet if not specified.
-                worksheet = workbook.get_sheet_by_name(name = workbook.get_sheet_names()[0])
+#                 worksheet = workbook.get_sheet_by_name(name = workbook.get_sheet_names()[0])
+#                worksheet = workbook.get_sheet_by_name(name = workbook.sheetnames[0])
+                worksheet = workbook[workbook.sheetnames[0]]
             #
             for rowindex, row in enumerate(worksheet.iter_rows()):
                 if (self._data_rows_to is not None) and (rowindex > self._data_rows_to):
