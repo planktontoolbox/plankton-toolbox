@@ -52,7 +52,7 @@ class AnalyseDatasetsTab7(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     # ===== TAB: Statistics ===== 
     def content_statistics(self):
@@ -167,7 +167,7 @@ class AnalyseDatasetsTab7(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _calc_statistics(self, dataset, reportdata,
                         selectedparameter, 
@@ -329,7 +329,7 @@ class AnalyseDatasetsTab7(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _view_data(self):
         """ """
@@ -368,7 +368,7 @@ class AnalyseDatasetsTab7(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _extract_values(self, dataset, reportdata,
                         selectedparameter, 
@@ -510,7 +510,7 @@ class AnalyseDatasetsTab7(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
            
     def _plot_graph(self):
         """ """
@@ -557,7 +557,7 @@ class AnalyseDatasetsTab7(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
     
     def _extract_plot_values(self, dataset,
                         selectedparameter, 
@@ -646,4 +646,4 @@ class AnalyseDatasetsTab7(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))

@@ -6,8 +6,9 @@
 
 import app_framework
 import app_activities
+import toolbox_utils
 
-@app_framework.singleton
+@toolbox_utils.singleton
 class ActivityManager(object):
     """ 
     The activity manager is used to set up available activites. 

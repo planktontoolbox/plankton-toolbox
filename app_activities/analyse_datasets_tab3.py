@@ -28,7 +28,7 @@ class AnalyseDatasetsTab3(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def clear(self):
         """ """
@@ -37,7 +37,7 @@ class AnalyseDatasetsTab3(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def update(self):
         """ """
@@ -47,7 +47,7 @@ class AnalyseDatasetsTab3(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     # ===== TAB: Aggregate data ===== 
     def content_aggregate_data(self):
@@ -277,7 +277,7 @@ class AnalyseDatasetsTab3(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
 
     def _update_select_data_alternatives(self):
@@ -305,7 +305,7 @@ class AnalyseDatasetsTab3(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     def _add_missing_taxa(self):
         """ """
@@ -330,5 +330,5 @@ class AnalyseDatasetsTab3(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 

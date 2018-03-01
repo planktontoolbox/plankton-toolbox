@@ -115,7 +115,7 @@ class PlanktonCounterActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _new_sample(self):
         """ """
@@ -126,7 +126,7 @@ class PlanktonCounterActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     def _delete_datasets_and_sample(self):
         """ """
@@ -137,7 +137,7 @@ class PlanktonCounterActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     def _backup_export_import(self):
         """ """
@@ -149,7 +149,7 @@ class PlanktonCounterActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     def _export_import_samples(self):
         """ """
@@ -161,7 +161,7 @@ class PlanktonCounterActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     def _selected_sample_changed(self):
         """ """
@@ -180,7 +180,7 @@ class PlanktonCounterActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
     
     def _update_counter_sample_list(self):
         """ """
@@ -200,7 +200,7 @@ class PlanktonCounterActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _open_edit_count(self):
         """ """        
@@ -223,7 +223,7 @@ class PlanktonCounterActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
 class NewDatasetDialog(QtWidgets.QDialog):
     """ This dialog is allowed to access private parts in the parent widget. """
@@ -269,7 +269,7 @@ class NewDatasetDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
 
 class NewSampleDialog(QtWidgets.QDialog):
@@ -323,7 +323,7 @@ class NewSampleDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _create_sample(self):
         """ """
@@ -341,7 +341,7 @@ class NewSampleDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
 
 class DeleteDialog(QtWidgets.QDialog):
@@ -418,7 +418,7 @@ class DeleteDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     def _check_all_datasets(self):
         """ """
@@ -429,7 +429,7 @@ class DeleteDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     def _uncheck_all_datasets(self):
         """ """
@@ -440,7 +440,7 @@ class DeleteDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _delete_marked_datasets(self):
         """ """
@@ -458,7 +458,7 @@ class DeleteDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     # SAMPLES.
     
@@ -514,7 +514,7 @@ class DeleteDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     def _check_all_samples(self):
         """ """
@@ -526,7 +526,7 @@ class DeleteDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     def _uncheck_all_samples(self):
         """ """
@@ -538,7 +538,7 @@ class DeleteDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _delete_marked_samples(self):
         """ """
@@ -558,7 +558,7 @@ class DeleteDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
 
 class BackupExportImportDialog(QtWidgets.QDialog):
@@ -639,7 +639,7 @@ class BackupExportImportDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
        
     def _backup(self):
         """ """
@@ -669,7 +669,7 @@ class BackupExportImportDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
     
     def _content_from_backup(self):
         """ """
@@ -724,7 +724,7 @@ class BackupExportImportDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
        
     def _import_from_backup(self):
         """ """
@@ -766,7 +766,7 @@ class BackupExportImportDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
 
 class ExportImportSamplesDialog(QtWidgets.QDialog):
@@ -800,7 +800,7 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _load_dataset_list(self):
         """ """
@@ -815,7 +815,7 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
     
     def _content(self):
         """ """
@@ -831,7 +831,7 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
    
     def _content_export(self):
         """ """
@@ -894,7 +894,7 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
     
     def _check_all_samples(self):
         """ """
@@ -906,7 +906,7 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
     
     def _uncheck_all_samples(self):
         """ """
@@ -918,7 +918,7 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
     
     def _content_import(self):
         """ """
@@ -989,7 +989,7 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
     
     def _import_samples(self):
         """ """
@@ -1036,5 +1036,5 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 

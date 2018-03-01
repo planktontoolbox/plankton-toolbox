@@ -13,6 +13,7 @@ import plankton_core
 import app_framework
 import app_activities
 import app_tools
+import toolbox_utils
 
 class MainWindow(QtWidgets.QMainWindow):
     """
@@ -43,7 +44,7 @@ class MainWindow(QtWidgets.QMainWindow):
                              time.strftime('%Y-%m-%d %H:%M:%S') )
         self._logfile.write('')
         self._logtool = None # Should be initiated later.
-        app_framework.Logging().set_log_target(self)
+        toolbox_utils.Logging().set_log_target(self)
         # Setup main window.
         self._createActions()
         self._createMenu()
@@ -287,15 +288,19 @@ class MainWindow(QtWidgets.QMainWindow):
     def write_to_log(self, message):
         """ Log to file and to the log tool when available. """
 #        self.console.addItem(message)
-        self._logfile.write(message + '\r\n')
-        self._logfile.flush()        
-        # Search for the console tool. Note: Not available during startup.
-        if not self._logtool:
-            for tool in self._toolmanager.get_tool_list():
-                if type(tool) == app_tools.LogTool:
-                    self._logtool = tool
-        # Log message.                   
-        if self._logtool: self._logtool.write_to_log(message)
+        try:
+            self._logfile.write(message + '\r\n')
+            self._logfile.flush()        
+            # Search for the console tool. Note: Not available during startup.
+            if not self._logtool:
+                for tool in self._toolmanager.get_tool_list():
+                    if type(tool) == app_tools.LogTool:
+                        self._logtool = tool
+            # Log message.                   
+            if self._logtool: self._logtool.write_to_log(message)
+        #
+        except Exception as e:
+            print('Exception (write_to_log):', e)
 
     def _loadResources(self):
         """ """
@@ -309,8 +314,8 @@ class MainWindow(QtWidgets.QMainWindow):
     def setVersion(self, version):
         """ """
         self._version = version
-        app_framework.Logging().log('Plankton Toolbox. Version: ' + self._version + '.')
-        app_framework.Logging().log('')
+        toolbox_utils.Logging().log('Plankton Toolbox. Version: ' + self._version + '.')
+        toolbox_utils.Logging().log('')
         
     def _about(self):
         """ """

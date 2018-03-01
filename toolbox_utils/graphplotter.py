@@ -996,9 +996,9 @@ class PieChart(ChartBase):
                     x_labels = []
                     for index, item in enumerate(y_array):
                         try:
-                            if not numpy.isnan(item):
+                            if not numpy.isnan(float(item)):
                                 x_labels.append(str(x_array[index])) # Labels should be text.
-                                y_cleaned.append(y_array[index])
+                                y_cleaned.append(float(y_array[index]))
                         except:
                             pass
                     subplot.pie(y_cleaned, labels = x_labels)
@@ -1068,8 +1068,8 @@ class BoxPlotChart(ChartBase):
                 y_cleaned = []
                 for index, item in enumerate(y_array):
                     try:
-                        if not numpy.isnan(item):
-                            y_cleaned.append(y_array[index])
+                        if not numpy.isnan(float(item)):
+                            y_cleaned.append(float(y_array[index]))
                     except:
                         pass
                 #    

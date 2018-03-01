@@ -29,7 +29,7 @@ class AnalyseDatasetsTab1(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
                 
     def clear(self):
         """ """
@@ -39,7 +39,7 @@ class AnalyseDatasetsTab1(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def update(self):
         """ """        
@@ -98,7 +98,7 @@ class AnalyseDatasetsTab1(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _clear_analysis_data(self):
         """ """
@@ -112,7 +112,7 @@ class AnalyseDatasetsTab1(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _copy_datasets_for_analysis(self):
         """ """
@@ -148,5 +148,5 @@ class AnalyseDatasetsTab1(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 

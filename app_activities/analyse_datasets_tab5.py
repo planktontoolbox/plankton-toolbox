@@ -29,7 +29,7 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
                 
     def clear(self):
         """ """
@@ -52,7 +52,7 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     # ===== TAB: Predefined graphs ===== 
     def content_predefined_graphs(self):
@@ -134,7 +134,7 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _add_sub_plot_1(self):
         """ """
@@ -171,7 +171,7 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _add_sub_plot_2(self):
         """ """
@@ -180,7 +180,7 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _add_plot_3(self):
         """ """
@@ -212,7 +212,7 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _add_plot_4(self):
         """ """
@@ -243,7 +243,7 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
             #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _create_plot_data_for_time_series(self, selectedparameter, dataset, plotdata):
         """ """
@@ -274,7 +274,7 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _create_plot_data_for_seasonal_cycle(self, selectedparameter, dataset, plotdata):
         """ """
@@ -311,7 +311,7 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
     
     def _add_plot_aaaaaaaaa(self, selectedparameter, dataset, plotdata):
         """ """
@@ -384,7 +384,7 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
             #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _add_plot_bbbbbbbbb(self, selectedparameter, dataset, plotdata):
         """ """
@@ -458,4 +458,4 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))

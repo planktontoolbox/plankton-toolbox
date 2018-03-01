@@ -11,6 +11,7 @@ import sys
 import plankton_core
 import app_activities
 import app_framework
+import toolbox_utils
 
 class PlanktonCounterDialog(QtWidgets.QDialog):
     """ """
@@ -71,7 +72,7 @@ class PlanktonCounterDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def closeEvent(self, event):
         """ Called from Qt when dialog is closed. """
@@ -85,7 +86,7 @@ class PlanktonCounterDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _create_content(self):
         """ """
@@ -188,5 +189,5 @@ class PlanktonCounterDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 

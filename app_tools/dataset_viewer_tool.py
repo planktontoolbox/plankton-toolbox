@@ -11,6 +11,7 @@ from PyQt5 import QtCore
 
 import plankton_core
 import app_framework
+import toolbox_utils
 
 class DatasetViewerTool(app_framework.ToolBase):
     """ """
@@ -112,7 +113,7 @@ class DatasetViewerTool(app_framework.ToolBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _view_dataset(self, index):
         """ """
@@ -147,7 +148,7 @@ class DatasetViewerTool(app_framework.ToolBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
     
     def _save_data(self):
         """ """
@@ -178,7 +179,7 @@ class DatasetViewerTool(app_framework.ToolBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _copy_to_clipboard(self):
         """ """
@@ -201,7 +202,7 @@ class DatasetViewerTool(app_framework.ToolBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _refresh_result_table(self):
         """ """
@@ -210,7 +211,7 @@ class DatasetViewerTool(app_framework.ToolBase):
             self._tableview.resizeColumnsToContents()
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     # Allow synch is confusing. Activate again when used in more tools.
     # (Currently used in the other way, controlled by a checkbox in load_datasets_activity.)                       
@@ -227,5 +228,5 @@ class DatasetViewerTool(app_framework.ToolBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         

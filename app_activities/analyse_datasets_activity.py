@@ -150,7 +150,7 @@ class AnalyseDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _refresh_filtered_data(self):
         """ """
@@ -160,7 +160,7 @@ class AnalyseDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _view_hide_data_changed(self):
         """ """
@@ -169,7 +169,7 @@ class AnalyseDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _content_save_analysis_data(self):
         """ """
@@ -198,7 +198,7 @@ class AnalyseDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     #     def set_analysis_data(self, analysis_data):
     #         """ """
@@ -214,7 +214,7 @@ class AnalyseDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def hide_viewed_data(self):
         """ """
@@ -225,7 +225,7 @@ class AnalyseDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
         
     def update_viewed_data(self):
@@ -278,7 +278,7 @@ class AnalyseDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
         
     def _refresh_viewed_data_table(self):
@@ -289,7 +289,7 @@ class AnalyseDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _save_analysis_data(self):
         """ """
@@ -320,7 +320,7 @@ class AnalyseDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _copy_to_clipboard(self):
         """ """
@@ -343,7 +343,7 @@ class AnalyseDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def clear_all_tabs(self):
         """ """
@@ -359,7 +359,7 @@ class AnalyseDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def update_all_tabs(self):
         """ """
@@ -375,7 +375,7 @@ class AnalyseDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def update_filter(self):
         """ Must be done before calls to create_filtered_dataset(). """
@@ -384,7 +384,7 @@ class AnalyseDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def view_analysis_data(self):
         """ """
@@ -395,7 +395,7 @@ class AnalyseDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def view_statistical_data(self):
         """ """
@@ -406,7 +406,7 @@ class AnalyseDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def view_report_data(self):
         """ """
@@ -417,5 +417,5 @@ class AnalyseDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 

@@ -34,7 +34,7 @@ class PlanktonCounterSampleEdit(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def save_data(self):
         """ """
@@ -43,7 +43,7 @@ class PlanktonCounterSampleEdit(QtWidgets.QWidget):
 #         #
 #         except Exception as e:
 #             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-#             app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+#             toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def clear(self):
         """ """
@@ -54,7 +54,7 @@ class PlanktonCounterSampleEdit(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _create_content_sample_edit(self):
         """ """
@@ -134,7 +134,7 @@ class PlanktonCounterSampleEdit(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _save_edit_table(self):
         """ """
@@ -151,7 +151,7 @@ class PlanktonCounterSampleEdit(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _save_sample_report(self):
         """ """
@@ -161,7 +161,7 @@ class PlanktonCounterSampleEdit(QtWidgets.QWidget):
                 pass
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
 
 class ExportSampleDialog(QtWidgets.QDialog):
@@ -236,7 +236,7 @@ class ExportSampleDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
     
     def _export_dataset(self):
         """ """
@@ -261,5 +261,5 @@ class ExportSampleDialog(QtWidgets.QDialog):
             toolbox_utils.Logging().error('Failed to export sample. ' + str(e))
             QtWidgets.QMessageBox.warning(self, 'Warning', 'Failed to export sample. ' + str(e))
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         

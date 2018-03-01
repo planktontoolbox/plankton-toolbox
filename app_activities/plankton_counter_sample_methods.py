@@ -13,6 +13,7 @@ from PyQt5 import QtCore
 
 import plankton_core
 import app_framework
+import toolbox_utils
 
 class PlanktonCounterSampleMethods(QtWidgets.QWidget):
     """ """
@@ -49,7 +50,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def save_data(self):
         """ Save data to method stored in sample. """
@@ -58,7 +59,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _load_current_sample_method(self):
         """ """
@@ -73,7 +74,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _save_method_to_current_sample(self):
         """ """
@@ -86,7 +87,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _create_content_methods(self):
         """ """
@@ -342,7 +343,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     def _update_counting_species_list(self):
         """ """
@@ -357,7 +358,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _copy_default_method_values(self):
         """ """
@@ -383,7 +384,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
 #####        
     def _update_method_table(self):
@@ -401,7 +402,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _update_method_step_table(self):
         """ """
@@ -419,7 +420,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _reset_default_method_values(self):
         """ """
@@ -448,7 +449,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
 #####
     def _update_method_fields(self, fields_dict):
@@ -509,7 +510,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 #####
     def _select_method_changed(self):
         """ """
@@ -528,7 +529,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _select_method_step_changed(self):
         """ """
@@ -545,7 +546,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _update_method_step_fields(self, fields_dict):
         """ """
@@ -606,7 +607,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _field_changed(self):
         """ """
@@ -618,7 +619,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _update_current_sample_method(self):
         """ Get info for both method and method step. """
@@ -669,7 +670,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
  
 
 ## Moved to plankton_counte_methods.py
@@ -798,11 +799,11 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
                     self._update_method_step_table()
             except Exception as e:
                 debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-                app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+                toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _delete_method_steps(self):
         """ """
@@ -828,7 +829,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     def _save_as_default_method(self):
         """ """
@@ -856,7 +857,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
                         self._selectdefaultmethod_list.setCurrentIndex(currentindex)
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _default_method_delete(self):
         """ """
@@ -866,7 +867,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
                 self._update_default_method_list()
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
 
 #####
@@ -984,7 +985,7 @@ class AddMethodStepDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
  
  
 class DeleteMethodStepsDialog(QtWidgets.QDialog):
@@ -1045,7 +1046,7 @@ class DeleteMethodStepsDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
              
     def _check_all_rows(self):
         """ """
@@ -1056,7 +1057,7 @@ class DeleteMethodStepsDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
              
     def _uncheck_all_rows(self):
         """ """
@@ -1067,7 +1068,7 @@ class DeleteMethodStepsDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
  
     def _delete_marked_rows(self):
         """ """
@@ -1082,7 +1083,7 @@ class DeleteMethodStepsDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
  
 class SaveDefaultMethodAsDialog(QtWidgets.QDialog):
     """ """
@@ -1162,7 +1163,7 @@ class SaveDefaultMethodAsDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _update(self):
         """ """
@@ -1177,7 +1178,7 @@ class SaveDefaultMethodAsDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
     
     def _save(self):
         """ """
@@ -1192,7 +1193,7 @@ class SaveDefaultMethodAsDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
 
 
@@ -1317,7 +1318,7 @@ class DeleteDefaultMethodDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     def _check_all_default_methods(self):
         """ """
@@ -1328,7 +1329,7 @@ class DeleteDefaultMethodDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     def _uncheck_all_default_methods(self):
         """ """
@@ -1339,7 +1340,7 @@ class DeleteDefaultMethodDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _delete_marked_default_methods(self):
         """ """
@@ -1354,5 +1355,5 @@ class DeleteDefaultMethodDialog(QtWidgets.QDialog):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 

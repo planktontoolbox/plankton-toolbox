@@ -40,7 +40,7 @@ class GraphPlotterTool(app_framework.ToolBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def set_plot_data(self, plot_data):
         """ """
@@ -62,7 +62,7 @@ class GraphPlotterTool(app_framework.ToolBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def set_chart_selection(self, 
                           chart = 'Line chart', # Line chart, Bar chart, Scatter chart, Pie chart, Map chart.
@@ -80,7 +80,7 @@ class GraphPlotterTool(app_framework.ToolBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _create_content(self):
         """ """
@@ -321,7 +321,7 @@ class GraphPlotterTool(app_framework.ToolBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _draw_chart(self, embedded = True):
         """ """
@@ -397,7 +397,7 @@ class GraphPlotterTool(app_framework.ToolBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _reset_labels(self):
         """ """
@@ -446,7 +446,7 @@ class GraphPlotterTool(app_framework.ToolBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     def _apply_labels(self):
         """ """
@@ -479,7 +479,7 @@ class GraphPlotterTool(app_framework.ToolBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
 #     def _applyLabelsJson(self):
 #         """ """
@@ -506,5 +506,5 @@ class GraphPlotterTool(app_framework.ToolBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 

@@ -6,8 +6,7 @@
 
 import time
 import toolbox_utils
-import plankton_core
-
+ 
 @toolbox_utils.singleton
 class Logging(object):
     """
@@ -25,17 +24,17 @@ class Logging(object):
         self._erroracc = {} # Contains accumulated errors and counter.
         #
         self.set_log_target(DefaultLogTarget())
-        
+         
     def set_log_target(self, target):
         """ Target must be an object containing a method named write_to_log(message). """
         self._logtarget = target
-
+ 
     def clear(self):
         """ Clears all accumulated log rows. """
         self._infoacc.clear()
         self._warningacc.clear()
         self._erroracc.clear()
-        
+         
     def log(self, message):
         """ Used for direct logging. Also used by other methods in the class. """
         message = str(message)
@@ -51,7 +50,7 @@ class Logging(object):
                 self._logtarget.write_to_log('')
             else:
                 print('')
-  
+   
     def info(self, message):
         """ Accumulates info rows. Increment counter if it already exists. """
         message = str(message)
@@ -63,7 +62,7 @@ class Logging(object):
                 self._infoacc[message] = 1
         else:
             self.log(message)
-
+ 
     def warning(self, message):
         """ Accumulates warnings. Increment counter if it already exists. """
         message = str(message)
@@ -75,7 +74,7 @@ class Logging(object):
                 self._warningacc[message] = 1
         else:
             self.log(message)
-        
+         
     def error(self, message):
         """ Accumulates errors. Increment counter if it already exists. """
         message = str(message)
@@ -87,12 +86,12 @@ class Logging(object):
                 self._erroracc[message] = 1
         else:
             self.log(message)
-            
+             
     def start_accumulated_logging(self):
         """ """
         self.clear()
         self._accumulatedloggingactive = True
-        
+         
     def log_all_accumulated_rows(self):
         """ """
         errorcount = sum(self._erroracc.values())
@@ -113,7 +112,7 @@ class Logging(object):
             else:
                 self.log('- WARNINGS: ' + str(warningcount) + '.')
             self.clear()
-        
+         
     def log_all_info_rows(self):
         """ Log all the content in the accumulated info row list. """
         for message in sorted(self._infoacc):
@@ -122,7 +121,7 @@ class Logging(object):
                 self.log('- ' + message + '   (' + str(count) + ' time)')
             else:
                 self.log('- ' + message + '   (' + str(count) + ' times)')
-        
+         
     def get_all_info_rows(self):
         """ Returns a list of strings. """
         result = []
@@ -133,7 +132,7 @@ class Logging(object):
             else:
                 self.log('- ' + message + '   (' + str(count) + ' times)')
         return result
-        
+         
     def log_all_warnings(self):
         """ Log all the content in the accumulated warning list. """
         for message in sorted(self._warningacc):
@@ -142,7 +141,7 @@ class Logging(object):
                 self.log('- ' + message + '   (' + str(count) + ' time)')
             else:
                 self.log('- ' + message + '   (' + str(count) + ' times)')
-        
+         
     def get_all_warnings(self):
         """ Returns a list of strings. """
         result = []
@@ -153,7 +152,7 @@ class Logging(object):
             else:
                 self.log('- ' + message + '   (' + str(count) + ' times)')
         return result
-        
+         
     def log_all_errors(self):
         """ Log all the content in the accumulated error list. """
         for message in sorted(self._erroracc):
@@ -162,7 +161,7 @@ class Logging(object):
                 self.log('- ' + message + '   (' + str(count) + ' time)')
             else:
                 self.log('- ' + message + '   (' + str(count) + ' times)')
-
+ 
     def get_all_errors(self):
         """ Returns a list of strings. """
         result = []
@@ -173,13 +172,13 @@ class Logging(object):
             else:
                 self.log('- ' + message + '   (' + str(count) + ' times)')
         return result
-
-
+ 
+ 
 class DefaultLogTarget(object):
     """ """
     def __init__(self):
         """ """
-        
+         
     def write_to_log(self, message):
         """ """
         print(message)

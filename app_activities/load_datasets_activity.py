@@ -51,7 +51,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _log_available_parsers(self):
         """ """
@@ -66,7 +66,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _create_content(self):
         """ """
@@ -103,7 +103,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     # ===== PLANKTON COUNTER DATASETS ======
     def _content_plankton_counter(self):
@@ -148,7 +148,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     def _counter_check_all_datasets(self):
         """ """
@@ -159,7 +159,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             
     def _counter_uncheck_all_datasets(self):
         """ """
@@ -170,7 +170,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _counter_import_counter_datasets(self):
         """ """
@@ -225,7 +225,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
             
             
@@ -296,7 +296,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _load_plankton_counter_excel(self):
         """ """
@@ -342,7 +342,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _load_sharkweb_datasets(self):
         """ """
@@ -388,7 +388,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
 #     def _load_phytowin_datasets(self):
 #         """ """
@@ -549,7 +549,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _textfile_import_column_selected(self, selected_row):
         """ """
@@ -574,7 +574,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _load_text_files(self):
         """ """
@@ -630,7 +630,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     # ===== EXCEL FILES ======
     def _content_xlsx(self):
@@ -718,7 +718,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _load_excel_file(self):
         """ """
@@ -769,7 +769,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     # ===== LOADED DATASETS =====    
     def _content_loaded_datasets(self):
@@ -832,7 +832,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _unload_marked_datasets(self):
         # Remove datasets, start with the last one. 
@@ -845,7 +845,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _update_dataset_list(self):
         """ """
@@ -883,7 +883,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
     
     def _selection_changed(self):
         """ """
@@ -893,7 +893,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def _view_dataset(self):
         """ """
@@ -907,7 +907,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     
 class DatasetTableData(object):

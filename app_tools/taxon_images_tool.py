@@ -10,6 +10,8 @@ from PyQt5 import QtGui
 from PyQt5 import QtCore
 
 import app_framework
+import toolbox_utils
+
 
 class TaxonImagesTool(app_framework.ToolBase):
     """
@@ -54,4 +56,4 @@ class TaxonImagesTool(app_framework.ToolBase):
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))

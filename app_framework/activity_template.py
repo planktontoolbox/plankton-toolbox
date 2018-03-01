@@ -62,6 +62,6 @@ class TemplateActivity(app_framework.ActivityBase):
 
     def _test(self):
         """ """
-        app_framework.Logging().log('Name: ' + str(self._nameedit.text()))
-        app_framework.Logging().log('E-mail: ' + str(self._emailedit.text()))
+        toolbox_utils.Logging().log('Name: ' + str(self._nameedit.text()))
+        toolbox_utils.Logging().log('E-mail: ' + str(self._emailedit.text()))
         

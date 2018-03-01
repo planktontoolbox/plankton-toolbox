@@ -7,6 +7,7 @@
 import sys
 from PyQt5 import QtWidgets
 import app_framework
+import toolbox_utils
 
 class TestActivity(app_framework.ActivityBase):
     """
@@ -64,10 +65,10 @@ class TestActivity(app_framework.ActivityBase):
     def _test(self):
         """ """
         try:
-            app_framework.Logging().log('Name: ' + str(self._nameedit.text()))
-            app_framework.Logging().log('E-mail: ' + str(self._emailedit.text()))
+            toolbox_utils.Logging().log('Name: ' + str(self._nameedit.text()))
+            toolbox_utils.Logging().log('E-mail: ' + str(self._emailedit.text()))
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            app_framework.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         

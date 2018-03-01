@@ -9,7 +9,7 @@ import toolbox_utils
 import plankton_core
 import app_framework
 
-@app_framework.singleton
+@toolbox_utils.singleton
 class ToolboxDatasets(QtCore.QObject):
     """ Toolbox wrapper for plankton_core.Datasets. Emitted signals for change notifications are added. """
 

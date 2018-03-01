@@ -4,10 +4,11 @@
 # Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
-import app_framework
 import app_tools
+import toolbox_utils
 
-@app_framework.singleton
+
+@toolbox_utils.singleton
 class ToolManager(object):
     """
     The tool manager is used to set up available tools. 

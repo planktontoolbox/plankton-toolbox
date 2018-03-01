@@ -6,8 +6,10 @@
 
 from PyQt5 import QtCore
 import app_framework
+import toolbox_utils
 
-@app_framework.singleton
+
+@toolbox_utils.singleton
 class AppSync(QtCore.QObject):
     """ """
     selected_row_changed = QtCore.pyqtSignal()

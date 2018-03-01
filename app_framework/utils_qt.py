@@ -270,7 +270,7 @@ class ToolboxQTableView(QtWidgets.QTableView):
         """ Used to repaint. """
         if self._tablemodel:
             self._tablemodel.beginResetModel()
-#             self._tablemodel.getModeldata().clear()
+#           pass
             self._tablemodel.endResetModel()
           
     def getTableModel(self):
@@ -279,8 +279,10 @@ class ToolboxQTableView(QtWidgets.QTableView):
         
     def setTableModel(self, tablemodeldata):
         """ """
-        self._tablemodel.setModeldata(tablemodeldata)
-        self.resetModel()        
+        if self._tablemodel:
+            self._tablemodel.beginResetModel()
+            self._tablemodel.setModeldata(tablemodeldata)
+            self._tablemodel.endResetModel()
           
     def getSelectionModel(self):
         """ """
@@ -381,25 +383,16 @@ class ToolboxEditableQTableView( QtWidgets.QTableView):
             print('DEBUG, Exception: ', e)
             raise
          
-    def resetModel(self):
-        """ Used to repaint. """
-        try:
-            if self._tablemodel:
-                self._tablemodel.beginResetModel()
-    #             self._tablemodel.getModeldata().clear()
-                self._tablemodel.endResetModel()
-        except Exception as e:
-            print('DEBUG, Exception: ', e)
-            raise
-          
     def getTableModel(self):
         """ """
         return self._tablemodel.getModeldata()
           
     def setTableModel(self, tablemodeldata):
         """ """
-        self._tablemodel.setModeldata(tablemodeldata)
-        self.resetModel()        
+        if self._tablemodel:
+            self._tablemodel.beginResetModel()
+            self._tablemodel.setModeldata(tablemodeldata)
+            self._tablemodel.endResetModel()
           
     def getSelectionModel(self):
         """ """

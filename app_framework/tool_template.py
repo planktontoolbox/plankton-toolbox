@@ -66,4 +66,4 @@ class TemplateTool(app_framework.ToolBase):
 
     def _test(self):
         """ """
-        app_framework.Logging().log('Name: ' + str(self._emailedit.text()))
+        toolbox_utils.Logging().log('Name: ' + str(self._emailedit.text()))
