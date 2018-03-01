@@ -1,10 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding:utf-8 -*-
-#
-# Copyright (c) 2010-2016 SMHI, Swedish Meteorological and Hydrological Institute 
+# Project: http://plankton-toolbox.org
+# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
-#
-from __future__ import unicode_literals
 
 # import codecs
 # import dateutil
@@ -203,7 +201,7 @@ from __future__ import unicode_literals
 #                     try:
 #                         value = dateutil.parser.parse(sample_date)
 #                         if value:
-#                             sample_date = unicode(value.strftime('%Y-%m-%d'))
+#                             sample_date = str(value.strftime('%Y-%m-%d'))
 #                     except:
 #                         toolbox_utils.Logging().warning('Parser: Failed to convert to date: ' + sample_date)
 #                     #
@@ -333,7 +331,7 @@ from __future__ import unicode_literals
 #             if phytowinsize:
 #                 try:
 #                     # Convert from float to int. Excel related problem.
-#                     phytowinsize = unicode(int(float(phytowinsize.replace(',', '.'))))
+#                     phytowinsize = str(int(float(phytowinsize.replace(',', '.'))))
 #                 except:
 #                     phytowinsize = u''
 #                     print(u'loadPhytowinPegMapping, phytowinsize: ' + row[1])
@@ -342,7 +340,7 @@ from __future__ import unicode_literals
 #             if pegsize:
 #                 try:
 #                     # Convert from float to int. Excel related problem.
-#                     pegsize = unicode(int(float(pegsize.replace(',', '.'))))
+#                     pegsize = str(int(float(pegsize.replace(',', '.'))))
 #                 except:
 #                     pegsize = u''
 #                     print(u'loadPhytowinPegMapping, pegsize: ' + row[3])

@@ -1,10 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding:utf-8 -*-
-#
-# Copyright (c) 2010-2016 SMHI, Swedish Meteorological and Hydrological Institute 
+# Project: http://plankton-toolbox.org
+# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
-#
-from __future__ import unicode_literals
 
 import os
 import zipfile
@@ -197,8 +195,8 @@ class SharkArchive():
         if parameter_index:
             for index, param_unit in enumerate(sorted(parameter_unit_list)):
                 pair = param_unit.split(':')
-                metadata_rows.append('parameter#' + unicode(index) + ': ' + pair[0])
-                metadata_rows.append('unit#' + unicode(index) + ': ' + pair[1])
+                metadata_rows.append('parameter#' + str(index) + ': ' + pair[0])
+                metadata_rows.append('unit#' + str(index) + ': ' + pair[1])
         # Join rows.
         self._metadataauto_text = '\r\n'.join(metadata_rows)
 
@@ -290,28 +288,28 @@ if __name__ == "__main__":
                      )
         #
         sharkarchive.load_shark_data()
-        print('\nDEBUG: ' + unicode(sharkarchive.get_data_tableobject().header()))
+        print('\nDEBUG: ' + str(sharkarchive.get_data_tableobject().header()))
         for index, row in enumerate(sharkarchive.get_data_tableobject().rows()):
             if index >= 10:
                 print('DEBUG: Show 10 first rows.')
                 break
-            print('DEBUG: ' + unicode(row))
+            print('DEBUG: ' + str(row))
         #
         sharkarchive.load_shark_metadata()
-        print('\nDEBUG: ' + unicode(sharkarchive.get_metadata_text()))
-        print('\nDEBUG: ' + unicode(sharkarchive.get_metadata_dict()))
+        print('\nDEBUG: ' + str(sharkarchive.get_metadata_text()))
+        print('\nDEBUG: ' + str(sharkarchive.get_metadata_dict()))
         #
         sharkarchive.load_shark_metadata_auto()
-        print('\nDEBUG: ' + unicode(sharkarchive.get_metadataauto_text()))
-        print('\nDEBUG: ' + unicode(sharkarchive.get_metadataauto_dict()))
+        print('\nDEBUG: ' + str(sharkarchive.get_metadataauto_text()))
+        print('\nDEBUG: ' + str(sharkarchive.get_metadataauto_dict()))
         #
         sharkarchive.generate_metadata_auto()
-        print('\nDEBUG: ' + unicode(sharkarchive.get_metadataauto_text()))
-        print('\nDEBUG: ' + unicode(sharkarchive.get_metadataauto_dict()))
+        print('\nDEBUG: ' + str(sharkarchive.get_metadataauto_text()))
+        print('\nDEBUG: ' + str(sharkarchive.get_metadataauto_dict()))
         #
         sharkarchive.update_archive_file()
         
     except Exception as e:
-        print('Test failed: ' + unicode(e))
+        print('Test failed: ' + str(e))
         raise
     

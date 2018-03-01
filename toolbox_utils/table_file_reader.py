@@ -1,10 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding:utf-8 -*-
-#
-# Copyright (c) 2010-2016 SMHI, Swedish Meteorological and Hydrological Institute 
+# Project: http://plankton-toolbox.org
+# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
-#
-from __future__ import unicode_literals
 
 import os
 import locale
@@ -142,7 +140,7 @@ class TableFileReader():
         #         
         if len(dictionary) == 0:            
             print('Failed to create dictionary. Keyindex/valueindex: ' + 
-                   unicode(keyindex) + '/' + unicode(valueindex))            
+                   str(keyindex) + '/' + str(valueindex))            
         #
         return dictionary
         
@@ -176,8 +174,17 @@ class TableFileReader():
             for rowindex, row in enumerate(infile):
                 if (self._data_rows_to is not None) and (rowindex > self._data_rows_to):
                     break # Break loop if data_row_to is defined and exceeded.
-                # Convert to unicode.
-                row = unicode(row, self._encoding, self._encoding_error_handling)
+                # Convert to str.
+
+
+
+#                 row = str(row, self._encoding, self._encoding_error_handling)
+#                 row = row.encode(self._encoding, self._encoding_error_handling).decode('UTF-16')
+#                 row = str(row.encode(self._encoding, self._encoding_error_handling))
+##                row = str(row, encoding=self._encoding, errors=self._encoding_error_handling)
+
+                
+                
                 if rowindex == self._header_row:
                     # Header.
                     fielddelimiter = self._get_field_delimiter(row)
@@ -245,19 +252,25 @@ class TableFileReader():
         self._columnsbyindex = None
         #
         try:
-            workbook = openpyxl.load_workbook(filename, use_iterators = True) # Supports big files.
+#             workbook = openpyxl.load_workbook(filename, use_iterators = True) # Supports big files.
+            workbook = openpyxl.load_workbook(filename, read_only = True) # Supports big files.
             if workbook == None:
                 raise UserWarning('Can\'t read Excel (.xlsx) file.')
             worksheet = None
+            #
             if self._excel_sheet_name:
                 # 
-                if self._excel_sheet_name in workbook.get_sheet_names():
-                    worksheet = workbook.get_sheet_by_name(name = self._excel_sheet_name)
+#                 if self._excel_sheet_name in workbook.get_sheet_names():
+#                     worksheet = workbook.get_sheet_by_name(name = self._excel_sheet_name)
+                if self._excel_sheet_name in workbook.sheetnames:
+                    worksheet = workbook[self._excel_sheet_name]
                 else:
                     raise UserWarning('Excel sheet ' + self._excel_sheet_name + ' not available.')      
             else:
                 # Use the first sheet if not specified.
-                worksheet = workbook.get_sheet_by_name(name = workbook.get_sheet_names()[0])
+#                 worksheet = workbook.get_sheet_by_name(name = workbook.get_sheet_names()[0])
+#                worksheet = workbook.get_sheet_by_name(name = workbook.sheetnames[0])
+                worksheet = workbook[workbook.sheetnames[0]]
             #
             for rowindex, row in enumerate(worksheet.iter_rows()):
                 if (self._data_rows_to is not None) and (rowindex > self._data_rows_to):
@@ -270,7 +283,7 @@ class TableFileReader():
                         if value == None:
                             newrow.append('')
                         else:
-                            newrow.append(unicode(value).strip())
+                            newrow.append(str(value).strip())
                     #
                     columnsbyindex = self._prepare_columnsbyindex(newrow)
                     table_header = self._get_row_based_on_columnsbyindex(newrow, columnsbyindex)
@@ -282,7 +295,7 @@ class TableFileReader():
                         if value == None:
                             newrow.append('')
                         else:
-                            newrow.append(unicode(value).strip())
+                            newrow.append(str(value).strip())
                     #
                     if len(''.join(newrow)) == 0:
                         continue # Don't add empty rows.
@@ -294,7 +307,7 @@ class TableFileReader():
             return (table_header, table_rows)
         #  
         except Exception as e:
-            msg = 'Failed to read from file. File name: ' + filename + '. Exception: ' + unicode(e)
+            msg = 'Failed to read from file. File name: ' + filename + '. Exception: ' + str(e)
             print(msg)
             raise
 
@@ -324,8 +337,8 @@ class TableFileReader():
                     for rowindex, row in enumerate(zipentry):
                         if (self._data_rows_to is not None) and (rowindex > self._data_rows_to):
                             break # Break loop if data_row_to is defined and exceeded.
-                        # Convert to unicode.
-                        row = unicode(row, self._encoding, self._encoding_error_handling)
+                        # Convert to str.
+                        row = str(row, self._encoding, self._encoding_error_handling)
                         if rowindex == self._header_row:
                             # Header.
                             fielddelimiter = self._get_field_delimiter(row)
@@ -340,7 +353,7 @@ class TableFileReader():
                             table_rows.append(self._get_row_based_on_columnsbyindex(row, columnsbyindex))
             #
             except Exception as e:
-                msg = 'Can\'t read zip file. Entry name: ' + self._zip_file_entry + '. Exception: ' + unicode(e)
+                msg = 'Can\'t read zip file. Entry name: ' + self._zip_file_entry + '. Exception: ' + str(e)
                 print(msg)
                 raise UserWarning(msg)
             #
@@ -374,14 +387,14 @@ if __name__ == "__main__":
     #                 select_columns_by_index = [1, 0],
                     select_columns_by_name = ['bbb', 'aaa'],
                      )
-        print('Header: ' + unicode(tablefilereader.header()))
-        print('Rows:   ' + unicode(tablefilereader.rows()))
+        print('Header: ' + str(tablefilereader.header()))
+        print('Rows:   ' + str(tablefilereader.rows()))
         testdict = tablefilereader.create_dictionary(key_column_by_name = 'aaa', value_column_by_name = 'bbb')
-        print('Dict by name: ' + unicode(testdict))
+        print('Dict by name: ' + str(testdict))
         testdict = tablefilereader.create_dictionary(key_column_by_index = 1, value_column_by_index = 0)
-        print('Dict by index: ' + unicode(testdict))
+        print('Dict by index: ' + str(testdict))
     except Exception as e:
-        print('Test failed: ' + unicode(e))
+        print('Test failed: ' + str(e))
 
     print('\n=== TEST: Excel files. ===')
     try:
@@ -391,14 +404,14 @@ if __name__ == "__main__":
                     select_columns_by_index = [1, 0],
     #                 select_columns_by_name = ['bbb', 'aaa'],
                     )
-        print('Header: ' + unicode(tablefilereader.header()))
-        print('Rows:   ' + unicode(tablefilereader.rows()))
+        print('Header: ' + str(tablefilereader.header()))
+        print('Rows:   ' + str(tablefilereader.rows()))
         testdict = tablefilereader.create_dictionary(key_column_by_name = 'aaa', value_column_by_name = 'bbb')
-        print('Dict by name: ' + unicode(testdict))    #
+        print('Dict by name: ' + str(testdict))    #
         testdict = tablefilereader.create_dictionary(key_column_by_index = 1, value_column_by_index = 0)
-        print('Dict by index: ' + unicode(testdict))
+        print('Dict by index: ' + str(testdict))
     except Exception as e:
-        print('Test failed: ' + unicode(e))
+        print('Test failed: ' + str(e))
 
     print('\n=== TEST: Zip files. ===')
     try:
@@ -409,12 +422,12 @@ if __name__ == "__main__":
     #                 select_columns_by_index = [1, 0],
                     select_columns_by_name = ['aaa', 'bbb', 'eee', 'ccc'], # Column 'eee' not in file.
                     )
-        print('Header: ' + unicode(tablefilereader.header()))
-        print('Rows:   ' + unicode(tablefilereader.rows()))
+        print('Header: ' + str(tablefilereader.header()))
+        print('Rows:   ' + str(tablefilereader.rows()))
         testdict = tablefilereader.create_dictionary(key_column_by_name = 'aaa', value_column_by_name = 'ccc')
-        print('Dict by name:  ' + unicode(testdict))
+        print('Dict by name:  ' + str(testdict))
         testdict = tablefilereader.create_dictionary(key_column_by_index = 0, value_column_by_index = 2)
-        print('Dict by index: ' + unicode(testdict))
+        print('Dict by index: ' + str(testdict))
     except Exception as e:
-        print('Test failed: ' + unicode(e))
+        print('Test failed: ' + str(e))
 

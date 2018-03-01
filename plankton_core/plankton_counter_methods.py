@@ -1,10 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding:utf-8 -*-
-#
-# Copyright (c) 2010-2016 SMHI, Swedish Meteorological and Hydrological Institute 
+# Project: http://plankton-toolbox.org
+# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
-#
-from __future__ import unicode_literals
 
 import os
 import math
@@ -386,7 +384,7 @@ class PlanktonCounterMethod():
             ### TEST: coeffoneunit = chamber_filter_area * sampledvolume * onelitre_ml / (singlearea * counted_volume * (sampledvolume + preservative_volume))
             coeffoneunit = chamber_filter_area * (sampledvolume + preservative_volume) * onelitre_ml / (singlearea * counted_volume * sampledvolume)
             coeffoneunit = int(coeffoneunit + 0.5) # Round.
-            fields_dict['coefficient_one_unit'] = unicode(coeffoneunit)
+            fields_dict['coefficient_one_unit'] = str(coeffoneunit)
         except:
             pass
 

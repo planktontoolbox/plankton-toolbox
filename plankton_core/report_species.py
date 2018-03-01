@@ -1,11 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding:utf-8 -*-
-#
-# Copyright (c) 2010-2016 SMHI, Swedish Meteorological and Hydrological Institute 
+# Project: http://plankton-toolbox.org
+# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
-#
-from __future__ import unicode_literals
 
+import operator
 import plankton_core
 
 class CreateReportSpecies(object):
@@ -153,7 +152,8 @@ class CreateReportSpecies(object):
             species_rows.append(row)
             
         # Sort the outdata list before writing to file. 
-        species_rows.sort(report_count_table_sort) # Sort function defined below.
+        # Sort order: Class, species, size and trophy.
+        species_rows.sort(key=operator.itemgetter(0, 2, 3, 6))
         
         #
         # Aggregate values. Same species and trophy but different size classes will be aggregated.
@@ -171,10 +171,10 @@ class CreateReportSpecies(object):
                                     abundcol = 8 + (sampleindex * self._numberofcolumnspersample)
                                     volumecol = abundcol + 1
                                     if row[abundcol] and oldrow[abundcol]:
-                                        row[abundcol] = unicode(int(row[abundcol]) + int(oldrow[abundcol]))
+                                        row[abundcol] = str(int(row[abundcol]) + int(oldrow[abundcol]))
                                         oldrow[0] = u'REMOVE AGGREGATED' #
                                     if row[volumecol] and oldrow[volumecol]:
-                                        row[volumecol] = unicode(float(row[volumecol].replace(u',', u'.')) + 
+                                        row[volumecol] = str(float(row[volumecol].replace(u',', u'.')) + 
                                                                  float(oldrow[volumecol].replace(u',', u'.'))).replace(u'.', u',')
                                         oldrow[0] = u'REMOVE AGGREGATED' #
                                     #

@@ -1,10 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding:utf-8 -*-
-#
-# Copyright (c) 2010-2016 SMHI, Swedish Meteorological and Hydrological Institute 
+# Project: http://plankton-toolbox.org
+# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
-#
-from __future__ import unicode_literals
 
 
 
@@ -58,7 +56,7 @@ from __future__ import unicode_literals
 #                 try:
 #                     species_dict = self.find_valid_taxon(scientific_name, rank)
 #                 except Exception as e:
-#                     print('Exception: ' + unicode(e))
+#                     print('Exception: ' + str(e))
 #                 #
 #                 if species_dict is None:
 #                     if taxon_id:
@@ -98,7 +96,7 @@ from __future__ import unicode_literals
 #                 parent_taxon = taxa_dict[parent_id]
 #                 if parent_taxon.get('rank', '') == 'Class':
 #                     taxon_class = parent_taxon['scientificname']
-#                     taxon_class_id = 'AphiaID:' + unicode(parent_taxon['AphiaID'])
+#                     taxon_class_id = 'AphiaID:' + str(parent_taxon['AphiaID'])
 #                 #
 #                 parent_id = parent_taxon.get('parent_id', None)
 #             #
@@ -111,7 +109,7 @@ from __future__ import unicode_literals
 #         for row in taxa_dict.values():
 #             outrow = []
 #             for item in ['scientificname', 'rank', 'AphiaID', 'parent_id', 'taxon_class', 'class_id', 'classification']:
-#                 outrow.append(unicode(row.get(item, '')))
+#                 outrow.append(str(row.get(item, '')))
 #             table_rows.append(outrow)
 #         #
 #         tablefilewriter.write_file(table_header, table_rows)
@@ -190,11 +188,11 @@ from __future__ import unicode_literals
 # #         classification_string = ''
 # #         classification = self.get_aphia_classification_by_id(aphia_id)
 # #         if classification:    
-# #             classification_string = unicode(classification.rank) + ': ' + unicode(classification.scientificname)
+# #             classification_string = str(classification.rank) + ': ' + str(classification.scientificname)
 # #             while classification.child:
 # #                 classification = classification.child
 # #                 if (classification.rank and classification.scientificname):
-# #                     classification_string += ' - ' + unicode(classification.rank) + ': ' + unicode(classification.scientificname)        
+# #                     classification_string += ' - ' + str(classification.rank) + ': ' + str(classification.scientificname)        
 # #         worms_dict['worms_classification'] = classification_string
 # #         
 # #         # Synonyms.
@@ -203,7 +201,7 @@ from __future__ import unicode_literals
 # #         if synonyms:
 # #             for synonym in synonyms:
 # #                 if (synonym.scientificname and synonym.authority):
-# #                     synonym_list.append(unicode(synonym.scientificname) + ' ' + unicode(synonym.authority))
+# #                     synonym_list.append(str(synonym.scientificname) + ' ' + str(synonym.authority))
 # #         worms_dict['worms_synonym_list'] = synonym_list
 # #         #        
 # #         return worms_dict
@@ -224,22 +222,22 @@ from __future__ import unicode_literals
 # #         print('\nTest. WormsMarineSpecies: find_valid_taxon:')
 # #         worms_result = marinespecies.find_valid_taxon('Ctenophora')
 # #         for key in worms_result.keys():
-# #             print(key + ':' + unicode(worms_result[key]))
+# #             print(key + ':' + str(worms_result[key]))
 # #     except Exception as e:
-# #         print('Test failed: ' + unicode(e))
+# #         print('Test failed: ' + str(e))
 # #  
 # #     try:
 # #         print('\nTest. WormsMarineSpecies: find_valid_taxon:')
 # #         worms_result = marinespecies.find_valid_taxon('Ctenophora', rank = 'Phylum')
 # #         for key in worms_result.keys():
-# #             print(key + ':' + unicode(worms_result[key]))
+# #             print(key + ':' + str(worms_result[key]))
 # #     except Exception as e:
-# #         print('Test failed: ' + unicode(e))
+# #         print('Test failed: ' + str(e))
 # 
 #     try:
 #         print('\nTest. WormsMarineSpecies: generate_tree_from_species_list:')
 #         worms_result = marinespecies.generate_tree_from_species_list()
 #     except Exception as e:
-#         print('Test failed: ' + unicode(e))
+#         print('Test failed: ' + str(e))
 #         raise
 

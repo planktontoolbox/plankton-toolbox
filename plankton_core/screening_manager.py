@@ -1,10 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding:utf-8 -*-
-#
-# Copyright (c) 2010-2016 SMHI, Swedish Meteorological and Hydrological Institute 
+# Project: http://plankton-toolbox.org
+# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
-#
-from __future__ import unicode_literals
 
 import toolbox_utils
 import plankton_core
@@ -44,7 +42,7 @@ class ScreeningManager(object):
 #                 self._load_code_lists(excelfilename)                
         #
         except Exception as e:
-            toolbox_utils.Logging().error('Failed when loading code lists. Exception: ' + unicode(e))
+            toolbox_utils.Logging().error('Failed when loading code lists. Exception: ' + str(e))
 #        # Used for DEBUG:
 #        import locale
 #        import codecs
@@ -86,7 +84,7 @@ class ScreeningManager(object):
 #                     if key in self.get_code_types():
 #                         checked_codetypes_set.add(key)
 #                         if data_dict[key] not in self.get_codes(key):
-#                             toolbox_utils.Logging().warning('Visit level. Code is not valid.  Code type: ' + unicode(key) + '  Code: ' + unicode(data_dict[key]))
+#                             toolbox_utils.Logging().warning('Visit level. Code is not valid.  Code type: ' + str(key) + '  Code: ' + str(data_dict[key]))
 #                 #
 #                 for samplenode in visitnode.get_children():
 #                     #
@@ -95,7 +93,7 @@ class ScreeningManager(object):
 #                         if key in self.get_code_types():
 #                             checked_codetypes_set.add(key)
 #                             if data_dict[key] not in self.get_codes(key):
-#                                 toolbox_utils.Logging().warning('Sample level. Code is not valid.  Code type: ' + unicode(key) + '  Code: ' + unicode(data_dict[key]))
+#                                 toolbox_utils.Logging().warning('Sample level. Code is not valid.  Code type: ' + str(key) + '  Code: ' + str(data_dict[key]))
 #                     #                        
 #                     for variablenode in samplenode.get_children():
 #                         #
@@ -104,7 +102,7 @@ class ScreeningManager(object):
 #                             if key in self.get_code_types():
 #                                 checked_codetypes_set.add(key)
 #                                 if data_dict[key] not in self.get_codes(key):
-#                                     toolbox_utils.Logging().warning('Variable level. Code is not valid.  Code type: ' + unicode(key) + '  Code: ' + unicode(data_dict[key]))
+#                                     toolbox_utils.Logging().warning('Variable level. Code is not valid.  Code type: ' + str(key) + '  Code: ' + str(data_dict[key]))
 #         # Returns set of checked code types.
 #         return checked_codetypes_set
 
@@ -123,7 +121,7 @@ class ScreeningManager(object):
                         data_dict = variablenode.get_data_dict()
                         if 'scientific_name' in data_dict:
                             if data_dict['scientific_name'] not in species.get_taxa_lookup_dict():
-                                toolbox_utils.Logging().warning('Taxon name not in species list.  Taxon name: ' + unicode(data_dict['scientific_name']))
+                                toolbox_utils.Logging().warning('Taxon name not in species list.  Taxon name: ' + str(data_dict['scientific_name']))
      
     def bvol_species_screening(self, datasets):
         """ """
@@ -143,6 +141,6 @@ class ScreeningManager(object):
                             sizeclass = data_dict['size_class'] 
                             
                             if species.get_bvol_value(taxonname, sizeclass, 'bvol_size_class') == None:
-                                toolbox_utils.Logging().warning('Taxon name/size clas not in BVOL list.  Taxon name: ' + unicode(taxonname) + '  Size class: ' + unicode(sizeclass))
+                                toolbox_utils.Logging().warning('Taxon name/size clas not in BVOL list.  Taxon name: ' + str(taxonname) + '  Size class: ' + str(sizeclass))
      
 

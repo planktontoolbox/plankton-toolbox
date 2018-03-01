@@ -1,10 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding:utf-8 -*-
-#
-# Copyright (c) 2010-2016 SMHI, Swedish Meteorological and Hydrological Institute 
+# Project: http://plankton-toolbox.org
+# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
-#
-from __future__ import unicode_literals
 
 import plankton_core
 
@@ -181,7 +179,7 @@ class CreateReportToDataCenterShark(object):
                             row_key = ''
                             for item in self._row_key_items:
                                 if row_key: row_key += '<+>'
-                                row_key += unicode(row_dict.get(item, ''))
+                                row_key += str(row_dict.get(item, ''))
                             # Add to dict if first time.
                             if row_key not in report_rows_dict:
                                 report_rows_dict[row_key] = row_dict

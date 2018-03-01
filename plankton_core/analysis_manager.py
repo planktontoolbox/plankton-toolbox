@@ -1,10 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding:utf-8 -*-
-#
-# Copyright (c) 2010-2016 SMHI, Swedish Meteorological and Hydrological Institute 
+# Project: http://plankton-toolbox.org
+# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
-#
-from __future__ import unicode_literals
 
 import toolbox_utils
 import plankton_core
@@ -209,7 +207,7 @@ class AnalysisData(object):
         for visitnode in self._data.get_children()[:]:
             if nodelevel == 'visit':
                 if key in visitnode.get_data_dict().keys():
-                    if unicode(visitnode.get_data(key)) in selectedcontent:
+                    if str(visitnode.get_data(key)) in selectedcontent:
                         self._data.remove_child(visitnode)
                         continue
                 else:
@@ -221,7 +219,7 @@ class AnalysisData(object):
             for samplenode in visitnode.get_children()[:]:
                 if nodelevel == 'sample':
                     if key in samplenode.get_data_dict().keys():
-                        if unicode(samplenode.get_data(key)) in selectedcontent:
+                        if str(samplenode.get_data(key)) in selectedcontent:
                             visitnode.remove_child(samplenode)
                             continue
                     else:
@@ -233,7 +231,7 @@ class AnalysisData(object):
                 for variablenode in samplenode.get_children()[:]:
                     if nodelevel == 'variable':
                         if key in variablenode.get_data_dict().keys():
-                            if unicode(variablenode.get_data(key)) in selectedcontent:
+                            if str(variablenode.get_data(key)) in selectedcontent:
                                 samplenode.remove_child(variablenode)
                         else:
                             # Handle empty values.
@@ -281,8 +279,8 @@ class AnalysisData(object):
                 continue
             if visitnode.get_data('visit_month') not in filter_visit_months:
                 continue
-            if (unicode(visitnode.get_data('station_name')) + ' : ' + 
-                unicode(visitnode.get_data('sample_date'))) not in filter_visits:
+            if (str(visitnode.get_data('station_name')) + ' : ' + 
+                str(visitnode.get_data('sample_date'))) not in filter_visits:
                 continue
             # Create node and copy node data.            
             filteredvisit = plankton_core.VisitNode()
@@ -290,8 +288,8 @@ class AnalysisData(object):
             filtereddata.add_child(filteredvisit)    
             #
             for samplenode in visitnode.get_children():
-                minmax = unicode(samplenode.get_data('sample_min_depth_m')) +  '-' + \
-                         unicode(samplenode.get_data('sample_max_depth_m'))
+                minmax = str(samplenode.get_data('sample_min_depth_m')) +  '-' + \
+                         str(samplenode.get_data('sample_max_depth_m'))
                 if minmax not in filter_minmaxdepth:
                     continue
                 #

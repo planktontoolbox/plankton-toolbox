@@ -1,10 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding:utf-8 -*-
-#
-# Copyright (c) 2010-2016 SMHI, Swedish Meteorological and Hydrological Institute 
+# Project: http://plankton-toolbox.org
+# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
-#
-from __future__ import unicode_literals
 
 import codecs
 import toolbox_utils
@@ -154,17 +152,20 @@ class ImportSharkWeb(plankton_core.DataImportPreparedBase):
                         try:
                             value = row_dict.get('sample_date', '')
                             value = value[5:7]
-                        except: pass        
+                        except: 
+                            pass        
                     if parsinginforow[1] == 'plankton_group':
                         try:
                             value = row_dict.get('scientific_name', '')
                             value = plankton_core.Species().get_plankton_group_from_taxon_name(value)
-                        except: pass 
+                        except: 
+                            pass 
                     if parsinginforow[1] == 'analysed_by':
                         try:
                             if not value:
                                 value = row_dict.get('taxonomist', '')
-                        except: pass 
+                        except: 
+                            pass 
                     # Add at right level.
                     if parsinginforow[0] == 'visit':
                         currentvisit.add_data(parsinginforow[1], value)        

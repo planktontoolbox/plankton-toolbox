@@ -1,10 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding:utf-8 -*-
-#
-# Copyright (c) 2010-2016 SMHI, Swedish Meteorological and Hydrological Institute 
+# Project: http://plankton-toolbox.org
+# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
-#
-from __future__ import unicode_literals
 
 import copy
 import toolbox_utils
@@ -301,7 +299,7 @@ class DatasetNode(DatasetBase, DataNode):
 #        if import_column:
 #            self.add_metadata('Import column', import_column)
 #            importrows = []
-#            for rowindex in xrange(0, tabledata.get_row_count()):
+#            for rowindex in range(0, tabledata.get_row_count()):
 #                importcolumndata = tabledata.get_data_item_by_column_name(rowindex, import_column)
 #                if importcolumndata:
 #                    nodelevel = tabledata.get_data_item(rowindex, 0)
@@ -312,7 +310,7 @@ class DatasetNode(DatasetBase, DataNode):
 #        if export_column:
 #            self.add_metadata('Export column', export_column)
 #            columnsinfo = []
-#            for rowindex in xrange(0, tabledata.get_row_count()):
+#            for rowindex in range(0, tabledata.get_row_count()):
 #                exportcolumndata = tabledata.get_data_item_by_column_name(rowindex, export_column)
 #                if exportcolumndata:
 #                    nodelevel = tabledata.get_data_item(rowindex, 0)

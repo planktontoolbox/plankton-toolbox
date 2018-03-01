@@ -1,11 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding:utf-8 -*-
-#
-# Copyright (c) 2010-2016 SMHI, Swedish Meteorological and Hydrological Institute 
+# Project: http://plankton-toolbox.org
+# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
-#
-from __future__ import unicode_literals
 
+import sys
 import toolbox_utils
 import os.path
 from numpy import rank
@@ -57,7 +56,9 @@ class Species(object):
             # Only done once since the class is declared as singleton.
             self._load_all_data()
         except Exception as e:
-            toolbox_utils.Logging().error('Failed when loading species related files: ' + unicode(e))            
+            toolbox_utils.Logging().error('Failed when loading species related files: ' + str(e))            
+            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
             raise
 
     def get_taxa_dict(self):
@@ -89,7 +90,7 @@ class Species(object):
             speciesobject = self._taxa_lookup[scientific_name]
             if 'size_classes' in speciesobject:
                 for sizeclassobject in speciesobject['size_classes']:
-                    if sizeclassobject.get('bvol_size_class', '') == unicode(size_class):
+                    if sizeclassobject.get('bvol_size_class', '') == str(size_class):
                         return sizeclassobject
         #
         return {}
@@ -100,7 +101,7 @@ class Species(object):
             speciesobject = self._taxa_lookup[scientific_name]
             if 'size_classes' in speciesobject:
                 for sizeclassobject in speciesobject['size_classes']:
-                    if sizeclassobject.get('bvol_size_class', '') == unicode(size_class):
+                    if sizeclassobject.get('bvol_size_class', '') == str(size_class):
                         return sizeclassobject.get(key, '')
         #
         return '' 
@@ -223,7 +224,7 @@ class Species(object):
             self._precalculate_data()
         #
         except Exception as e:
-            toolbox_utils.Logging().error('Failed when loading species data: ' + unicode(e))            
+            toolbox_utils.Logging().error('Failed when loading species data: ' + str(e))            
             raise
             
     def _load_trophic_types(self, excel_file_name):
@@ -479,15 +480,16 @@ class Species(object):
                         elif level == 'size_class':
                             if (internalname == 'bvol_size_class'):
                                 try:
-                                    # Convert from float to integer and back to unicode. Excel related problem.
-                                    sizeclassdict[internalname] = unicode(int(float(value)))
+                                    # Convert from float to integer and back to str. Excel related problem.
+                                    sizeclassdict[internalname] = str(int(float(value)))
                                 except:
                                     sizeclassdict[internalname] = '<ERROR>'
                             #        
                             if numeric == 'numeric':
                                 try:
                                     value = value.replace(',', '.').replace(' ', '') # Try/except if already float.
-                                except: pass
+                                except: 
+                                    pass
                                 sizeclassdict[internalname] = value
                             else:
                                 sizeclassdict[internalname] = value
@@ -548,7 +550,8 @@ class Species(object):
                     else:
                         taxon_name = parent_name
             #
-            except: pass
+            except: 
+                pass
         #                            
         toolbox_utils.Logging().warning('Not match for Plankton group. "OTHERS" assigned for: ' + scientific_name)
         self._planktongroups_lookup[scientific_name] = 'OTHERS'

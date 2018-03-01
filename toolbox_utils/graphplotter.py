@@ -1,10 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding:utf-8 -*-
-#
-# Copyright (c) 2010-2016 SMHI, Swedish Meteorological and Hydrological Institute 
+# Project: http://plankton-toolbox.org
+# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
-#
-from __future__ import unicode_literals
 
 import numpy.ma
 import datetime
@@ -286,7 +284,7 @@ class ChartBase(object):
                     value = int(value)
                     integer_array.append(value)
                 except:
-                    failedconversions_set.add(unicode(value))
+                    failedconversions_set.add(str(value))
                     integer_array.append(int('nan'))
             #
             if len(failedconversions_set) > 0:
@@ -303,11 +301,12 @@ class ChartBase(object):
                 try:
                     try:
                         value = value.replace(',', '.').replace(' ', '') # Try/except if already float.
-                    except: pass
+                    except: 
+                        pass
                     value = float(value)
                     float_array.append(value)
                 except:
-                    failedconversions_set.add(unicode(value))
+                    failedconversions_set.add(str(value))
                     float_array.append(float('nan'))
             #
             if len(failedconversions_set) > 0:
@@ -329,7 +328,7 @@ class ChartBase(object):
                         time = datetime.datetime.strptime(timestring, '%Y-%m-%d %H:%M:%S')
                     datetime_array.append(time)
                 except:
-                    failedconversions_set.add(unicode(timestring))
+                    failedconversions_set.add(str(timestring))
             #
             if len(failedconversions_set) > 0:
                 toolbox_utils.Logging().warning('GraphPlotter.ChartBase: These values could not be converted to date or datetime: "' + 
@@ -997,9 +996,9 @@ class PieChart(ChartBase):
                     x_labels = []
                     for index, item in enumerate(y_array):
                         try:
-                            if not numpy.isnan(item):
-                                x_labels.append(unicode(x_array[index])) # Labels should be text.
-                                y_cleaned.append(y_array[index])
+                            if not numpy.isnan(float(item)):
+                                x_labels.append(str(x_array[index])) # Labels should be text.
+                                y_cleaned.append(float(y_array[index]))
                         except:
                             pass
                     subplot.pie(y_cleaned, labels = x_labels)
@@ -1069,8 +1068,8 @@ class BoxPlotChart(ChartBase):
                 y_cleaned = []
                 for index, item in enumerate(y_array):
                     try:
-                        if not numpy.isnan(item):
-                            y_cleaned.append(y_array[index])
+                        if not numpy.isnan(float(item)):
+                            y_cleaned.append(float(y_array[index]))
                     except:
                         pass
                 #    

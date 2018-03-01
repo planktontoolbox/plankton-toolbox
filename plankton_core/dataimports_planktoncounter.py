@@ -1,10 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding:utf-8 -*-
-#
-# Copyright (c) 2010-2016 SMHI, Swedish Meteorological and Hydrological Institute 
+# Project: http://plankton-toolbox.org
+# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
-#
-from __future__ import unicode_literals
 
 import os
 import codecs
@@ -274,10 +272,12 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
         sample_date = visitnode.get_data('sample_date', '')
         try:
             visitnode.add_data('visit_year', sample_date[0:4])
-        except: pass      
+        except: 
+            pass      
         try:
             visitnode.add_data('visit_month', sample_date[5:7])        
-        except: pass 
+        except: 
+            pass 
              
         # Create sample node and add data. Note: Only one sample in each file. 
         samplenode = plankton_core.SampleNode()

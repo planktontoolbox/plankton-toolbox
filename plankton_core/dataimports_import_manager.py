@@ -1,10 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding:utf-8 -*-
-#
-# Copyright (c) 2010-2016 SMHI, Swedish Meteorological and Hydrological Institute 
+# Project: http://plankton-toolbox.org
+# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
-#
-from __future__ import unicode_literals
 
 import toolbox_utils
 import plankton_core
@@ -65,7 +63,7 @@ class ImportManager(object):
             tabledataset.append_row(row)
         #
         toolbox_utils.Logging().info('Loading file. Header content: ' +  
-                                 unicode(tabledataset.get_header()))
+                                 str(tabledataset.get_header()))
         
         # Phase 2: Parse the table and create a corresponding tree structure.
         targetdataset = plankton_core.DatasetNode()
@@ -115,7 +113,7 @@ class ImportManager(object):
 #                    if datarowsfrom: datarowsfrom -= 1
         
         tablefilereader = toolbox_utils.TableFileReader(excel_file_name = filename,
-                                                  sheet_name = sheetname,
+                                                  excel_sheet_name = sheetname,
                                                   header_row = headerrow,
                                                   data_rows_from = datarowsfrom)
         tabledataset = plankton_core.DatasetTable()
@@ -124,7 +122,7 @@ class ImportManager(object):
             tabledataset.append_row(row)
         #
         toolbox_utils.Logging().info('Loading file. Header content: ' +  
-                                 unicode(tabledataset.get_header()))
+                                 str(tabledataset.get_header()))
 
         # Phase 2: Parse the table and create a corresponding tree structure.
         targetdataset = plankton_core.DatasetNode()
@@ -181,7 +179,7 @@ class ImportManager(object):
         if self._import_column:
 #            self.addMetadata('Import column', self._import_column)
             self._importrows = []
-            for rowindex in xrange(0, tabledata.get_row_count()):
+            for rowindex in range(0, tabledata.get_row_count()):
                 importcolumndata = tabledata.get_data_item_by_column_name(rowindex, self._import_column)
                 if importcolumndata:
                     nodelevel = tabledata.get_data_item(rowindex, 0)
@@ -193,7 +191,7 @@ class ImportManager(object):
         if self._export_column:
 #            self.addMetadata('Export column', self._export_column)
             self._columnsinfo = []
-            for rowindex in xrange(0, tabledata.get_row_count()):
+            for rowindex in range(0, tabledata.get_row_count()):
                 exportcolumndata = tabledata.get_data_item_by_column_name(rowindex, self._export_column)
                 if exportcolumndata:
                     nodelevel = tabledata.get_data_item(rowindex, 0)

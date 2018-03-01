@@ -1,10 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding:utf-8 -*-
-#
-# Copyright (c) 2010-2016 SMHI, Swedish Meteorological and Hydrological Institute 
+# Project: http://plankton-toolbox.org
+# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
-#
-from __future__ import unicode_literals
 
 import os
 import locale
@@ -106,8 +104,8 @@ class TableFileWriter():
             out.write(self._field_delimiter.join(table_header) + self._row_delimiter)
             # Rows.
             for row in table_rows:
-                # Convert to unicode if floats or integers occurs.
-                outrow = [unicode(rowpart) for rowpart in row] 
+                # Convert to str if floats or integers occurs.
+                outrow = [str(rowpart) for rowpart in row] 
                 out.write(self._field_delimiter.join(outrow) + self._row_delimiter)
         except Exception as e:
             print('Failed to write to text file: ' + filepathname )
@@ -138,20 +136,21 @@ class TableFileWriter():
             self._encoding = locale.getpreferredencoding()
         #
         try:
-            workbook = openpyxl.Workbook(optimized_write = True)  # Supports big files.
+#             workbook = openpyxl.Workbook(optimized_write = True)  # Supports big files.
+            workbook = openpyxl.Workbook(write_only = True)  # Supports big files.
             worksheet = workbook.create_sheet()
             # Header.
             worksheet.append(table_header)
             # Rows.
             for row in table_rows:
-                # Convert to unicode if floats or integers occurs.
-                outrow = [unicode(rowpart) for rowpart in row] 
+                # Convert to str if floats or integers occurs.
+                outrow = [str(rowpart) for rowpart in row] 
                 worksheet.append(outrow)
             # Save to file.   
             workbook.save(filepathname)
         #
         except Exception as e:
-            msg = 'Failed to write to file: ' + filepathname + '. Exception: ' + unicode(e)
+            msg = 'Failed to write to file: ' + filepathname + '. Exception: ' + str(e)
             print(msg)
             raise
 

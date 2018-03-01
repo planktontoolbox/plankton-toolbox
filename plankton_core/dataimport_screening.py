@@ -1,10 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding:utf-8 -*-
-#
-# Copyright (c) 2010-2016 SMHI, Swedish Meteorological and Hydrological Institute 
+# Project: http://plankton-toolbox.org
+# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
-#
-from __future__ import unicode_literals
 
 import toolbox_utils
 import plankton_core
@@ -47,4 +45,4 @@ class DataImportManager(object):
         
         
 #         # Add to dataset list. (Note:ToolboxDatasets is a wrapper containing the 'datasetListChanged'-signal).
-#         toolbox_datasets.ToolboxDatasets().add_dataset(datasetnode)
+#         app_framework.ToolboxDatasets().add_dataset(datasetnode)

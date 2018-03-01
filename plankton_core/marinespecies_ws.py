@@ -1,10 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding:utf-8 -*-
-#
-# Copyright (c) 2010-2016 SMHI, Swedish Meteorological and Hydrological Institute 
+# Project: http://plankton-toolbox.org
+# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
-#
-from __future__ import unicode_literals
 
 
 # TODO: Activate this code later. 
@@ -57,7 +55,7 @@ from __future__ import unicode_literals
 #     def get_aphia_name_by_id(self, aphia_id):
 #         """ Get the correct name for a given AphiaID. """
 #         scientific_name = self._wsdl_object.getAphiaNameByID(aphia_id)
-#         return unicode(scientific_name) # String
+#         return str(scientific_name) # String
 # 
 #     def get_aphia_record_by_id(self, aphia_id):
 #         """ Get the complete Aphia Record for a given AphiaID. """
@@ -211,7 +209,7 @@ from __future__ import unicode_literals
 #         """ Clean values by removing unwanted characters. """
 #         try:
 #             if worms_dict[key]:
-#                 return unicode(worms_dict[key]).replace('\n', ' ').replace('\r', ' ') # Remove new lines.
+#                 return str(worms_dict[key]).replace('\n', ' ').replace('\r', ' ') # Remove new lines.
 #         except:
 #             print('Error when reading WORMS value for: ' + key + '.')
 #         return ''
@@ -228,69 +226,69 @@ from __future__ import unicode_literals
 #     worms_ws = WormsWebservice()
 #     
 #     worms_result = worms_ws.get_aphia_id('Nitzschia frustulum')
-#     print('\nget_aphia_id: ' + unicode(worms_result))
+#     print('\nget_aphia_id: ' + str(worms_result))
 #     
 #     worms_result = worms_ws.get_aphia_records('Ctenophora')
-#     print('\nget_aphia_records: ' + unicode(worms_result))
+#     print('\nget_aphia_records: ' + str(worms_result))
 #     for record in worms_result:
 #         print('---')
 #         for key in record.keys():
-#             print(key + ':' + unicode(record[key]))
+#             print(key + ':' + str(record[key]))
 #     
 #     worms_result = worms_ws.get_aphia_name_by_id(145422)
 #     print('\nget_aphia_name_by_id: ' + worms_result)
 #     
 #     worms_result = worms_ws.get_aphia_record_by_id(145422)
-#     print('\nget_aphia_record_by_id: ' + unicode(worms_result))
+#     print('\nget_aphia_record_by_id: ' + str(worms_result))
 #     for key in worms_result.keys():
-#         print(key + ':' + unicode(worms_result[key]))
+#         print(key + ':' + str(worms_result[key]))
 #      
 #     worms_result = worms_ws.get_aphia_record_by_ext_id('85257', ext_type = 'tsn')
-#     print('\nget_aphia_record_by_tsn: ' + unicode(worms_result))
+#     print('\nget_aphia_record_by_tsn: ' + str(worms_result))
 #     
 #     worms_result = worms_ws.get_aphia_records_by_names(['Nitzschia frustulum'])
-#     print('\nget_aphia_records_by_names: ' + unicode(worms_result))
+#     print('\nget_aphia_records_by_names: ' + str(worms_result))
 #     for name_record in worms_result:
 #         for record in name_record:
 #             print('---')
 #             for key in record.keys():
-#                 print(key + ':' + unicode(record[key]))
+#                 print(key + ':' + str(record[key]))
 #   
 #     worms_result = worms_ws.get_aphia_classification_by_id(145422)
-#     print('\nget_aphia_classification_by_id: ' + unicode(worms_result))
+#     print('\nget_aphia_classification_by_id: ' + str(worms_result))
 #     for record in worms_result:
-#             print(unicode(record))
+#             print(str(record))
 #      
 #     worms_result = worms_ws.get_sources_by_aphia_id(145422)
-#     print('\nget_sources_by_aphia_id: ' + unicode(worms_result))
+#     print('\nget_sources_by_aphia_id: ' + str(worms_result))
 #     for record in worms_result:
-#             print(unicode(record))
+#             print(str(record))
 #    
 #     worms_result = worms_ws.get_aphia_synonyms_by_id(145422)
-#     print('\nget_aphia_synonyms_by_id: ' + unicode(worms_result))
+#     print('\nget_aphia_synonyms_by_id: ' + str(worms_result))
 #     for record in worms_result:
 #         print('---')
 #         for key in record.keys():
-#             print(key + ':' + unicode(record[key]))
+#             print(key + ':' + str(record[key]))
 #     
 #     worms_result = worms_ws.get_aphia_children_by_id(144101)
-#     print('\nget_aphia_children_by_id: ' + unicode(worms_result))
+#     print('\nget_aphia_children_by_id: ' + str(worms_result))
 #     for record in worms_result:
 #         print('---')
 #         for key in record.keys():
-#             print(key + ':' + unicode(record[key]))
+#             print(key + ':' + str(record[key]))
 #            
 #     worms_result = worms_ws.get_aphia_records_by_vernacular('copepods') 
-#     print('\nget_aphia_records_by_vernacular: ' + unicode(worms_result))
+#     print('\nget_aphia_records_by_vernacular: ' + str(worms_result))
 #     for record in worms_result:
 #         print('---')
 #         for key in record.keys():
-#             print(key + ':' + unicode(record[key]))
+#             print(key + ':' + str(record[key]))
 #     
 #     worms_result = worms_ws.get_aphia_vernaculars_by_id(1080)
-#     print('\nget_aphia_vernaculars_by_id: ' + unicode(worms_result))
+#     print('\nget_aphia_vernaculars_by_id: ' + str(worms_result))
 #     for record in worms_result:
 #         print('---')
 #         for key in record.keys():
-#             print(key + ':' + unicode(record[key]))
+#             print(key + ':' + str(record[key]))
 

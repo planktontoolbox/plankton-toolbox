@@ -1,15 +1,12 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding:utf-8 -*-
-#
-# Copyright (c) 2010-2016 SMHI, Swedish Meteorological and Hydrological Institute 
+# Project: http://plankton-toolbox.org
+# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
-#
-from __future__ import unicode_literals
 
 import time
 import toolbox_utils
-import plankton_core
-
+ 
 @toolbox_utils.singleton
 class Logging(object):
     """
@@ -27,20 +24,20 @@ class Logging(object):
         self._erroracc = {} # Contains accumulated errors and counter.
         #
         self.set_log_target(DefaultLogTarget())
-        
+         
     def set_log_target(self, target):
         """ Target must be an object containing a method named write_to_log(message). """
         self._logtarget = target
-
+ 
     def clear(self):
         """ Clears all accumulated log rows. """
         self._infoacc.clear()
         self._warningacc.clear()
         self._erroracc.clear()
-        
+         
     def log(self, message):
         """ Used for direct logging. Also used by other methods in the class. """
-        message = unicode(message)
+        message = str(message)
         if message:
             if self._logtarget:
                 self._logtarget.write_to_log(time.strftime('%Y-%m-%d %H:%M:%S') + ': ' + message)
@@ -53,10 +50,10 @@ class Logging(object):
                 self._logtarget.write_to_log('')
             else:
                 print('')
-  
+   
     def info(self, message):
         """ Accumulates info rows. Increment counter if it already exists. """
-        message = unicode(message)
+        message = str(message)
         message = 'INFO: ' + message
         if self._accumulatedloggingactive:
             if message in self._infoacc:
@@ -65,10 +62,10 @@ class Logging(object):
                 self._infoacc[message] = 1
         else:
             self.log(message)
-
+ 
     def warning(self, message):
         """ Accumulates warnings. Increment counter if it already exists. """
-        message = unicode(message)
+        message = str(message)
         message = 'WARNING: ' + message
         if self._accumulatedloggingactive:
             if message in self._warningacc:
@@ -77,10 +74,10 @@ class Logging(object):
                 self._warningacc[message] = 1
         else:
             self.log(message)
-        
+         
     def error(self, message):
         """ Accumulates errors. Increment counter if it already exists. """
-        message = unicode(message)
+        message = str(message)
         message = 'ERROR: ' + message
         if self._accumulatedloggingactive:
             if message in self._erroracc:
@@ -89,12 +86,12 @@ class Logging(object):
                 self._erroracc[message] = 1
         else:
             self.log(message)
-            
+             
     def start_accumulated_logging(self):
         """ """
         self.clear()
         self._accumulatedloggingactive = True
-        
+         
     def log_all_accumulated_rows(self):
         """ """
         errorcount = sum(self._erroracc.values())
@@ -109,79 +106,79 @@ class Logging(object):
             if errorcount == 0:
                 self.log('- Errors: 0.')
             else:
-                self.log('- ERRORS: ' + unicode(errorcount) + '.')
+                self.log('- ERRORS: ' + str(errorcount) + '.')
             if warningcount == 0:
                 self.log('- Warnings: 0.')
             else:
-                self.log('- WARNINGS: ' + unicode(warningcount) + '.')
+                self.log('- WARNINGS: ' + str(warningcount) + '.')
             self.clear()
-        
+         
     def log_all_info_rows(self):
         """ Log all the content in the accumulated info row list. """
         for message in sorted(self._infoacc):
             count = self._infoacc[message]
             if count == 1:
-                self.log('- ' + message + '   (' + unicode(count) + ' time)')
+                self.log('- ' + message + '   (' + str(count) + ' time)')
             else:
-                self.log('- ' + message + '   (' + unicode(count) + ' times)')
-        
+                self.log('- ' + message + '   (' + str(count) + ' times)')
+         
     def get_all_info_rows(self):
         """ Returns a list of strings. """
         result = []
         for message in sorted(self._infoacc):
             count = self._infoacc[message]
             if count == 1:
-                self.log('- ' + message + '   (' + unicode(count) + ' time)')
+                self.log('- ' + message + '   (' + str(count) + ' time)')
             else:
-                self.log('- ' + message + '   (' + unicode(count) + ' times)')
+                self.log('- ' + message + '   (' + str(count) + ' times)')
         return result
-        
+         
     def log_all_warnings(self):
         """ Log all the content in the accumulated warning list. """
         for message in sorted(self._warningacc):
             count = self._warningacc[message]
             if count == 1:
-                self.log('- ' + message + '   (' + unicode(count) + ' time)')
+                self.log('- ' + message + '   (' + str(count) + ' time)')
             else:
-                self.log('- ' + message + '   (' + unicode(count) + ' times)')
-        
+                self.log('- ' + message + '   (' + str(count) + ' times)')
+         
     def get_all_warnings(self):
         """ Returns a list of strings. """
         result = []
         for message in sorted(self._warningacc):
             count = self._warningacc[message]
             if count == 1:
-                self.log('- ' + message + '   (' + unicode(count) + ' time)')
+                self.log('- ' + message + '   (' + str(count) + ' time)')
             else:
-                self.log('- ' + message + '   (' + unicode(count) + ' times)')
+                self.log('- ' + message + '   (' + str(count) + ' times)')
         return result
-        
+         
     def log_all_errors(self):
         """ Log all the content in the accumulated error list. """
         for message in sorted(self._erroracc):
             count = self._erroracc[message]
             if count == 1:
-                self.log('- ' + message + '   (' + unicode(count) + ' time)')
+                self.log('- ' + message + '   (' + str(count) + ' time)')
             else:
-                self.log('- ' + message + '   (' + unicode(count) + ' times)')
-
+                self.log('- ' + message + '   (' + str(count) + ' times)')
+ 
     def get_all_errors(self):
         """ Returns a list of strings. """
         result = []
         for message in sorted(self._erroracc):
             count = self._erroracc[message]
             if count == 1:
-                self.log('- ' + message + '   (' + unicode(count) + ' time)')
+                self.log('- ' + message + '   (' + str(count) + ' time)')
             else:
-                self.log('- ' + message + '   (' + unicode(count) + ' times)')
+                self.log('- ' + message + '   (' + str(count) + ' times)')
         return result
-
-
+ 
+ 
 class DefaultLogTarget(object):
     """ """
     def __init__(self):
         """ """
-        
+         
     def write_to_log(self, message):
         """ """
         print(message)

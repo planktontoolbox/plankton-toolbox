@@ -1,10 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding:utf-8 -*-
-#
-# Copyright (c) 2010-2016 SMHI, Swedish Meteorological and Hydrological Institute 
+# Project: http://plankton-toolbox.org
+# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
-#
-from __future__ import unicode_literals
 
 import dateutil.parser
 
@@ -21,12 +19,12 @@ class ParsedFormat(plankton_core.FormatBase):
     
     def replace_method_keywords(self, parse_command, node_level = None, view_format = None):
         """ Mapping between Excel parser code and python code."""
-        command = unicode(parse_command.strip())
+        command = str(parse_command.strip())
         #
         if 'Column:' in command:
             # An easier notation for "$Text('Example column')": "Column:Example column".
             # For simple column name mapping based on the format column.
-            command = unicode(command.replace('Column:', '').strip())
+            command = str(command.replace('Column:', '').strip())
             if view_format is None:
                 command = 'self._as_text("' + command + '")'
             elif view_format == 'text':
@@ -53,7 +51,7 @@ class ParsedFormat(plankton_core.FormatBase):
             command = command.replace('$GetPlanktonGroup(', 'self._get_plankton_group(')
 #         else:
 #             # For hard-coded values.
-#             command = ''' + unicode(command.strip()) + ''"
+#             command = ''' + str(command.strip()) + ''"
         
         #
         if node_level == 'function_sample':
@@ -87,7 +85,7 @@ class ParsedFormat(plankton_core.FormatBase):
     
     def _as_text(self, column_name):
         """ To be called from Excel-based parser. """
-        column_name = unicode(column_name)
+        column_name = str(column_name)
         if column_name in self._header:
             index = self._header.index(column_name)
             return self._row[index] if len(self._row) > index else ''
@@ -96,7 +94,7 @@ class ParsedFormat(plankton_core.FormatBase):
 
     def _as_integer(self, column_name):
         """ To be called from Excel-based parser. """
-        column_name = unicode(column_name)
+        column_name = str(column_name)
         if column_name in self._header:
             index = self._header.index(column_name)
             if len(self._row) > index:
@@ -112,7 +110,7 @@ class ParsedFormat(plankton_core.FormatBase):
 
     def _as_float(self, column_name):
         """ To be called from Excel-based parser. """
-        column_name = unicode(column_name)
+        column_name = str(column_name)
         if column_name in self._header:
             index = self._header.index(column_name)
             if len(self._row) > index:
@@ -129,7 +127,7 @@ class ParsedFormat(plankton_core.FormatBase):
     def _as_date(self, column_name):
         """ Reformat to match the ISO format. (2000-01-01)
         To be called from Excel-based parser. """
-        column_name = unicode(column_name)
+        column_name = str(column_name)
         if column_name in self._header:
             index = self._header.index(column_name)
             if len(self._row) > index:
@@ -144,15 +142,15 @@ class ParsedFormat(plankton_core.FormatBase):
 
     def _get_taxon_info_by_key(self, scientific_name, key):
         """ To be called from Excel-based parser. """
-        scientific_name = unicode(scientific_name)
-        key = unicode(key)
+        scientific_name = str(scientific_name)
+        key = str(key)
         return plankton_core.Species().get_taxon_value(scientific_name, key)
 
     def _get_sizeclass_info_by_key(self, scientific_name, size_class, key):
         """ To be called from Excel-based parser. """
-        scientific_name = unicode(scientific_name)
-        key = unicode(key)
-        size_class = unicode(size_class)
+        scientific_name = str(scientific_name)
+        key = str(key)
+        size_class = str(size_class)
         value = plankton_core.Species().get_bvol_value(scientific_name, size_class, key)
         if value:
             return value
@@ -160,9 +158,9 @@ class ParsedFormat(plankton_core.FormatBase):
 
     def _get_trophic_type(self, scientific_name, size_class, reported_trophic_type = ''):
         """ To be called from Excel-based parser. """
-        scientific_name = unicode(scientific_name)
-        size_class = unicode(size_class)
-        reported_trophic_type = unicode(reported_trophic_type)
+        scientific_name = str(scientific_name)
+        size_class = str(size_class)
+        reported_trophic_type = str(reported_trophic_type)
         value = plankton_core.Species().get_bvol_value(scientific_name, size_class, 'trophic_type')
         if not value:
             value = plankton_core.Species().get_taxon_value(scientific_name, 'trophic_type')
@@ -173,19 +171,19 @@ class ParsedFormat(plankton_core.FormatBase):
 
     def _get_plankton_group(self, scientific_name):
         """ To be called from Excel-based parser. """
-        scientific_name = unicode(scientific_name)
+        scientific_name = str(scientific_name)
         return plankton_core.Species().get_plankton_group_from_taxon_name(scientific_name)
 
     def _to_station(self, current_node, station_name, **kwargs):
         """ To be called from Excel-based parser. """
         # TODO: For test:
-        station_name = unicode(station_name)
+        station_name = str(station_name)
         current_node.add_data('station_name', station_name)
 
     def _to_position(self, current_node, latitude, longitude, **kwargs):
         """ To be called from Excel-based parser. """
-        latitude = unicode(latitude)
-        longitude = unicode(longitude)
+        latitude = str(latitude)
+        longitude = str(longitude)
 #        print('DEBUG: _to_position: ' + latitude + ' ' + longitude)
 
     def _create_variable(self, current_node, **kwargs):
