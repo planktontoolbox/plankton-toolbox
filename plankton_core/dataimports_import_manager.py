@@ -113,7 +113,7 @@ class ImportManager(object):
 #                    if datarowsfrom: datarowsfrom -= 1
         
         tablefilereader = toolbox_utils.TableFileReader(excel_file_name = filename,
-                                                  sheet_name = sheetname,
+                                                  excel_sheet_name = sheetname,
                                                   header_row = headerrow,
                                                   data_rows_from = datarowsfrom)
         tabledataset = plankton_core.DatasetTable()

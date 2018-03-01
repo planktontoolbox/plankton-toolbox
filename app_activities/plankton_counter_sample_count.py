@@ -657,9 +657,9 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
                 species_index = self._species_tableview._tablemodel.createIndex(index.row(), 0)
                 sizeclass_index = self._species_tableview._tablemodel.createIndex(index.row(), 1)
                 sflag_index = self._species_tableview._tablemodel.createIndex(index.row(), 2)
-                scientific_name = self._species_tableview._tablemodel.data(species_index).toString()
-                size_class = str(self._species_tableview._tablemodel.data(sizeclass_index))
-                species_flag = str(self._species_tableview._tablemodel.data(sflag_index))
+                scientific_name = self._species_tableview._tablemodel.data(species_index).value()
+                size_class = self._species_tableview._tablemodel.data(sizeclass_index).value()
+                species_flag = self._species_tableview._tablemodel.data(sflag_index).value()
                 #
                 # Update name and size in pair.
                 self._scientific_name_edit.setText(scientific_name)
@@ -1102,7 +1102,8 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
                             # Reduce number of sizeclasses.
                             usedsizeclasses = None
                             if (len(row) > 1) and (len(row[1]) > 0):
-                                usedsizeclasses = map(str.strip, row[1].split(','))
+#                                 usedsizeclasses = map(str.strip, row[1].split(','))
+                                usedsizeclasses = [str.strip(x) for x in row[1].split(',')]
                             #
                             taxon_dict = plankton_core.Species().get_taxon_dict(scientific_name)
                             sizeclasses_list = taxon_dict.get('size_classes', [])

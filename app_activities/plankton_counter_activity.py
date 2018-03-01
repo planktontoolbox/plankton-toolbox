@@ -1005,8 +1005,6 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
                                     'Import sample(s)',
                                     '', # self._last_used_excelfile_name,
                                     namefilter)
-                # From QString to str.
-                filenames = map(str, filenames)
                 # Check if user pressed ok or cancel.
                 if filenames:
                     for filename in filenames:

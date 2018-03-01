@@ -19,7 +19,8 @@ class DataImportUtils(object):
         # Remove 'cf.'
         if ' cf. '.upper() in (' ' + new_scientific_name + ' ').upper():  
             parts = new_scientific_name.split(' ')
-            parts = map(str.strip, parts) # Remove white characters.
+#             parts = map(str.strip, parts) # Remove white characters.
+            parts = [str.strip(x) for x in parts] # Remove white characters.
             speciesname = ''
             for part in parts:
                 if part not in ['cf.', 'CF.', 'cf', 'CF']:
@@ -42,7 +43,8 @@ class DataImportUtils(object):
         if (' sp.'.upper() in (new_scientific_name + ' ').upper()) or \
            (' sp '.upper() in (new_scientific_name + ' ').upper()):  
             parts = new_scientific_name.split(' ')
-            parts = map(str.strip, parts) # Remove white characters.
+#             parts = map(str.strip, parts) # Remove white characters.
+            parts = [str.strip(x) for x in parts] # Remove white characters.
             speciesname = ''
             for part in parts:
                 if part not in ['sp.', 'SP.', 'sp', 'SP']:
@@ -65,7 +67,8 @@ class DataImportUtils(object):
         if (' spp.'.upper() in (new_scientific_name + ' ').upper()) or \
            (' spp '.upper() in (new_scientific_name + ' ').upper()):  
             parts = new_scientific_name.split(' ')
-            parts = map(str.strip, parts) # Remove white characters.
+#             parts = map(str.strip, parts) # Remove white characters.
+            parts = [str.strip(x) for x in parts] # Remove white characters.
             speciesname = ''
             for part in parts:
                 if part not in ['spp.', 'SPP.', 'spp', 'SPP']:

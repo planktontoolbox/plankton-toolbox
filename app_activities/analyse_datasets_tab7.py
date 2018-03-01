@@ -286,7 +286,10 @@ class AnalyseDatasetsTab7(QtWidgets.QWidget):
                 taxonkey = keysplit[6]
                 #
                 try:
-                    data_list = map(float, data_dict[key])
+#                     data_list = map(float, data_dict[key]) # Not working in Python3.
+#                    data_list = list(map(float, data_dict[key])) # ALT 1.
+                    data_list =[float(x) for x in  data_dict[key]] # ALT 2. list comprehensions.
+                    
                     # Calculate result by use of numpy. 
                     # Use float64 since we are using both small and big unit.
                     meanvalue = numpy.mean(data_list, dtype=numpy.float64)

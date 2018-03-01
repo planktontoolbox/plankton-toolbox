@@ -9,7 +9,7 @@ import codecs
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 
-import app_core
+import plankton_core
 import app_framework
 import app_activities
 import app_tools
@@ -95,7 +95,12 @@ class MainWindow(QtWidgets.QMainWindow):
         # Load resources when the main event loop has started.
 #         if app_framework.ToolboxSettings().get_value('Resources:Load at startup'):
 #             QtCore.QTimer.singleShot(10, app_framework.ToolboxResources().loadAllResources)
-#         QtCore.QTimer.singleShot(100, self._loadResources)
+        QtCore.QTimer.singleShot(1000, self._loadResources)
+#        self._loadResources()
+        
+        
+        
+        
         
     def closeEvent(self, event):
         """ Called on application shutdown. """
@@ -292,13 +297,14 @@ class MainWindow(QtWidgets.QMainWindow):
         # Log message.                   
         if self._logtool: self._logtool.write_to_log(message)
 
-#     def _loadResources(self):
-#         """ """
-#         try:
-#             self.statusBar().showMessage(self.tr('Loading species lists...'))
-#             # TODO: Load resources here.
-#         finally:
-#             self.statusBar().showMessage(self.tr(''))            
+    def _loadResources(self):
+        """ """
+        try:
+            # Load resources here.
+            self.statusBar().showMessage(self.tr('Loading species lists...'))
+            plankton_core.Species()
+        finally:
+            self.statusBar().showMessage(self.tr(''))            
 
     def setVersion(self, version):
         """ """

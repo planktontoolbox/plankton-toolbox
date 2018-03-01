@@ -314,8 +314,6 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
                                     'Load plankton counter sample file(s). ',
                                     self._lastusedplanktoncounterfilename,
                                     namefilter)
-                # From QString to str.
-                filenames = map(str, filenames)
                 # Check if user pressed ok or cancel.
                 if filenames:
                     for filename in filenames:
@@ -362,8 +360,6 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
                                     'Load SHARKweb file(s). ',
                                     self._lastusedsharkwebfilename,
                                     namefilter)
-                # From QString to str.
-                filenames = map(str, filenames)
                 # Check if user pressed ok or cancel.
                 if filenames:
                     for filename in filenames:
@@ -595,8 +591,6 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
                                     'Import dataset(s)',
                                     self._last_used_textfile_name,
                                     namefilter)
-                # From QString to str.
-                filenames = map(str, filenames)
                 # Check if user pressed ok or cancel.
                 self._tabledataset = plankton_core.DatasetTable()
                 if filenames:
@@ -741,8 +735,6 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
                                     'Import dataset(s)',
                                     self._last_used_excelfile_name,
                                     namefilter)
-                # From QString to str.
-                filenames = map(str, filenames)
                 # Check if user pressed ok or cancel.
                 self._tabledataset = plankton_core.DatasetTable()
                 if filenames:

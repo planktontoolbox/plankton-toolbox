@@ -91,7 +91,7 @@ class PlanktonCounterSampleEdit(QtWidgets.QWidget):
         #
         self._sampletable_editable = app_framework.ToolboxEditableQTableView()
         self._sampletable_table = plankton_core.DatasetTable()
-#         self._sampletable_editable.setTableModel(self._sampletable_table)
+        self._sampletable_editable.setTableModel(self._sampletable_table)
         #
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self._sampletable_editable)
