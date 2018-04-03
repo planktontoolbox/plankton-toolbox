@@ -94,11 +94,12 @@ class Logging(object):
          
     def log_all_accumulated_rows(self):
         """ """
+        self._accumulatedloggingactive = False
+        #
         errorcount = sum(self._erroracc.values())
         warningcount = sum(self._warningacc.values())
         #
         if (errorcount > 0) or (warningcount > 0):
-            self._accumulatedloggingactive = False
             self.log('Accumulated log summary:')
             self.log_all_info_rows()
             self.log_all_warnings()
@@ -112,7 +113,7 @@ class Logging(object):
             else:
                 self.log('- WARNINGS: ' + str(warningcount) + '.')
             self.clear()
-         
+        
     def log_all_info_rows(self):
         """ Log all the content in the accumulated info row list. """
         for message in sorted(self._infoacc):

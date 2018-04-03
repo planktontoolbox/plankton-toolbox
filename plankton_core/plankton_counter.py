@@ -30,7 +30,7 @@ class PlanktonCounterManager(QtCore.QObject):
                 os.makedirs(self._dataset_dir_path)
 #                 print('Directories created for this path: ' + self._dataset_dir_path)
             except Exception as e:
-                raise UserWarning('Can\'t create directories in path. Path: ' + self._dataset_dir_path + '. Exception: ' + e)
+                raise UserWarning('Can\'t create directories in path. Path: ' + self._dataset_dir_path + '. Exception: ' + str(e))
         #
 
     def _emit_change_notification(self):
@@ -63,7 +63,7 @@ class PlanktonCounterManager(QtCore.QObject):
                 os.makedirs(path)
 #                 print('Directories created for this path: ' + path)
             except Exception as e:
-                raise UserWarning('Can\'t create directories in path. Path: ' + path + '. Exception: ' + e)
+                raise UserWarning('Can\'t create directories in path. Path: ' + path + '. Exception: ' + str(e))
         else:
             raise UserWarning('Dataset already exists, create failed. Dataset name: ' + dataset_name)
         #
@@ -77,7 +77,7 @@ class PlanktonCounterManager(QtCore.QObject):
             try:
                 shutil.rmtree(path)
             except Exception as e:
-                raise UserWarning('Can\'t delete directory. Path: ' + path + '. Exception: ' + e)
+                raise UserWarning('Can\'t delete directory. Path: ' + path + '. Exception: ' + str(e))
         else:
             raise UserWarning('Dataset did not exist, delete failed. Dataset name: ' + dataset_name)
         #
@@ -112,7 +112,7 @@ class PlanktonCounterManager(QtCore.QObject):
                 os.makedirs(path)
 #                 print('Directories created for this path: ' + path)
             except Exception as e:
-                raise UserWarning('Can\'t create directories in path. Path: ' + path + '. Exception: ' + e)
+                raise UserWarning('Can\'t create directories in path. Path: ' + path + '. Exception: ' + str(e))
         else:
             raise UserWarning('Sample already exists, create failed. Dataset name: ' + dataset_name)
         #
@@ -126,7 +126,7 @@ class PlanktonCounterManager(QtCore.QObject):
             try:
                 shutil.rmtree(path)
             except Exception as e:
-                raise UserWarning('Can\'t delete sample. Path: ' + path + '. Exception: ' + e)
+                raise UserWarning('Can\'t delete sample. Path: ' + path + '. Exception: ' + str(e))
         else:
             raise UserWarning('Sample does not exist, delete failed. Sample name: ' + sample_name)
         #
@@ -141,7 +141,7 @@ class PlanktonCounterManager(QtCore.QObject):
             try:
                 shutil.move(path, new_path)
             except Exception as e:
-                raise UserWarning('Can\'t rename sample. Path: ' + path + '. Exception: ' + e)
+                raise UserWarning('Can\'t rename sample. Path: ' + path + '. Exception: ' + str(e))
         else:
             raise UserWarning('Sample does not exist, rename failed. Dataset name: ' + old_sample_name)
         #
@@ -345,7 +345,11 @@ class PlanktonCounterSample():
                 sample_row = SampleRow(info_dict)
                 # Don't save samples without name or counted value = 0.
                 if len(sample_row.get_scientific_name()) > 0:
+                    # Quantitative.
                     if sample_row.get_counted_units() > 0:
+                        self._sample_rows[sample_row.get_key()] = sample_row
+                    # Qualitative.
+                    if sample_row.get_abundance_class():
                         self._sample_rows[sample_row.get_key()] = sample_row
 
     def recalculate_coefficient(self, current_method):
@@ -947,7 +951,14 @@ class SampleRow():
     
     def get_counted_units(self):
         """ """
-        countedunits = int(self._sample_row_dict.get('counted_units', '0'))
+        try:
+            countedunits = self._sample_row_dict.get('counted_units', '0')
+            if countedunits:
+                countedunits = int(countedunits)
+            else:
+                countedunits = 0
+        except:
+            countedunits = 0
         #
         return countedunits
     
@@ -980,9 +991,12 @@ class SampleRow():
     
     def get_abundance_class(self):
         """ """
-        countedunits = self._sample_row_dict.get('abundance_class', '0')
+        try:
+            abundance_class = str(self._sample_row_dict.get('abundance_class', ''))
+        except:
+            abundance_class = ''
         #
-        return countedunits
+        return abundance_class
     
     def set_abundance_class(self, value):
         """ """

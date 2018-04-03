@@ -33,7 +33,7 @@ class PlanktonCounterMethods():
                 os.makedirs(dir_path)
 #                 print('Directories created for this path: ' + dir_path)
             except Exception as e:
-                print('Can\'t create directories in path. Path: ' + dir_path + '. Exception: ' + e)
+                print('Can\'t create directories in path. Path: ' + dir_path + '. Exception: ' + str(e))
     
     def get_methods_dir_path(self):
         """ """

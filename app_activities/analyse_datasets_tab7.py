@@ -307,7 +307,7 @@ class AnalyseDatasetsTab7(QtWidgets.QWidget):
                     countedvalues = len(data_list)
                     #
                     print(', '.join(map(str, data_list))) # Print data.
-                    print('Error in calc statistics: ' + e) # Print exception.            
+                    print('Error in calc statistics: ' + str(e)) # Print exception.            
                 # Create row.
                 report_row = []
                 report_row.append(selectedparameter)

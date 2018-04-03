@@ -92,7 +92,7 @@ class TableFileWriter():
                 os.makedirs(self._file_path)
                 print('Directories created for this path: ' + self._file_path)
             except Exception as e:
-                raise UserWarning('Can\'t create directories in path. Path: ' + self._file_path + '. Exception: ' + e)
+                raise UserWarning('Can\'t create directories in path. Path: ' + self._file_path + '. Exception: ' + str(e))
         # Get encoding.
         if self._encoding is None:
             self._encoding = locale.getpreferredencoding()
@@ -168,7 +168,7 @@ class TableFileWriter():
                 os.makedirs(self._file_path)
                 print('Directories created for this path: ' + self._file_path)
             except Exception as e:
-                raise UserWarning('Can\'t create directories in path. Path: ' + self._file_path + '. Exception: ' + e)
+                raise UserWarning('Can\'t create directories in path. Path: ' + self._file_path + '. Exception: ' + str(e))
         # Get encoding.
         if self._encoding is None:
             self._encoding = locale.getpreferredencoding()

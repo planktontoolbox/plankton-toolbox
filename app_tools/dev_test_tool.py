@@ -171,6 +171,6 @@
 #             
 #             self._parent.show_activity_by_name(settings['show_activity_after'])
 #         except Exception as e:
-#             toolbox_utils.Logging().warning('Failed to run script: %s' % (e))
+#             toolbox_utils.Logging().warning('Failed to run script: %s' % (str(e)))
 #             raise
 #         
