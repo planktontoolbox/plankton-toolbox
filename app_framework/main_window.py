@@ -91,7 +91,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.resize(size)
         self.move(position)        
         # Tell the user.
-        app_tools.ToolManager().show_tool_by_name('Application log') # Show the log tool if hidden.
+        app_tools.ToolManager().show_tool_by_name('Toolbox logging') # Show the log tool if hidden.
 
         # Load resources when the main event loop has started.
 #         if app_framework.ToolboxSettings().get_value('Resources:Load at startup'):
@@ -300,7 +300,7 @@ class MainWindow(QtWidgets.QMainWindow):
             if self._logtool: self._logtool.write_to_log(message)
         #
         except Exception as e:
-            print('Exception (write_to_log):', e)
+            print('Exception (write_to_log):', str(e))
 
     def _loadResources(self):
         """ """
@@ -308,6 +308,7 @@ class MainWindow(QtWidgets.QMainWindow):
             # Load resources here.
             self.statusBar().showMessage(self.tr('Loading species lists...'))
             plankton_core.Species()
+
         finally:
             self.statusBar().showMessage(self.tr(''))            
 

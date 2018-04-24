@@ -7,7 +7,9 @@
 import os
 import shutil
 import math
-import openpyxl
+# import openpyxl
+import xlsxwriter
+import operator
 from PyQt5 import QtCore
 import toolbox_utils
 import plankton_core
@@ -30,7 +32,7 @@ class PlanktonCounterManager(QtCore.QObject):
                 os.makedirs(self._dataset_dir_path)
 #                 print('Directories created for this path: ' + self._dataset_dir_path)
             except Exception as e:
-                raise UserWarning('Can\'t create directories in path. Path: ' + self._dataset_dir_path + '. Exception: ' + e)
+                raise UserWarning('Can\'t create directories in path. Path: ' + self._dataset_dir_path + '. Exception: ' + str(e))
         #
 
     def _emit_change_notification(self):
@@ -63,7 +65,7 @@ class PlanktonCounterManager(QtCore.QObject):
                 os.makedirs(path)
 #                 print('Directories created for this path: ' + path)
             except Exception as e:
-                raise UserWarning('Can\'t create directories in path. Path: ' + path + '. Exception: ' + e)
+                raise UserWarning('Can\'t create directories in path. Path: ' + path + '. Exception: ' + str(e))
         else:
             raise UserWarning('Dataset already exists, create failed. Dataset name: ' + dataset_name)
         #
@@ -77,7 +79,7 @@ class PlanktonCounterManager(QtCore.QObject):
             try:
                 shutil.rmtree(path)
             except Exception as e:
-                raise UserWarning('Can\'t delete directory. Path: ' + path + '. Exception: ' + e)
+                raise UserWarning('Can\'t delete directory. Path: ' + path + '. Exception: ' + str(e))
         else:
             raise UserWarning('Dataset did not exist, delete failed. Dataset name: ' + dataset_name)
         #
@@ -112,7 +114,7 @@ class PlanktonCounterManager(QtCore.QObject):
                 os.makedirs(path)
 #                 print('Directories created for this path: ' + path)
             except Exception as e:
-                raise UserWarning('Can\'t create directories in path. Path: ' + path + '. Exception: ' + e)
+                raise UserWarning('Can\'t create directories in path. Path: ' + path + '. Exception: ' + str(e))
         else:
             raise UserWarning('Sample already exists, create failed. Dataset name: ' + dataset_name)
         #
@@ -126,7 +128,7 @@ class PlanktonCounterManager(QtCore.QObject):
             try:
                 shutil.rmtree(path)
             except Exception as e:
-                raise UserWarning('Can\'t delete sample. Path: ' + path + '. Exception: ' + e)
+                raise UserWarning('Can\'t delete sample. Path: ' + path + '. Exception: ' + str(e))
         else:
             raise UserWarning('Sample does not exist, delete failed. Sample name: ' + sample_name)
         #
@@ -141,7 +143,7 @@ class PlanktonCounterManager(QtCore.QObject):
             try:
                 shutil.move(path, new_path)
             except Exception as e:
-                raise UserWarning('Can\'t rename sample. Path: ' + path + '. Exception: ' + e)
+                raise UserWarning('Can\'t rename sample. Path: ' + path + '. Exception: ' + str(e))
         else:
             raise UserWarning('Sample does not exist, rename failed. Dataset name: ' + old_sample_name)
         #
@@ -345,7 +347,11 @@ class PlanktonCounterSample():
                 sample_row = SampleRow(info_dict)
                 # Don't save samples without name or counted value = 0.
                 if len(sample_row.get_scientific_name()) > 0:
+                    # Quantitative.
                     if sample_row.get_counted_units() > 0:
+                        self._sample_rows[sample_row.get_key()] = sample_row
+                    # Qualitative.
+                    if sample_row.get_abundance_class():
                         self._sample_rows[sample_row.get_key()] = sample_row
 
     def recalculate_coefficient(self, current_method):
@@ -672,152 +678,10 @@ class PlanktonCounterSample():
 
     def export_sample_to_excel(self, export_target_dir, export_target_filename):
         """ Export to Excel. """
-        # Prepare sample info header and rows.
-        sample_info_dict = self.get_sample_info()
-        #
-        sample_info_header = ['key', 'value']
-        sample_info_header_order = [
-                'plankton_toolbox_version',
-                'sample_name',
-                'sample_id',
-                'sample_date',
-                'sample_time',
-                'visit_year',
-                'country_code',
-                'platform_code',
-                'sampling_series',
-                'sampling_laboratory',
-                'orderer',                
-                'project_code',
-                'station_name',
-                'sample_latitude_dm',
-                'sample_longitude_dm',
-                'sample_latitude_dd',
-                'sample_longitude_dd',
-                'sample_min_depth_m',
-                'sample_max_depth_m',
-                'water_depth_m',
-                'sampler_type_code',
-                'sampled_volume_l',
-                'net_type_code', 
-                'sampler_area_m2',
-                'net_mesh_size_um',
-                'wire_angle_deg',
-                'net_tow_length_m',
-                'analytical_laboratory', 
-                'analysis_date',
-                'analysed_by',
-                'sample_comment',               
-                ]
-        sample_info_rows = []
-        for header_item in sample_info_header_order:
-            sample_info_rows.append([header_item, sample_info_dict.get(header_item, '')])
         
-        # Prepare sample info header and rows.
-        sample_data_header = self.get_header()
-        sample_data_rows = self.get_rows()
+        excel_export_writer = ExcelExportWriter(self)
+        excel_export_writer.to_excel(export_target_dir, export_target_filename)
         
-        # Prepare sample info header and rows.
-        sample_method_header = []
-        sample_method_rows = []
-        sample_path = self.get_dir_path()
-        if os.path.exists(os.path.join(sample_path, 'counting_method.txt')):
-            sample_method_header, sample_method_rows = plankton_core.PlanktonCounterMethods().get_counting_method_table(
-                                                sample_path, 'counting_method.txt')        
-
-        # Use openpyxl for Excel.
-#         workbook = openpyxl.Workbook(optimized_write = True)  # Supports big files.
-        workbook = openpyxl.Workbook(write_only  = True)  # Supports big files.
-
-#         # Sheet: Summary.
-#         sampleinfo_worksheet = workbook.create_sheet('Summary')
-#         sampleinfo_worksheet.title = 'Summary'
-# #         # Header.
-# #         sampleinfo_worksheet.append(sample_info_header)
-# #         # Rows.
-# #         for row in sample_info_rows:
-# #             sampleinfo_worksheet.append(row)
-#         sampleinfo_worksheet.append(['This summary worksheet i under development...'])
-        
-        # Sheet: Table summary.
-        sampleinfo_worksheet = workbook.create_sheet('Table summary')
-        sampleinfo_worksheet.title = 'Table summary'
-        # Header.
-        sampleinfo_worksheet.append(sample_info_header_order + sample_data_header)
-        # Rows.
-        for row in sample_data_rows: 
-            row_dict = dict(zip(sample_data_header, row))
-            row_dict.update(sample_info_dict)
-            table_row = []
-            for key in sample_info_header_order + sample_data_header:
-                table_row.append(row_dict.get(key, ''))
-            #
-            sampleinfo_worksheet.append(table_row)
-        
-        
-        # Sheet: Sample info.
-        sampleinfo_worksheet = workbook.create_sheet('sample_info.txt')
-        sampleinfo_worksheet.title = 'sample_info.txt'
-        # Header.
-        sampleinfo_worksheet.append(sample_info_header)
-        # Rows.
-        for row in sample_info_rows:
-            sampleinfo_worksheet.append(row)
-        # Extra info for restart of counting session.
-        sampleinfo_worksheet.append(['']) # Empty.
-        for key in sample_info_dict.keys():
-            if key == 'last_used_method_step':
-                sampleinfo_worksheet.append([key, sample_info_dict.get(key, '')])
-            if key.startswith('max_count_area<+>'):
-                sampleinfo_worksheet.append([key, sample_info_dict.get(key, '')])
-        # Sheet: Sample data.
-        sampledata_worksheet = workbook.create_sheet('sample_data.txt')
-        sampledata_worksheet.title = 'sample_data.txt'
-        # Header.
-        sampledata_worksheet.append(sample_data_header)
-        # Rows.
-        for row in sample_data_rows:
-            sampledata_worksheet.append(row)
-        # Sheet: Sample method.
-        samplemethod_worksheet = workbook.create_sheet('counting_method.txt')
-        samplemethod_worksheet.title = 'counting_method.txt'
-        # Header.
-        samplemethod_worksheet.append(sample_method_header)
-        # Rows.
-        for row in sample_method_rows:
-            samplemethod_worksheet.append(row)
-        # Sheet: README.
-        samplemethod_worksheet = workbook.create_sheet('README')
-        samplemethod_worksheet.title = 'README'
-        # Header.
-        samplemethod_worksheet.append(['Plankton Toolbox - Plankton counter'])
-        # Rows.
-        readme_text = [
-            [''],
-            ['This Excel file is generated by Plankton Toolbox.'],
-            [''],
-            ['The file represents one counted plankton sample. It can be used for export and import '],
-            ['between different computers running Plankton Toolbox, or as an archive file.'],
-            ['Don\'t edit or rename the sheets sample_info.txt, sample_data.txt or '],
-            ['counting_method.txt if the file should be imported later to Plankton Toolbox.'],
-            [''],
-            ['Generated sheets:'],
-            ['- Summary: Page containing information in a compact format. (Under development, not available yet.)'],
-            ['- Table summary: Page with generated data in table format.'],
-            ['- sample_info.txt: Copy of the internally used file for information connected to a sample (metadata).'],
-            ['- sample_data.txt: Copy of the internally used file for counted sample rows.'],
-            ['- counting_method.txt: Copy of the internally used file for parameters related to the counting method.'],
-            ['- README: This text.'],
-            [''],
-            ['More info at: http://nordicmicroalgae.org and http://plankton-toolbox.org '],
-            ]
-        # 
-        for row in readme_text:
-            samplemethod_worksheet.append(row)
-            
-        # Save to file.
-        filepathname = os.path.join(export_target_dir, export_target_filename)
-        workbook.save(filepathname)
 
 
 class SampleRow():
@@ -947,7 +811,14 @@ class SampleRow():
     
     def get_counted_units(self):
         """ """
-        countedunits = int(self._sample_row_dict.get('counted_units', '0'))
+        try:
+            countedunits = self._sample_row_dict.get('counted_units', '0')
+            if countedunits:
+                countedunits = int(countedunits)
+            else:
+                countedunits = 0
+        except:
+            countedunits = 0
         #
         return countedunits
     
@@ -980,9 +851,12 @@ class SampleRow():
     
     def get_abundance_class(self):
         """ """
-        countedunits = self._sample_row_dict.get('abundance_class', '0')
+        try:
+            abundance_class = str(self._sample_row_dict.get('abundance_class', ''))
+        except:
+            abundance_class = ''
         #
-        return countedunits
+        return abundance_class
     
     def set_abundance_class(self, value):
         """ """
@@ -1040,3 +914,499 @@ class SampleRow():
             value = round(value, - int(math.floor(math.log10(abs(value)))) + (n - 1)) 
         return value
 
+
+class ExcelExportWriter():
+    """ """
+    def __init__(self, sample_object):
+        """ """
+        self.sample_object = sample_object
+        #
+        self.load_overview_mappings()
+        
+    def to_excel(self, export_target_dir, export_target_filename):
+        """ Export to Excel. """
+        self.export_target_filename = export_target_filename
+        # Create Excel document.
+        filepathname = os.path.join(export_target_dir, export_target_filename)
+        workbook = xlsxwriter.Workbook(filepathname)
+        # Add worksheets.
+        self.summary_worksheet = workbook.add_worksheet('Sample summary')
+        self.sampleinfo_worksheet = workbook.add_worksheet('sample_info.txt')
+        self.sampledata_worksheet = workbook.add_worksheet('sample_data.txt')
+        self.samplemethod_worksheet = workbook.add_worksheet('counting_method.txt')
+        self.readme_worksheet = workbook.add_worksheet('README')
+        # Adjust column width.
+        self.sampleinfo_worksheet.set_column('A:B', 40)
+        self.sampledata_worksheet.set_column('A:C', 30)
+        self.sampledata_worksheet.set_column('D:U', 20)
+        self.samplemethod_worksheet.set_column('A:Q', 30)
+        self.readme_worksheet.set_column('A:A', 100)
+        # Create cell formats.
+        self.bold_format = workbook.add_format({'bold': True})
+        self.bold_right_format = workbook.add_format({'bold': True, 'align': 'right'})
+        self.integer_format = workbook.add_format()
+        self.integer_format.set_num_format('0')
+        self.decimal_format = workbook.add_format()
+        self.decimal_format.set_num_format('0.00')
+        self.decimal_6_format = workbook.add_format()
+        self.decimal_6_format.set_num_format('0.000000')
+        self.latlong_dd_format = workbook.add_format()
+        self.latlong_dd_format.set_num_format('0.0000')
+        
+        # Prepare sample info header and rows.
+        self.sample_data_header = self.sample_object.get_header()
+        self.sample_data_rows = self.sample_object.get_rows()
+        # Prepare method header and rows.
+        self.sample_method_header = []
+        self.sample_method_rows = []
+        sample_path = self.sample_object.get_dir_path()
+        if os.path.exists(os.path.join(sample_path, 'counting_method.txt')):
+            self.sample_method_header, self.sample_method_rows = plankton_core.PlanktonCounterMethods().get_counting_method_table(
+                                            sample_path, 'counting_method.txt')
+                    
+        # === Sheet: Sample info. ===
+        sample_info_header = ['key', 'value']
+        sample_info_header_order = [
+                'plankton_toolbox_version',
+                'sample_name',
+                'sample_id',
+                'sample_date',
+                'sample_time',
+                'visit_year',
+                'country_code',
+                'platform_code',
+                'sampling_series',
+                'sampling_laboratory',
+                'orderer',
+                'project_code',
+                'station_name',
+                'sample_latitude_dm',
+                'sample_longitude_dm',
+                'sample_latitude_dd',
+                'sample_longitude_dd',
+                'sample_min_depth_m',
+                'sample_max_depth_m',
+                'water_depth_m',
+                'sampler_type_code',
+                'sampled_volume_l',
+                'net_type_code', 
+                'sampler_area_m2',
+                'net_mesh_size_um',
+                'wire_angle_deg',
+                'net_tow_length_m',
+                'analytical_laboratory', 
+                'analysis_date',
+                'analysed_by',
+                'sample_comment',               
+                ]
+        sample_info_rows = []
+        self.sample_info_dict = self.sample_object.get_sample_info()
+        for header_item in sample_info_header_order:
+            sample_info_rows.append([header_item, self.sample_info_dict.get(header_item, '')])
+        # Sample info header.
+        self.sampleinfo_worksheet.write_row(0, 0, sample_info_header, self.bold_format)
+        # Rows.
+        row_nr = 1
+        for row in sample_info_rows:
+            self.sampleinfo_worksheet.write_row(row_nr, 0, row)
+            row_nr += 1
+        # Extra info for restart of counting session.
+        row_nr += 1
+        for key in self.sample_info_dict.keys():
+            if key == 'last_used_method_step':
+                self.sampleinfo_worksheet.write_row(row_nr, 0, [key, self.sample_info_dict.get(key, '')])
+                row_nr += 1
+            if key.startswith('max_count_area<+>'):
+                self.sampleinfo_worksheet.write_row(row_nr, 0, [key, self.sample_info_dict.get(key, '')])
+                row_nr += 1
+
+        # === Sheet: Sample data. ===
+        self.sampledata_worksheet.title = 'sample_data.txt'
+        # Header.
+        self.sampledata_worksheet.write_row(0, 0, self.sample_data_header, self.bold_format)
+        # Rows.
+        row_nr = 1
+        for row in self.sample_data_rows:
+            self.sampledata_worksheet.write_row(row_nr, 0, row)
+            row_nr += 1
+
+        # === Sheet: Sample method. ===
+        # Header.
+        self.samplemethod_worksheet.write_row(0, 0, self.sample_method_header, self.bold_format)
+        # Rows.
+        row_nr = 1
+        for row in self.sample_method_rows:
+            self.samplemethod_worksheet.write_row(row_nr, 0, row)
+            row_nr += 1
+            
+        # === Sheet: README. ===
+        # Header.
+        self.readme_worksheet.write_row(0, 0, ['Plankton Toolbox - Plankton counter'], self.bold_format)
+        # Rows.
+        readme_text = [
+            [''],
+            ['This Excel file is generated by Plankton Toolbox.'],
+            [''],
+            ['The file represents one counted plankton sample. It can be used for export and import '],
+            ['between different computers running Plankton Toolbox, or as an archive file.'],
+            [''],
+            ['NOTE: Don\'t edit or rename the sheets "sample_info.txt", "sample_data.txt" or '],
+            ['"counting_method.txt" if the file should be imported later to Plankton Toolbox.'],
+            [''],
+            ['Generated sheets:'],
+            ['- Sample summary: Contains information in a compact format. May be used printed for archive purposes.'],
+            ['- sample_info.txt: Copy of the internally used file for information connected to a sample (metadata).'],
+            ['- sample_data.txt: Copy of the internally used file for counted sample rows.'],
+            ['- counting_method.txt: Copy of the internally used file for parameters related to the counting method.'],
+            ['- README: This text.'],
+            [''],
+            ['More info at: http://nordicmicroalgae.org and http://plankton-toolbox.org '],
+            ]
+        #
+        row_nr = 1
+        for row in readme_text:
+            self.readme_worksheet.write_row(row_nr, 0, row)
+            row_nr += 1
+        
+        # === Sheet: Sample summary. ===
+        self.create_overview_sheet()
+        
+        # Done. Close the Excel document.
+        workbook.close()
+
+    
+    def load_overview_mappings(self):
+        """ """
+        self.overview_info_mapping = [
+                ['label', 'Plankton Toolbox:', 0, 1, 'text'],
+                ['sample_info', 'plankton_toolbox_version', 0, 2, 'text'],
+                
+                # VISIT.
+                ['label', 'SAMPLING EVENT', 2, 1, 'text'],
+                
+                ['label', 'Station:', 3, 1, 'text'],
+                ['sample_info', 'station_name', 3, 2, 'text'],
+                
+                ['label', 'Date:', 4, 1, 'text'],
+                ['sample_info', 'sample_date', 4, 2, 'text'],
+                
+                ['label', 'Time:', 5, 1, 'text'],
+                ['sample_info', 'sample_time', 5, 2, 'text'],
+                
+                ['label', 'Series:', 6, 1, 'text'],
+                ['sample_info', 'sampling_series', 6, 2, 'text'],
+                
+                ['label', 'Platform:', 7, 1, 'text'],
+                ['sample_info', 'platform_code', 7, 2, 'text'],
+                
+                ['label', 'Lat/long (DD):', 8, 1, 'text'],
+                ['sample_info', 'sample_latitude_dd', 8, 2, 'text'], #, 'pos_dd'], 
+                ['sample_info', 'sample_longitude_dd', 8, 3, 'text'], #, 'pos_dd'], 
+                
+                ['label', 'Lat/long (DM):', 9, 1, 'text'],
+                ['sample_info', 'sample_latitude_dm', 9, 2, 'text'],
+                ['sample_info', 'sample_longitude_dm', 9, 3, 'text'],
+                
+                ['label', 'Water depth (m):', 10, 1, 'text'],
+                ['sample_info', 'water_depth_m', 10, 2, 'decimal'],
+                
+                ['label', 'Project:', 11, 1, 'text'],
+                ['sample_info', 'project_code', 11, 2, 'text'],
+                
+                # SAMPLE.
+                ['label', 'SAMPLE', 2, 5, 'text'],
+                
+                ['label', 'Sampler type code:', 3, 5, 'text'],
+                ['sample_info', 'sampler_type_code', 3, 7, 'text'],
+                
+                ['label', 'Min depth (m):', 4, 5, 'text'],
+                ['sample_info', 'sample_min_depth_m', 4, 7, 'decimal'],
+                ['label', 'Max depth (m):', 5, 5, 'text'],
+                ['sample_info', 'sample_max_depth_m', 5, 7, 'decimal'],
+                
+                ['label', 'Analysed by/taxonomist:', 7, 5, 'text'],
+                ['sample_info', 'analysed_by', 7, 7, 'text'],
+                
+                ['label', 'Analysis date:', 8, 5, 'text'],
+                ['sample_info', 'analysis_date', 8, 7, 'text'],
+                
+                ['label', 'Sample comment:', 9, 5, 'text'],
+                ['sample_info', 'sample_comment', 9, 7, 'text'],
+                
+                ['label', 'Sampled volume (l):', 10, 5, 'text'],
+                ['sample_info', 'sampled_volume_l', 10, 7, 'decimal'],            
+                
+                # SIGNATURE.
+                ['label', 'SIGNATURE', 2, 9, 'text'],
+                
+                ['label', 'Date:', 4, 9, 'text'],
+                
+                ['label', 'Institute:', 6, 9, 'text'],
+                
+                ['label', 'Signature:', 8, 9, 'text'],
+            ]
+        self.overview_method_mapping = [
+                # METOD STEP.
+                ['label', 'Method step', 15, 1, 'text'],
+                ['counting_method', 'counting_method_step', 16, 1, 'text'],
+                
+                ['label', 'Preservative', 15, 3, 'text'],
+                ['counting_method', 'preservative', 16, 3, 'text'],
+                
+                ['label', 'Counted volume (ml)', 15, 5, 'text_r'],
+                ['counting_method', 'counted_volume_ml', 16, 5, 'decimal'],
+                
+                ['label', 'Microscope', 15, 7, 'text'],
+                ['counting_method', 'microscope', 16, 7, 'text'],
+                
+                ['label', 'Magnification', 15, 9, 'text_r'],
+                ['counting_method', 'magnification', 16, 9, 'integer'],
+            ]
+        self.overview_sample_mapping = [            
+                ['label', 'Class', 15, 1, 'text'],
+                ['sample_data', 'taxon_class', 15, 1, 'text'], 
+                
+                ['label', 'Scientific name', 15, 2, 'text'],
+                ['sample_data', 'scientific_full_name', 15, 2, 'text'], 
+                
+                ['label', 'Trophic type', 15, 4, 'text'],
+                ['sample_data', 'trophic_type', 15, 4, 'text'], 
+                
+                ['label', 'Size class', 15, 5, 'text_r'],
+                ['sample_data', 'size_class', 15, 5, 'integer'], 
+                
+                ['label', 'Counted', 15, 6, 'text_r'],
+                ['sample_data', 'counted_units', 15, 6, 'integer'], 
+                
+                ['label', 'Coeff.', 15, 7, 'text_r'],
+                ['sample_data', 'coefficient', 15, 7, 'integer'], 
+                
+                ['label', 'Abundance (units/l)', 15, 8, 'text_r'],
+                ['sample_data', 'abundance_units_l', 15, 8, 'integer'], 
+                
+                ['label', 'Volume (mm3/l)', 15, 9, 'text_r'],
+                ['sample_data', 'volume_mm3_l', 15, 9, 'decimal_6'], 
+                
+                ['label', 'Carbon (ugc/l)', 15, 10, 'text_r'],
+                ['sample_data', 'carbon_ugc_l', 15, 10, 'decimal'], 
+
+                ['label', 'Volume/unit (um3)', 15, 11, 'text_r'],
+                ['sample_data', 'volume_um3_unit', 15, 11, 'decimal'], 
+            ]
+
+    def create_overview_sheet(self):
+        """ """
+        # Excel page setup.
+        self.summary_worksheet.set_paper(9) # A4
+        self.summary_worksheet.set_landscape()
+        self.summary_worksheet.fit_to_pages(1, 0)
+        self.summary_worksheet.set_footer('Plankton Toolbox   -   &F   -   &D &T   -   Page: &P (&N)')
+        # Image.
+        ### worksheet.insert_image('G2', 'plankton_toolbox_icon.png')
+        # Column width.
+        xlsx_layout = [
+            {'columns': 'A:A', 'width': 2}, 
+            {'columns': 'B:D', 'width': 20}, 
+            {'columns': 'E:F', 'width': 12}, 
+            {'columns': 'G:G', 'width': 20}, 
+            {'columns': 'H:H', 'width': 10}, 
+            {'columns': 'I:I', 'width': 20}, 
+            {'columns': 'J:K', 'width': 15}, 
+            {'columns': 'L:M', 'width': 20}, 
+        ]
+        for row in xlsx_layout:
+            if ('columns' in row.keys()) and ('width' in row.keys()):
+                self.summary_worksheet.set_column(row['columns'], row['width'])
+        #
+        method_steps_dict = {}
+        for data in self.sample_method_rows:
+            #print(index)
+            step_dict = dict(zip(self.sample_method_header, data))
+            method_steps_dict[step_dict['counting_method_step']] = step_dict
+        # Write file name.
+        self.summary_worksheet.write(0, 3, self.export_target_filename, self.bold_format)
+        #
+        for row in self.overview_info_mapping:
+            source, field, cell_row, cell_col, cell_format = row
+
+            try:            
+                value = ''
+                if source == 'label':
+                    if cell_format == 'text_r':
+                        self.summary_worksheet.write(cell_row, cell_col, field, self.bold_right_format)
+                    else:
+                        self.summary_worksheet.write(cell_row, cell_col, field, self.bold_format)
+            
+                elif source == 'sample_info':
+                    if field in self.sample_info_dict:
+                        value = self.sample_info_dict[field]
+                        
+                        cell_style_obj = None
+                        if cell_format == 'integer': 
+                            cell_style_obj = self.integer_format
+                            if value is not '':
+                                value = int(float(value))
+                        elif cell_format == 'decimal': 
+                            cell_style_obj = self.decimal_format
+                            if value is not '':
+                                value = float(value)
+                        elif cell_format == 'decimal_6': 
+                            cell_style_obj = self.decimal_6_format
+                            if value is not '':
+                                value = float(value)
+                        elif cell_format == 'pos_dd': 
+                            cell_style_obj = self.latlong_dd_format
+                            if value is not '':
+                                value = float(value)
+                        #
+                        self.summary_worksheet.write(cell_row, cell_col, value, cell_style_obj)
+            
+            except:
+                print(row)
+            
+            # Methods and row data.
+            row_offset = 0
+            header = True
+            last_used_method_step = 'not defined'
+            
+            # Sort order: method_step, 'scientific_full_name, size_class.        
+            sorted_data_rows = self.sample_data_rows.copy()
+            sorted_data_rows.sort(key=operator.itemgetter(4, 0, 3))
+            
+            for data_row in sorted_data_rows:
+                
+                data_row_dict = dict(zip(self.sample_data_header, data_row))
+                used_method_step = data_row_dict.get('method_step', '')
+                if used_method_step:
+                    method_dict = method_steps_dict[used_method_step]
+                else:
+                    method_dict = {}
+                # New method step.
+                if used_method_step != last_used_method_step:
+                    row_offset += 1
+                    self. overview_sheet_method(method_dict, row_offset)
+                    row_offset += 3
+                    header = True
+                    last_used_method_step = used_method_step
+                # Header for data rows.
+                if header:
+                    self. overview_sheet_data(data_row_dict, row_offset, header)
+                    header = False
+                    row_offset += 1
+                # Data rows.
+                self. overview_sheet_data(data_row_dict, row_offset, header)
+                row_offset += 1
+    
+    def overview_sheet_method(self, method_dict, row_offset):
+        """ """
+        for row in self.overview_method_mapping:
+            source, field, cell_row, cell_col, cell_format = row
+
+            try:
+                value = ''
+                if source == 'label':
+                    if cell_format == 'text_r':
+                        self.summary_worksheet.write(cell_row+row_offset, cell_col, field, self.bold_right_format)
+                    else:
+                        self.summary_worksheet.write(cell_row+row_offset, cell_col, field, self.bold_format)
+            
+                elif source == 'counting_method':
+                    if field in method_dict:
+                        value = method_dict[field]
+                        
+                        cell_style_obj = None
+                        if cell_format == 'integer': 
+                            cell_style_obj = self.integer_format
+                            if value is not '':
+                                value = int(float(value))
+                                # Don't write zero values.
+                                if value == 0:
+                                    value = ''
+                                    cell_style_obj = None
+                        elif cell_format == 'decimal': 
+                            cell_style_obj = self.decimal_format
+                            if value is not '':
+                                value = float(value)
+                                # Don't write zero values.
+                                if value == 0.0:
+                                    value = ''
+                                    cell_style_obj = None
+                        elif cell_format == 'decimal_6': 
+                            cell_style_obj = self.decimal_6_format
+                            if value is not '':
+                                value = float(value)
+                                # Don't write zero values.
+                                if value == 0.0:
+                                    value = ''
+                                    cell_style_obj = None
+                        #
+                        self.summary_worksheet.write(cell_row+row_offset, cell_col, value, cell_style_obj)
+            #
+            except Exception as e:
+                print(str(row), '   Exception: ', str(e))
+    
+    def overview_sheet_data(self, sample_data_dict, row_offset, header=True):
+        """ """
+        for row in self.overview_sample_mapping:
+            source, field, cell_row, cell_col, cell_format = row
+
+            try:
+                value = ''
+                if header:
+                    if source == 'label':
+                        if cell_format == 'text_r':
+                            self.summary_worksheet.write(cell_row+row_offset, cell_col, field, self.bold_right_format)
+                        else:
+                            self.summary_worksheet.write(cell_row+row_offset, cell_col, field, self.bold_format)
+                else:
+                    if source == 'sample_data':
+                        if field in sample_data_dict:
+                            value = sample_data_dict[field]
+                            
+                            # Special for qualitative analysis.
+                            if (field == 'counted_units') and (value == ''):
+                                value = sample_data_dict['abundance_class']
+                                #
+                                if value == '1':
+                                    value = '1 (Observed)'
+                                elif value == '2':
+                                    value = '2 (Several cells)'
+                                elif value == '3':
+                                    value = '3 (1-10%)'
+                                elif value == '4':
+                                    value = '4 (10-50%)'
+                                elif value == '5':
+                                    value = '5 (50-100%)'
+                                #
+                                cell_format='text'
+                            #
+                            cell_style_obj = None
+                            if cell_format == 'integer': 
+                                cell_style_obj = self.integer_format
+                                if value is not '':
+                                    value = int(float(value))
+                                    # Don't write zero values.
+                                    if value == 0:
+                                        value = ''
+                                        cell_style_obj = None
+                            elif cell_format == 'decimal': 
+                                cell_style_obj = self.decimal_format
+                                if value is not '':
+                                    value = float(value)
+                                    # Don't write zero values.
+                                    if value == 0.0:
+                                        value = ''
+                                        cell_style_obj = None
+                            elif cell_format == 'decimal_6': 
+                                cell_style_obj = self.decimal_6_format
+                                if value is not '':
+                                    value = float(value)
+                                    # Don't write zero values.
+                                    if value == 0.0:
+                                        value = ''
+                                        cell_style_obj = None
+                            #
+                            self.summary_worksheet.write(cell_row++row_offset, cell_col, value, cell_style_obj)
+            #
+            except Exception as e:
+                print(str(row), '   Exception: ', str(e))

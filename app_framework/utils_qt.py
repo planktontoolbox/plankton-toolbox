@@ -371,7 +371,7 @@ class ToolboxEditableQTableView( QtWidgets.QTableView):
             self.setSelectionModel(self._selectionmodel)
             self.resizeColumnsToContents()
         except Exception as e:
-            print('DEBUG, Exception: ', e)
+            print('DEBUG, Exception: ', str(e))
             raise
  
     def clearModel(self):
@@ -380,7 +380,7 @@ class ToolboxEditableQTableView( QtWidgets.QTableView):
             if self._tablemodel.getModeldata():
                 self._tablemodel.getModeldata().clear()
         except Exception as e:
-            print('DEBUG, Exception: ', e)
+            print('DEBUG, Exception: ', str(e))
             raise
          
     def getTableModel(self):
@@ -408,7 +408,7 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
             # Initialize parent.
             QtCore.QAbstractTableModel.__init__(self)
         except Exception as e:
-            print('DEBUG, Exception: ', e)
+            print('DEBUG, Exception: ', str(e))
             raise
         
     def rowCount(self, parent=QtCore.QModelIndex()):
@@ -418,7 +418,7 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
                 return 0
             return self._modeldata.get_row_count()
         except Exception as e:
-            print('DEBUG, Exception: ', e)
+            print('DEBUG, Exception: ', str(e))
             raise
 
     def columnCount(self, parent=QtCore.QModelIndex()):
@@ -428,7 +428,7 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
                 return 0
             return self._modeldata.get_column_count()
         except Exception as e:
-            print('DEBUG, Exception: ', e)
+            print('DEBUG, Exception: ', str(e))
             raise
 
     def getModeldata(self):
@@ -450,7 +450,7 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
                 return QtCore.QVariant(str(section + 1))
             return QtCore.QVariant()
         except Exception as e:
-            print('DEBUG, Exception: ', e)
+            print('DEBUG, Exception: ', str(e))
             raise
 
     def data(self, index=QtCore.QModelIndex(), role = QtCore.Qt.DisplayRole):
@@ -464,7 +464,7 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
                     return QtCore.QVariant(str(self._modeldata.get_data_item(index.row(), index.column())))
             return QtCore.QVariant()
         except Exception as e:
-            print('DEBUG, Exception: ', e)
+            print('DEBUG, Exception: ', str(e))
             raise
 
     def setData(self, index, value, role = QtCore.Qt.EditRole):
@@ -477,7 +477,7 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
                 return True
             return False
         except Exception as e:
-            print('DEBUG, Exception: ', e)
+            print('DEBUG, Exception: ', str(e))
             raise
 
     def flags(self, index):
@@ -485,7 +485,7 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
         try:
             return QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
         except Exception as e:
-            print('DEBUG, Exception: ', e)
+            print('DEBUG, Exception: ', str(e))
             raise
 
 
