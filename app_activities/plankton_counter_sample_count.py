@@ -671,7 +671,16 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
                 currentindex = self._speciessizeclass_list.findText(size_class, QtCore.Qt.MatchFixedString)
                 if currentindex >= 0:
                     self._speciessizeclass_list.setCurrentIndex(currentindex)
-                
+                else:
+                    # This is not a valid size class for this species.
+                    # Add to combo to make it possible to make stored data accessible. 
+                    # Add and search again.
+                    self._speciessizeclass_list.addItem(size_class)                    
+                    currentindex = self._speciessizeclass_list.findText(size_class, QtCore.Qt.MatchFixedString)
+                    if currentindex >= 0:
+                        self._speciessizeclass_list.setCurrentIndex(currentindex)
+                    #
+                    toolbox_utils.Logging().error('Invalid size class. Species: ' + scientific_name + '   Size class: ' + size_class + '.')
                 
     ##### Move this...            
     #             # Trophic type.
@@ -769,6 +778,16 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
             currentindex = self._speciessizeclass_list.findText(size_class, QtCore.Qt.MatchFixedString)
             if currentindex >= 0:
                 self._speciessizeclass_list.setCurrentIndex(currentindex)
+            else:
+                # This is not a valid size class for this species.
+                # Add to combo to make it possible to make stored data accessible. 
+                # Add and search again.
+                self._speciessizeclass_list.addItem(size_class)                    
+                currentindex = self._speciessizeclass_list.findText(size_class, QtCore.Qt.MatchFixedString)
+                if currentindex >= 0:
+                    self._speciessizeclass_list.setCurrentIndex(currentindex)
+                #
+                toolbox_utils.Logging().error('Invalid size class. Species: ' + scientific_name + '   Size class: ' + size_class + '.')
             #
             self._update_scientific_full_name()
         #
