@@ -566,7 +566,7 @@ class BackupExportImportDialog(QtWidgets.QDialog):
     def __init__(self, parentwidget):
         """ """
         super(BackupExportImportDialog, self).__init__(parentwidget)
-        self.setWindowTitle("Plakton toolbox data export/import")
+        self.setWindowTitle("Plankton toolbox data export/import")
         self._parentwidget = parentwidget
         self.setLayout(self._content())
         self.setMinimumSize(600, 200)
@@ -980,10 +980,13 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
                         sample_object = plankton_core.PlanktonCounterSample(dir_path, datasetname, samplename)
                         #
                         sample_object.export_sample_to_excel(export_target_dir, export_target_filename)
+                        #
+                        toolbox_utils.Logging().log('Sample exported: ' + export_target_filename + '   to directory: ' + export_target_dir )
                     #        
                     except Exception as e:
-                        toolbox_utils.Logging().error('Failed to export sample. ' + str(e))
-                        QtWidgets.QMessageBox.warning(self, 'Warning', 'Failed to export sample. ' + str(e))
+                        toolbox_utils.Logging().error('Failed to export sample. File: ' + export_target_filename +  '   Exception: ' + str(e))
+                        QtWidgets.QMessageBox.warning(self, 'Warning', 
+                                                      'Failed to export sample. File: ' + export_target_filename +  '   Exception: ' + str(e))
             #            
             self.accept() # Close dialog box.
         #
@@ -1020,12 +1023,14 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
                         sample_object = plankton_core.PlanktonCounterSample(dir_path, datasetname, samplename)
                         #
                         sample_object.import_sample_from_excel(filename)
+                        #
+                        toolbox_utils.Logging().log('Sample imported: ' + filename)
             #
             except Exception as e:
-                toolbox_utils.Logging().error('Excel file import failed on exception: ' + str(e))
-                QtWidgets.QMessageBox.warning(self, 'Excel file loading.\n', 
-                                          'Excel file import failed on exception.\n' + str(e))
-                raise
+                toolbox_utils.Logging().error('Failed to import sample. File: ' + filename +  '   Exception: ' + str(e))
+                QtWidgets.QMessageBox.warning(self, 'Warning.', 
+                                              'Failed to export sample. File: ' + filename +  '   Exception: ' + str(e))
+                # raise
             finally:
                 toolbox_utils.Logging().log_all_accumulated_rows()  
                 toolbox_utils.Logging().log('Importing samples done.')

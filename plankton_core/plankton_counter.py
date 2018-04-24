@@ -925,6 +925,7 @@ class ExcelExportWriter():
         
     def to_excel(self, export_target_dir, export_target_filename):
         """ Export to Excel. """
+        self.export_target_filename = export_target_filename
         # Create Excel document.
         filepathname = os.path.join(export_target_dir, export_target_filename)
         workbook = xlsxwriter.Workbook(filepathname)
@@ -942,10 +943,13 @@ class ExcelExportWriter():
         self.readme_worksheet.set_column('A:A', 100)
         # Create cell formats.
         self.bold_format = workbook.add_format({'bold': True})
+        self.bold_right_format = workbook.add_format({'bold': True, 'align': 'right'})
         self.integer_format = workbook.add_format()
         self.integer_format.set_num_format('0')
         self.decimal_format = workbook.add_format()
         self.decimal_format.set_num_format('0.00')
+        self.decimal_6_format = workbook.add_format()
+        self.decimal_6_format.set_num_format('0.000000')
         self.latlong_dd_format = workbook.add_format()
         self.latlong_dd_format.set_num_format('0.0000')
         
@@ -973,7 +977,7 @@ class ExcelExportWriter():
                 'platform_code',
                 'sampling_series',
                 'sampling_laboratory',
-                'orderer',                
+                'orderer',
                 'project_code',
                 'station_name',
                 'sample_latitude_dm',
@@ -1096,8 +1100,8 @@ class ExcelExportWriter():
                 ['sample_info', 'platform_code', 7, 2, 'text'],
                 
                 ['label', 'Lat/long (DD):', 8, 1, 'text'],
-                ['sample_info', 'sample_latitude_dd', 8, 2, 'pos_dd'],
-                ['sample_info', 'sample_longitude_dd', 8, 3, 'pos_dd'],
+                ['sample_info', 'sample_latitude_dd', 8, 2, 'text'], #, 'pos_dd'], 
+                ['sample_info', 'sample_longitude_dd', 8, 3, 'text'], #, 'pos_dd'], 
                 
                 ['label', 'Lat/long (DM):', 9, 1, 'text'],
                 ['sample_info', 'sample_latitude_dm', 9, 2, 'text'],
@@ -1113,24 +1117,33 @@ class ExcelExportWriter():
                 ['label', 'SAMPLE', 2, 5, 'text'],
                 
                 ['label', 'Sampler type code:', 3, 5, 'text'],
-                ['sample_info', 'sampler_type_code', 3, 6, 'text'],
+                ['sample_info', 'sampler_type_code', 3, 7, 'text'],
                 
                 ['label', 'Min depth (m):', 4, 5, 'text'],
-                ['sample_info', 'sample_min_depth_m', 4, 6, 'decimal'],
+                ['sample_info', 'sample_min_depth_m', 4, 7, 'decimal'],
                 ['label', 'Max depth (m):', 5, 5, 'text'],
-                ['sample_info', 'sample_max_depth_m', 5, 6, 'decimal'],
+                ['sample_info', 'sample_max_depth_m', 5, 7, 'decimal'],
                 
                 ['label', 'Analysed by/taxonomist:', 7, 5, 'text'],
-                ['sample_info', 'analysed_by', 7, 6, 'text'],
+                ['sample_info', 'analysed_by', 7, 7, 'text'],
                 
                 ['label', 'Analysis date:', 8, 5, 'text'],
-                ['sample_info', 'analysis_date', 8, 6, 'text'],
+                ['sample_info', 'analysis_date', 8, 7, 'text'],
                 
                 ['label', 'Sample comment:', 9, 5, 'text'],
-                ['sample_info', 'sample_comment', 9, 6, 'text'],
+                ['sample_info', 'sample_comment', 9, 7, 'text'],
                 
                 ['label', 'Sampled volume (l):', 10, 5, 'text'],
-                ['sample_info', 'sampled_volume_l', 10, 6, 'decimal'],            
+                ['sample_info', 'sampled_volume_l', 10, 7, 'decimal'],            
+                
+                # SIGNATURE.
+                ['label', 'SIGNATURE', 2, 9, 'text'],
+                
+                ['label', 'Date:', 4, 9, 'text'],
+                
+                ['label', 'Institute:', 6, 9, 'text'],
+                
+                ['label', 'Signature:', 8, 9, 'text'],
             ]
         self.overview_method_mapping = [
                 # METOD STEP.
@@ -1140,14 +1153,14 @@ class ExcelExportWriter():
                 ['label', 'Preservative', 15, 3, 'text'],
                 ['counting_method', 'preservative', 16, 3, 'text'],
                 
-                ['label', 'Counted volume (ml)', 15, 4, 'text'],
-                ['counting_method', 'counted_volume_ml', 16, 4, 'text'],
+                ['label', 'Counted volume (ml)', 15, 5, 'text_r'],
+                ['counting_method', 'counted_volume_ml', 16, 5, 'decimal'],
                 
-                ['label', 'Microscope', 15, 5, 'text'],
-                ['counting_method', 'microscope', 16, 5, 'text'],
+                ['label', 'Microscope', 15, 7, 'text'],
+                ['counting_method', 'microscope', 16, 7, 'text'],
                 
-                ['label', 'Magnification', 15, 6, 'text'],
-                ['counting_method', 'magnification', 16, 6, 'text'],
+                ['label', 'Magnification', 15, 9, 'text_r'],
+                ['counting_method', 'magnification', 16, 9, 'integer'],
             ]
         self.overview_sample_mapping = [            
                 ['label', 'Class', 15, 1, 'text'],
@@ -1159,29 +1172,26 @@ class ExcelExportWriter():
                 ['label', 'Trophic type', 15, 4, 'text'],
                 ['sample_data', 'trophic_type', 15, 4, 'text'], 
                 
-                ['label', 'Size class', 15, 5, 'text'],
-                ['sample_data', 'size_class', 15, 5, 'text'], 
+                ['label', 'Size class', 15, 5, 'text_r'],
+                ['sample_data', 'size_class', 15, 5, 'integer'], 
                 
-                ['label', 'Counted units', 15, 6, 'text'],
-                ['sample_data', 'counted_units', 15, 6, 'text'], 
+                ['label', 'Counted', 15, 6, 'text_r'],
+                ['sample_data', 'counted_units', 15, 6, 'integer'], 
                 
-                ['label', 'Abundance class', 15, 7, 'text'],
-                ['sample_data', 'abundance_class', 15, 7, 'text'], 
+                ['label', 'Coeff.', 15, 7, 'text_r'],
+                ['sample_data', 'coefficient', 15, 7, 'integer'], 
                 
-                ['label', 'Coefficient', 15, 8, 'text'],
-                ['sample_data', 'coefficient', 15, 8, 'text'], 
+                ['label', 'Abundance (units/l)', 15, 8, 'text_r'],
+                ['sample_data', 'abundance_units_l', 15, 8, 'integer'], 
                 
-                ['label', 'Abundance (units/l)', 15, 9, 'text'],
-                ['sample_data', 'abundance_units_l', 15, 9, 'text'], 
+                ['label', 'Volume (mm3/l)', 15, 9, 'text_r'],
+                ['sample_data', 'volume_mm3_l', 15, 9, 'decimal_6'], 
                 
-                ['label', 'Volume (mm3/l)', 15, 10, 'text'],
-                ['sample_data', 'volume_mm3_l', 15, 10, 'text'], 
-                
-                ['label', 'Carbon (ugc/l)', 15, 11, 'text'],
-                ['sample_data', 'carbon_ugc_l', 15, 11, 'text'], 
+                ['label', 'Carbon (ugc/l)', 15, 10, 'text_r'],
+                ['sample_data', 'carbon_ugc_l', 15, 10, 'decimal'], 
 
-                ['label', 'Volume/unit (um3)', 15, 12, 'text'],
-                ['sample_data', 'volume_um3_unit', 15, 12, 'text'], 
+                ['label', 'Volume/unit (um3)', 15, 11, 'text_r'],
+                ['sample_data', 'volume_um3_unit', 15, 11, 'decimal'], 
             ]
 
     def create_overview_sheet(self):
@@ -1190,13 +1200,19 @@ class ExcelExportWriter():
         self.summary_worksheet.set_paper(9) # A4
         self.summary_worksheet.set_landscape()
         self.summary_worksheet.fit_to_pages(1, 0)
-        self.summary_worksheet.set_footer('Plankton Toolbox - &F - &D &T - Page: &P ')
+        self.summary_worksheet.set_footer('Plankton Toolbox   -   &F   -   &D &T   -   Page: &P (&N)')
         # Image.
         ### worksheet.insert_image('G2', 'plankton_toolbox_icon.png')
         # Column width.
         xlsx_layout = [
             {'columns': 'A:A', 'width': 2}, 
-            {'columns': 'B:M', 'width': 20}
+            {'columns': 'B:D', 'width': 20}, 
+            {'columns': 'E:F', 'width': 12}, 
+            {'columns': 'G:G', 'width': 20}, 
+            {'columns': 'H:H', 'width': 10}, 
+            {'columns': 'I:I', 'width': 20}, 
+            {'columns': 'J:K', 'width': 15}, 
+            {'columns': 'L:M', 'width': 20}, 
         ]
         for row in xlsx_layout:
             if ('columns' in row.keys()) and ('width' in row.keys()):
@@ -1207,14 +1223,19 @@ class ExcelExportWriter():
             #print(index)
             step_dict = dict(zip(self.sample_method_header, data))
             method_steps_dict[step_dict['counting_method_step']] = step_dict
-        
+        # Write file name.
+        self.summary_worksheet.write(0, 3, self.export_target_filename, self.bold_format)
+        #
         for row in self.overview_info_mapping:
             source, field, cell_row, cell_col, cell_format = row
 
             try:            
                 value = ''
                 if source == 'label':
-                    self.summary_worksheet.write(cell_row, cell_col, field, self.bold_format)
+                    if cell_format == 'text_r':
+                        self.summary_worksheet.write(cell_row, cell_col, field, self.bold_right_format)
+                    else:
+                        self.summary_worksheet.write(cell_row, cell_col, field, self.bold_format)
             
                 elif source == 'sample_info':
                     if field in self.sample_info_dict:
@@ -1224,9 +1245,13 @@ class ExcelExportWriter():
                         if cell_format == 'integer': 
                             cell_style_obj = self.integer_format
                             if value is not '':
-                                value = int(value)
+                                value = int(float(value))
                         elif cell_format == 'decimal': 
-                            cell_style_obj = self.integer_format
+                            cell_style_obj = self.decimal_format
+                            if value is not '':
+                                value = float(value)
+                        elif cell_format == 'decimal_6': 
+                            cell_style_obj = self.decimal_6_format
                             if value is not '':
                                 value = float(value)
                         elif cell_format == 'pos_dd': 
@@ -1280,7 +1305,10 @@ class ExcelExportWriter():
             try:
                 value = ''
                 if source == 'label':
-                    self.summary_worksheet.write(cell_row+row_offset, cell_col, field, self.bold_format)
+                    if cell_format == 'text_r':
+                        self.summary_worksheet.write(cell_row+row_offset, cell_col, field, self.bold_right_format)
+                    else:
+                        self.summary_worksheet.write(cell_row+row_offset, cell_col, field, self.bold_format)
             
                 elif source == 'counting_method':
                     if field in method_dict:
@@ -1290,15 +1318,32 @@ class ExcelExportWriter():
                         if cell_format == 'integer': 
                             cell_style_obj = self.integer_format
                             if value is not '':
-                                value = int(value)
+                                value = int(float(value))
+                                # Don't write zero values.
+                                if value == 0:
+                                    value = ''
+                                    cell_style_obj = None
                         elif cell_format == 'decimal': 
                             cell_style_obj = self.decimal_format
                             if value is not '':
                                 value = float(value)
+                                # Don't write zero values.
+                                if value == 0.0:
+                                    value = ''
+                                    cell_style_obj = None
+                        elif cell_format == 'decimal_6': 
+                            cell_style_obj = self.decimal_6_format
+                            if value is not '':
+                                value = float(value)
+                                # Don't write zero values.
+                                if value == 0.0:
+                                    value = ''
+                                    cell_style_obj = None
                         #
                         self.summary_worksheet.write(cell_row+row_offset, cell_col, value, cell_style_obj)
-            except:
-                print(row)
+            #
+            except Exception as e:
+                print(str(row), '   Exception: ', str(e))
     
     def overview_sheet_data(self, sample_data_dict, row_offset, header=True):
         """ """
@@ -1309,23 +1354,59 @@ class ExcelExportWriter():
                 value = ''
                 if header:
                     if source == 'label':
-                        self.summary_worksheet.write(cell_row+row_offset, cell_col, field, self.bold_format)
+                        if cell_format == 'text_r':
+                            self.summary_worksheet.write(cell_row+row_offset, cell_col, field, self.bold_right_format)
+                        else:
+                            self.summary_worksheet.write(cell_row+row_offset, cell_col, field, self.bold_format)
                 else:
                     if source == 'sample_data':
                         if field in sample_data_dict:
                             value = sample_data_dict[field]
                             
+                            # Special for qualitative analysis.
+                            if (field == 'counted_units') and (value == ''):
+                                value = sample_data_dict['abundance_class']
+                                #
+                                if value == '1':
+                                    value = '1 (Observed)'
+                                elif value == '2':
+                                    value = '2 (Several cells)'
+                                elif value == '3':
+                                    value = '3 (1-10%)'
+                                elif value == '4':
+                                    value = '4 (10-50%)'
+                                elif value == '5':
+                                    value = '5 (50-100%)'
+                                #
+                                cell_format='text'
+                            #
                             cell_style_obj = None
                             if cell_format == 'integer': 
                                 cell_style_obj = self.integer_format
                                 if value is not '':
-                                    value = int(value)
+                                    value = int(float(value))
+                                    # Don't write zero values.
+                                    if value == 0:
+                                        value = ''
+                                        cell_style_obj = None
                             elif cell_format == 'decimal': 
-                                cell_style_obj = self.integer_format
+                                cell_style_obj = self.decimal_format
                                 if value is not '':
                                     value = float(value)
+                                    # Don't write zero values.
+                                    if value == 0.0:
+                                        value = ''
+                                        cell_style_obj = None
+                            elif cell_format == 'decimal_6': 
+                                cell_style_obj = self.decimal_6_format
+                                if value is not '':
+                                    value = float(value)
+                                    # Don't write zero values.
+                                    if value == 0.0:
+                                        value = ''
+                                        cell_style_obj = None
                             #
                             self.summary_worksheet.write(cell_row++row_offset, cell_col, value, cell_style_obj)
-
-            except:
-                print(row)
+            #
+            except Exception as e:
+                print(str(row), '   Exception: ', str(e))
