@@ -171,11 +171,11 @@ class CreateReportSpecies(object):
                                     abundcol = 8 + (sampleindex * self._numberofcolumnspersample)
                                     volumecol = abundcol + 1
                                     if row[abundcol] and oldrow[abundcol]:
-                                        row[abundcol] = str(int(row[abundcol]) + int(oldrow[abundcol]))
+                                        row[abundcol] = str(float(row[abundcol]) + float(oldrow[abundcol]))
                                         oldrow[0] = u'REMOVE AGGREGATED' #
                                     if row[volumecol] and oldrow[volumecol]:
                                         row[volumecol] = str(float(row[volumecol].replace(u',', u'.')) + 
-                                                                 float(oldrow[volumecol].replace(u',', u'.'))).replace(u'.', u',')
+                                                                 float(oldrow[volumecol].replace(u',', u'.')))
                                         oldrow[0] = u'REMOVE AGGREGATED' #
                                     #
                                     sampleindex += 1     
