@@ -182,12 +182,13 @@ class CreateReportsActivity(app_framework.ActivityBase):
     def _report_list_changed(self):
         """ """
         try:
-    #         reportindex = self._report_list.currentIndex()
-    #         if (reportindex == 4) or (reportindex == 5):
-    #             self._aggregate_checkbox.setEnabled(True)
-    #         else:
-    #             self._aggregate_checkbox.setEnabled(False)
-            self._aggregate_checkbox.setEnabled(False)
+            reportindex = self._report_list.currentIndex()
+            if reportindex in [1, 2]:
+                # 'Quantitative (counted): Table format' or 
+                # 'Quantitative (counted): Species list'
+                self._aggregate_checkbox.setEnabled(True)
+            else:
+                self._aggregate_checkbox.setEnabled(False)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -310,7 +311,7 @@ class CreateReportsActivity(app_framework.ActivityBase):
             result_table = plankton_core.DatasetTable()
             report.create_report(datasets, result_table,
     #                             show_debug_info = self._debuginfo_checkbox.checkState(),
-                                aggregate_rows = self._aggregate_checkbox.checkState())
+                                aggregate_rows = self._aggregate_checkbox.isChecked())
             # Preview result.
             self._tableview.setTableModel(result_table)
             self._tableview.resetModel() # Model data has changed.
