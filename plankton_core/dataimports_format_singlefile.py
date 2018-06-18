@@ -19,9 +19,13 @@ class FormatSingleFile(plankton_core.ParsedFormat):
         #        
         datasetparserrows = dataset.get_dataset_parser_rows()
         #
-        visitkeycommand = None
-        samplekeycommand = None
-#        variablekeycommand = None
+#         visitkeycommand = None
+#         samplekeycommand = None
+#         variablekeycommand = None
+        self.visit_key_parts = None
+        self.sample_key_parts = None
+
+
         #
         try:
             for parserrow in datasetparserrows:
@@ -47,11 +51,9 @@ class FormatSingleFile(plankton_core.ParsedFormat):
                         self.append_parser_command(commandstring)
                     #
                     elif (parsernode == 'info') and (parserkey == 'visit_key'):
-                        commandstring = 'keystring = ' + parsercommand
-                        visitkeycommand = compile(commandstring, '', 'exec')
+                        self.visit_key_parts = 'self.visit_keystring = ' + parsercommand
                     elif (parsernode == 'info') and (parserkey == 'sample_key'):
-                        commandstring = 'keystring = ' + parsercommand
-                        samplekeycommand = compile(commandstring, '', 'exec')
+                        self.sample_key_parts = 'self.sample_keystring = ' + parsercommand
                     #
                     elif parsernode == 'function_dataset':
                         commandstring = parserkey + parsercommand
@@ -83,21 +85,21 @@ class FormatSingleFile(plankton_core.ParsedFormat):
                     currentsample = None
                     currentvariable = None
                     # Check if visit exists. Create or reuse.
-                    keystring = None
-                    exec(visitkeycommand) # Command assigns keystring.
-                    currentvisit = dataset.get_visit_lookup(keystring)
+                    self.visit_keystring = None
+                    exec(self.visit_key_parts) # Command assigns keystring.
+                    currentvisit = dataset.get_visit_lookup(self.visit_keystring)
                     if not currentvisit:
                         currentvisit = plankton_core.VisitNode()
                         dataset.add_child(currentvisit)    
-                        currentvisit.set_id_string(keystring)
+                        currentvisit.set_id_string(self.visit_keystring)
                     # Check if sample exists. Create or reuse.
-                    keystring = None
-                    exec(samplekeycommand) # Command assigns keystring.
-                    currentsample = dataset.get_sample_lookup(keystring)
+                    self.sample_keystring = None
+                    exec(self.sample_key_parts) # Command assigns keystring.
+                    currentsample = dataset.get_sample_lookup(self.sample_keystring)
                     if not currentsample:
                         currentsample = plankton_core.SampleNode()
                         currentvisit.add_child(currentsample)    
-                        currentsample.set_id_string(keystring)    
+                        currentsample.set_id_string(self.sample_keystring)    
                     # Add all variables in row.
                     currentvariable = plankton_core.VariableNode()
                     currentsample.add_child(currentvariable)    
