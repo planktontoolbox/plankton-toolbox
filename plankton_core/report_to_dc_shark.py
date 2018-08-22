@@ -47,7 +47,7 @@ class CreateReportToDataCenterShark(object):
             'sample_comment', # 'COMNT_SAMP',
             'scientific_name', # 'LATNM',
             'species_flag_code', # 'SFLAG',
-            'cf', # 'CF',
+#            'cf', # 'CF',
             'trophic_type', # 'TRPHY',
             'param_counted', # 'COUNTNR', # Parameter.
             'param_abundance_class', # 'COUNT_CLASS', # Parameter.
@@ -202,8 +202,59 @@ class CreateReportToDataCenterShark(object):
             # Copy items.
             report_row = []
             row_dict = report_rows_dict[key]
+            #
+            self.cleanup_fields(row_dict)
+            #
             for item in self._header_counted_items:
                 report_row.append(row_dict.get(item, ''))
             # Add all rows to result.
             result_table.append_row(report_row)
+    
+    def cleanup_fields(self, row_dict):
+        """ """
+        # Concatenate CF into SFLAG.
+        sflag = row_dict.get('species_flag_code', '').strip()
+        cf = row_dict.get('cf', '').strip()
+        if 'CF' in cf.upper():
+            if len(sflag) > 0:
+                row_dict['species_flag_code'] = sflag + ' CF'
+            else:
+                row_dict['species_flag_code'] = 'CF'
 
+        # Biovol and carbon: '' if 0.00.
+        biovol = row_dict.get('param_biovolume', '').strip()
+        try:
+            biovol = float(biovol)
+            if biovol == 0.0:
+                row_dict['param_biovolume'] = ''
+        except:
+            pass
+
+        # Remove descriptions for codes.
+        smtyp = row_dict.get('sampler_type_code', '')
+        if '(' in smtyp:
+            row_dict['sampler_type_code'] = smtyp.split('(')[0].strip()
+        
+        metfp = row_dict.get('preservative', '')
+        if '(' in metfp:
+            row_dict['preservative'] = metfp.split('(')[0].strip()
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
