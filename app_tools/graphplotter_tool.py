@@ -106,53 +106,53 @@ class GraphPlotterTool(app_framework.ToolBase):
         #
         return widget
 
-    def _create_content_settings(self):
-        """ """
-        widget = QtWidgets.QWidget()
-        # Active widgets and connections.
-        self._timeseriesforat_edit = QtWidgets.QLineEdit(""" bo, ro, g^, ys""")
-        self._xyplotformat_edit = QtWidgets.QLineEdit(""" bo, ro, g^, ys""")
-        #
-        self._editable_listview = app_framework.ToolboxEditableQTableView()
-        data = plankton_core.DatasetTable()
-        data.set_header(['X label     ', 'Y label     ', 'Z label     '])
-        data.append_row(['a', 'b', 'c'])
-        data.append_row(['1', '2', '3'])
-        self._editable_listview.setTableModel(data)
-        self._editable_listview.resetModel() # Model data has changed.
-        self._editable_listview.resizeColumnsToContents()
-        #                
-        self._resetsettings_button = QtWidgets.QPushButton('Reset')
-#        self._resetsettings_button.clicked.connect(self._resetSettings)                
-        #                
-        self._applysettings_button = QtWidgets.QPushButton('Apply')
-#        self._applysettings_button.clicked.connect(self._applySettings)                
-        # Layout.
-        form = QtWidgets.QFormLayout()
-        form.addRow('Test 1:', self._timeseriesforat_edit)
-        form.addRow('Test 2', self._xyplotformat_edit)
-        form.addRow('Plot labels', self._editable_listview)
-        #
-        hbox = QtWidgets.QHBoxLayout()
-#         hbox.addStretch(5)
-        hbox.addWidget(self._resetsettings_button)
-        hbox.addWidget(self._applysettings_button)
-        hbox.addStretch(10)
-        #
-        vbox = QtWidgets.QVBoxLayout()
-        vbox.addLayout(form)
-        vbox.addLayout(hbox, 10)
-        # 
-        widget.setLayout(vbox)
-  
-        # Under development...
-        self._timeseriesforat_edit.setDisabled(True)
-        self._xyplotformat_edit.setDisabled(True)
-        self._editable_listview.setDisabled(True)
-        self._resetsettings_button.setDisabled(True)
-        self._applysettings_button.setDisabled(True)
-        #
-        return widget
+#     def _create_content_settings(self):
+#         """ """
+#         widget = QtWidgets.QWidget()
+#         # Active widgets and connections.
+#         self._timeseriesforat_edit = QtWidgets.QLineEdit(""" bo, ro, g^, ys""")
+#         self._xyplotformat_edit = QtWidgets.QLineEdit(""" bo, ro, g^, ys""")
+#         #
+#         self._editable_listview = app_framework.ToolboxEditableQTableView()
+#         data = plankton_core.DatasetTable()
+#         data.set_header(['X label     ', 'Y label     ', 'Z label     '])
+#         data.append_row(['a', 'b', 'c'])
+#         data.append_row(['1', '2', '3'])
+#         self._editable_listview.setTableModel(data)
+#         ### self._editable_listview.resetModel() # Model data has changed.
+#         self._editable_listview.resizeColumnsToContents()
+#         #                
+#         self._resetsettings_button = QtWidgets.QPushButton('Reset')
+# #        self._resetsettings_button.clicked.connect(self._resetSettings)                
+#         #                
+#         self._applysettings_button = QtWidgets.QPushButton('Apply')
+# #        self._applysettings_button.clicked.connect(self._applySettings)                
+#         # Layout.
+#         form = QtWidgets.QFormLayout()
+#         form.addRow('Test 1:', self._timeseriesforat_edit)
+#         form.addRow('Test 2', self._xyplotformat_edit)
+#         form.addRow('Plot labels', self._editable_listview)
+#         #
+#         hbox = QtWidgets.QHBoxLayout()
+# #         hbox.addStretch(5)
+#         hbox.addWidget(self._resetsettings_button)
+#         hbox.addWidget(self._applysettings_button)
+#         hbox.addStretch(10)
+#         #
+#         vbox = QtWidgets.QVBoxLayout()
+#         vbox.addLayout(form)
+#         vbox.addLayout(hbox, 10)
+#         # 
+#         widget.setLayout(vbox)
+#   
+#         # Under development...
+#         self._timeseriesforat_edit.setDisabled(True)
+#         self._xyplotformat_edit.setDisabled(True)
+#         self._editable_listview.setDisabled(True)
+#         self._resetsettings_button.setDisabled(True)
+#         self._applysettings_button.setDisabled(True)
+#         #
+#         return widget
 
     def _create_content_labels(self):
         """ """
@@ -425,8 +425,8 @@ class GraphPlotterTool(app_framework.ToolBase):
                     row.append(plot['z_label'])
                     self._plotlabels_table.append_row(row)
     
-    #         self._plotlabels_editable.setTableModel(self._plotlabels_table)
-            self._plotlabels_editable.resetModel() # Model data has changed.
+    
+            self._plotlabels_editable.setTableModel(self._plotlabels_table) ###
             self._plotlabels_editable.resizeColumnsToContents()
     
                 
