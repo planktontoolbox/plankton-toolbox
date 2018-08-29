@@ -12,5 +12,9 @@ plankton_toolbox_log.txt
 
 .settings/*
 
+plankton_toolbox_data/*
+plankton_toolbox_counter/*
+DEMO/*
 
-
+build/*
+dist/*

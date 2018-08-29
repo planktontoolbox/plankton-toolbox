@@ -346,8 +346,8 @@ class Species(object):
             accepted_name_usage = ''
             try:
                 row_dict = dict(zip(header, row))
-                scientific_name = row_dict.get('scientific_name', None).strip()
-                accepted_name_usage = row_dict.get('accepted_name_usage', None).strip() # Valid scientific name. 
+                scientific_name = row_dict.get('scientific_name', '').strip()
+                accepted_name_usage = row_dict.get('accepted_name_usage', '').strip() # Valid scientific name. 
                 #
                 if scientific_name and (scientific_name in self._taxa_lookup):
                     # print('Harmful: scientific_name: ' + scientific_name)
