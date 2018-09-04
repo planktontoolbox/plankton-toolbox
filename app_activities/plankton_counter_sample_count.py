@@ -644,43 +644,50 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
             self._taxon_sflag_list.setCurrentIndex(0)
             self._taxon_cf_list.setCurrentIndex(0)
             
-            
-    #         self._trophic_type_list.setCurrentIndex(0)
-            
-            
             # Get selected rows as indexes. Convert to base model if proxy model is used.
             proxyindexes = self._species_tableview.selectedIndexes()
             if len(proxyindexes) > 0:
                 proxyindex = proxyindexes[0]
                 index = self._species_tableview.model().mapToSource(proxyindex)
                 # Info from species table.
-                species_index = self._species_tableview._tablemodel.createIndex(index.row(), 0)
-                sizeclass_index = self._species_tableview._tablemodel.createIndex(index.row(), 1)
-                sflag_index = self._species_tableview._tablemodel.createIndex(index.row(), 2)
-                scientific_name = self._species_tableview._tablemodel.data(species_index).value()
-                size_class = self._species_tableview._tablemodel.data(sizeclass_index).value()
-                species_flag = self._species_tableview._tablemodel.data(sflag_index).value()
-                #
-                # Update name and size in pair.
-                self._scientific_name_edit.setText(scientific_name)
-                # Species sizeclass list.
-                currentindex = self._taxon_sflag_list.findText(species_flag, QtCore.Qt.MatchFixedString)
-                if currentindex >= 0:
-                    self._taxon_sflag_list.setCurrentIndex(currentindex)
-                # Species sizeclass list.
-                currentindex = self._speciessizeclass_list.findText(size_class, QtCore.Qt.MatchFixedString)
-                if currentindex >= 0:
-                    self._speciessizeclass_list.setCurrentIndex(currentindex)
-                else:
-                    # This is not a valid size class for this species.
-                    # Add to combo to make it possible to make stored data accessible. 
-                    # Add and search again.
-                    self._speciessizeclass_list.addItem(size_class)                    
+                
+                if self._viewsizeclassinfo_checkbox.isChecked():
+                    # Taxon list with size classes. 
+                    species_index = self._species_tableview._tablemodel.createIndex(index.row(), 0)
+                    sizeclass_index = self._species_tableview._tablemodel.createIndex(index.row(), 1)
+                    sflag_index = self._species_tableview._tablemodel.createIndex(index.row(), 2)
+                    scientific_name = self._species_tableview._tablemodel.data(species_index).value()
+                    size_class = self._species_tableview._tablemodel.data(sizeclass_index).value()
+                    species_flag = self._species_tableview._tablemodel.data(sflag_index).value()
+                    #
+                    # Update name and size in pair.
+                    self._scientific_name_edit.setText(scientific_name)
+                    # Species sizeclass list.
+                    currentindex = self._taxon_sflag_list.findText(species_flag, QtCore.Qt.MatchFixedString)
+                    if currentindex >= 0:
+                        self._taxon_sflag_list.setCurrentIndex(currentindex)
+                    # Species sizeclass list.
                     currentindex = self._speciessizeclass_list.findText(size_class, QtCore.Qt.MatchFixedString)
                     if currentindex >= 0:
                         self._speciessizeclass_list.setCurrentIndex(currentindex)
+                    else:
+                        # This is not a valid size class for this species.
+                        # Add to combo to make it possible to make stored data accessible. 
+                        # Add and search again.
+                        self._speciessizeclass_list.addItem(size_class)                    
+                        currentindex = self._speciessizeclass_list.findText(size_class, QtCore.Qt.MatchFixedString)
+                        if currentindex >= 0:
+                            self._speciessizeclass_list.setCurrentIndex(currentindex)
+                        #
+                        toolbox_utils.Logging().error('Invalid size class. Species: ' + scientific_name + '   Size class: ' + size_class + '.')
+                else:
+                    # Taxon list without size classes. 
+                    species_index = self._species_tableview._tablemodel.createIndex(index.row(), 0)
+                    scientific_name = self._species_tableview._tablemodel.data(species_index).value()
                     #
-                    toolbox_utils.Logging().error('Invalid size class. Species: ' + scientific_name + '   Size class: ' + size_class + '.')
+                    # Update name.
+                    self._scientific_name_edit.setText(scientific_name)
+                    
                 
     ##### Move this...            
     #             # Trophic type.

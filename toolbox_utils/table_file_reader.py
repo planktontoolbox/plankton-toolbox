@@ -7,6 +7,7 @@
 import os
 import locale
 import zipfile
+import pathlib
 
 # This utility should work even if openpyxl is not installed, but with no Excel support.
 openpyxl_installed = True
@@ -168,22 +169,29 @@ class TableFileReader():
         # 
         columnsbyindex = None
         # Read file.
-        with open(filename, 'r') as infile:
+#         with open(filename, 'r') as infile:
+#             fielddelimiter = None
+#             # Iterate over rows in file.            
+#             for rowindex, row in enumerate(infile):
+#                 if (self._data_rows_to is not None) and (rowindex > self._data_rows_to):
+#                     break # Break loop if data_row_to is defined and exceeded.
+#                 # Convert to str.
+# 
+# 
+# 
+# #                 row = str(row, self._encoding, self._encoding_error_handling)
+# #                 row = row.encode(self._encoding, self._encoding_error_handling).decode('UTF-16')
+# #                 row = str(row.encode(self._encoding, self._encoding_error_handling))
+# ##                row = str(row, encoding=self._encoding, errors=self._encoding_error_handling)
+
+        with pathlib.Path(filename).open('r', encoding='cp1252') as infile:
             fielddelimiter = None
-            # Iterate over rows in file.            
-            for rowindex, row in enumerate(infile):
+            # Iterate over rows in file. 
+            rowindex = -1           
+            for row in infile:
+                rowindex += 1
                 if (self._data_rows_to is not None) and (rowindex > self._data_rows_to):
                     break # Break loop if data_row_to is defined and exceeded.
-                # Convert to str.
-
-
-
-#                 row = str(row, self._encoding, self._encoding_error_handling)
-#                 row = row.encode(self._encoding, self._encoding_error_handling).decode('UTF-16')
-#                 row = str(row.encode(self._encoding, self._encoding_error_handling))
-##                row = str(row, encoding=self._encoding, errors=self._encoding_error_handling)
-
-                
                 
                 if rowindex == self._header_row:
                     # Header.
