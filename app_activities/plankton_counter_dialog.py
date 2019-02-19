@@ -167,16 +167,50 @@ class PlanktonCounterDialog(QtWidgets.QDialog):
         """ """
         widget = QtWidgets.QWidget()
         #
+        self._sample_locked_checkbox = QtWidgets.QCheckBox('Locked')
+        self._sample_locked_checkbox.setChecked(True)
+        self._sample_locked_checkbox.stateChanged.connect(self.sample_locked_changed)
+        #
         self._close_button = QtWidgets.QPushButton('Close plankton counter')
         self._close_button.clicked.connect(self.close)
         #
         layout = QtWidgets.QHBoxLayout()
-        layout.addStretch(10)
+        layout.addWidget(self._sample_locked_checkbox)
+        layout.addStretch(30)
         layout.addWidget(self._close_button)
         widget.setLayout(layout)
         #
         return widget
+    
+    def sample_locked_changed(self):
+        """ """
+        # TODO: 
+        print('DEBUG: sample_locked_changed')
+        if self._sample_locked_checkbox.isChecked():
+            if self.metadata_widget:
+                self.metadata_widget.set_read_only(True)
+            if self.methods_widget:
+                self.methods_widget.set_read_only(True)
+            if self.count_widget:
+                self.count_widget.set_read_only(True)
+            if self.sample_data_widget:
+                self.sample_data_widget.set_read_only(True)
+        else:
+            if self.metadata_widget:
+                self.metadata_widget.set_read_only(False)
+            if self.methods_widget:
+                self.methods_widget.set_read_only(False)
+            if self.count_widget:
+                self.count_widget.set_read_only(False)
+            if self.sample_data_widget:
+                self.sample_data_widget.set_read_only(False)
+    
+    def recalculate_sample(self):
+        """ """
+        # TODO: 
+        print('DEBUG: recalculate_sample')
         
+    
     def keyPressEvent(self, qKeyEvent):
         """ Overridden from base class. """
         try:

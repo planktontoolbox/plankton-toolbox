@@ -37,6 +37,10 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         #
         # Log available parsers when GUI setup has finished.
         QtCore.QTimer.singleShot(200, self.load_data)
+        #
+        self.sample_locked = True
+        self.set_read_only()
+        #
 #         self.load_data()
         
     def load_data(self):
@@ -54,12 +58,13 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         
     def save_data(self):
         """ Save data to method stored in sample. """
-        try:
-            self._save_method_to_current_sample()
-        #
-        except Exception as e:
-            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+        if not self.sample_locked:
+            try:
+                self._save_method_to_current_sample()
+            #
+            except Exception as e:
+                debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+                toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
     def _load_current_sample_method(self):
         """ """
@@ -161,7 +166,8 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
                                            '1/2 Chamber/filter', 
                                            'Field of views', 
                                            'Transects',  
-                                           'Rectangles'])
+                                           'Rectangles', 
+                                           'Coeff. calculated by user'])
         self._countareatype_list.currentIndexChanged.connect(self._field_changed)
         self._viewdiameter_edit = QtWidgets.QLineEdit('')
         self._viewdiameter_edit.setMaximumWidth(60)
@@ -175,6 +181,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         self._coefficient_one_unit_edit = QtWidgets.QLineEdit()
         self._coefficient_one_unit_edit.setMaximumWidth(100)
         self._coefficient_one_unit_edit.setEnabled(False)
+        self._coefficient_one_unit_edit.textEdited.connect(self._field_changed)
 
         self._counting_species_list = QtWidgets.QComboBox()
         self._counting_species_list.addItems(['<valid taxa>'])
@@ -329,6 +336,46 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         #
         return layout       
         
+    
+    
+    
+    
+    def set_read_only(self, read_only=True):
+        """ """
+        if (not self.sample_locked) and read_only:
+            # Save sample before locking.
+            self.save_data()
+        #
+        self.sample_locked = read_only
+        #
+        enabled = not read_only
+        self._selectdefaultmethod_list
+        self._defaultmethod_copy_button.setEnabled(enabled)
+        self._defaultmethod_reset_button.setEnabled(enabled)
+#         self._selectmethod_table.setEnabled(enabled)
+#         self._selectmethodstep_table.setEnabled(enabled)
+        self._methodtype_list.setEnabled(enabled)
+        self._sampledvolume_edit.setReadOnly(read_only)
+        self._countedvolume_edit.setReadOnly(read_only)
+        self._chamber_filter_diameter_edit.setReadOnly(read_only)
+        self._preservative_list.setEnabled(enabled)
+        self._preservative_volume_edit.setReadOnly(read_only)
+        self._magnification_edit.setReadOnly(read_only)
+        self._microscope_edit.setReadOnly(read_only)
+        self._countareatype_list.setEnabled(enabled)
+        self._viewdiameter_edit.setReadOnly(read_only)
+        self._transectrectanglewidth_edit.setReadOnly(read_only)
+        self._transectrectanglelength_edit.setReadOnly(read_only)
+        self._coefficient_one_unit_edit.setReadOnly(read_only)
+        self._counting_species_list.setEnabled(enabled)
+        self._viewsizeclassinfo_checkbox.setEnabled(enabled)
+        self._addmethodstep_button.setEnabled(enabled)
+        self._deletemethodsteps_method_button.setEnabled(enabled)
+        self._saveasdefault_method_button.setEnabled(enabled)
+        self._deletedefault_method_button.setEnabled(enabled)
+        #
+        self._set_fields_valid_for_data()
+    
     def _update_default_method_list(self):
         """ """
         try:
@@ -612,6 +659,9 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
     def _field_changed(self):
         """ """
         try:
+            
+            self._set_fields_valid_for_data()
+            
     ##         self._calculate_coefficient_one_unit()
             self._update_current_sample_method()
     #         # If any field changed, then go back to sample method.
@@ -621,8 +671,45 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
             toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
+    def _set_fields_valid_for_data(self):
+        """ Get info for both method and method step. """        
+        countareatype = self._countareatype_list.currentText()
+        
+        if countareatype == 'Chamber/filter':
+            self._viewdiameter_edit.setEnabled(False)
+            self._transectrectanglewidth_edit.setEnabled(False)
+            self._transectrectanglelength_edit.setEnabled(False)
+            self._coefficient_one_unit_edit.setEnabled(False)
+        elif  countareatype == '1/2 Chamber/filter':
+            self._viewdiameter_edit.setEnabled(False)
+            self._transectrectanglewidth_edit.setEnabled(False)
+            self._transectrectanglelength_edit.setEnabled(False)
+            self._coefficient_one_unit_edit.setEnabled(False)
+        elif  countareatype == 'Field of views':
+            self._viewdiameter_edit.setEnabled(True)
+            self._transectrectanglewidth_edit.setEnabled(False)
+            self._transectrectanglelength_edit.setEnabled(False)
+            self._coefficient_one_unit_edit.setEnabled(False)
+        elif  countareatype == 'Transects':
+            self._viewdiameter_edit.setEnabled(False)
+            self._transectrectanglewidth_edit.setEnabled(True)
+            self._transectrectanglelength_edit.setEnabled(True)
+            self._coefficient_one_unit_edit.setEnabled(False)
+        elif  countareatype == 'Rectangles':
+            self._viewdiameter_edit.setEnabled(False)
+            self._transectrectanglewidth_edit.setEnabled(True)
+            self._transectrectanglelength_edit.setEnabled(True)
+            self._coefficient_one_unit_edit.setEnabled(False)
+        elif  countareatype == 'Coeff. calculated by user':
+            self._viewdiameter_edit.setEnabled(False)
+            self._transectrectanglewidth_edit.setEnabled(False)
+            self._transectrectanglelength_edit.setEnabled(False)
+            self._coefficient_one_unit_edit.setEnabled(True)
+                
     def _update_current_sample_method(self):
         """ Get info for both method and method step. """
+        if self.sample_locked:
+            return
         try:
             if self._dont_update_current_sample_method_flag:
                 return

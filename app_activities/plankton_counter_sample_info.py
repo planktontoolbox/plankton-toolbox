@@ -28,6 +28,9 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
         #
         self.setLayout(self._create_content_sample_info())
         #
+        self.sample_locked = True
+        self.set_read_only()
+        #
         self.load_data()
 
     def load_data(self):
@@ -45,18 +48,19 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
         
     def save_data(self):
         """ """
-        try:
-            # Get info from sample object if the count module have added config info.
-            sample_info_dict = self._current_sample_object.get_sample_info()
-            # 
-            self._from_fields_to_dict(sample_info_dict)
-            # 
-            self._current_sample_object.set_sample_info(sample_info_dict)
-            self._current_sample_object.save_sample_info()
-        #
-        except Exception as e:
-            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+        if not self.sample_locked:
+            try:
+                # Get info from sample object if the count module have added config info.
+                sample_info_dict = self._current_sample_object.get_sample_info()
+                # 
+                self._from_fields_to_dict(sample_info_dict)
+                # 
+                self._current_sample_object.set_sample_info(sample_info_dict)
+                self._current_sample_object.save_sample_info()
+            #
+            except Exception as e:
+                debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+                toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
 
     def clear_sample_info(self):
         """ """
@@ -336,6 +340,59 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
         layout.addLayout(hbox1)
         #
         return layout
+    
+    def set_read_only(self, read_only=True):
+        """ """
+        if (not self.sample_locked) and read_only:
+            # Save sample before locking.
+            self.save_data()
+        #
+        self.sample_locked = read_only
+        #
+        enabled = not read_only
+        self._sample_name_edit.setReadOnly(read_only)
+        self._change_sample_name_button.setEnabled(enabled)
+        self._sample_id_edit.setReadOnly(read_only)
+        self._sample_year_edit.setReadOnly(read_only)
+        self._visit_month_edit.setReadOnly(read_only)
+        self._sample_day_edit.setReadOnly(read_only)
+        self._sample_time_edit.setReadOnly(read_only)
+        self._sampling_year_edit.setReadOnly(read_only)
+        self._sampling_country_edit.setReadOnly(read_only)
+        self._sampling_platform_edit.setReadOnly(read_only)
+        self._sampling_series_edit.setReadOnly(read_only)
+        self._sampling_laboratory_edit.setReadOnly(read_only)
+        self._orderer_edit.setReadOnly(read_only)
+        self._project_edit.setReadOnly(read_only)
+        self._station_name_edit.setReadOnly(read_only)
+        self._latitude_degree.setReadOnly(read_only)
+        self._latitude_minute.setReadOnly(read_only)
+        self._longitude_degree.setReadOnly(read_only)
+        self._longitude_minute.setReadOnly(read_only)
+        self._latitude_dd.setReadOnly(read_only)
+        self._longitude_dd.setReadOnly(read_only)
+        self._sample_min_depth_m_edit.setReadOnly(read_only)
+        self._sample_max_depth_m_edit.setReadOnly(read_only)
+        self._water_depth_m_edit.setReadOnly(read_only)
+        self._sampler_type_code_list.setEnabled(enabled)
+        self._sampled_volume_l_edit.setReadOnly(read_only)
+        self._net_type_code_list.setEnabled(enabled)
+        self._sampler_area_m2_edit.setReadOnly(read_only)
+        self._net_mesh_size_um_edit.setReadOnly(read_only)
+        self._wire_angle_deg_edit.setReadOnly(read_only)
+        self._net_tow_length_m_edit.setReadOnly(read_only)
+        self._analytical_laboratory_edit.setReadOnly(read_only)
+        self._analysis_year_edit.setReadOnly(read_only)
+        self._analysis_month_edit.setReadOnly(read_only)
+        self._analysis_day_edit.setReadOnly(read_only)
+        self._analysis_today_button.setEnabled(enabled)
+        self._analysed_by_edit.setReadOnly(read_only)
+        self._sample_comment_edit.setReadOnly(read_only)
+        self._clear_sample_info_button.setEnabled(enabled)
+        self._copyfromsample_button.setEnabled(enabled)
+    
+    
+    
     
     def analysis_today(self):
         """ """

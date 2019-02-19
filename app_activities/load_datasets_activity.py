@@ -5,6 +5,7 @@
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import sys
+import pathlib
 import os.path
 import glob
 import locale
@@ -44,9 +45,10 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
     def _load_available_parsers(self):
         """ """
         try:
-            self._parser_path = 'plankton_toolbox_data/parsers/'
+            plankton_toolbox_data_path = app_framework.ToolboxUserSettings().get_path_to_plankton_toolbox_data()
+            self._parser_path = str(pathlib.Path(plankton_toolbox_data_path, 'parsers'))
             self._parser_list = []
-            for parserpath in glob.glob(self._parser_path + '*.xlsx'):
+            for parserpath in glob.glob(self._parser_path + '/*.xlsx'):
                 self._parser_list.append(os.path.basename(parserpath))
         #
         except Exception as e:
@@ -309,7 +311,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
     
                 # Show select file dialog box. Multiple files can be selected.
                 namefilter = 'Plankton counter samples (*.xlsx);;All files (*.*)'
-                filenames, _ = QtWidgets.QFileDialog.getOpenFileNames(
+                filenames, _filters = QtWidgets.QFileDialog.getOpenFileNames(
                                     self,
                                     'Load plankton counter sample file(s). ',
                                     self._lastusedplanktoncounterfilename,
@@ -355,7 +357,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
     
                 # Show select file dialog box. Multiple files can be selected.
                 namefilter = 'SHARKweb files (*.txt);;All files (*.*)'
-                filenames, _ = QtWidgets.QFileDialog.getOpenFileNames(
+                filenames, _filters = QtWidgets.QFileDialog.getOpenFileNames(
                                     self,
                                     'Load SHARKweb file(s). ',
                                     self._lastusedsharkwebfilename,
@@ -400,7 +402,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
 # 
 #             # Show select file dialog box. Multiple files can be selected.
 #             namefilter = 'Phytowin files (*.csv);;All files (*.*)'
-#             filenames = QtWidgets.QFileDialog.getOpenFileNames(
+#             filenames, _filters = QtWidgets.QFileDialog.getOpenFileNames(
 #                                 self,
 #                                 'Load PhytoWin file(s). ',
 #                                 self._lastusedphytowinfilename,
@@ -586,7 +588,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
                 self._write_to_status_bar('Importing datasets...')
                 # Show select file dialog box. Multiple files can be selected.
                 namefilter = 'Text files (*.txt);;All files (*.*)'
-                filenames, _ = QtWidgets.QFileDialog.getOpenFileNames(
+                filenames, _filters = QtWidgets.QFileDialog.getOpenFileNames(
                                     self,
                                     'Import dataset(s)',
                                     self._last_used_textfile_name,
@@ -730,7 +732,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
                 self._write_to_status_bar('Importing datasets...')
                 # Show select file dialog box. Multiple files can be selected.
                 namefilter = 'Excel files (*.xlsx);;All files (*.*)'
-                filenames, _ = QtWidgets.QFileDialog.getOpenFileNames(
+                filenames, _filters = QtWidgets.QFileDialog.getOpenFileNames(
                                     self,
                                     'Import dataset(s)',
                                     self._last_used_excelfile_name,

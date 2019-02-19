@@ -5,6 +5,7 @@
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import os
+import pathlib
 import shutil
 import math
 # import openpyxl
@@ -12,6 +13,7 @@ import xlsxwriter
 import operator
 from PyQt5 import QtCore
 import toolbox_utils
+import app_framework
 import plankton_core
 
 @toolbox_utils.singleton
@@ -19,13 +21,13 @@ class PlanktonCounterManager(QtCore.QObject):
     """ """
     planktonCounterListChanged = QtCore.pyqtSignal()
     
-    def __init__(self,
-                 dataset_dir_path = 'plankton_toolbox_counter/datasets',
-                 ):
+    def __init__(self):
         """ """
         QtCore.QObject.__init__(self)
         #
-        self._dataset_dir_path = dataset_dir_path
+        plankton_toolbox_counter_path = app_framework.ToolboxUserSettings().get_path_to_plankton_toolbox_counter()
+        self._dataset_dir_path = str(pathlib.Path(plankton_toolbox_counter_path, 'datasets'))
+         
         # Check if exists. Create if not.
         if (self._dataset_dir_path) and (not os.path.exists(self._dataset_dir_path)):
             try:

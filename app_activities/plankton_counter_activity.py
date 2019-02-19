@@ -5,6 +5,7 @@
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import os
+import pathlib
 import sys
 # import ntpath
 import datetime
@@ -647,7 +648,7 @@ class BackupExportImportDialog(QtWidgets.QDialog):
             backup_zip_dir_name = str(self._backupdir_edit.text())
             backup_zip_file_name = str(self._backupzipfilename_edit.text())
             #
-            source_dir = 'plankton_toolbox_data'
+            source_dir = app_framework.ToolboxUserSettings().get_path_to_plankton_toolbox_data()
             source_dir_len = len(source_dir) + 1
             #
             try:
@@ -707,12 +708,12 @@ class BackupExportImportDialog(QtWidgets.QDialog):
         widget.setLayout(layout)
         #
         return widget
-  
+    
     def _browse_import_files(self):
         """ """
         try:        
             namefilter = 'Backup files (*.zip);;All files (*.*)'
-            dirfilename = QtWidgets.QFileDialog.getOpenFileName(
+            dirfilename, _filters = QtWidgets.QFileDialog.getOpenFileName(
                                 self,
                                 'Load backup. ',
                                 '', # self._lastusedsharkwebfilename,
@@ -725,30 +726,35 @@ class BackupExportImportDialog(QtWidgets.QDialog):
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
             toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
-       
+    
     def _import_from_backup(self):
         """ """
         try:        
     #         source_filename = 'BACKUP-PlanktonToolbox-ver1.2.0_2016-12-12_203805.zip'
             source_zip_dir_file_name = str(self._importfile_edit.text())
             if source_zip_dir_file_name:
-                dest_dir = 'plankton_toolbox_data'
+                dest_dir = pathlib.Path(app_framework.ToolboxUserSettings().get_path_to_plankton_toolbox_data())
                 #
                 try:
                     if self._copyold_checkbox.isChecked():
                         # Rename 'plankton_toolbox_data'.
-                        dest_dir_old = dest_dir + '_OLD_' + str(datetime.datetime.now().strftime('%Y-%m-%d_%H%M%S'))
-                        os.rename(dest_dir, dest_dir_old)
+                        dest_dir_old = str(dest_dir) + '_OLD_' + str(datetime.datetime.now().strftime('%Y-%m-%d_%H%M%S'))
+                        os.rename(str(dest_dir), dest_dir_old)
                     #
-                except Exception: ## as e:
-                    toolbox_utils.Logging().error('Failed to rename plankton_toolbox_data. Check if files are locked by Excel. ') # ...Error: ' + str(e))
-                    QtWidgets.QMessageBox.warning(self, 'Warning', 'Failed to rename plankton_toolbox_data.  Check if files are locked by Excel. ') # ...Error: ' + str(e))
+                except Exception as e:
+                    try:
+                        toolbox_utils.Logging().error('Failed to rename plankton_toolbox_data. Check if files are locked by Excel. Error: ' + str(e))
+                        QtWidgets.QMessageBox.warning(self, 'Warning', 'Failed to rename plankton_toolbox_data.  Check if files are locked by Excel. Error: ' + str(e))
+                    except Exception:
+                        toolbox_utils.Logging().error('Failed to rename plankton_toolbox_data. Check if files are locked by Excel. ') # ...Error: ' + str(e))
+                        QtWidgets.QMessageBox.warning(self, 'Warning', 'Failed to rename plankton_toolbox_data.  Check if files are locked by Excel. ') # ...Error: ' + str(e))
                 #
                 try:
                     # Extract from zip.
                     with zipfile.ZipFile(source_zip_dir_file_name) as zip_file:
-        #                 zip_file.extractall(dest_dir)
-                        zip_file.extractall('')
+        #                 zip_file.extractall(str(dest_dir))
+                        dest_dir_parent = dest_dir.parent
+                        zip_file.extractall(str(dest_dir_parent))
                     #
                     QtWidgets.QMessageBox.information(self, 'Restart Plankton Toolbox', 
                                                   'Please restart Plankton Toolbox to load the new species lists, etc.')
@@ -1003,7 +1009,7 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
                 toolbox_utils.Logging().start_accumulated_logging()
                 # Show select file dialog box. Multiple files can be selected.
                 namefilter = 'Excel files (*.xlsx);;All files (*.*)'
-                filenames, _ = QtWidgets.QFileDialog.getOpenFileNames(
+                filenames, _filters = QtWidgets.QFileDialog.getOpenFileNames(
                                     self,
                                     'Import sample(s)',
                                     '', # self._last_used_excelfile_name,

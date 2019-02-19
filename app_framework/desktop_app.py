@@ -55,6 +55,8 @@ def desktop_application():
     # Create application and start the main event loop. 
     window = app_framework.MainWindow()
     window.setVersion(__version__)
+    window.initialise()
+    #
     window.show()
     sys.exit(app.exec_())
 
