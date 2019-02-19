@@ -20,3 +20,5 @@ from .desktop_app import set_version
 from .desktop_app import get_version
 
 from .help_texts import HelpTexts
+
+from .user_settings import ToolboxUserSettings

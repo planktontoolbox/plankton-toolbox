@@ -34,7 +34,10 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         #
         # Log available parsers when GUI setup has finished.
         QtCore.QTimer.singleShot(200, self.load_data)
-
+        #
+        self.sample_locked = True
+        self.set_read_only()
+    
     def load_data(self):
         """ Called at startup. """
         try:
@@ -61,24 +64,25 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
 
     def save_data(self):
         """ Called at shutdown and when needed. """
-        try:
-            self._current_sample_object.recalculate_coefficient(self._current_sample_method)
-            self._current_sample_object.save_sample_data()
-            # Update info method steps and counting areas.
-            methodstep = str(self._selectmethodstep_list.currentText())
-            maxcountarea = str(self._countareanumber_edit.text())
-            info_dict = {}
-            if methodstep:
-                info_dict['last_used_method_step'] = methodstep
-            if maxcountarea:
-                info_dict['max_count_area<+>' + methodstep] = maxcountarea
+        if not self.sample_locked:
+            try:
+                self._current_sample_object.recalculate_coefficient(self._current_sample_method)
+                self._current_sample_object.save_sample_data()
+                # Update info method steps and counting areas.
+                methodstep = str(self._selectmethodstep_list.currentText())
+                maxcountarea = str(self._countareanumber_edit.text())
+                info_dict = {}
+                if methodstep:
+                    info_dict['last_used_method_step'] = methodstep
+                if maxcountarea:
+                    info_dict['max_count_area<+>' + methodstep] = maxcountarea
+                #
+                self._current_sample_object.update_sample_info(info_dict)
+                self._current_sample_object.save_sample_info()
             #
-            self._current_sample_object.update_sample_info(info_dict)
-            self._current_sample_object.save_sample_info()
-        #
-        except Exception as e:
-            debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
-            toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+            except Exception as e:
+                debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
+                toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
  
     def _create_content_species_count(self):
         """ """
@@ -413,6 +417,64 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         #
         return layout
      
+    
+    
+    
+    def set_read_only(self, read_only=True):
+        """ """
+        if (not self.sample_locked) and read_only:
+            # Save sample before locking.
+            self.save_data()
+        #
+        self.sample_locked = read_only
+        #
+        enabled = not read_only
+        self._selectmethodstep_list.setEnabled(enabled)
+        self._nextmethodstep_button.setEnabled(enabled)
+        self._countareatype_edit.setReadOnly(read_only)
+        self._countareanumber_edit.setReadOnly(read_only)
+        self._addcountarea_button.setEnabled(enabled)
+        self._removecountarea_button.setEnabled(enabled)
+        self._locktaxa_button.setEnabled(enabled)
+        self._coefficient_edit.setReadOnly(read_only)
+        self._scientific_name_edit.setReadOnly(read_only)
+        self._scientific_full_name_edit.setReadOnly(read_only)
+        self._taxon_sflag_list.setEnabled(enabled)
+        self._taxon_cf_list.setEnabled(enabled)
+        self._speciessizeclass_list.setEnabled(enabled)
+        self._countedunits_edit.setReadOnly(read_only)
+        self._counted_clear_button.setEnabled(enabled)
+        self._counted_add1_button.setEnabled(enabled)
+        self._counted_sub1_button.setEnabled(enabled)
+        self._counted_add10_button.setEnabled(enabled)
+        self._counted_sub10_button.setEnabled(enabled)
+        self._counted_add100_button.setEnabled(enabled)
+        self._counted_sub100_button.setEnabled(enabled)
+        self._counted_class_clear_button.setEnabled(enabled)
+        self._counted_class1_button.setEnabled(enabled)
+        self._counted_class2_button.setEnabled(enabled)
+        self._counted_class3_button.setEnabled(enabled)
+        self._counted_class4_button.setEnabled(enabled)
+        self._counted_class5_button.setEnabled(enabled)
+        self._variable_comment_edit.setReadOnly(read_only)
+        self._resumecounting_button.setEnabled(enabled)
+        self._abundance_class_list.setEnabled(enabled)
+        self._selectspecieslist_list.setEnabled(enabled)
+        self._species_tableview.setEnabled(enabled)
+        self._species_tableview.setEnabled(enabled)
+        self._speciesfilter_edit.setReadOnly(read_only)
+        self._speciesfilterclear_button.setEnabled(enabled)
+        self._viewsizeclassinfo_checkbox.setEnabled(enabled)
+        self._summarytype_list.setEnabled(enabled)
+        self._summary_listview.setEnabled(enabled)
+        self._mostcountedsorted_checkbox.setEnabled(enabled)
+        self._currentmethodstep_checkbox.setEnabled(enabled)
+        self._saveasspecieslist_button.setEnabled(enabled)
+        self._deletespecieslists_button.setEnabled(enabled)
+        #
+        if not read_only:
+            self._select_method_step_changed()
+    
     #===== Methods connected to widgets. =====
     
     def _selected_species_changed(self, new):
@@ -427,8 +489,12 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
                 size = sizeclass.get('bvol_size_class', '')
                 if size:
                     sizes.append(size)
-            self._speciessizeclass_list.clear()
-            self._speciessizeclass_list.addItems([''] + sizes)
+            try:
+                self._speciessizeclass_list.blockSignals(True)
+                self._speciessizeclass_list.clear()
+                self._speciessizeclass_list.addItems([''] + sizes)
+            finally:
+                self._speciessizeclass_list.blockSignals(False)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -589,9 +655,29 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
             summary_data = self._current_sample_object.get_taxa_summary(summary_type = summarytype,
                                                                         most_counted_sorting = mostcountedsorting,
                                                                         method_step = method_step)
+            # Mark active row.
+            active_row_index = None
+            if summarytype == 'Counted per taxa/sizes':
+                scientific_name = str(self._scientific_full_name_edit.text())
+                size_class = str(self._speciessizeclass_list.currentText())
+                
+                active_row_text = scientific_name
+                if size_class:
+                    active_row_text +=  ' [' + size_class + '] '
+                active_row_text += ':'
+                for index, row in enumerate(summary_data):
+                    if row.startswith(active_row_text):
+                        active_row_index = index
             # Update summary list.
-            self._summary_listview.clear()
-            self._summary_listview.addItems(summary_data)
+            try:
+                self._summary_listview.blockSignals(True)
+                self._summary_listview.clear()
+                self._summary_listview.addItems(summary_data)
+                
+                if active_row_index:
+                    self._summary_listview.setCurrentRow(active_row_index);
+            finally:
+                self._summary_listview.blockSignals(False)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -1183,8 +1269,8 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
     #                    'bvol_height_um', 'bvol_diameter_1_um', 'bvol_diameter_2_um']
     #         outkeylist = ['Range', 'L1', 'L2', 'bvol_width_um', 
     #                       'H', 'D1', 'D2']
-            keylist = ['bvol_size_range', 'bvol_calculated_volume_um3']
-            outkeylist = ['Size', 'Volume']
+            keylist = ['bvol_size_range', 'bvol_calculated_volume_um3', 'bvol_geometric_shape', ]
+            outkeylist = ['Size', 'Volume', 'Shape', ]
             for index, key in enumerate(keylist):
                 if key in sizeclass_dict and sizeclass_dict[key]:
                     sizeinfolist.append(outkeylist[index]+ ': ' + sizeclass_dict[key])
@@ -1201,22 +1287,27 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
     def _load_counting_method(self):
         """ """
         try:
-            self._selectmethodstep_list.clear()
-            #
-            sample_path = self._current_sample_object.get_dir_path()
-            if os.path.exists(os.path.join(sample_path, 'counting_method.txt')):
-                header, rows = plankton_core.PlanktonCounterMethods().get_counting_method_table(
-                                                    sample_path, 'counting_method.txt')        
-                self._current_sample_method = plankton_core.PlanktonCounterMethod(header, rows)
+            try:
+                self._selectmethodstep_list.blockSignals(True)
+
+                self._selectmethodstep_list.clear()
                 #
-                countingmethodsteps = self._current_sample_method.get_counting_method_steps_list()
-                if len(countingmethodsteps) > 0:
-                    self._selectmethodstep_list.addItems(countingmethodsteps)
-                    self._selectmethodstep_list.setCurrentIndex(0)
+                sample_path = self._current_sample_object.get_dir_path()
+                if os.path.exists(os.path.join(sample_path, 'counting_method.txt')):
+                    header, rows = plankton_core.PlanktonCounterMethods().get_counting_method_table(
+                                                        sample_path, 'counting_method.txt')        
+                    self._current_sample_method = plankton_core.PlanktonCounterMethod(header, rows)
+                    #
+                    countingmethodsteps = self._current_sample_method.get_counting_method_steps_list()
+                    if len(countingmethodsteps) > 0:
+                        self._selectmethodstep_list.addItems(countingmethodsteps)
+                        self._selectmethodstep_list.setCurrentIndex(0)
+                    else:
+                        self._selectmethodstep_list.addItems(['<not available>'])
                 else:
                     self._selectmethodstep_list.addItems(['<not available>'])
-            else:
-                self._selectmethodstep_list.addItems(['<not available>'])
+            finally:
+                self._selectmethodstep_list.blockSignals(False)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -1252,7 +1343,8 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
             countareatype = self._current_sample_method_step_fields.get('count_area_type', '')
             self._countareatype_edit.setText(countareatype)
             # Alternatives: 'Chamber','1/2 chamber','Field of views','Transects','Rectangles'
-            if (countareatype == 'Field of views') or (countareatype == 'Transects') or (countareatype == 'Filters'):
+            if (countareatype == 'Field of views') or (countareatype == 'Transects') or \
+               (countareatype == 'Rectangles') or (countareatype == 'Coeff. calculated by user'):
                 self._countareanumber_edit.setEnabled(False)
                 self._addcountarea_button.setEnabled(True)
                 self._locktaxa_button.setEnabled(True)

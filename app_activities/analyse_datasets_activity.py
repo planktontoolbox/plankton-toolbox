@@ -302,7 +302,7 @@ class AnalyseDatasetsActivity(app_framework.ActivityBase):
                     namefilter = 'Excel files (*.xlsx);;All files (*.*)'
                 else:
                     namefilter = 'Text files (*.txt);;All files (*.*)'
-                filename, _ = QtWidgets.QFileDialog.getSaveFileName(
+                filename, _filters = QtWidgets.QFileDialog.getSaveFileName(
                                 self,
                                 'Export dataset',
                                 self._lastuseddirectory,

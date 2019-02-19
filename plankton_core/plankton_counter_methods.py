@@ -5,22 +5,21 @@
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import os
+import pathlib
 import math
 import toolbox_utils
+import app_framework
 import plankton_core
 
 @toolbox_utils.singleton
 class PlanktonCounterMethods():
     """ """
-    def __init__(self,
-                 config_dir_path = 'plankton_toolbox_counter/config',
-                 methods_methods_dir_path = 'plankton_toolbox_counter/config/counting_methods',
-                 methods_species_lists_dir_path = 'plankton_toolbox_counter/config/counting_species_lists',
-                 ):
+    def __init__(self):
         """ """
-        self._config_dir_path = config_dir_path
-        self._methods_dir_path = methods_methods_dir_path
-        self._methods_species_lists_dir_path = methods_species_lists_dir_path
+        plankton_toolbox_counter_path = app_framework.ToolboxUserSettings().get_path_to_plankton_toolbox_counter()
+        self._config_dir_path = str(pathlib.Path(plankton_toolbox_counter_path, 'config'))
+        self._methods_dir_path = str(pathlib.Path(plankton_toolbox_counter_path, 'config/counting_methods'))
+        self._methods_species_lists_dir_path = str(pathlib.Path(plankton_toolbox_counter_path, 'config/counting_species_lists'))
         #
         self._check_dir_path(self._methods_dir_path) 
         self._check_dir_path(self._methods_species_lists_dir_path) 
@@ -101,9 +100,22 @@ class PlanktonCounterMethods():
             file_path = self._methods_species_lists_dir_path,
             text_file_name = specieslistname + '.txt',                 
             )
+        # Extract scientific name.
+        species_list = []
+        for row in species_list_rows:
+            if len(row) > 0:
+                name = row[0]
+                if len(name) > 0:
+                    if 'Total counted' not in name:
+                        if ':' in name:
+                            name = name.split(':')[0]
+                            if name:
+                                species_list.append([name.strip()])
+                else:
+                    print('DEBUG: scientific name: ', name)
         #
         header = ['scientific_name']
-        tablefilewriter_method.write_file(header, species_list_rows)
+        tablefilewriter_method.write_file(header, species_list)
     
     def delete_counting_species_list(self, counting_species_list):
         """ """
@@ -335,6 +347,9 @@ class PlanktonCounterMethod():
                     
     def calculate_coefficient_one_unit(self, fields_dict):
         """ """
+        if fields_dict.get('count_area_type', '') == 'Coeff. calculated by user':
+            return # Do not override users calculations. 
+
         # Clear result.
         fields_dict['coefficient_one_unit'] = '0'
         #
@@ -348,7 +363,7 @@ class PlanktonCounterMethod():
             counted_volume_ml = fields_dict.get('counted_volume_ml', 0.0).replace(',', '.')
             chamber_filter_diameter_mm = fields_dict.get('chamber_filter_diameter_mm', 0.0).replace(',', '.')
             # From default method step.
-            countareatype = fields_dict.get('count_area_type', 0.0).replace(',', '.')
+            countareatype = fields_dict.get('count_area_type', '')
             diameterofview_mm = fields_dict.get('diameter_of_view_mm', 0.0).replace(',', '.')
             transectrectanglelength_mm = fields_dict.get('transect_rectangle_length_mm', 0.0).replace(',', '.')
             transectrectanglewidth_mm = fields_dict.get('transect_rectangle_width_mm', 0.0).replace(',', '.')
@@ -370,14 +385,18 @@ class PlanktonCounterMethod():
             #
             if countareatype == 'Chamber/filter':
                 singlearea = chamber_filter_area
-            if countareatype == '1/2 Chamber/filter':
+            elif countareatype == '1/2 Chamber/filter':
                 singlearea = chamber_filter_area * 0.5
-            if countareatype == 'Field of views':
+            elif countareatype == 'Field of views':
                 singlearea = ((float(diameterofview_mm) / 2) ** 2) * math.pi # r2*pi.
-            if countareatype == 'Transects':
+            elif countareatype == 'Transects':
                 singlearea = float(transectrectanglelength_mm) * float(transectrectanglewidth_mm) # l * w.
-            if countareatype == 'Rectangles':
+            elif countareatype == 'Rectangles':
                 singlearea = float(transectrectanglelength_mm) * float(transectrectanglewidth_mm) # l * w.
+            elif countareatype == 'Coeff. calculated by user':
+                return
+            else:
+                return
             
             # Calculate coeff.
             onelitre_ml = 1000.0

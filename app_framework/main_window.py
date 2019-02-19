@@ -35,6 +35,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self._version = ''
         # Note: Tools menu is public.
         self.toolsmenu = None
+        
+    def initialise(self):
         # Load app settings.
         self._ui_settings = QtCore.QSettings()
         # Logging. Always log to plankton_toolbox_log.txt. Use the Log tool when  
@@ -55,6 +57,17 @@ class MainWindow(QtWidgets.QMainWindow):
         self._toolmanager = app_tools.ToolManager()
         self._toolmanager.set_parent(self)
         self._toolmanager.init_tools()
+        #
+        toolbox_utils.Logging().log('Plankton Toolbox. Version: ' + self._version + '.')
+        # Log if user _settings.txt is used.
+        data_path = app_framework.ToolboxUserSettings().get_path_to_plankton_toolbox_data()
+        counter_path = app_framework.ToolboxUserSettings().get_path_to_plankton_toolbox_counter()
+        if (data_path != 'plankton_toolbox_data') or (counter_path != 'plankton_toolbox_counter'):
+            toolbox_utils.Logging().log('')
+            toolbox_utils.Logging().log('User settings in "plankton_toolbox_data/user_settings.txt": ')
+            toolbox_utils.Logging().log('- Path to data dictionary: ' + data_path)
+            toolbox_utils.Logging().log('- Path to counter dictionary: ' + counter_path)
+        #
         self._activitymanager = app_activities.ActivityManager()
         self._activitymanager.set_parent(self)
         self._activitymanager.init_activities()
@@ -92,16 +105,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.move(position)        
         # Tell the user.
         app_tools.ToolManager().show_tool_by_name('Toolbox logging') # Show the log tool if hidden.
-
+        
         # Load resources when the main event loop has started.
 #         if app_framework.ToolboxSettings().get_value('Resources:Load at startup'):
 #             QtCore.QTimer.singleShot(10, app_framework.ToolboxResources().loadAllResources)
         QtCore.QTimer.singleShot(1000, self._loadResources)
 #        self._loadResources()
-        
-        
-        
-        
         
     def closeEvent(self, event):
         """ Called on application shutdown. """
@@ -197,6 +206,7 @@ class MainWindow(QtWidgets.QMainWindow):
         toolsvbox = QtWidgets.QVBoxLayout()
         toolsgroup.setLayout(toolsvbox)
         grid1.addStretch(5)
+        
         # Add one button for each activity. Create stacked widgets.
         for activity in self._activitymanager.get_activity_list():
             button = app_framework.ActivityMenuQLabel(' ' + activity.objectName())
@@ -262,7 +272,7 @@ class MainWindow(QtWidgets.QMainWindow):
         """
 ###        self._activityheader = QtWidgets.QLabel('<b>Activity not selected...</b>", self)
 ###        self._activityheader.setAlignment(QtCore.Qt.AlignHCenter)
-        self._activitystack = QtWidgets.QStackedLayout()        
+        self._activitystack = QtWidgets.QStackedLayout()
         # Layout widgets.
         widget = QtWidgets.QWidget(self) 
         layout = QtWidgets.QVBoxLayout()
@@ -310,14 +320,12 @@ class MainWindow(QtWidgets.QMainWindow):
             plankton_core.Species()
 
         finally:
-            self.statusBar().showMessage(self.tr(''))            
+            self.statusBar().showMessage(self.tr(''))
 
     def setVersion(self, version):
         """ """
         self._version = version
-        toolbox_utils.Logging().log('Plankton Toolbox. Version: ' + self._version + '.')
-        toolbox_utils.Logging().log('')
-        
+    
     def _about(self):
         """ """
         about_text = app_framework.HelpTexts().get_text('about')

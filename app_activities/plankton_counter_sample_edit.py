@@ -25,6 +25,9 @@ class PlanktonCounterSampleEdit(QtWidgets.QWidget):
         #
         self.setLayout(self._create_content_sample_edit())
         #
+        self.sample_locked = True
+        self.set_read_only()
+        #
 #         self.load_data()
 
     def load_data(self):
@@ -38,6 +41,7 @@ class PlanktonCounterSampleEdit(QtWidgets.QWidget):
 
     def save_data(self):
         """ """
+#         if not self.sample_locked:
 #         try:
 #         # self._save_edit_table() # Don't save when tab in plankton_counter_dialog changed.
 #         #
@@ -107,16 +111,37 @@ class PlanktonCounterSampleEdit(QtWidgets.QWidget):
         self._save_button = QtWidgets.QPushButton('Save edited changes')
         self._save_button.clicked.connect(self._save_edit_table)
         #
+        self._recalculate_sample_button = QtWidgets.QPushButton('   (Recalculate sample)   ')
+        self._recalculate_sample_button.setEnabled(False)
+#         self._recalculate_sample_button.clicked.connect(self.recalculate_sample)
+        #
         layout = QtWidgets.QHBoxLayout()
         layout.addWidget(self._exportsamplereport_button)
 #         layout.addStretch(10)
 #         layout.addWidget(self._load_button)
         layout.addWidget(self._save_button)
+        layout.addWidget(self._recalculate_sample_button)
 #         layout.addWidget(self._clear_button)
         layout.addStretch(10)
         widget.setLayout(layout)
         #
         return widget
+    
+    
+    
+    def set_read_only(self, read_only=True):
+        """ """
+        if (not self.sample_locked) and read_only:
+            # Save sample before locking.
+            self.save_data()
+        #
+        self.sample_locked = read_only
+        #
+        enabled = not read_only
+#         self._sampletable_table
+        self._recalculate_sample_button.setEnabled(enabled)
+        self._save_button.setEnabled(enabled)
+        self._sampletable_editable.setEnabled(enabled)
     
     def _load_edit_table(self):
         """ """

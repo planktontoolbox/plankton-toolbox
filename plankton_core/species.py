@@ -6,6 +6,8 @@
 
 import sys
 import toolbox_utils
+import app_framework
+import pathlib
 import os.path
 from numpy import rank
 
@@ -28,10 +30,10 @@ class Species(object):
     - etc. (Documented on the wiki pages mentioned above.)
     
     """
-    def __init__(self,
-                 species_directory_path = 'plankton_toolbox_data/species/'):
-        # Parameters.
-        self._species_directory_path = species_directory_path
+    def __init__(self):
+        
+        plankton_toolbox_data_path = app_framework.ToolboxUserSettings().get_path_to_plankton_toolbox_data()
+        self._species_directory_path = str(pathlib.Path(plankton_toolbox_data_path, 'species'))
         # Taxa files.
         self._taxa_filenames = self._get_files_by_prefix('taxa_')
         # Translate files.
