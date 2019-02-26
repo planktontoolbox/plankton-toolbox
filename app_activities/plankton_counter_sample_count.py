@@ -136,7 +136,10 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         # Count number.
         self._countedunits_edit = KeyPressQSpinBox(self)
         self._countedunits_edit.setRange(0, 999999999)
+        
+        self._countedunits_edit.setKeyboardTracking(False) # Feature to avoid emitted signals.
         self._countedunits_edit.valueChanged.connect(self._counted_value_changed)
+        
         self._counted_clear_button = KeyPressQPushButton('Clear', self)
         self._counted_add1_button = KeyPressQPushButton('+1', self)
         self._counted_sub1_button = KeyPressQPushButton('-1', self)
