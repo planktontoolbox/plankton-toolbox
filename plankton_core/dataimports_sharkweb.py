@@ -101,7 +101,7 @@ class ImportSharkWeb(plankton_core.DataImportPreparedBase):
         finally:
             if input_file: input_file.close()
 
-    def create_tree_dataset(self, dataset):
+    def create_tree_dataset(self, dataset, update_trophic_type):
         """ """
         try:
             # Base class must know header for _asText(), etc.
@@ -166,6 +166,21 @@ class ImportSharkWeb(plankton_core.DataImportPreparedBase):
                                 value = row_dict.get('taxonomist', '')
                         except: 
                             pass 
+                    if parsinginforow[1] == 'trophic_type':
+                    
+                    
+                        # Update trophic_type.
+                        if parsinginforow[1] == 'trophic_type':
+                            if update_trophic_type:
+                                scientific_name = row_dict.get('scientific_name', '')
+                                size_class = row_dict.get('size_class', '')
+                                trophic_type = plankton_core.Species().get_bvol_value(scientific_name, size_class, 'trophic_type')
+                                if trophic_type:
+                                    value = trophic_type # Use existing if not in local list.
+                            # Replace empty with NS=Not specified.
+                            if not value:
+                                value = 'NS'
+                    
                     # Add at right level.
                     if parsinginforow[0] == 'visit':
                         currentvisit.add_data(parsinginforow[1], value)        

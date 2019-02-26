@@ -99,7 +99,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
             # Layout widgets.
             layout = QtWidgets.QVBoxLayout()
             layout.addWidget(tabWidget)
-            selectdatabox.setLayout(layout)        
+            selectdatabox.setLayout(layout)
             #
             return selectdatabox
         #
@@ -117,17 +117,21 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         counter_datasets_listview.setModel(self._counter_datasets_model)
         #
         self._cleara_metadata_button = app_framework.ClickableQLabel('Clear all')
-        self._cleara_metadata_button.label_clicked.connect(self._counter_uncheck_all_datasets)                
+        self._cleara_metadata_button.label_clicked.connect(self._counter_uncheck_all_datasets)
         self._markall_button = app_framework.ClickableQLabel('Mark all')
-        self._markall_button.label_clicked.connect(self._counter_check_all_datasets)                
+        self._markall_button.label_clicked.connect(self._counter_check_all_datasets)
         self._importcounterdataset_button = QtWidgets.QPushButton('Import marked dataset(s)')
-        self._importcounterdataset_button.clicked.connect(self._counter_import_counter_datasets)                
+        self._importcounterdataset_button.clicked.connect(self._counter_import_counter_datasets)
+        self._importcounter_trophic_list_checkbox = QtWidgets.QCheckBox('Update trophic types')
+        self._importcounter_trophic_list_checkbox.setChecked(True)
+
         # Layout widgets.
         hbox1 = QtWidgets.QHBoxLayout()
         hbox1.addWidget(self._cleara_metadata_button)
         hbox1.addWidget(self._markall_button)
 #         hbox1.addStretch(10)
         hbox1.addWidget(self._importcounterdataset_button)
+        hbox1.addWidget(self._importcounter_trophic_list_checkbox)
         hbox1.addStretch(10)
         #
         layout = QtWidgets.QVBoxLayout()
@@ -201,9 +205,11 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
     #                 print('DEBUG: dataset_name: ' + dataset_name)
     #                 print('DEBUG: sample_name: ' + sample_name)
     
+                    update_trophic_type = self._importcounter_trophic_list_checkbox.isChecked()
                     datasetnode = plankton_core.DataImportManager().import_dataset_file(dataset_name = dataset_name, 
                                                                                         sample_name = sample_name, 
-                                                                                        import_format = 'PlanktonCounter')
+                                                                                        import_format = 'PlanktonCounter',
+                                                                                        update_trophic_type=update_trophic_type)
                     # Use datasets-wrapper to emit change notification when dataset list is updated.
                     app_framework.ToolboxDatasets().emit_change_notification()
     
@@ -259,7 +265,9 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         
         # Load dataset.
         self._predefined_getdataset_button = QtWidgets.QPushButton('Import datasets/datafiles...')
-        self._predefined_getdataset_button.clicked.connect(self._import_predefined_datasets)                
+        self._predefined_getdataset_button.clicked.connect(self._import_predefined_datasets)
+        self._predefined_trophic_list_checkbox = QtWidgets.QCheckBox('Update trophic types')
+        self._predefined_trophic_list_checkbox.setChecked(True)
         # Layout widgets.
         form1 = QtWidgets.QGridLayout()
         gridrow = 0
@@ -272,6 +280,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         hbox1 = QtWidgets.QHBoxLayout()
 #         hbox1.addStretch(10)
         hbox1.addWidget(self._predefined_getdataset_button)
+        hbox1.addWidget(self._predefined_trophic_list_checkbox)
         hbox1.addStretch(10)
         #
         layout = QtWidgets.QVBoxLayout()
@@ -320,8 +329,10 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
                 if filenames:
                     for filename in filenames:
                         self._lastusedplanktoncounterfilename = filename
+                        update_trophic_type = self._predefined_trophic_list_checkbox.isChecked()
                         datasetnode = plankton_core.DataImportManager().import_dataset_file(filename, 
-                                                                                            import_format = 'PlanktonCounterExcel')
+                                                                                            import_format = 'PlanktonCounterExcel', 
+                                                                                            update_trophic_type=update_trophic_type)
                         # Use datasets-wrapper to emit change notification when dataset list is updated.
                         app_framework.ToolboxDatasets().emit_change_notification()
                         # Add metadata related to imported file.
@@ -366,8 +377,10 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
                 if filenames:
                     for filename in filenames:
                         self._lastusedsharkwebfilename = filename
+                        update_trophic_type = self._predefined_trophic_list_checkbox.isChecked()
                         datasetnode = plankton_core.DataImportManager().import_dataset_file(filename, 
-                                                                                            import_format = 'SHARKweb')
+                                                                                            import_format = 'SHARKweb',
+                                                                                            update_trophic_type=update_trophic_type)
                         # Use datasets-wrapper to emit change notification when dataset list is updated.
                         app_framework.ToolboxDatasets().emit_change_notification()
                         # Add metadata related to imported file.
@@ -488,7 +501,9 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         self._textfile_encoding_list.addItems(self._encodings_list)
         # Load dataset.
         self._textfile_getdataset_button = QtWidgets.QPushButton('Import dataset(s)...')
-        self._textfile_getdataset_button.clicked.connect(self._load_text_files)                
+        self._textfile_getdataset_button.clicked.connect(self._load_text_files)
+        self._textfile_trophic_list_checkbox = QtWidgets.QCheckBox('Update trophic types')
+        self._textfile_trophic_list_checkbox.setChecked(True)
         # Layout widgets.
         form1 = QtWidgets.QGridLayout()
         gridrow = 0
@@ -512,6 +527,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         hbox1.addWidget(self._textfile_encoding_list)
 #         hbox1.addStretch(10)
         hbox1.addWidget(self._textfile_getdataset_button)
+        hbox1.addWidget(self._textfile_trophic_list_checkbox)
         hbox1.addStretch(10)
         #
         layout = QtWidgets.QVBoxLayout()
@@ -605,13 +621,38 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
                         else:
                             textfileencoding = str(self._textfile_encoding_list.currentText())                        
                         # Set up for import file parsing.
-                        importmanager = plankton_core.ImportManager(self._parser_path + str(self._textfile_parser_list.currentText()),
+                        importmanager = plankton_core.ImportManager(str(pathlib.Path(self._parser_path, str(self._textfile_parser_list.currentText()))),
                                                          str(self._textfile_importcolumn_list.currentText()),
                                                          str(self._textfile_exportcolumn_list.currentText()))
                         # Import and parse file.
                         dataset = importmanager.import_text_file(filename, textfileencoding)
+                        
+                        
+                        
+                                
+                        
+                        # Update trophic_type.
+                        update_trophic_type = self._textfile_trophic_list_checkbox.isChecked()
+                        print('DEBUG: excel_trophic_list')
+                        for visit in dataset.get_children():
+                            for sample in visit.get_children():
+                                for variable in sample.get_children():
+                                    trophic_type = variable.get_data('trophic_type', '')
+                                    # Update all trophic_types.
+                                    if update_trophic_type:
+                                        scientific_name = variable.get_data('scientific_name', '')
+                                        size_class = variable.get_data('size_class', '')
+                                        trophic_type = plankton_core.Species().get_bvol_value(scientific_name, size_class, 'trophic_type')
+                                        if trophic_type:
+                                            variable.add_data('trophic_type', trophic_type) # Use existing if not in local list.
+                                    # Replace empty with NS=Not specified.
+                                    if not trophic_type:
+                                        variable.add_data('trophic_type', 'NS')
+                        
+                        
+                        
                         # Add metadata related to imported file.
-                        dataset.add_metadata('parser', self._parser_path + str(self._textfile_parser_list.currentText()))
+                        dataset.add_metadata('parser', str(pathlib.Path(self._parser_path, str(self._textfile_parser_list.currentText()))))
                         dataset.add_metadata('file_name', os.path.basename(filename))
                         dataset.add_metadata('file_path', filename)
                         dataset.add_metadata('import_column', str(self._textfile_importcolumn_list.currentText()))
@@ -660,6 +701,8 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         # Load dataset.
         self._excel_getdataset_button = QtWidgets.QPushButton('Import dataset(s)...')
         self._excel_getdataset_button.clicked.connect(self._load_excel_file)                
+        self._excel_trophic_list_checkbox = QtWidgets.QCheckBox('Update trophic types')
+        self._excel_trophic_list_checkbox.setChecked(True)
         # Layout widgets.
         form1 = QtWidgets.QGridLayout()
         gridrow = 0
@@ -680,6 +723,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         hbox1 = QtWidgets.QHBoxLayout()
 #         hbox1.addStretch(10)
         hbox1.addWidget(self._excel_getdataset_button)
+        hbox1.addWidget(self._excel_trophic_list_checkbox)
         hbox1.addStretch(10)
         #
         layout = QtWidgets.QVBoxLayout()
@@ -744,13 +788,36 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
                         # Store selected path. Will be used as default next time.
                         self._last_used_excelfile_name = filename
                         # Set up for import file parsing.
-                        importmanager = plankton_core.ImportManager(self._parser_path + str(self._excel_parser_list.currentText()),
+                        importmanager = plankton_core.ImportManager(str(pathlib.Path(self._parser_path, str(self._excel_parser_list.currentText()))),
                                                          str(self._excel_importcolumn_list.currentText()),
                                                          str(self._excel_exportcolumn_list.currentText()))
                         # Import and parse file.
                         dataset = importmanager.import_excel_file(filename)
+                        
+                        
+                        
+                        # Update trophic_type.
+                        update_trophic_type = self._excel_trophic_list_checkbox.isChecked()
+                        print('DEBUG: excel_trophic_list')
+                        for visit in dataset.get_children():
+                            for sample in visit.get_children():
+                                for variable in sample.get_children():
+                                    trophic_type = variable.get_data('trophic_type', '')
+                                    # Update all trophic_types.
+                                    if update_trophic_type:
+                                        scientific_name = variable.get_data('scientific_name', '')
+                                        size_class = variable.get_data('size_class', '')
+                                        trophic_type = plankton_core.Species().get_bvol_value(scientific_name, size_class, 'trophic_type')
+                                        if trophic_type:
+                                            variable.add_data('trophic_type', trophic_type) # Use existing if not in local list.
+                                    # Replace empty with NS=Not specified.
+                                    if not trophic_type:
+                                        variable.add_data('trophic_type', 'NS')
+                        
+                        
+                        
                         # Add metadata related to imported file.
-                        dataset.add_metadata('parser', self._parser_path + str(self._excel_parser_list.currentText()))
+                        dataset.add_metadata('parser', str(pathlib.Path(self._parser_path, str(self._excel_parser_list.currentText()))))
                         dataset.add_metadata('file_name', os.path.basename(filename))
                         dataset.add_metadata('file_path', filename)
                         dataset.add_metadata('import_column', str(self._excel_importcolumn_list.currentText()))
