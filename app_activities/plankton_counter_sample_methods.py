@@ -6,7 +6,6 @@
 
 import os
 import sys
-import time
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
@@ -167,7 +166,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
                                            'Field of views', 
                                            'Transects',  
                                            'Rectangles', 
-                                           'Coeff. calculated by user'])
+                                          ])
         self._countareatype_list.currentIndexChanged.connect(self._field_changed)
         self._viewdiameter_edit = QtWidgets.QLineEdit('')
         self._viewdiameter_edit.setMaximumWidth(60)
@@ -182,7 +181,8 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         self._coefficient_one_unit_edit.setMaximumWidth(100)
         self._coefficient_one_unit_edit.setEnabled(False)
         self._coefficient_one_unit_edit.textEdited.connect(self._field_changed)
-
+        self._coefficient_by_user_checkbox = QtWidgets.QCheckBox('Calc. by user')
+        self._coefficient_by_user_checkbox.stateChanged.connect(self._field_changed)
         self._counting_species_list = QtWidgets.QComboBox()
         self._counting_species_list.addItems(['<valid taxa>'])
 #         self._counting_species_list.addItems(['<all species>'])
@@ -284,30 +284,32 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         grid5.addWidget(QtWidgets.QLabel(''), gridrow, 1, 1, 1) # Add space.
         gridrow += 1
         grid5.addWidget(app_framework.RightAlignedQLabel('Magnification:'), gridrow, 0, 1, 1)
-        grid5.addWidget(self._magnification_edit, gridrow, 1, 1, 1)
+        grid5.addWidget(self._magnification_edit, gridrow, 1, 1, 2)
         gridrow += 1
         grid5.addWidget(app_framework.RightAlignedQLabel('Microscope:'), gridrow, 0, 1, 1)
-        grid5.addWidget(self._microscope_edit, gridrow, 1, 1, 1)
+        grid5.addWidget(self._microscope_edit, gridrow, 1, 1, 2)
         gridrow += 1
         grid5.addWidget(app_framework.RightAlignedQLabel('Count area type:'), gridrow, 0, 1, 1)
-        grid5.addWidget(self._countareatype_list, gridrow, 1, 1, 1)
+        grid5.addWidget(self._countareatype_list, gridrow, 1, 1, 2)
         gridrow += 1
         grid5.addWidget(app_framework.RightAlignedQLabel('Diameter of view (mm):'), gridrow, 0, 1, 1)
-        grid5.addWidget(self._viewdiameter_edit, gridrow, 1, 1, 1)
+        grid5.addWidget(self._viewdiameter_edit, gridrow, 1, 1, 2)
         gridrow += 1
         grid5.addWidget(app_framework.RightAlignedQLabel('Transect/rectangle width (mm):'), gridrow, 0, 1, 1)
-        grid5.addWidget(self._transectrectanglewidth_edit, gridrow, 1, 1, 1)
+        grid5.addWidget(self._transectrectanglewidth_edit, gridrow, 1, 1, 2)
         gridrow += 1
         grid5.addWidget(app_framework.RightAlignedQLabel('Transect/rectangle length (mm):'), gridrow, 0, 1, 1)
-        grid5.addWidget(self._transectrectanglelength_edit, gridrow, 1, 1, 1)
+        grid5.addWidget(self._transectrectanglelength_edit, gridrow, 1, 1, 2)
         gridrow += 1
-        grid5.addWidget(app_framework.LeftAlignedQLabel('Calculated coefficient for one area:'), gridrow, 0, 1, 1)
+        grid5.addWidget(app_framework.RightAlignedQLabel('Coefficient for one area:'), gridrow, 0, 1, 1)
+#         grid5.addWidget(app_framework.LeftAlignedQLabel('Coefficient for one area:'), gridrow, 0, 1, 1)
         grid5.addWidget(self._coefficient_one_unit_edit, gridrow, 1, 1, 1)     
+        grid5.addWidget(self._coefficient_by_user_checkbox, gridrow, 2, 1, 1)     
         gridrow += 1
         grid5.addWidget(app_framework.RightAlignedQLabel('Default counting species list:'), gridrow, 0, 1, 1)
-        grid5.addWidget(self._counting_species_list, gridrow, 1, 1, 1)
+        grid5.addWidget(self._counting_species_list, gridrow, 1, 1, 2)
         gridrow += 1
-        grid5.addWidget(self._viewsizeclassinfo_checkbox, gridrow, 1, 1, 1)
+        grid5.addWidget(self._viewsizeclassinfo_checkbox, gridrow, 1, 1, 2)
         #
         hbox1 = QtWidgets.QHBoxLayout()
         hbox1.addLayout(grid2, 10)
@@ -367,12 +369,14 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         self._transectrectanglewidth_edit.setReadOnly(read_only)
         self._transectrectanglelength_edit.setReadOnly(read_only)
         self._coefficient_one_unit_edit.setReadOnly(read_only)
+        self._coefficient_by_user_checkbox.setEnabled(enabled)
         self._counting_species_list.setEnabled(enabled)
         self._viewsizeclassinfo_checkbox.setEnabled(enabled)
         self._addmethodstep_button.setEnabled(enabled)
         self._deletemethodsteps_method_button.setEnabled(enabled)
         self._saveasdefault_method_button.setEnabled(enabled)
         self._deletedefault_method_button.setEnabled(enabled)
+        self._coefficient_by_user_checkbox.setEnabled(enabled)
         #
         self._set_fields_valid_for_data()
     
@@ -541,6 +545,12 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
                 self._transectrectanglewidth_edit.setText(fields_dict.get('transect_rectangle_width_mm', ''))
                 self._coefficient_one_unit_edit.setText(fields_dict.get('coefficient_one_unit', ''))
                 #
+                combostate = fields_dict.get('coefficient_by_user', 'FALSE')
+                if combostate.upper() == 'TRUE':
+                    self._coefficient_by_user_checkbox.setChecked(True)
+                else:
+                    self._coefficient_by_user_checkbox.setChecked(False)
+                #
                 comboindex = self._counting_species_list.findText(fields_dict.get('counting_species_list', '<valid taxa>'))
     #             comboindex = self._counting_species_list.findText(fields_dict.get('counting_species_list', '<all species>'))
                 self._counting_species_list.setCurrentIndex(comboindex)
@@ -551,7 +561,6 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
                 else:
                     self._viewsizeclassinfo_checkbox.setChecked(False)
                 #
-    ##             self._calculate_coefficient_one_unit()
             finally:
                 self._dont_update_current_sample_method_flag = False
         #
@@ -638,6 +647,12 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
                 self._transectrectanglewidth_edit.setText(fields_dict.get('transect_rectangle_width_mm', ''))
                 self._coefficient_one_unit_edit.setText(fields_dict.get('coefficient_one_unit', ''))
                 #
+                combostate = fields_dict.get('coefficient_by_user', 'FALSE')
+                if combostate.upper() == 'TRUE':
+                    self._coefficient_by_user_checkbox.setChecked(True)
+                else:
+                    self._coefficient_by_user_checkbox.setChecked(False)
+                #
                 comboindex = self._counting_species_list.findText(fields_dict.get('counting_species_list', '<valid taxa>'))
     #             comboindex = self._counting_species_list.findText(fields_dict.get('counting_species_list', '<all species>'))
                 self._counting_species_list.setCurrentIndex(comboindex)
@@ -648,7 +663,6 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
                 else:
                     self._viewsizeclassinfo_checkbox.setChecked(False)
                 #
-    ##             self._calculate_coefficient_one_unit()
             finally:
                 self._dont_update_current_sample_method_flag = False
         #
@@ -662,7 +676,6 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
             
             self._set_fields_valid_for_data()
             
-    ##         self._calculate_coefficient_one_unit()
             self._update_current_sample_method()
     #         # If any field changed, then go back to sample method.
     #         self._selectdefaultmethod_list.setCurrentIndex(0)
@@ -675,32 +688,33 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         """ Get info for both method and method step. """        
         countareatype = self._countareatype_list.currentText()
         
-        if countareatype == 'Chamber/filter':
-            self._viewdiameter_edit.setEnabled(False)
-            self._transectrectanglewidth_edit.setEnabled(False)
-            self._transectrectanglelength_edit.setEnabled(False)
-            self._coefficient_one_unit_edit.setEnabled(False)
-        elif  countareatype == '1/2 Chamber/filter':
-            self._viewdiameter_edit.setEnabled(False)
-            self._transectrectanglewidth_edit.setEnabled(False)
-            self._transectrectanglelength_edit.setEnabled(False)
-            self._coefficient_one_unit_edit.setEnabled(False)
-        elif  countareatype == 'Field of views':
-            self._viewdiameter_edit.setEnabled(True)
-            self._transectrectanglewidth_edit.setEnabled(False)
-            self._transectrectanglelength_edit.setEnabled(False)
-            self._coefficient_one_unit_edit.setEnabled(False)
-        elif  countareatype == 'Transects':
-            self._viewdiameter_edit.setEnabled(False)
-            self._transectrectanglewidth_edit.setEnabled(True)
-            self._transectrectanglelength_edit.setEnabled(True)
-            self._coefficient_one_unit_edit.setEnabled(False)
-        elif  countareatype == 'Rectangles':
-            self._viewdiameter_edit.setEnabled(False)
-            self._transectrectanglewidth_edit.setEnabled(True)
-            self._transectrectanglelength_edit.setEnabled(True)
-            self._coefficient_one_unit_edit.setEnabled(False)
-        elif  countareatype == 'Coeff. calculated by user':
+        if not self._coefficient_by_user_checkbox.isChecked():
+            if countareatype == 'Chamber/filter':
+                self._viewdiameter_edit.setEnabled(False)
+                self._transectrectanglewidth_edit.setEnabled(False)
+                self._transectrectanglelength_edit.setEnabled(False)
+                self._coefficient_one_unit_edit.setEnabled(False)
+            elif  countareatype == '1/2 Chamber/filter':
+                self._viewdiameter_edit.setEnabled(False)
+                self._transectrectanglewidth_edit.setEnabled(False)
+                self._transectrectanglelength_edit.setEnabled(False)
+                self._coefficient_one_unit_edit.setEnabled(False)
+            elif  countareatype == 'Field of views':
+                self._viewdiameter_edit.setEnabled(True)
+                self._transectrectanglewidth_edit.setEnabled(False)
+                self._transectrectanglelength_edit.setEnabled(False)
+                self._coefficient_one_unit_edit.setEnabled(False)
+            elif  countareatype == 'Transects':
+                self._viewdiameter_edit.setEnabled(False)
+                self._transectrectanglewidth_edit.setEnabled(True)
+                self._transectrectanglelength_edit.setEnabled(True)
+                self._coefficient_one_unit_edit.setEnabled(False)
+            elif  countareatype == 'Rectangles':
+                self._viewdiameter_edit.setEnabled(False)
+                self._transectrectanglewidth_edit.setEnabled(True)
+                self._transectrectanglelength_edit.setEnabled(True)
+                self._coefficient_one_unit_edit.setEnabled(False)
+        else:
             self._viewdiameter_edit.setEnabled(False)
             self._transectrectanglewidth_edit.setEnabled(False)
             self._transectrectanglelength_edit.setEnabled(False)
@@ -741,6 +755,10 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
             fields_dict['transect_rectangle_length_mm'] = str(self._transectrectanglelength_edit.text()).replace(',', '.').replace(' ', '')
             fields_dict['transect_rectangle_width_mm'] = str(self._transectrectanglewidth_edit.text()).replace(',', '.').replace(' ', '')
             fields_dict['coefficient_one_unit'] = str(self._coefficient_one_unit_edit.text()).replace(',', '.').replace(' ', '')
+            if self._coefficient_by_user_checkbox.isChecked():
+                fields_dict['coefficient_by_user'] = 'TRUE'
+            else:
+                fields_dict['coefficient_by_user'] = 'FALSE'
             
             fields_dict['counting_species_list'] = str(self._counting_species_list.currentText())
             if self._viewsizeclassinfo_checkbox.isChecked():
@@ -758,108 +776,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
             toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
- 
-
-## Moved to plankton_counte_methods.py
-#     def _calculate_coefficient_one_unit(self, fields_dict):
-#         """ """
-#         # Clear result.
-#         self._coefficient_one_unit_edit.setText('0')
-#         #
-#         try:
-#             # From default method.
-# #             sampledvolume_ml = str(self._sampledvolume_edit.text())
-# #             preservative_volume_ml = str(self._preservative_volume_edit.text())
-# #             counted_volume_ml = str(self._countedvolume_edit.text())
-# #             chamber_filter_diameter_mm = str(self._chamber_filter_diameter_edit.text())
-# #             # From default method step.
-# #             countareatype = str(self._countareatype_list.currentText())
-# #             diameterofview_mm = str(self._viewdiameter_edit.text())
-# #             transectrectanglelength_mm = str(self._transectrectanglelength_edit.text())
-# #             transectrectanglewidth_mm = str(self._transectrectanglewidth_edit.text())
-#             sampledvolume_ml = fields_dict.get('sampled_volume_ml', 0.0)
-#             preservative_volume_ml = fields_dict.get('preservative_volume_ml', 0.0)
-#             counted_volume_ml = fields_dict.get('counted_volume_ml', 0.0)
-#             chamber_filter_diameter_mm = fields_dict.get('chamber_filter_diameter_mm', 0.0)
-#             # From default method step.
-#             countareatype = fields_dict.get('count_area_type', 0.0)
-#             diameterofview_mm = fields_dict.get('diameter_of_view_mm', 0.0)
-#             transectrectanglelength_mm = fields_dict.get('transect_rectangle_length_mm', 0.0)
-#             transectrectanglewidth_mm = fields_dict.get('transect_rectangle_width_mm', 0.0)
-#             #
-#             if not chamber_filter_diameter_mm:
-#                 return
-#             if not sampledvolume_ml:
-#                 return
-#             if not counted_volume_ml:
-#                 return
-#             #
-#             chamber_filter_area = ((float(chamber_filter_diameter_mm) / 2) ** 2) * math.pi # r2*pi.
-#             sampledvolume = float(sampledvolume_ml)
-#             counted_volume = float(counted_volume_ml)
-#             #
-#             try: preservative_volume = float(preservative_volume_ml)
-#             except: preservative_volume = 0.0
-#             singlearea = 1.0
-#             #
-#             if countareatype == 'Chamber/filter':
-#                 singlearea = chamber_filter_area
-#             if countareatype == '1/2 Chamber/filter':
-#                 singlearea = chamber_filter_area * 0.5
-#             if countareatype == 'Field of views':
-#                 singlearea = ((float(diameterofview_mm) / 2) ** 2) * math.pi # r2*pi.
-#             if countareatype == 'Transects':
-#                 singlearea = float(transectrectanglelength_mm) * float(transectrectanglewidth_mm) # l * w.
-#             if countareatype == 'Rectangles':
-#                 singlearea = float(transectrectanglelength_mm) * float(transectrectanglewidth_mm) # l * w.
-#             
-#             # Calculate coeff.
-#             onelitre_ml = 1000.0
-#             coeffoneunit = chamber_filter_area * sampledvolume * onelitre_ml / (singlearea * counted_volume * (sampledvolume + preservative_volume))
-#             coeffoneunit = int(coeffoneunit + 0.5) # Round.
-# #             self._coefficient_one_unit_edit.setText(str(coeffoneunit))
-#             fields_dict['coefficient_one_unit'] = str(coeffoneunit)
-#         #
-#         except:
-#             fields_dict['coefficient_one_unit'] = str(coeffoneunit)
-        
-#     def _save_default_method(self):
-#         """ """
-#         if self._current_sample_method is None:
-#             return
-#         #
-#         self._update_current_sample_method()
-#         #
-#         if self._selectdefaultmethod_list.currentIndex() == 0:
-#             self._save_method_to_current_sample()
-#         else:
-#             selecteddefaultmethod = str(self._selectdefaultmethod_list.currentText())
-#             path = plankton_core.PlanktonCounterMethods().get_methods_dir_path()
-#             self._current_sample_method.save_method_config_to_file(path, selecteddefaultmethod + '.txt')
-#             # Also save to current sample.
-#             self._save_method_to_current_sample()
-#####
-#     def _add_method(self):
-#         """ """
-#         old_method = ''
-#         if self._selectdefaultmethod_list.currentIndex() > 0:
-#             old_method = str(self._selectdefaultmethod_list.currentText())
-#         current_method = str(self._selectmethod_table.currentItem().text())
-#         #
-#         dialog = AddMethodDialog(self, self._current_sample_method, current_method)
-#         if dialog.exec_():
-#             if old_method:
-#                 path = plankton_core.PlanktonCounterMethods().get_methods_dir_path()
-#                 self._current_sample_method.save_method_config_to_file(path, old_method + '.txt')
-#             #
-#             self._update_default_method_list()
-#             #
-#             currentindex = self._selectdefaultmethod_list.findText(old_method, QtCore.Qt.MatchFixedString)
-#             if currentindex >= 0:
-#                 self._selectdefaultmethod_list.setCurrentIndex(currentindex)
-#             #
-#             self._update_method_table()
-            
+    
     def _add_method_step(self):
         """ """
         try:

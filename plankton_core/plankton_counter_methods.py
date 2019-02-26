@@ -184,6 +184,7 @@ class PlanktonCounterMethod():
                'transect_rectangle_length_mm',
                'transect_rectangle_width_mm',
                'coefficient_one_unit',
+               'coefficient_by_user',
                'counting_species_list',
                'view_sizeclass_info',
                ]
@@ -347,9 +348,9 @@ class PlanktonCounterMethod():
                     
     def calculate_coefficient_one_unit(self, fields_dict):
         """ """
-        if fields_dict.get('count_area_type', '') == 'Coeff. calculated by user':
-            return # Do not override users calculations. 
-
+        if fields_dict.get('coefficient_by_user', 'FALSE') == 'TRUE':
+            return
+        
         # Clear result.
         fields_dict['coefficient_one_unit'] = '0'
         #
@@ -393,8 +394,6 @@ class PlanktonCounterMethod():
                 singlearea = float(transectrectanglelength_mm) * float(transectrectanglewidth_mm) # l * w.
             elif countareatype == 'Rectangles':
                 singlearea = float(transectrectanglelength_mm) * float(transectrectanglewidth_mm) # l * w.
-            elif countareatype == 'Coeff. calculated by user':
-                return
             else:
                 return
             
@@ -402,7 +401,8 @@ class PlanktonCounterMethod():
             onelitre_ml = 1000.0
             ### TEST: coeffoneunit = chamber_filter_area * sampledvolume * onelitre_ml / (singlearea * counted_volume * (sampledvolume + preservative_volume))
             coeffoneunit = chamber_filter_area * (sampledvolume + preservative_volume) * onelitre_ml / (singlearea * counted_volume * sampledvolume)
-            coeffoneunit = int(coeffoneunit + 0.5) # Round.
+#             coeffoneunit = int(coeffoneunit + 0.5) # Python 2.
+            coeffoneunit = int(coeffoneunit)
             fields_dict['coefficient_one_unit'] = str(coeffoneunit)
         except:
             pass

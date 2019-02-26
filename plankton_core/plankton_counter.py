@@ -373,7 +373,8 @@ class PlanktonCounterSample():
             if locked_at_area:
                 number_of_areas = int(locked_at_area)
             #
-            coefficient = int((coefficient_one_unit / number_of_areas) + 0.5)
+#             coefficient = int((coefficient_one_unit / number_of_areas) + 0.5) # Python 2.
+            coefficient = int(coefficient_one_unit / number_of_areas)
             sampleobject.set_coefficient(str(coefficient))
             # 
             sampleobject._calculate_values()
@@ -913,7 +914,10 @@ class SampleRow():
                            n = 4): # Number of significant figures.
         """ """
         if value != 0.0:
-            value = round(value, - int(math.floor(math.log10(abs(value)))) + (n - 1)) 
+            if value >= 1000.0:
+                value = round(value, 1)
+            else:
+                value = round(value, - int(math.floor(math.log10(abs(value)))) + (n - 1)) 
         return value
 
 

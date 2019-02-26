@@ -111,16 +111,11 @@ class PlanktonCounterSampleEdit(QtWidgets.QWidget):
         self._save_button = QtWidgets.QPushButton('Save edited changes')
         self._save_button.clicked.connect(self._save_edit_table)
         #
-        self._recalculate_sample_button = QtWidgets.QPushButton('   (Recalculate sample)   ')
-        self._recalculate_sample_button.setEnabled(False)
-#         self._recalculate_sample_button.clicked.connect(self.recalculate_sample)
-        #
         layout = QtWidgets.QHBoxLayout()
         layout.addWidget(self._exportsamplereport_button)
 #         layout.addStretch(10)
 #         layout.addWidget(self._load_button)
         layout.addWidget(self._save_button)
-        layout.addWidget(self._recalculate_sample_button)
 #         layout.addWidget(self._clear_button)
         layout.addStretch(10)
         widget.setLayout(layout)
@@ -139,7 +134,6 @@ class PlanktonCounterSampleEdit(QtWidgets.QWidget):
         #
         enabled = not read_only
 #         self._sampletable_table
-        self._recalculate_sample_button.setEnabled(enabled)
         self._save_button.setEnabled(enabled)
         self._sampletable_editable.setEnabled(enabled)
     
