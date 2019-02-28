@@ -92,7 +92,17 @@ class AnalyseDatasetsTab3(QtWidgets.QWidget):
         self._reloaddata_button.clicked.connect(self._main_activity._tab1widget._copy_datasets_for_analysis)
         #               
         self._addmissingtaxa_button = QtWidgets.QPushButton('Add 0 for not observed')
-        self._addmissingtaxa_button.clicked.connect(self._add_missing_taxa)                
+        self._addmissingtaxa_button.clicked.connect(self._add_missing_taxa)
+        
+        
+        
+        self._addmissingtaxa_trophictype_checkbox = QtWidgets.QCheckBox('Include trophic types')
+        self._addmissingtaxa_trophictype_checkbox.setChecked(False)
+        self._addmissingtaxa_stagesex_checkbox = QtWidgets.QCheckBox('Include development stage/sex')
+        self._addmissingtaxa_stagesex_checkbox.setChecked(False)
+        
+        
+        
         # Layout widgets.
         form1 = QtWidgets.QGridLayout()
         gridrow = 0
@@ -113,7 +123,11 @@ class AnalyseDatasetsTab3(QtWidgets.QWidget):
         form1.addWidget(self._trophic_type_listview, gridrow, 1, 4, 3)
         form1.addWidget(self._lifestage_listview, gridrow, 4, 4, 3)
         form1.addWidget(self._addmissingtaxa_button, gridrow, 9, 1, 1)
-        gridrow += 4
+        gridrow += 1
+        form1.addWidget(self._addmissingtaxa_trophictype_checkbox, gridrow, 9, 1, 1)
+        gridrow += 1
+        form1.addWidget(self._addmissingtaxa_stagesex_checkbox, gridrow, 9, 1, 1)
+        gridrow += 3
         form1.addWidget(self._reloaddata_button, gridrow, 0, 1, 1)
         form1.addWidget(self._aggregatedata_button, gridrow, 1, 1, 1)
         #
@@ -317,8 +331,16 @@ class AnalyseDatasetsTab3(QtWidgets.QWidget):
                 analysisdata = self._analysisdata.get_data()
                 if not analysisdata:        
                     return
-                # 
-                plankton_core.AnalysisPrepare().add_missing_taxa(analysisdata)
+                #
+                
+                
+                
+                include_trophictypes = self._addmissingtaxa_trophictype_checkbox.isChecked()
+                include_stagesex = self._addmissingtaxa_stagesex_checkbox.isChecked()
+                
+                
+                
+                plankton_core.AnalysisPrepare().add_missing_taxa(analysisdata, include_trophictypes, include_stagesex)
                 #
                 self._main_activity.update_viewed_data_and_tabs()    
             except UserWarning as e:

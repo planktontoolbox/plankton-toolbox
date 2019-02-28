@@ -205,12 +205,6 @@ class PlanktonCounterDialog(QtWidgets.QDialog):
             if self.sample_data_widget:
                 self.sample_data_widget.set_read_only(False)
     
-    def recalculate_sample(self):
-        """ """
-        # TODO: 
-        print('DEBUG: recalculate_sample')
-        
-    
     def keyPressEvent(self, qKeyEvent):
         """ Overridden from base class. """
         try:

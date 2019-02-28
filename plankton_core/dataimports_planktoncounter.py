@@ -83,6 +83,7 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
             ['variable', 'transect_rectangle_length_mm', 'text', 'transect_rectangle_length_mm', ''], 
             ['variable', 'transect_rectangle_width_mm', 'text', 'transect_rectangle_width_mm', ''], 
             ['variable', 'coefficient_one_unit', 'text', 'coefficient_one_unit', ''], 
+            ['variable', 'coefficient_by_user', 'text', 'coefficient_by_user', ''], 
             #
             ['variable', 'coefficient', 'text', 'coefficient', ''], 
             ['sample', 'analytical_laboratory', 'text', 'analytical_laboratory', ''], 
@@ -252,7 +253,7 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
     
     
     
-    def create_tree_dataset(self, dataset_top_node):    
+    def create_tree_dataset(self, dataset_top_node, update_trophic_type):
         """ """
         # Add data to dataset node.
         for parsinginforow in self._parsing_info:
@@ -298,7 +299,7 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
                 if parsinginforow[0] == 'variable':
                     value = self._sample_info.get(parsinginforow[3], '')
                     variablenode.add_data(parsinginforow[1], value)
-                 
+            
             # Merge data header and row.     
             row_dict = dict(zip(self._sample_header, row))
 
@@ -314,6 +315,19 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
             for parsinginforow in self._parsing_info:
                 if parsinginforow[0] == 'variable':
                     value = row_dict.get(parsinginforow[3], '')
+                    
+                    # Update trophic_type.
+                    if parsinginforow[1] == 'trophic_type':
+                        if update_trophic_type:
+                            scientific_name = row_dict.get('scientific_name', '')
+                            size_class = row_dict.get('size_class', '')
+                            trophic_type = plankton_core.Species().get_bvol_value(scientific_name, size_class, 'trophic_type')
+                            if trophic_type:
+                                value = trophic_type # Use existing if not in local list.
+                        # Replace empty with NS=Not specified.
+                        if not value:
+                            value = 'NS'
+                    
                     if len(value) > 0: # Don't overwrite from previous step.
                         variablenode.add_data(parsinginforow[1], value)
                                        

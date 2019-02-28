@@ -136,7 +136,10 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         # Count number.
         self._countedunits_edit = KeyPressQSpinBox(self)
         self._countedunits_edit.setRange(0, 999999999)
+        
+        self._countedunits_edit.setKeyboardTracking(False) # Feature to avoid emitted signals.
         self._countedunits_edit.valueChanged.connect(self._counted_value_changed)
+        
         self._counted_clear_button = KeyPressQPushButton('Clear', self)
         self._counted_add1_button = KeyPressQPushButton('+1', self)
         self._counted_sub1_button = KeyPressQPushButton('-1', self)
@@ -1344,7 +1347,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
             self._countareatype_edit.setText(countareatype)
             # Alternatives: 'Chamber','1/2 chamber','Field of views','Transects','Rectangles'
             if (countareatype == 'Field of views') or (countareatype == 'Transects') or \
-               (countareatype == 'Rectangles') or (countareatype == 'Coeff. calculated by user'):
+               (countareatype == 'Rectangles'):
                 self._countareanumber_edit.setEnabled(False)
                 self._addcountarea_button.setEnabled(True)
                 self._locktaxa_button.setEnabled(True)
@@ -1493,7 +1496,8 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
             coeffoneunittext = method_dict.get('coefficient_one_unit', '0').replace(',', '.').replace(' ', '')
             try:
                 coeffoneunit = float(coeffoneunittext)
-                coeff = int((coeffoneunit / value) + 0.5)
+#                 coeff = int((coeffoneunit / value) + 0.5) # Python2.
+                coeff = int(coeffoneunit / value)
                 self._coefficient_edit.setText(str(coeff))
             except:
                 self._coefficient_edit.setText('0')

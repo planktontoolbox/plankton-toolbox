@@ -326,7 +326,7 @@ class AnalysisPrepare(object):
         super(AnalysisPrepare, self).__init__()
 
 
-    def add_missing_taxa(self, analysisdata):
+    def add_missing_taxa(self, analysisdata, include_trophictypes, include_stagesex):
         """ """
         if not analysisdata:        
             return
@@ -341,9 +341,14 @@ class AnalysisPrepare(object):
                     if parameter:
                         parameter_set.add((parameter, unit))
                     taxonname = variablenode.get_data('scientific_name')
-                    trophic_type = variablenode.get_data('trophic_type')
-                    stage = variablenode.get_data('stage')
-                    sex = variablenode.get_data('sex')
+                    trophic_type = ''
+                    stage = ''
+                    sex = ''
+                    if include_trophictypes:
+                        trophic_type = variablenode.get_data('trophic_type')
+                    if include_stagesex:
+                        stage = variablenode.get_data('stage')
+                        sex = variablenode.get_data('sex')
                     if taxonname:
                         taxon_set.add((taxonname, trophic_type, stage, sex))
         # Step 2: Create list with parameter-taxon pairs.
@@ -363,9 +368,14 @@ class AnalysisPrepare(object):
                     parameter = variablenode.get_data('parameter')
                     unit = variablenode.get_data('unit')
                     taxon = variablenode.get_data('scientific_name')
-                    trophic_type = variablenode.get_data('trophic_type')
-                    stage = variablenode.get_data('stage')
-                    sex = variablenode.get_data('sex')
+                    trophic_type = ''
+                    stage = ''
+                    sex = ''
+                    if include_trophictypes:
+                        trophic_type = variablenode.get_data('trophic_type')
+                    if include_stagesex:
+                        stage = variablenode.get_data('stage')
+                        sex = variablenode.get_data('sex')
                     sample_parameter_taxon_list.append(((parameter, unit), (taxon, trophic_type, stage, sex)))
                 # Add missing variables.
                 for itempairs in parameter_taxon_list:
@@ -373,9 +383,16 @@ class AnalysisPrepare(object):
                         variable = plankton_core.VariableNode()
                         samplenode.add_child(variable)
                         variable.add_data('scientific_name', itempairs[1][0])
-                        variable.add_data('trophic_type', itempairs[1][1])
-                        variable.add_data('stage', itempairs[1][2])
-                        variable.add_data('sex', itempairs[1][3])
+                        if include_trophictypes:
+                            variable.add_data('trophic_type', itempairs[1][1])
+                        else:
+                            variable.add_data('trophic_type', '')
+                        if include_stagesex:
+                            variable.add_data('stage', itempairs[1][2])
+                            variable.add_data('sex', itempairs[1][3])
+                        else:
+                            variable.add_data('stage', '')
+                            variable.add_data('sex', '')
                         variable.add_data('parameter', itempairs[0][0])
                         variable.add_data('value', float(0.0))
                         variable.add_data('unit', itempairs[0][1])
