@@ -626,7 +626,7 @@ class PlanktonCounterSample():
     
     def delete_rows_in_method_step(self, current_method_step):
         """ """
-        for sampleobject in self._sample_rows.values():
+        for sampleobject in list(self._sample_rows.values()): # Clone list when deleting content.
             if sampleobject.get_method_step() == current_method_step:
                 del self._sample_rows[sampleobject.get_key()]
     
