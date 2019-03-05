@@ -13,7 +13,7 @@ from PyQt5 import QtCore
 import app_framework
 import toolbox_utils
 import plankton_core
-import matplotlib.backends.backend_qt4agg as mpl_backend
+import matplotlib.backends.backend_qt5agg as mpl_backend
 import matplotlib.figure as mpl_figure
 
 class GraphPlotterTool(app_framework.ToolBase):
@@ -304,7 +304,7 @@ class GraphPlotterTool(app_framework.ToolBase):
         
     def _create_content_chart_area(self):
         """ """
-        # Matplotlib figure and canvas for Qt4.
+        # Matplotlib figure and canvas for Qt5.
         self._figure = mpl_figure.Figure()
         self._canvas = mpl_backend.FigureCanvasQTAgg(self._figure)        
         self._canvas.show()
