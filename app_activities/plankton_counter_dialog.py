@@ -93,10 +93,17 @@ class PlanktonCounterDialog(QtWidgets.QDialog):
         contentLayout = QtWidgets.QVBoxLayout(self)
         self.setLayout(contentLayout)
         #
+        
+        self._sample_locked_checkbox = QtWidgets.QCheckBox('Locked for editing')
+        self._sample_locked_checkbox.setChecked(True)
+        self._sample_locked_checkbox.stateChanged.connect(self.sample_locked_changed)
+        
+        #
         dataset_sample_label = QtWidgets.QLabel('Dataset: <b>' + self._current_dataset + '</b>' +
                                             ' Sample: <b>' + self._current_sample + '</b>')
         contentLayout.addWidget(dataset_sample_label)
-        contentLayout.addWidget(QtWidgets.QLabel('')) # Empty label to create space.
+#         contentLayout.addWidget(QtWidgets.QLabel('')) # Empty label to create space.
+        contentLayout.addWidget(self._sample_locked_checkbox)
 
         self._main_tab_widget = QtWidgets.QTabWidget(self)
         
@@ -167,15 +174,15 @@ class PlanktonCounterDialog(QtWidgets.QDialog):
         """ """
         widget = QtWidgets.QWidget()
         #
-        self._sample_locked_checkbox = QtWidgets.QCheckBox('Locked')
-        self._sample_locked_checkbox.setChecked(True)
-        self._sample_locked_checkbox.stateChanged.connect(self.sample_locked_changed)
+#         self._sample_locked_checkbox = QtWidgets.QCheckBox('Locked for editing')
+#         self._sample_locked_checkbox.setChecked(True)
+#         self._sample_locked_checkbox.stateChanged.connect(self.sample_locked_changed)
         #
         self._close_button = QtWidgets.QPushButton('Close plankton counter')
         self._close_button.clicked.connect(self.close)
         #
         layout = QtWidgets.QHBoxLayout()
-        layout.addWidget(self._sample_locked_checkbox)
+#         layout.addWidget(self._sample_locked_checkbox)
         layout.addStretch(30)
         layout.addWidget(self._close_button)
         widget.setLayout(layout)
