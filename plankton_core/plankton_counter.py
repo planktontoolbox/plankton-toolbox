@@ -716,8 +716,8 @@ class SampleRow():
         try:
             self._bvol_volume = float(self._size_class_dict.get('bvol_calculated_volume_um3', '0').replace(',', '.'))
             self._bvol_carbon = float(self._size_class_dict.get('bvol_calculated_carbon_pg', '0').replace(',', '.'))
-        except:
-            pass
+        except Exception as e:
+            raise UserWarning('Failed to read BVOL volume or carbon. Hint: Save Excel with values, not formulas. Exception: ' + str(e))
         self._sample_row_dict['volume_um3_unit'] = str(self._round_value(self._bvol_volume))
         self._sample_row_dict['carbon_pgc_unit'] = str(self._round_value(self._bvol_carbon))
 
@@ -985,7 +985,10 @@ class ExcelExportWriter():
                 'sampling_laboratory',
                 'orderer',
                 'project_code',
+                'method_documentation',
+                'method_reference_code',
                 'station_name',
+                'station_code',
                 'sample_latitude_dm',
                 'sample_longitude_dm',
                 'sample_latitude_dd',
@@ -1003,7 +1006,7 @@ class ExcelExportWriter():
                 'analytical_laboratory', 
                 'analysis_date',
                 'analysed_by',
-                'sample_comment',               
+                'sample_comment',
                 ]
         sample_info_rows = []
         self.sample_info_dict = self.sample_object.get_sample_info()

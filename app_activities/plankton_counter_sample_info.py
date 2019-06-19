@@ -107,7 +107,12 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
         self._orderer_edit = QtWidgets.QLineEdit()
         self._orderer_edit.setMinimumWidth(200)
         self._project_edit = QtWidgets.QLineEdit()
+        
+        self._method_documentation_edit = QtWidgets.QLineEdit()
+        self._method_reference_code_edit = QtWidgets.QLineEdit()
+        
         self._station_name_edit = QtWidgets.QLineEdit()
+        self._station_code_edit = QtWidgets.QLineEdit()
         self._latitude_degree = QtWidgets.QLineEdit()
         self._latitude_degree.setPlaceholderText('dd')
         self._latitude_degree.setMaximumWidth(40)
@@ -246,8 +251,19 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
         form1.addWidget(app_framework.RightAlignedQLabel('Project:'), gridrow, 0, 1, 1)
         form1.addWidget(self._project_edit, gridrow, 1, 1, 3)
         gridrow += 1
+        form1.addWidget(app_framework.RightAlignedQLabel('Method documentation:'), gridrow, 0, 1, 1)
+        hbox = QtWidgets.QHBoxLayout()
+        hbox.addWidget(self._method_documentation_edit)
+        hbox.addWidget(app_framework.RightAlignedQLabel('Method ref.:'))
+        hbox.addWidget(self._method_reference_code_edit)
+        form1.addLayout(hbox, gridrow, 1, 1, 3)
+        gridrow += 1
         form1.addWidget(app_framework.RightAlignedQLabel('Station name:'), gridrow, 0, 1, 1)
-        form1.addWidget(self._station_name_edit, gridrow, 1, 1, 3)
+        hbox = QtWidgets.QHBoxLayout()
+        hbox.addWidget(self._station_name_edit, 10)
+        hbox.addWidget(app_framework.RightAlignedQLabel('Station code:'))
+        hbox.addWidget(self._station_code_edit, 3)
+        form1.addLayout(hbox, gridrow, 1, 1, 3)
         gridrow += 1
         form1.addWidget(app_framework.RightAlignedQLabel('Latitude, degree:'), gridrow, 0, 1, 1)
         hbox = QtWidgets.QHBoxLayout()
@@ -364,7 +380,12 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
         self._sampling_laboratory_edit.setReadOnly(read_only)
         self._orderer_edit.setReadOnly(read_only)
         self._project_edit.setReadOnly(read_only)
+        
+        self._method_documentation_edit.setReadOnly(read_only)
+        self._method_reference_code_edit.setReadOnly(read_only)
+        
         self._station_name_edit.setReadOnly(read_only)
+        self._station_code_edit.setReadOnly(read_only)
         self._latitude_degree.setReadOnly(read_only)
         self._latitude_minute.setReadOnly(read_only)
         self._longitude_degree.setReadOnly(read_only)
@@ -538,7 +559,12 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
             metadata_dict['sampling_laboratory'] = str(self._sampling_laboratory_edit.text())
             metadata_dict['orderer'] = str(self._orderer_edit.text())
             metadata_dict['project_code'] = str(self._project_edit.text())
+            
+            metadata_dict['method_documentation'] = str(self._method_documentation_edit.text())
+            metadata_dict['method_reference_code'] = str(self._method_reference_code_edit.text())
+            
             metadata_dict['station_name'] = str(self._station_name_edit.text())
+            metadata_dict['station_code'] = str(self._station_code_edit.text())
             lat_deg_tmp = str(self._latitude_degree.text()).replace(',', '.')
             lat_min_tmp = str(self._latitude_minute.text()).replace(',', '.')
             long_deg_tmp = str(self._longitude_degree.text()).replace(',', '.')
@@ -595,7 +621,12 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
             self._sampling_laboratory_edit.setText(metadata_dict.get('sampling_laboratory', ''))
             self._orderer_edit.setText(metadata_dict.get('orderer', ''))
             self._project_edit.setText(metadata_dict.get('project_code', ''))
+            
+            self._method_documentation_edit.setText(metadata_dict.get('method_documentation', ''))
+            self._method_reference_code_edit.setText(metadata_dict.get('method_reference_code', ''))
+            
             self._station_name_edit.setText(metadata_dict.get('station_name', ''))
+            self._station_code_edit.setText(metadata_dict.get('station_code', ''))
             lat_tmp = str(metadata_dict.get('sample_latitude_dm', ''))
             long_tmp = str(metadata_dict.get('sample_longitude_dm', ''))
             if (len(lat_tmp) > 2) and (' ' in lat_tmp):

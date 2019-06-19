@@ -37,6 +37,7 @@ from .report_standard import CreateReportStandard
 from .report_counted import CreateReportCounted
 from .report_species import CreateReportSpecies
 from .report_to_dc_shark import CreateReportToDataCenterShark
+from .report_to_datacenter import CreateReportToDataCenter
 
 from .screening_manager import ScreeningManager
 
