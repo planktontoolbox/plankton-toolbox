@@ -15,6 +15,7 @@ class CreateReportCounted(object):
         #
         self._header_items = [
             'station_name', 
+            'station_code', 
             'sample_date', 
             'analysis_date', 
             'sample_min_depth_m', 
@@ -35,6 +36,7 @@ class CreateReportCounted(object):
         
         self._translate_header = {
             'station_name': 'Station name', # 'Station', # 0
+            'station_code': 'Station code', # 'Station', # 0
             'sample_date': 'Sample date', # 'Provtagningsdatum', # 1
             'analysis_date': 'Analysis date', # 'Analysdatum', # 2
             'sample_min_depth_m': 'Min depth (m)', # 'Min djup', # 3
@@ -56,6 +58,7 @@ class CreateReportCounted(object):
         # Used as row key and for sort order.
         self._row_key_items = [
             'station_name', 
+            'station_code', 
             'sample_date', 
             'sample_min_depth_m', 
             'sample_max_depth_m', 
@@ -69,6 +72,7 @@ class CreateReportCounted(object):
         # Used as key for aggregated rows.
         self._row_key_aggregated_items = [
             'station_name', 
+            'station_code', 
             'sample_date', 
             'sample_min_depth_m', 
             'sample_max_depth_m', 

@@ -18,6 +18,7 @@ class CreateReportStandard(object):
             'sample_date', 
             'visit_month', 
             'station_name', 
+            'station_code', 
             'sample_latitude_dd', 
             'sample_longitude_dd', 
             'water_depth_m', 
