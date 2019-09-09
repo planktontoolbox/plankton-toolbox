@@ -5,6 +5,7 @@
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import sys
+import math
 import toolbox_utils
 import app_framework
 import pathlib
@@ -490,11 +491,19 @@ class Species(object):
                             if numeric == 'numeric':
                                 try:
                                     value = value.replace(',', '.').replace(' ', '') # Try/except if already float.
+                                    value = float(value)
+                                    # Round float values.
+                                    n = 4 # Number of significant digits.
+                                    if value != 0.0:
+                                        if value >= 1000.0:
+                                            value = round(value, 1)
+                                        else:
+                                            value = round(value, - int(math.floor(math.log10(abs(value)))) + (n - 1)) 
                                 except: 
                                     pass
-                                sizeclassdict[internalname] = value
+                                sizeclassdict[internalname] = str(value)
                             else:
-                                sizeclassdict[internalname] = value
+                                sizeclassdict[internalname] = str(value)
                 # Check if exists in self._taxa
                 if 'bvol_species' in taxondict: 
                     scientificname = taxondict['bvol_species']
