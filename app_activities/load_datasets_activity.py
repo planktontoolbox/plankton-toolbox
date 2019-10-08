@@ -873,7 +873,9 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         self._unloadmarkeddatasets_button = QtWidgets.QPushButton('Remove marked dataset(s)')
         # If checked the selected dataset content should be viewed in the dataset viewer tool.
         self._viewdataset_checkbox = QtWidgets.QCheckBox('View marked dataset')
-        self._viewdataset_checkbox.setChecked(False)
+#         self._viewdataset_checkbox.setChecked(False)
+        self._viewdataset_checkbox.setChecked(True)
+        self._viewdataset_checkbox.hide()
         # Button connections.
         self._unloadalldatasets_button.clicked.connect(self._unload_all_datasets)                
         self._unloadmarkeddatasets_button.clicked.connect(self._unload_marked_datasets)                

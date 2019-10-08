@@ -42,8 +42,8 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         """ Called at startup. """
         try:
             # Load common parts.
-            self._update_select_specieslist_combo()             
-            self._update_selected_specieslist(None) 
+            self._update_select_specieslist_combo()
+            self._update_selected_specieslist(None)
             # Load from files.
             self._load_counting_method()
             self._current_sample_object.load_sample_info()
@@ -57,6 +57,9 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
             self._disable_counting_buttons()
             #
             self._scientific_full_name_edit.setText('')
+            #
+            self._select_method_step_changed()
+            self._selected_species_list_changed()
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -917,8 +920,8 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
             toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         #
         try:
-            self._update_select_specieslist_combo()             
-            self._update_selected_specieslist(None) 
+            self._update_select_specieslist_combo()
+            self._update_selected_specieslist(None)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -929,14 +932,14 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         try:
             dialog = DeleteCountingSpeciesListDialog(self)
             if dialog.exec_():
-                self._update_select_specieslist_combo()             
-                self._update_selected_specieslist(None) 
+                self._update_select_specieslist_combo()
+                self._update_selected_specieslist(None)
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
             toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         #
         try:
-            self._update_select_specieslist_combo()             
+            self._update_select_specieslist_combo()
             self._update_selected_specieslist(None)
         #
         except Exception as e:
@@ -1273,7 +1276,8 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
     #         outkeylist = ['Range', 'L1', 'L2', 'bvol_width_um', 
     #                       'H', 'D1', 'D2']
             keylist = ['bvol_size_range', 'bvol_calculated_volume_um3', 'bvol_geometric_shape', ]
-            outkeylist = ['Size', 'Volume', 'Shape', ]
+#             outkeylist = ['Size', 'Volume', 'Shape', ]
+            outkeylist = ['S', 'V', 'Shape', ]
             for index, key in enumerate(keylist):
                 if key in sizeclass_dict and sizeclass_dict[key]:
                     sizeinfolist.append(outkeylist[index]+ ': ' + sizeclass_dict[key])
