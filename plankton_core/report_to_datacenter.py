@@ -193,13 +193,13 @@ class CreateReportToDataCenter(object):
     
     def cleanup_fields(self, row_dict):
         """ """
-        cf = row_dict.get('cf', '').strip()
+        cf = str(row_dict.get('cf', '')).strip()
         if 'CF' in cf.upper():
             row_dict['cf'] = 'Cf.'
         
 #         # Concatenate CF into SFLAG.
-#         sflag = row_dict.get('species_flag_code', '').strip()
-#         cf = row_dict.get('cf', '').strip()
+#         sflag = str(row_dict.get('species_flag_code', '')).strip()
+#         cf = str(row_dict.get('cf', '')).strip()
 #         if 'CF' in cf.upper():
 #             if len(sflag) > 0:
 #                 row_dict['species_flag_code'] = sflag + ' CF'
@@ -207,7 +207,7 @@ class CreateReportToDataCenter(object):
 #                 row_dict['species_flag_code'] = 'CF'
 
         # Biovol and carbon: '' if 0.00.
-        biovol = row_dict.get('param_biovolume', '').strip()
+        biovol = str(row_dict.get('param_biovolume', '')).strip()
         try:
             biovol = float(biovol)
             if biovol == 0.0:
@@ -216,11 +216,11 @@ class CreateReportToDataCenter(object):
             pass
 
         # Remove descriptions for codes.
-        smtyp = row_dict.get('sampler_type_code', '')
+        smtyp = str(row_dict.get('sampler_type_code', ''))
         if '(' in smtyp:
             row_dict['sampler_type_code'] = smtyp.split('(')[0].strip()
         
-        metfp = row_dict.get('preservative', '')
+        metfp = str(row_dict.get('preservative', ''))
         if '(' in metfp:
             row_dict['preservative'] = metfp.split('(')[0].strip()
 

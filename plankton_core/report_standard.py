@@ -6,12 +6,17 @@
 
 import operator
 
+from plankton_core.species import Species
+
+
 class CreateReportStandard(object):
     """ """
     def __init__(self):
         """ """
         # Initialize parent.
         super(CreateReportStandard, self).__init__()
+        #
+        self.taxon_cache = {}
         #
         self._header_items = [
             'visit_year', 
@@ -40,7 +45,9 @@ class CreateReportStandard(object):
             'taxon_order', 
             'taxon_family', 
             'taxon_genus', 
-            'taxon_hierarchy', 
+            'taxon_species', 
+            'rank', 
+#             'taxon_hierarchy', 
             'sampling_laboratory', 
             'analytical_laboratory', 
             'analysed_by', 
@@ -75,14 +82,33 @@ class CreateReportStandard(object):
                         datadict.update(samplenode.get_data_dict())
                         datadict.update(variablenode.get_data_dict())
                         #
+                        self.add_taxon_related_info(datadict)
+                        #
                         report_row = []
                         #
                         for item in self._header_items:
                             report_row.append(datadict.get(item, '')) 
                         #
                         result_table.append_row(report_row)
-        #
-
+        
         # Sort order: Station, date, min depth, max depth, scientific name, size.        
         result_table.get_rows().sort(key=operator.itemgetter(3, 1, 9, 10, 11, 13))
-
+    
+    def add_taxon_related_info(self, datadict):
+        """ """
+        taxa = datadict.get('scientific_name', '')
+        
+        datadict['plankton_group'] = Species().get_plankton_group_from_taxon_name(taxa)
+            
+        if taxa:
+            taxon_dict = Species().get_taxon_dict(taxa)
+            
+            for taxon_key in ['taxon_species', 'taxon_genus', 'taxon_family', 
+                              'taxon_order', 'taxon_class', 
+                              'taxon_phylum', 'taxon_kingdom', 
+                              'rank']:
+                
+                value = taxon_dict.get(taxon_key, '')
+                if value:
+                    datadict[taxon_key] = value
+    

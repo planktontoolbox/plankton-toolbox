@@ -48,7 +48,8 @@ class ToolBase(QtWidgets.QDockWidget):
         """
         content = QtWidgets.QWidget()
         widget = QtWidgets.QWidget()
-        self.setWidget(widget)        
+        widget.setMinimumSize(250, 200)
+        self.setWidget(widget)
         # Add scroll.
         mainscroll = QtWidgets.QScrollArea()
         ### mainscroll.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -59,6 +60,7 @@ class ToolBase(QtWidgets.QDockWidget):
         mainlayout.setSpacing(0)
         mainlayout.addWidget(mainscroll)
         widget.setLayout(mainlayout)
+        
         return content 
 
     def _write_to_status_bar(self, message):
