@@ -10,7 +10,6 @@ import toolbox_utils
 import app_framework
 import pathlib
 import os.path
-from numpy import rank
 
 @toolbox_utils.singleton
 class Species(object):
