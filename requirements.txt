@@ -1,0 +1,10 @@
+
+pyqt5
+matplotlib
+openpyxl
+jupyter
+
+xlsxwriter
+
+pylint
+

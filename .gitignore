@@ -1,4 +1,8 @@
 
+venv
+.vscode
+launch.json
+
 *.pyc
 *.pyo
 
@@ -7,6 +11,8 @@
 
 toolbox_data/parsers/*.xlsx
 plankton_toolbox_log.txt
+*plankton_toolbox_data*
+*plankton_toolbox_counter*
 
 .*~
 
