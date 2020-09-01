@@ -1526,7 +1526,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
             try:
                 coeffoneunit = float(coeffoneunittext)
 #                 coeff = int((coeffoneunit / value) + 0.5) # Python2.
-                coeff = int(coeffoneunit / value)
+                coeff = round(coeffoneunit / value)
                 self._coefficient_edit.setText(str(coeff))
             except:
                 self._coefficient_edit.setText('0')

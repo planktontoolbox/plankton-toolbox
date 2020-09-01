@@ -402,7 +402,7 @@ class PlanktonCounterMethod():
             ### TEST: coeffoneunit = chamber_filter_area * sampledvolume * onelitre_ml / (singlearea * counted_volume * (sampledvolume + preservative_volume))
             coeffoneunit = chamber_filter_area * (sampledvolume + preservative_volume) * onelitre_ml / (singlearea * counted_volume * sampledvolume)
 #             coeffoneunit = int(coeffoneunit + 0.5) # Python 2.
-            coeffoneunit = int(coeffoneunit)
+            coeffoneunit = round(coeffoneunit)
             fields_dict['coefficient_one_unit'] = str(coeffoneunit)
         except:
             pass
