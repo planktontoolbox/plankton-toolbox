@@ -74,35 +74,53 @@ class MainWindow(QtWidgets.QMainWindow):
         # Add tools to selector.
         self._create_contentSelectors()
         # Load last used window positions.
-        ### size = QtCore.QSize(900, 600)
-        ### position = QtCore.QPoint(100, 80)
-        size = self._ui_settings.value('XMainWindow/Size', QtCore.QSize(900, 600)) #.toSize()
-        position = self._ui_settings.value('XMainWindow/Position', QtCore.QPoint(100, 80)) #.toPoint()
-        # Check if outside window.
-        screengeometry = QtWidgets.QDesktopWidget().screenGeometry()
-        if ((size.width() + position.x()) > screengeometry.width()) or \
-            ((size.height() + position.y()) > screengeometry.height()):
+        size = self._ui_settings.value('MainWindow/Size', QtCore.QSize(900, 600)) #.toSize()
+        position = self._ui_settings.value('MainWindow/Position', QtCore.QPoint(100, 80)) #.toPoint()
+
+        # Check if outside windows. New, including Windows 10.
+        # print("DEBUG position x: ", position.x())
+        # print("DEBUG position y: ", position.y())
+        # print("DEBUG size w: ", size.width())
+        # print("DEBUG size h: ", size.height())
+        fit_in_screen = False
+        screen_x = 0
+        screen_y = 0
+        screen_width = 1920
+        screen_height = 1020
+        for screen in QtWidgets.QApplication.screens():
+            # print("DEBUG: ", screen.name())
+            # print("DEBUG x: ", screen.availableGeometry().x())
+            # print("DEBUG y: ", screen.availableGeometry().y())
+            # print("DEBUG w: ", screen.availableGeometry().width())
+            # print("DEBUG h: ", screen.availableGeometry().height())
+            screen_x = screen.availableGeometry().x()
+            screen_y = screen.availableGeometry().y()
+            screen_width = screen.availableGeometry().width()
+            screen_height = screen.availableGeometry().height()
+            screen_x_max = screen_x + screen_width
+            screen_y_max = screen_y + screen_height
+
+            if ((position.x() + size.width()) <= screen_x_max) and \
+                ((position.y() + size.height()) <= screen_y_max):
+
+                if (position.x() >= screen_x) and (position.y() >= screen_y):
+                    fit_in_screen = True
+                    break
+
+        if fit_in_screen == False:
             size.setWidth(900)
             size.setHeight(600)
             position.setX(100)
             position.setY(80)
-        elif (position.x() < -10) or \
-             (position.y() < -10):
-            size.setWidth(900)
-            size.setHeight(600)
-            position.setX(100)
-            position.setY(80)
-        else:
-            try:   
-                self.setGeometry(self._ui_settings.value('MainWindow/Geometry'))
-                self.restoreState(self._ui_settings.value('MainWindow/State'))
-                size = self._ui_settings.value('MainWindow/Size', QtCore.QVariant(QtCore.QSize(900, 600))) #.toSize()
-                position = self._ui_settings.value('MainWindow/Position', QtCore.QVariant(QtCore.QPoint(100, 50))) #.toPoint()
-            except:
-                pass # May contain None at first start on new computer.
-        #
+
+        try:   
+            self.setGeometry(self._ui_settings.value('MainWindow/Geometry'))
+            self.restoreState(self._ui_settings.value('MainWindow/State'))
+        except:
+            pass # May contain None at first start on new computer.
+
         self.resize(size)
-        self.move(position)        
+        self.move(position)  
         # Tell the user.
         app_tools.ToolManager().show_tool_by_name('Toolbox logging') # Show the log tool if hidden.
         
