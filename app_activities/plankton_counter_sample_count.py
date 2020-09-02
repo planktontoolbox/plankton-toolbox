@@ -266,8 +266,22 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         self._deletespecieslists_button = KeyPressQPushButton('Delete counting species lists...', self) 
         self._deletespecieslists_button.clicked.connect(self._delete_species_lists)
         #
-        #
-        # Large text.        
+        # Column 3: Selectable font sizes for species list.
+        self._specieslistfontsize_list = KeyPressQComboBox(self)
+        self._specieslistfontsize_list.addItems(['<default>', 
+                                         '6', 
+                                         '7', 
+                                         '8', 
+                                         '9',
+                                         '10',
+                                         '11',
+                                         '12',
+                                         '13',
+                                         '14',
+                                         '15',
+                                         ])
+        self._specieslistfontsize_list.currentIndexChanged.connect(self._update_specieslistfontsize)
+        # Large text.
         bigboldfont = QtGui.QFont('SansSerif', 12, QtGui.QFont.Bold)
         bigfont = QtGui.QFont('SansSerif', 12)
         #
@@ -284,8 +298,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         self._species_tableview.setFont(bigfont)
         #
         self._speciesfilter_edit.setFont(bigboldfont)
-        
-        
+
         # Layout. Column 1A. Methods.
         countgrid = QtWidgets.QGridLayout()
         gridrow = 0
@@ -404,6 +417,8 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         hbox = QtWidgets.QHBoxLayout()
         hbox.addWidget(self._viewsizeclassinfo_checkbox)
         hbox.addWidget(self._deletespecieslists_button)
+        hbox.addWidget(QtWidgets.QLabel('Size:'))
+        hbox.addWidget(self._specieslistfontsize_list)
         hbox.addStretch(5)
         vboxspecies.addLayout(hbox)
         #
@@ -970,6 +985,21 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
             toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
+    
+    def _update_specieslistfontsize(self):
+        """ """
+        fontsize = self._specieslistfontsize_list.currentText()
+        try:
+            if fontsize == '<default>':
+                fontsize = 12
+            else:
+                fontsize = int(fontsize)
+            variablefont = QtGui.QFont('SansSerif', fontsize)
+            self._species_tableview.setFont(variablefont)
+            self._species_tableview.horizontalHeader().setFont(variablefont)
+            self._species_tableview.verticalHeader().setFont(variablefont)
+        except:
+            pass
     
     def _disable_counting_buttons(self):
         """ """
@@ -1798,7 +1828,7 @@ class DeleteCountingSpeciesListDialog(QtWidgets.QDialog):
         """ """
         self._parentwidget = parentwidget
         super(DeleteCountingSpeciesListDialog, self).__init__(parentwidget)
-        self.setWindowTitle("Delete counting specis list type(s)")
+        self.setWindowTitle("Delete counting species list type(s)")
         self.setLayout(self._content())
         self.setMinimumSize(500, 500)
         self._load_data()
