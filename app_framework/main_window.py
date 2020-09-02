@@ -100,10 +100,10 @@ class MainWindow(QtWidgets.QMainWindow):
             screen_x_max = screen_x + screen_width
             screen_y_max = screen_y + screen_height
 
-            if ((position.x() + size.width()) <= screen_x_max) and \
-                ((position.y() + size.height()) <= screen_y_max):
+            if ((position.x() + size.width()) <= (screen_x_max + 20)) and \
+                ((position.y() + size.height()) <= (screen_y_max + 20)):
 
-                if (position.x() >= screen_x) and (position.y() >= screen_y):
+                if (position.x() >= (screen_x - 20)) and (position.y() >= (screen_y - 20)):
                     fit_in_screen = True
                     break
 
