@@ -2,9 +2,9 @@
 pyqt5
 matplotlib
 openpyxl
-jupyter
-
 xlsxwriter
 
+# For vscode.
 pylint
+black
 
