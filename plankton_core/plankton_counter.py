@@ -394,8 +394,7 @@ class PlanktonCounterSample():
         summary_data = []
         #
         totalcounted = 0
-        countedspecies = {} # Value for sizeclasses aggregated.
-        countedspecies_text = {} # Value for sizeclasses aggregated.
+        counted_dict = {}
         size_range_dict = {} # Value for sizeclasses aggregated.
         locked_list = []
         #
@@ -406,67 +405,75 @@ class PlanktonCounterSample():
                     continue
             # Count on scientific name. Standard alternative.
             taxon = sampleobject.get_scientific_full_name()
+            sort_order = taxon
             size = sampleobject.get_size_class()
             # Use the same key for locked items.
             if sampleobject.is_locked():
                 if size:
-                    locked_list.append(taxon + ' [' + size + '] ')     
+                    locked_list.append(taxon + ' [' + size + '] ')
                 else:
-                    locked_list.append(taxon)     
+                    locked_list.append(taxon)
             # Count on class name.
             if summary_type == 'Counted per classes':
                 taxon = plankton_core.Species().get_taxon_value(taxon, 'taxon_class')
+                sort_order = taxon
                 if len(taxon) == 0:
                     taxon = '<class unknown>'
+                    sort_order = taxon
             # Count on scientific name and size class.
             elif summary_type == 'Counted per taxa':
                 if size:
                     taxon = taxon
+                    sort_order = taxon
             elif summary_type == 'Counted per taxa/sizes':
                 if size:
+                    size_for_sorting = f"{taxon} [{float(size):5.0f}]"
                     taxon = taxon + ' [' + size + '] '
+                    sort_order = size_for_sorting
             # Create in list, first time only.
-            if taxon not in countedspecies:
-                countedspecies[taxon] = 0
-                countedspecies_text[taxon] = '0'
+            if taxon not in counted_dict:
+                counted_dict[taxon] = {}
+                counted_dict[taxon]["counted_units"] = 0
+                counted_dict[taxon]["as_text"] = '0'
+                counted_dict[taxon]["sort_order"] = sort_order
             # Add.
             try:
                 abundance_class = sampleobject.get_abundance_class()
                 if abundance_class in ['', 0]:
                     # Quantitative.
-                    countedspecies[taxon] += int(sampleobject.get_counted_units())
-                    countedspecies_text[taxon] = str(countedspecies[taxon])
+                    counted_dict[taxon]["counted_units"] += int(sampleobject.get_counted_units())
+                    counted_dict[taxon]["as_text"] = str(counted_dict[taxon]["counted_units"])
                     
                     totalcounted += int(sampleobject.get_counted_units())
 
                     counted_units_list = sampleobject.get_counted_units_list()
                     if ';' in counted_units_list:
                         last_transect_units = counted_units_list.split(';')[-1]
-                        countedspecies_text[taxon] = str(countedspecies[taxon]) + '/' + last_transect_units
+                        counted_dict[taxon]["as_text"] = str(counted_dict[taxon]["counted_units"]) + '/' + last_transect_units
                 else:
                     # Qualitative.
                     if summary_type in ['Counted per taxa', 'Counted per taxa/sizes']:
-                        if countedspecies[taxon] == 0:
+                        if counted_dict[taxon] == 0:
                             if abundance_class == '1':
-                                countedspecies[taxon] = 1
-                                countedspecies_text[taxon] = '1=Observed'
+                                counted_dict[taxon]["counted_units"] = 1
+                                counted_dict[taxon]["as_text"] = '1=Observed'
                             elif abundance_class == '2':
-                                countedspecies[taxon] = 2
-                                countedspecies_text[taxon] = '2=Several cells'
+                                counted_dict[taxon]["counted_units"] = 2
+                                counted_dict[taxon]["as_text"] = '2=Several cells'
                             elif abundance_class == '3':
-                                countedspecies[taxon] = 3
-                                countedspecies_text[taxon] = '3=1-10%'
+                                counted_dict[taxon]["counted_units"] = 3
+                                counted_dict[taxon]["as_text"] = '3=1-10%'
                             elif abundance_class == '4':
-                                countedspecies[taxon] = 4
-                                countedspecies_text[taxon] = '4=10-50%'
+                                counted_dict[taxon]["counted_units"] = 4
+                                counted_dict[taxon]["as_text"] = '4=10-50%'
                             elif abundance_class == '5':
-                                countedspecies[taxon] = 5
-                                countedspecies_text[taxon] = '5=50-100%'
+                                counted_dict[taxon]["counted_units"] = 5
+                                counted_dict[taxon]["as_text"] = '5=50-100%'
                         else:
-                            countedspecies[taxon] = 1
-                            countedspecies_text[taxon] = '<Qualitative>'
+                            counted_dict[taxon]["counted_units"] = 1
+                            counted_dict[taxon]["as_text"] = '<Qualitative>'
                     else:
-                        countedspecies_text[taxon] = '<Qualitative>'
+                        counted_dict[taxon]["as_text"] = '<Qualitative>'
             except: 
                 pass # If value = ''.
             #
@@ -479,7 +486,7 @@ class PlanktonCounterSample():
         summary_data.append('')
         if most_counted_sorting == False:
             # Alphabetical.
-            for key in sorted(countedspecies):
+            for key, _value in sorted(counted_dict.items(), key=lambda x:x[1]["sort_order"]):
                 size_range = ''
                 if key in size_range_dict:
                     size_range = '    ' + size_range_dict[key]
@@ -487,17 +494,17 @@ class PlanktonCounterSample():
                 if key in locked_list:
                     lock_info = ' [Locked]'
                 
-                summary_data.append(key + ': ' + str(countedspecies_text[key]) + lock_info + size_range)
+                summary_data.append(key + ': ' + str(counted_dict[key]["as_text"]) + lock_info + size_range)
         else:
             # Sort for most counted.
-            for key in sorted(countedspecies, key=countedspecies.get, reverse=True):
+            for key, _value in sorted(counted_dict.items(), key=lambda x:x[1]["counted_units"], reverse=True):
                 size_range = ''
                 if key in size_range_dict:
                     size_range = ' ' + size_range_dict[key]
                 lock_info = ''
                 if key in locked_list:
                     lock_info = ' [Locked]'
-                summary_data.append(key + ': ' + str(countedspecies_text[key]) + lock_info + size_range)
+                summary_data.append(key + ': ' + str(counted_dict[key]["as_text"]) + lock_info + size_range)
         #
         return summary_data
 
@@ -1342,7 +1349,7 @@ class ExcelExportWriter():
                                     cell_style_obj = None
                         elif cell_format == 'decimal_6': 
                             cell_style_obj = self.decimal_6_format
-                            if value is not '':
+                            if value != '':
                                 value = float(value)
                                 # Don't write zero values.
                                 if value == 0.0:
@@ -1400,7 +1407,7 @@ class ExcelExportWriter():
                                         cell_style_obj = None
                             elif cell_format == 'decimal': 
                                 cell_style_obj = self.decimal_format
-                                if value is not '':
+                                if value != '':
                                     value = float(value)
                                     # Don't write zero values.
                                     if value == 0.0:
@@ -1408,7 +1415,7 @@ class ExcelExportWriter():
                                         cell_style_obj = None
                             elif cell_format == 'decimal_6': 
                                 cell_style_obj = self.decimal_6_format
-                                if value is not '':
+                                if value != '':
                                     value = float(value)
                                     # Don't write zero values.
                                     if value == 0.0:
