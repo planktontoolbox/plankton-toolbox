@@ -124,18 +124,16 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         self._taxon_cf_list.addItems(['', 'cf. (species)', 'cf. (genus)']) 
         self._taxon_cf_list.currentIndexChanged.connect(self._species_cf_flag_changed)
 
-
-
 #         self._trophic_type_list = QtWidgets.QComboBox(self)
 #         self._trophic_type_list.addItems(['NS', 'AU', 'HT', 'MX']) 
 # #         self._trophic_type_list.currentIndexChanged._trophic_type_changed)
 
-        
-        
         # Sizeclass.
+        self._speciessizeclass_info_label = QtWidgets.QLabel('')
         self._speciessizeclass_list = QtWidgets.QComboBox(self)
         self._speciessizeclass_list.addItems(['']) 
         self._speciessizeclass_list.currentIndexChanged.connect(self._size_class_changed)
+
         # Count number.
         self._countedunits_edit = KeyPressQSpinBox(self)
         self._countedunits_edit.setRange(0, 999999999)
@@ -321,8 +319,8 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         countgrid.addWidget(self._locktaxa_button, gridrow, 3, 1, 1)
         #
         # Layout. Column 1B. Species info. 
-        gridrow += 1
-        countgrid.addWidget(QtWidgets.QLabel(''), gridrow, 1, 1, 1) # Add space.
+        # gridrow += 1
+        # countgrid.addWidget(QtWidgets.QLabel(''), gridrow, 1, 1, 1) # Add space.
         gridrow += 1
         countgrid.addWidget(QtWidgets.QLabel(''), gridrow, 1, 1, 1) # Add space.
         gridrow += 1
@@ -340,20 +338,21 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         sp_spp_hbox.addWidget(app_framework.RightAlignedQLabel('Cf.:'))
         sp_spp_hbox.addWidget(self._taxon_cf_list)
 
-        
 #         sp_spp_hbox.addWidget(app_framework.RightAlignedQLabel('Trophic type:'))
 #         sp_spp_hbox.addWidget(self._trophic_type_list)
 
-        
         sp_spp_hbox.addStretch(10)        
         countgrid.addLayout(sp_spp_hbox, gridrow, 1, 1, 3)
         gridrow += 1
         countgrid.addWidget(app_framework.RightAlignedQLabel('Size class:'), gridrow, 0, 1, 1)
         countgrid.addWidget(self._speciessizeclass_list, gridrow, 1, 1, 1)
+        gridrow += 1
+        countgrid.addWidget(app_framework.RightAlignedQLabel('Size info:'), gridrow, 0, 1, 1)
+        countgrid.addWidget(self._speciessizeclass_info_label, gridrow, 1, 1, 6)
         #
         # Layout. Column 1C. Counted numbers. 
-        gridrow += 1
-        countgrid.addWidget(QtWidgets.QLabel(''), gridrow, 1, 1, 1) # Add space.
+        # gridrow += 1
+        # countgrid.addWidget(QtWidgets.QLabel(''), gridrow, 1, 1, 1) # Add space.
         gridrow += 1
         countgrid.addWidget(QtWidgets.QLabel(''), gridrow, 1, 1, 1) # Add space.
         gridrow += 1
@@ -462,7 +461,6 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         layout.addWidget(splitter)
         #
         return layout
-     
     
     
     
@@ -526,6 +524,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
     def _selected_species_changed(self, new):
         """ """
         try:
+            self._speciessizeclass_info_label.setText('')
             # Add content to size class list base on BVOL info.
             scientific_name = str(self._scientific_name_edit.text())
             # Get alternatives for size classes.
@@ -549,6 +548,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
     def _selected_species_edited(self, new):
         """ """
         try:
+            self._speciessizeclass_info_label.setText('')
             scientific_name = str(self._scientific_name_edit.text())
             #
             self._scientific_full_name_edit.setText('')
@@ -556,11 +556,9 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
             self._speciessizeclass_list.setCurrentIndex(0)
             self._taxon_sflag_list.setCurrentIndex(0)
             self._taxon_cf_list.setCurrentIndex(0)
-    
-            
+
     #         self._trophic_type_list.setCurrentIndex(0)
-    
-            
+
             self._scientific_full_name_edit.setText(scientific_name)
         #
         except Exception as e:
@@ -571,6 +569,15 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         """ """
         try:
             self._get_sample_row()
+
+            # Update Size class info field.
+            self._speciessizeclass_info_label.setText('')
+            scientific_name = str(self._scientific_name_edit.text())
+            size_class = str(self._speciessizeclass_list.currentText())
+            if size_class:
+                bvol_dict = plankton_core.Species().get_bvol_dict(scientific_name, size_class)
+                sizeinfo = self.generate_size_info_from_dict(bvol_dict, compact=False)
+                self._speciessizeclass_info_label.setText(sizeinfo)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -721,7 +728,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
                 self._summary_listview.addItems(summary_data)
                 
                 if active_row_index:
-                    self._summary_listview.setCurrentRow(active_row_index);
+                    self._summary_listview.setCurrentRow(active_row_index)
             finally:
                 self._summary_listview.blockSignals(False)
         #
@@ -1291,7 +1298,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
                                     cellsperunit = sizeclass_dict.get('bvol_cells_per_counting_unit', '')
     #                                 volume = sizeclass_dict.get('bvol_calculated_volume_um3', '')
     #                                 carbon = sizeclass_dict.get('bvol_calculated_carbon_pg', '')
-                                    sizeinfo = self.generate_size_info_from_dict(sizeclass_dict)
+                                    sizeinfo = self.generate_size_info_from_dict(sizeclass_dict, compact=True)
                                     #
                                     tablemodel.append_row([scientific_name, size, sflag, cellsperunit, trophictype, sizeinfo])
                             else:
@@ -1322,7 +1329,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
             toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
         
-    def generate_size_info_from_dict(self, sizeclass_dict):
+    def generate_size_info_from_dict(self, sizeclass_dict, compact=False):
         """ """
         try:
             sizeinfolist = []
@@ -1331,8 +1338,9 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
     #         outkeylist = ['Range', 'L1', 'L2', 'bvol_width_um', 
     #                       'H', 'D1', 'D2']
             keylist = ['bvol_size_range', 'bvol_calculated_volume_um3', 'bvol_geometric_shape', ]
-#             outkeylist = ['Size', 'Volume', 'Shape', ]
-            outkeylist = ['S', 'V', 'Shape', ]
+            outkeylist = ['Size', 'Volume', 'Shape', ]
+            if compact:
+                outkeylist = ['S', 'V', 'Shape', ]
             for index, key in enumerate(keylist):
                 if key in sizeclass_dict and sizeclass_dict[key]:
                     sizeinfolist.append(outkeylist[index]+ ': ' + sizeclass_dict[key])
