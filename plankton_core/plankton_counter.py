@@ -1208,6 +1208,9 @@ class ExcelExportWriter():
 
                 ['label', 'Volume/unit (um3)', 15, 11, 'text_r'],
                 ['sample_data', 'volume_um3_unit', 15, 11, 'decimal'], 
+
+                ['label', 'Counted trans/views', 15, 12, 'text_r'],
+                ['sample_data', 'count_area_number', 15, 12, 'integer'], 
             ]
 
     def create_overview_sheet(self):
