@@ -21,7 +21,7 @@ import app_activities
 
 class PlanktonCounterActivity(app_framework.ActivityBase):
     """ """
-    planktonCounterListChanged = QtCore.pyqtSignal()
+    # planktonCounterListChanged = QtCore.pyqtSignal()
     
     def __init__(self, name, parentwidget):
         """ """
@@ -41,7 +41,8 @@ class PlanktonCounterActivity(app_framework.ActivityBase):
         
     def _emit_change_notification(self):
         """ Emit signal to update GUI lists for available datasets and samples. """
-        self.planktonCounterListChanged.emit()
+        # self.planktonCounterListChanged.emit()
+        plankton_core.PlanktonCounterManager()._emit_change_notification()
 
     def _create_content(self):
         """ """
@@ -654,7 +655,7 @@ class BackupExportImportDialog(QtWidgets.QDialog):
             try:
                 backup_dir_file_name = os.path.join(backup_zip_dir_name, backup_zip_file_name)
                 with zipfile.ZipFile(backup_dir_file_name, 'w', zipfile.ZIP_DEFLATED) as zip_file:
-                    for root, dirs, files in os.walk(source_dir):
+                    for root, _dirs, files in os.walk(source_dir):
                         for file_name in files:   
                             #print('DEBUG: ' + file_name)    
                             if (not file_name.startswith('.')) and (not file_name.startswith('~')):                        
