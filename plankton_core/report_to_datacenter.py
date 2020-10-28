@@ -15,6 +15,7 @@ class CreateReportToDataCenter(object):
         # Header.
         self._header_counted_items = [
             'project_code', 
+            'project_name', 
             'orderer', 
             'sample_date', 
             'sample_time', 
@@ -33,6 +34,7 @@ class CreateReportToDataCenter(object):
             'species_flag_code', 
             'cf',
             'size_class', 
+            'bvol_size_range', 
             'param_abundance', 
             'param_biovolume', 
             'param_carbonconc', 
@@ -52,7 +54,8 @@ class CreateReportToDataCenter(object):
         ]
         
         self._translate_header = {
-            'project_code': 'Project_name', 
+            'project_code': 'Project_code', 
+            'project_name': 'Project_name', 
             'orderer': 'Orderer', 
             'sample_date': 'Sample_date', 
             'sample_time': 'Sample_time', 
@@ -71,9 +74,10 @@ class CreateReportToDataCenter(object):
             'species_flag_code': 'Species_flag', 
             'cf': 'Cf', 
             'size_class': 'Size_class', 
-            'param_abundance': 'Abundance', 
-            'param_biovolume': 'Biovolume', 
-            'param_carbonconc': 'Calculated_carbon', 
+            'bvol_size_range': 'Size_range', 
+            'param_abundance': 'Abundance_ind_l', 
+            'param_biovolume': 'Biovolume_mm3_l', 
+            'param_carbonconc': 'Calculated_carbon_ugC_l', 
             'param_abundance_class': 'Presence', 
             'param_counted': 'Counted_nr', 
             'coefficient': 'Coefficient', 
@@ -185,6 +189,7 @@ class CreateReportToDataCenter(object):
             taxon_class = plankton_core.Species().get_taxon_value(scientificname, u'taxon_class')
             taxon_rank = plankton_core.Species().get_taxon_value(scientificname, u'rank')
             counted_unit = plankton_core.Species().get_bvol_value(scientificname, sizeclass, u'bvol_unit')
+            bvol_size_range = plankton_core.Species().get_bvol_value(scientificname, sizeclass, u'bvol_size_range')
             harmful = plankton_core.Species().get_taxon_value(scientificname, u'harmful')
             if len(str(harmful).strip()) > 0:
                 harmful = 'Y'
@@ -194,12 +199,13 @@ class CreateReportToDataCenter(object):
             row_dict['rank'] = taxon_rank
             row_dict['potential_harmful'] = harmful
             row_dict['counted_unit'] = counted_unit
+            row_dict['bvol_size_range'] = bvol_size_range
     
     def cleanup_fields(self, row_dict):
         """ """
         cf = str(row_dict.get('cf', '')).strip()
-        if 'CF' in cf.upper():
-            row_dict['cf'] = 'Cf.'
+        # if 'CF' in cf.upper():
+        #     row_dict['cf'] = 'Cf.'
         
 #         # Concatenate CF into SFLAG.
 #         sflag = str(row_dict.get('species_flag_code', '')).strip()
@@ -227,5 +233,3 @@ class CreateReportToDataCenter(object):
         metfp = str(row_dict.get('preservative', ''))
         if '(' in metfp:
             row_dict['preservative'] = metfp.split('(')[0].strip()
-
-
