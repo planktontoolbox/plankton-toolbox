@@ -32,7 +32,7 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
             ['visit', 'sampling_laboratory', 'text', 'sampling_laboratory', ''], 
             ['visit', 'orderer', 'text', 'orderer', ''], 
             ['visit', 'project_code', 'text', 'project_code', ''], 
-            ['visit', 'project_code', 'text', 'project_code', ''], 
+            ['visit', 'project_name', 'text', 'project_name', ''], 
             ['visit', 'method_documentation', 'text', 'method_documentation', ''], 
             ['visit', 'method_reference_code', 'text', 'method_reference_code', ''], 
             ['visit', 'station_name', 'text', 'station_name', ''], 

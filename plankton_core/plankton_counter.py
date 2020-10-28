@@ -992,6 +992,7 @@ class ExcelExportWriter():
                 'sampling_laboratory',
                 'orderer',
                 'project_code',
+                'project_name',
                 'method_documentation',
                 'method_reference_code',
                 'station_name',
@@ -1126,8 +1127,11 @@ class ExcelExportWriter():
                 ['label', 'Water depth (m):', 10, 1, 'text'],
                 ['sample_info', 'water_depth_m', 10, 2, 'decimal'],
                 
-                ['label', 'Project:', 11, 1, 'text'],
+                ['label', 'Project code:', 11, 1, 'text'],
                 ['sample_info', 'project_code', 11, 2, 'text'],
+                
+                ['label', 'Project name:', 12, 1, 'text'],
+                ['sample_info', 'project_name', 12, 2, 'text'],
                 
                 # SAMPLE.
                 ['label', 'SAMPLE', 2, 5, 'text'],
