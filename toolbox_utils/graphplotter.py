@@ -253,7 +253,8 @@ class ChartBase(object):
         leg = subplot.legend(loc='best', fancybox=True, prop = font_properties)
         if leg:
             leg.get_frame().set_alpha(0.5)
-            leg.draggable(state = True)
+            # leg.draggable(state = True)
+            leg.set_draggable(True)
 
     def _finalize_plotting(self):
         """ """
