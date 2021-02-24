@@ -225,12 +225,21 @@ class CreateReportToDataCenterShark(object):
             else:
                 row_dict['species_flag_code'] = 'CF'
 
-        # Biovol and carbon: '' if 0.00.
+        # Biovol: '' if 0.00.
         biovol = str(row_dict.get('param_biovolume', '')).strip()
         try:
             biovol = float(biovol)
             if biovol == 0.0:
                 row_dict['param_biovolume'] = ''
+        except:
+            pass
+        
+        # Carbon: '' if 0.00.
+        carbonconc = str(row_dict.get('param_carbonconc', '')).strip()
+        try:
+            carbonconc = float(carbonconc)
+            if carbonconc == 0.0:
+                row_dict['param_carbonconc'] = ''
         except:
             pass
 

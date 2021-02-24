@@ -453,7 +453,8 @@ class PlanktonCounterSample():
                 else:
                     # Qualitative.
                     if summary_type in ['Counted per taxa', 'Counted per taxa/sizes']:
-                        if counted_dict[taxon] == 0:
+                        # if counted_dict[taxon] == 0:
+                        if counted_dict[taxon]["counted_units"] == 0:
                             if abundance_class == '1':
                                 counted_dict[taxon]["counted_units"] = 1
                                 counted_dict[taxon]["as_text"] = '1=Observed'
@@ -901,14 +902,15 @@ class SampleRow():
             self._sample_row_dict['abundance_units_l'] = str(self._round_value(abundance))
             #
             try:
-                ### value = abundance * self._bvol_volume / 1000000.0
                 value = abundance * self._bvol_volume / 1000000000.0
                 self._sample_row_dict['volume_mm3_l'] = str(self._round_value(value))
             except:
                 self._sample_row_dict['volume_mm3_l'] = '0.00'
             #
             try:
-                value = abundance * self._bvol_carbon / 1000.0
+                # CARBON calculation modified 2021-02-23.
+                # value = abundance * self._bvol_carbon / 1000.0
+                value = abundance * self._bvol_carbon / 1000000.0
                 self._sample_row_dict['carbon_ugc_l'] = str(self._round_value(value))
             except:
                 self._sample_row_dict['carbon_ugc_l'] = '0.00'
