@@ -5,7 +5,7 @@
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 # Version for "Plankton toolbox - desktop application".
-__version__ = '1.3.3'
+__version__ = '1.3.4'
 
 # Matplotlib for PyQt5. 
 # Backend must be defined before other matplotlib imports.
