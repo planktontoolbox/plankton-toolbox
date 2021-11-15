@@ -73,9 +73,9 @@ class HelpTexts(object):
         
         <h4>Under development</h4>
         <p>
-        The Plankton Toolbox  is under development and provided free with no guarantees regarding functionality. 
+        The Plankton Toolbox  is under development and provided for free with no guarantees regarding functionality. 
         Comments, bug reports and requests for new functionality are welcome and can be sent to 
-        <a href="mailto:info@nordicmicroalgae.org">info@nordicmicroalgae.org</a>
+        <a href="mailto:nordicmicroalgae@smhi.se">nordicmicroalgae@smhi.se</a>
         <p>
         More information about the project is available via the menu "Help/About".
         </p>
@@ -95,10 +95,11 @@ class HelpTexts(object):
         The software is under development and provided free with no 
         guarantees regarding functionality. Comments, bug reports and requests 
         for new functionality are welcome and can be sent to 
-        <a href="mailto:info@nordicmicroalgae.org">info@nordicmicroalgae.org</a>
+        <a href="mailto:nordicmicroalgae@smhi.se">nordicmicroalgae@smhi.se</a>
         </p>
         <p>
-        Plankton Toolbox can be run on Windows, MacOS and Ubuntu. No installation is needed.
+        Plankton Toolbox can be run on Windows and MacOS, no installation is needed.
+        For Linux users it is possible to install it from the GitHub repository.
         The latest version can be found at: 
         <a href="http://nordicmicroalgae.org/tools">http://nordicmicroalgae.org/tools</a>.
         </p>
@@ -106,13 +107,13 @@ class HelpTexts(object):
         Plankton Toolbox is developed by the oceanographic unit of the 
         <a href="http://smhi.se">Swedish Meterological and Hydrological Institute (SMHI)</a>.
         The software is a product of the 
-        <a href="http://www.svenskalifewatch.se">Swedish LifeWatch project</a> 
+        <a href="https://biodiversitydata.se/">SBDI - Swedish Biodiversity Data Infrastructure</a> 
         funded by the 
         <a href="http://www.vr.se">Swedish Science Council</a>.
         </p>
         <p>
         Developed in Python 3 and Qt/PyQt5. Released under the MIT license.
-        Source code and info for developers at: 
-        <a href="http://plankton-toolbox.org">http://plankton-toolbox.org</a>.
+        Source code and info for developers at 
+        <a href="https://github.com/planktontoolbox/plankton-toolbox">GitHub</a>.
         </p>
         """
