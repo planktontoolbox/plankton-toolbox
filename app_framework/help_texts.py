@@ -29,9 +29,9 @@ class HelpTexts(object):
 
         self._texts['start_activity'] = """
         <br/>
-        <h3>Welcome to the Plankton Toolbox</h3>
+        <h3>Welcome to Plankton Toolbox</h3>
         <p>
-        The Plankton Toolbox is a free tool for aquatic scientists, and others, 
+        Plankton Toolbox is a free tool for aquatic scientists, and others, 
         working with environmental monitoring related to phyto- and zooplankton. 
         </p>
         <p>
@@ -65,20 +65,36 @@ class HelpTexts(object):
         </p>
         <h4>Preloaded data</h4>
         <p>
-        To run the Plankton Toolbox there should be a folder named <b>plankton_toolbox_data</b> in the 
-        same folder as the executable file. It contains species lists, parsers (used for dataset imports)
+        To run Plankton Toolbox there should be a folder named <b>plankton_toolbox_data</b> in the 
+        same folder as the executable file. The folder contains species lists, parsers (used for dataset imports)
         and code-lists for screening. These files can be modified by the user and new files can be added 
         if the default set of files can't be used.
         </p>
         
         <h4>Under development</h4>
         <p>
-        The Plankton Toolbox  is under development and provided for free with no guarantees regarding functionality. 
+        Plankton Toolbox  is under development and provided for free with no guarantees regarding functionality. 
         Comments, bug reports and requests for new functionality are welcome and can be sent to 
         <a href="mailto:nordicmicroalgae@smhi.se">nordicmicroalgae@smhi.se</a>
+        </p>
         <p>
         More information about the project is available via the menu "Help/About".
         </p>
+
+        <h4>Acknowledgment</h4>
+        <p>
+        The development of Plankton Toolbox is funded by the 
+        <a href="http://smhi.se">Swedish Meteorological and Hydrological Institute (SMHI)</a> 
+        and the 
+        <a href="http://www.vr.se"> Swedish Research Council</a> 
+        through Grant No 2019-00242. 
+        The software is part of the 
+        <a href="https://biodiversitydata.se/">the Swedish Biodiversity Data Infrastructure (SBDI)</a> 
+        and was former part of the Swedish Lifewatch project. 
+        We further want to acknowledge the effort of the phytoplankton specialists who maintained the species lists 
+        and also tested and suggested improvements of the software.
+        </p>
+
         """
         
         # About.
@@ -88,31 +104,31 @@ class HelpTexts(object):
         <b>Plankton Toolbox</b> - ###version###
         </p>
         <p>
-        The Plankton Toolbox is a free tool for aquatic scientists, and others, 
+        Plankton Toolbox is a free tool for aquatic scientists, and others, 
         working with environmental monitoring related to phyto- and zooplankton.
         </p>
         <p>
-        The software is under development and provided free with no 
+        The software is under development and provided for free with no 
         guarantees regarding functionality. Comments, bug reports and requests 
         for new functionality are welcome and can be sent to 
         <a href="mailto:nordicmicroalgae@smhi.se">nordicmicroalgae@smhi.se</a>
         </p>
         <p>
-        Plankton Toolbox can be run on Windows and MacOS, no installation is needed.
+        Plankton Toolbox can run on Windows and MacOS, no installation is needed.
         For Linux users it is possible to install it from the GitHub repository.
         The latest version can be found at: 
         <a href="http://nordicmicroalgae.org/tools">http://nordicmicroalgae.org/tools</a>.
         </p>
         <p>
-        Plankton Toolbox is developed by the oceanographic unit of the 
-        <a href="http://smhi.se">Swedish Meterological and Hydrological Institute (SMHI)</a>.
-        The software is a product of the 
-        <a href="https://biodiversitydata.se/">SBDI - Swedish Biodiversity Data Infrastructure</a> 
-        funded by the 
-        <a href="http://www.vr.se">Swedish Science Council</a>.
+        Plankton Toolbox is developed by the oceanographic unit of the
+        <a href="http://smhi.se">Swedish Meteorological and Hydrological Institute (SMHI)</a>.
+        The software is a product within 
+        <a href="https://biodiversitydata.se/">the Swedish Biodiversity Data Infrastructure (SBDI)</a> 
+        funded by SMHI and the 
+        <a href="http://www.vr.se"> Swedish Research Council</a> through Grant No 2019-00242.
         </p>
         <p>
-        Developed in Python 3 and Qt/PyQt5. Released under the MIT license.
+        The software is developed in Python and Qt/PyQt5. Released under the MIT license.
         Source code and info for developers at 
         <a href="https://github.com/planktontoolbox/plankton-toolbox">GitHub</a>.
         </p>
