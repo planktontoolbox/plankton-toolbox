@@ -63,13 +63,6 @@ class HelpTexts(object):
         A User Guide is available at: 
         <a href="http://nordicmicroalgae.org/tools">http://nordicmicroalgae.org/tools</a>.
         </p>
-        <h4>Preloaded data</h4>
-        <p>
-        To run Plankton Toolbox there should be a folder named <b>plankton_toolbox_data</b> in the 
-        same folder as the executable file. The folder contains species lists, parsers (used for dataset imports)
-        and code-lists for screening. These files can be modified by the user and new files can be added 
-        if the default set of files can't be used.
-        </p>
         
         <h4>Under development</h4>
         <p>
