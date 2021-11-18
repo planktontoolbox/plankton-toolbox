@@ -8,3 +8,5 @@ xlsxwriter
 pylint
 black
 
+# To build executables.
+pyinstaller
