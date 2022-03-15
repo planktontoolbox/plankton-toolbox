@@ -57,6 +57,7 @@ class CreateReportToDataCenterShark(object):
             'size_class', # 'SIZCL',
             'size_class_ref_list', # 'SIZRF',
             'param_biovolume', # 'BIOVOL', # Parameter.
+            'param_carbonconc', 
             'quality_flag', # 'QFLAG',
             'analysed_by', # 'TAXNM',
             'counted_volume_ml', # 'SDVOL', # sedimentation_volume_ml
@@ -114,6 +115,7 @@ class CreateReportToDataCenterShark(object):
             'size_class': 'SIZCL',
             'size_class_ref_list': 'SIZRF',
             'param_biovolume': 'BIOVOL', # Parameter.
+            'param_carbonconc': 'C_CONC', 
             'quality_flag': 'QFLAG',
             'analysed_by': 'TAXNM',
             'counted_volume_ml': 'SDVOL', # sedimentation_volume_ml
