@@ -1,4 +1,3 @@
-
 from .tool_manager import ToolManager
 
 from .log_tool import LogTool

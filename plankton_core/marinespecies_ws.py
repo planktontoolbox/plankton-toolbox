@@ -1,35 +1,34 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
 # Project: http://plankton-toolbox.org
-# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 
-# TODO: Activate this code later. 
-
+# TODO: Activate this code later.
 
 
 # from SOAPpy import WSDL
-# 
+#
 # class WormsWebservice(object):
 #     """ SOAP calls to the web service at WoRMS, World Register of Marine Species.
-#         More info at: http://www.marinespecies.org/aphia.php?p=webservice. 
+#         More info at: http://www.marinespecies.org/aphia.php?p=webservice.
 #     """
 #     def __init__(self):
 #         """ """
 #         self._wsdl_object = WSDL.Proxy('http://www.marinespecies.org/aphia.php?p=soap&wsdl=1')
-#         
+#
 #     def get_aphia_id(self, scientific_name,
 #                            marine_only = 'false'):
 #         """ Get the (first) exact matching AphiaID for a given name.
 #             Parameters:
 #                 marine_only: limit to marine taxa. Default=true.
 #         """
-#         aphia_id = self._wsdl_object.getAphiaID(scientific_name, 
+#         aphia_id = self._wsdl_object.getAphiaID(scientific_name,
 #                                                 marine_only)
 #         return aphia_id # Integer or None.
-# 
-#     def get_aphia_records(self, scientific_name, 
+#
+#     def get_aphia_records(self, scientific_name,
 #                                 like = 'false', # Exact match by default.
 #                                 fuzzy = 'false', # Exact match by default.
 #                                 marine_only = 'false', # Brackish species wanted.
@@ -41,7 +40,7 @@
 #                 marine_only: limit to marine taxa. Default=true.
 #                 offset: starting recordnumber, when retrieving next chunck of (50) records. Default=1.
 #         """
-#         worms_records = self._wsdl_object.getAphiaRecords(scientific_name, 
+#         worms_records = self._wsdl_object.getAphiaRecords(scientific_name,
 #                                               like, fuzzy, marine_only, offset)
 #         # Convert from SOAPs structType to Python.
 #         records = []
@@ -51,12 +50,12 @@
 #                 records.append(record)
 #         #
 #         return records
-#         
+#
 #     def get_aphia_name_by_id(self, aphia_id):
 #         """ Get the correct name for a given AphiaID. """
 #         scientific_name = self._wsdl_object.getAphiaNameByID(aphia_id)
 #         return str(scientific_name) # String
-# 
+#
 #     def get_aphia_record_by_id(self, aphia_id):
 #         """ Get the complete Aphia Record for a given AphiaID. """
 #         worms_record = self._wsdl_object.getAphiaRecordByID(aphia_id)
@@ -66,9 +65,9 @@
 #             record = dict((key, getattr(worms_record, key)) for key in worms_record._keys())
 #         #
 #         return record
-#         
+#
 #     def get_aphia_record_by_ext_id(self, ext_id, ext_type = 'tsn'):
-#         """ Get the Aphia Record for a given external identifier. 
+#         """ Get the Aphia Record for a given external identifier.
 #             type: Should have one of the following values:
 #                 'bold': Barcode of Life Database (BOLD) TaxID
 #                 'dyntaxa': Dyntaxa ID
@@ -86,13 +85,13 @@
 #             record = dict((key, getattr(worms_record, key)) for key in worms_record._keys())
 #         #
 #         return record
-# 
-#     def get_aphia_records_by_names(self, scientific_names, 
-#                                          like = 'true', 
+#
+#     def get_aphia_records_by_names(self, scientific_names,
+#                                          like = 'true',
 #                                          fuzzy = 'true',
 #                                          marine_only = 'false'):
 #         """ For each given scientific name, try to find one or more AphiaRecords.
-#             This allows you to match multiple names in one call. Limited to 500 names at once for performance reasons. 
+#             This allows you to match multiple names in one call. Limited to 500 names at once for performance reasons.
 #             Parameters:
 #                 like: add a '%'-sign after the ScientificName (SQL LIKE function). Default=false.
 #                 fuzzy: fuzzy matching. Default=true.
@@ -115,9 +114,9 @@
 #                 name_records.append(records)
 #         #
 #         return name_records
-#         
-#     def get_aphia_records_by_vernacular(self, vernacular, 
-#                                               like = 'true', 
+#
+#     def get_aphia_records_by_vernacular(self, vernacular,
+#                                               like = 'true',
 #                                               offset = 1):
 #         """ Get one or more Aphia Records (max. 50) for a given vernacular.
 #             Parameters:
@@ -133,7 +132,7 @@
 #                 records.append(record)
 #         #
 #         return records
-#         
+#
 #     def get_aphia_classification_by_id(self, aphia_id):
 #         """ Get the complete classification for one taxon. This also includes any sub or super ranks. """
 #         worms_classification = self._wsdl_object.getAphiaClassificationByID(aphia_id)
@@ -148,9 +147,9 @@
 #                         record[key] = getattr(child_record, key)
 #                 records.append(record)
 #                 child_record = child_record['child']
-#         #        
+#         #
 #         return records # Classification as list of records.
-# 
+#
 #     def get_sources_by_aphia_id(self, aphia_id):
 #         """ Get one or more sources/references including links, for one AphiaID. """
 #         worms_sources = self._wsdl_object.getSourcesByAphiaID(aphia_id)
@@ -162,7 +161,7 @@
 #                 records.append(record)
 #         #
 #         return records
-# 
+#
 #     def get_aphia_synonyms_by_id(self, aphia_id):
 #         """ Get all synonyms for a given AphiaID. """
 #         worms_records = self._wsdl_object.getAphiaSynonymsByID(aphia_id)
@@ -174,7 +173,7 @@
 #                 records.append(record)
 #         #
 #         return records
-# 
+#
 #     def get_aphia_vernaculars_by_id(self, aphia_id):
 #         """ Get all vernaculars for a given AphiaID. """
 #         vernaculars = self._wsdl_object.getAphiaVernacularsByID(aphia_id)
@@ -186,9 +185,9 @@
 #                 records.append(record)
 #         #
 #         return records
-# 
-#     def get_aphia_children_by_id(self, aphia_id, 
-#                                        offset = 1, 
+#
+#     def get_aphia_children_by_id(self, aphia_id,
+#                                        offset = 1,
 #                                        marine_only = 'false'):
 #         """ Get the direct children (max. 50) for a given AphiaID.
 #             Parameters:
@@ -204,7 +203,7 @@
 #                 records.append(record)
 #         #
 #         return records
-#        
+#
 #     def get_value(self, worms_dict, key):
 #         """ Clean values by removing unwanted characters. """
 #         try:
@@ -213,39 +212,39 @@
 #         except:
 #             print('Error when reading WORMS value for: ' + key + '.')
 #         return ''
-# 
-# 
-# 
+#
+#
+#
 # # ===== TEST =====
 # if __name__ == "__main__":
 #     """ Used for testing. """
-#     
+#
 #     # === Test WormsWebservice. ===
 #     print('\n=== Test WormsWebservice ===')
-#     
+#
 #     worms_ws = WormsWebservice()
-#     
+#
 #     worms_result = worms_ws.get_aphia_id('Nitzschia frustulum')
 #     print('\nget_aphia_id: ' + str(worms_result))
-#     
+#
 #     worms_result = worms_ws.get_aphia_records('Ctenophora')
 #     print('\nget_aphia_records: ' + str(worms_result))
 #     for record in worms_result:
 #         print('---')
 #         for key in record.keys():
 #             print(key + ':' + str(record[key]))
-#     
+#
 #     worms_result = worms_ws.get_aphia_name_by_id(145422)
 #     print('\nget_aphia_name_by_id: ' + worms_result)
-#     
+#
 #     worms_result = worms_ws.get_aphia_record_by_id(145422)
 #     print('\nget_aphia_record_by_id: ' + str(worms_result))
 #     for key in worms_result.keys():
 #         print(key + ':' + str(worms_result[key]))
-#      
+#
 #     worms_result = worms_ws.get_aphia_record_by_ext_id('85257', ext_type = 'tsn')
 #     print('\nget_aphia_record_by_tsn: ' + str(worms_result))
-#     
+#
 #     worms_result = worms_ws.get_aphia_records_by_names(['Nitzschia frustulum'])
 #     print('\nget_aphia_records_by_names: ' + str(worms_result))
 #     for name_record in worms_result:
@@ -253,42 +252,41 @@
 #             print('---')
 #             for key in record.keys():
 #                 print(key + ':' + str(record[key]))
-#   
+#
 #     worms_result = worms_ws.get_aphia_classification_by_id(145422)
 #     print('\nget_aphia_classification_by_id: ' + str(worms_result))
 #     for record in worms_result:
 #             print(str(record))
-#      
+#
 #     worms_result = worms_ws.get_sources_by_aphia_id(145422)
 #     print('\nget_sources_by_aphia_id: ' + str(worms_result))
 #     for record in worms_result:
 #             print(str(record))
-#    
+#
 #     worms_result = worms_ws.get_aphia_synonyms_by_id(145422)
 #     print('\nget_aphia_synonyms_by_id: ' + str(worms_result))
 #     for record in worms_result:
 #         print('---')
 #         for key in record.keys():
 #             print(key + ':' + str(record[key]))
-#     
+#
 #     worms_result = worms_ws.get_aphia_children_by_id(144101)
 #     print('\nget_aphia_children_by_id: ' + str(worms_result))
 #     for record in worms_result:
 #         print('---')
 #         for key in record.keys():
 #             print(key + ':' + str(record[key]))
-#            
-#     worms_result = worms_ws.get_aphia_records_by_vernacular('copepods') 
+#
+#     worms_result = worms_ws.get_aphia_records_by_vernacular('copepods')
 #     print('\nget_aphia_records_by_vernacular: ' + str(worms_result))
 #     for record in worms_result:
 #         print('---')
 #         for key in record.keys():
 #             print(key + ':' + str(record[key]))
-#     
+#
 #     worms_result = worms_ws.get_aphia_vernaculars_by_id(1080)
 #     print('\nget_aphia_vernaculars_by_id: ' + str(worms_result))
 #     for record in worms_result:
 #         print('---')
 #         for key in record.keys():
 #             print(key + ':' + str(record[key]))
-

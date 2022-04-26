@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
 # Project: http://plankton-toolbox.org
-# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
+
 
 def singleton(cls):
     """
@@ -10,11 +11,13 @@ def singleton(cls):
     Usage example:
         @singleton
         class MyClass:
-           ...               
+           ...
     """
     instances = {}
+
     def getinstance():
         if cls not in instances:
             instances[cls] = cls()
         return instances[cls]
+
     return getinstance

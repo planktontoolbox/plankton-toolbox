@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
 # Project: http://plankton-toolbox.org
-# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 # from PyQt6 import QtWidgets
@@ -9,23 +9,23 @@
 # import plankton_toolbox.toolbox.utils_qt as utils_qt
 # import plankton_toolbox.tools.tool_base as tool_base
 # import plankton_toolbox.toolbox.toolbox_resources as toolbox_resources
-# 
+#
 # class DyntaxaBrowserTool(tool_base.ToolBase):
 #     """
 #     """
-#     
+#
 #     def __init__(self, name, parentwidget):
 #         """ """
 #         # Create model.
 #         self._dyntaxa_object = toolbox_resources.ToolboxResources().get_resource_dyntaxa()
-#         # Initialize parent. Should be called after other 
+#         # Initialize parent. Should be called after other
 #         # initialization since the base class calls _create_content().
 #         super(DyntaxaBrowserTool, self).__init__(name, parentwidget)
 #         #
 #         # Where is the tool allowed to dock in the main window.
 #         self.setAllowedAreas(QtCore.Qt.DockWidgetArea.RightDockWidgetArea)
 #         self.setBaseSize(600,600)
-#         
+#
 #     def _create_content(self):
 #         """ """
 #         content = self._create_scrollable_content()
@@ -34,15 +34,15 @@
 #         contentLayout.addLayout(self._content_taxon_list())
 #         contentLayout.addLayout(self._content_dyntaxa_item())
 #         contentLayout.addLayout(self._content_dyntaxa_control())
-#         # Used when toolbox resource has changed.        
+#         # Used when toolbox resource has changed.
 #         toolbox_resources.ToolboxResources().dyntaxaResourceLoaded.connect(self._dyntaxa_refresh)
-# 
+#
 #     def _content_taxon_list(self):
 #         """ """
 #         layout = QtWidgets.QVBoxLayout()
 #         self._tableView = app_framework.ToolboxQTableView()
 #         layout.addWidget(self._tableView)
-#         # Data model.        
+#         # Data model.
 #         self._model = DyntaxaTableModel(self._dyntaxa_object)
 #         self._tableView.setTableModel(self._model)
 #         #
@@ -50,7 +50,7 @@
 #         self._tableView.getSelectionModel().selectionChanged.connect(self._show_item_info)
 #         #
 #         return layout
-#     
+#
 #     def _content_dyntaxa_item(self):
 #         """ """
 #         # Active widgets and connections.
@@ -88,33 +88,33 @@
 # #        layout.addRow('Calculated carbon:", self._carbon_label)
 #         #
 #         return layout
-# 
+#
 #     def _content_dyntaxa_control(self):
 #         """ """
 #         # Active widgets and connections.
 #         self._loadresource_button = QtWidgets.QPushButton('Load Dyntaxa resource')
-#         self._loadresource_button.clicked.connect(self._load_resource)                
+#         self._loadresource_button.clicked.connect(self._load_resource)
 #         # Layout widgets.
 #         layout = QtWidgets.QHBoxLayout()
 #         layout.addStretch(5)
 #         layout.addWidget(self._loadresource_button)
 #         #
 #         return layout
-# 
+#
 #     def _show_item_info(self, index):
 #         """ """
 # #        name_index = self._model.createIndex(index.row(), 0)
 # #        size_index = self._model.createIndex(index.row(), 1)
 # #        taxonName = self._model.data(name_index).toString()
-# #        size = self._model.data(size_index).toString() 
+# #        size = self._model.data(size_index).toString()
 # ###        taxonName = self._dyntaxa_object.getData(index.row(), 0)
 # ###        size = self._dyntaxa_object.getData(index.row(), 1)
 #         #
 #         taxon = self._dyntaxa_object.getSortedNameList()[index.row()]
 #         self._scientificname_label.setText(
-#             '<b>' + 
-#             '<i>' + taxon.get('Scientific name', '') + '</i>' + 
-#             '&nbsp;&nbsp;&nbsp;' + taxon.get('Scientific name author', '') + 
+#             '<b>' +
+#             '<i>' + taxon.get('Scientific name', '') + '</i>' +
+#             '&nbsp;&nbsp;&nbsp;' + taxon.get('Scientific name author', '') +
 #             '</b>')
 #         # Build classification hierarchy.
 #         hier = ''
@@ -128,7 +128,7 @@
 #             taxon = self._dyntaxa_object.getTaxonById(parentid)
 #             if taxon:
 #                 name = taxon.get('Scientific name', None)
-#             if len(hier) > 1000: # If infinite loops related to error in parent id. 
+#             if len(hier) > 1000: # If infinite loops related to error in parent id.
 #                 self._classification_label.setText('ERROR: Hierachy too long: ' + hier)
 #                 print('ERROR: Hierachy too long: ' + hier)
 #                 return
@@ -145,61 +145,61 @@
 # #        self._formula_label.setText(sizeclass.get('Formula', '-'))
 # #        self._volume_label.setText(str(sizeclass.get('Calculated volume, um3', '-')))
 # #        self._carbon_label.setText(str(sizeclass.get('Calculated Carbon pg/counting unit', '-')))
-# 
+#
 #     def _load_resource(self):
 #         """ """
 #         toolbox_resources.ToolboxResources().load_resource_dyntaxa()
-# 
+#
 #     def _dyntaxa_refresh(self):
 #         """ """
 #         self._tableView.resetModel()
 #         self._tableView.resizeColumnsToContents() # TODO: Check if time-consuming...
-#         
+#
 # ##############################################################
 # class DyntaxaTableModel(QtCore.QAbstractTableModel):
-#     """ 
+#     """
 #     """
 #     def __init__(self, dataset):
 #         self._dataset = dataset
 # #        self._nameandsizelist = self._dataset.getNameAndSizeList()
 #         # Initialize parent.
 #         super(DyntaxaTableModel, self).__init__()
-#         
+#
 #     def set_dataset(self, dataset):
 #         """ """
 #         self._dataset = dataset
-#         
+#
 #     def rowCount(self, parent=QtCore.QModelIndex()):
 #         """ """
 #         if self._dataset:
 #             return len(self._dataset.getSortedNameList())
 #         else:
 #             return 0
-# 
+#
 #     def columnCount(self, parent=QtCore.QModelIndex()):
 #         """ """
 #         return 6
-# 
+#
 #     def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
 #         """ Overridden abstract method.
 #             Columns: Dyntaxa id, Dyntaxa name. """
 #         if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
 #             if section == 0:
-#                 return QtCore.QVariant('Dyntaxa id')            
+#                 return QtCore.QVariant('Dyntaxa id')
 #             elif section == 1:
-#                 return QtCore.QVariant('Scientific name')            
+#                 return QtCore.QVariant('Scientific name')
 #             elif section == 2:
-#                 return QtCore.QVariant('Type')            
+#                 return QtCore.QVariant('Type')
 #             elif section == 3:
-#                 return QtCore.QVariant('Swedish')            
+#                 return QtCore.QVariant('Swedish')
 #             elif section == 4:
-#                 return QtCore.QVariant('ITIS')            
+#                 return QtCore.QVariant('ITIS')
 #             elif section == 5:
-#                 return QtCore.QVariant('ERMS')            
+#                 return QtCore.QVariant('ERMS')
 #         if orientation == QtCore.Qt.Vertical and role == QtCore.Qt.DisplayRole:
 #             return QtCore.QVariant(section + 1)
 #         return QtCore.QVariant()
-# 
+#
 #     def data(self, index=QtCore.QModelIndex(), role=QtCore.Qt.DisplayRole):
 #         """ Overridden abstract method. """
 #         if role == QtCore.Qt.DisplayRole:
@@ -229,4 +229,3 @@
 #                         if nameitem['Name type'] == 'ERMS-name':
 #                             return QtCore.QVariant(nameitem.get('Name', ''))
 #         return QtCore.QVariant()
-

@@ -1,28 +1,28 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
 # Project: http://plankton-toolbox.org
-# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 # from PyQt6 import QtWidgets
 # from PyQt6 import QtCore
-# 
+#
 # import app_framework
-# 
+#
 # class TaxonFactsTool(app_framework.ToolBase):
 #     """
 #     """
-#     
+#
 #     def __init__(self, name, parentwidget):
 #         """ """
-#         # Initialize parent. Should be called after other 
+#         # Initialize parent. Should be called after other
 #         # initialization since the base class calls _create_content().
 #         super(TaxonFactsTool, self).__init__(name, parentwidget)
 #         #
 #         # Where is the tool allowed to dock in the main window.
 #         self.setAllowedAreas(QtCore.Qt.DockWidgetArea.RightDockWidgetArea)
 #         self.setBaseSize(600,600)
-# 
+#
 #     def _create_content(self):
 #         """ """
 #         content = self._create_scrollable_content()
@@ -30,11 +30,11 @@
 #         content.setLayout(contentLayout)
 #         contentLayout.addLayout(self._content_facts())
 # #        contentLayout.addStretch(5)
-# 
+#
 #     def _content_facts(self):
 #         """ """
 #         layout = QtWidgets.QVBoxLayout()
-# 
+#
 #         label = QtWidgets.QLabel('<b><i>Dinophysis acuta</i> Ehrenberg 1839</b>')
 #         label.setAlignment(QtCore.Qt.AlignHCenter)
 #         text = QtWidgets.QTextBrowser()
@@ -46,7 +46,7 @@
 #     </tr>
 #     <tr>
 #         <th>Morphology</th>
-#     
+#
 #         <td><span id="data_morphology">The cells are widest below the middle</span></td>
 #     </tr>
 #     <tr>
@@ -55,8 +55,8 @@
 #     </tr>
 #     <tr>
 #         <th>Other remarks</th>
-#     
-#         <td><p id="data_other_remarks">Width here = dorso-ventral depth. Dimorphic cells have been observed (Hansen 1993a). This species has been associated with DSP outbreaks (Larsen &amp; Moestrup 1992) 
+#
+#         <td><p id="data_other_remarks">Width here = dorso-ventral depth. Dimorphic cells have been observed (Hansen 1993a). This species has been associated with DSP outbreaks (Larsen &amp; Moestrup 1992)
 #         Distribution: Worldwide
 #         </p></td>
 #     </tr>
@@ -64,7 +64,7 @@
 #         <th>Trophic type</th>
 #         <td>
 #             <span id="data_trophic_type">A/H</span>
-# 
+#
 #         </td>
 #     </tr>
 #     <tr>
@@ -73,7 +73,7 @@
 #             <span id="data_harmful">Test test</span>
 #         </td>
 #     </tr>
-# 
+#
 #     <tr>
 #         <th>Note on harmfulness</th>
 #         <td><p id="data_note_on_harmfulness"></p></td>
@@ -82,7 +82,7 @@
 #         <th>Substrate</th>
 #         <td><span id="data_substrate"></span></td>
 #     </tr>
-# 
+#
 #     <tr>
 #         <th>Life form</th>
 #         <td><span id="data_life_form">Solitary</span></td>
@@ -90,7 +90,7 @@
 #     <tr>
 #         <th>Width</th>
 #         <td><span id="data_width"></span></td>
-# 
+#
 #     </tr>
 #     <tr>
 #         <th>Length</th>
@@ -99,7 +99,7 @@
 #     <tr>
 #         <th>Size</th>
 #         <td><span id="data_size">Length 54-94 um, width 43-60 um</span></td>
-# 
+#
 #     </tr>
 #     <tr>
 #         <th>Resting spore</th>
@@ -114,16 +114,16 @@
 #         Larsen, J. &amp; Moestrup, Ö. 1992. Potentially toxic phytoplankton. 2. Genus <i>Dinophysis</i> (Dinophyceae). In: Lindley, J. A. (ed.) ICES Identification leaflets for plankton. International Council for the exploration of the sea, Copenhagen, p. 1-12.<br/><br/>
 #         Steidinger, K. A. &amp; Tangen, K. 1996. Dinoflagellates. In: Tomas, C. R. (ed.) Identifying marine diatoms and dinoflagellates. Academic Press, Inc., San Diego, p. 387-584.<br/><br/>
 #         </p></td>
-# 
+#
 #     </tr>
-# </tbody>        
+# </tbody>
 #         """)
-# 
+#
 #         layout.addWidget(label)
 #         layout.addWidget(text)
 #         #
 #         return layout
-#     
+#
 #     def _test(self):
 #         """ """
 #         self._write_to_log('Name: ' + str(self._nameedit.text()))
