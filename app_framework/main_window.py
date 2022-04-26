@@ -228,7 +228,7 @@ class MainWindow(QtWidgets.QMainWindow):
         dock.setWidget(widget)
         # Add scroll.
         mainscroll = QtWidgets.QScrollArea()
-        ### mainscroll.setFrameShape(QtWidgets.QFrame.NoFrame)
+        ### mainscroll.setFrameShape(QtWidgets.QFrame.Shape.NoFrame)
         mainscroll.setWidget(content)
         mainscroll.setWidgetResizable(True)
         mainlayout = QtWidgets.QVBoxLayout()
@@ -314,7 +314,7 @@ class MainWindow(QtWidgets.QMainWindow):
         the activities group box.
         """
         ###        self._activityheader = QtWidgets.QLabel('<b>Activity not selected...</b>", self)
-        ###        self._activityheader.setAlignment(QtCore.Qt.AlignHCenter)
+        ###        self._activityheader.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
         self._activitystack = QtWidgets.QStackedLayout()
         # Layout widgets.
         widget = QtWidgets.QWidget(self)

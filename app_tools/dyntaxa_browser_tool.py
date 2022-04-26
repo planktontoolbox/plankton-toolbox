@@ -180,10 +180,10 @@
 #         """ """
 #         return 6
 #
-#     def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
+#     def headerData(self, section, orientation, role=QtCore.Qt.ItemDataRole.DisplayRole):
 #         """ Overridden abstract method.
 #             Columns: Dyntaxa id, Dyntaxa name. """
-#         if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
+#         if orientation == QtCore.Qt.Orientation.Horizontal and role == QtCore.Qt.ItemDataRole.DisplayRole:
 #             if section == 0:
 #                 return QtCore.QVariant('Dyntaxa id')
 #             elif section == 1:
@@ -196,13 +196,13 @@
 #                 return QtCore.QVariant('ITIS')
 #             elif section == 5:
 #                 return QtCore.QVariant('ERMS')
-#         if orientation == QtCore.Qt.Vertical and role == QtCore.Qt.DisplayRole:
+#         if orientation == QtCore.Qt.Vertical and role == QtCore.Qt.ItemDataRole.DisplayRole:
 #             return QtCore.QVariant(section + 1)
 #         return QtCore.QVariant()
 #
-#     def data(self, index=QtCore.QModelIndex(), role=QtCore.Qt.DisplayRole):
+#     def data(self, index=QtCore.QModelIndex(), role=QtCore.Qt.ItemDataRole.DisplayRole):
 #         """ Overridden abstract method. """
-#         if role == QtCore.Qt.DisplayRole:
+#         if role == QtCore.Qt.ItemDataRole.DisplayRole:
 #             if index.isValid():
 #                 if index.column() == 0:
 #                     sizeclass = self._dataset.getSortedNameList()[index.row()]

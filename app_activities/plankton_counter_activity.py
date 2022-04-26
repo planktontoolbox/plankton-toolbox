@@ -376,7 +376,7 @@ class NewSampleDialog(QtWidgets.QDialog):
             #
             if self._current_dataset:
                 currentindex = self._dataset_list.findText(
-                    self._current_dataset, QtCore.Qt.MatchFixedString
+                    self._current_dataset, QtCore.Qt.MatchFlag.MatchFixedString
                 )
                 if currentindex >= 0:
                     self._dataset_list.setCurrentIndex(currentindex)
@@ -974,7 +974,7 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
             #
             if self._current_dataset:
                 currentindex = self._dataset_list.findText(
-                    self._current_dataset, QtCore.Qt.MatchFixedString
+                    self._current_dataset, QtCore.Qt.MatchFlag.MatchFixedString
                 )
                 if currentindex >= 0:
                     self._dataset_list.setCurrentIndex(currentindex)

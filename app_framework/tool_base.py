@@ -53,7 +53,7 @@ class ToolBase(QtWidgets.QDockWidget):
         self.setWidget(widget)
         # Add scroll.
         mainscroll = QtWidgets.QScrollArea()
-        ### mainscroll.setFrameShape(QtWidgets.QFrame.NoFrame)
+        ### mainscroll.setFrameShape(QtWidgets.QFrame.Shape.NoFrame)
         mainscroll.setWidget(content)
         mainscroll.setWidgetResizable(True)
         mainlayout = QtWidgets.QVBoxLayout()

@@ -44,7 +44,7 @@ class RightAlignedQLabel(QtWidgets.QLabel):
 
     def __init__(self, parent=None):
         QtWidgets.QLabel.__init__(self, parent)
-        self.setAlignment(QtCore.Qt.AlignVCenter | QtCore.Qt.AlignRight)
+        self.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter | QtCore.Qt.AlignmentFlag.AlignRight)
 
 
 class CenterAlignedQLabel(QtWidgets.QLabel):
@@ -52,7 +52,7 @@ class CenterAlignedQLabel(QtWidgets.QLabel):
 
     def __init__(self, parent=None):
         QtWidgets.QLabel.__init__(self, parent)
-        self.setAlignment(QtCore.Qt.AlignVCenter | QtCore.Qt.AlignCenter)
+        self.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter | QtCore.Qt.AlignmentFlag.AlignCenter)
 
 
 class LeftAlignedQLabel(QtWidgets.QLabel):
@@ -60,7 +60,7 @@ class LeftAlignedQLabel(QtWidgets.QLabel):
 
     def __init__(self, parent=None):
         QtWidgets.QLabel.__init__(self, parent)
-        self.setAlignment(QtCore.Qt.AlignVCenter | QtCore.Qt.AlignLeft)
+        self.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter | QtCore.Qt.AlignmentFlag.AlignLeft)
 
 
 class ClickableQLabel(QtWidgets.QLabel):
@@ -522,7 +522,7 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
                 return QtCore.QVariant()
             # Also for editing.
             if (role == QtCore.Qt.ItemDataRole.DisplayRole) or (
-                role == QtCore.Qt.EditRole
+                role == QtCore.Qt.ItemDataRole.EditRole
             ):
                 if index.isValid():
                     return QtCore.QVariant(
@@ -550,9 +550,9 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
         """Overridden abstract method. For editing."""
         try:
             return (
-                QtCore.Qt.ItemIsEditable
-                | QtCore.Qt.ItemIsEnabled
-                | QtCore.Qt.ItemIsSelectable
+                QtCore.Qt.ItemFlag.ItemIsEditable
+                | QtCore.Qt.ItemFlag.ItemIsEnabled
+                | QtCore.Qt.ItemFlag.ItemIsSelectable
             )
         except Exception as e:
             print("DEBUG, Exception: ", str(e))

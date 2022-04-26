@@ -140,7 +140,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
             self
         )  # app_framework.ToolboxQTableView(self)
         self._selectmethod_table.setSelectionMode(
-            QtWidgets.QAbstractItemView.SingleSelection
+            QtWidgets.QAbstractItemView.SelectionMode.SingleSelection
         )
         self._selectmethod_table.setStyleSheet(
             "QListWidget::item:hover{background-color:#cccccc;}"
@@ -152,7 +152,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
             self
         )  # app_framework.ToolboxQTableView(self)
         self._selectmethodstep_table.setSelectionMode(
-            QtWidgets.QAbstractItemView.SingleSelection
+            QtWidgets.QAbstractItemView.SelectionMode.SingleSelection
         )
         self._selectmethodstep_table.setStyleSheet(
             "QListWidget::item:hover{background-color:#cccccc;}"
@@ -673,7 +673,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
                 #
                 methodtype = fields_dict.get("qualitative_quantitative", "")
                 currentindex = self._methodtype_list.findText(
-                    methodtype, QtCore.Qt.MatchFixedString
+                    methodtype, QtCore.Qt.MatchFlag.MatchFixedString
                 )
                 if currentindex >= 0:
                     self._methodtype_list.setCurrentIndex(currentindex)
@@ -686,7 +686,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
                 #
                 preservative = fields_dict.get("preservative", "")
                 currentindex = self._preservative_list.findText(
-                    preservative, QtCore.Qt.MatchFixedString
+                    preservative, QtCore.Qt.MatchFlag.MatchFixedString
                 )
                 if currentindex >= 0:
                     self._preservative_list.setCurrentIndex(currentindex)
@@ -807,7 +807,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
                 #
                 methodtype = fields_dict.get("qualitative_quantitative", "")
                 currentindex = self._methodtype_list.findText(
-                    methodtype, QtCore.Qt.MatchFixedString
+                    methodtype, QtCore.Qt.MatchFlag.MatchFixedString
                 )
                 if currentindex >= 0:
                     self._methodtype_list.setCurrentIndex(currentindex)
@@ -820,7 +820,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
                 #
                 preservative = fields_dict.get("preservative", "")
                 currentindex = self._preservative_list.findText(
-                    preservative, QtCore.Qt.MatchFixedString
+                    preservative, QtCore.Qt.MatchFlag.MatchFixedString
                 )
                 if currentindex >= 0:
                     self._preservative_list.setCurrentIndex(currentindex)
@@ -1062,7 +1062,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
                     self._update_default_method_list()
                     #
                     currentindex = self._selectdefaultmethod_list.findText(
-                        old_method, QtCore.Qt.MatchFixedString
+                        old_method, QtCore.Qt.MatchFlag.MatchFixedString
                     )
                     if currentindex >= 0:
                         self._selectdefaultmethod_list.setCurrentIndex(currentindex)
@@ -1101,7 +1101,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
                 self._update_default_method_list()
                 #
                 currentindex = self._selectdefaultmethod_list.findText(
-                    old_method, QtCore.Qt.MatchFixedString
+                    old_method, QtCore.Qt.MatchFlag.MatchFixedString
                 )
                 if currentindex >= 0:
                     self._selectdefaultmethod_list.setCurrentIndex(currentindex)
@@ -1139,7 +1139,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
                     self._update_default_method_list()
                     #
                     currentindex = self._selectdefaultmethod_list.findText(
-                        new_name, QtCore.Qt.MatchFixedString
+                        new_name, QtCore.Qt.MatchFlag.MatchFixedString
                     )
                     if currentindex >= 0:
                         self._selectdefaultmethod_list.setCurrentIndex(currentindex)
@@ -1577,7 +1577,7 @@ class SaveDefaultMethodAsDialog(QtWidgets.QDialog):
 #             self._dataset_list.addItem(datasetname)
 #         #
 #         if self._current_dataset:
-#             currentindex = self._dataset_list.findText(self._current_dataset, QtCore.Qt.MatchFixedString)
+#             currentindex = self._dataset_list.findText(self._current_dataset, QtCore.Qt.MatchFlag.MatchFixedString)
 #             if currentindex >= 0:
 #                 self._dataset_list.setCurrentIndex(currentindex)
 #

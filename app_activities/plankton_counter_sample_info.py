@@ -774,7 +774,7 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
             self._water_depth_m_edit.setText(metadata_dict.get("water_depth_m", ""))
             sampler_type_code = metadata_dict.get("sampler_type_code", "")
             currentindex = self._sampler_type_code_list.findText(
-                sampler_type_code, QtCore.Qt.MatchFixedString
+                sampler_type_code, QtCore.Qt.MatchFlag.MatchFixedString
             )
             if currentindex >= 0:
                 self._sampler_type_code_list.setCurrentIndex(currentindex)
@@ -786,7 +786,7 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
 
             net_type_code = metadata_dict.get("net_type_code", "")
             currentindex = self._net_type_code_list.findText(
-                net_type_code, QtCore.Qt.MatchFixedString
+                net_type_code, QtCore.Qt.MatchFlag.MatchFixedString
             )
             if currentindex >= 0:
                 self._net_type_code_list.setCurrentIndex(currentindex)

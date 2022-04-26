@@ -288,7 +288,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
 
         self._summary_listview = KeyPressQListWidget(self)
         self._summary_listview.setSelectionMode(
-            QtWidgets.QAbstractItemView.SingleSelection
+            QtWidgets.QAbstractItemView.SelectionMode.SingleSelection
         )
         self._summary_listview.setStyleSheet(
             "QListWidget::item:hover{background-color:#cccccc;}"
@@ -334,7 +334,10 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
             self._update_specieslistfontsize
         )
         # Large text.
-        bigboldfont = QtGui.QFont("SansSerif", 12, QtGui.QFont.Bold)
+        # bigboldfont = QtGui.QFont("SansSerif", 12, QtGui.QFont.Bold)
+        bigboldfont = QtGui.QFont("SansSerif", 12)
+        bigboldfont.setBold(True)
+
         bigfont = QtGui.QFont("SansSerif", 12)
         #
         self._selectmethodstep_list.setFont(bigfont)
@@ -531,7 +534,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         vboxsummary_widget = QtWidgets.QWidget()
         vboxsummary_widget.setLayout(vboxsummary)
         #
-        splitter = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
+        splitter = QtWidgets.QSplitter(QtCore.Qt.Orientation.Horizontal)
         splitter.addWidget(vboxcount_widget)
         splitter.addWidget(vboxsummary_widget)
         splitter.addWidget(vboxspecies_widget)
@@ -949,13 +952,13 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
                     self._scientific_name_edit.setText(scientific_name)
                     # Species sizeclass list.
                     currentindex = self._taxon_sflag_list.findText(
-                        species_flag, QtCore.Qt.MatchFixedString
+                        species_flag, QtCore.Qt.MatchFlag.MatchFixedString
                     )
                     if currentindex >= 0:
                         self._taxon_sflag_list.setCurrentIndex(currentindex)
                     # Species sizeclass list.
                     currentindex = self._speciessizeclass_list.findText(
-                        size_class, QtCore.Qt.MatchFixedString
+                        size_class, QtCore.Qt.MatchFlag.MatchFixedString
                     )
                     if currentindex >= 0:
                         self._speciessizeclass_list.setCurrentIndex(currentindex)
@@ -965,7 +968,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
                         # Add and search again.
                         self._speciessizeclass_list.addItem(size_class)
                         currentindex = self._speciessizeclass_list.findText(
-                            size_class, QtCore.Qt.MatchFixedString
+                            size_class, QtCore.Qt.MatchFlag.MatchFixedString
                         )
                         if currentindex >= 0:
                             self._speciessizeclass_list.setCurrentIndex(currentindex)
@@ -1001,7 +1004,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
                 #                 trophic_type = self._trophic_type_list.setEnabled(True)
                 #             if trophic_type in ['AU', 'HT', 'MX']:
                 #                 self._trophic_type_list.setEnabled(False)
-                #                 currentindex = self._trophic_type_list.findText(trophic_type, QtCore.Qt.MatchFixedString)
+                #                 currentindex = self._trophic_type_list.findText(trophic_type, QtCore.Qt.MatchFlag.MatchFixedString)
                 #                 if currentindex >= 0:
                 #                     self._trophic_type_list.setCurrentIndex(currentindex)
                 ##### ...move this.
@@ -1072,25 +1075,25 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
 
             # Species CF. list.
             currentindex = self._taxon_cf_list.findText(
-                cf_flag, QtCore.Qt.MatchFixedString
+                cf_flag, QtCore.Qt.MatchFlag.MatchFixedString
             )
             if currentindex >= 0:
                 self._taxon_cf_list.setCurrentIndex(currentindex)
 
             #         # Trophic type list.
-            #         currentindex = self._trophic_type_list.findText(cf_flag, QtCore.Qt.MatchFixedString)
+            #         currentindex = self._trophic_type_list.findText(cf_flag, QtCore.Qt.MatchFlag.MatchFixedString)
             #         if currentindex >= 0:
             #             self._trophic_type_list.setCurrentIndex(currentindex)
 
             # Species SFLAG list.
             currentindex = self._taxon_sflag_list.findText(
-                spp_flag, QtCore.Qt.MatchFixedString
+                spp_flag, QtCore.Qt.MatchFlag.MatchFixedString
             )
             if currentindex >= 0:
                 self._taxon_sflag_list.setCurrentIndex(currentindex)
             # Species sizeclass list.
             currentindex = self._speciessizeclass_list.findText(
-                size_class, QtCore.Qt.MatchFixedString
+                size_class, QtCore.Qt.MatchFlag.MatchFixedString
             )
             if currentindex >= 0:
                 self._speciessizeclass_list.setCurrentIndex(currentindex)
@@ -1100,7 +1103,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
                 # Add and search again.
                 self._speciessizeclass_list.addItem(size_class)
                 currentindex = self._speciessizeclass_list.findText(
-                    size_class, QtCore.Qt.MatchFixedString
+                    size_class, QtCore.Qt.MatchFlag.MatchFixedString
                 )
                 if currentindex >= 0:
                     self._speciessizeclass_list.setCurrentIndex(currentindex)
@@ -1708,7 +1711,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
             # Species list.
             if self._counting_species_list:
                 currentindex = self._selectspecieslist_list.findText(
-                    self._counting_species_list, QtCore.Qt.MatchFixedString
+                    self._counting_species_list, QtCore.Qt.MatchFlag.MatchFixedString
                 )
                 if currentindex >= 0:
                     self._selectspecieslist_list.setCurrentIndex(currentindex)
@@ -1748,7 +1751,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         try:
             if self._selectmethodstep_list and selected_method_step:
                 currentindex = self._selectmethodstep_list.findText(
-                    selected_method_step, QtCore.Qt.MatchFixedString
+                    selected_method_step, QtCore.Qt.MatchFlag.MatchFixedString
                 )
                 if currentindex >= 0:
                     self._selectmethodstep_list.setCurrentIndex(currentindex)

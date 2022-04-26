@@ -121,7 +121,7 @@ class PlanktonCounterDialog(QtWidgets.QDialog):
 
         # Add scroll capabilities.
         scrollarea = QtWidgets.QScrollArea()
-        scrollarea.setFrameShape(QtWidgets.QFrame.NoFrame)
+        scrollarea.setFrameShape(QtWidgets.QFrame.Shape.NoFrame)
         scrollarea.setWidget(self._main_tab_widget)
         scrollarea.setWidgetResizable(True)
 
@@ -148,7 +148,7 @@ class PlanktonCounterDialog(QtWidgets.QDialog):
         )
         # Add scroll capabilities.
         #         scrollarea = QtWidgets.QScrollArea()
-        #         scrollarea.setFrameShape(QtWidgets.QFrame.NoFrame)
+        #         scrollarea.setFrameShape(QtWidgets.QFrame.Shape.NoFrame)
         #         scrollarea.setWidget(self.metadata_widget)
         #         scrollarea.setWidgetResizable(True)
         #         return scrollarea
@@ -164,7 +164,7 @@ class PlanktonCounterDialog(QtWidgets.QDialog):
         )
         #         # Add scroll capabilities.
         #         scrollarea = QtWidgets.QScrollArea()
-        #         scrollarea.setFrameShape(QtWidgets.QFrame.NoFrame)
+        #         scrollarea.setFrameShape(QtWidgets.QFrame.Shape.NoFrame)
         #         scrollarea.setWidget(self.methods_widget)
         #         scrollarea.setWidgetResizable(True)
         #         return scrollarea

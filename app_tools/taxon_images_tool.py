@@ -40,7 +40,7 @@ class TaxonImagesTool(app_framework.ToolBase):
         label = QtWidgets.QLabel("<b><i>Incertae sedis</i></b>")
         label.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
         imagelabel = QtWidgets.QLabel()
-        imagelabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
+        imagelabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignmentFlag.AlignmentFlag.AlignHCenter)
         image = QtGui.QImage("../planktondata/cache/images/Incertae_sedis.jpg")
         imagelabel.setPixmap(QtGui.QPixmap.fromImage(image))
         layout.addWidget(label)

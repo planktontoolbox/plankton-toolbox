@@ -36,7 +36,7 @@
 #         layout = QtWidgets.QVBoxLayout()
 #
 #         label = QtWidgets.QLabel('<b><i>Dinophysis acuta</i> Ehrenberg 1839</b>')
-#         label.setAlignment(QtCore.Qt.AlignHCenter)
+#         label.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
 #         text = QtWidgets.QTextBrowser()
 #         text.setHtml("""
 # <tbody>
