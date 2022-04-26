@@ -1413,19 +1413,19 @@ class ExcelExportWriter:
                         cell_style_obj = None
                         if cell_format == "integer":
                             cell_style_obj = self.integer_format
-                            if value is not "":
+                            if value != "":
                                 value = int(float(value))
                         elif cell_format == "decimal":
                             cell_style_obj = self.decimal_format
-                            if value is not "":
+                            if value != "":
                                 value = float(value)
                         elif cell_format == "decimal_6":
                             cell_style_obj = self.decimal_6_format
-                            if value is not "":
+                            if value != "":
                                 value = float(value)
                         elif cell_format == "pos_dd":
                             cell_style_obj = self.latlong_dd_format
-                            if value is not "":
+                            if value != "":
                                 value = float(value)
                         #
                         self.summary_worksheet.write(
@@ -1495,7 +1495,7 @@ class ExcelExportWriter:
                         cell_style_obj = None
                         if cell_format == "integer":
                             cell_style_obj = self.integer_format
-                            if value is not "":
+                            if value != "":
                                 value = int(float(value))
                                 # Don't write zero values.
                                 if value == 0:
@@ -1503,7 +1503,7 @@ class ExcelExportWriter:
                                     cell_style_obj = None
                         elif cell_format == "decimal":
                             cell_style_obj = self.decimal_format
-                            if value is not "":
+                            if value != "":
                                 value = float(value)
                                 # Don't write zero values.
                                 if value == 0.0:
@@ -1570,7 +1570,7 @@ class ExcelExportWriter:
                             cell_style_obj = None
                             if cell_format == "integer":
                                 cell_style_obj = self.integer_format
-                                if value is not "":
+                                if value != "":
                                     value = int(float(value))
                                     # Don't write zero values.
                                     if value == 0:
