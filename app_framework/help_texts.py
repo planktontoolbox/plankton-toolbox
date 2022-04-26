@@ -121,7 +121,7 @@ class HelpTexts(object):
         <a href="http://www.vr.se"> Swedish Research Council</a> through Grant No 2019-00242.
         </p>
         <p>
-        The software is developed in Python and Qt/PyQt5. Released under the MIT license.
+        The software is developed in Python and Qt/PyQt6. Released under the MIT license.
         Source code and info for developers at 
         <a href="https://github.com/planktontoolbox/plankton-toolbox">GitHub</a>.
         </p>

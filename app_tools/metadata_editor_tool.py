@@ -4,8 +4,8 @@
 # Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
-# from PyQt5 import QtWidgets
-# from PyQt5 import QtCore
+# from PyQt6 import QtWidgets
+# from PyQt6 import QtCore
 # import plankton_toolbox.tools.tool_base as tool_base
 # 
 # class MetadataEditorTool(tool_base.ToolBase):
@@ -19,7 +19,7 @@
 #         super(MetadataEditorTool, self).__init__(name, parentwidget)
 #         #
 #         # Where is the tool allowed to dock in the main window.
-#         self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea)
+#         self.setAllowedAreas(QtCore.Qt.DockWidgetArea.RightDockWidgetArea)
 #         self.setBaseSize(600,600)
 # 
 #     def _create_content(self):

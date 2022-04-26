@@ -5,7 +5,7 @@
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import sys
-from PyQt5 import QtWidgets
+from PyQt6 import QtWidgets
 import app_framework
 import toolbox_utils
 

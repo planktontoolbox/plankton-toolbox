@@ -5,8 +5,8 @@
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import sys
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
+from PyQt6 import QtWidgets
+from PyQt6 import QtCore
 
 import app_framework
 import toolbox_utils
@@ -23,11 +23,11 @@ class TemplateTool(app_framework.ToolBase):
         super(TemplateTool, self).__init__(name, parentwidget)
         #
         # Where is the tool allowed to dock in the main window.
-        self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea | 
-                             QtCore.Qt.BottomDockWidgetArea)
+        self.setAllowedAreas(QtCore.Qt.DockWidgetArea.RightDockWidgetArea | 
+                             QtCore.Qt.DockWidgetArea.BottomDockWidgetArea)
         self.setBaseSize(600,600)        
         # Default position. Hide as default.
-        self._parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, self)
+        self._parent.addDockWidget(QtCore.Qt.DockWidgetArea.RightDockWidgetArea, self)
         self.hide()
 
     def _create_content(self):

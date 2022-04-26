@@ -6,8 +6,9 @@
 
 import time
 import codecs
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
+from PyQt6 import QtWidgets
+from PyQt6 import QtCore
+from PyQt6 import QtGui
 
 import plankton_core
 import app_framework
@@ -153,7 +154,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._helpmenu = self.menuBar().addMenu(self.tr('&Help'))
         self._helpmenu.addAction(self._aboutaction)
         # Add sub-menu in the tools menu to hide all tools.
-        self._hidealltools = QtWidgets.QAction(self.tr('Hide all'), self)
+        self._hidealltools = QtGui.QAction(self.tr('Hide all'), self)
         self._hidealltools.setStatusTip(self.tr('Makes all extra tools invisible.'))
         self._hidealltools.triggered.connect(self._hideAllTools)
         self.toolsmenu.addAction(self._hidealltools)
@@ -179,18 +180,18 @@ class MainWindow(QtWidgets.QMainWindow):
         The user should be able to choose one activity and a number of tools.
         """
         # Dock widgets can be tabbed with vertical tabs.
-        self.setDockOptions(QtWidgets.QMainWindow.AnimatedDocks | 
-                            QtWidgets.QMainWindow.AllowTabbedDocks | 
-                            QtWidgets.QMainWindow.VerticalTabs)
+        self.setDockOptions(QtWidgets.QMainWindow.DockOption.AnimatedDocks | 
+                            QtWidgets.QMainWindow.DockOption.AllowTabbedDocks | 
+                            QtWidgets.QMainWindow.DockOption.VerticalTabs)
         # Create left dock widget and dock to main window.
 #         dock = QtWidgets.QDockWidget(self.tr(' Tool selector '), self)
         dock = QtWidgets.QDockWidget(self.tr(' Activities: '), self)
         dock.setObjectName('Activities and tools selector')
-        dock.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea)
-        dock.setFeatures(QtWidgets.QDockWidget.NoDockWidgetFeatures)
+        dock.setAllowedAreas(QtCore.Qt.DockWidgetArea.LeftDockWidgetArea)
+        dock.setFeatures(QtWidgets.QDockWidget.DockWidgetFeature.NoDockWidgetFeatures)
         # dock.setFeatures(QtWidgets.QDockWidget.DockWidgetFloatable | 
         #                  QtWidgets.QDockWidget.DockWidgetMovable)
-        self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
+        self.addDockWidget(QtCore.Qt.DockWidgetArea.LeftDockWidgetArea, dock)
         # Widget to create space and layout for two groupboxes.
         content = QtWidgets.QWidget()
         widget = QtWidgets.QWidget()
@@ -304,12 +305,12 @@ class MainWindow(QtWidgets.QMainWindow):
        
     def _createActions(self):
         """ Common application related actions. """
-        self._quitaction = QtWidgets.QAction(self.tr('&Quit'), self)
+        self._quitaction = QtGui.QAction(self.tr('&Quit'), self)
         self._quitaction.setShortcut(self.tr('Ctrl+Q'))
         self._quitaction.setStatusTip(self.tr('Quit the application'))
         self._quitaction.triggered.connect(self.close)
         #
-        self._aboutaction = QtWidgets.QAction(self.tr('&About'), self)
+        self._aboutaction = QtGui.QAction(self.tr('&About'), self)
         self._aboutaction.setStatusTip(self.tr('Show the application\'s About box'))
         self._aboutaction.triggered.connect(self._about)
 

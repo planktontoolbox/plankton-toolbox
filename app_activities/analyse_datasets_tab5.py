@@ -5,8 +5,8 @@
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import sys
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
+from PyQt6 import QtWidgets
+from PyQt6 import QtCore
 
 import toolbox_utils
 import plankton_core
@@ -62,7 +62,7 @@ class AnalyseDatasetsTab5(QtWidgets.QWidget):
 #         introlabel.setText(help_texts.HelpTexts().getText('AnalyseDatasetsTab5_intro'))
         # - Select parameter:
         self._parameter_list = QtWidgets.QComboBox()        
-        self._parameter_list.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContents)
+        self._parameter_list.setSizeAdjustPolicy(QtWidgets.QComboBox.SizeAdjustPolicy.AdjustToContents)
         #
         # Predefined graphs.
         self._addplot_1_button = QtWidgets.QPushButton('Time series')

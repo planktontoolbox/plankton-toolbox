@@ -4,8 +4,8 @@
 # Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
+from PyQt6 import QtWidgets
+from PyQt6 import QtCore
 
 # class ToolboxSettingsTool(tool_base.ToolBase):
 #     """
@@ -18,7 +18,7 @@ from PyQt5 import QtCore
 #         super(ToolboxSettingsTool, self).__init__(name, parentwidget)
 #         #
 #         # Where is the tool allowed to dock in the main window.
-#         self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea)
+#         self.setAllowedAreas(QtCore.Qt.DockWidgetArea.RightDockWidgetArea)
 #         self.setBaseSize(600,600)
 #         
 #     def _create_content(self):
@@ -93,7 +93,7 @@ from PyQt5 import QtCore
 #     
 # #    def _toogleLoadResources(self, checkStatus):
 # #        """ """
-# #        if checkStatus == QtCore.Qt.Checked:
+# #        if checkStatus == QtCore.Qt.CheckState.Checked:
 # #            toolbox_settings.ToolboxSettings().set_value('Resources:Load at startup', True)
 # #        else:
 # #            toolbox_settings.ToolboxSettings().set_value('Resources:Load at startup', False)
@@ -107,9 +107,9 @@ from PyQt5 import QtCore
 #         #
 #         loadresources = toolbox_settings.ToolboxSettings().get_value('Resources:Load at startup')
 #         if loadresources:
-#             self._loadresources_checkbox.setCheckState(QtCore.Qt.Checked)
+#             self._loadresources_checkbox.setCheckState(QtCore.Qt.CheckState.Checked)
 #         else:
-#             self._loadresources_checkbox.setCheckState(QtCore.Qt.Unchecked)
+#             self._loadresources_checkbox.setCheckState(QtCore.Qt.CheckState.Unchecked)
 #             
 #     
 #     def _restore_default(self):
@@ -127,7 +127,7 @@ from PyQt5 import QtCore
 #         toolbox_settings.ToolboxSettings().set_value('Resources:Dyntaxa:Filepath', str(self._dyntaxafilepath_edit.text()))
 #         toolbox_settings.ToolboxSettings().set_value('Resources:PEG:Filepath', str(self._pegfilepath_edit.text()))
 #         toolbox_settings.ToolboxSettings().set_value('Resources:Harmful plankton:Filepath', str(self._iocfilepath_edit.text()))
-#         if self._loadresources_checkbox.checkState() == QtCore.Qt.Checked:
+#         if self._loadresources_checkbox.checkState() == QtCore.Qt.CheckState.Checked:
 #             toolbox_settings.ToolboxSettings().set_value('Resources:Load at startup', True)
 #         else:
 #             toolbox_settings.ToolboxSettings().set_value('Resources:Load at startup', False)

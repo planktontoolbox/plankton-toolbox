@@ -7,9 +7,9 @@
 import os
 import sys
 import time
-from PyQt5 import QtGui
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
+from PyQt6 import QtGui
+from PyQt6 import QtWidgets
+from PyQt6 import QtCore
 
 import plankton_core
 import toolbox_utils
@@ -228,7 +228,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         self._selectspecieslist_list.currentIndexChanged.connect(self._selected_species_list_changed)
         # 
         self._species_tableview = KeyPressToolboxQTableView(self, filter_column_index = 0)
-        self._species_tableview.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self._species_tableview.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectionBehavior.SelectRows)
         self._species_tableview.setStyleSheet("QTableView::item:hover{background-color:#cccccc;}")
         self._species_tableview.getSelectionModel().selectionChanged.connect(self._selected_species_in_table_changed)
         # Filter for specieslist.
@@ -945,7 +945,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         """ """
         try:
             dialog = SaveAsCountingSpeciesListDialog(self)
-            if dialog.exec_():
+            if dialog.exec():
                 specieslistname = dialog.get_new_name()
                 if specieslistname:
                     currentmethodstep = None
@@ -978,7 +978,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         """ """
         try:
             dialog = DeleteCountingSpeciesListDialog(self)
-            if dialog.exec_():
+            if dialog.exec():
                 self._update_select_specieslist_combo()
                 self._update_selected_specieslist(None)
         except Exception as e:
@@ -1539,7 +1539,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
             currentmethodstep = str(self._selectmethodstep_list.currentText())
             countareanumber = str(self._countareanumber_edit.text())
             dialog = LockTaxaListDialog(self, self._current_sample_object, currentmethodstep, countareanumber)
-            dialog.exec_()
+            dialog.exec()
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
             toolbox_utils.Logging().error('Exception: (' + debug_info + '): ' + str(e))
@@ -1881,7 +1881,7 @@ class DeleteCountingSpeciesListDialog(QtWidgets.QDialog):
             self._counting_species_model.clear()        
             for countingspecieslist in countingspecieslists:
                 item = QtGui.QStandardItem(countingspecieslist)
-                item.setCheckState(QtCore.Qt.Unchecked)
+                item.setCheckState(QtCore.Qt.CheckState.Unchecked)
                 item.setCheckable(True)
                 self._counting_species_model.appendRow(item)
         #
@@ -1894,7 +1894,7 @@ class DeleteCountingSpeciesListDialog(QtWidgets.QDialog):
         try:
             for rowindex in range(self._counting_species_model.rowCount()):
                 item = self._counting_species_model.item(rowindex, 0)
-                item.setCheckState(QtCore.Qt.Checked)
+                item.setCheckState(QtCore.Qt.CheckState.Checked)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -1905,7 +1905,7 @@ class DeleteCountingSpeciesListDialog(QtWidgets.QDialog):
         try:
             for rowindex in range(self._counting_species_model.rowCount()):
                 item = self._counting_species_model.item(rowindex, 0)
-                item.setCheckState(QtCore.Qt.Unchecked)
+                item.setCheckState(QtCore.Qt.CheckState.Unchecked)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -1916,7 +1916,7 @@ class DeleteCountingSpeciesListDialog(QtWidgets.QDialog):
         try:
             for rowindex in range(self._counting_species_model.rowCount()):
                 item = self._counting_species_model.item(rowindex, 0)
-                if item.checkState() == QtCore.Qt.Checked:
+                if item.checkState() == QtCore.Qt.CheckState.Checked:
                     selectedname = str(item.text())
                     plankton_core.PlanktonCounterMethods().delete_counting_species_list(selectedname)
             #            
@@ -1986,9 +1986,9 @@ class LockTaxaListDialog(QtWidgets.QDialog):
                         taxon_size += ' [' + size + ']' 
                     item = QtGui.QStandardItem(taxon_size)
                     if is_locked:
-                        item.setCheckState(QtCore.Qt.Checked)
+                        item.setCheckState(QtCore.Qt.CheckState.Checked)
                     else:
-                        item.setCheckState(QtCore.Qt.Unchecked)
+                        item.setCheckState(QtCore.Qt.CheckState.Unchecked)
                     item.setCheckable(True)
                     self._counting_species_model.appendRow(item)
         #
@@ -2001,7 +2001,7 @@ class LockTaxaListDialog(QtWidgets.QDialog):
         try:
             for rowindex in range(self._counting_species_model.rowCount()):
                 item = self._counting_species_model.item(rowindex, 0)
-                item.setCheckState(QtCore.Qt.Checked)
+                item.setCheckState(QtCore.Qt.CheckState.Checked)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -2012,7 +2012,7 @@ class LockTaxaListDialog(QtWidgets.QDialog):
         try:
             for rowindex in range(self._counting_species_model.rowCount()):
                 item = self._counting_species_model.item(rowindex, 0)
-                item.setCheckState(QtCore.Qt.Unchecked)
+                item.setCheckState(QtCore.Qt.CheckState.Unchecked)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -2032,7 +2032,7 @@ class LockTaxaListDialog(QtWidgets.QDialog):
                 if len(parts) > 1:
                     size_class = parts[1].strip().strip(']')
                 #
-                if item.checkState() == QtCore.Qt.Checked:
+                if item.checkState() == QtCore.Qt.CheckState.Checked:
                     # Only lock unlocked taxa.
                     self._current_sample_object.lock_taxa(scientific_full_name, size_class, 
                                                           locked_at_count_area=self._count_area)

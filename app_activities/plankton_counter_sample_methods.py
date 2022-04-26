@@ -6,9 +6,9 @@
 
 import os
 import sys
-from PyQt5 import QtGui
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
+from PyQt6 import QtGui
+from PyQt6 import QtWidgets
+from PyQt6 import QtCore
 
 import plankton_core
 import app_framework
@@ -788,7 +788,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
             #
             try:
                 dialog = AddMethodStepDialog(self, self._current_sample_method, current_method, current_method_step)
-                if dialog.exec_():
+                if dialog.exec():
                     if old_method:
                         path = plankton_core.PlanktonCounterMethods().get_methods_dir_path()
                         self._current_sample_method.save_method_config_to_file(path, old_method + '.txt')
@@ -817,7 +817,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
                 old_method = str(self._selectdefaultmethod_list.currentText())
             #
             dialog = DeleteMethodStepsDialog(self, self._current_sample_method)
-            if dialog.exec_():
+            if dialog.exec():
                 if old_method:
                     path = plankton_core.PlanktonCounterMethods().get_methods_dir_path()
                     self._current_sample_method.save_method_config_to_file(path, old_method + '.txt')
@@ -848,7 +848,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
                 old_name = str(self._selectdefaultmethod_list.currentText())
             #
             dialog = SaveDefaultMethodAsDialog(self, old_name)
-            if dialog.exec_():
+            if dialog.exec():
                 new_name = dialog.get_new_name()
                 if new_name:
                     path = plankton_core.PlanktonCounterMethods().get_methods_dir_path()
@@ -867,7 +867,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         """ """
         try:
             dialog = DeleteDefaultMethodDialog(self)
-            if dialog.exec_():
+            if dialog.exec():
                 self._update_default_method_list()
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -1044,7 +1044,7 @@ class DeleteMethodStepsDialog(QtWidgets.QDialog):
             self._methodsteps_model.clear()        
             for methodstep in methodstepslists:
                 item = QtGui.QStandardItem(methodstep)
-                item.setCheckState(QtCore.Qt.Unchecked)
+                item.setCheckState(QtCore.Qt.CheckState.Unchecked)
                 item.setCheckable(True)
                 self._methodsteps_model.appendRow(item)
         #
@@ -1057,7 +1057,7 @@ class DeleteMethodStepsDialog(QtWidgets.QDialog):
         try:
             for rowindex in range(self._methodsteps_model.rowCount()):
                 item = self._methodsteps_model.item(rowindex, 0)
-                item.setCheckState(QtCore.Qt.Checked)
+                item.setCheckState(QtCore.Qt.CheckState.Checked)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -1068,7 +1068,7 @@ class DeleteMethodStepsDialog(QtWidgets.QDialog):
         try:
             for rowindex in range(self._methodsteps_model.rowCount()):
                 item = self._methodsteps_model.item(rowindex, 0)
-                item.setCheckState(QtCore.Qt.Unchecked)
+                item.setCheckState(QtCore.Qt.CheckState.Unchecked)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -1079,7 +1079,7 @@ class DeleteMethodStepsDialog(QtWidgets.QDialog):
         try:
             for rowindex in range(self._methodsteps_model.rowCount()):
                 item = self._methodsteps_model.item(rowindex, 0)
-                if item.checkState() == QtCore.Qt.Checked:
+                if item.checkState() == QtCore.Qt.CheckState.Checked:
                     selectedname = str(item.text())
                     self._current_sample_method.delete_method_step(selectedname)
             #
@@ -1316,7 +1316,7 @@ class DeleteDefaultMethodDialog(QtWidgets.QDialog):
             self._default_methods_model.clear()        
             for defaultmethod in defaultmethods:
                 item = QtGui.QStandardItem(defaultmethod)
-                item.setCheckState(QtCore.Qt.Unchecked)
+                item.setCheckState(QtCore.Qt.CheckState.Unchecked)
                 item.setCheckable(True)
                 self._default_methods_model.appendRow(item)
         #
@@ -1329,7 +1329,7 @@ class DeleteDefaultMethodDialog(QtWidgets.QDialog):
         try:
             for rowindex in range(self._default_methods_model.rowCount()):
                 item = self._default_methods_model.item(rowindex, 0)
-                item.setCheckState(QtCore.Qt.Checked)
+                item.setCheckState(QtCore.Qt.CheckState.Checked)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -1340,7 +1340,7 @@ class DeleteDefaultMethodDialog(QtWidgets.QDialog):
         try:
             for rowindex in range(self._default_methods_model.rowCount()):
                 item = self._default_methods_model.item(rowindex, 0)
-                item.setCheckState(QtCore.Qt.Unchecked)
+                item.setCheckState(QtCore.Qt.CheckState.Unchecked)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -1351,7 +1351,7 @@ class DeleteDefaultMethodDialog(QtWidgets.QDialog):
         try:
             for rowindex in range(self._default_methods_model.rowCount()):
                 item = self._default_methods_model.item(rowindex, 0)
-                if item.checkState() == QtCore.Qt.Checked:
+                if item.checkState() == QtCore.Qt.CheckState.Checked:
                     selectedname = str(item.text())
                     plankton_core.PlanktonCounterMethods().delete_counting_method(selectedname)
             #            

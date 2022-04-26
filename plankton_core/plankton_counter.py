@@ -11,7 +11,7 @@ import math
 # import openpyxl
 import xlsxwriter
 import operator
-from PyQt5 import QtCore
+from PyQt6 import QtCore
 import toolbox_utils
 import app_framework
 import plankton_core

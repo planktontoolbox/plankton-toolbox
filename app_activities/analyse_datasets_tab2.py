@@ -5,8 +5,8 @@
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import sys
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
+from PyQt6 import QtWidgets
+from PyQt6 import QtCore
 
 import toolbox_utils
 import plankton_core
@@ -64,7 +64,7 @@ class AnalyseDatasetsTab2(QtWidgets.QWidget):
         #
         self._column_list = QtWidgets.QComboBox()
         self._column_list.setMinimumContentsLength(20)
-        self._column_list.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContents)
+        self._column_list.setSizeAdjustPolicy(QtWidgets.QComboBox.SizeAdjustPolicy.AdjustToContents)
         self._column_list.setEnabled(False)
         #
         self._column_list.currentIndexChanged.connect(self._update_column_content)                

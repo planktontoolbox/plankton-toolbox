@@ -8,8 +8,8 @@
 import sys
 import datetime
 import math
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
+from PyQt6 import QtWidgets
+from PyQt6 import QtCore
 
 import plankton_core
 import app_framework
@@ -515,7 +515,7 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
         """ """
         try:
             dialog = CopyFromTemplateDialog(self)
-            if dialog.exec_():
+            if dialog.exec():
                 dataset = dialog.get_dataset()
                 sample = dialog.get_sample()
                 if dataset and sample:
@@ -535,7 +535,7 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
         try:
             self.save_data()
             dialog = RenameSampleDialog(self, self._current_sample)
-            if dialog.exec_():
+            if dialog.exec():
                 new_sample_name = dialog.get_new_sample_name()
                 if new_sample_name:
                     self.save_data()

@@ -5,9 +5,9 @@
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import sys
-from PyQt5 import QtGui
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
+from PyQt6 import QtGui
+from PyQt6 import QtWidgets
+from PyQt6 import QtCore
 
 import toolbox_utils
 import plankton_core
@@ -35,8 +35,8 @@ class ScreeningActivity(app_framework.ActivityBase):
             for rowindex, dataset in enumerate(app_framework.ToolboxDatasets().get_datasets()):
                 item = QtGui.QStandardItem('Import-' + str(rowindex + 1) + 
                                            '.   Source: ' + dataset.get_metadata('file_name'))
-                item.setCheckState(QtCore.Qt.Checked)
-    #            item.setCheckState(QtCore.Qt.Unchecked)
+                item.setCheckState(QtCore.Qt.CheckState.Checked)
+    #            item.setCheckState(QtCore.Qt.CheckState.Unchecked)
                 item.setCheckable(True)
                 self._loaded_datasets_model.appendRow(item)
             #
@@ -107,7 +107,7 @@ class ScreeningActivity(app_framework.ActivityBase):
         try:
             for rowindex in range(self._loaded_datasets_model.rowCount()):
                 item = self._loaded_datasets_model.item(rowindex, 0)
-                item.setCheckState(QtCore.Qt.Checked)
+                item.setCheckState(QtCore.Qt.CheckState.Checked)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -118,7 +118,7 @@ class ScreeningActivity(app_framework.ActivityBase):
         try:
             for rowindex in range(self._loaded_datasets_model.rowCount()):
                 item = self._loaded_datasets_model.item(rowindex, 0)
-                item.setCheckState(QtCore.Qt.Unchecked)
+                item.setCheckState(QtCore.Qt.CheckState.Unchecked)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -181,7 +181,7 @@ class ScreeningActivity(app_framework.ActivityBase):
                 for rowindex, dataset in enumerate(datasets):
                     #
                     item = self._loaded_datasets_model.item(rowindex, 0)
-                    if item.checkState() == QtCore.Qt.Checked:        
+                    if item.checkState() == QtCore.Qt.CheckState.Checked:        
                         #
                         row = 'Dataset: ' + dataset.get_metadata('file_name')
                         self._structureresult_list.append(row)
@@ -216,7 +216,7 @@ class ScreeningActivity(app_framework.ActivityBase):
                 for rowindex, dataset in enumerate(datasets):
                     #
                     item = self._loaded_datasets_model.item(rowindex, 0)
-                    if item.checkState() == QtCore.Qt.Checked:        
+                    if item.checkState() == QtCore.Qt.CheckState.Checked:        
                         #
                         row = 'Dataset: ' + dataset.get_metadata('file_name')
                         self._structureresult_list.append(row)
@@ -250,7 +250,7 @@ class ScreeningActivity(app_framework.ActivityBase):
                 for rowindex, dataset in enumerate(datasets):
                     #
                     item = self._loaded_datasets_model.item(rowindex, 0)
-                    if item.checkState() == QtCore.Qt.Checked:        
+                    if item.checkState() == QtCore.Qt.CheckState.Checked:        
                         #
                         row = 'Dataset: ' + dataset.get_metadata('file_name')
                         self._structureresult_list.append(row)
@@ -311,7 +311,7 @@ class ScreeningActivity(app_framework.ActivityBase):
                 for rowindex, dataset in enumerate(datasets):
                     #
                     item = self._loaded_datasets_model.item(rowindex, 0)
-                    if item.checkState() == QtCore.Qt.Checked:        
+                    if item.checkState() == QtCore.Qt.CheckState.Checked:        
                         #
                         dataset_descr = dataset.get_metadata('file_name')
                         for visitnode in dataset.get_children():
@@ -531,7 +531,7 @@ class ScreeningActivity(app_framework.ActivityBase):
         #
         self._column_list = QtWidgets.QComboBox()
         self._column_list.setMinimumContentsLength(30)
-        self._column_list.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContents)
+        self._column_list.setSizeAdjustPolicy(QtWidgets.QComboBox.SizeAdjustPolicy.AdjustToContents)
         self._column_list.setEnabled(False)
         #
         self._column_list.currentIndexChanged.connect(self._update_column_content)                
@@ -570,7 +570,7 @@ class ScreeningActivity(app_framework.ActivityBase):
                 for rowindex, dataset in enumerate(datasets):
                     #
                     item = self._loaded_datasets_model.item(rowindex, 0)
-                    if item.checkState() == QtCore.Qt.Checked:        
+                    if item.checkState() == QtCore.Qt.CheckState.Checked:        
                         #
                         for column in dataset.get_export_table_columns():
                             columns_set.add(column['header']) 
@@ -601,7 +601,7 @@ class ScreeningActivity(app_framework.ActivityBase):
             for rowindex, dataset in enumerate(datasets):
                 #
                 item = self._loaded_datasets_model.item(rowindex, 0)
-                if item.checkState() == QtCore.Qt.Checked:        
+                if item.checkState() == QtCore.Qt.CheckState.Checked:        
                     #
                     for info_dict in dataset.get_export_table_columns():
                         if info_dict['header'] == selectedcolumn:
@@ -614,7 +614,7 @@ class ScreeningActivity(app_framework.ActivityBase):
             for rowindex, dataset in enumerate(datasets):
                 #
                 item = self._loaded_datasets_model.item(rowindex, 0)
-                if item.checkState() == QtCore.Qt.Checked:        
+                if item.checkState() == QtCore.Qt.CheckState.Checked:        
                     #
                     if nodelevel == 'dataset':
                         if key in dataset.get_data_dict().keys():
@@ -709,7 +709,7 @@ class ScreeningActivity(app_framework.ActivityBase):
                 for rowindex, dataset in enumerate(datasets):
                     #
                     item = self._loaded_datasets_model.item(rowindex, 0)
-                    if item.checkState() == QtCore.Qt.Checked:        
+                    if item.checkState() == QtCore.Qt.CheckState.Checked:        
                         #
                         for visitnode in dataset.get_children():
                             for samplenode in visitnode.get_children():
@@ -758,7 +758,7 @@ class ScreeningActivity(app_framework.ActivityBase):
                 for rowindex, dataset in enumerate(datasets):
                     #
                     item = self._loaded_datasets_model.item(rowindex, 0)
-                    if item.checkState() == QtCore.Qt.Checked:        
+                    if item.checkState() == QtCore.Qt.CheckState.Checked:        
                         #
                         for visitnode in dataset.get_children():
                             for samplenode in visitnode.get_children():
@@ -819,7 +819,7 @@ class ScreeningActivity(app_framework.ActivityBase):
                 for rowindex, dataset in enumerate(datasets):
                     #
                     item = self._loaded_datasets_model.item(rowindex, 0)
-                    if item.checkState() == QtCore.Qt.Checked:        
+                    if item.checkState() == QtCore.Qt.CheckState.Checked:        
                         #
                         for visitnode in dataset.get_children():
                             date = visitnode.get_data('sample_date')

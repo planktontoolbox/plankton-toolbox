@@ -4,7 +4,7 @@
 # Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
-from PyQt5 import QtWidgets
+from PyQt6 import QtWidgets
 import app_framework
 import app_core
 

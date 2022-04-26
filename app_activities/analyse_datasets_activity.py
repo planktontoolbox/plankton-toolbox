@@ -6,8 +6,8 @@
 
 import sys
 import os.path
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
+from PyQt6 import QtWidgets
+from PyQt6 import QtCore
 
 import toolbox_utils
 import plankton_core

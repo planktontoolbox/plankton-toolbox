@@ -5,8 +5,8 @@
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import sys
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
+from PyQt6 import QtWidgets
+from PyQt6 import QtCore
 # import plankton_toolbox.toolbox.utils_qt as utils_qt
 # import plankton_toolbox.tools.tool_base as tool_base
 # import json
@@ -29,7 +29,7 @@ class GraphPlotterTool(app_framework.ToolBase):
         # initialization since the base class calls _create_content().
         super(GraphPlotterTool, self).__init__(name, parentwidget)
         # Where is the tool allowed to dock in the main window.
-        self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea | QtCore.Qt.BottomDockWidgetArea)
+        self.setAllowedAreas(QtCore.Qt.DockWidgetArea.RightDockWidgetArea | QtCore.Qt.DockWidgetArea.BottomDockWidgetArea)
         self.setBaseSize(600,600)
         #
         

@@ -6,9 +6,9 @@
 
 import os
 import sys
-from PyQt5 import QtGui
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
+from PyQt6 import QtGui
+from PyQt6 import QtWidgets
+from PyQt6 import QtCore
 
 import toolbox_utils
 import plankton_core
@@ -39,8 +39,8 @@ class CreateReportsActivity(app_framework.ActivityBase):
             for rowindex, dataset in enumerate(app_framework.ToolboxDatasets().get_datasets()):
                 item = QtGui.QStandardItem('Import-' + str(rowindex + 1) + 
                                            '.   Source: ' + dataset.get_metadata('file_name'))
-                item.setCheckState(QtCore.Qt.Checked)
-    #            item.setCheckState(QtCore.Qt.Unchecked)
+                item.setCheckState(QtCore.Qt.CheckState.Checked)
+    #            item.setCheckState(QtCore.Qt.CheckState.Unchecked)
                 item.setCheckable(True)
                 self._loaded_datasets_model.appendRow(item)
         #
@@ -108,7 +108,7 @@ class CreateReportsActivity(app_framework.ActivityBase):
         try:
             for rowindex in range(self._loaded_datasets_model.rowCount()):
                 item = self._loaded_datasets_model.item(rowindex, 0)
-                item.setCheckState(QtCore.Qt.Checked)
+                item.setCheckState(QtCore.Qt.CheckState.Checked)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -119,7 +119,7 @@ class CreateReportsActivity(app_framework.ActivityBase):
         try:
             for rowindex in range(self._loaded_datasets_model.rowCount()):
                 item = self._loaded_datasets_model.item(rowindex, 0)
-                item.setCheckState(QtCore.Qt.Unchecked)
+                item.setCheckState(QtCore.Qt.CheckState.Unchecked)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -298,7 +298,7 @@ class CreateReportsActivity(app_framework.ActivityBase):
             datasets = []
             for rowindex, dataset in enumerate(app_framework.ToolboxDatasets().get_datasets()):
                 item = self._loaded_datasets_model.item(rowindex, 0)
-                if item.checkState() == QtCore.Qt.Checked:        
+                if item.checkState() == QtCore.Qt.CheckState.Checked:        
                     datasets.append(dataset)
             # Preview result.
             result_table = plankton_core.DatasetTable()

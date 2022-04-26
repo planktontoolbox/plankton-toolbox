@@ -8,9 +8,9 @@
 This module contains customized GUI-related classes.
 """
 
-from PyQt5 import QtGui
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
+from PyQt6 import QtGui
+from PyQt6 import QtWidgets
+from PyQt6 import QtCore
 
 import plankton_core
 
@@ -18,7 +18,7 @@ class RichTextQLabel(QtWidgets.QLabel):
     """ Customized QLabel. Used for informative texts. """
     def __init__(self, parent = None):  
         QtWidgets.QLabel.__init__(self, parent)  
-        self.setTextFormat(QtCore.Qt.RichText)
+        self.setTextFormat(QtCore.Qt.TextFormat.RichText)
         self.setOpenExternalLinks(True) 
         self.setWordWrap(True)
 
@@ -26,8 +26,8 @@ class HeaderQLabel(QtWidgets.QLabel):
     """ Customized QLabel. Used for informative texts. """
     def __init__(self, parent = None):  
         QtWidgets.QLabel.__init__(self, parent)  
-        self.setTextFormat(QtCore.Qt.RichText)
-        self.setAlignment(QtCore.Qt.AlignHCenter)
+        self.setTextFormat(QtCore.Qt.TextFormat.RichText)
+        self.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
         self.setStyleSheet(""" 
             * { color: white; background-color: black; }
             """)
@@ -165,7 +165,7 @@ class SelectableQListView(QtWidgets.QListView):
         self._tablemodel.clear()        
         for tableitem in data_list:
             standarditem = QtGui.QStandardItem(tableitem)
-            standarditem.setCheckState(QtCore.Qt.Checked)
+            standarditem.setCheckState(QtCore.Qt.CheckState.Checked)
             standarditem.setCheckable(default_check_state)
             self._tablemodel.appendRow(standarditem)
          
@@ -173,13 +173,13 @@ class SelectableQListView(QtWidgets.QListView):
         """ """
         for rowindex in range(self._tablemodel.rowCount()):
             item = self._tablemodel.item(rowindex, 0)
-            item.setCheckState(QtCore.Qt.Checked)
+            item.setCheckState(QtCore.Qt.CheckState.Checked)
             
     def uncheckAll(self):
         """ """
         for rowindex in range(self._tablemodel.rowCount()):
             item = self._tablemodel.item(rowindex, 0)
-            item.setCheckState(QtCore.Qt.Unchecked)
+            item.setCheckState(QtCore.Qt.CheckState.Unchecked)
 
     def getSelectedDataList(self):
         """ """
@@ -187,7 +187,7 @@ class SelectableQListView(QtWidgets.QListView):
         self._selected_data_list = []
         for rowindex in range(self._tablemodel.rowCount()):
             item = self._tablemodel.item(rowindex, 0)
-            if item.checkState() == QtCore.Qt.Checked:
+            if item.checkState() == QtCore.Qt.CheckState.Checked:
                 selecteddata.append(str(item.text()))
         #
         return selecteddata
@@ -198,7 +198,7 @@ class SelectableQListView(QtWidgets.QListView):
         self._selected_data_list = []
         for rowindex in range(self._tablemodel.rowCount()):
             item = self._tablemodel.item(rowindex, 0)
-            if item.checkState() != QtCore.Qt.Checked:
+            if item.checkState() != QtCore.Qt.CheckState.Checked:
                 selecteddata.append(str(item.text()))
         #
         return selecteddata
@@ -209,7 +209,7 @@ class SelectableQListView(QtWidgets.QListView):
         self._selected_data_list = []
         for rowindex in range(self._tablemodel.rowCount()):
             item = self._tablemodel.item(rowindex, 0)
-            if item.checkState() == QtCore.Qt.Checked:
+            if item.checkState() == QtCore.Qt.CheckState.Checked:
                 selectedindexes.append(rowindex)
         #
         return selectedindexes
@@ -220,7 +220,7 @@ class SelectableQListView(QtWidgets.QListView):
         self._selected_data_list = []
         for rowindex in range(self._tablemodel.rowCount()):
             item = self._tablemodel.item(rowindex, 0)
-            if item.checkState() != QtCore.Qt.Checked:
+            if item.checkState() != QtCore.Qt.CheckState.Checked:
                 selectedindexes.append(rowindex)
         #
         return selectedindexes
@@ -254,9 +254,9 @@ class ToolboxQTableView(QtWidgets.QTableView):
             self.resizeColumnsToContents()        
         # Default setup for tables.
         self.setAlternatingRowColors(True)
-        self.setHorizontalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
+        self.setHorizontalScrollMode(QtWidgets.QAbstractItemView.ScrollMode.ScrollPerPixel)
         #self.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
-        self.setSelectionMode(QtWidgets.QAbstractItemView.ContiguousSelection)
+        self.setSelectionMode(QtWidgets.QAbstractItemView.SelectionMode.ContiguousSelection)
 #         self.verticalHeader().setDefaultSectionSize(18)
            
     def clearModel(self):
@@ -330,21 +330,21 @@ class ToolboxTableModel(QtCore.QAbstractTableModel):
 # #         self._modeldata.clear();
 #         self.endResetModel(); 
 
-    def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
+    def headerData(self, section, orientation, role=QtCore.Qt.ItemDataRole.DisplayRole):
         """ Overridden abstract method. """
         if self._modeldata == None:
             return QtCore.QVariant()
-        if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
+        if orientation == QtCore.Qt.Orientation.Horizontal and role == QtCore.Qt.ItemDataRole.DisplayRole:
             return QtCore.QVariant(str(self._modeldata.get_header_item(section)))
-        if orientation == QtCore.Qt.Vertical and role == QtCore.Qt.DisplayRole:
+        if orientation == QtCore.Qt.Orientation.Vertical and role == QtCore.Qt.ItemDataRole.DisplayRole:
             return QtCore.QVariant(str(section + 1))
         return QtCore.QVariant()
 
-    def data(self, index=QtCore.QModelIndex(), role=QtCore.Qt.DisplayRole):
+    def data(self, index=QtCore.QModelIndex(), role=QtCore.Qt.ItemDataRole.DisplayRole):
         """ Overridden abstract method. """
         if self._modeldata == None:
             return QtCore.QVariant()
-        if role == QtCore.Qt.DisplayRole:
+        if role == QtCore.Qt.ItemDataRole.DisplayRole:
             if index.isValid():
                 return QtCore.QVariant(str(self._modeldata.get_data_item(index.row(), index.column())))
         return QtCore.QVariant()
@@ -361,9 +361,9 @@ class ToolboxEditableQTableView( QtWidgets.QTableView):
              
             # Default setup for tables.
             self.setAlternatingRowColors(True)
-            self.setHorizontalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
+            self.setHorizontalScrollMode(QtWidgets.QAbstractItemView.ScrollMode.ScrollPerPixel)
             #self.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
-            self.setSelectionMode(QtWidgets.QAbstractItemView.ContiguousSelection)
+            self.setSelectionMode(QtWidgets.QAbstractItemView.SelectionMode.ContiguousSelection)
             # Default model, data and selection        
             self._tablemodel = ToolboxEditableTableModel()
             self.setModel(self._tablemodel)
@@ -439,27 +439,27 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
         """ """
         self._modeldata = tablemodeldata
 
-    def headerData(self, section, orientation, role = QtCore.Qt.DisplayRole):
+    def headerData(self, section, orientation, role = QtCore.Qt.ItemDataRole.DisplayRole):
         """ Overridden abstract method. """
         try:
             if self._modeldata == None:
                 return QtCore.QVariant()
-            if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
+            if orientation == QtCore.Qt.Orientation.Horizontal and role == QtCore.Qt.ItemDataRole.DisplayRole:
                 return QtCore.QVariant(str(self._modeldata.get_header_item(section)))
-            if orientation == QtCore.Qt.Vertical and role == QtCore.Qt.DisplayRole:
+            if orientation == QtCore.Qt.Orientation.Vertical and role == QtCore.Qt.ItemDataRole.DisplayRole:
                 return QtCore.QVariant(str(section + 1))
             return QtCore.QVariant()
         except Exception as e:
             print('DEBUG, Exception: ', str(e))
             raise
 
-    def data(self, index=QtCore.QModelIndex(), role = QtCore.Qt.DisplayRole):
+    def data(self, index=QtCore.QModelIndex(), role = QtCore.Qt.ItemDataRole.DisplayRole):
         """ Overridden abstract method. """
         try:
             if self._modeldata == None:
                 return QtCore.QVariant()
             # Also for editing.
-            if (role == QtCore.Qt.DisplayRole) or (role == QtCore.Qt.EditRole):
+            if (role == QtCore.Qt.ItemDataRole.DisplayRole) or (role == QtCore.Qt.EditRole):
                 if index.isValid():
                     return QtCore.QVariant(str(self._modeldata.get_data_item(index.row(), index.column())))
             return QtCore.QVariant()
@@ -467,10 +467,10 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
             print('DEBUG, Exception: ', str(e))
             raise
 
-    def setData(self, index, value, role = QtCore.Qt.EditRole):
+    def setData(self, index, value, role = QtCore.Qt.ItemDataRole.EditRole):
         """ Overridden abstract method. For editing. """
         try:
-            if role == QtCore.Qt.EditRole:
+            if role == QtCore.Qt.ItemDataRole.EditRole:
 #                 self._modeldata.set_data_item(index.row(), index.column(), str(value.toString()))
                 self._modeldata.set_data_item(index.row(), index.column(), value)
                 self.dataChanged.emit(index, index)

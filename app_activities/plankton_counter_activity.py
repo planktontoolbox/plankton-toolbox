@@ -10,9 +10,9 @@ import sys
 # import ntpath
 import datetime
 import zipfile
-from PyQt5 import QtGui
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
+from PyQt6 import QtGui
+from PyQt6 import QtWidgets
+from PyQt6 import QtCore
 
 import plankton_core
 import toolbox_utils
@@ -63,7 +63,7 @@ class PlanktonCounterActivity(app_framework.ActivityBase):
         #
         self._counter_samples_listview = QtWidgets.QListView()
         self._counter_samples_listview.setModel(self._counter_samples_model)
-        self._counter_samples_listview.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self._counter_samples_listview.setEditTriggers(QtWidgets.QAbstractItemView.EditTrigger.NoEditTriggers)
         self._counter_samples_selection_model = self._counter_samples_listview.selectionModel()
         self._counter_samples_selection_model.selectionChanged.connect(self._selected_sample_changed)
         #
@@ -110,7 +110,7 @@ class PlanktonCounterActivity(app_framework.ActivityBase):
         """ """        
         try:        
             my_dialog = NewDatasetDialog(self)
-            if my_dialog.exec_():
+            if my_dialog.exec():
                 self._current_dataset = None
                 self._current_sample = None
                 self._update_counter_sample_list()
@@ -123,7 +123,7 @@ class PlanktonCounterActivity(app_framework.ActivityBase):
         """ """
         try:        
             dialog = NewSampleDialog(self, self._current_dataset)
-            if dialog.exec_():
+            if dialog.exec():
                 self._update_counter_sample_list()
         #
         except Exception as e:
@@ -134,7 +134,7 @@ class PlanktonCounterActivity(app_framework.ActivityBase):
         """ """
         try:        
             dialog = DeleteDialog(self)
-            if dialog.exec_():
+            if dialog.exec():
                 self._update_counter_sample_list()
         #
         except Exception as e:
@@ -145,7 +145,7 @@ class PlanktonCounterActivity(app_framework.ActivityBase):
         """ """
         try:
             my_dialog = BackupExportImportDialog(self)
-            if my_dialog.exec_():
+            if my_dialog.exec():
                 self._current_dataset = None
                 self._update_counter_sample_list()
         #
@@ -157,7 +157,7 @@ class PlanktonCounterActivity(app_framework.ActivityBase):
         """ """
         try:
             my_dialog = ExportImportSamplesDialog(self, self._current_dataset)
-            if my_dialog.exec_():
+            if my_dialog.exec():
                 self._current_dataset = None
                 self._update_counter_sample_list()
         #
@@ -190,13 +190,13 @@ class PlanktonCounterActivity(app_framework.ActivityBase):
             self._counter_samples_model.clear()
             for datasetname in sorted(plankton_core.PlanktonCounterManager().get_dataset_names()):
                 item = QtGui.QStandardItem('Dataset: ' + datasetname)
-    #             item.setCheckState(QtCore.Qt.Unchecked)
+    #             item.setCheckState(QtCore.Qt.CheckState.Unchecked)
     #             item.setCheckable(True)
                 self._counter_samples_model.appendRow(item)
                 for samplename in sorted(plankton_core.PlanktonCounterManager().get_sample_names(datasetname)):
                     item = QtGui.QStandardItem('- Sample: ' + samplename)
     #                 item = QtWidgets.QStandardItem(datasetname + ': ' + samplename)
-    #                 item.setCheckState(QtCore.Qt.Unchecked)
+    #                 item.setCheckState(QtCore.Qt.CheckState.Unchecked)
     #                 item.setCheckable(True)
                     self._counter_samples_model.appendRow(item)
         #
@@ -217,11 +217,11 @@ class PlanktonCounterActivity(app_framework.ActivityBase):
                 return       
             #
     #         dialog = app_activities.PlanktonCounterDialog(self, self._current_dataset, self._current_sample)
-    #         if dialog.exec_():
+    #         if dialog.exec():
     #             self._update_counter_sample_list()
             
             dialog = app_activities.PlanktonCounterDialog(self, self._current_dataset, self._current_sample)
-            dialog.exec_()
+            dialog.exec()
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -414,7 +414,7 @@ class DeleteDialog(QtWidgets.QDialog):
             self._datasets_model.clear()        
             for datasetname in plankton_core.PlanktonCounterManager().get_dataset_names():
                 item = QtGui.QStandardItem(datasetname)
-                item.setCheckState(QtCore.Qt.Unchecked)
+                item.setCheckState(QtCore.Qt.CheckState.Unchecked)
                 item.setCheckable(True)
                 self._datasets_model.appendRow(item)
         #
@@ -427,7 +427,7 @@ class DeleteDialog(QtWidgets.QDialog):
         try:        
             for rowindex in range(self._datasets_model.rowCount()):
                 item = self._datasets_model.item(rowindex, 0)
-                item.setCheckState(QtCore.Qt.Checked)
+                item.setCheckState(QtCore.Qt.CheckState.Checked)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -438,7 +438,7 @@ class DeleteDialog(QtWidgets.QDialog):
         try:        
             for rowindex in range(self._datasets_model.rowCount()):
                 item = self._datasets_model.item(rowindex, 0)
-                item.setCheckState(QtCore.Qt.Unchecked)
+                item.setCheckState(QtCore.Qt.CheckState.Unchecked)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -449,7 +449,7 @@ class DeleteDialog(QtWidgets.QDialog):
         try:        
             for rowindex in range(self._datasets_model.rowCount()):
                 item = self._datasets_model.item(rowindex, 0)
-                if item.checkState() == QtCore.Qt.Checked:
+                if item.checkState() == QtCore.Qt.CheckState.Checked:
                     datasetname = str(item.text())
                     print(datasetname)
                     plankton_core.PlanktonCounterManager().delete_dataset(datasetname)
@@ -510,7 +510,7 @@ class DeleteDialog(QtWidgets.QDialog):
                 # Samples.
                 for samplename in plankton_core.PlanktonCounterManager().get_sample_names(datasetname):
                     item = QtGui.QStandardItem(samplename)
-                    item.setCheckState(QtCore.Qt.Unchecked)
+                    item.setCheckState(QtCore.Qt.CheckState.Unchecked)
                     item.setCheckable(True)
                     self._samples_model.appendRow(item)
         #
@@ -524,7 +524,7 @@ class DeleteDialog(QtWidgets.QDialog):
             for rowindex in range(self._samples_model.rowCount()):
                 item = self._samples_model.item(rowindex, 0)
                 if item.isCheckable ():
-                    item.setCheckState(QtCore.Qt.Checked)
+                    item.setCheckState(QtCore.Qt.CheckState.Checked)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -536,7 +536,7 @@ class DeleteDialog(QtWidgets.QDialog):
             for rowindex in range(self._samples_model.rowCount()):
                 item = self._samples_model.item(rowindex, 0)
                 if item.isCheckable ():
-                    item.setCheckState(QtCore.Qt.Unchecked)
+                    item.setCheckState(QtCore.Qt.CheckState.Unchecked)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -551,7 +551,7 @@ class DeleteDialog(QtWidgets.QDialog):
                 item = self._samples_model.item(rowindex, 0)
                 if str(item.text()).startswith('Dataset: '):
                     datasetname = str(item.text()).replace('Dataset: ', '')
-                if item.checkState() == QtCore.Qt.Checked:
+                if item.checkState() == QtCore.Qt.CheckState.Checked:
                     samplename = str(item.text())
                     print(samplename)
                     plankton_core.PlanktonCounterManager().delete_sample(datasetname, samplename)
@@ -801,7 +801,7 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
                 # Samples.
                 for samplename in plankton_core.PlanktonCounterManager().get_sample_names(datasetname):
                     item = QtGui.QStandardItem(samplename)
-                    item.setCheckState(QtCore.Qt.Unchecked)
+                    item.setCheckState(QtCore.Qt.CheckState.Unchecked)
                     item.setCheckable(True)
                     self._samples_model.appendRow(item)
         #
@@ -909,7 +909,7 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
             for rowindex in range(self._samples_model.rowCount()):
                 item = self._samples_model.item(rowindex, 0)
                 if item.isCheckable ():
-                    item.setCheckState(QtCore.Qt.Checked)
+                    item.setCheckState(QtCore.Qt.CheckState.Checked)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -921,7 +921,7 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
             for rowindex in range(self._samples_model.rowCount()):
                 item = self._samples_model.item(rowindex, 0)
                 if item.isCheckable ():
-                    item.setCheckState(QtCore.Qt.Unchecked)
+                    item.setCheckState(QtCore.Qt.CheckState.Unchecked)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -967,7 +967,7 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
                 item = self._samples_model.item(rowindex, 0)
                 if str(item.text()).startswith('Dataset: '):
                     datasetname = str(item.text()).replace('Dataset: ', '')
-                if item.checkState() == QtCore.Qt.Checked:
+                if item.checkState() == QtCore.Qt.CheckState.Checked:
                     samplename = str(item.text())
                     #print('DEBUG: ' + datasetname + '   ' + samplename)
                     try:

@@ -6,7 +6,7 @@
 
 import os
 import sys
-from PyQt5 import QtWidgets
+from PyQt6 import QtWidgets
 
 import plankton_core
 import toolbox_utils
@@ -176,7 +176,7 @@ class PlanktonCounterSampleEdit(QtWidgets.QWidget):
         """ """
         try:
             dialog = ExportSampleDialog(self, self._current_sample, self._current_sample_object)
-            if dialog.exec_():
+            if dialog.exec():
                 pass
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)

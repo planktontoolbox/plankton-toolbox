@@ -15,8 +15,8 @@ in $HOME/.config on Linux and in $HOME/Library/Preferences on MacOS.
 import sys
 import pathlib
 # import base64
-from PyQt5 import QtGui
-from PyQt5 import QtWidgets
+from PyQt6 import QtGui
+from PyQt6 import QtWidgets
 import app_framework
 
 __version__ = '' 
@@ -58,7 +58,7 @@ def desktop_application():
     window.initialise()
     #
     window.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
 
 # def get_icon_base64():
 #     """ """

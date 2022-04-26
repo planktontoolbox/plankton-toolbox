@@ -6,8 +6,8 @@
 
 import sys
 import os.path
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
+from PyQt6 import QtWidgets
+from PyQt6 import QtCore
 
 import plankton_core
 import app_framework
@@ -23,7 +23,7 @@ class DatasetViewerTool(app_framework.ToolBase):
         super(DatasetViewerTool, self).__init__(name, parentwidget)
         #
         # Where is the tool allowed to dock in the main window.
-        self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea | QtCore.Qt.BottomDockWidgetArea)
+        self.setAllowedAreas(QtCore.Qt.DockWidgetArea.RightDockWidgetArea | QtCore.Qt.DockWidgetArea.BottomDockWidgetArea)
         self.setBaseSize(600,600)
         # Filename used when saving data to file.
         self._lastuseddirectory = '.'
@@ -49,7 +49,7 @@ class DatasetViewerTool(app_framework.ToolBase):
         """ """
         # Active widgets and connections.
         self._selectdataset_list = QtWidgets.QComboBox()
-        self._selectdataset_list.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContents)
+        self._selectdataset_list.setSizeAdjustPolicy(QtWidgets.QComboBox.SizeAdjustPolicy.AdjustToContents)
         self._selectdataset_list.addItems(["<select dataset>"])
         self._selectdataset_list.currentIndexChanged.connect(self._view_dataset)
         #

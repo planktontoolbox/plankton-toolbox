@@ -5,9 +5,9 @@
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import sys
-from PyQt5 import QtGui
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
+from PyQt6 import QtGui
+from PyQt6 import QtWidgets
+from PyQt6 import QtCore
 
 import toolbox_utils
 import plankton_core
@@ -89,8 +89,8 @@ class AnalyseDatasetsTab1(QtWidgets.QWidget):
             for rowindex, dataset in enumerate(app_framework.ToolboxDatasets().get_datasets()):
                 item = QtGui.QStandardItem('Import-' + str(rowindex + 1) + 
                                            '.   Source: ' + dataset.get_metadata('file_name'))
-                item.setCheckState(QtCore.Qt.Checked)
-    #            item.setCheckState(QtCore.Qt.Unchecked)
+                item.setCheckState(QtCore.Qt.CheckState.Checked)
+    #            item.setCheckState(QtCore.Qt.CheckState.Unchecked)
                 item.setCheckable(True)
                 self._loaded_datasets_model.appendRow(item)
             #
@@ -129,7 +129,7 @@ class AnalyseDatasetsTab1(QtWidgets.QWidget):
                 datasets = []
                 for rowindex in range(self._loaded_datasets_model.rowCount()):
                     item = self._loaded_datasets_model.item(rowindex, 0)
-                    if item.checkState() == QtCore.Qt.Checked:        
+                    if item.checkState() == QtCore.Qt.CheckState.Checked:        
                         datasets.append(plankton_core.Datasets().get_datasets()[rowindex])
                 # Use the datasets for analysis.
                 self._analysisdata.copy_datasets_to_analysis_data(datasets)  

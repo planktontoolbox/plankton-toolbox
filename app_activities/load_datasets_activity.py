@@ -10,9 +10,9 @@ import os.path
 import glob
 import locale
 
-from PyQt5 import QtGui
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
+from PyQt6 import QtGui
+from PyQt6 import QtWidgets
+from PyQt6 import QtCore
 
 import toolbox_utils
 import plankton_core
@@ -78,8 +78,8 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         # Add activity name at top.
         self._activityheader = app_framework.HeaderQLabel()
         self._activityheader.setText('<h2>' + self.objectName() + '</h2>')
-        self._activityheader.setTextFormat(QtCore.Qt.RichText)
-        self._activityheader.setAlignment(QtCore.Qt.AlignHCenter)
+        self._activityheader.setTextFormat(QtCore.Qt.TextFormat.RichText)
+        self._activityheader.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
         contentLayout.addWidget(self._activityheader)
         # Add content to the activity.
         contentLayout.addWidget(self._content_load_dataset())
@@ -148,7 +148,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
             for datasetname in sorted(plankton_core.PlanktonCounterManager().get_dataset_names()):
                 for samplename in sorted(plankton_core.PlanktonCounterManager().get_sample_names(datasetname)):
                     item = QtGui.QStandardItem(datasetname + ': ' + samplename)
-                    item.setCheckState(QtCore.Qt.Unchecked)
+                    item.setCheckState(QtCore.Qt.CheckState.Unchecked)
                     item.setCheckable(True)
                     self._counter_datasets_model.appendRow(item)
         #
@@ -161,7 +161,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         try:
             for rowindex in range(self._counter_datasets_model.rowCount()):
                 item = self._counter_datasets_model.item(rowindex, 0)
-                item.setCheckState(QtCore.Qt.Checked)
+                item.setCheckState(QtCore.Qt.CheckState.Checked)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -172,7 +172,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         try:
             for rowindex in range(self._counter_datasets_model.rowCount()):
                 item = self._counter_datasets_model.item(rowindex, 0)
-                item.setCheckState(QtCore.Qt.Unchecked)
+                item.setCheckState(QtCore.Qt.CheckState.Unchecked)
         #
         except Exception as e:
             debug_info = self.__class__.__name__ + ', row  ' + str(sys._getframe().f_lineno)
@@ -185,7 +185,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
             selectedsamples = []
             for rowindex in range(self._counter_datasets_model.rowCount()):
                 item = self._counter_datasets_model.item(rowindex, 0)
-                if item.checkState() == QtCore.Qt.Checked:        
+                if item.checkState() == QtCore.Qt.CheckState.Checked:        
                     selectedsamples.append(str(item.text()))
             #
             if len(selectedsamples) == 0:
@@ -246,7 +246,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         widget = QtWidgets.QWidget()
         # - Select dataset parsers:
         self._predefined_format_combo = QtWidgets.QComboBox()
-        self._predefined_format_combo.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContents)
+        self._predefined_format_combo.setSizeAdjustPolicy(QtWidgets.QComboBox.SizeAdjustPolicy.AdjustToContents)
 #         self._textfile_parser_list.currentIndexChanged(int)'), self._textfile_parser_selected)                
         # - Add available dataset parsers.
 #         self._predefinedformat_list = ['PTBX Archive Format (*.zip) (Not implemented)',
@@ -475,19 +475,19 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
 #         introlabel.setText(help_texts.HelpTexts().getText('LoadDatasetsActivity_text_intro'))
         # - Select dataset parsers:
         self._textfile_parser_list = QtWidgets.QComboBox()
-        self._textfile_parser_list.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContents)
+        self._textfile_parser_list.setSizeAdjustPolicy(QtWidgets.QComboBox.SizeAdjustPolicy.AdjustToContents)
         self._textfile_parser_list.addItems(["<select>"])
         self._textfile_parser_list.currentIndexChanged.connect(self._textfile_parser_selected)                
         # - Add available dataset parsers.
         self._textfile_parser_list.addItems(self._parser_list)                
         # - Select import column:
         self._textfile_importcolumn_list = QtWidgets.QComboBox()
-        self._textfile_importcolumn_list.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContents)
+        self._textfile_importcolumn_list.setSizeAdjustPolicy(QtWidgets.QComboBox.SizeAdjustPolicy.AdjustToContents)
         self._textfile_importcolumn_list.addItems(["<no parser selected>"])        
         self._textfile_importcolumn_list.currentIndexChanged.connect(self._textfile_import_column_selected)                
         # - Select export column:
         self._textfile_exportcolumn_list = QtWidgets.QComboBox()
-        self._textfile_exportcolumn_list.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContents)
+        self._textfile_exportcolumn_list.setSizeAdjustPolicy(QtWidgets.QComboBox.SizeAdjustPolicy.AdjustToContents)
         self._textfile_exportcolumn_list.addItems(["<no parser selected>"])        
         # - Select text coding.
         self._textfile_encoding_list = QtWidgets.QComboBox()
@@ -685,18 +685,18 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
 #         introlabel.setText(help_texts.HelpTexts().getText('LoadDatasetsActivity_excel_intro'))
         # - Select dataset parser:
         self._excel_parser_list = QtWidgets.QComboBox()
-        self._excel_parser_list.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContents)
+        self._excel_parser_list.setSizeAdjustPolicy(QtWidgets.QComboBox.SizeAdjustPolicy.AdjustToContents)
         self._excel_parser_list.addItems(["<select>"])
         self._excel_parser_list.currentIndexChanged.connect(self._excel_parser_selected)                
         # - Add available dataset parsers.
         self._excel_parser_list.addItems(self._parser_list)                
         # - Select import column:
         self._excel_importcolumn_list = QtWidgets.QComboBox()
-        self._excel_importcolumn_list.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContents)
+        self._excel_importcolumn_list.setSizeAdjustPolicy(QtWidgets.QComboBox.SizeAdjustPolicy.AdjustToContents)
         self._excel_importcolumn_list.addItems(["<no parser selected>"])        
         # - Select export column:
         self._excel_exportcolumn_list = QtWidgets.QComboBox()
-        self._excel_exportcolumn_list.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContents)
+        self._excel_exportcolumn_list.setSizeAdjustPolicy(QtWidgets.QComboBox.SizeAdjustPolicy.AdjustToContents)
         self._excel_exportcolumn_list.addItems(["<no parser selected>"])        
         # Load dataset.
         self._excel_getdataset_button = QtWidgets.QPushButton('Import dataset(s)...')
@@ -847,7 +847,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
         selectdatabox = QtWidgets.QGroupBox('Imported datasets/datafiles', self)
         #
         self._datasets_table = app_framework.ToolboxQTableView()
-        self._datasets_table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self._datasets_table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectionBehavior.SelectRows)
         
         self._datasets_table.getTableModel().clear()
         self._datasets_table.getTableModel().set_header(
