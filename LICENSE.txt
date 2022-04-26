@@ -1,7 +1,7 @@
 
  Plankton Toolbox. http://plankton-toolbox.org
 
- Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
+ Copyright (c) 2010-present SMHI, Swedish Meteorological and Hydrological Institute 
  License: MIT License as follows:
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
