@@ -26,7 +26,7 @@ class CreateReportToDataCenterShark(object):
             "positioning_system_code",  # 'POSYS',
             "station_name",  # 'STATN',
             "platform_code",  # 'SHIPC',
-            "sampling_series",  # SERIES
+            "sampling_series",  # SERNO,
             "water_depth_m",  # 'WADEP',
             "visit_comment",  # 'COMNT_VISIT',
             "wind_direction_code",  # 'WINDIR',
@@ -55,7 +55,7 @@ class CreateReportToDataCenterShark(object):
             "param_counted",  # 'COUNTNR', # Parameter.
             "param_abundance_class",  # 'COUNT_CLASS', # Parameter.
             "coefficient",  # 'COEFF',
-            "param_abundance",  # 'CONC_IND_L-1', # Parameter.
+            "param_abundance",  # 'ABUND', # Parameter.
             "size_class",  # 'SIZCL',
             "size_class_ref_list",  # 'SIZRF',
             "param_biovolume",  # 'BIOVOL', # Parameter.
@@ -84,7 +84,7 @@ class CreateReportToDataCenterShark(object):
             "positioning_system_code": "POSYS",
             "station_name": "STATN",
             "platform_code": "SHIPC",
-            "sampling_series": "SERIES",
+            "sampling_series": "SERNO",
             "water_depth_m": "WADEP",
             "visit_comment": "COMNT_VISIT",
             "wind_direction_code": "WINDIR",
@@ -112,7 +112,7 @@ class CreateReportToDataCenterShark(object):
             "trophic_type": "TRPHY",
             "param_counted": "COUNTNR",  # Parameter.
             "coefficient": "COEFF",
-            "param_abundance": "CONC_IND_L-1",  # Parameter.
+            "param_abundance": "ABUND",  # Parameter.
             "param_abundance_class": "COUNT_CLASS",  # Parameter for NET samples.
             "size_class": "SIZCL",
             "size_class_ref_list": "SIZRF",
@@ -231,10 +231,21 @@ class CreateReportToDataCenterShark(object):
             #
             self.cleanup_fields(row_dict)
             #
+            self.add_new_fields(row_dict)
+            #
             for item in self._header_counted_items:
                 report_row.append(row_dict.get(item, ""))
             # Add all rows to result.
             result_table.append_row(report_row)
+
+    def add_new_fields(self, row_dict):
+        """ """
+        scientificname = row_dict.get("scientific_name", "")
+        if scientificname:
+            ref_list = plankton_core.Species().get_taxon_value(
+                scientificname, "size_class_ref_list"
+            )
+            row_dict["size_class_ref_list"] = ref_list
 
     def cleanup_fields(self, row_dict):
         """ """
