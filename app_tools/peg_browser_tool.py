@@ -197,7 +197,7 @@
 #                 return QtCore.QVariant('Dyntaxa id')
 #             elif section == 3:
 #                 return QtCore.QVariant('Dyntaxa name')
-#         if orientation == QtCore.Qt.Vertical and role == QtCore.Qt.ItemDataRole.DisplayRole:
+#         if orientation == QtCore.Qt.Orientation.Vertical and role == QtCore.Qt.ItemDataRole.DisplayRole:
 #             return QtCore.QVariant(section + 1)
 #         return QtCore.QVariant()
 #

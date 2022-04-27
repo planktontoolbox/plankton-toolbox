@@ -22,13 +22,13 @@ class ToolBase(QtWidgets.QDockWidget):
         #
         self.setObjectName(name)
         #
-        #        self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea |
-        #                             QtCore.Qt.BottomDockWidgetArea)
+        #        self.setAllowedAreas(QtCore.Qt.DockWidgetArea.RightDockWidgetArea |
+        #                             QtCore.Qt.DockWidgetArea.BottomDockWidgetArea)
         #        self.setBaseSize(600,600)
         # Add specific content. Abstract, implemented by subclasses.
         self._create_content()
         #         # Default position to the right. Hide as default.
-        #         self._parent.addDockWidget(QtCore.Qt.RightDockWidgetArea, self)
+        #         self._parent.addDockWidget(QtCore.Qt.DockWidgetArea.RightDockWidgetArea, self)
         #         self.hide()
         #  Toggles show/hide from the Tools menu in the main window.
         self._parent.toolsmenu.addAction(self.toggleViewAction())

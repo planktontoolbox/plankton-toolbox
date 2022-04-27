@@ -235,7 +235,7 @@ class PlanktonCounterDialog(QtWidgets.QDialog):
     def keyPressEvent(self, qKeyEvent):
         """Overridden from base class."""
         try:
-            if qKeyEvent.key() == QtCore.Qt.Key_Escape:
+            if qKeyEvent.key() == QtCore.Qt.Key.Key_Escape:
                 self.closeEvent(qKeyEvent)
                 qKeyEvent.accept()  # Was handled here.
             else:

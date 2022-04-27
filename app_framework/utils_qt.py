@@ -332,7 +332,7 @@ class ToolboxQTableView(QtWidgets.QTableView):
         In the constructor 'filter_column_index' must be defined."""
         filterString = QtCore.QRegExp(
             str(text),
-            QtCore.Qt.CaseInsensitive,
+            QtCore.Qt.CaseSensitivity.CaseInsensitive,
             #                                 QtCore.QRegExp.RegExp
         )
         self.filterproxymodel.setFilterRegExp(filterString)

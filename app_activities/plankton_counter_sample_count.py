@@ -1932,24 +1932,24 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
 
     def handle_key_press_event(self, qKeyEvent):
         """ """
-        if qKeyEvent.key() == QtCore.Qt.Key_Plus:
+        if qKeyEvent.key() == QtCore.Qt.Key.Key_Plus:
             self.add_to_counted_or_abundant_class(1)
             return True
-        elif qKeyEvent.key() == QtCore.Qt.Key_Space:
+        elif qKeyEvent.key() == QtCore.Qt.Key.Key_Space:
             self.add_to_counted_or_abundant_class(1)
             return True
-        #         elif qKeyEvent.key() == QtCore.Qt.RightButton: # Mouse right button.
+        #         elif qKeyEvent.key() == QtCore.Qt.MouseButton.RightButton: # Mouse right button.
         #             self._counted_add(1)
         #             return True
         #
-        elif qKeyEvent.key() == QtCore.Qt.Key_Minus:
+        elif qKeyEvent.key() == QtCore.Qt.Key.Key_Minus:
             self.add_to_counted_or_abundant_class(-1)
             return True
-        elif qKeyEvent.key() == QtCore.Qt.Key_Backspace:
+        elif qKeyEvent.key() == QtCore.Qt.Key.Key_Backspace:
             self.add_to_counted_or_abundant_class(-1)
             return True
         #
-        elif qKeyEvent.key() == QtCore.Qt.Key_Escape:
+        elif qKeyEvent.key() == QtCore.Qt.Key.Key_Escape:
             self._parentwidget.close()
             return True
         #
@@ -2039,7 +2039,7 @@ class KeyPressQListWidget(QtWidgets.QListWidget):
 
     def mousePressEvent(self, qMouseEvent):
         """ """
-        if qMouseEvent.button() == QtCore.Qt.RightButton:
+        if qMouseEvent.button() == QtCore.Qt.MouseButton.RightButton:
             self._parent._counted_add(1)
             qMouseEvent.accept()  # Was handled here.
         else:
@@ -2048,7 +2048,7 @@ class KeyPressQListWidget(QtWidgets.QListWidget):
 
     def mouseDoubleClickEvent(self, qMouseEvent):
         """NOTE: Count 2 on double click."""
-        if qMouseEvent.button() == QtCore.Qt.RightButton:
+        if qMouseEvent.button() == QtCore.Qt.MouseButton.RightButton:
             self._parent._counted_add(1)
             #             self._parent._counted_add(2) # NOTE: 2 on double click.
             qMouseEvent.accept()  # Was handled here.
@@ -2103,7 +2103,7 @@ class KeyPressToolboxQTableView(app_framework.ToolboxQTableView):
 
     def mousePressEvent(self, qMouseEvent):
         """ """
-        if qMouseEvent.button() == QtCore.Qt.RightButton:
+        if qMouseEvent.button() == QtCore.Qt.MouseButton.RightButton:
             self._parent._counted_add(1)
             qMouseEvent.accept()  # Was handled here.
         else:
@@ -2112,7 +2112,7 @@ class KeyPressToolboxQTableView(app_framework.ToolboxQTableView):
 
     def mouseDoubleClickEvent(self, qMouseEvent):
         """NOTE: Count 2 on double click."""
-        if qMouseEvent.button() == QtCore.Qt.RightButton:
+        if qMouseEvent.button() == QtCore.Qt.MouseButton.RightButton:
             self._parent._counted_add(1)
             #             self._parent._counted_add(2) # NOTE: 2 on double click.
             qMouseEvent.accept()  # Was handled here.

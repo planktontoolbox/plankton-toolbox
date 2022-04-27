@@ -196,7 +196,7 @@
 #                 return QtCore.QVariant('ITIS')
 #             elif section == 5:
 #                 return QtCore.QVariant('ERMS')
-#         if orientation == QtCore.Qt.Vertical and role == QtCore.Qt.ItemDataRole.DisplayRole:
+#         if orientation == QtCore.Qt.Orientation.Vertical and role == QtCore.Qt.ItemDataRole.DisplayRole:
 #             return QtCore.QVariant(section + 1)
 #         return QtCore.QVariant()
 #
