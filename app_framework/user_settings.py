@@ -5,6 +5,7 @@
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import pathlib
+import platform
 import toolbox_utils
 
 
@@ -38,12 +39,16 @@ class ToolboxUserSettings:
     def load_user_settings(self):
         """ """
         self.user_settings_loaded = True
+        if platform.system() == "Darwin": 
+            # Use home folder if macOS.
+            settings_dir_path = pathlib.Path(pathlib.Path.home(), "plankton_toolbox_data")
+        else:
+            settings_dir_path = pathlib.Path("plankton_toolbox_data")
         # Check if plankton_toolbox_data exists.
-        settings_file_path = pathlib.Path("plankton_toolbox_data")
-        if not settings_file_path.exists():
-            settings_file_path.mkdir(parents=True)
+        if not settings_dir_path.exists():
+            settings_dir_path.mkdir(parents=True)
         # Check if the user settings file exists.
-        settings_file_path = pathlib.Path("plankton_toolbox_data", "user_settings.txt")
+        settings_file_path = pathlib.Path(settings_dir_path, "user_settings.txt")
         if settings_file_path.exists():
             # Read settings.
             with settings_file_path.open("r", encoding="cp1252") as settings_file:

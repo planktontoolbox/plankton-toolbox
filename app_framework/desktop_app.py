@@ -43,7 +43,7 @@ def desktop_application():
     except:
         pass
     # Create directory with icon.
-    icon_path = pathlib.Path("plankton_toolbox_data/img/plankton_toolbox_icon.png")
+    icon_path = pathlib.Path(pathlib.Path.home(), "plankton_toolbox_data/img/plankton_toolbox_icon.png")
     if not icon_path.exists():
         if not icon_path.parents[0].exists():
             icon_path.parents[0].mkdir(parents=True)

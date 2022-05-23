@@ -5,7 +5,8 @@
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import time
-import codecs
+import pathlib
+import platform
 from PyQt6 import QtWidgets
 from PyQt6 import QtCore
 from PyQt6 import QtGui
@@ -44,12 +45,27 @@ class MainWindow(QtWidgets.QMainWindow):
         self._ui_settings = QtCore.QSettings()
         # Logging. Always log to plankton_toolbox_log.txt. Use the Log tool when
         # it is available.
-        self._logfile = codecs.open(
-            "plankton_toolbox_log.txt", mode="w", encoding="cp1252"
-        )
-        self._logfile.write("Plankton Toolbox. " + time.strftime("%Y-%m-%d %H:%M:%S"))
-        self._logfile.write("")
+
+
+
+        root_dir = ""
+        if platform.system() == "Darwin":
+            root_dir = pathlib.Path.home() # Use home dir for macOS.
+        log_path = pathlib.Path(root_dir, "plankton_toolbox_log.txt")
+        with log_path.open("w", encoding="cp1252") as f:
+            f.write("Plankton Toolbox. " + time.strftime("%Y-%m-%d %H:%M:%S"))
+            f.write("\n\n")
+
+        # self._logfile = codecs.open(
+        #     "plankton_toolbox_log.txt", mode="w", encoding="cp1252"
+        # )
+        # self._logfile.write("Plankton Toolbox. " + time.strftime("%Y-%m-%d %H:%M:%S"))
+        # self._logfile.write("")
+
+
+
         self._logtool = None  # Should be initiated later.
+
         toolbox_utils.Logging().set_log_target(self)
         # Setup main window.
         self._createActions()
@@ -159,7 +175,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self._ui_settings.setValue("MainWindow/Position", QtCore.QVariant(self.pos()))
         self._ui_settings.setValue("MainWindow/State", self.saveState())
         self._ui_settings.setValue("MainWindow/Geometry", self.geometry())
-        self._logfile.close
+
+
+
+        # self._logfile.close
+
+
+
 
     def _createMenu(self):
         """
@@ -342,8 +364,20 @@ class MainWindow(QtWidgets.QMainWindow):
         """Log to file and to the log tool when available."""
         #        self.console.addItem(message)
         try:
-            self._logfile.write(message + "\r\n")
-            self._logfile.flush()
+
+
+
+            root_dir = ""
+            if platform.system() == "Darwin":
+                root_dir = pathlib.Path.home() # Use home dir for macOS.
+            log_path = pathlib.Path(root_dir, "plankton_toolbox_log.txt")
+            with log_path.open("a", encoding="cp1252") as f:
+                f.write(message + "\r\n")
+            # self._logfile.write(message + "\r\n")
+            # self._logfile.flush()
+
+
+
             # Search for the console tool. Note: Not available during startup.
             if not self._logtool:
                 for tool in self._toolmanager.get_tool_list():
