@@ -6,7 +6,6 @@
 
 import sys
 import pathlib
-import os.path
 import glob
 import locale
 
@@ -55,7 +54,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
             self._parser_path = str(pathlib.Path(plankton_toolbox_data_path, "parsers"))
             self._parser_list = []
             for parserpath in glob.glob(self._parser_path + "/*.xlsx"):
-                self._parser_list.append(os.path.basename(parserpath))
+                self._parser_list.append(pathlib.Path(parserpath).name)
         #
         except Exception as e:
             debug_info = (
@@ -72,7 +71,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
                     'Available dataset parsers (located in "plankton_toolbox_data/parsers"):'
                 )
                 for parserpath in self._parser_list:
-                    toolbox_utils.Logging().log("- " + os.path.basename(parserpath))
+                    toolbox_utils.Logging().log("- " + pathlib.Path(parserpath).name)
             else:
                 toolbox_utils.Logging().log(
                     'No dataset parsers are found in "/plankton_toolbox_data/parsers". '
@@ -406,7 +405,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
                         # Add metadata related to imported file.
                         datasetnode.add_metadata("parser", "-")
                         datasetnode.add_metadata(
-                            "file_name", os.path.basename(filename)
+                            "file_name", pathlib.Path(parserpath).name
                         )
                         datasetnode.add_metadata("file_path", filename)
                         datasetnode.add_metadata("import_column", "-")
@@ -473,7 +472,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
                         # Add metadata related to imported file.
                         datasetnode.add_metadata("parser", "-")
                         datasetnode.add_metadata(
-                            "file_name", os.path.basename(filename)
+                            "file_name", pathlib.Path(parserpath).name
                         )
                         datasetnode.add_metadata("file_path", filename)
                         datasetnode.add_metadata("import_column", "-")
@@ -546,7 +545,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
     # #                     app_framework.ToolboxDatasets().add_dataset(datasetnode)
     #                     # Add metadata related to imported file.
     #                     datasetnode.add_metadata('parser', '-')
-    #                     datasetnode.add_metadata('file_name', os.path.basename(filename))
+    #                     datasetnode.add_metadata('file_name', pathlib.Path(parserpath).name)
     #                     datasetnode.add_metadata('file_path', filename)
     #                     datasetnode.add_metadata('import_column', '-')
     #                     datasetnode.add_metadata('export_column', '-')
@@ -809,7 +808,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
                                 )
                             ),
                         )
-                        dataset.add_metadata("file_name", os.path.basename(filename))
+                        dataset.add_metadata("file_name", pathlib.Path(parserpath).name)
                         dataset.add_metadata("file_path", filename)
                         dataset.add_metadata(
                             "import_column",
@@ -1026,7 +1025,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
                                 )
                             ),
                         )
-                        dataset.add_metadata("file_name", os.path.basename(filename))
+                        dataset.add_metadata("file_name", pathlib.Path(parserpath).name)
                         dataset.add_metadata("file_path", filename)
                         dataset.add_metadata(
                             "import_column",

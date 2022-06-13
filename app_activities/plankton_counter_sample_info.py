@@ -4,7 +4,6 @@
 # Copyright (c) 2010-present SMHI, Swedish Meteorological and Hydrological Institute
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
-# import os
 import sys
 import datetime
 import math

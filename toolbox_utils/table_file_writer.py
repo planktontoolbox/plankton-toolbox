@@ -4,7 +4,7 @@
 # Copyright (c) 2010-present SMHI, Swedish Meteorological and Hydrological Institute
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
-import os
+import pathlib
 import locale
 import codecs
 import zipfile
@@ -87,13 +87,13 @@ class TableFileWriter:
         # File path and name.
         filepathname = self._text_file_name
         if self._file_path and self._text_file_name:
-            filepathname = os.path.join(self._file_path, self._text_file_name)
+            filepathname = pathlib.Path(self._file_path, self._text_file_name)
         if filepathname is None:
             raise UserWarning("File name is missing.")
         # Create path if not exists.
-        if (self._file_path) and (not os.path.exists(self._file_path)):
+        if (self._file_path) and (not self._file_path.exists()):
             try:
-                os.makedirs(self._file_path)
+                pathlib.Path(self._file_path).mkdir(parents=True)
                 print("Directories created for this path: " + self._file_path)
             except Exception as e:
                 raise UserWarning(
@@ -138,13 +138,13 @@ class TableFileWriter:
         # File path and name.
         filepathname = self._excel_file_name
         if self._file_path and self._excel_file_name:
-            filepathname = os.path.join(self._file_path, self._excel_file_name)
+            filepathname = pathlib.Path(self._file_path, self._excel_file_name)
         if filepathname is None:
             raise UserWarning("File name is missing.")
         # Create path if not exists.
-        if (self._file_path) and (not os.path.exists(self._file_path)):
+        if (self._file_path) and (not self._file_path.exists()):
             try:
-                os.makedirs(self._file_path)
+                pathlib.Path(self._file_path).mkdir(parents=True)
                 print("Directories created for this path: " + self._file_path)
             except Exception as e:
                 raise UserWarning(
@@ -181,13 +181,13 @@ class TableFileWriter:
         # File path and name.
         filepathname = self._zip_file_name
         if self._file_path and self._zip_file_name:
-            filepathname = os.path.join(self._file_path, self._zip_file_name)
+            filepathname = pathlib.Path(self._file_path, self._zip_file_name)
         if filepathname is None:
             raise UserWarning("File name is missing.")
         # Create path if not exists.
-        if (self._file_path) and (not os.path.exists(self._file_path)):
+        if (self._file_path) and (not self._file_path.exists()):
             try:
-                os.makedirs(self._file_path)
+                pathlib.Path(self._file_path).mkdir(parents=True)
                 print("Directories created for this path: " + self._file_path)
             except Exception as e:
                 raise UserWarning(
@@ -227,8 +227,8 @@ class TableFileWriter:
         """There is no method in Python for this.
         Copy everything else to a temporary zip file and rename when finished."""
         #
-        zip_file = os.path.join(zip_file_path, zip_file_name)
-        if (zip_file) and (not os.path.exists(zip_file)):
+        zip_file = pathlib.Path(zip_file_path, zip_file_name)
+        if (zip_file) and (not zip_file.exists()):
             return  # Nothing to remove.
         #
         zip_read = zipfile.ZipFile(zip_file, "r")
@@ -242,7 +242,7 @@ class TableFileWriter:
             if containsentry:
                 tmpdir = tempfile.mkdtemp()
                 try:
-                    new_tmp_file = os.path.join(tmpdir, "tmp.zip")
+                    new_tmp_file = pathlib.Path(tmpdir, "tmp.zip")
                     zip_write = zipfile.ZipFile(new_tmp_file, "w", zipfile.ZIP_DEFLATED)
                     for item in zip_read.infolist():
                         if item.filename not in entries:

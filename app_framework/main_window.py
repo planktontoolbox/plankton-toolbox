@@ -6,7 +6,6 @@
 
 import time
 import pathlib
-import platform
 from PyQt6 import QtWidgets
 from PyQt6 import QtCore
 from PyQt6 import QtGui
@@ -47,10 +46,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # it is available.
 
 
-
-        root_dir = ""
-        if platform.system() == "Darwin":
-            root_dir = pathlib.Path.home() # Use home dir for macOS.
+        root_dir = app_framework.ToolboxUserSettings().home_for_mac()
         log_path = pathlib.Path(root_dir, "plankton_toolbox_log.txt")
         with log_path.open("w", encoding="cp1252") as f:
             f.write("Plankton Toolbox. " + time.strftime("%Y-%m-%d %H:%M:%S"))
@@ -367,9 +363,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
 
-            root_dir = ""
-            if platform.system() == "Darwin":
-                root_dir = pathlib.Path.home() # Use home dir for macOS.
+            root_dir = app_framework.ToolboxUserSettings().home_for_mac()
             log_path = pathlib.Path(root_dir, "plankton_toolbox_log.txt")
             with log_path.open("a", encoding="cp1252") as f:
                 f.write(message + "\r\n")

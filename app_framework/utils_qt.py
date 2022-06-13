@@ -629,12 +629,24 @@ class ToolboxEditableTableModel(QtCore.QAbstractTableModel):
 
 
 def set_app_style_sheet(app):
+
     app.setStyleSheet(
         """
-        
-/*        QDockWidget .QWidget { background-color: whitesmoke; }
-*/
+        QTextEdit, QListView { border: 1px solid darkgray; }")
         QAbstractButton:hover { color: #d1581c; }
-        
         """
     )
+
+#     app.setStyleSheet("QTextEdit, QListView { border: 2px solid darkgray; }")
+#     app.setStyleSheet(
+#         """
+#         QTextEdit {background-color: rgb(200, 255, 255);"
+#                                 "border-width: 10;"
+#                                 "border-radius: 30;"
+#                                 "border-style: solid;"
+#                                 "border-color: rgb(10, 10, 10)}
+# /*        QDockWidget .QWidget { background-color: whitesmoke; }
+# */
+#         QAbstractButton:hover { color: #d1581c; }
+#         """
+#     )

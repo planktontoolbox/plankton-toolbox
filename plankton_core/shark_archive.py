@@ -4,6 +4,7 @@
 # Copyright (c) 2010-present SMHI, Swedish Meteorological and Hydrological Institute
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
+import pathlib
 import os
 import zipfile
 import shutil
@@ -259,7 +260,7 @@ class SharkArchive:
                 self._file_path, self._archive_filename, entries_to_remove
             )
             #
-            zip_namepath = os.path.join(self._file_path, self._archive_filename)
+            zip_namepath = pathlib.Path(self._file_path, self._archive_filename)
             zip_write = zipfile.ZipFile(
                 zip_namepath, "a", zipfile.ZIP_DEFLATED
             )  # Append to zip.
@@ -315,8 +316,8 @@ class SharkArchive:
         Copy everything else to a temporary zip file and rename when finished."""
         tmpdir = tempfile.mkdtemp()
         try:
-            zip_file = os.path.join(zip_file_path, zip_file_name)
-            new_tmp_file = os.path.join(tmpdir, "tmp.zip")
+            zip_file = pathlib.Path(zip_file_path, zip_file_name)
+            new_tmp_file = pathlib.Path(tmpdir, "tmp.zip")
             zip_read = zipfile.ZipFile(zip_file, "r")
             zip_write = zipfile.ZipFile(new_tmp_file, "w", zipfile.ZIP_DEFLATED)
             for item in zip_read.infolist():

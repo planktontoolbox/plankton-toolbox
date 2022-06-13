@@ -4,8 +4,8 @@
 # Copyright (c) 2010-present SMHI, Swedish Meteorological and Hydrological Institute
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
-import os
 import pathlib
+import os
 import math
 import toolbox_utils
 import app_framework
@@ -37,7 +37,7 @@ class PlanktonCounterMethods:
 
     def _check_dir_path(self, dir_path):
         """Check if exists. Create if not."""
-        if (dir_path) and (not os.path.exists(dir_path)):
+        if (dir_path) and (not pathlib.Path(dir_path).exists()):
             try:
                 os.makedirs(dir_path)
             #                 print('Directories created for this path: ' + dir_path)
@@ -59,7 +59,7 @@ class PlanktonCounterMethods:
         """Returns a list with counting methods."""
         methods = []
         for methodfile in os.listdir(self._methods_dir_path):
-            if os.path.isfile(os.path.join(self._methods_dir_path, methodfile)):
+            if pathlib.Path(self._methods_dir_path, methodfile).is_file():
                 if methodfile.endswith(".txt"):
                     methods.append(methodfile.replace(".txt", ""))
         return sorted(methods)
@@ -77,10 +77,10 @@ class PlanktonCounterMethods:
     def get_counting_species_lists(self):
         """Returns a list with counting lists of species."""
         specieslists = []
-        speciesdirpath = os.path.join(self._config_dir_path, "counting_species_lists")
-        if (speciesdirpath) and (os.path.exists(speciesdirpath)):
+        speciesdirpath = pathlib.Path(self._config_dir_path, "counting_species_lists")
+        if speciesdirpath and speciesdirpath.exists():
             for listfile in os.listdir(speciesdirpath):
-                if os.path.isfile(os.path.join(speciesdirpath, listfile)):
+                if pathlib.Path(speciesdirpath, listfile).is_file():
                     if listfile.endswith(".txt"):
                         specieslists.append(listfile.replace(".txt", ""))
             return sorted(specieslists)
@@ -89,6 +89,8 @@ class PlanktonCounterMethods:
 
     def get_counting_species_table(self, counting_species_file_name):
         """ """
+        if counting_species_file_name == "<select>":
+            return [], []
         # Use all prealoaded species.
         if counting_species_file_name == "<valid taxa>":
             #         if counting_species_file_name == '<all species>':
@@ -99,10 +101,10 @@ class PlanktonCounterMethods:
             return ["scientific_name"], species_list_of_list
 
         # Read stored species file.
-        filepath = os.path.join(
+        filepath = pathlib.Path(
             self._methods_species_lists_dir_path, counting_species_file_name + ".txt"
         )
-        if os.path.isfile(filepath):
+        if filepath.is_file():
             tablefilereader = toolbox_utils.TableFileReader(
                 file_path=self._methods_species_lists_dir_path,
                 text_file_name=counting_species_file_name + ".txt",
@@ -136,17 +138,17 @@ class PlanktonCounterMethods:
 
     def delete_counting_species_list(self, counting_species_list):
         """ """
-        filepath = os.path.join(
+        filepath = pathlib.Path(
             self._methods_species_lists_dir_path, counting_species_list + ".txt"
         )
-        if os.path.isfile(filepath):
-            os.remove(filepath)
+        if filepath.is_file():
+            filepath.unlink() # Remove files.
 
     def delete_counting_method(self, counting_method_name):
         """ """
-        filepath = os.path.join(self._methods_dir_path, counting_method_name + ".txt")
-        if os.path.isfile(filepath):
-            os.remove(filepath)
+        filepath = pathlib.Path(self._methods_dir_path, counting_method_name + ".txt")
+        if filepath.is_file():
+            filepath.unlink() # Removes file.
 
 
 #     def get_preferred_sizeclasses_columns(self, counting_species_file_name):

@@ -9,7 +9,6 @@ import math
 import toolbox_utils
 import app_framework
 import pathlib
-import os.path
 
 
 @toolbox_utils.singleton
@@ -144,11 +143,11 @@ class Species(object):
 
             # Load taxa.
             for excelfilename in self._taxa_filenames:
-                if os.path.exists(excelfilename):
+                if pathlib.Path(excelfilename).exists():
                     toolbox_utils.Logging().log("")  # Empty line.
                     toolbox_utils.Logging().log(
                         "- "
-                        + os.path.basename(excelfilename)
+                        + pathlib.Path(excelfilename).name
                         + " (Species and other taxa)"
                     )
                     try:
@@ -160,10 +159,10 @@ class Species(object):
 
             # Add translated scientific names to taxa.
             for excelfilename in self._taxatranslate_filenames:
-                if os.path.exists(excelfilename):
+                if pathlib.Path(excelfilename).exists():
                     toolbox_utils.Logging().log("")  # Empty line.
                     toolbox_utils.Logging().log(
-                        "- " + os.path.basename(excelfilename) + " (Misspellings etc.)"
+                        "- " + pathlib.Path(excelfilename).name + " (Misspellings etc.)"
                     )
                     try:
                         toolbox_utils.Logging().start_accumulated_logging()
@@ -176,10 +175,10 @@ class Species(object):
 
             # Add synonyms to taxa. Note: 'translate_to_' will be added to filenames.
             for excelfilename in self._taxasynonyms_filenames:
-                if os.path.exists(excelfilename):
+                if pathlib.Path(excelfilename).exists():
                     toolbox_utils.Logging().log("")  # Empty line.
                     toolbox_utils.Logging().log(
-                        "- " + os.path.basename(excelfilename) + " (Synonyms for taxa)"
+                        "- " + pathlib.Path(excelfilename).name + " (Synonyms for taxa)"
                     )
                     try:
                         toolbox_utils.Logging().start_accumulated_logging()
@@ -190,11 +189,11 @@ class Species(object):
 
             # Load biovolume column mapping information.
             for excelfilename in self._bvolcolumns_filenames:
-                if os.path.exists(excelfilename):
+                if pathlib.Path(excelfilename).exists():
                     toolbox_utils.Logging().log("")  # Empty line.
                     toolbox_utils.Logging().log(
                         "- "
-                        + os.path.basename(excelfilename)
+                        + pathlib.Path(excelfilename).name
                         + " (Biovolume column mapping)"
                     )
                     try:
@@ -206,11 +205,11 @@ class Species(object):
 
             # Load BVOL species data.
             for excelfilename in self._bvol_filenames:
-                if os.path.exists(excelfilename):
+                if pathlib.Path(excelfilename).exists():
                     toolbox_utils.Logging().log("")  # Empty line.
                     toolbox_utils.Logging().log(
                         "- "
-                        + os.path.basename(excelfilename)
+                        + pathlib.Path(excelfilename).name
                         + " (Biovolumes etc. for sizeclasses)"
                     )
                     try:
@@ -222,10 +221,10 @@ class Species(object):
 
             # Load trophic types.
             for excelfilename in self._trophictype_filenames:
-                if os.path.exists(excelfilename):
+                if pathlib.Path(excelfilename).exists():
                     toolbox_utils.Logging().log("")  # Empty line.
                     toolbox_utils.Logging().log(
-                        "- " + os.path.basename(excelfilename) + " (Trophic types)"
+                        "- " + pathlib.Path(excelfilename).name + " (Trophic types)"
                     )
                     try:
                         toolbox_utils.Logging().start_accumulated_logging()
@@ -236,10 +235,10 @@ class Species(object):
 
             # Load harmful species.
             for excelfilename in self._harmful_filenames:
-                if os.path.exists(excelfilename):
+                if pathlib.Path(excelfilename).exists():
                     toolbox_utils.Logging().log("")  # Empty line.
                     toolbox_utils.Logging().log(
-                        "- " + os.path.basename(excelfilename) + " (Harmful organisms)"
+                        "- " + pathlib.Path(excelfilename).name + " (Harmful organisms)"
                     )
                     try:
                         toolbox_utils.Logging().start_accumulated_logging()
@@ -250,11 +249,11 @@ class Species(object):
 
             # Load plankton group definition.
             for excelfilename in self._planktongroups_filenames:
-                if os.path.exists(excelfilename):
+                if pathlib.Path(excelfilename).exists():
                     toolbox_utils.Logging().log("")  # Empty line.
                     toolbox_utils.Logging().log(
                         "- "
-                        + os.path.basename(excelfilename)
+                        + pathlib.Path(excelfilename).name
                         + " (Plankton group definition)"
                     )
                     try:
@@ -722,11 +721,11 @@ class Species(object):
         """ """
         xslx_files = {}
         # Search for all files starting with the prefix value and ends with '.xslx'.
-        for root, dirs, files in os.walk(self._species_directory_path):
-            for filename in files:
-                if filename.startswith(prefix) and filename.endswith(".xlsx"):
-                    #                     print ('DEBUG: ' + os.path.join(root, filename))
-                    xslx_files[filename] = os.path.join(root, filename)
+        files = list(pathlib.Path(self._species_directory_path).glob("*.xlsx"))
+        for file in files:
+            filename = str(file.stem)
+            if filename.startswith(prefix):
+                xslx_files[filename] = file
         # If versions of files is used, only get the latest one.
         latest_files = {}
         for key in sorted(xslx_files.keys()):
@@ -738,7 +737,7 @@ class Species(object):
 
     def _split_filename_on_version(self, file_name):
         """ """
-        filename = os.path.splitext(file_name)[0]
+        filename = pathlib.Path(file_name).stem
         parts = filename.split("version")
         name = parts[0].strip("_").strip()
         version = parts[1].strip("_").strip() if len(parts) > 1 else ""

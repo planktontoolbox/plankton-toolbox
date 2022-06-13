@@ -4,7 +4,7 @@
 # Copyright (c) 2010-present SMHI, Swedish Meteorological and Hydrological Institute
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
-import os
+import pathlib
 import codecs
 import toolbox_utils
 import plankton_core
@@ -163,12 +163,12 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
             raise UserWarning("Sample name is missing.")
         #
         dir_path = plankton_core.PlanktonCounterManager().get_dataset_dir_path()
-        dataset_path = os.path.join(dir_path, dataset_name)
-        sample_path = os.path.join(dataset_path, sample_name)
+        dataset_path = pathlib.Path(dir_path, dataset_name)
+        sample_path = pathlib.Path(dataset_path, sample_name)
         #
-        if (not dataset_path) or (not os.path.exists(dataset_path)):
+        if (not dataset_path) or (not dataset_path.exists()):
             raise UserWarning("Dataset files are missing.")
-        if (not sample_path) or (not os.path.exists(sample_path)):
+        if (not sample_path) or (not sample_path.exists()):
             raise UserWarning("Sample files are missing.")
         #
         self._dataset_metadata = {}
@@ -233,7 +233,7 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
         #
         dir_path = plankton_core.PlanktonCounterManager().get_dataset_dir_path()
         #
-        if (not excel_file_path) or (not os.path.isfile(excel_file_path)):
+        if (not excel_file_path) or (not excel_file_path.is_file()):
             raise UserWarning("Excel file does not exists.")
         #
         self._dataset_metadata = {}

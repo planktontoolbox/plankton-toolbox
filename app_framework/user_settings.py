@@ -24,6 +24,12 @@ class ToolboxUserSettings:
         self.path_to_plankton_toolbox_data = "plankton_toolbox_data"
         self.path_to_plankton_toolbox_counter = "plankton_toolbox_counter"
 
+    def home_for_mac(self):
+        """ """
+        if platform.system() == "Darwin": 
+            return pathlib.Path.home()
+        return "."
+
     def get_path_to_plankton_toolbox_data(self):
         """ """
         if not self.user_settings_loaded:
@@ -39,11 +45,7 @@ class ToolboxUserSettings:
     def load_user_settings(self):
         """ """
         self.user_settings_loaded = True
-        if platform.system() == "Darwin": 
-            # Use home folder if macOS.
-            settings_dir_path = pathlib.Path(pathlib.Path.home(), "plankton_toolbox_data")
-        else:
-            settings_dir_path = pathlib.Path("plankton_toolbox_data")
+        settings_dir_path = pathlib.Path(self.home_for_mac(), "plankton_toolbox_data")
         # Check if plankton_toolbox_data exists.
         if not settings_dir_path.exists():
             settings_dir_path.mkdir(parents=True)

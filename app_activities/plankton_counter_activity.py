@@ -4,9 +4,9 @@
 # Copyright (c) 2010-present SMHI, Swedish Meteorological and Hydrological Institute
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
-import os
 import pathlib
 import sys
+import os
 
 # import ntpath
 import datetime
@@ -749,11 +749,11 @@ class BackupExportImportDialog(QtWidgets.QDialog):
             source_dir_len = len(source_dir) + 1
             #
             try:
-                backup_dir_file_name = os.path.join(
+                backup_dir_file_name = pathlib.Path(
                     backup_zip_dir_name, backup_zip_file_name
                 )
                 with zipfile.ZipFile(
-                    backup_dir_file_name, "w", zipfile.ZIP_DEFLATED
+                    str(backup_dir_file_name), "w", zipfile.ZIP_DEFLATED
                 ) as zip_file:
                     for root, _dirs, files in os.walk(source_dir):
                         for file_name in files:
@@ -761,12 +761,12 @@ class BackupExportImportDialog(QtWidgets.QDialog):
                             if (not file_name.startswith(".")) and (
                                 not file_name.startswith("~")
                             ):
-                                path_file_name = os.path.join(root, file_name)
-                                zip_file_name = os.path.join(
+                                path_file_name = pathlib.Path(root, file_name)
+                                zip_file_name = pathlib.Path(
                                     "plankton_toolbox_data",
                                     path_file_name[source_dir_len:],
                                 )
-                                zip_file.write(path_file_name, zip_file_name)
+                                zip_file.write(str(path_file_name), str(zip_file_name))
             #
             except Exception as e:
                 toolbox_utils.Logging().error(
@@ -1145,11 +1145,11 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
                         # Export path and file name.
                         export_target_dir = str(self._browse_export_target_dir.text())
                         export_target_filename = samplename + ".xlsx"
-                        filepathname = os.path.join(
+                        filepathname = pathlib.Path(
                             export_target_dir, export_target_filename
                         )
                         # Check if it already exists.
-                        if os.path.isfile(filepathname):
+                        if filepathname.is_file():
                             box_result = QtWidgets.QMessageBox.warning(
                                 self,
                                 "Warning",
@@ -1225,12 +1225,10 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
                             plankton_core.PlanktonCounterManager().get_dataset_dir_path()
                         )
                         datasetname = str(self._dataset_list.currentText())
-                        samplename = os.path.basename(filename).replace(".xlsx", "")
+                        samplename = pathlib.Path(parserpath).stem
                         # Check if overwrite.
                         if self._replaceoldsamples_checkbox.isChecked() == False:
-                            if os.path.exists(
-                                os.path.join(dir_path, datasetname, samplename)
-                            ):
+                            if pathlib.Path(dir_path, datasetname, samplename).exists():
                                 continue  # Don't overwrite if it exists.
                         # Create sample object.
                         sample_object = plankton_core.PlanktonCounterSample(

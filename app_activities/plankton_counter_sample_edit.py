@@ -4,7 +4,7 @@
 # Copyright (c) 2010-present SMHI, Swedish Meteorological and Hydrological Institute
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
-import os
+import pathlib
 import sys
 from PyQt6 import QtWidgets
 
@@ -284,9 +284,8 @@ class ExportSampleDialog(QtWidgets.QDialog):
             # Export path and file name.
             export_target_dir = str(self._exporttargetdir_edit.text())
             export_target_filename = str(self._exporttargetfilename_edit.text())
-            #             filepathname = os.path.join(exporttargetdir, exporttargetfilename)
             # Warning.
-            if os.path.exists(os.path.join(export_target_dir, export_target_filename)):
+            if pathlib.Path(export_target_dir, export_target_filename).exists():
                 box_result = QtWidgets.QMessageBox.warning(
                     self,
                     "Warning",

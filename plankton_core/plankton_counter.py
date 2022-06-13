@@ -4,8 +4,8 @@
 # Copyright (c) 2010-present SMHI, Swedish Meteorological and Hydrological Institute
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
-import os
 import pathlib
+import os
 import shutil
 import math
 
@@ -36,10 +36,9 @@ class PlanktonCounterManager(QtCore.QObject):
         )
 
         # Check if exists. Create if not.
-        if (self._dataset_dir_path) and (not os.path.exists(self._dataset_dir_path)):
+        if (self._dataset_dir_path) and (not pathlib.Path(self._dataset_dir_path).exists()):
             try:
-                os.makedirs(self._dataset_dir_path)
-            #                 print('Directories created for this path: ' + self._dataset_dir_path)
+                pathlib.Path(self._dataset_dir_path).mkdir(parents=True)
             except Exception as e:
                 raise UserWarning(
                     "Can't create directories in path. Path: "
@@ -62,9 +61,9 @@ class PlanktonCounterManager(QtCore.QObject):
     def get_dataset_names(self):
         """Returns a list with available datasets."""
         datasetnames = []
-        if (self._dataset_dir_path) and (os.path.exists(self._dataset_dir_path)):
+        if (self._dataset_dir_path) and (pathlib.Path(self._dataset_dir_path).exists()):
             for datasetdir in os.listdir(self._dataset_dir_path):
-                if os.path.isdir(os.path.join(self._dataset_dir_path, datasetdir)):
+                if pathlib.Path(self._dataset_dir_path, datasetdir).is_dir():
                     datasetnames.append(datasetdir)
             return sorted(datasetnames)
         else:
@@ -74,12 +73,11 @@ class PlanktonCounterManager(QtCore.QObject):
 
     def create_dataset(self, dataset_name):
         """Creates a new dataset (= a new directory)."""
-        path = os.path.join(self._dataset_dir_path, dataset_name)
+        path = pathlib.Path(self._dataset_dir_path, dataset_name)
         # Check if exists.
-        if (path) and (not os.path.exists(path)):
+        if (path) and (not path.exists()):
             try:
-                os.makedirs(path)
-            #                 print('Directories created for this path: ' + path)
+                path.mkdir(parents=True)
             except Exception as e:
                 raise UserWarning(
                     "Can't create directories in path. Path: "
@@ -96,9 +94,9 @@ class PlanktonCounterManager(QtCore.QObject):
 
     def delete_dataset(self, dataset_name):
         """Deletes a dataset (the directory and all its content.)"""
-        path = os.path.join(self._dataset_dir_path, dataset_name)
+        path = pathlib.Path(self._dataset_dir_path, dataset_name)
         # Check if exists.
-        if path and os.path.exists(path):
+        if path and path.exists():
             try:
                 shutil.rmtree(path)
             except Exception as e:
@@ -117,11 +115,11 @@ class PlanktonCounterManager(QtCore.QObject):
     def get_sample_names(self, dataset_name):
         """Returns a list with available samples within a dataset."""
         samplenames = []
-        path = os.path.join(self._dataset_dir_path, dataset_name)
+        path = pathlib.Path(self._dataset_dir_path, dataset_name)
         # Check if exists.
-        if (path) and (os.path.exists(path)):
+        if (path) and (path.exists()):
             for sampledir in os.listdir(path):
-                if os.path.isdir(os.path.join(path, sampledir)):
+                if pathlib.Path(path, sampledir).is_dir():
                     samplenames.append(sampledir)
             return sorted(samplenames)
         else:
@@ -134,11 +132,11 @@ class PlanktonCounterManager(QtCore.QObject):
         if not sample_name:
             raise UserWarning("Can't create sample. Sample name is missing.")
         #
-        path = os.path.join(self._dataset_dir_path, dataset_name, sample_name)
+        path = pathlib.Path(self._dataset_dir_path, dataset_name, sample_name)
         # Check if exists.
-        if (path) and (not os.path.exists(path)):
+        if (path) and (not path.exists()):
             try:
-                os.makedirs(path)
+                path.mkdir(parents=True)
             #                 print('Directories created for this path: ' + path)
             except Exception as e:
                 raise UserWarning(
@@ -156,9 +154,9 @@ class PlanktonCounterManager(QtCore.QObject):
 
     def delete_sample(self, dataset_name, sample_name):
         """Deletes a sample (the directory and all its content.)"""
-        path = os.path.join(self._dataset_dir_path, dataset_name, sample_name)
+        path = pathlib.Path(self._dataset_dir_path, dataset_name, sample_name)
         # Check if exists.
-        if path and os.path.exists(path):
+        if path and path.exists():
             try:
                 shutil.rmtree(path)
             except Exception as e:
@@ -174,10 +172,10 @@ class PlanktonCounterManager(QtCore.QObject):
 
     def rename_sample(self, dataset_name, old_sample_name, new_sample_name):
         """Renames a sample."""
-        path = os.path.join(self._dataset_dir_path, dataset_name, old_sample_name)
-        new_path = os.path.join(self._dataset_dir_path, dataset_name, new_sample_name)
+        path = pathlib.Path(self._dataset_dir_path, dataset_name, old_sample_name)
+        new_path = pathlib.Path(self._dataset_dir_path, dataset_name, new_sample_name)
         # Check if exists.
-        if path and os.path.exists(path):
+        if path and path.exists():
             try:
                 shutil.move(path, new_path)
             except Exception as e:
@@ -195,7 +193,7 @@ class PlanktonCounterManager(QtCore.QObject):
 
     def load_dataset_metadata(self, dataset_name):
         """ """
-        path = os.path.join(self._dataset_dir_path, dataset_name)
+        path = pathlib.Path(self._dataset_dir_path, dataset_name)
         tablefilereader = toolbox_utils.TableFileReader(
             file_path=path,
             text_file_name="dataset_metadata.txt",
@@ -215,7 +213,7 @@ class PlanktonCounterManager(QtCore.QObject):
     #
     #     def load_sampling_info(self, dataset_name):
     #         """ """
-    #         path = os.path.join(self._dataset_dir_path, dataset_name)
+    #         path = pathlib.Path(self._dataset_dir_path, dataset_name)
     #         tablefilereader = toolbox_utils.TableFileReader(
     #                     file_path = path,
     #                     text_file_name = 'sampling_info.txt',
@@ -287,7 +285,7 @@ class PlanktonCounterSample:
         if not self._dataset_name:
             self._dataset_name = "Default-dataset"
         #
-        path = os.path.join(
+        path = pathlib.Path(
             self._dataset_dir_path, self._dataset_name, self._sample_name
         )
         self._tablefilewriter_sample_data = toolbox_utils.TableFileWriter(
@@ -304,7 +302,7 @@ class PlanktonCounterSample:
 
     def get_dir_path(self):
         """ """
-        return os.path.join(
+        return pathlib.Path(
             self._dataset_dir_path, self._dataset_name, self._sample_name
         )
 
@@ -347,10 +345,10 @@ class PlanktonCounterSample:
                 "Failed to load sample file. Path, dataset name or sample name is missing."
             )
         # Create file if not exists.
-        path = os.path.join(
+        path = pathlib.Path(
             self._dataset_dir_path, self._dataset_name, self._sample_name
         )
-        if not os.path.exists(os.path.join(path, "sample_info.txt")):
+        if not pathlib.Path(path, "sample_info.txt").exists():
             header = ["key", "value"]
             self._tablefilewriter_sample_info.write_file(header, [])
         # Read file to dict.
@@ -396,10 +394,10 @@ class PlanktonCounterSample:
                 "Failed to load sample file. Path, dataset name or sample name is missing."
             )
         # Create file if not exists.
-        path = os.path.join(
+        path = pathlib.Path(
             self._dataset_dir_path, self._dataset_name, self._sample_name
         )
-        if not os.path.exists(os.path.join(path, "sample_data.txt")):
+        if not pathlib.Path(path, "sample_data.txt").exists():
             self._tablefilewriter_sample_data.write_file(self._sample_header, [])
         # Read sample data to self._sample_rows.
         tablefilereader = toolbox_utils.TableFileReader(
@@ -791,7 +789,7 @@ class PlanktonCounterSample:
         method_header = tablefilereader.header()
         method_rows = tablefilereader.rows()
 
-        path = os.path.join(
+        path = pathlib.Path(
             self._dataset_dir_path, self._dataset_name, self._sample_name
         )
         tablefilewriter_sample_method = toolbox_utils.TableFileWriter(
@@ -1081,7 +1079,7 @@ class ExcelExportWriter:
         """Export to Excel."""
         self.export_target_filename = export_target_filename
         # Create Excel document.
-        filepathname = os.path.join(export_target_dir, export_target_filename)
+        filepathname = pathlib.Path(export_target_dir, export_target_filename)
         workbook = xlsxwriter.Workbook(filepathname)
         # Add worksheets.
         self.summary_worksheet = workbook.add_worksheet("Sample summary")
@@ -1114,7 +1112,7 @@ class ExcelExportWriter:
         self.sample_method_header = []
         self.sample_method_rows = []
         sample_path = self.sample_object.get_dir_path()
-        if os.path.exists(os.path.join(sample_path, "counting_method.txt")):
+        if pathlib.Path(sample_path, "counting_method.txt").exists():
             (
                 self.sample_method_header,
                 self.sample_method_rows,

@@ -4,7 +4,6 @@
 # Copyright (c) 2010-present SMHI, Swedish Meteorological and Hydrological Institute
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
-import os
 import locale
 import zipfile
 import pathlib
@@ -166,10 +165,10 @@ class TableFileReader:
         # File path and name.
         filename = self._text_file_name
         if self._file_path and self._text_file_name:
-            filename = os.path.join(self._file_path, self._text_file_name)
+            filename = pathlib.Path(self._file_path, self._text_file_name)
         if filename is None:
             raise UserWarning("File name is missing.")
-        if not os.path.exists(filename):
+        if not filename.exists():
             raise UserWarning("File is not found.  File: " + filename)
         # Get encoding.
         if self._encoding is None:
@@ -263,10 +262,10 @@ class TableFileReader:
         # File path and name.
         filename = self._excel_file_name
         if self._file_path and self._excel_file_name:
-            filename = os.path.join(self._file_path, self._excel_file_name)
+            filename = pathlib.Path(self._file_path, self._excel_file_name)
         if filename is None:
             raise UserWarning("File name is missing.")
-        if not os.path.exists(filename):
+        if not filename.exists():
             raise UserWarning("File is not found.  File: " + filename)
         #
         self._columnsbyindex = None
@@ -351,7 +350,7 @@ class TableFileReader:
         #
         filename = self._zip_file_name
         if self._file_path and self._zip_file_name:
-            filename = os.path.join(self._file_path, self._zip_file_name)
+            filename = pathlib.Path(self._file_path, self._zip_file_name)
         #
         if not zipfile.is_zipfile(filename):
             raise UserWarning("Selected file is not a valid zip file: " + filename)

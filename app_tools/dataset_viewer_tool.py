@@ -5,7 +5,7 @@
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import sys
-import os.path
+import pathlib
 from PyQt6 import QtWidgets
 from PyQt6 import QtCore
 
@@ -30,7 +30,7 @@ class DatasetViewerTool(app_framework.ToolBase):
         )
         self.setBaseSize(600, 600)
         # Filename used when saving data to file.
-        self._lastuseddirectory = "."
+        self._lastuseddirectory = app_framework.ToolboxUserSettings().home_for_mac()
 
     def _create_content(self):
         """ """
@@ -187,7 +187,7 @@ class DatasetViewerTool(app_framework.ToolBase):
                 filename = str(filename)  # QString to str.
                 # Check if user pressed ok or cancel.
                 if filename:
-                    self._lastuseddirectory = os.path.dirname(filename)
+                    self._lastuseddirectory = str(pathlib.Path(filename).parents[0])
                     if self._saveformat_list.currentIndex() == 0:  # Text file.
                         #                     self._tableview.getTableModel().getModeldata().saveAsTextFile(filename)
                         self._tableview.getTableModel().save_as_file(

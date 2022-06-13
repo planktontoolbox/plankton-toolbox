@@ -4,7 +4,7 @@
 # Copyright (c) 2010-present SMHI, Swedish Meteorological and Hydrological Institute
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
-import os
+import pathlib
 import sys
 import time
 from PyQt6 import QtGui
@@ -1649,7 +1649,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
                 self._selectmethodstep_list.clear()
                 #
                 sample_path = self._current_sample_object.get_dir_path()
-                if os.path.exists(os.path.join(sample_path, "counting_method.txt")):
+                if pathlib.Path(sample_path, "counting_method.txt").exists():
                     (
                         header,
                         rows,

@@ -5,6 +5,7 @@
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 import sys
+import pathlib
 from PyQt6 import QtWidgets
 from PyQt6 import QtCore
 
@@ -24,7 +25,7 @@ class GraphPlotterTool(app_framework.ToolBase):
     def __init__(self, name, parentwidget):
         """ """
         # Filename used when saving chart to file.
-        self._lastuseddirectory = "."
+        self._lastuseddirectory = app_framework.ToolboxUserSettings().home_for_mac()
         self._plotdata = None
         self._current_chart = None
         # Initialize parent. Should be called after other
