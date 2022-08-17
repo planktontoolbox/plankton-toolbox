@@ -85,7 +85,7 @@ class PlanktonCounterMethods:
                         specieslists.append(listfile.replace(".txt", ""))
             return sorted(specieslists)
         else:
-            raise UserWarning("The directory " + speciesdirpath + " does not exists.")
+            raise UserWarning("The directory " + str(speciesdirpath) + " does not exists.")
 
     def get_counting_species_table(self, counting_species_file_name):
         """ """
