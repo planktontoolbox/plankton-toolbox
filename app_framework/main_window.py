@@ -89,8 +89,8 @@ class MainWindow(QtWidgets.QMainWindow):
             toolbox_utils.Logging().log(
                 'User settings in "plankton_toolbox_data/user_settings.txt": '
             )
-            toolbox_utils.Logging().log("- Path to data dictionary: " + data_path)
-            toolbox_utils.Logging().log("- Path to counter dictionary: " + counter_path)
+            toolbox_utils.Logging().log("- Path to data dictionary: " + str(data_path))
+            toolbox_utils.Logging().log("- Path to counter dictionary: " + str(counter_path))
         #
         self._activitymanager = app_activities.ActivityManager()
         self._activitymanager.set_parent(self)
