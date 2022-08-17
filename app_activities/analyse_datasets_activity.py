@@ -337,7 +337,7 @@ class AnalyseDatasetsActivity(app_framework.ActivityBase):
                 else:
                     namefilter = "Text files (*.txt);;All files (*.*)"
                 filename, _filters = QtWidgets.QFileDialog.getSaveFileName(
-                    self, "Export dataset", self._lastuseddirectory, namefilter
+                    self, "Export dataset", str(self._lastuseddirectory), namefilter
                 )
                 filename = str(filename)  # QString to str.
                 # Check if user pressed ok or cancel.

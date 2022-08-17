@@ -369,7 +369,7 @@ class CreateReportsActivity(app_framework.ActivityBase):
                 else:
                     namefilter = "Text files (*.txt);;All files (*.*)"
                 filename, _filters = QtWidgets.QFileDialog.getSaveFileName(
-                    self, "Save dataset", self._lastuseddirectory, namefilter
+                    self, "Save dataset", str(self._lastuseddirectory), namefilter
                 )
                 filename = str(filename)  # QString to str.
                 # Check if user pressed ok or cancel.
