@@ -34,12 +34,22 @@ class ToolboxUserSettings:
         """ """
         if not self.user_settings_loaded:
             self.load_user_settings()
+        # Extra check for macOS. Can't be located inside App content folder.
+        if platform.system() == "Darwin": 
+            if self.path_to_plankton_toolbox_data == "plankton_toolbox_data":
+                return str(pathlib.Path(self.home_for_mac(), "plankton_toolbox_data"))
+        # Normal response.
         return self.path_to_plankton_toolbox_data
 
     def get_path_to_plankton_toolbox_counter(self):
         """ """
         if not self.user_settings_loaded:
             self.load_user_settings()
+        # Extra check for macOS. Can't be located inside App content folder.
+        if platform.system() == "Darwin": 
+            if self.path_to_plankton_toolbox_data == "plankton_toolbox_counter":
+                return str(pathlib.Path(self.home_for_mac(), "plankton_toolbox_counter"))
+        # Normal response.
         return self.path_to_plankton_toolbox_counter
 
     def load_user_settings(self):
