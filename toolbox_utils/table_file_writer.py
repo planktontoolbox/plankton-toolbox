@@ -149,7 +149,7 @@ class TableFileWriter:
             except Exception as e:
                 raise UserWarning(
                     "Can't create directories in path. Path: "
-                    + self._file_path
+                    + str(self._file_path)
                     + ". Exception: "
                     + e
                 )
@@ -192,7 +192,7 @@ class TableFileWriter:
             except Exception as e:
                 raise UserWarning(
                     "Can't create directories in path. Path: "
-                    + self._file_path
+                    + str(self._file_path)
                     + ". Exception: "
                     + str(e)
                 )

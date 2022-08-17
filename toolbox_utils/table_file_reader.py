@@ -169,7 +169,7 @@ class TableFileReader:
         if filename is None:
             raise UserWarning("File name is missing.")
         if not filename.exists():
-            raise UserWarning("File is not found.  File: " + filename)
+            raise UserWarning("File is not found.  File: " + str(filename))
         # Get encoding.
         if self._encoding is None:
             self._encoding = locale.getpreferredencoding()
@@ -266,7 +266,7 @@ class TableFileReader:
         if filename is None:
             raise UserWarning("File name is missing.")
         if not filename.exists():
-            raise UserWarning("File is not found.  File: " + filename)
+            raise UserWarning("File is not found.  File: " + str(filename))
         #
         self._columnsbyindex = None
         #
@@ -287,7 +287,7 @@ class TableFileReader:
                     worksheet = workbook[self._excel_sheet_name]
                 else:
                     raise UserWarning(
-                        "Excel sheet " + self._excel_sheet_name + " not available."
+                        "Excel sheet " + str(self._excel_sheet_name) + " not available."
                     )
             else:
                 # Use the first sheet if not specified.
@@ -353,7 +353,7 @@ class TableFileReader:
             filename = pathlib.Path(self._file_path, self._zip_file_name)
         #
         if not zipfile.is_zipfile(filename):
-            raise UserWarning("Selected file is not a valid zip file: " + filename)
+            raise UserWarning("Selected file is not a valid zip file: " + str(filename))
         # Get encoding.
         if self._encoding is None:
             self._encoding = (
@@ -399,7 +399,7 @@ class TableFileReader:
             except Exception as e:
                 msg = (
                     "Can't read zip file. Entry name: "
-                    + self._zip_file_entry
+                    + str(self._zip_file_entry)
                     + ". Exception: "
                     + str(e)
                 )

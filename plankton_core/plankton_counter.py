@@ -68,7 +68,7 @@ class PlanktonCounterManager(QtCore.QObject):
             return sorted(datasetnames)
         else:
             raise UserWarning(
-                "The directory " + self._dataset_dir_path + " does not exists."
+                "The directory " + str(self._dataset_dir_path) + " does not exists."
             )
 
     def create_dataset(self, dataset_name):
@@ -81,13 +81,13 @@ class PlanktonCounterManager(QtCore.QObject):
             except Exception as e:
                 raise UserWarning(
                     "Can't create directories in path. Path: "
-                    + path
+                    + str(path)
                     + ". Exception: "
                     + str(e)
                 )
         else:
             raise UserWarning(
-                "Dataset already exists, create failed. Dataset name: " + dataset_name
+                "Dataset already exists, create failed. Dataset name: " + str(dataset_name)
             )
         #
         self._emit_change_notification()
@@ -101,11 +101,11 @@ class PlanktonCounterManager(QtCore.QObject):
                 shutil.rmtree(path)
             except Exception as e:
                 raise UserWarning(
-                    "Can't delete directory. Path: " + path + ". Exception: " + str(e)
+                    "Can't delete directory. Path: " + str(path) + ". Exception: " + str(e)
                 )
         else:
             raise UserWarning(
-                "Dataset did not exist, delete failed. Dataset name: " + dataset_name
+                "Dataset did not exist, delete failed. Dataset name: " + str(dataset_name)
             )
         #
         self._emit_change_notification()
@@ -123,7 +123,7 @@ class PlanktonCounterManager(QtCore.QObject):
                     samplenames.append(sampledir)
             return sorted(samplenames)
         else:
-            raise UserWarning("Dataset does not exist. Dataset name: " + dataset_name)
+            raise UserWarning("Dataset does not exist. Dataset name: " + str(dataset_name))
 
     def create_sample(self, dataset_name, sample_name):
         """Creates a new sample (= a new directory in the dataset directory)."""
@@ -141,13 +141,13 @@ class PlanktonCounterManager(QtCore.QObject):
             except Exception as e:
                 raise UserWarning(
                     "Can't create directories in path. Path: "
-                    + path
+                    + str(path)
                     + ". Exception: "
                     + str(e)
                 )
         else:
             raise UserWarning(
-                "Sample already exists, create failed. Dataset name: " + dataset_name
+                "Sample already exists, create failed. Dataset name: " + str(dataset_name)
             )
         #
         self._emit_change_notification()
@@ -161,11 +161,11 @@ class PlanktonCounterManager(QtCore.QObject):
                 shutil.rmtree(path)
             except Exception as e:
                 raise UserWarning(
-                    "Can't delete sample. Path: " + path + ". Exception: " + str(e)
+                    "Can't delete sample. Path: " + str(path) + ". Exception: " + str(e)
                 )
         else:
             raise UserWarning(
-                "Sample does not exist, delete failed. Sample name: " + sample_name
+                "Sample does not exist, delete failed. Sample name: " + str(sample_name)
             )
         #
         self._emit_change_notification()
@@ -180,11 +180,11 @@ class PlanktonCounterManager(QtCore.QObject):
                 shutil.move(path, new_path)
             except Exception as e:
                 raise UserWarning(
-                    "Can't rename sample. Path: " + path + ". Exception: " + str(e)
+                    "Can't rename sample. Path: " + str(path) + ". Exception: " + str(e)
                 )
         else:
             raise UserWarning(
-                "Sample does not exist, rename failed. Dataset name: " + old_sample_name
+                "Sample does not exist, rename failed. Dataset name: " + str(old_sample_name)
             )
         #
         self._emit_change_notification()
