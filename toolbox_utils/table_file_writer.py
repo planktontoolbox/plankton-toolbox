@@ -109,7 +109,7 @@ class TableFileWriter:
         out = None
         try:
             out = codecs.open(
-                filepathname,
+                str(filepathname),
                 mode="w",
                 encoding=self._encoding,
                 errors=self._encoding_error_handling,
@@ -123,7 +123,7 @@ class TableFileWriter:
                 out.write(self._field_delimiter.join(outrow) + self._row_delimiter)
         except Exception as e:
             print("Failed to write to text file: " + filepathname)
-            raise
+            pass ### raise
         finally:
             if out:
                 out.close()
@@ -174,7 +174,7 @@ class TableFileWriter:
         except Exception as e:
             msg = "Failed to write to file: " + filepathname + ". Exception: " + str(e)
             print(msg)
-            raise
+            pass ### raise
 
     def _write_zip_entry(self, table_header, table_rows):
         """Private method. Use write_file() above."""

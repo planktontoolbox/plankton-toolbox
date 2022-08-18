@@ -730,7 +730,7 @@ class LineChart(ChartBase):
             toolbox_utils.Logging().warning(
                 "GraphPlotter.LineChart: Plot skipped: %s" % (e.args[0])
             )
-            raise
+            pass ### raise
 
 
 class BarChart(ChartBase):
@@ -893,7 +893,7 @@ class BarChart(ChartBase):
             toolbox_utils.Logging().warning(
                 "GraphPlotter.BarChart: Plot skipped: %s" % (e.args[0])
             )
-            raise
+            pass ### raise
 
 
 class ScatterChart(ChartBase):
@@ -1187,7 +1187,7 @@ class ScatterChart(ChartBase):
             toolbox_utils.Logging().warning(
                 "GraphPlotter.ScatterChart: Plot skipped: %s" % (e.args[0])
             )
-            raise
+            pass ### raise
 
 
 class PieChart(ChartBase):
@@ -1278,7 +1278,7 @@ class PieChart(ChartBase):
             toolbox_utils.Logging().warning(
                 "GraphPlotter.PieChart: Plot skipped: %s" % (e.args[0])
             )
-            raise
+            pass ### raise
 
 
 class BoxPlotChart(ChartBase):
@@ -1353,7 +1353,7 @@ class BoxPlotChart(ChartBase):
             toolbox_utils.Logging().warning(
                 "GraphPlotter.BoxPlotChart: Plot skipped: %s" % (e.args[0])
             )
-            raise
+            pass ### raise
 
 
 class MapChart(ChartBase):
@@ -1436,7 +1436,7 @@ class MapChart(ChartBase):
 #         #
 #         except Exception as e:
 #             toolbox_utils.Logging().warning('GraphPlotter.MapChart: Plot skipped: %s" % (e.args[0]))
-#             raise
+#             pass ### raise
 
 
 #

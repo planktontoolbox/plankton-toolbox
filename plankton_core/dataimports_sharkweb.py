@@ -97,7 +97,7 @@ class ImportSharkWeb(plankton_core.DataImportPreparedBase):
         try:
             ###            txtencode = toolbox_settings.ToolboxSettings().getValue('General:Character encoding, txt-files', 'cp1252')
             txtencode = "cp1252"
-            input_file = codecs.open(file_name, mode="r", encoding=txtencode)
+            input_file = codecs.open(str(file_name), mode="r", encoding=txtencode)
 
             # Read data header. Same header used for data and aggregated data.
             separator = "\t"  # Use ',' as default item separator.
