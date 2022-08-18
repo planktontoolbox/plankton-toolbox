@@ -313,7 +313,7 @@ class Species(object):
             except:
                 toolbox_utils.Logging().warning(
                     "Failed when loading trophic types. File:"
-                    + excel_file_name
+                    + str(excel_file_name)
                     + "  Taxon: "
                     + scientificname
                 )
@@ -350,7 +350,7 @@ class Species(object):
                             "Scientific name added twice: "
                             + scientificname
                             + "   (Source: "
-                            + excel_file_name
+                            + str(excel_file_name)
                             + ")"
                         )
                     #
@@ -362,7 +362,7 @@ class Species(object):
             except:
                 toolbox_utils.Logging().warning(
                     "Failed when loading taxa. File:"
-                    + excel_file_name
+                    + str(excel_file_name)
                     + "  Taxon: "
                     + scientificname
                 )
@@ -385,7 +385,7 @@ class Species(object):
                         "Invalid translate (valid taxa in first column): "
                         + fromname
                         + "   (Source: "
-                        + excel_file_name
+                        + str(excel_file_name)
                         + ")"
                     )
                     continue
@@ -403,13 +403,13 @@ class Species(object):
                         "Scientific name is missing: "
                         + toname
                         + "   (Source: "
-                        + excel_file_name
+                        + str(excel_file_name)
                         + ")"
                     )
             except:
                 toolbox_utils.Logging().warning(
                     "Failed when loading translates/synonyms. File:"
-                    + excel_file_name
+                    + str(excel_file_name)
                     + "  From taxon: "
                     + toname
                 )
@@ -447,7 +447,7 @@ class Species(object):
             except:
                 toolbox_utils.Logging().warning(
                     "Failed when loading harmful algae. File:"
-                    + excel_file_name
+                    + str(excel_file_name)
                     + "  Taxon: "
                     + scientific_name
                 )
@@ -477,7 +477,7 @@ class Species(object):
             except:
                 toolbox_utils.Logging().warning(
                     "Failed when loading plankton group def. File:"
-                    + excel_file_name
+                    + str(excel_file_name)
                     + "  Taxon: "
                     + scientificname
                 )
@@ -641,7 +641,7 @@ class Species(object):
                             + "   Size: "
                             + size
                             + "   (Source: "
-                            + excel_file_name
+                            + str(excel_file_name)
                             + ")"
                         )
                         continue  # Only add BVOL info if taxon exists in taxa.
@@ -666,7 +666,7 @@ class Species(object):
                                 + "   Size: "
                                 + sizeclassdict.get("bvol_size_class", "")
                                 + "   (Source: "
-                                + excel_file_name
+                                + str(excel_file_name)
                                 + ")"
                             )
                     #
