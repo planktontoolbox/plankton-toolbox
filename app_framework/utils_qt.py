@@ -44,7 +44,9 @@ class RightAlignedQLabel(QtWidgets.QLabel):
 
     def __init__(self, parent=None):
         QtWidgets.QLabel.__init__(self, parent)
-        self.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter | QtCore.Qt.AlignmentFlag.AlignRight)
+        self.setAlignment(
+            QtCore.Qt.AlignmentFlag.AlignVCenter | QtCore.Qt.AlignmentFlag.AlignRight
+        )
 
 
 class CenterAlignedQLabel(QtWidgets.QLabel):
@@ -52,7 +54,9 @@ class CenterAlignedQLabel(QtWidgets.QLabel):
 
     def __init__(self, parent=None):
         QtWidgets.QLabel.__init__(self, parent)
-        self.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter | QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.setAlignment(
+            QtCore.Qt.AlignmentFlag.AlignVCenter | QtCore.Qt.AlignmentFlag.AlignCenter
+        )
 
 
 class LeftAlignedQLabel(QtWidgets.QLabel):
@@ -60,7 +64,9 @@ class LeftAlignedQLabel(QtWidgets.QLabel):
 
     def __init__(self, parent=None):
         QtWidgets.QLabel.__init__(self, parent)
-        self.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter | QtCore.Qt.AlignmentFlag.AlignLeft)
+        self.setAlignment(
+            QtCore.Qt.AlignmentFlag.AlignVCenter | QtCore.Qt.AlignmentFlag.AlignLeft
+        )
 
 
 class ClickableQLabel(QtWidgets.QLabel):
@@ -636,6 +642,7 @@ def set_app_style_sheet(app):
         QAbstractButton:hover { color: #d1581c; }
         """
     )
+
 
 #     app.setStyleSheet("QTextEdit, QListView { border: 2px solid darkgray; }")
 #     app.setStyleSheet(

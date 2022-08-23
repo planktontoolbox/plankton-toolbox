@@ -104,7 +104,7 @@ class FormatSingleFile(plankton_core.ParsedFormat):
                 "Failed to parse dataset: %s" % (e.args[0])
                 + "- Command string: %s" % (commandstring)
             )
-            pass ### raise
+            pass  ### raise
         #
         try:
             # Base class must know header for _asText(), etc.

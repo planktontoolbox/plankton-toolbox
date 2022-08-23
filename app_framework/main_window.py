@@ -45,7 +45,6 @@ class MainWindow(QtWidgets.QMainWindow):
         # Logging. Always log to plankton_toolbox_log.txt. Use the Log tool when
         # it is available.
 
-
         root_dir = app_framework.ToolboxUserSettings().home_for_mac()
         log_path = pathlib.Path(root_dir, "plankton_toolbox_log.txt")
         with log_path.open("w", encoding="cp1252") as f:
@@ -57,8 +56,6 @@ class MainWindow(QtWidgets.QMainWindow):
         # )
         # self._logfile.write("Plankton Toolbox. " + time.strftime("%Y-%m-%d %H:%M:%S"))
         # self._logfile.write("")
-
-
 
         self._logtool = None  # Should be initiated later.
 
@@ -90,7 +87,9 @@ class MainWindow(QtWidgets.QMainWindow):
                 'User settings in "plankton_toolbox_data/user_settings.txt": '
             )
             toolbox_utils.Logging().log("- Path to data dictionary: " + str(data_path))
-            toolbox_utils.Logging().log("- Path to counter dictionary: " + str(counter_path))
+            toolbox_utils.Logging().log(
+                "- Path to counter dictionary: " + str(counter_path)
+            )
         #
         self._activitymanager = app_activities.ActivityManager()
         self._activitymanager.set_parent(self)
@@ -172,12 +171,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._ui_settings.setValue("MainWindow/State", self.saveState())
         self._ui_settings.setValue("MainWindow/Geometry", self.geometry())
 
-
-
         # self._logfile.close
-
-
-
 
     def _createMenu(self):
         """
@@ -361,16 +355,12 @@ class MainWindow(QtWidgets.QMainWindow):
         #        self.console.addItem(message)
         try:
 
-
-
             root_dir = app_framework.ToolboxUserSettings().home_for_mac()
             log_path = pathlib.Path(root_dir, "plankton_toolbox_log.txt")
             with log_path.open("a", encoding="cp1252") as f:
                 f.write(message + "\r\n")
             # self._logfile.write(message + "\r\n")
             # self._logfile.flush()
-
-
 
             # Search for the console tool. Note: Not available during startup.
             if not self._logtool:

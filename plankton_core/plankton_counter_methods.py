@@ -85,7 +85,9 @@ class PlanktonCounterMethods:
                         specieslists.append(listfile.replace(".txt", ""))
             return sorted(specieslists)
         else:
-            raise UserWarning("The directory " + str(speciesdirpath) + " does not exists.")
+            raise UserWarning(
+                "The directory " + str(speciesdirpath) + " does not exists."
+            )
 
     def get_counting_species_table(self, counting_species_file_name):
         """ """
@@ -142,13 +144,13 @@ class PlanktonCounterMethods:
             self._methods_species_lists_dir_path, counting_species_list + ".txt"
         )
         if filepath.is_file():
-            filepath.unlink() # Remove files.
+            filepath.unlink()  # Remove files.
 
     def delete_counting_method(self, counting_method_name):
         """ """
         filepath = pathlib.Path(self._methods_dir_path, counting_method_name + ".txt")
         if filepath.is_file():
-            filepath.unlink() # Removes file.
+            filepath.unlink()  # Removes file.
 
 
 #     def get_preferred_sizeclasses_columns(self, counting_species_file_name):

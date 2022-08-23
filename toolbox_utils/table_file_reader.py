@@ -341,7 +341,7 @@ class TableFileReader:
                 + str(e)
             )
             print(msg)
-            pass ### raise
+            pass  ### raise
 
     def _read_zip_entry(self):
         """Private method. Use read_file() above."""

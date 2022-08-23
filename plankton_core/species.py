@@ -70,7 +70,7 @@ class Species(object):
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
             toolbox_utils.Logging().error("Exception: (" + debug_info + "): " + str(e))
-            pass ### raise
+            pass  ### raise
 
     def get_taxa_dict(self):
         """ """
@@ -268,7 +268,7 @@ class Species(object):
         #
         except Exception as e:
             toolbox_utils.Logging().error("Failed when loading species data: " + str(e))
-            pass ### raise
+            pass  ### raise
 
     def _load_trophic_types(self, excel_file_name):
         """Adds trophic type info to the species objects."""
