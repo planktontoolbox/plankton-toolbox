@@ -265,8 +265,8 @@ class ExportSampleDialog(QtWidgets.QDialog):
         """ """
         try:
             dirdialog = QtWidgets.QFileDialog(self)
-            dirdialog.setFileMode(QtWidgets.QFileDialog.Directory)
-            dirdialog.setOptions(QtWidgets.QFileDialog.ShowDirsOnly)
+            dirdialog.setFileMode(QtWidgets.QFileDialog.FileMode.Directory)
+            dirdialog.setOptions(QtWidgets.QFileDialog.Option.ShowDirsOnly)
             dirdialog.setDirectory(str(self._exporttargetdir_edit.text()))
             dirpath = dirdialog.getExistingDirectory()
             if dirpath:

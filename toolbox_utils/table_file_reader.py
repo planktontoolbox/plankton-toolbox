@@ -163,13 +163,13 @@ class TableFileReader:
         table_header = []
         table_rows = []
         # File path and name.
-        filename = self._text_file_name
+        filename_path = pathlib.Path(self._text_file_name)
         if self._file_path and self._text_file_name:
-            filename = pathlib.Path(self._file_path, self._text_file_name)
-        if filename is None:
+            filename_path = pathlib.Path(self._file_path, self._text_file_name)
+        if filename_path is None:
             raise UserWarning("File name is missing.")
-        if not filename.exists():
-            raise UserWarning("File is not found.  File: " + str(filename))
+        if not filename_path.exists():
+            raise UserWarning("File is not found.  File: " + str(filename_path))
         # Get encoding.
         if self._encoding is None:
             self._encoding = locale.getpreferredencoding()
@@ -191,7 +191,7 @@ class TableFileReader:
         # #                 row = str(row.encode(self._encoding, self._encoding_error_handling))
         # ##                row = str(row, encoding=self._encoding, errors=self._encoding_error_handling)
 
-        with pathlib.Path(filename).open("r", encoding="cp1252") as infile:
+        with pathlib.Path(filename_path).open("r", encoding="cp1252") as infile:
             fielddelimiter = None
             # Iterate over rows in file.
             rowindex = -1
@@ -260,20 +260,20 @@ class TableFileReader:
         if openpyxl_installed == False:
             raise UserWarning('Can\'t read .xlsx files ("openpyxl" is not installed).')
         # File path and name.
-        filename = self._excel_file_name
+        filename_path = pathlib.Path(self._excel_file_name)
         if self._file_path and self._excel_file_name:
-            filename = pathlib.Path(self._file_path, self._excel_file_name)
-        if filename is None:
+            filename_path = pathlib.Path(self._file_path, self._excel_file_name)
+        if filename_path is None:
             raise UserWarning("File name is missing.")
-        if not filename.exists():
-            raise UserWarning("File is not found.  File: " + str(filename))
+        if not filename_path.exists():
+            raise UserWarning("File is not found.  File: " + str(filename_path))
         #
         self._columnsbyindex = None
         #
         try:
             #             workbook = openpyxl.load_workbook(filename, use_iterators = True) # Supports big files.
             workbook = openpyxl.load_workbook(
-                filename, read_only=True
+                str(filename_path), read_only=True
             )  # Supports big files.
             if workbook == None:
                 raise UserWarning("Can't read Excel (.xlsx) file.")
@@ -336,7 +336,7 @@ class TableFileReader:
         except Exception as e:
             msg = (
                 "Failed to read from file. File name: "
-                + filename
+                + str(filename_path)
                 + ". Exception: "
                 + str(e)
             )
@@ -363,7 +363,7 @@ class TableFileReader:
         with zipfile.ZipFile(filename, "r") as infile:
             if self._zip_file_entry not in infile.namelist():
                 raise UserWarning(
-                    "The entry " + self._zip_file_entry + " is missing in " + filename
+                    "The entry " + self._zip_file_entry + " is missing in " + str(filename)
                 )
             #
             try:

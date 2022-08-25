@@ -233,7 +233,7 @@ class ImportPlanktonCounter(plankton_core.DataImportPreparedBase):
         #
         dir_path = plankton_core.PlanktonCounterManager().get_dataset_dir_path()
         #
-        if (not excel_file_path) or (not excel_file_path.is_file()):
+        if (not excel_file_path) or (not pathlib.Path(excel_file_path).is_file()):
             raise UserWarning("Excel file does not exists.")
         #
         self._dataset_metadata = {}

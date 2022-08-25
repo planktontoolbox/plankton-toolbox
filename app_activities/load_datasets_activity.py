@@ -405,7 +405,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
                         # Add metadata related to imported file.
                         datasetnode.add_metadata("parser", "-")
                         datasetnode.add_metadata(
-                            "file_name", pathlib.Path(parserpath).name
+                            "file_name", pathlib.Path(filename).name
                         )
                         datasetnode.add_metadata("file_path", filename)
                         datasetnode.add_metadata("import_column", "-")
@@ -472,7 +472,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
                         # Add metadata related to imported file.
                         datasetnode.add_metadata("parser", "-")
                         datasetnode.add_metadata(
-                            "file_name", pathlib.Path(parserpath).name
+                            "file_name", pathlib.Path(filename).name
                         )
                         datasetnode.add_metadata("file_path", filename)
                         datasetnode.add_metadata("import_column", "-")
@@ -808,7 +808,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
                                 )
                             ),
                         )
-                        dataset.add_metadata("file_name", pathlib.Path(parserpath).name)
+                        dataset.add_metadata("file_name", pathlib.Path(filename).name)
                         dataset.add_metadata("file_path", filename)
                         dataset.add_metadata(
                             "import_column",
@@ -1025,7 +1025,7 @@ class LoadDatasetsActivity(app_framework.ActivityBase):
                                 )
                             ),
                         )
-                        dataset.add_metadata("file_name", pathlib.Path(parserpath).name)
+                        dataset.add_metadata("file_name", pathlib.Path(filename).name)
                         dataset.add_metadata("file_path", filename)
                         dataset.add_metadata(
                             "import_column",

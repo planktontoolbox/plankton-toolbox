@@ -724,8 +724,8 @@ class BackupExportImportDialog(QtWidgets.QDialog):
         """ """
         try:
             dirdialog = QtWidgets.QFileDialog(self)
-            dirdialog.setFileMode(QtWidgets.QFileDialog.Directory)
-            dirdialog.setOptions(QtWidgets.QFileDialog.ShowDirsOnly)
+            dirdialog.setFileMode(QtWidgets.QFileDialog.FileMode.Directory)
+            dirdialog.setOptions(QtWidgets.QFileDialog.Option.ShowDirsOnly)
             dirdialog.setDirectory(str(self._backupdir_edit.text()))
             dirpath = dirdialog.getExistingDirectory()
             if dirpath:
@@ -1055,8 +1055,8 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
         """ """
         try:
             dirdialog = QtWidgets.QFileDialog(self)
-            dirdialog.setFileMode(QtWidgets.QFileDialog.Directory)
-            dirdialog.setOptions(QtWidgets.QFileDialog.ShowDirsOnly)
+            dirdialog.setFileMode(QtWidgets.QFileDialog.FileMode.Directory)
+            dirdialog.setOptions(QtWidgets.QFileDialog.Option.ShowDirsOnly)
             dirdialog.setDirectory(str(self._browse_export_target_dir.text()))
             dirpath = dirdialog.getExistingDirectory()
             if dirpath:
@@ -1225,7 +1225,7 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
                             plankton_core.PlanktonCounterManager().get_dataset_dir_path()
                         )
                         datasetname = str(self._dataset_list.currentText())
-                        samplename = pathlib.Path(parserpath).stem
+                        samplename = pathlib.Path(filename).stem
                         # Check if overwrite.
                         if self._replaceoldsamples_checkbox.isChecked() == False:
                             if pathlib.Path(dir_path, datasetname, samplename).exists():

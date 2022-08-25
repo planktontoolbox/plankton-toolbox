@@ -85,7 +85,7 @@ class TableFileWriter:
     def _write_text_file(self, table_header, table_rows):
         """Private method. Use write_file() above."""
         # File path and name.
-        filepathname = self._text_file_name
+        filepathname = pathlib.Path(self._text_file_name)
         if self._file_path and self._text_file_name:
             filepathname = pathlib.Path(self._file_path, self._text_file_name)
         if filepathname is None:
@@ -122,7 +122,7 @@ class TableFileWriter:
                 outrow = [str(rowpart) for rowpart in row]
                 out.write(self._field_delimiter.join(outrow) + self._row_delimiter)
         except Exception as e:
-            print("Failed to write to text file: " + filepathname)
+            print("Failed to write to text file: " + str(filepathname))
             pass  ### raise
         finally:
             if out:
@@ -136,7 +136,7 @@ class TableFileWriter:
                 'Can\'t write to .xlsx files ("openpyxl" is not installed).'
             )
         # File path and name.
-        filepathname = self._excel_file_name
+        filepathname = pathlib.Path(self._excel_file_name)
         if self._file_path and self._excel_file_name:
             filepathname = pathlib.Path(self._file_path, self._excel_file_name)
         if filepathname is None:
@@ -169,17 +169,17 @@ class TableFileWriter:
                 outrow = [str(rowpart) for rowpart in row]
                 worksheet.append(outrow)
             # Save to file.
-            workbook.save(filepathname)
+            workbook.save(str(filepathname))
         #
         except Exception as e:
-            msg = "Failed to write to file: " + filepathname + ". Exception: " + str(e)
+            msg = "Failed to write to file: " + str(filepathname) + ". Exception: " + str(e)
             print(msg)
             pass  ### raise
 
     def _write_zip_entry(self, table_header, table_rows):
         """Private method. Use write_file() above."""
         # File path and name.
-        filepathname = self._zip_file_name
+        filepathname = pathlib.Path(self._zip_file_name)
         if self._file_path and self._zip_file_name:
             filepathname = pathlib.Path(self._file_path, self._zip_file_name)
         if filepathname is None:
@@ -209,7 +209,7 @@ class TableFileWriter:
             )
             #
             zip_write = zipfile.ZipFile(
-                filepathname, "a", zipfile.ZIP_DEFLATED
+                str(filepathname), "a", zipfile.ZIP_DEFLATED
             )  # Append to zip.
             try:
                 data = self._field_delimiter.join(table_header)
