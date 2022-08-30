@@ -764,7 +764,7 @@ class BackupExportImportDialog(QtWidgets.QDialog):
                                 path_file_name = pathlib.Path(root, file_name)
                                 zip_file_name = pathlib.Path(
                                     "plankton_toolbox_data",
-                                    path_file_name[source_dir_len:],
+                                    str(path_file_name)[source_dir_len:],
                                 )
                                 zip_file.write(str(path_file_name), str(zip_file_name))
             #

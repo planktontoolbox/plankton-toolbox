@@ -91,7 +91,7 @@ class TableFileWriter:
         if filepathname is None:
             raise UserWarning("File name is missing.")
         # Create path if not exists.
-        if (self._file_path) and (not self._file_path.exists()):
+        if (self._file_path) and (not pathlib.Path(self._file_path).exists()):
             try:
                 pathlib.Path(self._file_path).mkdir(parents=True)
                 print("Directories created for this path: " + self._file_path)
@@ -142,7 +142,7 @@ class TableFileWriter:
         if filepathname is None:
             raise UserWarning("File name is missing.")
         # Create path if not exists.
-        if (self._file_path) and (not self._file_path.exists()):
+        if (self._file_path) and (not pathlib.Path(self._file_path).exists()):
             try:
                 pathlib.Path(self._file_path).mkdir(parents=True)
                 print("Directories created for this path: " + self._file_path)
@@ -185,7 +185,7 @@ class TableFileWriter:
         if filepathname is None:
             raise UserWarning("File name is missing.")
         # Create path if not exists.
-        if (self._file_path) and (not self._file_path.exists()):
+        if (self._file_path) and (not pathlib.Path(self._file_path).exists()):
             try:
                 pathlib.Path(self._file_path).mkdir(parents=True)
                 print("Directories created for this path: " + self._file_path)
