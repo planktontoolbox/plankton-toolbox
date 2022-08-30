@@ -1154,10 +1154,10 @@ class ExportImportSamplesDialog(QtWidgets.QDialog):
                                 self,
                                 "Warning",
                                 "Excel file already exists. Do you want to replace it?",
-                                QtWidgets.QMessageBox.Cancel,
-                                QtWidgets.QMessageBox.Ok,
+                                QtWidgets.QMessageBox.QMessageBox.StandardButton.Cancel,
+                                QtWidgets.QMessageBox.QMessageBox.StandardButton.Ok,
                             )
-                            if box_result != QtWidgets.QMessageBox.Ok:
+                            if box_result != QtWidgets.QMessageBox.QMessageBox.StandardButton.Ok:
                                 continue
                         # Create sample object.
                         dir_path = (

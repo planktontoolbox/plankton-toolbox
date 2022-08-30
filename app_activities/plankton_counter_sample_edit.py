@@ -290,10 +290,10 @@ class ExportSampleDialog(QtWidgets.QDialog):
                     self,
                     "Warning",
                     "Excel file already exists. Do you want ro replace it?",
-                    QtWidgets.QMessageBox.Cancel,
-                    QtWidgets.QMessageBox.Ok,
+                    QtWidgets.QMessageBox.StandardButton.Cancel,
+                    QtWidgets.QMessageBox.StandardButton.Ok,
                 )
-                if box_result == QtWidgets.QMessageBox.Ok:
+                if box_result == QtWidgets.QMessageBox.StandardButton.Ok:
                     self._current_sample_object.export_sample_to_excel(
                         export_target_dir, export_target_filename
                     )

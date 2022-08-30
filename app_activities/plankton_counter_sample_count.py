@@ -1836,10 +1836,10 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
                     self,
                     "Warning",
                     "Do you want to remove all counted species from this method step?",
-                    QtWidgets.QMessageBox.Cancel,
-                    QtWidgets.QMessageBox.Ok,
+                    QtWidgets.QMessageBox.StandardButton.Cancel,
+                    QtWidgets.QMessageBox.StandardButton.Ok,
                 )
-                if box_result == QtWidgets.QMessageBox.Ok:
+                if box_result == QtWidgets.QMessageBox.StandardButton.Ok:
                     currentmethodstep = str(self._selectmethodstep_list.currentText())
                     self._current_sample_object.delete_rows_in_method_step(
                         currentmethodstep

@@ -571,10 +571,10 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
                 self,
                 "Warning",
                 "Do you want to clear all sample information?",
-                QtWidgets.QMessageBox.Cancel,
-                QtWidgets.QMessageBox.Ok,
+                QtWidgets.QMessageBox.StandardButton.Cancel,
+                QtWidgets.QMessageBox.StandardButton.Ok,
             )
-            if box_result == QtWidgets.QMessageBox.Ok:
+            if box_result == QtWidgets.QMessageBox.StandardButton.Ok:
                 self.clear_sample_info()
         #
         except Exception as e:
