@@ -486,7 +486,7 @@ class PlanktonCounterSample:
             # Use the same key for locked items.
             if sampleobject.is_locked():
                 if size:
-                    locked_list.append(taxon + " [" + size + "] ")
+                    locked_list.append(taxon + " {" + size + "} ")
                 else:
                     locked_list.append(taxon)
             # Count on class name.
@@ -504,7 +504,7 @@ class PlanktonCounterSample:
             elif summary_type == "Counted per taxa/sizes":
                 if size:
                     size_for_sorting = f"{taxon} [{float(size):5.0f}]"
-                    taxon = taxon + " [" + size + "] "
+                    taxon = taxon + " {" + size + "} "
                     sort_order = size_for_sorting
             # Create in list, first time only.
             if taxon not in counted_dict:
@@ -583,7 +583,7 @@ class PlanktonCounterSample:
                     size_range = "    " + size_range_dict[key]
                 lock_info = ""
                 if key in locked_list:
-                    lock_info = " [Locked]"
+                    lock_info = " LOCKED"
 
                 summary_data.append(
                     key
@@ -602,7 +602,7 @@ class PlanktonCounterSample:
                     size_range = " " + size_range_dict[key]
                 lock_info = ""
                 if key in locked_list:
-                    lock_info = " [Locked]"
+                    lock_info = " LOCKED"
                 summary_data.append(
                     key
                     + ": "

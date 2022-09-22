@@ -845,7 +845,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
 
                 active_row_text = scientific_name
                 if size_class:
-                    active_row_text += " [" + size_class + "] "
+                    active_row_text += " {" + size_class + "} "
                 active_row_text += ":"
                 for index, row in enumerate(summary_data):
                     if row.startswith(active_row_text):
@@ -1046,11 +1046,11 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
             #
             text_row_parts = text_row.split(":")
             text_row_parts = (
-                text_row_parts[0].replace("]", "[").split("[")
+                text_row_parts[0].replace("}", "{").split("{")
             )  # Maybe dirty, but...
             scientific_full_name = text_row_parts[0].strip()
             if len(text_row_parts) > 1:
-                size_class = text_row_parts[1].strip().strip("]")
+                size_class = text_row_parts[1].strip().strip("}")
             #
             name_parts = scientific_full_name.split(" ")
             spp_flag = ""
@@ -2361,7 +2361,7 @@ class LockTaxaListDialog(QtWidgets.QDialog):
                 if taxon:
                     taxon_size = taxon
                     if size:
-                        taxon_size += " [" + size + "]"
+                        taxon_size += " {" + size + "}"
                     item = QtGui.QStandardItem(taxon_size)
                     if is_locked:
                         item.setCheckState(QtCore.Qt.CheckState.Checked)
@@ -2411,10 +2411,10 @@ class LockTaxaListDialog(QtWidgets.QDialog):
                 selectedrow = str(item.text())
                 #
                 size_class = ""
-                parts = selectedrow.split("[")
+                parts = selectedrow.split("{")
                 scientific_full_name = parts[0].strip()
                 if len(parts) > 1:
-                    size_class = parts[1].strip().strip("]")
+                    size_class = parts[1].strip().strip("}")
                 #
                 if item.checkState() == QtCore.Qt.CheckState.Checked:
                     # Only lock unlocked taxa.
