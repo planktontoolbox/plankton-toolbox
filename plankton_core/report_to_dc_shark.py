@@ -241,9 +241,10 @@ class CreateReportToDataCenterShark(object):
     def add_new_fields(self, row_dict):
         """ """
         scientificname = row_dict.get("scientific_name", "")
+        size_class = row_dict.get("size_class", "")
         if scientificname:
-            ref_list = plankton_core.Species().get_taxon_value(
-                scientificname, "size_class_ref_list"
+            ref_list = plankton_core.Species().get_bvol_value(
+                scientificname, size_class, "size_class_ref_list"
             )
             row_dict["size_class_ref_list"] = ref_list
 

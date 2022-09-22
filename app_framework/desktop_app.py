@@ -58,7 +58,7 @@ def desktop_application():
         QtGui.QIcon("plankton_toolbox_data/img/plankton_toolbox_icon.png")
     )
     # Style, colours, etc.
-    app_framework.set_app_style_sheet(app)
+    # app_framework.set_app_style_sheet(app)
     # Create application and start the main event loop.
     window = app_framework.MainWindow()
     window.setVersion(__version__)
