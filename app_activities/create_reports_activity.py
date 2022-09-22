@@ -421,13 +421,13 @@ class CreateReportsActivity(app_framework.ActivityBase):
             if table_dataset:
                 # Header.
                 clipboardstring = (
-                    field_separator.join(map(str, table_dataset.get_header())).strip()
+                    field_separator.join(map(str, table_dataset.get_header()))
                     + row_separator
                 )
                 # Rows.
                 for row in table_dataset.get_rows():
                     clipboardstring += (
-                        field_separator.join(map(str, row)).strip() + row_separator
+                        field_separator.join(map(str, row)) + row_separator
                     )
             #
             clipboard.setText(clipboardstring)

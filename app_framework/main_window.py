@@ -358,7 +358,7 @@ class MainWindow(QtWidgets.QMainWindow):
             root_dir = app_framework.ToolboxUserSettings().home_for_mac()
             log_path = pathlib.Path(root_dir, "plankton_toolbox_log.txt")
             with log_path.open("a", encoding="cp1252") as f:
-                f.write(message + "\r\n")
+                f.write(message + "\n")
             # self._logfile.write(message + "\r\n")
             # self._logfile.flush()
 
