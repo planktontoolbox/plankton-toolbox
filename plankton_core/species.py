@@ -318,6 +318,32 @@ class Species(object):
                     + scientificname
                 )
 
+        # Check if all taxa have tropic types.
+        error_counter = 0
+        for taxon_dict in self._taxa_lookup.values():
+            scientific_name = taxon_dict["scientific_name"]
+            taxon_trophic_type = taxon_dict.get("trophic_type", "")
+            if len(taxon_dict.get("size_classes", [])) > 0:
+                if len(taxon_trophic_type) == 0:
+                    error_counter += 1
+                    toolbox_utils.Logging().warning(
+                        "Trophic type missing for taxa: "
+                        + scientific_name
+                    )
+                for sizeclass_dict in taxon_dict.get("size_classes", []):
+                    size_class = sizeclass_dict.get("bvol_size_class", "")
+                    trophic_type = sizeclass_dict.get("trophic_type", "")
+                    if len(trophic_type) == 0:
+                        error_counter += 1
+                        toolbox_utils.Logging().warning(
+                            "Trophic type missing for size class: "
+                            + scientific_name
+                            + "   "
+                            + size_class
+                        )
+        if error_counter > 0:
+            print("DEBUG: Trophic type missing: ", error_counter, " times.")
+
     def _load_taxa(self, excel_file_name):
         """Creates one data object for each taxon."""
         tablefilereader = toolbox_utils.TableFileReader(excel_file_name=excel_file_name)
