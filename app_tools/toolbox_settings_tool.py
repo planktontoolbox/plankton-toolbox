@@ -1,26 +1,26 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
 # Project: http://plankton-toolbox.org
-# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-present SMHI, Swedish Meteorological and Hydrological Institute
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
+from PyQt6 import QtWidgets
+from PyQt6 import QtCore
 
 # class ToolboxSettingsTool(tool_base.ToolBase):
 #     """
 #     """
-#     
+#
 #     def __init__(self, name, parentwidget):
 #         """ """
-#         # Initialize parent. Should be called after other 
+#         # Initialize parent. Should be called after other
 #         # initialization since the base class calls _create_content().
 #         super(ToolboxSettingsTool, self).__init__(name, parentwidget)
 #         #
 #         # Where is the tool allowed to dock in the main window.
-#         self.setAllowedAreas(QtCore.Qt.RightDockWidgetArea)
+#         self.setAllowedAreas(QtCore.Qt.DockWidgetArea.RightDockWidgetArea)
 #         self.setBaseSize(600,600)
-#         
+#
 #     def _create_content(self):
 #         """ """
 #         content = self._create_scrollable_content()
@@ -30,11 +30,11 @@ from PyQt5 import QtCore
 #         contentLayout.addLayout(self._content_resources())
 #         contentLayout.addLayout(self._content_buttons())
 #         contentLayout.addStretch(5)
-#         # Used when toolbox settings has changed.        
+#         # Used when toolbox settings has changed.
 #         toolbox_settings.ToolboxSettings().settingsChanged.connect(self._update)
 #         #
 #         self._update()
-# 
+#
 #     def _content_general(self):
 #         """ """
 #         # Active widgets and connections.
@@ -48,7 +48,7 @@ from PyQt5 import QtCore
 #         layout2.addRow('Decimal delimiter:', self._delimiter_edit)
 #         #
 #         return layout
-#     
+#
 #     def _content_resources(self):
 #         """ """
 #         # Active widgets and connections.
@@ -56,7 +56,7 @@ from PyQt5 import QtCore
 #         self._pegfilepath_edit = QtWidgets.QLineEdit('')
 #         self._iocfilepath_edit = QtWidgets.QLineEdit('')
 #         self._loadresources_checkbox = QtWidgets.QCheckBox('Load resources at startup.')
-# #        self._loadresources_checkbox.stateChanged(int)'), self._toogleLoadResources)                
+# #        self._loadresources_checkbox.stateChanged(int)'), self._toogleLoadResources)
 #         # Layout.
 #         box = QtWidgets.QGroupBox('Resources', self)
 #         layout = QtWidgets.QVBoxLayout()
@@ -72,16 +72,16 @@ from PyQt5 import QtCore
 #         layout2.addRow(None, self._loadresources_checkbox)
 #         #
 #         return layout
-#     
+#
 #     def _content_buttons(self):
 #         """ """
 #         # Active widgets and connections.
 #         self._restoredefault_button = QtWidgets.QPushButton('Restore defaults')
 #         self._restore_button = QtWidgets.QPushButton('Restore')
 #         self._save_button = QtWidgets.QPushButton('Save')
-#         self._restoredefault_button.clicked.connect(self._restore_default)                
-#         self._restore_button.clicked.connect(self._cancel)                
-#         self._save_button.clicked.connect(self._save)                
+#         self._restoredefault_button.clicked.connect(self._restore_default)
+#         self._restore_button.clicked.connect(self._cancel)
+#         self._save_button.clicked.connect(self._save)
 #         # Layout widgets.
 #         layout = QtWidgets.QHBoxLayout()
 #         layout.addStretch()
@@ -90,14 +90,14 @@ from PyQt5 import QtCore
 #         layout.addWidget(self._save_button)
 #         #
 #         return layout
-#     
+#
 # #    def _toogleLoadResources(self, checkStatus):
 # #        """ """
-# #        if checkStatus == QtCore.Qt.Checked:
+# #        if checkStatus == QtCore.Qt.CheckState.Checked:
 # #            toolbox_settings.ToolboxSettings().set_value('Resources:Load at startup', True)
 # #        else:
 # #            toolbox_settings.ToolboxSettings().set_value('Resources:Load at startup', False)
-#     
+#
 #     def _update(self):
 #         """ """
 #         self._delimiter_edit.setText(toolbox_settings.ToolboxSettings().get_value('General:Decimal delimiter'))
@@ -107,30 +107,29 @@ from PyQt5 import QtCore
 #         #
 #         loadresources = toolbox_settings.ToolboxSettings().get_value('Resources:Load at startup')
 #         if loadresources:
-#             self._loadresources_checkbox.setCheckState(QtCore.Qt.Checked)
+#             self._loadresources_checkbox.setCheckState(QtCore.Qt.CheckState.Checked)
 #         else:
-#             self._loadresources_checkbox.setCheckState(QtCore.Qt.Unchecked)
-#             
-#     
+#             self._loadresources_checkbox.setCheckState(QtCore.Qt.CheckState.Unchecked)
+#
+#
 #     def _restore_default(self):
 #         """ """
 #         toolbox_settings.ToolboxSettings().restore_default()
 #         self._update()
-#     
+#
 #     def _cancel(self):
 #         """ """
 #         self._update()
-#     
+#
 #     def _save(self):
 #         """ """
 #         toolbox_settings.ToolboxSettings().set_value('General:Decimal delimiter', str(self._delimiter_edit.text()))
 #         toolbox_settings.ToolboxSettings().set_value('Resources:Dyntaxa:Filepath', str(self._dyntaxafilepath_edit.text()))
 #         toolbox_settings.ToolboxSettings().set_value('Resources:PEG:Filepath', str(self._pegfilepath_edit.text()))
 #         toolbox_settings.ToolboxSettings().set_value('Resources:Harmful plankton:Filepath', str(self._iocfilepath_edit.text()))
-#         if self._loadresources_checkbox.checkState() == QtCore.Qt.Checked:
+#         if self._loadresources_checkbox.checkState() == QtCore.Qt.CheckState.Checked:
 #             toolbox_settings.ToolboxSettings().set_value('Resources:Load at startup', True)
 #         else:
 #             toolbox_settings.ToolboxSettings().set_value('Resources:Load at startup', False)
 #         # Save by use of QSettings.
 #         toolbox_settings.ToolboxSettings().save_settings(QtCore.QSettings())
-

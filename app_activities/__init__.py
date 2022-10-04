@@ -1,4 +1,3 @@
-
 from .activity_manager import ActivityManager
 
 from .start_activity import StartActivity

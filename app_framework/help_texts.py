@@ -1,33 +1,36 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
 # Project: http://plankton-toolbox.org
-# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-present SMHI, Swedish Meteorological and Hydrological Institute
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
-class HelpTexts(object):  
-    """ Help texts for the desktop application. 
-        Mostly displayed in util_qt.RichTextQLabel labels, basic HTML tags can be used. 
+
+class HelpTexts(object):
+    """Help texts for the desktop application.
+    Mostly displayed in util_qt.RichTextQLabel labels, basic HTML tags can be used.
     """
-    
-    def __init__(self, parent = None):  
+
+    def __init__(self, parent=None):
         """ """
         self._texts = {}
         self._add_texts()
-    
+
     def get_text(self, key):
         """ """
-        try:          
+        try:
             return self._texts[key]
         except:
             pass
-        return ''
-    
+        return ""
+
     def _add_texts(self):
-        """ """          
+        """ """
 
         # Start activity..
 
-        self._texts['start_activity'] = """
+        self._texts[
+            "start_activity"
+        ] = """
         <br/>
         <h3>Welcome to Plankton Toolbox</h3>
         <p>
@@ -89,10 +92,12 @@ class HelpTexts(object):
         </p>
 
         """
-        
+
         # About.
-        
-        self._texts['about'] = """
+
+        self._texts[
+            "about"
+        ] = """
         <p>
         <b>Plankton Toolbox</b> - ###version###
         </p>
@@ -121,7 +126,7 @@ class HelpTexts(object):
         <a href="http://www.vr.se"> Swedish Research Council</a> through Grant No 2019-00242.
         </p>
         <p>
-        The software is developed in Python and Qt/PyQt5. Released under the MIT license.
+        The software is developed in Python and Qt/PyQt6. Released under the MIT license.
         Source code and info for developers at 
         <a href="https://github.com/planktontoolbox/plankton-toolbox">GitHub</a>.
         </p>

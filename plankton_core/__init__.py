@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
 # Project: http://plankton-toolbox.org
-# Copyright (c) 2010-2018 SMHI, Swedish Meteorological and Hydrological Institute 
+# Copyright (c) 2010-present SMHI, Swedish Meteorological and Hydrological Institute
 # License: MIT License (see LICENSE.txt or http://opensource.org/licenses/mit).
 
 """ """
@@ -30,6 +30,7 @@ from .plankton_counter_methods import PlanktonCounterMethod
 
 from .dataimports_prepared_base import DataImportPreparedBase
 from .dataimports_sharkweb import ImportSharkWeb
+
 # from .plankton_core.dataimports_phytowin import ImportPhytowin
 from .dataimports_planktoncounter import ImportPlanktonCounter
 
@@ -51,4 +52,3 @@ from .dataimports_format_singlefile import FormatSingleFile
 from .dataimports_import_manager import ImportManager
 
 # from .marinespecies_ws import WormsWebservice
-
