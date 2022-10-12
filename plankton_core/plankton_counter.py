@@ -42,7 +42,7 @@ class PlanktonCounterManager(QtCore.QObject):
             except Exception as e:
                 raise UserWarning(
                     "Can't create directories in path. Path: "
-                    + self._dataset_dir_path
+                    + str(self._dataset_dir_path)
                     + ". Exception: "
                     + str(e)
                 )

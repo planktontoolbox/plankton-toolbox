@@ -94,11 +94,11 @@ class TableFileWriter:
         if (self._file_path) and (not pathlib.Path(self._file_path).exists()):
             try:
                 pathlib.Path(self._file_path).mkdir(parents=True)
-                print("Directories created for this path: " + self._file_path)
+                print("Directories created for this path: " + str(self._file_path))
             except Exception as e:
                 raise UserWarning(
                     "Can't create directories in path. Path: "
-                    + self._file_path
+                    + str(self._file_path)
                     + ". Exception: "
                     + str(e)
                 )
