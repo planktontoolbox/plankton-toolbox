@@ -336,12 +336,15 @@ class ToolboxQTableView(QtWidgets.QTableView):
     def onFilterTextChanged(self, text):
         """link the textChanged signal to this method for filtering.
         In the constructor 'filter_column_index' must be defined."""
-        filterString = QtCore.QRegExp(
-            str(text),
-            QtCore.Qt.CaseSensitivity.CaseInsensitive,
-            #                                 QtCore.QRegExp.RegExp
-        )
-        self.filterproxymodel.setFilterRegExp(filterString)
+        try:
+            filterString = QtCore.QRegularExpression(
+                str(text),
+                # QtCore.Qt.CaseSensitivity.CaseInsensitive,
+                QtCore.QRegularExpression.PatternOption.CaseInsensitiveOption,
+            )
+            self.filterproxymodel.setFilterRegularExpression(filterString)
+        except Exception as e:
+            print("EXCEPTION: onFilterTextChanged: ", e)
 
 
 class ToolboxTableModel(QtCore.QAbstractTableModel):
