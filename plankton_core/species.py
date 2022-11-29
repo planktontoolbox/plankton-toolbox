@@ -89,11 +89,16 @@ class Species(object):
 
     def get_taxon_value(self, scientific_name, key):
         """ """
+        value = ""
         key_lower = key.lower()
         if scientific_name in self._taxa_lookup:
-            return self._taxa_lookup[scientific_name].get(key_lower, "")
+            value = self._taxa_lookup[scientific_name].get(key_lower, "")
         #
-        return ""
+        if key in ["trophic_type", "trophic_type_code"]:
+            if value == "":
+                return "NS" # Not Specified.
+        #
+        return value
 
     def get_bvol_dict(self, scientific_name, size_class):
         """ """
@@ -108,14 +113,24 @@ class Species(object):
 
     def get_bvol_value(self, scientific_name, size_class, key):
         """ """
+        if key in ["trophic_type", "trophic_type_code"]:
+            if size_class == "":
+                trophic_type = self.get_taxon_value(scientific_name, key)
+                return trophic_type
+        #
+        value = ""
         if scientific_name in self._taxa_lookup:
             speciesobject = self._taxa_lookup[scientific_name]
             if "size_classes" in speciesobject:
                 for sizeclassobject in speciesobject["size_classes"]:
                     if sizeclassobject.get("bvol_size_class", "") == str(size_class):
-                        return sizeclassobject.get(key, "")
+                        value = sizeclassobject.get(key, "")
         #
-        return ""
+        if key in ["trophic_type", "trophic_type_code"]:
+            if value == "":
+                return "NS" # Not Specified.
+        #
+        return value
 
     def _clear(self):
         """ """
