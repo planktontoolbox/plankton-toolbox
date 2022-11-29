@@ -186,6 +186,8 @@ class ParsedFormat(plankton_core.FormatBase):
             )
         if not value:
             value = reported_trophic_type
+        if not value:
+            value = "NS"
         #
         return value
 
