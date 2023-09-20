@@ -33,6 +33,7 @@ class CreateReportStandard(object):
             "sample_min_depth_m",
             "sample_max_depth_m",
             "scientific_name",
+            "aphia_id",
             "species_flag_code",
             "cf",
             "size_class",  #'text',
@@ -113,8 +114,12 @@ class CreateReportStandard(object):
                 "taxon_phylum",
                 "taxon_kingdom",
                 "rank",
+                "bvol_aphia_id",
             ]:
 
                 value = taxon_dict.get(taxon_key, "")
                 if value:
-                    datadict[taxon_key] = value
+                    if taxon_key == "bvol_aphia_id":
+                        datadict["aphia_id"] = value
+                    else:
+                        datadict[taxon_key] = value

@@ -49,6 +49,7 @@ class CreateReportToDataCenterShark(object):
             "preservative",  # 'METFP',
             "sample_comment",  # 'COMNT_SAMP',
             "scientific_name",  # 'LATNM',
+            "aphia_id",  # 'APHIA_ID',
             "species_flag_code",  # 'SFLAG',
             #            'cf', # 'CF',
             "trophic_type",  # 'TRPHY',
@@ -107,6 +108,7 @@ class CreateReportToDataCenterShark(object):
             "preservative": "METFP",
             "sample_comment": "COMNT_SAMP",
             "scientific_name": "LATNM",
+            "aphia_id": "APHIA_ID",
             "species_flag_code": "SFLAG",
             "cf": "CF",
             "trophic_type": "TRPHY",
@@ -247,6 +249,10 @@ class CreateReportToDataCenterShark(object):
                 scientificname, size_class, "size_class_ref_list"
             )
             row_dict["size_class_ref_list"] = ref_list
+            bvol_aphia_id = plankton_core.Species().get_taxon_value(
+                scientificname, "bvol_aphia_id"
+            )
+            row_dict["aphia_id"] = bvol_aphia_id
 
     def cleanup_fields(self, row_dict):
         """ """

@@ -34,6 +34,7 @@ class CreateReportToDataCenter(object):
             "taxon_class",
             "scientific_full_name",
             "scientific_name",
+            "aphia_id",
             "rank",
             "species_flag_code",
             "cf",
@@ -76,6 +77,7 @@ class CreateReportToDataCenter(object):
             "taxon_class": "Taxon_class",
             "scientific_full_name": "Taxon_name_extended",
             "scientific_name": "Taxon_name",
+            "aphia_id": "Aphia_id",
             "rank": "Rank",
             "species_flag_code": "Species_flag",
             "cf": "Cf",
@@ -213,6 +215,9 @@ class CreateReportToDataCenter(object):
             taxon_class = plankton_core.Species().get_taxon_value(
                 scientificname, "taxon_class"
             )
+            bvol_aphia_id = plankton_core.Species().get_taxon_value(
+                scientificname, "bvol_aphia_id"
+            )
             taxon_rank = plankton_core.Species().get_taxon_value(scientificname, "rank")
             counted_unit = plankton_core.Species().get_bvol_value(
                 scientificname, sizeclass, "bvol_unit"
@@ -225,7 +230,9 @@ class CreateReportToDataCenter(object):
                 harmful = "Y"
             else:
                 harmful = ""
+            
             row_dict["taxon_class"] = taxon_class
+            row_dict["aphia_id"] = bvol_aphia_id
             row_dict["rank"] = taxon_rank
             row_dict["potential_harmful"] = harmful
             row_dict["counted_unit"] = counted_unit
