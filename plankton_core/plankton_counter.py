@@ -444,7 +444,7 @@ class PlanktonCounterSample:
                 number_of_areas = int(locked_at_area)
             #
             #             coefficient = int((coefficient_one_unit / number_of_areas) + 0.5) # Python 2.
-            coefficient = round(coefficient_one_unit / number_of_areas)
+            coefficient = round(coefficient_one_unit / number_of_areas, 1)
             sampleobject.set_coefficient(str(coefficient))
             #
             sampleobject._calculate_values()

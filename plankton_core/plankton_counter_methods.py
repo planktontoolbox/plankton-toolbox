@@ -459,7 +459,7 @@ class PlanktonCounterMethod:
                 / (singlearea * counted_volume * sampledvolume)
             )
             #             coeffoneunit = int(coeffoneunit + 0.5) # Python 2.
-            coeffoneunit = round(coeffoneunit)
+            coeffoneunit = round(coeffoneunit, 1)
             fields_dict["coefficient_one_unit"] = str(coeffoneunit)
         except:
             pass
