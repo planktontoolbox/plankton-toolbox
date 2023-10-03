@@ -920,6 +920,12 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
             self._taxon_sflag_list.setCurrentIndex(0)
             self._taxon_cf_list.setCurrentIndex(0)
 
+
+            current_method_step = str(self._selectmethodstep_list.currentText())            
+            if current_method_step in ["<not available>", "<select>"]:
+                return
+
+
             # Get selected rows as indexes. Convert to base model if proxy model is used.
             proxyindexes = self._species_tableview.selectedIndexes()
             if len(proxyindexes) > 0:
@@ -1032,6 +1038,13 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
     def _selected_species_in_summary_changed(self):
         """ """
         try:
+
+
+            current_method_step = str(self._selectmethodstep_list.currentText())            
+            if current_method_step in ["<not available>", "<select>"]:
+                return
+
+
             #         self._scientific_name_edit.setText('')
             # Clear the other species list.
             self._species_tableview.clearSelection()
@@ -1664,8 +1677,12 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
                         self._current_sample_method.get_counting_method_steps_list()
                     )
                     if len(countingmethodsteps) > 0:
-                        self._selectmethodstep_list.addItems(countingmethodsteps)
+
+
+                        self._selectmethodstep_list.addItems(["<select>"] + countingmethodsteps)
                         self._selectmethodstep_list.setCurrentIndex(0)
+
+
                     else:
                         self._selectmethodstep_list.addItems(["<not available>"])
                 else:
