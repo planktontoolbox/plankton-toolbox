@@ -114,6 +114,12 @@ class PlanktonCounterSampleEdit(QtWidgets.QWidget):
     def _content_end(self):
         """ """
         widget = QtWidgets.QWidget()
+
+
+        self._copytoclipboard_button = QtWidgets.QPushButton("Copy to clipboard")
+        self._copytoclipboard_button.clicked.connect(self._copy_to_clipboard)
+
+
         self._exportsamplereport_button = QtWidgets.QPushButton(
             "Export sample (.xlsx)..."
         )
@@ -122,6 +128,11 @@ class PlanktonCounterSampleEdit(QtWidgets.QWidget):
         self._save_button.clicked.connect(self._save_edit_table)
         #
         layout = QtWidgets.QHBoxLayout()
+
+
+        layout.addWidget(self._copytoclipboard_button)
+
+
         layout.addWidget(self._exportsamplereport_button)
         #         layout.addStretch(10)
         #         layout.addWidget(self._load_button)
@@ -192,6 +203,36 @@ class PlanktonCounterSampleEdit(QtWidgets.QWidget):
             )
             if dialog.exec():
                 pass
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception: (" + debug_info + "): " + str(e))
+
+    def _copy_to_clipboard(self):
+        """ """
+        try:
+            clipboard = QtWidgets.QApplication.clipboard()
+            field_separator = "\t"
+            row_separator = "\r\n"
+            clipboardstring = ""
+            #
+            table_dataset = self._sampletable_table
+            #
+            if table_dataset:
+                # Header.
+                clipboardstring = (
+                    field_separator.join(map(str, table_dataset.get_header()))
+                    + row_separator
+                )
+                # Rows.
+                for row in table_dataset.get_rows():
+                    clipboardstring += (
+                        field_separator.join(map(str, row)) + row_separator
+                    )
+            #
+            clipboard.setText(clipboardstring)
+        #
         except Exception as e:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
