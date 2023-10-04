@@ -1025,7 +1025,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
             # Update coefficient field.
             self._current_sample_method.calculate_coefficient_one_unit(fields_dict)
             self._coefficient_one_unit_edit.setText(
-                fields_dict.get("coefficient_one_unit", "0")
+                fields_dict.get("coefficient_one_unit", "0.0")
             )
         #
         except Exception as e:
