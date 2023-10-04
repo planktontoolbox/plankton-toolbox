@@ -6,6 +6,7 @@
 
 import pathlib
 import os
+import sys
 import math
 import toolbox_utils
 import app_framework
@@ -42,12 +43,11 @@ class PlanktonCounterMethods:
                 os.makedirs(dir_path)
             #                 print('Directories created for this path: ' + dir_path)
             except Exception as e:
-                print(
-                    "Can't create directories in path. Path: "
-                    + dir_path
-                    + ". Exception: "
-                    + str(e)
-                )
+                debug_info = "Can't create directories in path. Path: "
+                debug_info += dir_path
+                debug_info += ". Exception: "
+                debug_info += str(e)
+                toolbox_utils.Logging().error(debug_info)
 
     def get_methods_dir_path(self):
         """ """
@@ -248,8 +248,11 @@ class PlanktonCounterMethod:
                 if "counting_method" in method_dict:
                     if method_dict["counting_method"]:
                         countingmethodsteps_set.add(method_dict["counting_method"])
-        except:
-            pass
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter-methods: (" + debug_info + "): " + str(e))
         #
         return sorted(list(countingmethodsteps_set))
 
@@ -261,8 +264,11 @@ class PlanktonCounterMethod:
             for method_dict in self._method_dicts:
                 if method_dict["counting_method"] == method_name:
                     return method_dict
-        except:
-            pass
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter-methods: (" + debug_info + "): " + str(e))
         #
         return field_dict
 
@@ -317,8 +323,11 @@ class PlanktonCounterMethod:
                 if "counting_method" in method_dict:
                     if method_dict["counting_method"]:
                         countingmethods_set.add(method_dict["counting_method"])
-        except:
-            pass
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter-methods: (" + debug_info + "): " + str(e))
         #
         return sorted(list(countingmethods_set))
 
@@ -335,8 +344,11 @@ class PlanktonCounterMethod:
                             countingmethodsteps_set.add(
                                 method_dict["counting_method_step"]
                             )
-        except:
-            pass
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter-methods: (" + debug_info + "): " + str(e))
         #
         return sorted(list(countingmethodsteps_set))
 
@@ -347,8 +359,11 @@ class PlanktonCounterMethod:
             for method_dict in self._method_dicts:
                 if method_dict["counting_method_step"] == method_step_name:
                     return method_dict
-        except:
-            pass
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter-methods: (" + debug_info + "): " + str(e))
         #
         return field_dict
 
@@ -382,7 +397,7 @@ class PlanktonCounterMethod:
             return
 
         # Clear result.
-        fields_dict["coefficient_one_unit"] = "0"
+        fields_dict["coefficient_one_unit"] = "0.0"
         #
         try:
             # From default method.
@@ -461,8 +476,12 @@ class PlanktonCounterMethod:
             #             coeffoneunit = int(coeffoneunit + 0.5) # Python 2.
             coeffoneunit = round(coeffoneunit, 1)
             fields_dict["coefficient_one_unit"] = str(coeffoneunit)
-        except:
-            pass
+        #
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter-methods: (" + debug_info + "): " + str(e))
 
     def save_method_config_to_file(self, path, filename):
         """ """
