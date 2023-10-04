@@ -711,6 +711,26 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
     def _counted_value_changed(self, value):  # TODO:
         """ """
         try:
+
+            if value <= 0:
+                box_result = QtWidgets.QMessageBox.warning(
+                    self,
+                    "Warning",
+                    "Counted value is zero. Do you want to remove this species or species/sizeclass?",
+                    QtWidgets.QMessageBox.StandardButton.Cancel,
+                    QtWidgets.QMessageBox.StandardButton.Ok,
+                )
+                if box_result == QtWidgets.QMessageBox.StandardButton.Cancel:
+                    # Clear current counting.
+                    self._summary_listview.clearSelection()
+                    self._scientific_name_edit.setText("")
+                    self._scientific_full_name_edit.setText("")
+                    scientific_name = ""
+                    self._speciessizeclass_list.setCurrentIndex(0)
+                    self._taxon_sflag_list.setCurrentIndex(0)
+                    self._taxon_cf_list.setCurrentIndex(0)
+                    return
+
             self._disable_counting_buttons()
             # Reset qualitative counting if it was used before.
             value = self._countedunits_edit.value()
@@ -1861,22 +1881,38 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
                     self._current_sample_object.delete_rows_in_method_step(
                         currentmethodstep
                     )
-                    self._update_summary()
             else:
-                self._countareanumber_edit.setText(str(numberofcountareas_int - 1))
-                #
-                self._calculate_coefficient()
-                # Update coefficient for all taxa in this method step.
-                currentmethodstep = str(self._selectmethodstep_list.currentText())
-                coefficient = str(self._coefficient_edit.text())
-                countareanumber = str(self._countareanumber_edit.text())
-                self._current_sample_object.update_coeff_for_sample_rows(
-                    currentmethodstep, countareanumber, coefficient
+                box_result = QtWidgets.QMessageBox.warning(
+                    self,
+                    "Warning",
+                    "Do you want to remove one count area?",
+                    QtWidgets.QMessageBox.StandardButton.Cancel,
+                    QtWidgets.QMessageBox.StandardButton.Ok,
                 )
-                # Save max count area for method step.
-                self.save_data()
+                if box_result == QtWidgets.QMessageBox.StandardButton.Ok:
+                    self._countareanumber_edit.setText(str(numberofcountareas_int - 1))
+                    #
+                    self._calculate_coefficient()
+                    # Update coefficient for all taxa in this method step.
+                    currentmethodstep = str(self._selectmethodstep_list.currentText())
+                    coefficient = str(self._coefficient_edit.text())
+                    countareanumber = str(self._countareanumber_edit.text())
+                    self._current_sample_object.update_coeff_for_sample_rows(
+                        currentmethodstep, countareanumber, coefficient
+                    )
+                    # Save max count area for method step.
+                    self.save_data()
             #
             self._update_summary()
+
+            # Clear current counting.
+            self._summary_listview.clearSelection()
+            self._scientific_name_edit.setText("")
+            self._scientific_full_name_edit.setText("")
+            scientific_name = ""
+            self._speciessizeclass_list.setCurrentIndex(0)
+            self._taxon_sflag_list.setCurrentIndex(0)
+            self._taxon_cf_list.setCurrentIndex(0)
         #
         except Exception as e:
             debug_info = (
@@ -1918,17 +1954,17 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
             value = int(valuetxt)
             method_dict = self._current_sample_method_step_fields
             coeffoneunittext = (
-                method_dict.get("coefficient_one_unit", "0")
+                method_dict.get("coefficient_one_unit", "0.0")
                 .replace(",", ".")
                 .replace(" ", "")
             )
             try:
                 coeffoneunit = float(coeffoneunittext)
                 #                 coeff = int((coeffoneunit / value) + 0.5) # Python2.
-                coeff = round(coeffoneunit / value)
+                coeff = round(coeffoneunit / value, 1)
                 self._coefficient_edit.setText(str(coeff))
             except:
-                self._coefficient_edit.setText("0")
+                self._coefficient_edit.setText("0.0")
         #
         except Exception as e:
             debug_info = (
