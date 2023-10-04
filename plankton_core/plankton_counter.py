@@ -6,6 +6,7 @@
 
 import pathlib
 import os
+import sys
 import shutil
 import math
 
@@ -320,53 +321,81 @@ class PlanktonCounterSample:
 
     def save_sample_info(self):
         """ """
-        header = ["key", "value"]
-        rows = []
-        for key in sorted(self._sample_info_dict.keys()):
-            rows.append([key, self._sample_info_dict[key]])
+        try:
+            header = ["key", "value"]
+            rows = []
+            for key in sorted(self._sample_info_dict.keys()):
+                rows.append([key, self._sample_info_dict[key]])
+            #
+            self._tablefilewriter_sample_info.write_file(header, rows)
         #
-        self._tablefilewriter_sample_info.write_file(header, rows)
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def update_sample_info(self, info_dict):
         """ """
-        for key in info_dict.keys():
-            self._sample_info_dict[key] = info_dict[key]
+        try:
+            for key in info_dict.keys():
+                self._sample_info_dict[key] = info_dict[key]
+        #
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def load_sample_info(self):
         """ """
-        self._sample_info_dict = {}
-        #
-        if (
-            (self._dataset_dir_path is None)
-            or (self._dataset_name is None)
-            or (self._sample_name is None)
-        ):
-            raise UserWarning(
-                "Failed to load sample file. Path, dataset name or sample name is missing."
+        try:
+            self._sample_info_dict = {}
+            #
+            if (
+                (self._dataset_dir_path is None)
+                or (self._dataset_name is None)
+                or (self._sample_name is None)
+            ):
+                raise UserWarning(
+                    "Failed to load sample file. Path, dataset name or sample name is missing."
+                )
+            # Create file if not exists.
+            path = pathlib.Path(
+                self._dataset_dir_path, self._dataset_name, self._sample_name
             )
-        # Create file if not exists.
-        path = pathlib.Path(
-            self._dataset_dir_path, self._dataset_name, self._sample_name
-        )
-        if not pathlib.Path(path, "sample_info.txt").exists():
-            header = ["key", "value"]
-            self._tablefilewriter_sample_info.write_file(header, [])
-        # Read file to dict.
-        tablefilereader = toolbox_utils.TableFileReader(
-            file_path=path,
-            text_file_name="sample_info.txt",
-        )
-        for row in tablefilereader.rows():
-            if len(row) >= 2:
-                key = row[0].strip()
-                value = row[1].strip()
-                self._sample_info_dict[key] = value
+            if not pathlib.Path(path, "sample_info.txt").exists():
+                header = ["key", "value"]
+                self._tablefilewriter_sample_info.write_file(header, [])
+            # Read file to dict.
+            tablefilereader = toolbox_utils.TableFileReader(
+                file_path=path,
+                text_file_name="sample_info.txt",
+            )
+            for row in tablefilereader.rows():
+                if len(row) >= 2:
+                    key = row[0].strip()
+                    value = row[1].strip()
+                    self._sample_info_dict[key] = value
+        #
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def get_sample_header_and_rows(self):
         """ """
-        header = self.get_header()
-        rows = self.get_rows()
-        return header, rows
+        try:
+            header = self.get_header()
+            rows = self.get_rows()
+            return header, rows
+        #
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def get_header(self):
         """ """
@@ -374,491 +403,622 @@ class PlanktonCounterSample:
 
     def get_rows(self):
         """ """
-        rows = []
-        for key in sorted(self._sample_rows.keys()):
-            rows.append(
-                self._sample_rows[key].get_row_as_text_list(self._sample_header)
+        try:
+            rows = []
+            for key in sorted(self._sample_rows.keys()):
+                rows.append(
+                    self._sample_rows[key].get_row_as_text_list(self._sample_header)
+                )
+            return rows
+        #
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-        return rows
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def load_sample_data(self):
         """ """
-        self._sample_rows = {}
-        #
-        if (
-            (self._dataset_dir_path is None)
-            or (self._dataset_name is None)
-            or (self._sample_name is None)
-        ):
-            raise UserWarning(
-                "Failed to load sample file. Path, dataset name or sample name is missing."
+        try:
+            self._sample_rows = {}
+            #
+            if (
+                (self._dataset_dir_path is None)
+                or (self._dataset_name is None)
+                or (self._sample_name is None)
+            ):
+                raise UserWarning(
+                    "Failed to load sample file. Path, dataset name or sample name is missing."
+                )
+            # Create file if not exists.
+            path = pathlib.Path(
+                self._dataset_dir_path, self._dataset_name, self._sample_name
             )
-        # Create file if not exists.
-        path = pathlib.Path(
-            self._dataset_dir_path, self._dataset_name, self._sample_name
-        )
-        if not pathlib.Path(path, "sample_data.txt").exists():
-            self._tablefilewriter_sample_data.write_file(self._sample_header, [])
-        # Read sample data to self._sample_rows.
-        tablefilereader = toolbox_utils.TableFileReader(
-            file_path=path,
-            text_file_name="sample_data.txt",
-        )
-        self.update_all_sample_rows(tablefilereader.header(), tablefilereader.rows())
+            if not pathlib.Path(path, "sample_data.txt").exists():
+                self._tablefilewriter_sample_data.write_file(self._sample_header, [])
+            # Read sample data to self._sample_rows.
+            tablefilereader = toolbox_utils.TableFileReader(
+                file_path=path,
+                text_file_name="sample_data.txt",
+            )
+            self.update_all_sample_rows(tablefilereader.header(), tablefilereader.rows())
+        #
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def update_all_sample_rows(self, header, rows):
         """ """
-        self._sample_rows = {}
-        for row in rows:
-            if (len(row) >= 2) and (len(row[0]) >= 0) and (len(row[1]) >= 0):
-                info_dict = dict(zip(header, row))
-                sample_row = SampleRow(info_dict)
-                # Don't save samples without name or counted value = 0.
-                if len(sample_row.get_scientific_name()) > 0:
-                    # Quantitative.
-                    if sample_row.get_counted_units() > 0:
-                        self._sample_rows[sample_row.get_key()] = sample_row
-                    # Qualitative.
-                    if sample_row.get_abundance_class():
-                        self._sample_rows[sample_row.get_key()] = sample_row
+        try:
+            self._sample_rows = {}
+            for row in rows:
+                if (len(row) >= 2) and (len(row[0]) >= 0) and (len(row[1]) >= 0):
+                    info_dict = dict(zip(header, row))
+                    sample_row = SampleRow(info_dict)
+                    # Don't save samples without name or counted value = 0.
+                    if len(sample_row.get_scientific_name()) > 0:
+                        # Quantitative.
+                        if sample_row.get_counted_units() > 0:
+                            self._sample_rows[sample_row.get_key()] = sample_row
+                        # Qualitative.
+                        if sample_row.get_abundance_class():
+                            self._sample_rows[sample_row.get_key()] = sample_row
+        #
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def recalculate_coefficient(self, current_method):
         """ """
-        # Recalculate all rows.
-        for sampleobject in self._sample_rows.values():
-            # Get coefficient from method.
-            method_step = sampleobject.get_method_step()
-            method_step_fields = current_method.get_counting_method_step_fields(
-                method_step
+        try:
+            # Recalculate all rows.
+            for sampleobject in self._sample_rows.values():
+                # Get coefficient from method.
+                method_step = sampleobject.get_method_step()
+                method_step_fields = current_method.get_counting_method_step_fields(
+                    method_step
+                )
+                coefficient_one_unit = float(
+                    method_step_fields.get("coefficient_one_unit", "0.0")
+                )
+                # Calculate coefficient for one row.
+                count_area_number = int(sampleobject.get_count_area_number())
+                locked_at_area = sampleobject.get_locked_at_area()
+                ###counted_units_list = sampleobject.get_counted_units_list()
+                #
+                number_of_areas = count_area_number
+                if locked_at_area:
+                    number_of_areas = int(locked_at_area)
+                #
+                #             coefficient = int((coefficient_one_unit / number_of_areas) + 0.5) # Python 2.
+                coefficient = round(coefficient_one_unit / number_of_areas, 1)
+                sampleobject.set_coefficient(str(coefficient))
+                #
+                sampleobject._calculate_values()
+        #
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            coefficient_one_unit = int(
-                method_step_fields.get("coefficient_one_unit", "0")
-            )
-            # Calculate coefficient for one row.
-            count_area_number = int(sampleobject.get_count_area_number())
-            locked_at_area = sampleobject.get_locked_at_area()
-            ###counted_units_list = sampleobject.get_counted_units_list()
-            #
-            number_of_areas = count_area_number
-            if locked_at_area:
-                number_of_areas = int(locked_at_area)
-            #
-            #             coefficient = int((coefficient_one_unit / number_of_areas) + 0.5) # Python 2.
-            coefficient = round(coefficient_one_unit / number_of_areas, 1)
-            sampleobject.set_coefficient(str(coefficient))
-            #
-            sampleobject._calculate_values()
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def save_sample_data(self):
         """ """
-        rows = []
-        for key in sorted(self._sample_rows.keys()):
-            rows.append(
-                [
-                    "\t".join(
-                        self._sample_rows[key].get_row_as_text_list(self._sample_header)
-                    )
-                ]
-            )
+        try:
+            rows = []
+            for key in sorted(self._sample_rows.keys()):
+                rows.append(
+                    [
+                        "\t".join(
+                            self._sample_rows[key].get_row_as_text_list(self._sample_header)
+                        )
+                    ]
+                )
+            #
+            self._tablefilewriter_sample_data.write_file(self._sample_header, rows)
         #
-        self._tablefilewriter_sample_data.write_file(self._sample_header, rows)
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def get_taxa_summary(
         self, summary_type=None, most_counted_sorting=False, method_step=None
     ):
         """ """
-        summary_data = []
-        #
-        totalcounted = 0
-        counted_dict = {}
-        size_range_dict = {}  # Value for sizeclasses aggregated.
-        locked_list = []
-        #
-        for sampleobject in self._sample_rows.values():
-            # Check method step.
-            if method_step:
-                if not method_step == sampleobject.get_method_step():
-                    continue
-            # Count on scientific name. Standard alternative.
-            taxon = sampleobject.get_scientific_full_name()
-            sort_order = taxon
-            size = sampleobject.get_size_class()
-            # Use the same key for locked items.
-            if sampleobject.is_locked():
-                if size:
-                    locked_list.append(taxon + " {" + size + "} ")
-                else:
-                    locked_list.append(taxon)
-            # Count on class name.
-            if summary_type == "Counted per classes":
-                taxon = plankton_core.Species().get_taxon_value(taxon, "taxon_class")
-                sort_order = taxon
-                if len(taxon) == 0:
-                    taxon = "<class unknown>"
-                    sort_order = taxon
-            # Count on scientific name and size class.
-            elif summary_type == "Counted per taxa":
-                if size:
-                    taxon = taxon
-                    sort_order = taxon
-            elif summary_type == "Counted per taxa/sizes":
-                if size:
-                    size_for_sorting = f"{taxon} [{float(size):5.0f}]"
-                    taxon = taxon + " {" + size + "} "
-                    sort_order = size_for_sorting
-            # Create in list, first time only.
-            if taxon not in counted_dict:
-                counted_dict[taxon] = {}
-                counted_dict[taxon]["counted_units"] = 0
-                counted_dict[taxon]["as_text"] = "0"
-                counted_dict[taxon]["sort_order"] = sort_order
-            # Add.
-            try:
-                abundance_class = sampleobject.get_abundance_class()
-                if abundance_class in ["", 0]:
-                    # Quantitative.
-                    counted_dict[taxon]["counted_units"] += int(
-                        sampleobject.get_counted_units()
-                    )
-                    counted_dict[taxon]["as_text"] = str(
-                        counted_dict[taxon]["counted_units"]
-                    )
-
-                    totalcounted += int(sampleobject.get_counted_units())
-
-                    counted_units_list = sampleobject.get_counted_units_list()
-                    if ";" in counted_units_list:
-                        last_transect_units = counted_units_list.split(";")[-1]
-                        counted_dict[taxon]["as_text"] = (
-                            str(counted_dict[taxon]["counted_units"])
-                            + "/"
-                            + last_transect_units
-                        )
-                else:
-                    # Qualitative.
-                    if summary_type in ["Counted per taxa", "Counted per taxa/sizes"]:
-                        # if counted_dict[taxon] == 0:
-                        if counted_dict[taxon]["counted_units"] == 0:
-                            if abundance_class == "1":
-                                counted_dict[taxon]["counted_units"] = 1
-                                counted_dict[taxon]["as_text"] = "1=Observed"
-                            elif abundance_class == "2":
-                                counted_dict[taxon]["counted_units"] = 2
-                                counted_dict[taxon]["as_text"] = "2=Several cells"
-                            elif abundance_class == "3":
-                                counted_dict[taxon]["counted_units"] = 3
-                                counted_dict[taxon]["as_text"] = "3=1-10%"
-                            elif abundance_class == "4":
-                                counted_dict[taxon]["counted_units"] = 4
-                                counted_dict[taxon]["as_text"] = "4=10-50%"
-                            elif abundance_class == "5":
-                                counted_dict[taxon]["counted_units"] = 5
-                                counted_dict[taxon]["as_text"] = "5=50-100%"
-                        else:
-                            counted_dict[taxon]["counted_units"] = 1
-                            counted_dict[taxon]["as_text"] = "<Qualitative>"
-                    else:
-                        counted_dict[taxon]["as_text"] = "<Qualitative>"
-            except:
-                pass  # If value = ''.
+        try:
+            summary_data = []
             #
-            if summary_type in ["Counted per taxa/sizes"]:
-                bvol_size_range = (
-                    plankton_core.Species()
-                    .get_bvol_dict(sampleobject.get_scientific_name(), size)
-                    .get("bvol_size_range", "")
-                )
-                if bvol_size_range:
-                    size_range_dict[taxon] = "(Size: " + bvol_size_range + ")"
-        #
-        summary_data.append("Total counted: " + str(totalcounted))
-        summary_data.append("")
-        if most_counted_sorting == False:
-            # Alphabetical.
-            for key, _value in sorted(
-                counted_dict.items(), key=lambda x: x[1]["sort_order"]
-            ):
-                size_range = ""
-                if key in size_range_dict:
-                    size_range = "    " + size_range_dict[key]
-                lock_info = ""
-                if key in locked_list:
-                    lock_info = " LOCKED"
+            totalcounted = 0
+            counted_dict = {}
+            size_range_dict = {}  # Value for sizeclasses aggregated.
+            locked_list = []
+            #
+            for sampleobject in self._sample_rows.values():
+                # Check method step.
+                if method_step:
+                    if not method_step == sampleobject.get_method_step():
+                        continue
+                # Count on scientific name. Standard alternative.
+                taxon = sampleobject.get_scientific_full_name()
+                sort_order = taxon
+                size = sampleobject.get_size_class()
+                # Use the same key for locked items.
+                if sampleobject.is_locked():
+                    if size:
+                        locked_list.append(taxon + " {" + size + "} ")
+                    else:
+                        locked_list.append(taxon)
+                # Count on class name.
+                if summary_type == "Counted per classes":
+                    taxon = plankton_core.Species().get_taxon_value(taxon, "taxon_class")
+                    sort_order = taxon
+                    if len(taxon) == 0:
+                        taxon = "<class unknown>"
+                        sort_order = taxon
+                # Count on scientific name and size class.
+                elif summary_type == "Counted per taxa":
+                    if size:
+                        taxon = taxon
+                        sort_order = taxon
+                elif summary_type == "Counted per taxa/sizes":
+                    if size:
+                        size_for_sorting = f"{taxon} [{float(size):5.0f}]"
+                        taxon = taxon + " {" + size + "} "
+                        sort_order = size_for_sorting
+                # Create in list, first time only.
+                if taxon not in counted_dict:
+                    counted_dict[taxon] = {}
+                    counted_dict[taxon]["counted_units"] = 0
+                    counted_dict[taxon]["as_text"] = "0"
+                    counted_dict[taxon]["sort_order"] = sort_order
+                # Add.
+                try:
+                    abundance_class = sampleobject.get_abundance_class()
+                    if abundance_class in ["", 0]:
+                        # Quantitative.
+                        counted_dict[taxon]["counted_units"] += int(
+                            sampleobject.get_counted_units()
+                        )
+                        counted_dict[taxon]["as_text"] = str(
+                            counted_dict[taxon]["counted_units"]
+                        )
 
-                summary_data.append(
-                    key
-                    + ": "
-                    + str(counted_dict[key]["as_text"])
-                    + lock_info
-                    + size_range
-                )
-        else:
-            # Sort for most counted.
-            for key, _value in sorted(
-                counted_dict.items(), key=lambda x: x[1]["counted_units"], reverse=True
-            ):
-                size_range = ""
-                if key in size_range_dict:
-                    size_range = " " + size_range_dict[key]
-                lock_info = ""
-                if key in locked_list:
-                    lock_info = " LOCKED"
-                summary_data.append(
-                    key
-                    + ": "
-                    + str(counted_dict[key]["as_text"])
-                    + lock_info
-                    + size_range
-                )
+                        totalcounted += int(sampleobject.get_counted_units())
+
+                        counted_units_list = sampleobject.get_counted_units_list()
+                        if ";" in counted_units_list:
+                            last_transect_units = counted_units_list.split(";")[-1]
+                            counted_dict[taxon]["as_text"] = (
+                                str(counted_dict[taxon]["counted_units"])
+                                + "/"
+                                + last_transect_units
+                            )
+                    else:
+                        # Qualitative.
+                        if summary_type in ["Counted per taxa", "Counted per taxa/sizes"]:
+                            # if counted_dict[taxon] == 0:
+                            if counted_dict[taxon]["counted_units"] == 0:
+                                if abundance_class == "1":
+                                    counted_dict[taxon]["counted_units"] = 1
+                                    counted_dict[taxon]["as_text"] = "1=Observed"
+                                elif abundance_class == "2":
+                                    counted_dict[taxon]["counted_units"] = 2
+                                    counted_dict[taxon]["as_text"] = "2=Several cells"
+                                elif abundance_class == "3":
+                                    counted_dict[taxon]["counted_units"] = 3
+                                    counted_dict[taxon]["as_text"] = "3=1-10%"
+                                elif abundance_class == "4":
+                                    counted_dict[taxon]["counted_units"] = 4
+                                    counted_dict[taxon]["as_text"] = "4=10-50%"
+                                elif abundance_class == "5":
+                                    counted_dict[taxon]["counted_units"] = 5
+                                    counted_dict[taxon]["as_text"] = "5=50-100%"
+                            else:
+                                counted_dict[taxon]["counted_units"] = 1
+                                counted_dict[taxon]["as_text"] = "<Qualitative>"
+                        else:
+                            counted_dict[taxon]["as_text"] = "<Qualitative>"
+                except:
+                    pass  # If value = ''.
+                #
+                if summary_type in ["Counted per taxa/sizes"]:
+                    bvol_size_range = (
+                        plankton_core.Species()
+                        .get_bvol_dict(sampleobject.get_scientific_name(), size)
+                        .get("bvol_size_range", "")
+                    )
+                    if bvol_size_range:
+                        size_range_dict[taxon] = "(Size: " + bvol_size_range + ")"
+            #
+            summary_data.append("Total counted: " + str(totalcounted))
+            summary_data.append("")
+            if most_counted_sorting == False:
+                # Alphabetical.
+                for key, _value in sorted(
+                    counted_dict.items(), key=lambda x: x[1]["sort_order"]
+                ):
+                    size_range = ""
+                    if key in size_range_dict:
+                        size_range = "    " + size_range_dict[key]
+                    lock_info = ""
+                    if key in locked_list:
+                        lock_info = " LOCKED"
+
+                    summary_data.append(
+                        key
+                        + ": "
+                        + str(counted_dict[key]["as_text"])
+                        + lock_info
+                        + size_range
+                    )
+            else:
+                # Sort for most counted.
+                for key, _value in sorted(
+                    counted_dict.items(), key=lambda x: x[1]["counted_units"], reverse=True
+                ):
+                    size_range = ""
+                    if key in size_range_dict:
+                        size_range = " " + size_range_dict[key]
+                    lock_info = ""
+                    if key in locked_list:
+                        lock_info = " LOCKED"
+                    summary_data.append(
+                        key
+                        + ": "
+                        + str(counted_dict[key]["as_text"])
+                        + lock_info
+                        + size_range
+                    )
+            #
+            return summary_data
         #
-        return summary_data
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def get_locked_taxa(self, method_step=None):
         """ """
-        species_locked_list = []
-        #
-        for sampleobject in self._sample_rows.values():
-            # Check method step.
-            if method_step:
-                if not method_step == sampleobject.get_method_step():
-                    continue
+        try:
+            species_locked_list = []
             #
-            taxon = sampleobject.get_scientific_full_name()
-            size = sampleobject.get_size_class()
+            for sampleobject in self._sample_rows.values():
+                # Check method step.
+                if method_step:
+                    if not method_step == sampleobject.get_method_step():
+                        continue
+                #
+                taxon = sampleobject.get_scientific_full_name()
+                size = sampleobject.get_size_class()
+                #
+                if sampleobject.is_locked():
+                    species_locked_list.append([taxon, size, True])
+                else:
+                    species_locked_list.append([taxon, size, False])
             #
-            if sampleobject.is_locked():
-                species_locked_list.append([taxon, size, True])
-            else:
-                species_locked_list.append([taxon, size, False])
+            return species_locked_list
         #
-        return species_locked_list
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def lock_taxa(self, scientific_full_name, size_class, locked_at_count_area):
         """ """
-        search_dict = {}
-        search_dict["scientific_full_name"] = scientific_full_name
-        search_dict["size_class"] = size_class
-        samplerowkey = SampleRow(search_dict).get_key()
-        if samplerowkey in self._sample_rows:
-            if not self._sample_rows[samplerowkey].is_locked():
-                self._sample_rows[samplerowkey].set_lock(locked_at_count_area)
+        try:
+            search_dict = {}
+            search_dict["scientific_full_name"] = scientific_full_name
+            search_dict["size_class"] = size_class
+            samplerowkey = SampleRow(search_dict).get_key()
+            if samplerowkey in self._sample_rows:
+                if not self._sample_rows[samplerowkey].is_locked():
+                    self._sample_rows[samplerowkey].set_lock(locked_at_count_area)
+        #
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def unlock_taxa(self, scientific_full_name, size_class, count_area_number):
         """ """
-        search_dict = {}
-        search_dict["scientific_full_name"] = scientific_full_name
-        search_dict["size_class"] = size_class
-        samplerowkey = SampleRow(search_dict).get_key()
-        if samplerowkey in self._sample_rows:
-            self._sample_rows[samplerowkey].set_lock("")
+        try:
+            search_dict = {}
+            search_dict["scientific_full_name"] = scientific_full_name
+            search_dict["size_class"] = size_class
+            samplerowkey = SampleRow(search_dict).get_key()
+            if samplerowkey in self._sample_rows:
+                self._sample_rows[samplerowkey].set_lock("")
+            #
+            self._sample_rows[samplerowkey].set_count_area_number(count_area_number)
         #
-        self._sample_rows[samplerowkey].set_count_area_number(count_area_number)
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def get_sample_row_dict(self, counted_row_dict):
         """ """
-        samplerowkey = SampleRow(counted_row_dict).get_key()
-        if samplerowkey in self._sample_rows:
-            return self._sample_rows[samplerowkey].get_sample_row_dict()
+        try:
+            samplerowkey = SampleRow(counted_row_dict).get_key()
+            if samplerowkey in self._sample_rows:
+                return self._sample_rows[samplerowkey].get_sample_row_dict()
+            #
+            return {}
         #
-        return {}
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def update_sample_row(self, counted_row_dict):
         """ """
-        if len(counted_row_dict.get("scientific_name", "")) > 0:
-            samplerowkey = SampleRow(counted_row_dict).get_key()
-            if samplerowkey in self._sample_rows:
-                self._sample_rows[samplerowkey].update_sample_row_dict(counted_row_dict)
+        try:
+            if len(counted_row_dict.get("scientific_name", "")) > 0:
+                samplerowkey = SampleRow(counted_row_dict).get_key()
+                if samplerowkey in self._sample_rows:
+                    self._sample_rows[samplerowkey].update_sample_row_dict(counted_row_dict)
+        #
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def get_counted_value(self, selected_dict):
         """ """
-        samplerowkey = SampleRow(selected_dict).get_key()
-        if samplerowkey in self._sample_rows:
-            return self._sample_rows[samplerowkey].get_counted_units()
-        else:
-            return 0
+        try:
+            samplerowkey = SampleRow(selected_dict).get_key()
+            if samplerowkey in self._sample_rows:
+                return self._sample_rows[samplerowkey].get_counted_units()
+            else:
+                return 0
+        #
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def update_counted_value_in_core(self, counted_row_dict, value):
         """ """
-        if value == "0":
-            # Delete row.
-            samplerowkey = SampleRow(counted_row_dict).get_key()
-            if samplerowkey in self._sample_rows:
-                del self._sample_rows[samplerowkey]
-            return
-        #
-        if len(counted_row_dict.get("scientific_full_name", "")) > 0:
-            samplerowkey = SampleRow(counted_row_dict).get_key()
-            if samplerowkey not in self._sample_rows:
-                self._sample_rows[samplerowkey] = SampleRow(counted_row_dict)
-            # Check if the same method step or locked taxa.
-            samplerowobject = self._sample_rows[samplerowkey]
-            # Don't check for validity when the value is same same.
-            if samplerowobject.get_counted_units() == value:
+        try:
+            if value == "0":
+                # Delete row.
+                samplerowkey = SampleRow(counted_row_dict).get_key()
+                if samplerowkey in self._sample_rows:
+                    del self._sample_rows[samplerowkey]
                 return
-            if samplerowobject.is_locked():
-                raise UserWarning("Selected taxon is locked")
+            #
+            if len(counted_row_dict.get("scientific_full_name", "")) > 0:
+                samplerowkey = SampleRow(counted_row_dict).get_key()
+                if samplerowkey not in self._sample_rows:
+                    self._sample_rows[samplerowkey] = SampleRow(counted_row_dict)
+                # Check if the same method step or locked taxa.
+                samplerowobject = self._sample_rows[samplerowkey]
+                # Don't check for validity when the value is same same.
+                if samplerowobject.get_counted_units() == value:
+                    return
+                if samplerowobject.is_locked():
+                    raise UserWarning("Selected taxon is locked")
 
-            #             if counted_row_dict.get('method_step') == samplerowobject.get_method_step():
-            if True:
-                samplerowobject.set_counted_units(value)
-                samplerowobject.update_sample_row_dict(counted_row_dict)
-            else:
-                raise UserWarning(
-                    "Selected taxon is already counted in another method step."
-                )
+                #             if counted_row_dict.get('method_step') == samplerowobject.get_method_step():
+                if True:
+                    samplerowobject.set_counted_units(value)
+                    samplerowobject.update_sample_row_dict(counted_row_dict)
+                else:
+                    raise UserWarning(
+                        "Selected taxon is already counted in another method step."
+                    )
+        #
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def update_abundance_class_in_core(self, counted_row_dict, value):
         """ """
-        if value == "0":
-            # Delete row.
-            samplerowkey = SampleRow(counted_row_dict).get_key()
-            if samplerowkey in self._sample_rows:
-                del self._sample_rows[samplerowkey]
-            return
-        #
-        if len(counted_row_dict.get("scientific_full_name", "")) > 0:
-            samplerowkey = SampleRow(counted_row_dict).get_key()
-            if samplerowkey not in self._sample_rows:
-                self._sample_rows[samplerowkey] = SampleRow(counted_row_dict)
-            # Check if the same method step or locked taxa.
-            samplerowobject = self._sample_rows[samplerowkey]
-            # Don't check for validity when the value is same same.
-            if samplerowobject.get_counted_units() == value:
+        try:
+            if value == "0":
+                # Delete row.
+                samplerowkey = SampleRow(counted_row_dict).get_key()
+                if samplerowkey in self._sample_rows:
+                    del self._sample_rows[samplerowkey]
                 return
-            if samplerowobject.is_locked():
-                raise UserWarning("Selected taxon is locked")
+            #
+            if len(counted_row_dict.get("scientific_full_name", "")) > 0:
+                samplerowkey = SampleRow(counted_row_dict).get_key()
+                if samplerowkey not in self._sample_rows:
+                    self._sample_rows[samplerowkey] = SampleRow(counted_row_dict)
+                # Check if the same method step or locked taxa.
+                samplerowobject = self._sample_rows[samplerowkey]
+                # Don't check for validity when the value is same same.
+                if samplerowobject.get_counted_units() == value:
+                    return
+                if samplerowobject.is_locked():
+                    raise UserWarning("Selected taxon is locked")
 
-            #             if counted_row_dict.get('method_step') == samplerowobject.get_method_step():
-            if True:
-                #                 samplerowobject.set_counted_units(value)
-                samplerowobject.set_abundance_class(value)
-                samplerowobject.update_sample_row_dict(counted_row_dict)
-            else:
-                raise UserWarning(
-                    "Selected taxon is already counted in another method step."
-                )
+                #             if counted_row_dict.get('method_step') == samplerowobject.get_method_step():
+                if True:
+                    #                 samplerowobject.set_counted_units(value)
+                    samplerowobject.set_abundance_class(value)
+                    samplerowobject.update_sample_row_dict(counted_row_dict)
+                else:
+                    raise UserWarning(
+                        "Selected taxon is already counted in another method step."
+                    )
+        #
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def delete_rows_in_method_step(self, current_method_step):
         """ """
-        for sampleobject in list(
-            self._sample_rows.values()
-        ):  # Clone list when deleting content.
-            if sampleobject.get_method_step() == current_method_step:
-                del self._sample_rows[sampleobject.get_key()]
+        try:
+            for sampleobject in list(
+                self._sample_rows.values()
+            ):  # Clone list when deleting content.
+                if sampleobject.get_method_step() == current_method_step:
+                    del self._sample_rows[sampleobject.get_key()]
+        #
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def update_coeff_for_sample_rows(
         self, current_method_step, count_area_number, coefficient
     ):
         """ """
-        for sampleobject in self._sample_rows.values():
-            if sampleobject.get_method_step() == current_method_step:
-                if not sampleobject.is_locked():
-                    sampleobject.set_count_area_number(count_area_number)
-                    sampleobject.set_coefficient(coefficient)
+        try:
+            for sampleobject in self._sample_rows.values():
+                if sampleobject.get_method_step() == current_method_step:
+                    if not sampleobject.is_locked():
+                        sampleobject.set_count_area_number(count_area_number)
+                        sampleobject.set_coefficient(coefficient)
+        #
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def import_sample_from_excel(self, excel_file_path):
         """Import from Excel."""
-        # Sample info.
-        tablefilereader = toolbox_utils.TableFileReader(
-            file_path="",
-            excel_file_name=excel_file_path,
-            excel_sheet_name="sample_info.txt",
-        )
-        sample_header = tablefilereader.header()
-        sample_rows = tablefilereader.rows()
-        #
-        self._tablefilewriter_sample_info.write_file(sample_header, sample_rows)
+        try:
+            # Sample info.
+            tablefilereader = toolbox_utils.TableFileReader(
+                file_path="",
+                excel_file_name=excel_file_path,
+                excel_sheet_name="sample_info.txt",
+            )
+            sample_header = tablefilereader.header()
+            sample_rows = tablefilereader.rows()
+            #
+            self._tablefilewriter_sample_info.write_file(sample_header, sample_rows)
 
-        # Sample data.
-        tablefilereader = toolbox_utils.TableFileReader(
-            file_path="",
-            excel_file_name=excel_file_path,
-            excel_sheet_name="sample_data.txt",
-        )
-        data_header = tablefilereader.header()
-        data_rows = tablefilereader.rows()
-        #
-        self._tablefilewriter_sample_data.write_file(data_header, data_rows)
+            # Sample data.
+            tablefilereader = toolbox_utils.TableFileReader(
+                file_path="",
+                excel_file_name=excel_file_path,
+                excel_sheet_name="sample_data.txt",
+            )
+            data_header = tablefilereader.header()
+            data_rows = tablefilereader.rows()
+            #
+            self._tablefilewriter_sample_data.write_file(data_header, data_rows)
 
-        # Sample method.
-        tablefilereader = toolbox_utils.TableFileReader(
-            file_path="",
-            excel_file_name=excel_file_path,
-            excel_sheet_name="counting_method.txt",
-        )
-        method_header = tablefilereader.header()
-        method_rows = tablefilereader.rows()
+            # Sample method.
+            tablefilereader = toolbox_utils.TableFileReader(
+                file_path="",
+                excel_file_name=excel_file_path,
+                excel_sheet_name="counting_method.txt",
+            )
+            method_header = tablefilereader.header()
+            method_rows = tablefilereader.rows()
 
-        path = pathlib.Path(
-            self._dataset_dir_path, self._dataset_name, self._sample_name
-        )
-        tablefilewriter_sample_method = toolbox_utils.TableFileWriter(
-            file_path=path,
-            text_file_name="counting_method.txt",
-        )
+            path = pathlib.Path(
+                self._dataset_dir_path, self._dataset_name, self._sample_name
+            )
+            tablefilewriter_sample_method = toolbox_utils.TableFileWriter(
+                file_path=path,
+                text_file_name="counting_method.txt",
+            )
+            #
+            tablefilewriter_sample_method.write_file(method_header, method_rows)
         #
-        tablefilewriter_sample_method.write_file(method_header, method_rows)
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def export_sample_to_excel(self, export_target_dir, export_target_filename):
         """Export to Excel."""
-
-        excel_export_writer = ExcelExportWriter(self)
-        excel_export_writer.to_excel(export_target_dir, export_target_filename)
-
+        try:
+            excel_export_writer = ExcelExportWriter(self)
+            excel_export_writer.to_excel(export_target_dir, export_target_filename)
+        #
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
 class SampleRow:
     """Defines the content of one counted sample row."""
 
     def __init__(self, sample_row_dict):
         """ """
-        self._sample_row_dict = {}
-        self._sample_row_dict.update(sample_row_dict)
-        #
-        self._scientific_full_name = self._sample_row_dict.get(
-            "scientific_full_name", ""
-        )
-        self._scientific_name = self._sample_row_dict.get("scientific_name", "")
-        self._size_class = self._sample_row_dict.get("size_class", "")
-        #
-        # Get species related dictionaries for this taxon/sizeclass.
-        self._taxon_dict = plankton_core.Species().get_taxon_dict(self._scientific_name)
-        self._size_class_dict = plankton_core.Species().get_bvol_dict(
-            self._scientific_name, self._size_class
-        )
-        self._sample_row_dict["taxon_class"] = self._taxon_dict.get("taxon_class", "")
-        self._sample_row_dict["unit_type"] = self._size_class_dict.get("bvol_unit", "")
-        # Trophic type.
-        if not self._sample_row_dict.get("trophic_type", ""):
-            trophic_type = self._size_class_dict.get("trophic_type", "")
-            if not trophic_type:
-                trophic_type = self._taxon_dict.get("trophic_type", "")
-            if trophic_type:
-                self._sample_row_dict["trophic_type"] = trophic_type
-        #
-        self._bvol_volume = 0.0
-        self._bvol_carbon = 0.0
         try:
-            self._bvol_volume = float(
-                self._size_class_dict.get("bvol_calculated_volume_um3", "0").replace(
-                    ",", "."
-                )
+            self._sample_row_dict = {}
+            self._sample_row_dict.update(sample_row_dict)
+            #
+            self._scientific_full_name = self._sample_row_dict.get(
+                "scientific_full_name", ""
             )
-            self._bvol_carbon = float(
-                self._size_class_dict.get("bvol_calculated_carbon_pg", "0").replace(
-                    ",", "."
-                )
+            self._scientific_name = self._sample_row_dict.get("scientific_name", "")
+            self._size_class = self._sample_row_dict.get("size_class", "")
+            #
+            # Get species related dictionaries for this taxon/sizeclass.
+            self._taxon_dict = plankton_core.Species().get_taxon_dict(self._scientific_name)
+            self._size_class_dict = plankton_core.Species().get_bvol_dict(
+                self._scientific_name, self._size_class
             )
+            self._sample_row_dict["taxon_class"] = self._taxon_dict.get("taxon_class", "")
+            self._sample_row_dict["unit_type"] = self._size_class_dict.get("bvol_unit", "")
+            # Trophic type.
+            if not self._sample_row_dict.get("trophic_type", ""):
+                trophic_type = self._size_class_dict.get("trophic_type", "")
+                if not trophic_type:
+                    trophic_type = self._taxon_dict.get("trophic_type", "")
+                if trophic_type:
+                    self._sample_row_dict["trophic_type"] = trophic_type
+            #
+            self._bvol_volume = 0.0
+            self._bvol_carbon = 0.0
+            try:
+                self._bvol_volume = float(
+                    self._size_class_dict.get("bvol_calculated_volume_um3", "0").replace(
+                        ",", "."
+                    )
+                )
+                self._bvol_carbon = float(
+                    self._size_class_dict.get("bvol_calculated_carbon_pg", "0").replace(
+                        ",", "."
+                    )
+                )
+            except Exception as e:
+                raise UserWarning(
+                    "Failed to read BVOL volume or carbon. Hint: Save Excel with values, not formulas. Exception: "
+                    + str(e)
+                )
+            self._sample_row_dict["volume_um3_unit"] = str(
+                self._round_value(self._bvol_volume)
+            )
+            self._sample_row_dict["carbon_pgc_unit"] = str(
+                self._round_value(self._bvol_carbon)
+            )
+        #
         except Exception as e:
-            raise UserWarning(
-                "Failed to read BVOL volume or carbon. Hint: Save Excel with values, not formulas. Exception: "
-                + str(e)
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-        self._sample_row_dict["volume_um3_unit"] = str(
-            self._round_value(self._bvol_volume)
-        )
-        self._sample_row_dict["carbon_pgc_unit"] = str(
-            self._round_value(self._bvol_carbon)
-        )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def get_sample_row_dict(self):
         """ """
@@ -920,28 +1080,35 @@ class SampleRow:
 
     def set_count_area_number(self, count_area_number):
         """ """
-        self._sample_row_dict["count_area_number"] = count_area_number
-        count_area_number = int(count_area_number)
-        # Adjust length of list for counted per are.
-        counted_units_list = self._sample_row_dict.get("counted_units_list", None)
-        if counted_units_list:
-            counted_units_list = [int(x) for x in counted_units_list.split(";")]
-        else:
-            counted_units_list = count_area_number * [0]
-            counted_units_list[0] = self._sample_row_dict.get("counted_units", "0")
+        try:
+            self._sample_row_dict["count_area_number"] = count_area_number
+            count_area_number = int(count_area_number)
+            # Adjust length of list for counted per are.
+            counted_units_list = self._sample_row_dict.get("counted_units_list", None)
+            if counted_units_list:
+                counted_units_list = [int(x) for x in counted_units_list.split(";")]
+            else:
+                counted_units_list = count_area_number * [0]
+                counted_units_list[0] = self._sample_row_dict.get("counted_units", "0")
+            #
+            if len(counted_units_list) < count_area_number:
+                counted_units_list += (count_area_number - len(counted_units_list)) * [0]
+            if len(counted_units_list) > count_area_number:
+                counted_units_list = counted_units_list[:count_area_number]
+                # Recalculate when areas are removed.
+                calculated_value = sum(counted_units_list)
+                self._sample_row_dict["counted_units"] = str(calculated_value)
+            #
+            self._sample_row_dict["counted_units_list"] = ";".join(
+                str(x) for x in counted_units_list
+            )
+            # print('DEBUG: add count area: ' + self._sample_row_dict['counted_units_list'])
         #
-        if len(counted_units_list) < count_area_number:
-            counted_units_list += (count_area_number - len(counted_units_list)) * [0]
-        if len(counted_units_list) > count_area_number:
-            counted_units_list = counted_units_list[:count_area_number]
-            # Recalculate when areas are removed.
-            calculated_value = sum(counted_units_list)
-            self._sample_row_dict["counted_units"] = str(calculated_value)
-        #
-        self._sample_row_dict["counted_units_list"] = ";".join(
-            str(x) for x in counted_units_list
-        )
-        # print('DEBUG: add count area: ' + self._sample_row_dict['counted_units_list'])
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def set_coefficient(self, coefficient):
         """ """
@@ -968,32 +1135,50 @@ class SampleRow:
 
     def set_counted_units(self, value):
         """ """
-        old_value = self._sample_row_dict.get("counted_units", 0)
-        #
-        self._sample_row_dict["counted_units"] = value
-        self._sample_row_dict["abundance_class"] = ""
-        #
-        count_area_number = int(self._sample_row_dict.get("count_area_number", "1"))
-        counted_units_list = self._sample_row_dict.get("counted_units_list", None)
-        if counted_units_list:
-            counted_units_list = [int(x) for x in counted_units_list.split(";")]
-        else:
-            counted_units_list = count_area_number * [0]
-        #
-        if count_area_number == 1:
-            counted_units_list[0] = value
-        else:
-            if old_value != "":
-                value_for_area = int(value) - int(old_value)
+        try:
+            old_value = self._sample_row_dict.get("counted_units", 0)
+            #
+            self._sample_row_dict["counted_units"] = value
+            self._sample_row_dict["abundance_class"] = ""
+            #
+            count_area_number = int(self._sample_row_dict.get("count_area_number", "1"))
+            counted_units_list = self._sample_row_dict.get("counted_units_list", None)
+            if counted_units_list:
+                counted_units_list = [int(x) for x in counted_units_list.split(";")]
             else:
-                value_for_area = int(value)
-            counted_units_list[(count_area_number - 1)] += value_for_area
+                counted_units_list = count_area_number * [0]
+            #
+            if count_area_number == 1:
+                counted_units_list[0] = value
+            else:
+                if old_value != "":
+                    diff_value_for_area = int(value) - int(old_value)
+                else:
+                    diff_value_for_area = int(value)
+
+
+                old_value_for_area = counted_units_list[(count_area_number - 1)]
+                new_value_for_area = old_value_for_area + diff_value_for_area
+                if new_value_for_area >= 0:
+                    counted_units_list[(count_area_number - 1)] = new_value_for_area
+                else:
+                    toolbox_utils.Logging().warning("Value for count area can't be negative.")
+                    self._sample_row_dict["counted_units"] = old_value
+                    return
+
+                
+            #
+            self._sample_row_dict["counted_units_list"] = ";".join(
+                str(x) for x in counted_units_list
+            )
+            #
+            # print('DEBUG: ' + self._sample_row_dict['counted_units_list'])
         #
-        self._sample_row_dict["counted_units_list"] = ";".join(
-            str(x) for x in counted_units_list
-        )
-        #
-        # print('DEBUG: ' + self._sample_row_dict['counted_units_list'])
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def get_abundance_class(self):
         """ """
@@ -1011,60 +1196,80 @@ class SampleRow:
 
     def get_row_as_text_list(self, header_list):
         """ """
-        self._calculate_values()
+        try:
+            self._calculate_values()
+            #
+            row = []
+            for header_item in header_list:
+                row.append(self._sample_row_dict.get(header_item, ""))
+            #
+            return row
         #
-        row = []
-        for header_item in header_list:
-            row.append(self._sample_row_dict.get(header_item, ""))
-        #
-        return row
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def _calculate_values(self):
         """ """
-        counted_txt = self._sample_row_dict.get("counted_units", "")
-        coefficient_txt = self._sample_row_dict.get("coefficient", "0")
-        # Check if abundance_class.
-        if counted_txt == "":
-            self._sample_row_dict["abundance_units_l"] = ""
-            self._sample_row_dict["volume_mm3_l"] = ""
-            self._sample_row_dict["carbon_ugc_l"] = ""
-            return
-        #
         try:
-            counted = float(counted_txt.replace(",", "."))
-            coefficient = float(coefficient_txt.replace(",", "."))
-            abundance = counted * coefficient
-            self._sample_row_dict["abundance_units_l"] = str(
-                self._round_value(abundance)
-            )
+            counted_txt = self._sample_row_dict.get("counted_units", "")
+            coefficient_txt = self._sample_row_dict.get("coefficient", "0")
+            # Check if abundance_class.
+            if counted_txt == "":
+                self._sample_row_dict["abundance_units_l"] = ""
+                self._sample_row_dict["volume_mm3_l"] = ""
+                self._sample_row_dict["carbon_ugc_l"] = ""
+                return
             #
             try:
-                value = abundance * self._bvol_volume / 1000000000.0
-                self._sample_row_dict["volume_mm3_l"] = str(self._round_value(value))
+                counted = float(counted_txt.replace(",", "."))
+                coefficient = float(coefficient_txt.replace(",", "."))
+                abundance = counted * coefficient
+                self._sample_row_dict["abundance_units_l"] = str(
+                    self._round_value(abundance)
+                )
+                #
+                try:
+                    value = abundance * self._bvol_volume / 1000000000.0
+                    self._sample_row_dict["volume_mm3_l"] = str(self._round_value(value))
+                except:
+                    self._sample_row_dict["volume_mm3_l"] = "0.00"
+                #
+                try:
+                    # CARBON calculation modified 2021-02-23.
+                    # value = abundance * self._bvol_carbon / 1000.0
+                    value = abundance * self._bvol_carbon / 1000000.0
+                    self._sample_row_dict["carbon_ugc_l"] = str(self._round_value(value))
+                except:
+                    self._sample_row_dict["carbon_ugc_l"] = "0.00"
             except:
+                self._sample_row_dict["abundance_units_l"] = "0.00"
                 self._sample_row_dict["volume_mm3_l"] = "0.00"
-            #
-            try:
-                # CARBON calculation modified 2021-02-23.
-                # value = abundance * self._bvol_carbon / 1000.0
-                value = abundance * self._bvol_carbon / 1000000.0
-                self._sample_row_dict["carbon_ugc_l"] = str(self._round_value(value))
-            except:
                 self._sample_row_dict["carbon_ugc_l"] = "0.00"
-        except:
-            self._sample_row_dict["abundance_units_l"] = "0.00"
-            self._sample_row_dict["volume_mm3_l"] = "0.00"
-            self._sample_row_dict["carbon_ugc_l"] = "0.00"
+        #
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
     def _round_value(self, value, n=4):  # Number of significant figures.
         """ """
-        if value != 0.0:
-            if value >= 1000.0:
-                value = round(value, 1)
-            else:
-                value = round(value, -int(math.floor(math.log10(abs(value)))) + (n - 1))
-        return value
-
+        try:
+            if value != 0.0:
+                if value >= 1000.0:
+                    value = round(value, 1)
+                else:
+                    value = round(value, -int(math.floor(math.log10(abs(value)))) + (n - 1))
+            return value
+        #
+        except Exception as e:
+            debug_info = (
+                self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
+            )
+            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
 
 class ExcelExportWriter:
     """ """
