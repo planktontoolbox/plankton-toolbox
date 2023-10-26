@@ -245,10 +245,16 @@ class CreateReportToDataCenterShark(object):
         scientificname = row_dict.get("scientific_name", "")
         size_class = row_dict.get("size_class", "")
         if scientificname:
-            ref_list = plankton_core.Species().get_bvol_value(
-                scientificname, size_class, "size_class_ref_list"
-            )
-            row_dict["size_class_ref_list"] = ref_list
+            # Bvol list.
+            old_bvol_list = row_dict.get("bvol_list", "")
+            if old_bvol_list == "":
+                ref_list = plankton_core.Species().get_bvol_value(
+                    scientificname, size_class, "size_class_ref_list"
+                )
+                row_dict["size_class_ref_list"] = ref_list
+            else:
+                row_dict["size_class_ref_list"] = old_bvol_list
+            # Aphia ID.
             bvol_aphia_id = plankton_core.Species().get_taxon_value(
                 scientificname, "bvol_aphia_id"
             )

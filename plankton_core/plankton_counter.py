@@ -37,7 +37,9 @@ class PlanktonCounterManager(QtCore.QObject):
         )
 
         # Check if exists. Create if not.
-        if (self._dataset_dir_path) and (not pathlib.Path(self._dataset_dir_path).exists()):
+        if (self._dataset_dir_path) and (
+            not pathlib.Path(self._dataset_dir_path).exists()
+        ):
             try:
                 pathlib.Path(self._dataset_dir_path).mkdir(parents=True)
             except Exception as e:
@@ -88,7 +90,8 @@ class PlanktonCounterManager(QtCore.QObject):
                 )
         else:
             raise UserWarning(
-                "Dataset already exists, create failed. Dataset name: " + str(dataset_name)
+                "Dataset already exists, create failed. Dataset name: "
+                + str(dataset_name)
             )
         #
         self._emit_change_notification()
@@ -102,11 +105,15 @@ class PlanktonCounterManager(QtCore.QObject):
                 shutil.rmtree(path)
             except Exception as e:
                 raise UserWarning(
-                    "Can't delete directory. Path: " + str(path) + ". Exception: " + str(e)
+                    "Can't delete directory. Path: "
+                    + str(path)
+                    + ". Exception: "
+                    + str(e)
                 )
         else:
             raise UserWarning(
-                "Dataset did not exist, delete failed. Dataset name: " + str(dataset_name)
+                "Dataset did not exist, delete failed. Dataset name: "
+                + str(dataset_name)
             )
         #
         self._emit_change_notification()
@@ -124,7 +131,9 @@ class PlanktonCounterManager(QtCore.QObject):
                     samplenames.append(sampledir)
             return sorted(samplenames)
         else:
-            raise UserWarning("Dataset does not exist. Dataset name: " + str(dataset_name))
+            raise UserWarning(
+                "Dataset does not exist. Dataset name: " + str(dataset_name)
+            )
 
     def create_sample(self, dataset_name, sample_name):
         """Creates a new sample (= a new directory in the dataset directory)."""
@@ -148,7 +157,8 @@ class PlanktonCounterManager(QtCore.QObject):
                 )
         else:
             raise UserWarning(
-                "Sample already exists, create failed. Dataset name: " + str(dataset_name)
+                "Sample already exists, create failed. Dataset name: "
+                + str(dataset_name)
             )
         #
         self._emit_change_notification()
@@ -185,7 +195,8 @@ class PlanktonCounterManager(QtCore.QObject):
                 )
         else:
             raise UserWarning(
-                "Sample does not exist, rename failed. Dataset name: " + str(old_sample_name)
+                "Sample does not exist, rename failed. Dataset name: "
+                + str(old_sample_name)
             )
         #
         self._emit_change_notification()
@@ -280,6 +291,8 @@ class PlanktonCounterSample:
             "unit_type",
             "species_flag_code",
             "cf",
+            "bvol_list",
+            "bvol_list_calc",
         ]
 
         # Create file writers.
@@ -333,7 +346,9 @@ class PlanktonCounterSample:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def update_sample_info(self, info_dict):
         """ """
@@ -345,7 +360,9 @@ class PlanktonCounterSample:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def load_sample_info(self):
         """ """
@@ -382,7 +399,9 @@ class PlanktonCounterSample:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def get_sample_header_and_rows(self):
         """ """
@@ -395,7 +414,9 @@ class PlanktonCounterSample:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def get_header(self):
         """ """
@@ -415,7 +436,9 @@ class PlanktonCounterSample:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def load_sample_data(self):
         """ """
@@ -441,13 +464,17 @@ class PlanktonCounterSample:
                 file_path=path,
                 text_file_name="sample_data.txt",
             )
-            self.update_all_sample_rows(tablefilereader.header(), tablefilereader.rows())
+            self.update_all_sample_rows(
+                tablefilereader.header(), tablefilereader.rows()
+            )
         #
         except Exception as e:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def update_all_sample_rows(self, header, rows):
         """ """
@@ -470,7 +497,9 @@ class PlanktonCounterSample:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def recalculate_coefficient(self, current_method):
         """ """
@@ -504,7 +533,9 @@ class PlanktonCounterSample:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def save_sample_data(self):
         """ """
@@ -514,7 +545,9 @@ class PlanktonCounterSample:
                 rows.append(
                     [
                         "\t".join(
-                            self._sample_rows[key].get_row_as_text_list(self._sample_header)
+                            self._sample_rows[key].get_row_as_text_list(
+                                self._sample_header
+                            )
                         )
                     ]
                 )
@@ -525,7 +558,9 @@ class PlanktonCounterSample:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def get_taxa_summary(
         self, summary_type=None, most_counted_sorting=False, method_step=None
@@ -556,7 +591,9 @@ class PlanktonCounterSample:
                         locked_list.append(taxon)
                 # Count on class name.
                 if summary_type == "Counted per classes":
-                    taxon = plankton_core.Species().get_taxon_value(taxon, "taxon_class")
+                    taxon = plankton_core.Species().get_taxon_value(
+                        taxon, "taxon_class"
+                    )
                     sort_order = taxon
                     if len(taxon) == 0:
                         taxon = "<class unknown>"
@@ -601,7 +638,10 @@ class PlanktonCounterSample:
                             )
                     else:
                         # Qualitative.
-                        if summary_type in ["Counted per taxa", "Counted per taxa/sizes"]:
+                        if summary_type in [
+                            "Counted per taxa",
+                            "Counted per taxa/sizes",
+                        ]:
                             # if counted_dict[taxon] == 0:
                             if counted_dict[taxon]["counted_units"] == 0:
                                 if abundance_class == "1":
@@ -660,7 +700,9 @@ class PlanktonCounterSample:
             else:
                 # Sort for most counted.
                 for key, _value in sorted(
-                    counted_dict.items(), key=lambda x: x[1]["counted_units"], reverse=True
+                    counted_dict.items(),
+                    key=lambda x: x[1]["counted_units"],
+                    reverse=True,
                 ):
                     size_range = ""
                     if key in size_range_dict:
@@ -682,7 +724,9 @@ class PlanktonCounterSample:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def get_locked_taxa(self, method_step=None):
         """ """
@@ -709,7 +753,9 @@ class PlanktonCounterSample:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def lock_taxa(self, scientific_full_name, size_class, locked_at_count_area):
         """ """
@@ -726,7 +772,9 @@ class PlanktonCounterSample:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def unlock_taxa(self, scientific_full_name, size_class, count_area_number):
         """ """
@@ -744,7 +792,9 @@ class PlanktonCounterSample:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def get_sample_row_dict(self, counted_row_dict):
         """ """
@@ -759,7 +809,9 @@ class PlanktonCounterSample:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def update_sample_row(self, counted_row_dict):
         """ """
@@ -767,13 +819,17 @@ class PlanktonCounterSample:
             if len(counted_row_dict.get("scientific_name", "")) > 0:
                 samplerowkey = SampleRow(counted_row_dict).get_key()
                 if samplerowkey in self._sample_rows:
-                    self._sample_rows[samplerowkey].update_sample_row_dict(counted_row_dict)
+                    self._sample_rows[samplerowkey].update_sample_row_dict(
+                        counted_row_dict
+                    )
         #
         except Exception as e:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def get_counted_value(self, selected_dict):
         """ """
@@ -788,7 +844,9 @@ class PlanktonCounterSample:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def update_counted_value_in_core(self, counted_row_dict, value):
         """ """
@@ -825,7 +883,9 @@ class PlanktonCounterSample:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def update_abundance_class_in_core(self, counted_row_dict, value):
         """ """
@@ -863,7 +923,9 @@ class PlanktonCounterSample:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def delete_rows_in_method_step(self, current_method_step):
         """ """
@@ -878,7 +940,9 @@ class PlanktonCounterSample:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def update_coeff_for_sample_rows(
         self, current_method_step, count_area_number, coefficient
@@ -895,7 +959,9 @@ class PlanktonCounterSample:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def import_sample_from_excel(self, excel_file_path):
         """Import from Excel."""
@@ -945,7 +1011,9 @@ class PlanktonCounterSample:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def export_sample_to_excel(self, export_target_dir, export_target_filename):
         """Export to Excel."""
@@ -957,7 +1025,10 @@ class PlanktonCounterSample:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
+
 
 class SampleRow:
     """Defines the content of one counted sample row."""
@@ -975,12 +1046,25 @@ class SampleRow:
             self._size_class = self._sample_row_dict.get("size_class", "")
             #
             # Get species related dictionaries for this taxon/sizeclass.
-            self._taxon_dict = plankton_core.Species().get_taxon_dict(self._scientific_name)
+            self._taxon_dict = plankton_core.Species().get_taxon_dict(
+                self._scientific_name
+            )
             self._size_class_dict = plankton_core.Species().get_bvol_dict(
                 self._scientific_name, self._size_class
             )
-            self._sample_row_dict["taxon_class"] = self._taxon_dict.get("taxon_class", "")
-            self._sample_row_dict["unit_type"] = self._size_class_dict.get("bvol_unit", "")
+            self._sample_row_dict["taxon_class"] = self._taxon_dict.get(
+                "taxon_class", ""
+            )
+            self._sample_row_dict["unit_type"] = self._size_class_dict.get(
+                "bvol_unit", ""
+            )
+
+            bvol_list = self._size_class_dict.get("size_class_ref_list", "")
+            old_bvol_list = self._sample_row_dict.get("size_class_ref_list", "")
+            if old_bvol_list == "":
+                # Change only if empty. Keep counted bvol_list.
+                self._sample_row_dict["bvol_list"] = bvol_list
+
             # Trophic type.
             if not self._sample_row_dict.get("trophic_type", ""):
                 trophic_type = self._size_class_dict.get("trophic_type", "")
@@ -993,9 +1077,9 @@ class SampleRow:
             self._bvol_carbon = 0.0
             try:
                 self._bvol_volume = float(
-                    self._size_class_dict.get("bvol_calculated_volume_um3", "0").replace(
-                        ",", "."
-                    )
+                    self._size_class_dict.get(
+                        "bvol_calculated_volume_um3", "0"
+                    ).replace(",", ".")
                 )
                 self._bvol_carbon = float(
                     self._size_class_dict.get("bvol_calculated_carbon_pg", "0").replace(
@@ -1007,18 +1091,25 @@ class SampleRow:
                     "Failed to read BVOL volume or carbon. Hint: Save Excel with values, not formulas. Exception: "
                     + str(e)
                 )
-            self._sample_row_dict["volume_um3_unit"] = str(
-                self._round_value(self._bvol_volume)
-            )
-            self._sample_row_dict["carbon_pgc_unit"] = str(
-                self._round_value(self._bvol_carbon)
-            )
+
+            if (self._bvol_volume != 0.0) and (self._bvol_carbon != 0.0):
+                self._sample_row_dict["volume_um3_unit"] = str(
+                    self._round_value(self._bvol_volume)
+                )
+                self._sample_row_dict["carbon_pgc_unit"] = str(
+                    self._round_value(self._bvol_carbon)
+                )
+                # Save last bvol_list used for calculations.
+                self._sample_row_dict["bvol_list_calc"] = bvol_list
+
         #
         except Exception as e:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def get_sample_row_dict(self):
         """ """
@@ -1092,7 +1183,9 @@ class SampleRow:
                 counted_units_list[0] = self._sample_row_dict.get("counted_units", "0")
             #
             if len(counted_units_list) < count_area_number:
-                counted_units_list += (count_area_number - len(counted_units_list)) * [0]
+                counted_units_list += (count_area_number - len(counted_units_list)) * [
+                    0
+                ]
             if len(counted_units_list) > count_area_number:
                 counted_units_list = counted_units_list[:count_area_number]
                 # Recalculate when areas are removed.
@@ -1108,7 +1201,9 @@ class SampleRow:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def set_coefficient(self, coefficient):
         """ """
@@ -1156,17 +1251,17 @@ class SampleRow:
                 else:
                     diff_value_for_area = int(value)
 
-
                 old_value_for_area = counted_units_list[(count_area_number - 1)]
                 new_value_for_area = old_value_for_area + diff_value_for_area
                 if new_value_for_area >= 0:
                     counted_units_list[(count_area_number - 1)] = new_value_for_area
                 else:
-                    toolbox_utils.Logging().warning("Value for count area can't be negative.")
+                    toolbox_utils.Logging().warning(
+                        "Value for count area can't be negative."
+                    )
                     self._sample_row_dict["counted_units"] = old_value
                     return
 
-                
             #
             self._sample_row_dict["counted_units_list"] = ";".join(
                 str(x) for x in counted_units_list
@@ -1178,7 +1273,9 @@ class SampleRow:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def get_abundance_class(self):
         """ """
@@ -1209,7 +1306,9 @@ class SampleRow:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def _calculate_values(self):
         """ """
@@ -1233,7 +1332,9 @@ class SampleRow:
                 #
                 try:
                     value = abundance * self._bvol_volume / 1000000000.0
-                    self._sample_row_dict["volume_mm3_l"] = str(self._round_value(value))
+                    self._sample_row_dict["volume_mm3_l"] = str(
+                        self._round_value(value)
+                    )
                 except:
                     self._sample_row_dict["volume_mm3_l"] = "0.00"
                 #
@@ -1241,7 +1342,9 @@ class SampleRow:
                     # CARBON calculation modified 2021-02-23.
                     # value = abundance * self._bvol_carbon / 1000.0
                     value = abundance * self._bvol_carbon / 1000000.0
-                    self._sample_row_dict["carbon_ugc_l"] = str(self._round_value(value))
+                    self._sample_row_dict["carbon_ugc_l"] = str(
+                        self._round_value(value)
+                    )
                 except:
                     self._sample_row_dict["carbon_ugc_l"] = "0.00"
             except:
@@ -1253,7 +1356,9 @@ class SampleRow:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
 
     def _round_value(self, value, n=4):  # Number of significant figures.
         """ """
@@ -1262,14 +1367,19 @@ class SampleRow:
                 if value >= 1000.0:
                     value = round(value, 1)
                 else:
-                    value = round(value, -int(math.floor(math.log10(abs(value)))) + (n - 1))
+                    value = round(
+                        value, -int(math.floor(math.log10(abs(value)))) + (n - 1)
+                    )
             return value
         #
         except Exception as e:
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
-            toolbox_utils.Logging().error("Exception in counter: (" + debug_info + "): " + str(e))
+            toolbox_utils.Logging().error(
+                "Exception in counter: (" + debug_info + "): " + str(e)
+            )
+
 
 class ExcelExportWriter:
     """ """
@@ -1295,7 +1405,7 @@ class ExcelExportWriter:
         # Adjust column width.
         self.sampleinfo_worksheet.set_column("A:B", 40)
         self.sampledata_worksheet.set_column("A:C", 30)
-        self.sampledata_worksheet.set_column("D:U", 20)
+        self.sampledata_worksheet.set_column("D:W", 20)
         self.samplemethod_worksheet.set_column("A:Q", 30)
         self.readme_worksheet.set_column("A:A", 100)
         # Create cell formats.
