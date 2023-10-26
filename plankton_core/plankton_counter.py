@@ -1060,7 +1060,7 @@ class SampleRow:
             )
 
             bvol_list = self._size_class_dict.get("size_class_ref_list", "")
-            old_bvol_list = self._sample_row_dict.get("size_class_ref_list", "")
+            old_bvol_list = self._sample_row_dict.get("bvol_list", "")
             if old_bvol_list == "":
                 # Change only if empty. Keep counted bvol_list.
                 self._sample_row_dict["bvol_list"] = bvol_list
@@ -1331,20 +1331,22 @@ class SampleRow:
                 )
                 #
                 try:
-                    value = abundance * self._bvol_volume / 1000000000.0
-                    self._sample_row_dict["volume_mm3_l"] = str(
-                        self._round_value(value)
-                    )
+                    if self._bvol_volume != 0.0:
+                        value = abundance * self._bvol_volume / 1000000000.0
+                        self._sample_row_dict["volume_mm3_l"] = str(
+                            self._round_value(value)
+                        )
                 except:
                     self._sample_row_dict["volume_mm3_l"] = "0.00"
                 #
                 try:
-                    # CARBON calculation modified 2021-02-23.
-                    # value = abundance * self._bvol_carbon / 1000.0
-                    value = abundance * self._bvol_carbon / 1000000.0
-                    self._sample_row_dict["carbon_ugc_l"] = str(
-                        self._round_value(value)
-                    )
+                    if self._bvol_carbon != 0.0:
+                        # CARBON calculation modified 2021-02-23.
+                        # value = abundance * self._bvol_carbon / 1000.0
+                        value = abundance * self._bvol_carbon / 1000000.0
+                        self._sample_row_dict["carbon_ugc_l"] = str(
+                            self._round_value(value)
+                        )
                 except:
                     self._sample_row_dict["carbon_ugc_l"] = "0.00"
             except:
