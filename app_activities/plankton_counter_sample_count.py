@@ -713,23 +713,24 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         try:
 
             if value <= 0:
-                box_result = QtWidgets.QMessageBox.warning(
-                    self,
-                    "Warning",
-                    "Counted value is zero. Do you want to remove this species or species/sizeclass?",
-                    QtWidgets.QMessageBox.StandardButton.Cancel,
-                    QtWidgets.QMessageBox.StandardButton.Ok,
-                )
-                if box_result == QtWidgets.QMessageBox.StandardButton.Cancel:
-                    # Clear current counting.
-                    self._summary_listview.clearSelection()
-                    self._scientific_name_edit.setText("")
-                    self._scientific_full_name_edit.setText("")
-                    scientific_name = ""
-                    self._speciessizeclass_list.setCurrentIndex(0)
-                    self._taxon_sflag_list.setCurrentIndex(0)
-                    self._taxon_cf_list.setCurrentIndex(0)
-                    return
+                scientific_name = self._scientific_name_edit.text()
+                if (len(scientific_name) > 0):
+                    box_result = QtWidgets.QMessageBox.warning(
+                        self,
+                        "Warning",
+                        "Counted value is zero. Do you want to remove this species or species/sizeclass?",
+                        QtWidgets.QMessageBox.StandardButton.Cancel,
+                        QtWidgets.QMessageBox.StandardButton.Ok,
+                    )
+                    if box_result == QtWidgets.QMessageBox.StandardButton.Cancel:
+                        # Clear current counting.
+                        self._summary_listview.clearSelection()
+                        self._scientific_name_edit.setText("")
+                        self._scientific_full_name_edit.setText("")
+                        self._speciessizeclass_list.setCurrentIndex(0)
+                        self._taxon_sflag_list.setCurrentIndex(0)
+                        self._taxon_cf_list.setCurrentIndex(0)
+                        return
 
             self._disable_counting_buttons()
             # Reset qualitative counting if it was used before.
