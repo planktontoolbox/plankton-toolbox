@@ -245,7 +245,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         #
         # Column 2: Species lists for counting.
         self._selectspecieslist_list = KeyPressQComboBox(self)
-        self._selectspecieslist_list.addItems(["<valid taxa>"])
+        self._selectspecieslist_list.addItems(["WoRMS-all-taxa"])
         #         self._selectspecieslist_list.addItems(['<all species>'])
         self._selectspecieslist_list.currentIndexChanged.connect(
             self._selected_species_list_changed
@@ -1515,7 +1515,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
                 plankton_core.PlanktonCounterMethods().get_counting_species_lists()
             )
             self._selectspecieslist_list.addItems(
-                ["<select>", "<valid taxa>"] + specieslists
+                ["<select>", "WoRMS-all-taxa"] + specieslists
             )
         #         self._selectspecieslist_list.addItems(['<select>', '<all species>' ] + specieslists)
         #

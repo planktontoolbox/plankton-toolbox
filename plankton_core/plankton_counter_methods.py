@@ -94,7 +94,7 @@ class PlanktonCounterMethods:
         if counting_species_file_name == "<select>":
             return [], []
         # Use all prealoaded species.
-        if counting_species_file_name == "<valid taxa>":
+        if counting_species_file_name == "WoRMS-all-taxa":
             #         if counting_species_file_name == '<all species>':
             species_list_of_list = []
             #             for key in sorted(plankton_core.Species().get_taxa_lookup_dict().keys()):

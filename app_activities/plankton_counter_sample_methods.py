@@ -233,7 +233,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
         self._coefficient_by_user_checkbox = QtWidgets.QCheckBox("Calc. by user")
         self._coefficient_by_user_checkbox.stateChanged.connect(self._field_changed)
         self._counting_species_list = QtWidgets.QComboBox()
-        self._counting_species_list.addItems(["<valid taxa>"])
+        self._counting_species_list.addItems(["WoRMS-all-taxa"])
         #         self._counting_species_list.addItems(['<all species>'])
         self._counting_species_list.currentIndexChanged.connect(self._field_changed)
         self._viewsizeclassinfo_checkbox = QtWidgets.QCheckBox("View sizeclass info")
@@ -533,7 +533,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
                 plankton_core.PlanktonCounterMethods().get_counting_species_lists()
             )
             if len(specieslists) > 0:
-                self._counting_species_list.addItems(["<valid taxa>"] + specieslists)
+                self._counting_species_list.addItems(["WoRMS-all-taxa"] + specieslists)
             #             self._counting_species_list.addItems(['<all species>'] + specieslists)
             else:
                 self._counting_species_list.addItems(["<not available>"])
@@ -731,7 +731,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
                     self._coefficient_by_user_checkbox.setChecked(False)
                 #
                 comboindex = self._counting_species_list.findText(
-                    fields_dict.get("counting_species_list", "<valid taxa>")
+                    fields_dict.get("counting_species_list", "WoRMS-all-taxa")
                 )
                 #             comboindex = self._counting_species_list.findText(fields_dict.get('counting_species_list', '<all species>'))
                 self._counting_species_list.setCurrentIndex(comboindex)
@@ -865,7 +865,7 @@ class PlanktonCounterSampleMethods(QtWidgets.QWidget):
                     self._coefficient_by_user_checkbox.setChecked(False)
                 #
                 comboindex = self._counting_species_list.findText(
-                    fields_dict.get("counting_species_list", "<valid taxa>")
+                    fields_dict.get("counting_species_list", "WoRMS-all-taxa")
                 )
                 #             comboindex = self._counting_species_list.findText(fields_dict.get('counting_species_list', '<all species>'))
                 self._counting_species_list.setCurrentIndex(comboindex)
