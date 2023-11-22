@@ -10,6 +10,10 @@ import sys
 import shutil
 import math
 
+# from PyQt6 import QtGui
+# from PyQt6 import QtWidgets
+# from PyQt6 import QtCore
+
 # import openpyxl
 import xlsxwriter
 import operator

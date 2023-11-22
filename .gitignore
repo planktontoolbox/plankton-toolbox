@@ -24,3 +24,6 @@ DEMO/*
 
 build/*
 dist/*
+
+*.xlsx
+*.zip
