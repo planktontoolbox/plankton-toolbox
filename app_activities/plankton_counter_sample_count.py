@@ -28,7 +28,10 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         #
         self._current_sample_method = None
         self._current_sample_method_step_fields = {}
-        self._temporary_disable_update = False
+        self._temporarily_disable_update = False
+        self._temporarily_disable_value_change = False
+        self._temporarily_clear_summary_list = False
+        self._temporarily_clear_species_table = False
         #
         super(PlanktonCounterSampleCount, self).__init__()
         #
@@ -711,10 +714,12 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
     def _counted_value_changed(self, value):  # TODO:
         """ """
         try:
+            if self._temporarily_disable_value_change:
+                return
 
             if value <= 0:
-                scientific_name = self._scientific_name_edit.text()
-                if (len(scientific_name) > 0):
+                scientific_full_name = self._scientific_full_name_edit.text()
+                if (len(scientific_full_name) > 0):
                     box_result = QtWidgets.QMessageBox.warning(
                         self,
                         "Warning",
@@ -722,15 +727,15 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
                         QtWidgets.QMessageBox.StandardButton.Cancel,
                         QtWidgets.QMessageBox.StandardButton.Ok,
                     )
-                    if box_result == QtWidgets.QMessageBox.StandardButton.Cancel:
-                        # Clear current counting.
-                        self._summary_listview.clearSelection()
-                        self._scientific_name_edit.setText("")
-                        self._scientific_full_name_edit.setText("")
-                        self._speciessizeclass_list.setCurrentIndex(0)
-                        self._taxon_sflag_list.setCurrentIndex(0)
-                        self._taxon_cf_list.setCurrentIndex(0)
-                        return
+                if box_result == QtWidgets.QMessageBox.StandardButton.Cancel:
+                    # Clear current counting.
+                    self._summary_listview.clearSelection()
+                    self._scientific_name_edit.setText("")
+                    self._scientific_full_name_edit.setText("")
+                    self._speciessizeclass_list.setCurrentIndex(0)
+                    self._taxon_sflag_list.setCurrentIndex(0)
+                    self._taxon_cf_list.setCurrentIndex(0)
+                    return
 
             self._disable_counting_buttons()
             # Reset qualitative counting if it was used before.
@@ -934,18 +939,25 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
     def _selected_species_in_table_changed(self):
         """ """
         try:
+            # Clear the other species list.
+            if self._temporarily_clear_species_table:
+                return
+            self._temporarily_clear_summary_list = True
+            self._summary_listview.clearSelection()
+            self._temporarily_clear_summary_list = False
+
+            current_method_step = str(self._selectmethodstep_list.currentText())            
+            if current_method_step in ["<not available>", "<select>"]:
+                return
+
+            self._temporarily_disable_value_change = True
+
             self._scientific_name_edit.setText("")
             self._scientific_full_name_edit.setText("")
             scientific_name = ""
             self._speciessizeclass_list.setCurrentIndex(0)
             self._taxon_sflag_list.setCurrentIndex(0)
             self._taxon_cf_list.setCurrentIndex(0)
-
-
-            current_method_step = str(self._selectmethodstep_list.currentText())            
-            if current_method_step in ["<not available>", "<select>"]:
-                return
-
 
             # Get selected rows as indexes. Convert to base model if proxy model is used.
             proxyindexes = self._species_tableview.selectedIndexes()
@@ -1037,9 +1049,11 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
                 ##### ...move this.
 
                 #
+                self._temporarily_disable_value_change = False
                 self._update_scientific_full_name()
         #
         except Exception as e:
+            self._temporarily_disable_value_change = False
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
@@ -1059,19 +1073,22 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
     def _selected_species_in_summary_changed(self):
         """ """
         try:
-
-
+            # Clear the other species list.
+            if self._temporarily_clear_summary_list:
+                return
+            self._temporarily_clear_species_table = True
+            self._species_tableview.clearSelection()
+            self._temporarily_clear_species_table = False
+ 
             current_method_step = str(self._selectmethodstep_list.currentText())            
             if current_method_step in ["<not available>", "<select>"]:
                 return
-
-
-            #         self._scientific_name_edit.setText('')
-            # Clear the other species list.
-            self._species_tableview.clearSelection()
             #
             if not self._summary_listview.currentItem():
                 return
+            
+            self._temporarily_disable_value_change = True
+
             # Get name and size.
             size_class = ""
             text_row = str(self._summary_listview.currentItem().text())
@@ -1150,9 +1167,11 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
                     + "."
                 )
             #
+            self._temporarily_disable_value_change = False
             self._update_scientific_full_name()
         #
         except Exception as e:
+            self._temporarily_disable_value_change = False
             debug_info = (
                 self.__class__.__name__ + ", row  " + str(sys._getframe().f_lineno)
             )
@@ -1348,7 +1367,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
         try:
             self._disable_counting_buttons()
             # Lock of update chains off.
-            self._temporary_disable_update = True
+            self._temporarily_disable_update = True
             ""
             scientific_full_name = str(self._scientific_full_name_edit.text())
             size_class = str(self._speciessizeclass_list.currentText())
@@ -1369,21 +1388,48 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
             info_dict["scientific_full_name"] = scientific_full_name
             info_dict["size_class"] = size_class
             sample_row_dict = self._current_sample_object.get_sample_row_dict(info_dict)
+
+
+
+            # # Update fields.
+            # counted_value = 0
+            # counted_units = sample_row_dict.get("counted_units", "")
+            # abundance_class = sample_row_dict.get("abundance_class", "")
+            # if counted_units == "":
+            #     # Abundance class.
+            #     self._countedunits_edit.setValue(0)
+            #     if abundance_class:
+            #         abundance_class_int = int(abundance_class)
+            #         self._abundance_class_list.setCurrentIndex(abundance_class_int)
+            # else:
+            #     # Normal count.
+            #     counted_value = int(counted_units)
+            #     self._countedunits_edit.setValue(counted_value)
+            #     self._abundance_class_list.setCurrentIndex(0)
+
             # Update fields.
             counted_value = 0
             counted_units = sample_row_dict.get("counted_units", "")
             abundance_class = sample_row_dict.get("abundance_class", "")
             if counted_units == "":
-                # Abundance class.
-                self._countedunits_edit.setValue(0)
-                if abundance_class:
-                    abundance_class_int = int(abundance_class)
-                    self._abundance_class_list.setCurrentIndex(abundance_class_int)
+                if abundance_class == "":
+                    # Both empty.
+                    self._countedunits_edit.setValue(0)
+                    self._abundance_class_list.setCurrentIndex(0)
+                else:
+                    # Abundance class.
+                    self._countedunits_edit.setValue(0)
+                    if abundance_class:
+                        abundance_class_int = int(abundance_class)
+                        self._abundance_class_list.setCurrentIndex(abundance_class_int)
             else:
                 # Normal count.
                 counted_value = int(counted_units)
                 self._countedunits_edit.setValue(counted_value)
                 self._abundance_class_list.setCurrentIndex(0)
+
+
+
             #
             self._variable_comment_edit.setText(
                 sample_row_dict.get("variable_comment", "")
@@ -1405,7 +1451,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
             #
             # Lock of update chains off.
             time.sleep(0.01)  # Avoid update queue.
-            self._temporary_disable_update = False
+            self._temporarily_disable_update = False
         #
         except Exception as e:
             debug_info = (
@@ -1416,7 +1462,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
     def _update_sample_row(self):
         """ """
         try:
-            if self._temporary_disable_update:
+            if self._temporarily_disable_update:
                 return
 
             scientific_full_name = str(self._scientific_full_name_edit.text())
@@ -1463,7 +1509,7 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
     def _update_abundance_class_sample_row(self):
         """ """
         try:
-            if self._temporary_disable_update:
+            if self._temporarily_disable_update:
                 return
 
             scientific_full_name = str(self._scientific_full_name_edit.text())
