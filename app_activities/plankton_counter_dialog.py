@@ -56,7 +56,7 @@ class PlanktonCounterDialog(QtWidgets.QDialog):
                 self.metadata_widget.save_data()
             elif oldtabindex == 1:
                 self.methods_widget.save_data()
-                self.count_widget.load_data()
+                # self.count_widget.load_data()
                 self.count_widget.save_data()
             elif oldtabindex == 2:
                 self.count_widget.save_data()

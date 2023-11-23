@@ -719,7 +719,8 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
 
             if value <= 0:
                 scientific_full_name = self._scientific_full_name_edit.text()
-                if (len(scientific_full_name) > 0):
+                scientific_name = self._scientific_name_edit.text()
+                if (len(scientific_full_name) > 0) and (len(scientific_name) > 0):
                     box_result = QtWidgets.QMessageBox.warning(
                         self,
                         "Warning",
