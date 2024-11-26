@@ -98,7 +98,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._create_contentSelectors()
         # Load last used window positions.
         size = self._ui_settings.value(
-            "MainWindow/Size", QtCore.QSize(900, 600)
+            "MainWindow/Size", QtCore.QSize(1200, 900)
         )  # .toSize()
         position = self._ui_settings.value(
             "MainWindow/Position", QtCore.QPoint(100, 80)
@@ -143,9 +143,12 @@ class MainWindow(QtWidgets.QMainWindow):
             position.setX(100)
             position.setY(80)
 
+        # Use this as default if not recived from storage.
+        default_state = b'\x00\x00\x00\xff\x00\x00\x00\x00\xfd\x00\x00\x00\x03\x00\x00\x00\x00\x00\x00\x00\xaa\x00\x00\x02j\xfc\x02\x00\x00\x00\x01\xfb\x00\x00\x00:\x00A\x00c\x00t\x00i\x00v\x00i\x00t\x00i\x00e\x00s\x00 \x00a\x00n\x00d\x00 \x00t\x00o\x00o\x00l\x00s\x00 \x00s\x00e\x00l\x00e\x00c\x00t\x00o\x00r\x01\x00\x00\x00!\x00\x00\x02j\x00\x00\x00P\x00\xff\xff\xff\x00\x00\x00\x01\x00\x00\x01\xec\x00\x00\x02j\xfc\x02\x00\x00\x00\x02\xfb\x00\x00\x00\x1a\x00G\x00r\x00a\x00p\x00h\x00 \x00p\x00l\x00o\x00t\x00t\x00e\x00r\x00\x00\x00\x00!\x00\x00\x02j\x00\x00\x00\xe0\x00\xff\xff\xff\xfb\x00\x00\x00\x1c\x00D\x00a\x00t\x00a\x00s\x00e\x00t\x00 \x00v\x00i\x00e\x00w\x00e\x00r\x00\x00\x00\x01^\x00\x00\x01-\x00\x00\x00\xe0\x00\xff\xff\xff\x00\x00\x00\x03\x00\x00\x04\xb8\x00\x00\x00\xe0\xfc\x01\x00\x00\x00\x01\xfb\x00\x00\x00\x1e\x00T\x00o\x00o\x00l\x00b\x00o\x00x\x00 \x00l\x00o\x00g\x00g\x00i\x00n\x00g\x01\x00\x00\x00\x00\x00\x00\x04\xb8\x00\x00\x00\xfa\x00\xff\xff\xff\x00\x00\x04\n\x00\x00\x02j\x00\x00\x00\x04\x00\x00\x00\x04\x00\x00\x00\x08\x00\x00\x00\x08\xfc\x00\x00\x00\x00'
+
         try:
-            self.setGeometry(self._ui_settings.value("MainWindow/Geometry"))
-            self.restoreState(self._ui_settings.value("MainWindow/State"))
+            self.setGeometry(self._ui_settings.value("MainWindow/Geometry", QtCore.QRect(100, 110, 1208, 900)))
+            self.restoreState(self._ui_settings.value("MainWindow/State", default_state))
         except:
             pass  # May contain None at first start on new computer.
 
@@ -170,6 +173,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self._ui_settings.setValue("MainWindow/Position", QtCore.QVariant(self.pos()))
         self._ui_settings.setValue("MainWindow/State", self.saveState())
         self._ui_settings.setValue("MainWindow/Geometry", self.geometry())
+
+        # print("Size: ", self._ui_settings.value("MainWindow/Size"))
+        # print("Position: ", self._ui_settings.value("MainWindow/Position"))
+        # print("State: ", self._ui_settings.value("MainWindow/State"))
+        # print("Geometry: ", self._ui_settings.value("MainWindow/Geometry"))
 
         # self._logfile.close
 
