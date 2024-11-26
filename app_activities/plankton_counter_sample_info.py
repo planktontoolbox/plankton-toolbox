@@ -504,21 +504,49 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
             #
             try:
                 latitude_dd = float(lat_deg.replace(",", ".").replace(" ", ""))
-                if lat_min:
-                    latitude_dd += (
-                        float(lat_min.replace(",", ".").replace(" ", "")) / 60
-                    )
-                latitude_dd = math.floor(latitude_dd * 10000) / 10000
+
+
+                if latitude_dd >= 0.0:
+                    if lat_min:
+                        latitude_dd += (
+                            float(lat_min.replace(",", ".").replace(" ", "")) / 60
+                        )
+                    latitude_dd = math.floor(latitude_dd * 10000) / 10000
+                else:
+                    latitude_dd *= -1.0
+                    if lat_min:
+                        latitude_dd += (
+                            float(lat_min.replace(",", ".").replace(" ", "")) / 60
+                        )
+                    latitude_dd = math.floor(latitude_dd * 10000) / 10000
+                    latitude_dd *= -1.0
+
+
+
                 self._latitude_dd.setText(str(latitude_dd))
             except:
                 self._latitude_dd.setText("")
             try:
                 longitude_dd = float(long_deg.replace(",", ".").replace(" ", ""))
-                if long_min:
-                    longitude_dd += (
-                        float(long_min.replace(",", ".").replace(" ", "")) / 60
-                    )
-                longitude_dd = math.floor(longitude_dd * 10000) / 10000
+
+
+                if longitude_dd >= 0.0:
+                    if long_min:
+                        longitude_dd += (
+                            float(long_min.replace(",", ".").replace(" ", "")) / 60
+                        )
+                    longitude_dd = math.floor(longitude_dd * 10000) / 10000
+                else:
+                    longitude_dd *= -1.0
+                    if long_min:
+                        longitude_dd += (
+                            float(long_min.replace(",", ".").replace(" ", "")) / 60
+                        )
+                    longitude_dd = math.floor(longitude_dd * 10000) / 10000
+                    longitude_dd *= -1.0
+
+
+
                 self._longitude_dd.setText(str(longitude_dd))
             except:
                 self._longitude_dd.setText("")
@@ -537,23 +565,50 @@ class PlanktonCounterSampleInfo(QtWidgets.QWidget):
             #
             try:
                 value = float(lat_dd.replace(",", ".").replace(" ", ""))
-                value += 0.0000008  # Round (= 0.5 min).
-                degrees = math.floor(abs(value))
-                minutes = (abs(value) - degrees) * 60
-                minutes = math.floor(minutes * 100) / 100
-                self._latitude_degree.setText(str(int(degrees)))
-                self._latitude_minute.setText(str(minutes))
+
+
+                if value >= 0.0:
+                    value += 0.0000008  # Round (= 0.5 min).
+                    degrees = math.floor(abs(value))
+                    minutes = (abs(value) - degrees) * 60
+                    minutes = math.floor(minutes * 100) / 100
+                    self._latitude_degree.setText(str(int(degrees)))
+                    self._latitude_minute.setText(str(minutes))
+                else:
+                    value *= -1.0
+                    value += 0.0000008  # Round (= 0.5 min).
+                    degrees = math.floor(abs(value))
+                    minutes = (abs(value) - degrees) * 60
+                    minutes = math.floor(minutes * 100) / 100
+                    self._latitude_degree.setText(str(int(degrees * -1.0)))
+                    self._latitude_minute.setText(str(minutes))
+
+
+
             except:
                 self._latitude_degree.setText("")
                 self._latitude_minute.setText("")
             try:
                 value = float(long_dd.replace(",", ".").replace(" ", ""))
-                value += 0.0000008  # Round (= 0.5 min).
-                degrees = math.floor(abs(value))
-                minutes = (abs(value) - degrees) * 60
-                minutes = math.floor(minutes * 100) / 100
-                self._longitude_degree.setText(str(int(degrees)))
-                self._longitude_minute.setText(str(minutes))
+
+
+                if value >= 0.0:
+                    value += 0.0000008  # Round (= 0.5 min).
+                    degrees = math.floor(abs(value))
+                    minutes = (abs(value) - degrees) * 60
+                    minutes = math.floor(minutes * 100) / 100
+                    self._longitude_degree.setText(str(int(degrees)))
+                    self._longitude_minute.setText(str(minutes))
+                else:
+                    value *= -1.0
+                    value += 0.0000008  # Round (= 0.5 min).
+                    degrees = math.floor(abs(value))
+                    minutes = (abs(value) - degrees) * 60
+                    minutes = math.floor(minutes * 100) / 100
+                    self._longitude_degree.setText(str(int(degrees * -1.0)))
+                    self._longitude_minute.setText(str(minutes))
+
+
             except:
                 self._longitude_degree.setText("")
                 self._longitude_minute.setText("")
