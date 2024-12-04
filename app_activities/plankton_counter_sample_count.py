@@ -728,15 +728,15 @@ class PlanktonCounterSampleCount(QtWidgets.QWidget):
                         QtWidgets.QMessageBox.StandardButton.Cancel,
                         QtWidgets.QMessageBox.StandardButton.Ok,
                     )
-                if box_result == QtWidgets.QMessageBox.StandardButton.Cancel:
-                    # Clear current counting.
-                    self._summary_listview.clearSelection()
-                    self._scientific_name_edit.setText("")
-                    self._scientific_full_name_edit.setText("")
-                    self._speciessizeclass_list.setCurrentIndex(0)
-                    self._taxon_sflag_list.setCurrentIndex(0)
-                    self._taxon_cf_list.setCurrentIndex(0)
-                    return
+                    if box_result == QtWidgets.QMessageBox.StandardButton.Cancel:
+                        # Clear current counting.
+                        self._summary_listview.clearSelection()
+                        self._scientific_name_edit.setText("")
+                        self._scientific_full_name_edit.setText("")
+                        self._speciessizeclass_list.setCurrentIndex(0)
+                        self._taxon_sflag_list.setCurrentIndex(0)
+                        self._taxon_cf_list.setCurrentIndex(0)
+                        return
 
             self._disable_counting_buttons()
             # Reset qualitative counting if it was used before.
