@@ -59,3 +59,47 @@ http://nordicmicroalgae.org/tools
 
 For Mac users that are using the pre build Mac version these two directories 
 should be placed in the users home directory.
+
+## For Windows users ##
+
+If there are problems, of any reason, to run the Windows executable file, then it is 
+always possible to run Plankton Toolbox as a Python application.
+Here is an example of how to do it on Windows.
+
+Download and install Python ( https://www.python.org/downloads/ ).
+In the example below Python version 13.3 was installed here: "C:\Python313".
+
+Create a folder named "PTBX" on the desktop and move into it.
+
+    cd Desktop
+    mkdir PTBX
+    cd PTBX
+
+Download and install the software for Plankton Toolbox from GitHub.
+
+    git clone https://github.com/planktontoolbox/plankton-toolbox.git
+    cd plankton-toolbox
+    C:\Python313\python.exe -m venv venv
+    venv\Scripts\activate
+    pip install -r requirements.txt
+
+Create a file in the PTBX folder with the name "Start_PTBX.bat". 
+Add the line below to that file.
+
+    plankton-toolbox\venv\Scripts\python.exe plankton-toolbox\plankton_toolbox_start.py
+
+Now Plankton Toolbox can be started by a double klick on that bat file, 
+but there is still one important step left. 
+
+To get species lists and settings for microscopes, etc., you have to replace the two
+folders called "plankton_toolbox_data" and "plankton_toolbox_counter" with the ones that
+are published here http://nordicmicroalgae.org/tools as parts of the zip files.
+Both "plankton_toolbox_data" and "plankton_toolbox_counter" should be placed in the folder 
+called "PTBX" if the example above is followed.
+
+
+
+
+
+
+
